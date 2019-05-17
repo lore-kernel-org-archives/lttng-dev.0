@@ -1,18 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH barectf 2/2] Cleanup: bitfields: streamline use
- of underscores
-Date: Fri, 17 May 2019 10:35:37 -0400
-Message-ID: <20190517143537.13182-2-mathieu.desnoyers__303.006851912357$1558103763$gmane$org@efficios.com>
-References: <20190517143537.13182-1-mathieu.desnoyers@efficios.com>
+Subject: [PATCH barectf 1/2] Fix: bitfield: shift
+ undefined/implementation defined behaviors (v3)
+Date: Fri, 17 May 2019 10:35:36 -0400
+Message-ID: <20190517143537.13182-1-mathieu.desnoyers__10814.7754961223$1558103798$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 4559nb0Nmfz10Lk
+ by lists.lttng.org (Postfix) with ESMTPS id 4559nb0PlRz10Ll
  for <lttng-dev@lists.lttng.org>; Fri, 17 May 2019 10:35:46 -0400 (EDT)
-In-Reply-To: <20190517143537.13182-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,297 +24,256 @@ To: pproulx@efficios.com, jgalar@efficios.com, joraj@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Do not prefix macro arguments with underscores. Use one leading
-underscore as prefix for local variables defined within macros.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- barectf/templates.py | 210 +++++++++++++++++++++++++--------------------------
- 1 file changed, 105 insertions(+), 105 deletions(-)
-
-diff --git a/barectf/templates.py b/barectf/templates.py
-index 6444da4..63aa5c2 100644
---- a/barectf/templates.py
-+++ b/barectf/templates.py
-@@ -622,10 +622,10 @@ _BITFIELD = '''#ifndef _$PREFIX$BITFIELD_H
- #include <limits.h>
- 
- #ifdef __cplusplus
--# define CAST_PTR(_type, _value) \\
--	static_cast<_type>(static_cast<void *>(_value))
-+# define CAST_PTR(type, value) \\
-+	static_cast<type>(static_cast<void *>(value))
- #else
--# define CAST_PTR(_type, _value)	((void *) (_value))
-+# define CAST_PTR(type, value)	((void *) (value))
- #endif
- 
- #define $PREFIX$BYTE_ORDER $ENDIAN_DEF$
-@@ -698,8 +698,8 @@ _BITFIELD = '''#ifndef _$PREFIX$BITFIELD_H
-  * This macro should not be used if `shift` can be greater or equal than
-  * the bitwidth of `v`. See `_bt_safe_lshift`.
-  */
--#define _$prefix$bt_lshift(_vtype, v, shift)				\\
--	((_vtype) (_$prefix$bt_cast_value_to_unsigned(v) << (shift)))
-+#define _$prefix$bt_lshift(vtype, v, shift)				\\
-+	((vtype) (_$prefix$bt_cast_value_to_unsigned(v) << (shift)))
- 
- /*
-  * Generate a mask of type `type` with the `length` least significant bits
-@@ -733,11 +733,11 @@ _BITFIELD = '''#ifndef _$PREFIX$BITFIELD_H
-  * the bitwidth of `v`. See `_bt_safe_rshift`.
-  */
- #if ((-1 >> 1) == -1)
--#define _$prefix$bt_rshift(_vtype, v, shift)	((v) >> (shift))
-+#define _$prefix$bt_rshift(vtype, v, shift)	((v) >> (shift))
- #else
--#define _$prefix$bt_rshift(_vtype, v, shift)				\\
--	((_vtype) ((_$prefix$bt_cast_value_to_unsigned(v) >> (shift)) |	\\
--		((v) < 0 ? _$prefix$bt_make_mask_complement(_vtype,	\\
-+#define _$prefix$bt_rshift(vtype, v, shift)				\\
-+	((vtype) ((_$prefix$bt_cast_value_to_unsigned(v) >> (shift)) |	\\
-+		((v) < 0 ? _$prefix$bt_make_mask_complement(vtype,	\\
- 			sizeof(v) * CHAR_BIT - (shift)) : 0)))
- #endif
- 
-@@ -793,122 +793,122 @@ do {									\\
-  * Also, consecutive bitfields are placed from higher to lower bits.
-  */
- 
--#define _$prefix$bt_bitfield_write_le(_ptr, type, _start, _length, _vtype, _v) \\
-+#define _$prefix$bt_bitfield_write_le(ptr, type, start, length, vtype, v) \\
- do {									\\
--	_vtype __v = (_v);						\\
--	type *__ptr = CAST_PTR(type *, _ptr);				\\
--	unsigned long __start = (_start), __length = (_length);		\\
--	type mask, cmask;						\\
--	unsigned long ts = sizeof(type) * CHAR_BIT; /* type size */	\\
--	unsigned long start_unit, end_unit, this_unit;			\\
--	unsigned long end, cshift; /* cshift is "complement shift" */	\\
-+	vtype _v = (v);							\\
-+	type *_ptr = CAST_PTR(type *, ptr);				\\
-+	unsigned long _start = (start), _length = (length);		\\
-+	type _mask, _cmask;						\\
-+	unsigned long _ts = sizeof(type) * CHAR_BIT; /* type size */	\\
-+	unsigned long _start_unit, _end_unit, _this_unit;		\\
-+	unsigned long _end, _cshift; /* _cshift is "complement shift" */ \\
- 									\\
--	if (!__length)							\\
-+	if (!_length)							\\
- 		break;							\\
- 									\\
--	end = __start + __length;					\\
--	start_unit = __start / ts;					\\
--	end_unit = (end + (ts - 1)) / ts;				\\
-+	_end = _start + _length;					\\
-+	_start_unit = _start / _ts;					\\
-+	_end_unit = (_end + (_ts - 1)) / _ts;				\\
- 									\\
- 	/* Trim v high bits */						\\
--	if (__length < sizeof(__v) * CHAR_BIT)				\\
--		__v &= _$prefix$bt_make_mask(_vtype, __length);		\\
-+	if (_length < sizeof(_v) * CHAR_BIT)				\\
-+		_v &= _$prefix$bt_make_mask(vtype, _length);		\\
- 									\\
- 	/* We can now append v with a simple "or", shift it piece-wise */ \\
--	this_unit = start_unit;						\\
--	if (start_unit == end_unit - 1) {				\\
--		mask = _$prefix$bt_make_mask(type, __start % ts);	\\
--		if (end % ts)						\\
--			mask |= _$prefix$bt_make_mask_complement(type, end % ts); \\
--		cmask = _$prefix$bt_lshift(type, (type) (__v), __start % ts); \\
--		cmask &= ~mask;						\\
--		__ptr[this_unit] &= mask;				\\
--		__ptr[this_unit] |= cmask;				\\
-+	_this_unit = _start_unit;					\\
-+	if (_start_unit == _end_unit - 1) {				\\
-+		_mask = _$prefix$bt_make_mask(type, _start % _ts);	\\
-+		if (_end % _ts)						\\
-+			_mask |= _$prefix$bt_make_mask_complement(type, _end % _ts); \\
-+		_cmask = _$prefix$bt_lshift(type, (type) (_v), _start % _ts); \\
-+		_cmask &= ~_mask;					\\
-+		_ptr[_this_unit] &= _mask;				\\
-+		_ptr[_this_unit] |= _cmask;				\\
- 		break;							\\
- 	}								\\
--	if (__start % ts) {						\\
--		cshift = __start % ts;					\\
--		mask = _$prefix$bt_make_mask(type, cshift);		\\
--		cmask = _$prefix$bt_lshift(type, (type) (__v), cshift);	\\
--		cmask &= ~mask;						\\
--		__ptr[this_unit] &= mask;				\\
--		__ptr[this_unit] |= cmask;				\\
--		_$prefix$bt_safe_rshift(_vtype, __v, ts - cshift); \\
--		__start += ts - cshift;					\\
--		this_unit++;						\\
-+	if (_start % _ts) {						\\
-+		_cshift = _start % _ts;					\\
-+		_mask = _$prefix$bt_make_mask(type, _cshift);		\\
-+		_cmask = _$prefix$bt_lshift(type, (type) (_v), _cshift); \\
-+		_cmask &= ~_mask;					\\
-+		_ptr[_this_unit] &= _mask;				\\
-+		_ptr[_this_unit] |= _cmask;				\\
-+		_$prefix$bt_safe_rshift(vtype, _v, _ts - _cshift);	\\
-+		_start += _ts - _cshift;				\\
-+		_this_unit++;						\\
- 	}								\\
--	for (; this_unit < end_unit - 1; this_unit++) {			\\
--		__ptr[this_unit] = (type) __v;				\\
--		_$prefix$bt_safe_rshift(_vtype, __v, ts); 		\\
--		__start += ts;						\\
-+	for (; _this_unit < _end_unit - 1; _this_unit++) {		\\
-+		_ptr[_this_unit] = (type) _v;				\\
-+		_$prefix$bt_safe_rshift(vtype, _v, _ts); 		\\
-+		_start += _ts;						\\
- 	}								\\
--	if (end % ts) {							\\
--		mask = _$prefix$bt_make_mask_complement(type, end % ts); \\
--		cmask = (type) __v;					\\
--		cmask &= ~mask;						\\
--		__ptr[this_unit] &= mask;				\\
--		__ptr[this_unit] |= cmask;				\\
-+	if (_end % _ts) {						\\
-+		_mask = _$prefix$bt_make_mask_complement(type, _end % _ts); \\
-+		_cmask = (type) _v;					\\
-+		_cmask &= ~_mask;					\\
-+		_ptr[_this_unit] &= _mask;				\\
-+		_ptr[_this_unit] |= _cmask;				\\
- 	} else								\\
--		__ptr[this_unit] = (type) __v;				\\
-+		_ptr[_this_unit] = (type) _v;				\\
- } while (0)
- 
--#define _$prefix$bt_bitfield_write_be(_ptr, type, _start, _length, _vtype, _v) \\
-+#define _$prefix$bt_bitfield_write_be(ptr, type, start, length, vtype, v) \\
- do {									\\
--	_vtype __v = (_v);						\\
--	type *__ptr = CAST_PTR(type *, _ptr);				\\
--	unsigned long __start = (_start), __length = (_length);		\\
--	type mask, cmask;						\\
--	unsigned long ts = sizeof(type) * CHAR_BIT; /* type size */	\\
--	unsigned long start_unit, end_unit, this_unit;			\\
--	unsigned long end, cshift; /* cshift is "complement shift" */	\\
-+	vtype _v = (v);							\\
-+	type *_ptr = CAST_PTR(type *, ptr);				\\
-+	unsigned long _start = (start), _length = (length);		\\
-+	type _mask, _cmask;						\\
-+	unsigned long _ts = sizeof(type) * CHAR_BIT; /* type size */	\\
-+	unsigned long _start_unit, _end_unit, _this_unit;		\\
-+	unsigned long _end, _cshift; /* _cshift is "complement shift" */ \\
- 									\\
--	if (!__length)							\\
-+	if (!_length)							\\
- 		break;							\\
- 									\\
--	end = __start + __length;					\\
--	start_unit = __start / ts;					\\
--	end_unit = (end + (ts - 1)) / ts;				\\
-+	_end = _start + _length;					\\
-+	_start_unit = _start / _ts;					\\
-+	_end_unit = (_end + (_ts - 1)) / _ts;				\\
- 									\\
- 	/* Trim v high bits */						\\
--	if (__length < sizeof(__v) * CHAR_BIT)				\\
--		__v &= _$prefix$bt_make_mask(_vtype, __length);		\\
-+	if (_length < sizeof(_v) * CHAR_BIT)				\\
-+		_v &= _$prefix$bt_make_mask(vtype, _length);		\\
- 									\\
- 	/* We can now append v with a simple "or", shift it piece-wise */ \\
--	this_unit = end_unit - 1;					\\
--	if (start_unit == end_unit - 1) {				\\
--		mask = _$prefix$bt_make_mask(type, (ts - (end % ts)) % ts); \\
--		if (__start % ts)					\\
--			mask |= _$prefix$bt_make_mask_complement(type, ts - (__start % ts)); \\
--		cmask = _$prefix$bt_lshift(type, (type) (__v), (ts - (end % ts)) % ts); \\
--		cmask &= ~mask;						\\
--		__ptr[this_unit] &= mask;				\\
--		__ptr[this_unit] |= cmask;				\\
-+	_this_unit = _end_unit - 1;					\\
-+	if (_start_unit == _end_unit - 1) {				\\
-+		_mask = _$prefix$bt_make_mask(type, (_ts - (_end % _ts)) % _ts); \\
-+		if (_start % _ts)					\\
-+			_mask |= _$prefix$bt_make_mask_complement(type, _ts - (_start % _ts)); \\
-+		_cmask = _$prefix$bt_lshift(type, (type) (_v), (_ts - (_end % _ts)) % _ts); \\
-+		_cmask &= ~_mask;					\\
-+		_ptr[_this_unit] &= _mask;				\\
-+		_ptr[_this_unit] |= _cmask;				\\
- 		break;							\\
- 	}								\\
--	if (end % ts) {							\\
--		cshift = end % ts;					\\
--		mask = _$prefix$bt_make_mask(type, ts - cshift);	\\
--		cmask = _$prefix$bt_lshift(type, (type) (__v), ts - cshift); \\
--		cmask &= ~mask;						\\
--		__ptr[this_unit] &= mask;				\\
--		__ptr[this_unit] |= cmask;				\\
--		_$prefix$bt_safe_rshift(_vtype, __v, cshift); \\
--		end -= cshift;						\\
--		this_unit--;						\\
-+	if (_end % _ts) {						\\
-+		_cshift = _end % _ts;					\\
-+		_mask = _$prefix$bt_make_mask(type, _ts - _cshift);	\\
-+		_cmask = _$prefix$bt_lshift(type, (type) (_v), _ts - _cshift); \\
-+		_cmask &= ~_mask;					\\
-+		_ptr[_this_unit] &= _mask;				\\
-+		_ptr[_this_unit] |= _cmask;				\\
-+		_$prefix$bt_safe_rshift(vtype, _v, _cshift);		\\
-+		_end -= _cshift;					\\
-+		_this_unit--;						\\
- 	}								\\
--	for (; (long) this_unit >= (long) start_unit + 1; this_unit--) { \\
--		__ptr[this_unit] = (type) __v;				\\
--		_$prefix$bt_safe_rshift(_vtype, __v, ts); \\
--		end -= ts;						\\
-+	for (; (long) _this_unit >= (long) _start_unit + 1; _this_unit--) { \\
-+		_ptr[_this_unit] = (type) _v;				\\
-+		_$prefix$bt_safe_rshift(vtype, _v, _ts); 		\\
-+		_end -= _ts;						\\
- 	}								\\
--	if (__start % ts) {						\\
--		mask = _$prefix$bt_make_mask_complement(type, ts - (__start % ts)); \\
--		cmask = (type) __v;					\\
--		cmask &= ~mask;						\\
--		__ptr[this_unit] &= mask;				\\
--		__ptr[this_unit] |= cmask;				\\
-+	if (_start % _ts) {						\\
-+		_mask = _$prefix$bt_make_mask_complement(type, _ts - (_start % _ts)); \\
-+		_cmask = (type) _v;					\\
-+		_cmask &= ~_mask;					\\
-+		_ptr[_this_unit] &= _mask;				\\
-+		_ptr[_this_unit] |= _cmask;				\\
- 	} else								\\
--		__ptr[this_unit] = (type) __v;				\\
-+		_ptr[_this_unit] = (type) _v;				\\
- } while (0)
- 
- /*
-@@ -918,19 +918,19 @@ do {									\\
- 
- #if ($PREFIX$BYTE_ORDER == LITTLE_ENDIAN)
- 
--#define $prefix$bt_bitfield_write_le(ptr, type, _start, _length, _vtype, _v) \\
--	_$prefix$bt_bitfield_write_le(ptr, type, _start, _length, _vtype, _v)
-+#define $prefix$bt_bitfield_write_le(ptr, type, start, length, vtype, v) \\
-+	_$prefix$bt_bitfield_write_le(ptr, type, start, length, vtype, v)
- 
--#define $prefix$bt_bitfield_write_be(ptr, type, _start, _length, _vtype, _v) \\
--	_$prefix$bt_bitfield_write_be(ptr, unsigned char, _start, _length, _vtype, _v)
-+#define $prefix$bt_bitfield_write_be(ptr, type, start, length, vtype, v) \\
-+	_$prefix$bt_bitfield_write_be(ptr, unsigned char, start, length, vtype, v)
- 
- #elif ($PREFIX$BYTE_ORDER == BIG_ENDIAN)
- 
--#define $prefix$bt_bitfield_write_le(ptr, type, _start, _length, _vtype, _v) \\
--	_$prefix$bt_bitfield_write_le(ptr, unsigned char, _start, _length, _vtype, _v)
-+#define $prefix$bt_bitfield_write_le(ptr, type, start, length, vtype, v) \\
-+	_$prefix$bt_bitfield_write_le(ptr, unsigned char, start, length, vtype, v)
- 
--#define $prefix$bt_bitfield_write_be(ptr, type, _start, _length, _vtype, _v) \\
--	_$prefix$bt_bitfield_write_be(ptr, type, _start, _length, _vtype, _v)
-+#define $prefix$bt_bitfield_write_be(ptr, type, start, length, vtype, v) \\
-+	_$prefix$bt_bitfield_write_be(ptr, type, start, length, vtype, v)
- 
- #else /* ($PREFIX$BYTE_ORDER == PDP_ENDIAN) */
- 
--- 
-2.11.0
+Yml0ZmllbGQuaCB1c2VzIHRoZSBsZWZ0IHNoaWZ0IG9wZXJhdG9yIHdpdGggYSBsZWZ0IG9wZXJh
+bmQgd2hpY2gKbWF5IGJlIG5lZ2F0aXZlLiBUaGUgQzk5IHN0YW5kYXJkIHN0YXRlcyB0aGF0IHNo
+aWZ0aW5nIGEgbmVnYXRpdmUKdmFsdWUgaXMgdW5kZWZpbmVkLgoKV2hlbiBidWlsZGluZyB3aXRo
+IC1Xc2hpZnQtbmVnYXRpdmUtdmFsdWUsIHdlIGdldCB0aGlzIGdjYyB3YXJuaW5nOgoKSW4gZmls
+ZSBpbmNsdWRlZCBmcm9tIC9ob21lL3NtYXJjaGkvc3JjL2JhYmVsdHJhY2UvaW5jbHVkZS9iYWJl
+bHRyYWNlL2N0ZnNlci1pbnRlcm5hbC5oOjQ0OjAsCiAgICAgICAgICAgICAgICAgZnJvbSAvaG9t
+ZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2N0ZnNlci9jdGZzZXIuYzo0MjoKL2hvbWUvc21hcmNo
+aS9zcmMvYmFiZWx0cmFjZS9pbmNsdWRlL2JhYmVsdHJhY2UvY3Rmc2VyLWludGVybmFsLmg6IElu
+IGZ1bmN0aW9uIOKAmGJ0X2N0ZnNlcl93cml0ZV91bnNpZ25lZF9pbnTigJk6Ci9ob21lL3NtYXJj
+aGkvc3JjL2JhYmVsdHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2JpdGZpZWxkLWludGVybmFsLmg6
+MTE2OjI0OiBlcnJvcjogbGVmdCBzaGlmdCBvZiBuZWdhdGl2ZSB2YWx1ZSBbLVdlcnJvcj1zaGlm
+dC1uZWdhdGl2ZS12YWx1ZV0KICAgbWFzayA9IH4oKH4odHlwZSkgMCkgPDwgKF9fc3RhcnQgJSB0
+cykpOyAgXAogICAgICAgICAgICAgICAgICAgICAgICBeCi9ob21lL3NtYXJjaGkvc3JjL2JhYmVs
+dHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2JpdGZpZWxkLWludGVybmFsLmg6MjIyOjI6IG5vdGU6
+IGluIGV4cGFuc2lvbiBvZiBtYWNybyDigJhfYnRfYml0ZmllbGRfd3JpdGVfbGXigJkKICBfYnRf
+Yml0ZmllbGRfd3JpdGVfbGUocHRyLCB0eXBlLCBfc3RhcnQsIF9sZW5ndGgsIF92KQogIF5+fn5+
+fn5+fn5+fn5+fn5+fn5+fgovaG9tZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2luY2x1ZGUvYmFi
+ZWx0cmFjZS9jdGZzZXItaW50ZXJuYWwuaDo0MTg6Mzogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1h
+Y3JvIOKAmGJ0X2JpdGZpZWxkX3dyaXRlX2xl4oCZCiAgIGJ0X2JpdGZpZWxkX3dyaXRlX2xlKG1t
+YXBfYWxpZ25fYWRkcihjdGZzZXItPmJhc2VfbW1hKSArCiAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+
+CgpUaGlzIGJvaWxzIGRvd24gdG8gdGhlIGZhY3QgdGhhdCB0aGUgZXhwcmVzc2lvbiB+KCh1aW50
+OF90KTApIGhhcyB0eXBlCiJzaWduZWQgaW50Iiwgd2hpY2ggaXMgdXNlZCBhcyBhbiBvcGVyYW5k
+IG9mIHRoZSBsZWZ0IHNoaWZ0LiAgVGhpcyBpcyBkdWUKdG8gdGhlIGludGVnZXIgcHJvbW90aW9u
+IHJ1bGVzIG9mIEM5OSAoNi4zLjMuMSk6CgogICAgSWYgYW4gaW50IGNhbiByZXByZXNlbnQgYWxs
+IHZhbHVlcyBvZiB0aGUgb3JpZ2luYWwgdHlwZSwgdGhlIHZhbHVlIGlzCiAgICBjb252ZXJ0ZWQg
+dG8gYW4gaW50OyBvdGhlcndpc2UsIGl0IGlzIGNvbnZlcnRlZCB0byBhbiB1bnNpZ25lZCBpbnQu
+CiAgICBUaGVzZSBhcmUgY2FsbGVkIHRoZSBpbnRlZ2VyIHByb21vdGlvbnMuIEFsbCBvdGhlciB0
+eXBlcyBhcmUgdW5jaGFuZ2VkCiAgICBieSB0aGUgaW50ZWdlciBwcm9tb3Rpb25zLgoKV2UgYWxz
+byBuZWVkIHRvIGNhc3QgdGhlIHJlc3VsdCBleHBsaWNpdGx5IGludG8gdGhlIGxlZnQgaGFuZApz
+aWRlIHR5cGUgdG8gZGVhbCB3aXRoOgoKd2FybmluZzogbGFyZ2UgaW50ZWdlciBpbXBsaWNpdGx5
+IHRydW5jYXRlZCB0byB1bnNpZ25lZCB0eXBlIFstV292ZXJmbG93XQoKVGhlIEM5OSBzdGFuZGFy
+ZCBzdGF0ZXMgdGhhdCBhIHJpZ2h0IHNoaWZ0IGhhcyBpbXBsZW1lbnRhdGlvbi1kZWZpbmVkCmJl
+aGF2aW9yIHdoZW4gc2hpZnRpbmcgYSBzaWduZWQgbmVnYXRpdmUgdmFsdWUuIEFkZCBhIHByZXBy
+b2Nlc3NvciBjaGVjawp0aGF0IHRoZSBjb21waWxlciBwcm92aWRlcyB0aGUgZXhwZWN0ZWQgYmVo
+YXZpb3IsIGVsc2UgcHJvdmlkZSBhbgphbHRlcm5hdGl2ZSBpbXBsZW1lbnRhdGlvbiB3aGljaCBn
+dWFyYW50ZWVzIHRoZSBpbnRlbmRlZCBiZWhhdmlvci4KCkEgcHJlcHJvY2Vzc29yIGNoZWNrIGlz
+IGFsc28gYWRkZWQgdG8gZW5zdXJlIHRoYXQgdGhlIGNvbXBpbGVyCnJlcHJlc2VudGF0aW9uIGZv
+ciBzaWduZWQgdmFsdWVzIGlzIHR3bydzIGNvbXBsZW1lbnQsIHdoaWNoIGlzIGV4cGVjdGVkCmJ5
+IHRoaXMgaGVhZGVyLgoKU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUu
+ZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KLS0tCkNoYW5nZXMgc2luY2UgdjE6Ci0gRml4IHdyb25n
+IHVzZSBvZiBfJHByZWZpeCRidF9tYWtlX21hc2soKSBpbiBfJHByZWZpeCRidF9iaXRmaWVsZF93
+cml0ZV9iZS4KICBTaG91bGQgYmUgXyRwcmVmaXgkYnRfbWFrZV9tYXNrX2NvbXBsZW1lbnQoKS4K
+CkNoYW5nZXMgc2luY2UgdjI6Ci0gRG9jdW1lbnRhdGlvbiBhbmQgc3R5bGUgdXBkYXRlcy4KLS0t
+CiBiYXJlY3RmL3RlbXBsYXRlcy5weSB8IDE5MyArKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKystLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAxNjIgaW5zZXJ0aW9ucygr
+KSwgMzEgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvYmFyZWN0Zi90ZW1wbGF0ZXMucHkgYi9i
+YXJlY3RmL3RlbXBsYXRlcy5weQppbmRleCBlZWM2NzdiLi42NDQ0ZGE0IDEwMDY0NAotLS0gYS9i
+YXJlY3RmL3RlbXBsYXRlcy5weQorKysgYi9iYXJlY3RmL3RlbXBsYXRlcy5weQpAQCAtNTk2LDEx
+ICs1OTYsOSBAQCBfQklURklFTEQgPSAnJycjaWZuZGVmIF8kUFJFRklYJEJJVEZJRUxEX0gKICNk
+ZWZpbmUgXyRQUkVGSVgkQklURklFTERfSAogCiAvKgotICogQmFiZWxUcmFjZQotICoKICAqIEJp
+dGZpZWxkcyByZWFkL3dyaXRlIGZ1bmN0aW9ucy4KICAqCi0gKiBDb3B5cmlnaHQgMjAxMCAtIE1h
+dGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CisgKiBDb3B5
+cmlnaHQgMjAxMC0yMDE5IC0gTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVm
+ZmljaW9zLmNvbT4KICAqCiAgKiBQZXJtaXNzaW9uIGlzIGhlcmVieSBncmFudGVkLCBmcmVlIG9m
+IGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcgYSBjb3B5CiAgKiBvZiB0aGlzIHNvZnR3
+YXJlIGFuZCBhc3NvY2lhdGVkIGRvY3VtZW50YXRpb24gZmlsZXMgKHRoZSAiU29mdHdhcmUiKSwg
+dG8gZGVhbApAQCAtNjMyLDE2ICs2MzAsMTQ5IEBAIF9CSVRGSUVMRCA9ICcnJyNpZm5kZWYgXyRQ
+UkVGSVgkQklURklFTERfSAogCiAjZGVmaW5lICRQUkVGSVgkQllURV9PUkRFUiAkRU5ESUFOX0RF
+RiQKIAotLyogV2UgY2FuJ3Qgc2hpZnQgYSBpbnQgZnJvbSAzMiBiaXQsID4+IDMyIGFuZCA8PCAz
+MiBvbiBpbnQgaXMgdW5kZWZpbmVkICovCi0jZGVmaW5lIF8kcHJlZml4JGJ0X3BpZWNld2lzZV9y
+c2hpZnQoX3Z0eXBlLCBfdiwgX3NoaWZ0KSBcXAorLyoKKyAqIFRoaXMgYml0ZmllbGQgaGVhZGVy
+IHJlcXVpcmVzIHRoZSBjb21waWxlciByZXByZXNlbnRhdGlvbiBvZiBzaWduZWQKKyAqIGludGVn
+ZXJzIHRvIGJlIHR3bydzIGNvbXBsZW1lbnQuCisgKi8KKyNpZiAoLTEgIT0gfjApCisjZXJyb3Ig
+ImJpdGZpZWxkLmggcmVxdWlyZXMgdGhlIGNvbXBpbGVyIHJlcHJlc2VudGF0aW9uIG9mIHNpZ25l
+ZCBpbnRlZ2VycyB0byBiZSB0d28ncyBjb21wbGVtZW50LiIKKyNlbmRpZgorCisvKgorICogUHJv
+ZHVjZSBhIGJ1aWxkLXRpbWUgZXJyb3IgaWYgdGhlIGNvbmRpdGlvbiBgY29uZGAgaXMgbm9uLXpl
+cm8uCisgKiBFdmFsdWF0ZXMgYXMgYSBzaXplX3QgZXhwcmVzc2lvbi4KKyAqLworI2RlZmluZSBf
+JHByZWZpeCRCVF9CVUlMRF9BU1NFUlQoY29uZCkJCQkJCVxcCisJc2l6ZW9mKHN0cnVjdCB7IGlu
+dCBmOigyICogISEoY29uZCkgLSAxKTsgfSkKKworLyoKKyAqIENhc3QgdmFsdWUgYHZgIHRvIGFu
+IHVuc2lnbmVkIGludGVnZXIgb2YgdGhlIHNhbWUgc2l6ZSBhcyBgdmAuCisgKi8KKyNkZWZpbmUg
+XyRwcmVmaXgkYnRfY2FzdF92YWx1ZV90b191bnNpZ25lZCh2KQkJCQlcXAorCShzaXplb2Yodikg
+PT0gc2l6ZW9mKHVpbnQ4X3QpID8gKHVpbnQ4X3QpICh2KSA6CQkJXFwKKwlzaXplb2YodikgPT0g
+c2l6ZW9mKHVpbnQxNl90KSA/ICh1aW50MTZfdCkgKHYpIDoJCVxcCisJc2l6ZW9mKHYpID09IHNp
+emVvZih1aW50MzJfdCkgPyAodWludDMyX3QpICh2KSA6CQlcXAorCXNpemVvZih2KSA9PSBzaXpl
+b2YodWludDY0X3QpID8gKHVpbnQ2NF90KSAodikgOgkJXFwKKwlfJHByZWZpeCRCVF9CVUlMRF9B
+U1NFUlQoc2l6ZW9mKHYpIDw9IHNpemVvZih1aW50NjRfdCkpKQorCisvKgorICogQ2FzdCB2YWx1
+ZSBgdmAgdG8gYW4gdW5zaWduZWQgaW50ZWdlciB0eXBlIG9mIHRoZSBzaXplIG9mIHR5cGUgYHR5
+cGVgCisgKiAqd2l0aG91dCogc2lnbi1leHRlbnNpb24uCisgKgorICogVGhlIHVuc2lnbmVkIGNh
+c3QgZW5zdXJlcyB0aGF0IHdlJ3JlIG5vdCBzaGlmdGluZyBhIG5lZ2F0aXZlIHZhbHVlLAorICog
+d2hpY2ggaXMgdW5kZWZpbmVkIGluIEMuIEhvd2V2ZXIsIHRoaXMgbGltaXRzIHRoZSBtYXhpbXVt
+IHR5cGUgc2l6ZQorICogb2YgYHR5cGVgIHRvIDY0LWJpdC4gR2VuZXJhdGUgYSBjb21waWxlLXRp
+bWUgZXJyb3IgaWYgdGhlIHNpemUgb2YKKyAqIGB0eXBlYCBpcyBsYXJnZXIgdGhhbiA2NC1iaXQu
+CisgKi8KKyNkZWZpbmUgXyRwcmVmaXgkYnRfY2FzdF92YWx1ZV90b191bnNpZ25lZF90eXBlKHR5
+cGUsIHYpCQlcXAorCShzaXplb2YodHlwZSkgPT0gc2l6ZW9mKHVpbnQ4X3QpID8JCQkJXFwKKwkJ
+KHVpbnQ4X3QpIF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkKHYpIDoJCVxcCisJc2l6ZW9mKHR5
+cGUpID09IHNpemVvZih1aW50MTZfdCkgPwkJCQlcXAorCQkodWludDE2X3QpIF9idF9jYXN0X3Zh
+bHVlX3RvX3Vuc2lnbmVkKHYpIDoJCVxcCisJc2l6ZW9mKHR5cGUpID09IHNpemVvZih1aW50MzJf
+dCkgPwkJCQlcXAorCQkodWludDMyX3QpIF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkKHYpIDoJ
+CVxcCisJc2l6ZW9mKHR5cGUpID09IHNpemVvZih1aW50NjRfdCkgPwkJCQlcXAorCQkodWludDY0
+X3QpIF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkKHYpIDoJCVxcCisJXyRwcmVmaXgkQlRfQlVJ
+TERfQVNTRVJUKHNpemVvZih2KSA8PSBzaXplb2YodWludDY0X3QpKSkKKworLyoKKyAqIF8kcHJl
+Zml4JGJ0X2ZpbGxfbWFzayBldmFsdWF0ZXMgdG8gYSAidHlwZSIgaW50ZWdlciB3aXRoIGFsbCBi
+aXRzIHNldC4KKyAqLworI2RlZmluZSBfJHByZWZpeCRidF9maWxsX21hc2sodHlwZSkJKCh0eXBl
+KSB+KHR5cGUpIDApCisKKy8qCisgKiBMZWZ0IHNoaWZ0IGEgdmFsdWUgYHZgIG9mIGBzaGlmdGAg
+Yml0cy4KKyAqCisgKiBUaGUgdHlwZSBvZiBgdmAgY2FuIGJlIHNpZ25lZCBvciB1bnNpZ25lZCBp
+bnRlZ2VyLgorICogVGhlIHZhbHVlIG9mIGBzaGlmdGAgbXVzdCBiZSBsZXNzIHRoYW4gdGhlIHNp
+emUgb2YgYHZgIChpbiBiaXRzKSwKKyAqIG90aGVyd2lzZSB0aGUgYmVoYXZpb3IgaXMgdW5kZWZp
+bmVkLgorICogRXZhbHVhdGVzIHRvIHRoZSByZXN1bHQgb2YgdGhlIHNoaWZ0IG9wZXJhdGlvbi4K
+KyAqCisgKiBBY2NvcmRpbmcgdG8gdGhlIEM5OSBzdGFuZGFyZCwgbGVmdCBzaGlmdCBvZiBhIGxl
+ZnQgaGFuZC1zaWRlIHNpZ25lZAorICogdHlwZSBpcyB1bmRlZmluZWQgaWYgaXQgaGFzIGEgbmVn
+YXRpdmUgdmFsdWUgb3IgaWYgdGhlIHJlc3VsdCBjYW5ub3QKKyAqIGJlIHJlcHJlc2VudGVkIGlu
+IHRoZSByZXN1bHQgdHlwZS4gVGhpcyBiaXRmaWVsZCBoZWFkZXIgZGlzY2FyZHMgdGhlCisgKiBi
+aXRzIHRoYXQgYXJlIGxlZnQtc2hpZnRlZCBiZXlvbmQgdGhlIHJlc3VsdCB0eXBlIHJlcHJlc2Vu
+dGF0aW9uLAorICogd2hpY2ggaXMgdGhlIGJlaGF2aW9yIG9mIGFuIHVuc2lnbmVkIHR5cGUgbGVm
+dCBzaGlmdCBvcGVyYXRpb24uCisgKiBUaGVyZWZvcmUsIGFsd2F5cyBwZXJmb3JtIGxlZnQgc2hp
+ZnQgb24gYW4gdW5zaWduZWQgdHlwZS4KKyAqCisgKiBUaGlzIG1hY3JvIHNob3VsZCBub3QgYmUg
+dXNlZCBpZiBgc2hpZnRgIGNhbiBiZSBncmVhdGVyIG9yIGVxdWFsIHRoYW4KKyAqIHRoZSBiaXR3
+aWR0aCBvZiBgdmAuIFNlZSBgX2J0X3NhZmVfbHNoaWZ0YC4KKyAqLworI2RlZmluZSBfJHByZWZp
+eCRidF9sc2hpZnQoX3Z0eXBlLCB2LCBzaGlmdCkJCQkJXFwKKwkoKF92dHlwZSkgKF8kcHJlZml4
+JGJ0X2Nhc3RfdmFsdWVfdG9fdW5zaWduZWQodikgPDwgKHNoaWZ0KSkpCisKKy8qCisgKiBHZW5l
+cmF0ZSBhIG1hc2sgb2YgdHlwZSBgdHlwZWAgd2l0aCB0aGUgYGxlbmd0aGAgbGVhc3Qgc2lnbmlm
+aWNhbnQgYml0cworICogY2xlYXJlZCwgYW5kIHRoZSBtb3N0IHNpZ25pZmljYW50IGJpdHMgc2V0
+LgorICovCisjZGVmaW5lIF8kcHJlZml4JGJ0X21ha2VfbWFza19jb21wbGVtZW50KHR5cGUsIGxl
+bmd0aCkJCQlcXAorCV8kcHJlZml4JGJ0X2xzaGlmdCh0eXBlLCBfJHByZWZpeCRidF9maWxsX21h
+c2sodHlwZSksIGxlbmd0aCkKKworLyoKKyAqIEdlbmVyYXRlIGEgbWFzayBvZiB0eXBlIGB0eXBl
+YCB3aXRoIHRoZSBgbGVuZ3RoYCBsZWFzdCBzaWduaWZpY2FudCBiaXRzCisgKiBzZXQsIGFuZCB0
+aGUgbW9zdCBzaWduaWZpY2FudCBiaXRzIGNsZWFyZWQuCisgKi8KKyNkZWZpbmUgXyRwcmVmaXgk
+YnRfbWFrZV9tYXNrKHR5cGUsIGxlbmd0aCkJCQkJXFwKKwkoKHR5cGUpIH5fJHByZWZpeCRidF9t
+YWtlX21hc2tfY29tcGxlbWVudCh0eXBlLCBsZW5ndGgpKQorCisvKgorICogUmlnaHQgc2hpZnQg
+YSB2YWx1ZSBgdmAgb2YgYHNoaWZ0YCBiaXRzLgorICoKKyAqIFRoZSB0eXBlIG9mIGB2YCBjYW4g
+YmUgc2lnbmVkIG9yIHVuc2lnbmVkIGludGVnZXIuCisgKiBUaGUgdmFsdWUgb2YgYHNoaWZ0YCBt
+dXN0IGJlIGxlc3MgdGhhbiB0aGUgc2l6ZSBvZiBgdmAgKGluIGJpdHMpLAorICogb3RoZXJ3aXNl
+IHRoZSBiZWhhdmlvciBpcyB1bmRlZmluZWQuCisgKiBFdmFsdWF0ZXMgdG8gdGhlIHJlc3VsdCBv
+ZiB0aGUgc2hpZnQgb3BlcmF0aW9uLgorICoKKyAqIEFjY29yZGluZyB0byB0aGUgQzk5IHN0YW5k
+YXJkLCByaWdodCBzaGlmdCBvZiBhIGxlZnQgaGFuZC1zaWRlIHNpZ25lZAorICogdHlwZSB3aGlj
+aCBoYXMgYSBuZWdhdGl2ZSB2YWx1ZSBpcyBpbXBsZW1lbnRhdGlvbiBkZWZpbmVkLiBUaGlzCisg
+KiBiaXRmaWVsZCBoZWFkZXIgcmVsaWVzIG9uIHRoZSByaWdodCBzaGlmdCBpbXBsZW1lbnRhdGlv
+biBjYXJyeWluZyB0aGUKKyAqIHNpZ24gYml0LiBJZiB0aGUgY29tcGlsZXIgaW1wbGVtZW50YXRp
+b24gaGFzIGEgZGlmZmVyZW50IGJlaGF2aW9yLAorICogZW11bGF0ZSBjYXJyeWluZyB0aGUgc2ln
+biBiaXQuCisgKgorICogVGhpcyBtYWNybyBzaG91bGQgbm90IGJlIHVzZWQgaWYgYHNoaWZ0YCBj
+YW4gYmUgZ3JlYXRlciBvciBlcXVhbCB0aGFuCisgKiB0aGUgYml0d2lkdGggb2YgYHZgLiBTZWUg
+YF9idF9zYWZlX3JzaGlmdGAuCisgKi8KKyNpZiAoKC0xID4+IDEpID09IC0xKQorI2RlZmluZSBf
+JHByZWZpeCRidF9yc2hpZnQoX3Z0eXBlLCB2LCBzaGlmdCkJKCh2KSA+PiAoc2hpZnQpKQorI2Vs
+c2UKKyNkZWZpbmUgXyRwcmVmaXgkYnRfcnNoaWZ0KF92dHlwZSwgdiwgc2hpZnQpCQkJCVxcCisJ
+KChfdnR5cGUpICgoXyRwcmVmaXgkYnRfY2FzdF92YWx1ZV90b191bnNpZ25lZCh2KSA+PiAoc2hp
+ZnQpKSB8CVxcCisJCSgodikgPCAwID8gXyRwcmVmaXgkYnRfbWFrZV9tYXNrX2NvbXBsZW1lbnQo
+X3Z0eXBlLAlcXAorCQkJc2l6ZW9mKHYpICogQ0hBUl9CSVQgLSAoc2hpZnQpKSA6IDApKSkKKyNl
+bmRpZgorCisvKgorICogUmlnaHQgc2hpZnQgYSBzaWduZWQgb3IgdW5zaWduZWQgaW50ZWdlciB3
+aXRoIGBzaGlmdGAgdmFsdWUgYmVpbmcgYW4KKyAqIGFyYml0cmFyeSBudW1iZXIgb2YgYml0cy4g
+YHZgIGlzIG1vZGlmaWVkIGJ5IHRoaXMgbWFjcm8uIFRoZSBzaGlmdAorICogaXMgdHJhbnNmb3Jt
+ZWQgaW50byBhIHNlcXVlbmNlIG9mIGBfbnJfcGFydGlhbF9zaGlmdHNgIGNvbnNlY3V0aXZlCisg
+KiBzaGlmdCBvcGVyYXRpb25zLCBlYWNoIG9mIGEgbnVtYmVyIG9mIGJpdHMgc21hbGxlciB0aGFu
+IHRoZSBiaXR3aWR0aAorICogb2YgYHZgLCBlbmRpbmcgd2l0aCBhIHNoaWZ0IG9mIHRoZSBudW1i
+ZXIgb2YgbGVmdCBvdmVyIGJpdHMuCisgKi8KKyNkZWZpbmUgXyRwcmVmaXgkYnRfc2FmZV9yc2hp
+ZnQodnR5cGUsIHYsIHNoaWZ0KQkJCVxcCitkbyB7CQkJCQkJCQkJXFwKKwl1bnNpZ25lZCBsb25n
+IF9ucl9wYXJ0aWFsX3NoaWZ0cyA9IChzaGlmdCkgLyAoc2l6ZW9mKHYpICogQ0hBUl9CSVQgLSAx
+KTsgXFwKKwl1bnNpZ25lZCBsb25nIF9sZWZ0b3Zlcl9iaXRzID0gKHNoaWZ0KSAlIChzaXplb2Yo
+dikgKiBDSEFSX0JJVCAtIDEpOyBcXAorCQkJCQkJCQkJXFwKKwlmb3IgKDsgX25yX3BhcnRpYWxf
+c2hpZnRzOyBfbnJfcGFydGlhbF9zaGlmdHMtLSkJCVxcCisJCSh2KSA9IF8kcHJlZml4JGJ0X3Jz
+aGlmdCh2dHlwZSwgdiwgc2l6ZW9mKHYpICogQ0hBUl9CSVQgLSAxKTsgXFwKKwkodikgPSBfJHBy
+ZWZpeCRidF9yc2hpZnQodnR5cGUsIHYsIF9sZWZ0b3Zlcl9iaXRzKTsJCVxcCit9IHdoaWxlICgw
+KQorCisvKgorICogTGVmdCBzaGlmdCBhIHNpZ25lZCBvciB1bnNpZ25lZCBpbnRlZ2VyIHdpdGgg
+YHNoaWZ0YCB2YWx1ZSBiZWluZyBhbgorICogYXJiaXRyYXJ5IG51bWJlciBvZiBiaXRzLiBgdmAg
+aXMgbW9kaWZpZWQgYnkgdGhpcyBtYWNyby4gVGhlIHNoaWZ0CisgKiBpcyB0cmFuc2Zvcm1lZCBp
+bnRvIGEgc2VxdWVuY2Ugb2YgYF9ucl9wYXJ0aWFsX3NoaWZ0c2AgY29uc2VjdXRpdmUKKyAqIHNo
+aWZ0IG9wZXJhdGlvbnMsIGVhY2ggb2YgYSBudW1iZXIgb2YgYml0cyBzbWFsbGVyIHRoYW4gdGhl
+IGJpdHdpZHRoCisgKiBvZiBgdmAsIGVuZGluZyB3aXRoIGEgc2hpZnQgb2YgdGhlIG51bWJlciBv
+ZiBsZWZ0IG92ZXIgYml0cy4KKyAqLworI2RlZmluZSBfJHByZWZpeCRidF9zYWZlX2xzaGlmdCh2
+dHlwZSwgdiwgc2hpZnQpCQkJXFwKIGRvIHsJCQkJCQkJCQlcXAotCXVuc2lnbmVkIGxvbmcgX19f
+c2hpZnQgPSAoX3NoaWZ0KTsJCQkJXFwKLQl1bnNpZ25lZCBsb25nIHNiID0gKF9fX3NoaWZ0KSAv
+IChzaXplb2YoX3YpICogQ0hBUl9CSVQgLSAxKTsJXFwKLQl1bnNpZ25lZCBsb25nIGZpbmFsID0g
+KF9fX3NoaWZ0KSAlIChzaXplb2YoX3YpICogQ0hBUl9CSVQgLSAxKTsgXFwKKwl1bnNpZ25lZCBs
+b25nIF9ucl9wYXJ0aWFsX3NoaWZ0cyA9IChzaGlmdCkgLyAoc2l6ZW9mKHYpICogQ0hBUl9CSVQg
+LSAxKTsgXFwKKwl1bnNpZ25lZCBsb25nIF9sZWZ0b3Zlcl9iaXRzID0gKHNoaWZ0KSAlIChzaXpl
+b2YodikgKiBDSEFSX0JJVCAtIDEpOyBcXAogCQkJCQkJCQkJXFwKLQlmb3IgKDsgc2I7IHNiLS0p
+CQkJCQkJXFwKLQkJX3YgPj49IHNpemVvZihfdikgKiBDSEFSX0JJVCAtIDE7CQkJXFwKLQlfdiA+
+Pj0gZmluYWw7CQkJCQkJCVxcCisJZm9yICg7IF9ucl9wYXJ0aWFsX3NoaWZ0czsgX25yX3BhcnRp
+YWxfc2hpZnRzLS0pCQlcXAorCQkodikgPSBfJHByZWZpeCRidF9sc2hpZnQodnR5cGUsIHYsIHNp
+emVvZih2KSAqIENIQVJfQklUIC0gMSk7IFxcCisJKHYpID0gXyRwcmVmaXgkYnRfbHNoaWZ0KHZ0
+eXBlLCB2LCBfbGVmdG92ZXJfYml0cyk7CQlcXAogfSB3aGlsZSAoMCkKIAogLyoKQEAgLTY2NCw3
+ICs3OTUsNyBAQCBkbyB7CQkJCQkJCQkJXFwKIAogI2RlZmluZSBfJHByZWZpeCRidF9iaXRmaWVs
+ZF93cml0ZV9sZShfcHRyLCB0eXBlLCBfc3RhcnQsIF9sZW5ndGgsIF92dHlwZSwgX3YpIFxcCiBk
+byB7CQkJCQkJCQkJXFwKLQlfdnR5cGUgX192ID0gKF92KTsJCQkJCVxcCisJX3Z0eXBlIF9fdiA9
+IChfdik7CQkJCQkJXFwKIAl0eXBlICpfX3B0ciA9IENBU1RfUFRSKHR5cGUgKiwgX3B0cik7CQkJ
+CVxcCiAJdW5zaWduZWQgbG9uZyBfX3N0YXJ0ID0gKF9zdGFydCksIF9fbGVuZ3RoID0gKF9sZW5n
+dGgpOwkJXFwKIAl0eXBlIG1hc2ssIGNtYXNrOwkJCQkJCVxcCkBAIC02ODEsMTUgKzgxMiwxNSBA
+QCBkbyB7CQkJCQkJCQkJXFwKIAkJCQkJCQkJCVxcCiAJLyogVHJpbSB2IGhpZ2ggYml0cyAqLwkJ
+CQkJCVxcCiAJaWYgKF9fbGVuZ3RoIDwgc2l6ZW9mKF9fdikgKiBDSEFSX0JJVCkJCQkJXFwKLQkJ
+X192ICY9IH4oKH4oX3Z0eXBlKSAwKSA8PCBfX2xlbmd0aCk7CQlcXAorCQlfX3YgJj0gXyRwcmVm
+aXgkYnRfbWFrZV9tYXNrKF92dHlwZSwgX19sZW5ndGgpOwkJXFwKIAkJCQkJCQkJCVxcCiAJLyog
+V2UgY2FuIG5vdyBhcHBlbmQgdiB3aXRoIGEgc2ltcGxlICJvciIsIHNoaWZ0IGl0IHBpZWNlLXdp
+c2UgKi8gXFwKIAl0aGlzX3VuaXQgPSBzdGFydF91bml0OwkJCQkJCVxcCiAJaWYgKHN0YXJ0X3Vu
+aXQgPT0gZW5kX3VuaXQgLSAxKSB7CQkJCVxcCi0JCW1hc2sgPSB+KCh+KHR5cGUpIDApIDw8IChf
+X3N0YXJ0ICUgdHMpKTsJCVxcCisJCW1hc2sgPSBfJHByZWZpeCRidF9tYWtlX21hc2sodHlwZSwg
+X19zdGFydCAlIHRzKTsJXFwKIAkJaWYgKGVuZCAlIHRzKQkJCQkJCVxcCi0JCQltYXNrIHw9ICh+
+KHR5cGUpIDApIDw8IChlbmQgJSB0cyk7CQlcXAotCQljbWFzayA9ICh0eXBlKSBfX3YgPDwgKF9f
+c3RhcnQgJSB0cyk7CQkJXFwKKwkJCW1hc2sgfD0gXyRwcmVmaXgkYnRfbWFrZV9tYXNrX2NvbXBs
+ZW1lbnQodHlwZSwgZW5kICUgdHMpOyBcXAorCQljbWFzayA9IF8kcHJlZml4JGJ0X2xzaGlmdCh0
+eXBlLCAodHlwZSkgKF9fdiksIF9fc3RhcnQgJSB0cyk7IFxcCiAJCWNtYXNrICY9IH5tYXNrOwkJ
+CQkJCVxcCiAJCV9fcHRyW3RoaXNfdW5pdF0gJj0gbWFzazsJCQkJXFwKIAkJX19wdHJbdGhpc191
+bml0XSB8PSBjbWFzazsJCQkJXFwKQEAgLTY5NywyMiArODI4LDIyIEBAIGRvIHsJCQkJCQkJCQlc
+XAogCX0JCQkJCQkJCVxcCiAJaWYgKF9fc3RhcnQgJSB0cykgewkJCQkJCVxcCiAJCWNzaGlmdCA9
+IF9fc3RhcnQgJSB0czsJCQkJCVxcCi0JCW1hc2sgPSB+KCh+KHR5cGUpIDApIDw8IGNzaGlmdCk7
+CQkJXFwKLQkJY21hc2sgPSAodHlwZSkgX192IDw8IGNzaGlmdDsJCQkJXFwKKwkJbWFzayA9IF8k
+cHJlZml4JGJ0X21ha2VfbWFzayh0eXBlLCBjc2hpZnQpOwkJXFwKKwkJY21hc2sgPSBfJHByZWZp
+eCRidF9sc2hpZnQodHlwZSwgKHR5cGUpIChfX3YpLCBjc2hpZnQpOwlcXAogCQljbWFzayAmPSB+
+bWFzazsJCQkJCQlcXAogCQlfX3B0clt0aGlzX3VuaXRdICY9IG1hc2s7CQkJCVxcCiAJCV9fcHRy
+W3RoaXNfdW5pdF0gfD0gY21hc2s7CQkJCVxcCi0JCV8kcHJlZml4JGJ0X3BpZWNld2lzZV9yc2hp
+ZnQoX3Z0eXBlLCBfX3YsIHRzIC0gY3NoaWZ0KTsgXFwKKwkJXyRwcmVmaXgkYnRfc2FmZV9yc2hp
+ZnQoX3Z0eXBlLCBfX3YsIHRzIC0gY3NoaWZ0KTsgXFwKIAkJX19zdGFydCArPSB0cyAtIGNzaGlm
+dDsJCQkJCVxcCiAJCXRoaXNfdW5pdCsrOwkJCQkJCVxcCiAJfQkJCQkJCQkJXFwKIAlmb3IgKDsg
+dGhpc191bml0IDwgZW5kX3VuaXQgLSAxOyB0aGlzX3VuaXQrKykgewkJCVxcCiAJCV9fcHRyW3Ro
+aXNfdW5pdF0gPSAodHlwZSkgX192OwkJCQlcXAotCQlfJHByZWZpeCRidF9waWVjZXdpc2VfcnNo
+aWZ0KF92dHlwZSwgX192LCB0cyk7IAkJXFwKKwkJXyRwcmVmaXgkYnRfc2FmZV9yc2hpZnQoX3Z0
+eXBlLCBfX3YsIHRzKTsgCQlcXAogCQlfX3N0YXJ0ICs9IHRzOwkJCQkJCVxcCiAJfQkJCQkJCQkJ
+XFwKIAlpZiAoZW5kICUgdHMpIHsJCQkJCQkJXFwKLQkJbWFzayA9ICh+KHR5cGUpIDApIDw8IChl
+bmQgJSB0cyk7CQkJXFwKKwkJbWFzayA9IF8kcHJlZml4JGJ0X21ha2VfbWFza19jb21wbGVtZW50
+KHR5cGUsIGVuZCAlIHRzKTsgXFwKIAkJY21hc2sgPSAodHlwZSkgX192OwkJCQkJXFwKIAkJY21h
+c2sgJj0gfm1hc2s7CQkJCQkJXFwKIAkJX19wdHJbdGhpc191bml0XSAmPSBtYXNrOwkJCQlcXApA
+QCAtNzIzLDcgKzg1NCw3IEBAIGRvIHsJCQkJCQkJCQlcXAogCiAjZGVmaW5lIF8kcHJlZml4JGJ0
+X2JpdGZpZWxkX3dyaXRlX2JlKF9wdHIsIHR5cGUsIF9zdGFydCwgX2xlbmd0aCwgX3Z0eXBlLCBf
+dikgXFwKIGRvIHsJCQkJCQkJCQlcXAotCV92dHlwZSBfX3YgPSAoX3YpOwkJCQkJXFwKKwlfdnR5
+cGUgX192ID0gKF92KTsJCQkJCQlcXAogCXR5cGUgKl9fcHRyID0gQ0FTVF9QVFIodHlwZSAqLCBf
+cHRyKTsJCQkJXFwKIAl1bnNpZ25lZCBsb25nIF9fc3RhcnQgPSAoX3N0YXJ0KSwgX19sZW5ndGgg
+PSAoX2xlbmd0aCk7CQlcXAogCXR5cGUgbWFzaywgY21hc2s7CQkJCQkJXFwKQEAgLTc0MCwxNSAr
+ODcxLDE1IEBAIGRvIHsJCQkJCQkJCQlcXAogCQkJCQkJCQkJXFwKIAkvKiBUcmltIHYgaGlnaCBi
+aXRzICovCQkJCQkJXFwKIAlpZiAoX19sZW5ndGggPCBzaXplb2YoX192KSAqIENIQVJfQklUKQkJ
+CQlcXAotCQlfX3YgJj0gfigofihfdnR5cGUpIDApIDw8IF9fbGVuZ3RoKTsJCQlcXAorCQlfX3Yg
+Jj0gXyRwcmVmaXgkYnRfbWFrZV9tYXNrKF92dHlwZSwgX19sZW5ndGgpOwkJXFwKIAkJCQkJCQkJ
+CVxcCiAJLyogV2UgY2FuIG5vdyBhcHBlbmQgdiB3aXRoIGEgc2ltcGxlICJvciIsIHNoaWZ0IGl0
+IHBpZWNlLXdpc2UgKi8gXFwKIAl0aGlzX3VuaXQgPSBlbmRfdW5pdCAtIDE7CQkJCQlcXAogCWlm
+IChzdGFydF91bml0ID09IGVuZF91bml0IC0gMSkgewkJCQlcXAotCQltYXNrID0gfigofih0eXBl
+KSAwKSA8PCAoKHRzIC0gKGVuZCAlIHRzKSkgJSB0cykpOwlcXAorCQltYXNrID0gXyRwcmVmaXgk
+YnRfbWFrZV9tYXNrKHR5cGUsICh0cyAtIChlbmQgJSB0cykpICUgdHMpOyBcXAogCQlpZiAoX19z
+dGFydCAlIHRzKQkJCQkJXFwKLQkJCW1hc2sgfD0gKH4oKHR5cGUpIDApKSA8PCAodHMgLSAoX19z
+dGFydCAlIHRzKSk7CVxcCi0JCWNtYXNrID0gKHR5cGUpIF9fdiA8PCAoKHRzIC0gKGVuZCAlIHRz
+KSkgJSB0cyk7CQlcXAorCQkJbWFzayB8PSBfJHByZWZpeCRidF9tYWtlX21hc2tfY29tcGxlbWVu
+dCh0eXBlLCB0cyAtIChfX3N0YXJ0ICUgdHMpKTsgXFwKKwkJY21hc2sgPSBfJHByZWZpeCRidF9s
+c2hpZnQodHlwZSwgKHR5cGUpIChfX3YpLCAodHMgLSAoZW5kICUgdHMpKSAlIHRzKTsgXFwKIAkJ
+Y21hc2sgJj0gfm1hc2s7CQkJCQkJXFwKIAkJX19wdHJbdGhpc191bml0XSAmPSBtYXNrOwkJCQlc
+XAogCQlfX3B0clt0aGlzX3VuaXRdIHw9IGNtYXNrOwkJCQlcXApAQCAtNzU2LDIyICs4ODcsMjIg
+QEAgZG8gewkJCQkJCQkJCVxcCiAJfQkJCQkJCQkJXFwKIAlpZiAoZW5kICUgdHMpIHsJCQkJCQkJ
+XFwKIAkJY3NoaWZ0ID0gZW5kICUgdHM7CQkJCQlcXAotCQltYXNrID0gfigofih0eXBlKSAwKSA8
+PCAodHMgLSBjc2hpZnQpKTsJCQlcXAotCQljbWFzayA9ICh0eXBlKSBfX3YgPDwgKHRzIC0gY3No
+aWZ0KTsJCQlcXAorCQltYXNrID0gXyRwcmVmaXgkYnRfbWFrZV9tYXNrKHR5cGUsIHRzIC0gY3No
+aWZ0KTsJXFwKKwkJY21hc2sgPSBfJHByZWZpeCRidF9sc2hpZnQodHlwZSwgKHR5cGUpIChfX3Yp
+LCB0cyAtIGNzaGlmdCk7IFxcCiAJCWNtYXNrICY9IH5tYXNrOwkJCQkJCVxcCiAJCV9fcHRyW3Ro
+aXNfdW5pdF0gJj0gbWFzazsJCQkJXFwKIAkJX19wdHJbdGhpc191bml0XSB8PSBjbWFzazsJCQkJ
+XFwKLQkJXyRwcmVmaXgkYnRfcGllY2V3aXNlX3JzaGlmdChfdnR5cGUsIF9fdiwgY3NoaWZ0KTsg
+XFwKKwkJXyRwcmVmaXgkYnRfc2FmZV9yc2hpZnQoX3Z0eXBlLCBfX3YsIGNzaGlmdCk7IFxcCiAJ
+CWVuZCAtPSBjc2hpZnQ7CQkJCQkJXFwKIAkJdGhpc191bml0LS07CQkJCQkJXFwKIAl9CQkJCQkJ
+CQlcXAogCWZvciAoOyAobG9uZykgdGhpc191bml0ID49IChsb25nKSBzdGFydF91bml0ICsgMTsg
+dGhpc191bml0LS0pIHsgXFwKIAkJX19wdHJbdGhpc191bml0XSA9ICh0eXBlKSBfX3Y7CQkJCVxc
+Ci0JCV8kcHJlZml4JGJ0X3BpZWNld2lzZV9yc2hpZnQoX3Z0eXBlLCBfX3YsIHRzKTsgXFwKKwkJ
+XyRwcmVmaXgkYnRfc2FmZV9yc2hpZnQoX3Z0eXBlLCBfX3YsIHRzKTsgXFwKIAkJZW5kIC09IHRz
+OwkJCQkJCVxcCiAJfQkJCQkJCQkJXFwKIAlpZiAoX19zdGFydCAlIHRzKSB7CQkJCQkJXFwKLQkJ
+bWFzayA9ICh+KHR5cGUpIDApIDw8ICh0cyAtIChfX3N0YXJ0ICUgdHMpKTsJCVxcCisJCW1hc2sg
+PSBfJHByZWZpeCRidF9tYWtlX21hc2tfY29tcGxlbWVudCh0eXBlLCB0cyAtIChfX3N0YXJ0ICUg
+dHMpKTsgXFwKIAkJY21hc2sgPSAodHlwZSkgX192OwkJCQkJXFwKIAkJY21hc2sgJj0gfm1hc2s7
+CQkJCQkJXFwKIAkJX19wdHJbdGhpc191bml0XSAmPSBtYXNrOwkJCQlcXAotLSAKMi4xMS4wCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
+bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
