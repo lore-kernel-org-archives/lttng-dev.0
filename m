@@ -1,17 +1,16 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules 2/5] fix: mm/vmscan: drop
- may_writepage and classzone_idx from direct reclaim begin template (v5.2)
-Date: Tue, 21 May 2019 16:33:11 -0400
-Message-ID: <20190521203314.8577-2-mjeanson__15856.6443527647$1558470859$gmane$org@efficios.com>
+Subject: [PATCH lttng-modules 3/5] fix: mm/vmscan: simplify
+ trace_reclaim_flags and trace_shrink_flags (v5.2)
+Date: Tue, 21 May 2019 16:33:12 -0400
+Message-ID: <20190521203314.8577-3-mjeanson__22061.9615561858$1558470896$gmane$org@efficios.com>
 References: <20190521203314.8577-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 457nXX4rvHz10WN
- for <lttng-dev@lists.lttng.org>; Tue, 21 May 2019 16:33:32 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 457nXY6dpsz10Wd
+ for <lttng-dev@lists.lttng.org>; Tue, 21 May 2019 16:33:33 -0400 (EDT)
 In-Reply-To: <20190521203314.8577-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -27,83 +26,96 @@ List-Id: lttng-dev@lists.lttng.org
 
 See upstream commit:
 
-  commit 3481c37ffa1de58ef140d0fe9eabf56305e74666
+  commit 60b62ff7cc4217ac3de76535fa4c1510a798dbcb
   Author: Yafang Shao <laoar.shao@gmail.com>
-  Date:   Mon May 13 17:19:14 2019 -0700
+  Date:   Mon May 13 17:23:08 2019 -0700
 
-    mm/vmscan: drop may_writepage and classzone_idx from direct reclaim begin template
+    mm/vmscan: simplify trace_reclaim_flags and trace_shrink_flags
 
-    There are three tracepoints using this template, which are
-    mm_vmscan_direct_reclaim_begin,
-    mm_vmscan_memcg_reclaim_begin,
-    mm_vmscan_memcg_softlimit_reclaim_begin.
-
-    Regarding mm_vmscan_direct_reclaim_begin,
-    sc.may_writepage is !laptop_mode, that's a static setting, and
-    reclaim_idx is derived from gfp_mask which is already show in this
-    tracepoint.
-
-    Regarding mm_vmscan_memcg_reclaim_begin,
-    may_writepage is !laptop_mode too, and reclaim_idx is (MAX_NR_ZONES-1),
-    which are both static value.
-
-    mm_vmscan_memcg_softlimit_reclaim_begin is the same with
-    mm_vmscan_memcg_reclaim_begin.
-
-    So we can drop them all.
+    trace_reclaim_flags and trace_shrink_flags are almost the same.
+    We can simplify them to avoid redundant code.
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- .../events/lttng-module/mm_vmscan.h           | 37 ++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+ .../events/lttng-module/mm_vmscan.h           | 52 +++++++++++++++++--
+ 1 file changed, 49 insertions(+), 3 deletions(-)
 
 diff --git a/instrumentation/events/lttng-module/mm_vmscan.h b/instrumentation/events/lttng-module/mm_vmscan.h
-index cc7a275..db4a906 100644
+index db4a906..417472c 100644
 --- a/instrumentation/events/lttng-module/mm_vmscan.h
 +++ b/instrumentation/events/lttng-module/mm_vmscan.h
-@@ -114,7 +114,42 @@ LTTNG_TRACEPOINT_EVENT(mm_vmscan_wakeup_kswapd,
+@@ -26,7 +26,16 @@ typedef int isolate_mode_t;
+ 
+ #endif
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,5,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,0))
++
++#include <linux/mm_inline.h>
++
++#define trace_reclaim_flags(file) ( \
++	(file ? RECLAIM_WB_FILE : RECLAIM_WB_ANON) | \
++	(RECLAIM_WB_ASYNC) \
++	)
++
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,5,0))
+ 
+ #include <linux/mm_inline.h>
+ 
+@@ -559,7 +568,20 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE(mm_vmscan_lru_isolate_template, mm_vmscan_memcg_
  )
  #endif
  
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,8,0))
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,5,0))
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,0))
++LTTNG_TRACEPOINT_EVENT(mm_vmscan_writepage,
 +
-+LTTNG_TRACEPOINT_EVENT_CLASS(mm_vmscan_direct_reclaim_begin_template,
++	TP_PROTO(struct page *page),
 +
-+	TP_PROTO(int order, gfp_t gfp_flags),
-+
-+	TP_ARGS(order, gfp_flags),
++	TP_ARGS(page),
 +
 +	TP_FIELDS(
-+		ctf_integer(int, order, order)
-+		ctf_integer(gfp_t, gfp_flags, gfp_flags)
++		ctf_integer_hex(struct page *, page, page)
++		ctf_integer(int, reclaim_flags, trace_reclaim_flags(
++				page_is_file_cache(page)))
 +	)
 +)
-+
-+LTTNG_TRACEPOINT_EVENT_INSTANCE(mm_vmscan_direct_reclaim_begin_template, mm_vmscan_direct_reclaim_begin,
-+
-+	TP_PROTO(int order, gfp_t gfp_flags),
-+
-+	TP_ARGS(order, gfp_flags)
-+)
-+
-+LTTNG_TRACEPOINT_EVENT_INSTANCE(mm_vmscan_direct_reclaim_begin_template, mm_vmscan_memcg_reclaim_begin,
-+
-+	TP_PROTO(int order, gfp_t gfp_flags),
-+
-+	TP_ARGS(order, gfp_flags)
-+)
-+
-+LTTNG_TRACEPOINT_EVENT_INSTANCE(mm_vmscan_direct_reclaim_begin_template, mm_vmscan_memcg_softlimit_reclaim_begin,
-+
-+	TP_PROTO(int order, gfp_t gfp_flags),
-+
-+	TP_ARGS(order, gfp_flags)
-+)
-+
-+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,8,0))
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,5,0))
+ LTTNG_TRACEPOINT_EVENT(mm_vmscan_writepage,
  
- LTTNG_TRACEPOINT_EVENT_CLASS(mm_vmscan_direct_reclaim_begin_template,
+ 	TP_PROTO(struct page *page),
+@@ -586,7 +608,31 @@ LTTNG_TRACEPOINT_EVENT(mm_vmscan_writepage,
+ )
+ #endif
  
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,0))
++LTTNG_TRACEPOINT_EVENT(mm_vmscan_lru_shrink_inactive,
++
++	TP_PROTO(int nid,
++		unsigned long nr_scanned, unsigned long nr_reclaimed,
++		struct reclaim_stat *stat, int priority, int file),
++
++	TP_ARGS(nid, nr_scanned, nr_reclaimed, stat, priority, file),
++
++	TP_FIELDS(
++		ctf_integer(int, nid, nid)
++		ctf_integer(unsigned long, nr_scanned, nr_scanned)
++		ctf_integer(unsigned long, nr_reclaimed, nr_reclaimed)
++		ctf_integer(unsigned long, nr_dirty, stat->nr_dirty)
++		ctf_integer(unsigned long, nr_writeback, stat->nr_writeback)
++		ctf_integer(unsigned long, nr_congested, stat->nr_congested)
++		ctf_integer(unsigned long, nr_immediate, stat->nr_immediate)
++		ctf_integer(unsigned long, nr_activate, stat->nr_activate)
++		ctf_integer(unsigned long, nr_ref_keep, stat->nr_ref_keep)
++		ctf_integer(unsigned long, nr_unmap_fail, stat->nr_unmap_fail)
++		ctf_integer(int, priority, priority)
++		ctf_integer(int, reclaim_flags, trace_reclaim_flags(file))
++	)
++)
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0))
+ LTTNG_TRACEPOINT_EVENT(mm_vmscan_lru_shrink_inactive,
+ 
+ 	TP_PROTO(int nid,
 -- 
 2.17.1
