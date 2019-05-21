@@ -1,16 +1,21 @@
-From: Zvi Vered <veredz72@gmail.com>
-Subject: lttng trace" Read trace under windows
-Date: Mon, 20 May 2019 22:49:49 -0700
-Message-ID: <CABRndgx7zGtAR_7eM8Vb7AorGkS4-2b8z8P5n9rv45-SMhuL0Q__36833.5831489944$1558381822$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: lttng trace" Read trace under windows
+Date: Tue, 21 May 2019 10:48:11 -0400
+Message-ID: <20190521144811.GA1071__673.065536987849$1558450119$gmane$org@joraj-alpa>
+References: <CABRndgx7zGtAR_7eM8Vb7AorGkS4-2b8z8P5n9rv45-SMhuL0Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8707443176718008455=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw1-xc2e.google.com (mail-yw1-xc2e.google.com
- [IPv6:2607:f8b0:4864:20::c2e])
- by lists.lttng.org (Postfix) with ESMTPS id 4578cm4QSjz11Bx
- for <lttng-dev@lists.lttng.org>; Mon, 20 May 2019 15:50:00 -0400 (EDT)
-Received: by mail-yw1-xc2e.google.com with SMTP id k128so4121391ywf.2
- for <lttng-dev@lists.lttng.org>; Mon, 20 May 2019 12:50:00 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 457dtG51Y4z1047
+ for <lttng-dev@lists.lttng.org>; Tue, 21 May 2019 10:48:22 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 7B4D3BD539
+ for <lttng-dev@lists.lttng.org>; Tue, 21 May 2019 10:48:16 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CABRndgx7zGtAR_7eM8Vb7AorGkS4-2b8z8P5n9rv45-SMhuL0Q@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,46 +25,25 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Zvi Vered <veredz72@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============8707443176718008455==
-Content-Type: multipart/alternative; boundary="0000000000009674bc05895709a0"
+Hi,
 
---0000000000009674bc05895709a0
-Content-Type: text/plain; charset="UTF-8"
+On Mon, May 20, 2019 at 10:49:49PM -0700, Zvi Vered wrote:
+> Hello,
+> 
+> I'm looking for a windows library that can read a trace ?
 
-Hello,
+Babeltrace 1.5 can be build on cygwin.
 
-I'm looking for a windows library that can read a trace ?
-Or - detailed instructions on the structure of each file in the trace.
+> Or - detailed instructions on the structure of each file in the trace.
 
-Can you please advise ?
+https://diamon.org/ctf/
 
-Thank you,
-Zvika
+Cheers
 
---0000000000009674bc05895709a0
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello,<br><div><br></div><div>I&#39;m looking for a window=
-s library that can read a trace ?</div><div>Or - detailed instructions on t=
-he structure of each file in the trace.=C2=A0</div><div><br></div><div>Can =
-you please advise ?</div><div><br></div><div>Thank you,</div><div>Zvika=C2=
-=A0</div></div>
-
---0000000000009674bc05895709a0--
-
---===============8707443176718008455==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============8707443176718008455==--
+-- 
+Jonathan Rajotte-Julien
+EfficiOS
