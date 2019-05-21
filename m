@@ -1,16 +1,18 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules 1/5] fix: timer/trace: Improve
- timer tracing (v5.2)
-Date: Tue, 21 May 2019 16:33:10 -0400
-Message-ID: <20190521203314.8577-1-mjeanson__25524.3454290152$1558470827$gmane$org@efficios.com>
+Subject: [PATCH lttng-modules 2/5] fix: mm/vmscan: drop
+ may_writepage and classzone_idx from direct reclaim begin template (v5.2)
+Date: Tue, 21 May 2019 16:33:11 -0400
+Message-ID: <20190521203314.8577-2-mjeanson__15856.6443527647$1558470859$gmane$org@efficios.com>
+References: <20190521203314.8577-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 457nXX3NtHz10WL
+ by lists.lttng.org (Postfix) with ESMTPS id 457nXX4rvHz10WN
  for <lttng-dev@lists.lttng.org>; Tue, 21 May 2019 16:33:32 -0400 (EDT)
+In-Reply-To: <20190521203314.8577-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,72 +27,83 @@ List-Id: lttng-dev@lists.lttng.org
 
 See upstream commit:
 
-  commit f28d3d5346e97e60c81f933ac89ccf015430e5cf
-  Author: Anna-Maria Gleixner <anna-maria@linutronix.de>
-  Date:   Thu Mar 21 13:09:21 2019 +0100
+  commit 3481c37ffa1de58ef140d0fe9eabf56305e74666
+  Author: Yafang Shao <laoar.shao@gmail.com>
+  Date:   Mon May 13 17:19:14 2019 -0700
 
-    timer/trace: Improve timer tracing
+    mm/vmscan: drop may_writepage and classzone_idx from direct reclaim begin template
 
-    Timers are added to the timer wheel off by one. This is required in
-    case a timer is queued directly before incrementing jiffies to prevent
-    early timer expiry.
+    There are three tracepoints using this template, which are
+    mm_vmscan_direct_reclaim_begin,
+    mm_vmscan_memcg_reclaim_begin,
+    mm_vmscan_memcg_softlimit_reclaim_begin.
 
-    When reading a timer trace and relying only on the expiry time of the timer
-    in the timer_start trace point and on the now in the timer_expiry_entry
-    trace point, it seems that the timer fires late. With the current
-    timer_expiry_entry trace point information only now=jiffies is printed but
-    not the value of base->clk. This makes it impossible to draw a conclusion
-    to the index of base->clk and makes it impossible to examine timer problems
-    without additional trace points.
+    Regarding mm_vmscan_direct_reclaim_begin,
+    sc.may_writepage is !laptop_mode, that's a static setting, and
+    reclaim_idx is derived from gfp_mask which is already show in this
+    tracepoint.
 
-    Therefore add the base->clk value to the timer_expire_entry trace
-    point, to be able to calculate the index the timer base is located at
-    during collecting expired timers.
+    Regarding mm_vmscan_memcg_reclaim_begin,
+    may_writepage is !laptop_mode too, and reclaim_idx is (MAX_NR_ZONES-1),
+    which are both static value.
+
+    mm_vmscan_memcg_softlimit_reclaim_begin is the same with
+    mm_vmscan_memcg_reclaim_begin.
+
+    So we can drop them all.
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- instrumentation/events/lttng-module/timer.h | 22 +++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ .../events/lttng-module/mm_vmscan.h           | 37 ++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
-diff --git a/instrumentation/events/lttng-module/timer.h b/instrumentation/events/lttng-module/timer.h
-index 8703ea0..997084f 100644
---- a/instrumentation/events/lttng-module/timer.h
-+++ b/instrumentation/events/lttng-module/timer.h
-@@ -89,6 +89,27 @@ LTTNG_TRACEPOINT_EVENT(timer_start,
+diff --git a/instrumentation/events/lttng-module/mm_vmscan.h b/instrumentation/events/lttng-module/mm_vmscan.h
+index cc7a275..db4a906 100644
+--- a/instrumentation/events/lttng-module/mm_vmscan.h
++++ b/instrumentation/events/lttng-module/mm_vmscan.h
+@@ -114,7 +114,42 @@ LTTNG_TRACEPOINT_EVENT(mm_vmscan_wakeup_kswapd,
  )
- #endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,2,0)) */
+ #endif
  
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,8,0))
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,0))
-+/**
-+ * timer_expire_entry - called immediately before the timer callback
-+ * @timer:	pointer to struct timer_list
-+ *
-+ * Allows to determine the timer latency.
-+ */
-+LTTNG_TRACEPOINT_EVENT(timer_expire_entry,
 +
-+	TP_PROTO(struct timer_list *timer, unsigned long baseclk),
++LTTNG_TRACEPOINT_EVENT_CLASS(mm_vmscan_direct_reclaim_begin_template,
 +
-+	TP_ARGS(timer, baseclk),
++	TP_PROTO(int order, gfp_t gfp_flags),
++
++	TP_ARGS(order, gfp_flags),
 +
 +	TP_FIELDS(
-+		ctf_integer_hex(void *, timer, timer)
-+		ctf_integer(unsigned long, now, jiffies)
-+		ctf_integer_hex(void *, function, timer->function)
-+		ctf_integer(unsigned long, baseclk, baseclk)
++		ctf_integer(int, order, order)
++		ctf_integer(gfp_t, gfp_flags, gfp_flags)
 +	)
 +)
-+#else
- /**
-  * timer_expire_entry - called immediately before the timer callback
-  * @timer:	pointer to struct timer_list
-@@ -107,6 +128,7 @@ LTTNG_TRACEPOINT_EVENT(timer_expire_entry,
- 		ctf_integer_hex(void *, function, timer->function)
- 	)
- )
-+#endif
++
++LTTNG_TRACEPOINT_EVENT_INSTANCE(mm_vmscan_direct_reclaim_begin_template, mm_vmscan_direct_reclaim_begin,
++
++	TP_PROTO(int order, gfp_t gfp_flags),
++
++	TP_ARGS(order, gfp_flags)
++)
++
++LTTNG_TRACEPOINT_EVENT_INSTANCE(mm_vmscan_direct_reclaim_begin_template, mm_vmscan_memcg_reclaim_begin,
++
++	TP_PROTO(int order, gfp_t gfp_flags),
++
++	TP_ARGS(order, gfp_flags)
++)
++
++LTTNG_TRACEPOINT_EVENT_INSTANCE(mm_vmscan_direct_reclaim_begin_template, mm_vmscan_memcg_softlimit_reclaim_begin,
++
++	TP_PROTO(int order, gfp_t gfp_flags),
++
++	TP_ARGS(order, gfp_flags)
++)
++
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,8,0))
  
- /**
-  * timer_expire_exit - called immediately after the timer callback returns
+ LTTNG_TRACEPOINT_EVENT_CLASS(mm_vmscan_direct_reclaim_begin_template,
+ 
 -- 
 2.17.1
