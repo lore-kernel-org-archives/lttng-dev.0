@@ -1,18 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
 Subject: Re: [lttng-ust RFC v2] Add setuid wrapper for per-UID
  buffers
-Date: Wed, 22 May 2019 12:24:22 -0400 (EDT)
-Message-ID: <641634709.7665.1558542262099.JavaMail.zimbra__33444.9303963751$1558542292$gmane$org@efficios.com>
+Date: Wed, 22 May 2019 16:38:46 -0400 (EDT)
+Message-ID: <14935434.8382.1558557526205.JavaMail.zimbra__3527.88562174595$1558557544$gmane$org@efficios.com>
 References: <20190522154855.20846-1-gabriel.pollo-guilbert@efficios.com>
+ <641634709.7665.1558542262099.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 458Hyg4cmbzycH
- for <lttng-dev@lists.lttng.org>; Wed, 22 May 2019 12:24:27 -0400 (EDT)
-In-Reply-To: <20190522154855.20846-1-gabriel.pollo-guilbert@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 458Pc82XM9zyvy
+ for <lttng-dev@lists.lttng.org>; Wed, 22 May 2019 16:38:48 -0400 (EDT)
+In-Reply-To: <641634709.7665.1558542262099.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,9 +23,38 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
+
+After reading some man pages (mainly credentials(7) and capabilities(7)), I've
+come to the conclusion that the definition of a "user" is kind of unclear.
+
+RUID and EUID are pretty much the same, except that when a process wants to
+drop its previlieges temporarily, it only needs to change the EUID. Usually,
+a process will use the value saved in SUID to regain the original previlieges.
+
+As of right now, the per-UID buffers are created using getuid(3) which returns
+the __real__ user ID (RUID).
+
+setfsuid(2): may change FSUID, not RUID, same buffers would be used after
+seteuid(2): may change EUID, not RUID, same behavior
+setuid(2): may change RUID, EUID and SUID, the should be a wrapper
+setreuid(2): may change RUID and EUID, there should be a wrapper
+setresuid(2): may change RUID, EUID and SUID, the should be a wrapper
+
+That said, I don't know if `per-RUID` buffers is the actual behavior we want.
+Lots of application only changes EUID in order to drop previlieges.
+
+On a side note, I can also add a check in the wrappers so that if the RUID
+doesn't change, we don't re-register the application for nothing. Sounds good?
+
+----- Original Message -----
+From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+To: "Gabriel-Andrew Pollo-Guilbert" <gabriel.pollo-guilbert@efficios.com>
+Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
+Sent: Wednesday, May 22, 2019 12:24:22 PM
+Subject: Re: [lttng-dev] [lttng-ust RFC v2] Add setuid wrapper for per-UID buffers
 
 ----- On May 22, 2019, at 11:48 AM, Gabriel-Andrew Pollo-Guilbert gabriel.pollo-guilbert@efficios.com wrote:
 
