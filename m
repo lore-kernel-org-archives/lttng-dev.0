@@ -1,110 +1,69 @@
 From: Kirill Tkhai <ktkhai@virtuozzo.com>
-Subject: Re: [PATCH lttng-modules 4/5] fix: mm: move recent_rotated pages
- calculation to shrink_inactive_list() (v5.2)
-Date: Wed, 22 May 2019 11:37:26 +0300
-Message-ID: <bcb13b3a-44f4-c8da-ab32-2fa3e37ee81e@virtuozzo.com>
-References: <20190521203314.8577-1-mjeanson@efficios.com>
- <20190521203314.8577-4-mjeanson@efficios.com>
- <1045726286.6695.1558472016130.JavaMail.zimbra@efficios.com>
+Subject: [PATCH] mm: Rename mm_vmscan_lru_shrink_inactive trace event
+ variables
+Date: Wed, 22 May 2019 11:44:06 +0300
+Message-ID: <155851455676.7870.1951762540769724271.stgit@localhost.localdomain>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1045726286.6695.1558472016130.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
 Sender: linux-kernel-owner@vger.kernel.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, rostedt <rostedt@goodmis.org>, linux-kernel <linux-kernel@vger.kernel.org>
+To: akpm@linux-foundation.org, mjeanson@efficios.com, rostedt@goodmis.org, lttng-dev@lists.lttng.org, linux-kernel@vger.kernel.org, ktkhai@virtuozzo.com
 List-Id: lttng-dev@lists.lttng.org
 
-On 21.05.2019 23:53, Mathieu Desnoyers wrote:
-> ----- On May 21, 2019, at 4:33 PM, Michael Jeanson mjeanson@efficios.com wrote:
-> 
->> See upstream commit:
->>
->>  commit 886cf1901db962cee5f8b82b9b260079a5e8a4eb
->>  Author: Kirill Tkhai <ktkhai@virtuozzo.com>
->>  Date:   Mon May 13 17:16:51 2019 -0700
->>
->>    mm: move recent_rotated pages calculation to shrink_inactive_list()
->>
->>    Patch series "mm: Generalize putback functions"]
->>
->>    putback_inactive_pages() and move_active_pages_to_lru() are almost
->>    similar, so this patchset merges them ina single function.
->>
->>    This patch (of 4):
->>
->>    The patch moves the calculation from putback_inactive_pages() to
->>    shrink_inactive_list().  This makes putback_inactive_pages() looking more
->>    similar to move_active_pages_to_lru().
->>
->>    To do that, we account activated pages in reclaim_stat::nr_activate.
->>    Since a page may change its LRU type from anon to file cache inside
->>    shrink_page_list() (see ClearPageSwapBacked()), we have to account pages
->>    for the both types.  So, nr_activate becomes an array.
->>
->>    Previously we used nr_activate to account PGACTIVATE events, but now we
->>    account them into pgactivate variable (since they are about number of
->>    pages in general, not about sum of hpage_nr_pages).
->>
->> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
->> ---
->> instrumentation/events/lttng-module/mm_vmscan.h | 3 ++-
->> 1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/instrumentation/events/lttng-module/mm_vmscan.h
->> b/instrumentation/events/lttng-module/mm_vmscan.h
->> index 417472c..3f9ffde 100644
->> --- a/instrumentation/events/lttng-module/mm_vmscan.h
->> +++ b/instrumentation/events/lttng-module/mm_vmscan.h
->> @@ -625,7 +625,8 @@ LTTNG_TRACEPOINT_EVENT(mm_vmscan_lru_shrink_inactive,
->> 		ctf_integer(unsigned long, nr_writeback, stat->nr_writeback)
->> 		ctf_integer(unsigned long, nr_congested, stat->nr_congested)
->> 		ctf_integer(unsigned long, nr_immediate, stat->nr_immediate)
->> -		ctf_integer(unsigned long, nr_activate, stat->nr_activate)
->> +		ctf_integer(unsigned long, nr_activate0, stat->nr_activate[0])
->> +		ctf_integer(unsigned long, nr_activate1, stat->nr_activate[1])
-> 
-> This patch is for lttng-modules, but I'm adding Kirill Tkhai (author of the Linux
-> kernel commit causing the need for this change in lttng-modules) and Steven Rostedt
-> in CC, because I feel they might want to join this discussion naming of
-> userspace-visible TRACE_EVENT() fields.
-> 
-> Based on the upstream Linux commit, it looks like only the TP_printk() has
-> sane names for event fields, but could really improve on the naming for the
-> binary version of those fields:
-> 
-> -       TP_printk("nid=%d nr_scanned=%ld nr_reclaimed=%ld nr_dirty=%ld nr_writeback=%ld nr_congested=%ld nr_immediate=%ld nr_activate=%ld nr_ref_keep=%ld nr_unmap_fail=%ld priority=%d flags=%s",
-> +       TP_printk("nid=%d nr_scanned=%ld nr_reclaimed=%ld nr_dirty=%ld nr_writeback=%ld nr_congested=%ld nr_immediate=%ld nr_activate_anon=%d nr_activate_file=%d nr_ref_keep=%ld nr_unmap_fail=%ld priority=%d flags=%s",
->                 __entry->nid,
->                 __entry->nr_scanned, __entry->nr_reclaimed,
->                 __entry->nr_dirty, __entry->nr_writeback,
->                 __entry->nr_congested, __entry->nr_immediate,
-> -               __entry->nr_activate, __entry->nr_ref_keep,
-> -               __entry->nr_unmap_fail, __entry->priority,
-> +               __entry->nr_activate0, __entry->nr_activate1,
-> +               __entry->nr_ref_keep, __entry->nr_unmap_fail,
-> +               __entry->priority,
->                 show_reclaim_flags(__entry->reclaim_flags))
->  );
-> 
-> So I recommend we do the following in lttng-modules:
-> 
-> Rename the field nr_activate0 to nr_activate_anon,
-> Rename the field nr_activate1 to nr_activate_file.
-> 
-> So users can make something out of those tracepoints without digging
-> into the kernel source code.
-> 
-> Even if Steven and Kirill end up choosing to change the name of those
-> fields upstream in trace-event, it won't have any impact on lttng-modules.
-> 
-> It would make sense to change those newly introduced exposed names in the
-> upstream kernel as well though.
+Rename nr_activate{0,1} into nr_activate{anon,file} since this
+is exported into userspace, e.g., it's shown here:
 
-Yeah, since these are exported to userspace, we should better rename them in the way
-you suggested.
+/sys/kernel/debug/tracing/events/vmscan/mm_vmscan_lru_shrink_inactive/format.
 
-Thanks,
-Kirill
+Now we have:
+field:unsigned int nr_activate0;	offset:64;	size:4;	signed:0;
+field:unsigned int nr_activate1;	offset:68;	size:4;	signed:0;
+
+The patch changes these to:
+field:unsigned int nr_activate_anon;	offset:64;	size:4;	signed:0;
+field:unsigned int nr_activate_file;	offset:68;	size:4;	signed:0;
+
+which is better readable.
+
+Suggested-by: Michael Jeanson <mjeanson@efficios.com>
+Signed-off-by: Kirill Tkhai <ktkhai@virtuozzo.com>
+---
+ include/trace/events/vmscan.h |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
+index a5ab2973e8dc..c316279715f4 100644
+--- a/include/trace/events/vmscan.h
++++ b/include/trace/events/vmscan.h
+@@ -348,8 +348,8 @@ TRACE_EVENT(mm_vmscan_lru_shrink_inactive,
+ 		__field(unsigned long, nr_writeback)
+ 		__field(unsigned long, nr_congested)
+ 		__field(unsigned long, nr_immediate)
+-		__field(unsigned int, nr_activate0)
+-		__field(unsigned int, nr_activate1)
++		__field(unsigned int, nr_activate_anon)
++		__field(unsigned int, nr_activate_file)
+ 		__field(unsigned long, nr_ref_keep)
+ 		__field(unsigned long, nr_unmap_fail)
+ 		__field(int, priority)
+@@ -364,8 +364,8 @@ TRACE_EVENT(mm_vmscan_lru_shrink_inactive,
+ 		__entry->nr_writeback = stat->nr_writeback;
+ 		__entry->nr_congested = stat->nr_congested;
+ 		__entry->nr_immediate = stat->nr_immediate;
+-		__entry->nr_activate0 = stat->nr_activate[0];
+-		__entry->nr_activate1 = stat->nr_activate[1];
++		__entry->nr_activate_anon = stat->nr_activate[0];
++		__entry->nr_activate_file = stat->nr_activate[1];
+ 		__entry->nr_ref_keep = stat->nr_ref_keep;
+ 		__entry->nr_unmap_fail = stat->nr_unmap_fail;
+ 		__entry->priority = priority;
+@@ -377,7 +377,7 @@ TRACE_EVENT(mm_vmscan_lru_shrink_inactive,
+ 		__entry->nr_scanned, __entry->nr_reclaimed,
+ 		__entry->nr_dirty, __entry->nr_writeback,
+ 		__entry->nr_congested, __entry->nr_immediate,
+-		__entry->nr_activate0, __entry->nr_activate1,
++		__entry->nr_activate_anon, __entry->nr_activate_file,
+ 		__entry->nr_ref_keep, __entry->nr_unmap_fail,
+ 		__entry->priority,
+ 		show_reclaim_flags(__entry->reclaim_flags))
