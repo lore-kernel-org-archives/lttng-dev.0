@@ -1,17 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules 1/5] fix: timer/trace: Improve
- timer tracing (v5.2)
-Date: Wed, 22 May 2019 11:37:37 -0400 (EDT)
-Message-ID: <1938745462.7459.1558539457112.JavaMail.zimbra__41434.7578001738$1558539475$gmane$org@efficios.com>
-References: <20190521203314.8577-1-mjeanson@efficios.com>
+From: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+Subject: [lttng-ust RFC v2] Add setuid wrapper for per-UID
+ buffers
+Date: Wed, 22 May 2019 11:48:55 -0400
+Message-ID: <20190522154855.20846-1-gabriel.pollo-guilbert__44085.2759218373$1558540201$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 458Gwf1n3jzyVy
- for <lttng-dev@lists.lttng.org>; Wed, 22 May 2019 11:37:38 -0400 (EDT)
-In-Reply-To: <20190521203314.8577-1-mjeanson@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 458HBW1M6rzyXh
+ for <lttng-dev@lists.lttng.org>; Wed, 22 May 2019 11:49:38 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,94 +19,207 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-All merged into lttng-modules master, 2.11, 2.10, 2.9 branches.
+In case of a per-UID buffer, events following a setuid() call should be
+forwarded to buffers of the new UID. In order to do so, we add a wrapper around
+setuid() that unregister and re-register the application from the session
+daemon.
 
-I updated the field names for patch 4/5 as discussed.
+Signed-off-by: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+---
+ Makefile.am                     |  1 +
+ configure.ac                    |  1 +
+ doc/man/lttng-ust.3.txt         | 11 ++++++++
+ include/lttng/ust.h             |  1 +
+ liblttng-ust-setuid/Makefile.am | 10 +++++++
+ liblttng-ust-setuid/ustsetuid.c | 47 +++++++++++++++++++++++++++++++++
+ liblttng-ust/lttng-ust-comm.c   | 29 ++++++++++++++++++--
+ 7 files changed, 98 insertions(+), 2 deletions(-)
+ create mode 100644 liblttng-ust-setuid/Makefile.am
+ create mode 100644 liblttng-ust-setuid/ustsetuid.c
 
-Thanks,
-
-Mathieu
-
------ On May 21, 2019, at 4:33 PM, Michael Jeanson mjeanson@efficios.com wrote:
-
-> See upstream commit:
-> 
->  commit f28d3d5346e97e60c81f933ac89ccf015430e5cf
->  Author: Anna-Maria Gleixner <anna-maria@linutronix.de>
->  Date:   Thu Mar 21 13:09:21 2019 +0100
-> 
->    timer/trace: Improve timer tracing
-> 
->    Timers are added to the timer wheel off by one. This is required in
->    case a timer is queued directly before incrementing jiffies to prevent
->    early timer expiry.
-> 
->    When reading a timer trace and relying only on the expiry time of the timer
->    in the timer_start trace point and on the now in the timer_expiry_entry
->    trace point, it seems that the timer fires late. With the current
->    timer_expiry_entry trace point information only now=jiffies is printed but
->    not the value of base->clk. This makes it impossible to draw a conclusion
->    to the index of base->clk and makes it impossible to examine timer problems
->    without additional trace points.
-> 
->    Therefore add the base->clk value to the timer_expire_entry trace
->    point, to be able to calculate the index the timer base is located at
->    during collecting expired timers.
-> 
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
-> instrumentation/events/lttng-module/timer.h | 22 +++++++++++++++++++++
-> 1 file changed, 22 insertions(+)
-> 
-> diff --git a/instrumentation/events/lttng-module/timer.h
-> b/instrumentation/events/lttng-module/timer.h
-> index 8703ea0..997084f 100644
-> --- a/instrumentation/events/lttng-module/timer.h
-> +++ b/instrumentation/events/lttng-module/timer.h
-> @@ -89,6 +89,27 @@ LTTNG_TRACEPOINT_EVENT(timer_start,
-> )
-> #endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,2,0)) */
-> 
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,0))
-> +/**
-> + * timer_expire_entry - called immediately before the timer callback
-> + * @timer:	pointer to struct timer_list
-> + *
-> + * Allows to determine the timer latency.
-> + */
-> +LTTNG_TRACEPOINT_EVENT(timer_expire_entry,
-> +
-> +	TP_PROTO(struct timer_list *timer, unsigned long baseclk),
-> +
-> +	TP_ARGS(timer, baseclk),
-> +
-> +	TP_FIELDS(
-> +		ctf_integer_hex(void *, timer, timer)
-> +		ctf_integer(unsigned long, now, jiffies)
-> +		ctf_integer_hex(void *, function, timer->function)
-> +		ctf_integer(unsigned long, baseclk, baseclk)
-> +	)
-> +)
-> +#else
-> /**
->  * timer_expire_entry - called immediately before the timer callback
->  * @timer:	pointer to struct timer_list
-> @@ -107,6 +128,7 @@ LTTNG_TRACEPOINT_EVENT(timer_expire_entry,
-> 		ctf_integer_hex(void *, function, timer->function)
-> 	)
-> )
-> +#endif
-> 
-> /**
->  * timer_expire_exit - called immediately after the timer callback returns
-> --
-> 2.17.1
-
+diff --git a/Makefile.am b/Makefile.am
+index 810761ca..e8812e59 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -5,6 +5,7 @@ SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
+ 		liblttng-ust-ctl \
+ 		liblttng-ust-fd \
+ 		liblttng-ust-fork \
++		liblttng-ust-setuid \
+ 		liblttng-ust-libc-wrapper \
+ 		liblttng-ust-cyg-profile \
+ 		tools
+diff --git a/configure.ac b/configure.ac
+index 52fc3f68..95780dba 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -522,6 +522,7 @@ AC_CONFIG_FILES([
+ 	liblttng-ust/Makefile
+ 	liblttng-ust-ctl/Makefile
+ 	liblttng-ust-fork/Makefile
++	liblttng-ust-setuid/Makefile
+ 	liblttng-ust-dl/Makefile
+ 	liblttng-ust-fd/Makefile
+ 	liblttng-ust-java/Makefile
+diff --git a/doc/man/lttng-ust.3.txt b/doc/man/lttng-ust.3.txt
+index 5c9c9f5d..b252c11d 100644
+--- a/doc/man/lttng-ust.3.txt
++++ b/doc/man/lttng-ust.3.txt
+@@ -744,6 +744,17 @@ library before you start the application. Typical use cases include
+ daemons closing all file descriptors after man:fork(2), and buggy
+ applications doing ``double-closes''.
+ 
++Using LTTng-UST with applications that change user
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++If your application is traced using per-UID buffers and changes user ID using
++man:setuid(2), the library `liblttng-ust-setuid.so` needs to be preloaded
++before starting the application with the `LD_PRELOAD` environment variable (see
++man:ld.so(8)). This way, events generated after the UID change will be fowarded
++to the correct buffer.
++
++This workaround requires that the tracing session be global (root
++lttng-sessiond) in order to avoid permission problems between a session
++daemon started by another user.
+ 
+ Context information
+ ~~~~~~~~~~~~~~~~~~~
+diff --git a/include/lttng/ust.h b/include/lttng/ust.h
+index 2779d7a7..5495e564 100644
+--- a/include/lttng/ust.h
++++ b/include/lttng/ust.h
+@@ -32,6 +32,7 @@ extern "C" {
+ extern void ust_before_fork(sigset_t *save_sigset);
+ extern void ust_after_fork_parent(sigset_t *restore_sigset);
+ extern void ust_after_fork_child(sigset_t *restore_sigset);
++extern void ust_after_setuid(void);
+ 
+ #ifdef __cplusplus 
+ }
+diff --git a/liblttng-ust-setuid/Makefile.am b/liblttng-ust-setuid/Makefile.am
+new file mode 100644
+index 00000000..df3cd622
+--- /dev/null
++++ b/liblttng-ust-setuid/Makefile.am
+@@ -0,0 +1,10 @@
++AM_CPPFLAGS = -I$(top_srcdir)/include
++AM_CFLAGS += -fno-strict-aliasing
++
++lib_LTLIBRARIES = liblttng-ust-setuid.la
++liblttng_ust_setuid_la_SOURCES = ustsetuid.c
++liblttng_ust_setuid_la_LIBADD = \
++	$(top_builddir)/liblttng-ust/liblttng-ust.la \
++	$(DL_LIBS)
++
++liblttng_ust_setuid_la_CFLAGS = -DUST_COMPONENT=liblttng-ust-setuid $(AM_CFLAGS)
+diff --git a/liblttng-ust-setuid/ustsetuid.c b/liblttng-ust-setuid/ustsetuid.c
+new file mode 100644
+index 00000000..8cae9a43
+--- /dev/null
++++ b/liblttng-ust-setuid/ustsetuid.c
+@@ -0,0 +1,47 @@
++/*
++ * Copyright (C) 2019 Gabriel-Andrew Pollo-Guilbert
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; version 2.1 of
++ * the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++ */
++
++#define _GNU_SOURCE
++#include <unistd.h>
++#include <errno.h>
++#include <stdio.h>
++#include <lttng/ust-dlfcn.h>
++#include <lttng/ust.h>
++
++int setuid(uid_t uid)
++{
++	static int (*plibc_func)(uid_t) = NULL;
++	int retval;
++
++	if (plibc_func == NULL) {
++		plibc_func = dlsym(RTLD_NEXT, "setuid");
++		if (plibc_func == NULL) {
++			fprintf(stderr, "libustsetuid: unable to find \"setuid\" symbol\n");
++			errno = ENOSYS;
++			return -1;
++		}
++	}
++
++	retval = plibc_func(uid);
++	if (retval < 0)
++		return retval;
++
++	ust_after_setuid();
++
++	return retval;
++}
+diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+index 61dbb41b..0d0b9eb4 100644
+--- a/liblttng-ust/lttng-ust-comm.c
++++ b/liblttng-ust/lttng-ust-comm.c
+@@ -225,10 +225,12 @@ void ust_unlock(void)
+  *   daemon problems).
+  */
+ static sem_t constructor_wait;
++
+ /*
+  * Doing this for both the global and local sessiond.
+  */
+-static int sem_count = { 2 };
++#define LTTNG_UST_INIT_SEM_COUNT 2
++static int sem_count = { LTTNG_UST_INIT_SEM_COUNT };
+ 
+ /*
+  * Counting nesting within lttng-ust. Used to ensure that calling fork()
+@@ -1922,7 +1924,7 @@ void lttng_ust_cleanup(int exiting)
+ 	exit_tracepoint();
+ 	if (!exiting) {
+ 		/* Reinitialize values for fork */
+-		sem_count = 2;
++		sem_count = LTTNG_UST_INIT_SEM_COUNT;
+ 		lttng_ust_comm_should_quit = 0;
+ 		initialized = 0;
+ 	}
+@@ -2072,3 +2074,26 @@ void lttng_ust_sockinfo_session_enabled(void *owner)
+ 	struct sock_info *sock_info = owner;
+ 	sock_info->statedump_pending = 1;
+ }
++
++/*
++ * Re-register the application when changing user ID. This is especially
++ * important for per-UID buffers. It is not strictly needed for per-PID
++ * buffers, but a slight extra overhead when changing user ID is considered
++ * harmless for a relatively infrequent operation.
++ */
++void ust_after_setuid(void)
++{
++	DBG("Unregistering the process");
++	lttng_ust_fixup_tls();
++	lttng_ust_exit();
++
++	sem_count = LTTNG_UST_INIT_SEM_COUNT;
++	lttng_ust_comm_should_quit = 0;
++	initialized = 0;
++
++	global_apps.wait_shm_mmap = NULL;
++	local_apps.wait_shm_mmap = NULL;
++
++	DBG("Registering the process under new UID=%u", getuid());
++	lttng_ust_init();
++}
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.21.0
