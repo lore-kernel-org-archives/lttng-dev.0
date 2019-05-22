@@ -1,32 +1,27 @@
 From: Kirill Tkhai <ktkhai@virtuozzo.com>
-Subject: [PATCH] mm: Rename mm_vmscan_lru_shrink_inactive trace event
+Subject: [PATCH v2] mm: Rename mm_vmscan_lru_shrink_inactive trace event
  variables
-Date: Wed, 22 May 2019 11:44:06 +0300
-Message-ID: <155851455676.7870.1951762540769724271.stgit@localhost.localdomain>
+Date: Wed, 22 May 2019 13:17:49 +0300
+Message-ID: <9b9a8da4-556a-8972-cf87-071ce5099ad0@virtuozzo.com>
+References: <155851455676.7870.1951762540769724271.stgit@localhost.localdomain>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <155851455676.7870.1951762540769724271.stgit@localhost.localdomain>
+Content-Language: en-US
 Sender: linux-kernel-owner@vger.kernel.org
-To: akpm@linux-foundation.org, mjeanson@efficios.com, rostedt@goodmis.org, lttng-dev@lists.lttng.org, linux-kernel@vger.kernel.org, ktkhai@virtuozzo.com
+To: akpm@linux-foundation.org, mjeanson@efficios.com, rostedt@goodmis.org, lttng-dev@lists.lttng.org, linux-kernel@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
 Rename nr_activate{0,1} into nr_activate{anon,file} since this
 is exported into userspace, e.g., it's shown here:
 
-/sys/kernel/debug/tracing/events/vmscan/mm_vmscan_lru_shrink_inactive/format.
+/sys/kernel/debug/tracing/events/vmscan/mm_vmscan_lru_shrink_inactive/format
 
-Now we have:
-field:unsigned int nr_activate0;	offset:64;	size:4;	signed:0;
-field:unsigned int nr_activate1;	offset:68;	size:4;	signed:0;
+v2: Changed suggested person (sorry, Mathieu :))
 
-The patch changes these to:
-field:unsigned int nr_activate_anon;	offset:64;	size:4;	signed:0;
-field:unsigned int nr_activate_file;	offset:68;	size:4;	signed:0;
-
-which is better readable.
-
-Suggested-by: Michael Jeanson <mjeanson@efficios.com>
+Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Kirill Tkhai <ktkhai@virtuozzo.com>
 ---
  include/trace/events/vmscan.h |   10 +++++-----
