@@ -1,16 +1,16 @@
-From: Simon Marchi <simon.marchi@efficios.com>
-Subject: [PATCH] Fix: fix compilation errors when using
- --disable-epoll
-Date: Mon, 27 May 2019 12:28:38 -0400
-Message-ID: <20190527162838.11675-1-simon.marchi__1466.97658799297$1558974541$gmane$org@efficios.com>
+From: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+Subject: [lttng-ust RFC v3] Add setuid wrappers for per-UID
+ buffers
+Date: Mon, 27 May 2019 17:51:01 -0400
+Message-ID: <20190527215101.13744-1-gabriel.pollo-guilbert__36431.5341970482$1558993935$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 45CMqK48Kzz10Jy
- for <lttng-dev@lists.lttng.org>; Mon, 27 May 2019 12:28:45 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 45CW0B3ZlNz10Yx
+ for <lttng-dev@lists.lttng.org>; Mon, 27 May 2019 17:51:54 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,63 +21,265 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
-Cc: Simon Marchi <simon.marchi@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-SSBnZXQgdGhpcyBlcnJvcjoKCiAgICAgIENDICAgICAgIGNvbXBhdC1wb2xsLmxvCiAgICAvaG9t
-ZS9zbWFyY2hpL3NyYy9sdHRuZy10b29scy9zcmMvY29tbW9uL2NvbXBhdC9jb21wYXQtcG9sbC5j
-OiBJbiBmdW5jdGlvbiDigJhjb21wYXRfcG9sbF93YWl04oCZOgogICAgL2hvbWUvc21hcmNoaS9z
-cmMvbHR0bmctdG9vbHMvc3JjL2NvbW1vbi9jb21wYXQvY29tcGF0LXBvbGwuYzozNTM6NzogZXJy
-b3I6IOKAmGlwZmTigJkgdW5kZWNsYXJlZCAoZmlyc3QgdXNlIGluIHRoaXMgZnVuY3Rpb24pCiAg
-ICAgICBpZiAoaXBmZC0+cmV2ZW50cyAhPSAwKSB7CiAgICAgICAgICAgXn5+fgoKd2hpY2gganVz
-dCBzZWVtcyBsaWtlIGEgdHlwby4KCkEgc2Vjb25kIGVycm9yIG9jY3VycyBsYXRlcjoKCiAgQ0Mg
-ICAgICAgdGVzdF91dGlsc19jb21wYXRfcG9sbC5vCi9ob21lL3NtYXJjaGkvc3JjL2x0dG5nLXRv
-b2xzL3Rlc3RzL3VuaXQvdGVzdF91dGlsc19jb21wYXRfcG9sbC5jOiBJbiBmdW5jdGlvbiDigJh0
-ZXN0X21vZF93YWl04oCZOgovaG9tZS9zbWFyY2hpL3NyYy9sdHRuZy10b29scy90ZXN0cy91bml0
-L3Rlc3RfdXRpbHNfY29tcGF0X3BvbGwuYzoxMzg6MjQ6IGVycm9yOiDigJhNQUdJQ19WQUxVReKA
-mSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKICBjaGFyIHJidWYgPSAw
-LCB0YnVmID0gTUFHSUNfVkFMVUU7CiAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+
-CgpUaGUgcHJvYmxlbSBpcyB0aGF0IE1BR0lDX1ZBTFVFIGlzIGRlZmluZWQgaW5zaWRlIGFuICNp
-ZmRlZiBIQVZFX0VQT0xMLApidXQgaXMgdXNlZCBldmVuIGlmICFIQVZFX0VQT0xMLiAgTW92ZSBp
-dCBvdXRzaWRlIHRoZSBpZmRlZiwgYW5kIGFkanVzdAp0aGUgc3BlbGxpbmcgYW5kIGdyYW1tYXRp
-Y2FsIGVycm9ycyBpbiB0aGUgY29tbWVudHMuCgpOb3RlIHRoYXQgY29tcGF0LXBvbGwuYyBpcyBv
-bmx5IGNvbXBpbGVkIGlmIGVwb2xsIGlzIG5vdCBhdmFpbGFibGUgb3IKZGlzYWJsZWQsIHdoaWNo
-IHlvdSBjYW4gZG8gd2l0aCAtLWRpc2FibGUtZXBvbGwuICBJbiBteSBjYXNlLApJIGVuZGVkIHVw
-IHVzaW5nIGNvbXBhdC1wb2xsLmMgYmVjYXVzZSB0aGUgQVhfSEFWRV9FUE9MTCBtYWNybyBkb2Vz
-IG5vdAp3b3JrIGNvcnJlY3RseSB3aGVuIGNvbmZpZ3VyaW5nIHdpdGggIi1XYWxsIC1XZXJyb3Ii
-LiAgSSdsbCB0YWNrbGUgdGhpcwppc3N1ZSBzZXBhcmF0ZWx5LgoKSSBvbmx5IGJ1aWx0LXRlc3Rl
-ZCB0aGUgcHJvcG9zZWQgY2hhbmdlLCBhbmQgSSBkb24ndCBrbm93IGFueXRoaW5nIGFib3V0CnRo
-aXMgY29kZSwgc28gcGxlYXNlIGNoZWNrIGNhcmVmdWxseSB0aGF0IGl0IGlzIHJpZ2h0LgoKU2ln
-bmVkLW9mZi1ieTogU2ltb24gTWFyY2hpIDxzaW1vbi5tYXJjaGlAZWZmaWNpb3MuY29tPgotLS0K
-IHNyYy9jb21tb24vY29tcGF0L2NvbXBhdC1wb2xsLmMgICAgIHwgIDIgKy0KIHRlc3RzL3VuaXQv
-dGVzdF91dGlsc19jb21wYXRfcG9sbC5jIHwgMTIgKysrKysrKy0tLS0tCiAyIGZpbGVzIGNoYW5n
-ZWQsIDggaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zcmMvY29t
-bW9uL2NvbXBhdC9jb21wYXQtcG9sbC5jIGIvc3JjL2NvbW1vbi9jb21wYXQvY29tcGF0LXBvbGwu
-YwppbmRleCAwMjIwYjI3ODU0YWIuLjI1NGNlMjcxZTcxYyAxMDA2NDQKLS0tIGEvc3JjL2NvbW1v
-bi9jb21wYXQvY29tcGF0LXBvbGwuYworKysgYi9zcmMvY29tbW9uL2NvbXBhdC9jb21wYXQtcG9s
-bC5jCkBAIC0zNTAsNyArMzUwLDcgQEAgaW50IGNvbXBhdF9wb2xsX3dhaXQoc3RydWN0IGx0dG5n
-X3BvbGxfZXZlbnQgKmV2ZW50cywgaW50IHRpbWVvdXQpCiAJCXN0cnVjdCBwb2xsZmQgKmlkbGVf
-cGZkID0gJmV2ZW50cy0+d2FpdC5ldmVudHNbaWRsZV9wZmRfaW5kZXhdOwogCQlzdHJ1Y3QgcG9s
-bGZkICpjdXJyZW50X3BmZCA9ICZldmVudHMtPndhaXQuZXZlbnRzW2ldOwogCi0JCWlmIChpcGZk
-LT5yZXZlbnRzICE9IDApIHsKKwkJaWYgKGlkbGVfcGZkLT5yZXZlbnRzICE9IDApIHsKIAkJCXN3
-YXBfcGZkID0gKmN1cnJlbnRfcGZkOwogCQkJKmN1cnJlbnRfcGZkID0gKmlkbGVfcGZkOwogCQkJ
-KmlkbGVfcGZkID0gc3dhcF9wZmQ7CmRpZmYgLS1naXQgYS90ZXN0cy91bml0L3Rlc3RfdXRpbHNf
-Y29tcGF0X3BvbGwuYyBiL3Rlc3RzL3VuaXQvdGVzdF91dGlsc19jb21wYXRfcG9sbC5jCmluZGV4
-IDFlYjMyN2E2YTcwOC4uYzhjYWM1NDRkNTMxIDEwMDY0NAotLS0gYS90ZXN0cy91bml0L3Rlc3Rf
-dXRpbHNfY29tcGF0X3BvbGwuYworKysgYi90ZXN0cy91bml0L3Rlc3RfdXRpbHNfY29tcGF0X3Bv
-bGwuYwpAQCAtNDcsNiArNDcsMTMgQEAgaW50IGx0dG5nX29wdF9taTsKICNkZWZpbmUgTlVNX1RF
-U1RTIDQ1CiAjZW5kaWYKIAorLyoKKyAqIE5vbi16ZXJvIDgtYml0cyBhcmJpdHJhcnkgdmFsdWUg
-YmVsb3cgMHg3ZiB0byBlbnN1cmUgbm8gc2lnbiBleHRlbnNpb24KKyAqIG9jY3Vycy4gIEl0IGlz
-IHVzZWQgdG8gdmVyaWZ5IHRoYXQgdGhlIHZhbHVlIGlzIHByb3Blcmx5IHByb3BhZ2F0ZWQgdGhy
-b3VnaAorICogdGhlIHBpcGUuCisgKi8KKyNkZWZpbmUgTUFHSUNfVkFMVUUgKChjaGFyKTB4NUEp
-CisKICNpZmRlZiBIQVZFX0VQT0xMCiAjaWYgZGVmaW5lZChIQVZFX0VQT0xMX0NSRUFURTEpICYm
-IGRlZmluZWQoRVBPTExfQ0xPRVhFQykKICNkZWZpbmUgQ0xPRV9WQUxVRSBFUE9MTF9DTE9FWEVD
-CkBAIC01NCwxMSArNjEsNiBAQCBpbnQgbHR0bmdfb3B0X21pOwogI2RlZmluZSBDTE9FX1ZBTFVF
-IEZEX0NMT0VYRUMKICNlbmRpZgogCi0vKiBOb24temVybyA4LWJpdHMgYXJiaXRyYXJ5IHZhbHVl
-IGJlbG93IDB4N2YgdG8gZW5zdXJlIG5vIHNpZ24gZXh0ZW5zaW9uCi0gKiB1c2VkIHRvIHZlcmlm
-eSB0aGF0IHRoZSB2YWx1ZSBpcyBwcm9wZXJseSBwcm9wYWdhdGVkIHRocm91Z2h0IHRoZSBwaXBl
-LgotICovCi0jZGVmaW5lIE1BR0lDX1ZBTFVFICgoY2hhcikweDVBKQotCiB2b2lkIHRlc3RfZXBv
-bGxfY29tcGF0KHZvaWQpCiB7CiAJLyoKLS0gCjIuMjEuMAoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYK
+In case of a per-UID buffer, events following a change of user ID should be
+forwarded to buffers of the new UID. In order to do so, we add a wrapper around
+setuid(3), setreuid(3) and setresuid(2) that unregister and re-register the
+application from the session daemon.
+
+While there exist some other functions such as seteuid(3) or setfsuid(2), we
+don't need to add a wrapper for them since they do not edit the real user ID,
+the actual ID returned by getuid(3) and used for creating the buffers.
+
+Signed-off-by: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+---
+ Makefile.am                     |   1 +
+ configure.ac                    |   1 +
+ doc/man/lttng-ust.3.txt         |  11 ++++
+ include/lttng/ust.h             |   1 +
+ liblttng-ust-setuid/Makefile.am |  10 ++++
+ liblttng-ust-setuid/ustsetuid.c | 102 ++++++++++++++++++++++++++++++++
+ liblttng-ust/lttng-ust-comm.c   |  29 ++++++++-
+ 7 files changed, 153 insertions(+), 2 deletions(-)
+ create mode 100644 liblttng-ust-setuid/Makefile.am
+ create mode 100644 liblttng-ust-setuid/ustsetuid.c
+
+diff --git a/Makefile.am b/Makefile.am
+index 810761ca..e8812e59 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -5,6 +5,7 @@ SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
+ 		liblttng-ust-ctl \
+ 		liblttng-ust-fd \
+ 		liblttng-ust-fork \
++		liblttng-ust-setuid \
+ 		liblttng-ust-libc-wrapper \
+ 		liblttng-ust-cyg-profile \
+ 		tools
+diff --git a/configure.ac b/configure.ac
+index 52fc3f68..95780dba 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -522,6 +522,7 @@ AC_CONFIG_FILES([
+ 	liblttng-ust/Makefile
+ 	liblttng-ust-ctl/Makefile
+ 	liblttng-ust-fork/Makefile
++	liblttng-ust-setuid/Makefile
+ 	liblttng-ust-dl/Makefile
+ 	liblttng-ust-fd/Makefile
+ 	liblttng-ust-java/Makefile
+diff --git a/doc/man/lttng-ust.3.txt b/doc/man/lttng-ust.3.txt
+index 5c9c9f5d..b252c11d 100644
+--- a/doc/man/lttng-ust.3.txt
++++ b/doc/man/lttng-ust.3.txt
+@@ -744,6 +744,17 @@ library before you start the application. Typical use cases include
+ daemons closing all file descriptors after man:fork(2), and buggy
+ applications doing ``double-closes''.
+ 
++Using LTTng-UST with applications that change user
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++If your application is traced using per-UID buffers and changes user ID using
++man:setuid(2), the library `liblttng-ust-setuid.so` needs to be preloaded
++before starting the application with the `LD_PRELOAD` environment variable (see
++man:ld.so(8)). This way, events generated after the UID change will be fowarded
++to the correct buffer.
++
++This workaround requires that the tracing session be global (root
++lttng-sessiond) in order to avoid permission problems between a session
++daemon started by another user.
+ 
+ Context information
+ ~~~~~~~~~~~~~~~~~~~
+diff --git a/include/lttng/ust.h b/include/lttng/ust.h
+index 2779d7a7..5495e564 100644
+--- a/include/lttng/ust.h
++++ b/include/lttng/ust.h
+@@ -32,6 +32,7 @@ extern "C" {
+ extern void ust_before_fork(sigset_t *save_sigset);
+ extern void ust_after_fork_parent(sigset_t *restore_sigset);
+ extern void ust_after_fork_child(sigset_t *restore_sigset);
++extern void ust_after_setuid(void);
+ 
+ #ifdef __cplusplus 
+ }
+diff --git a/liblttng-ust-setuid/Makefile.am b/liblttng-ust-setuid/Makefile.am
+new file mode 100644
+index 00000000..df3cd622
+--- /dev/null
++++ b/liblttng-ust-setuid/Makefile.am
+@@ -0,0 +1,10 @@
++AM_CPPFLAGS = -I$(top_srcdir)/include
++AM_CFLAGS += -fno-strict-aliasing
++
++lib_LTLIBRARIES = liblttng-ust-setuid.la
++liblttng_ust_setuid_la_SOURCES = ustsetuid.c
++liblttng_ust_setuid_la_LIBADD = \
++	$(top_builddir)/liblttng-ust/liblttng-ust.la \
++	$(DL_LIBS)
++
++liblttng_ust_setuid_la_CFLAGS = -DUST_COMPONENT=liblttng-ust-setuid $(AM_CFLAGS)
+diff --git a/liblttng-ust-setuid/ustsetuid.c b/liblttng-ust-setuid/ustsetuid.c
+new file mode 100644
+index 00000000..b94ea8d2
+--- /dev/null
++++ b/liblttng-ust-setuid/ustsetuid.c
+@@ -0,0 +1,102 @@
++/*
++ * Copyright (C) 2019 Gabriel-Andrew Pollo-Guilbert
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; version 2.1 of
++ * the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++ */
++
++#define _GNU_SOURCE
++#include <unistd.h>
++#include <errno.h>
++#include <stdio.h>
++#include <lttng/ust-dlfcn.h>
++#include <lttng/ust.h>
++
++int setuid(uid_t uid)
++{
++	static int (*plibc_func)(uid_t) = NULL;
++	int retval;
++
++	if (plibc_func == NULL) {
++		plibc_func = dlsym(RTLD_NEXT, __func__);
++		if (plibc_func == NULL) {
++			fprintf(stderr, "libustsetuid: unable to find \"%s\" symbol\n", __func__);
++			errno = ENOSYS;
++			return -1;
++		}
++	}
++
++	uid_t before_uid = getuid();
++
++	retval = plibc_func(uid);
++	if (retval < 0)
++		return retval;
++
++	if (before_uid != getuid())
++		ust_after_setuid();
++
++	return retval;
++}
++
++int setreuid(uid_t ruid, uid_t euid)
++{
++	static int (*plibc_func)(uid_t, uid_t) = NULL;
++	int retval;
++
++	if (plibc_func == NULL) {
++		plibc_func = dlsym(RTLD_NEXT, __func__);
++		if (plibc_func == NULL) {
++			fprintf(stderr, "libustsetuid: unable to find \"%s\" symbol\n", __func__);
++			errno = ENOSYS;
++			return -1;
++		}
++	}
++
++	uid_t before_uid = getuid();
++
++	retval = plibc_func(ruid, euid);
++	if (retval < 0)
++		return retval;
++
++	if (before_uid != getuid())
++		ust_after_setuid();
++
++	return retval;
++}
++
++int setresuid(uid_t ruid, uid_t euid, uid_t suid)
++{
++	static int (*plibc_func)(uid_t, uid_t, uid_t) = NULL;
++	int retval;
++
++	if (plibc_func == NULL) {
++		plibc_func = dlsym(RTLD_NEXT, __func__);
++		if (plibc_func == NULL) {
++			fprintf(stderr, "libustsetuid: unable to find \"%s\" symbol\n", __func__);
++			errno = ENOSYS;
++			return -1;
++		}
++	}
++
++	uid_t before_uid = getuid();
++
++	retval = plibc_func(ruid, euid, suid);
++	if (retval < 0)
++		return retval;
++
++	if (before_uid != getuid())
++		ust_after_setuid();
++
++	return retval;
++}
+diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+index 61dbb41b..0d0b9eb4 100644
+--- a/liblttng-ust/lttng-ust-comm.c
++++ b/liblttng-ust/lttng-ust-comm.c
+@@ -225,10 +225,12 @@ void ust_unlock(void)
+  *   daemon problems).
+  */
+ static sem_t constructor_wait;
++
+ /*
+  * Doing this for both the global and local sessiond.
+  */
+-static int sem_count = { 2 };
++#define LTTNG_UST_INIT_SEM_COUNT 2
++static int sem_count = { LTTNG_UST_INIT_SEM_COUNT };
+ 
+ /*
+  * Counting nesting within lttng-ust. Used to ensure that calling fork()
+@@ -1922,7 +1924,7 @@ void lttng_ust_cleanup(int exiting)
+ 	exit_tracepoint();
+ 	if (!exiting) {
+ 		/* Reinitialize values for fork */
+-		sem_count = 2;
++		sem_count = LTTNG_UST_INIT_SEM_COUNT;
+ 		lttng_ust_comm_should_quit = 0;
+ 		initialized = 0;
+ 	}
+@@ -2072,3 +2074,26 @@ void lttng_ust_sockinfo_session_enabled(void *owner)
+ 	struct sock_info *sock_info = owner;
+ 	sock_info->statedump_pending = 1;
+ }
++
++/*
++ * Re-register the application when changing user ID. This is especially
++ * important for per-UID buffers. It is not strictly needed for per-PID
++ * buffers, but a slight extra overhead when changing user ID is considered
++ * harmless for a relatively infrequent operation.
++ */
++void ust_after_setuid(void)
++{
++	DBG("Unregistering the process");
++	lttng_ust_fixup_tls();
++	lttng_ust_exit();
++
++	sem_count = LTTNG_UST_INIT_SEM_COUNT;
++	lttng_ust_comm_should_quit = 0;
++	initialized = 0;
++
++	global_apps.wait_shm_mmap = NULL;
++	local_apps.wait_shm_mmap = NULL;
++
++	DBG("Registering the process under new UID=%u", getuid());
++	lttng_ust_init();
++}
+-- 
+2.21.0
