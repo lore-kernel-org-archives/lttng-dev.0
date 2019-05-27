@@ -1,22 +1,16 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: lttng trace" Read trace under windows
-Date: Mon, 27 May 2019 10:19:07 -0400
-Message-ID: <20190527141907.GB17476__9977.75912271521$1558966771$gmane$org@joraj-alpa>
-References: <CABRndgx7zGtAR_7eM8Vb7AorGkS4-2b8z8P5n9rv45-SMhuL0Q@mail.gmail.com>
- <20190521144811.GA1071@joraj-alpa>
- <CABRndgyEo1g+x1=DmTFqWwvZzXVmJUrVCg6kD+=QQfciksLwEw@mail.gmail.com>
+From: Simon Marchi <simon.marchi@efficios.com>
+Subject: [PATCH] configure.ac: Remove duplicated
+ CMD_DESCR_ROTATE definition
+Date: Mon, 27 May 2019 11:52:46 -0400
+Message-ID: <20190527155246.24102-1-simon.marchi__5097.20942225016$1558972399$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45CJxw1ZFrz1063
- for <lttng-dev@lists.lttng.org>; Mon, 27 May 2019 10:19:16 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 3F0EA1DAC8D
- for <lttng-dev@lists.lttng.org>; Mon, 27 May 2019 10:19:09 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <CABRndgyEo1g+x1=DmTFqWwvZzXVmJUrVCg6kD+=QQfciksLwEw@mail.gmail.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 45CM2522h7z10F7
+ for <lttng-dev@lists.lttng.org>; Mon, 27 May 2019 11:53:00 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,35 +20,37 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Zvi Vered <veredz72@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On Sun, May 26, 2019 at 05:40:51AM +0300, Zvi Vered wrote:
-> Hi Jonathan,
-> 
-> Thank you very much for your repy.
-> 
-> Each trace contains also idx files (channel0_0.idx ... channel0_7.idx).
-> Are those also CTF files ?
-
-The index files are not part of the 1.8 spec. They are utility files for the
-reader. These files are optionals.
-
-Please see src/common/index/ [1] in the lttng-tools tree if you want do
-dig further.
-
-[1] https://github.com/lttng/lttng-tools/blob/master/src/common/index
-
-> 
-> Is "metadata" a CTF file also ?
-
-https://diamon.org/ctf/#spec7.1
-
-It represent a metadata stream.
-
-Cheers
-
--- 
-Jonathan Rajotte-Julien
-EfficiOS
+Q01EX0RFU0NSX1JPVEFURSBpcyBkZWZpbmVkIHR3aWNlIGJ5IGNvbmZpZ3VyZS4gIFRoaXMgYnJl
+YWtzIGNvbmZpZ3VyaW5nCndpdGggIi1XZXJyb3IgLVdhbGwiLCBhcyBzb21lIHRlc3QgcHJvZ3Jh
+bXMgZG9uJ3QgY29tcGlsZSBkdWUgdG86CgogIGNvbmZpZ3VyZToxNjk5MDogZ2NjIC1vIGNvbmZ0
+ZXN0IC1XYWxsIC1XZXJyb3IgICBjb25mdGVzdC5jICA+JjUKICBjb25mdGVzdC5jOjE2MzogZXJy
+b3I6ICJDT05GSUdfQ01EX0RFU0NSX1JPVEFURSIgcmVkZWZpbmVkIFstV2Vycm9yXQogICAjZGVm
+aW5lIENPTkZJR19DTURfREVTQ1JfUk9UQVRFICJBcmNoaXZlIGEgdHJhY2luZyBzZXNzaW9u4oCZ
+cyBjdXJyZW50IHRyYWNlIGNodW5rIgoKICBjb25mdGVzdC5jOjE1NDogbm90ZTogdGhpcyBpcyB0
+aGUgbG9jYXRpb24gb2YgdGhlIHByZXZpb3VzIGRlZmluaXRpb24KICAgI2RlZmluZSBDT05GSUdf
+Q01EX0RFU0NSX1JPVEFURSAiQXJjaGl2ZSBhIHRyYWNpbmcgc2Vzc2lvbidzIGN1cnJlbnQgdHJh
+Y2UgY2h1bmsiCgogIGNjMTogYWxsIHdhcm5pbmdzIGJlaW5nIHRyZWF0ZWQgYXMgZXJyb3JzCgpT
+aWduZWQtb2ZmLWJ5OiBTaW1vbiBNYXJjaGkgPHNpbW9uLm1hcmNoaUBlZmZpY2lvcy5jb20+Ci0t
+LQogY29uZmlndXJlLmFjIHwgMSAtCiAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQoKZGlm
+ZiAtLWdpdCBhL2NvbmZpZ3VyZS5hYyBiL2NvbmZpZ3VyZS5hYwppbmRleCAyMTRkNThhYzg4NTYu
+LmU4ODg3NTg1NjExNSAxMDA2NDQKLS0tIGEvY29uZmlndXJlLmFjCisrKyBiL2NvbmZpZ3VyZS5h
+YwpAQCAtNDEyLDcgKzQxMiw2IEBAIF9BQ19ERUZJTkVfUVVPVEVEX0FORF9TVUJTVChbQ01EX0RF
+U0NSX1NUQVRVU10sIFtHZXQgdGhlIHN0YXR1cyBvZiB0aGUgY3VycmVudCB0CiBfQUNfREVGSU5F
+X1FVT1RFRF9BTkRfU1VCU1QoW0NNRF9ERVNDUl9TVE9QXSwgW1N0b3AgdHJhY2luZ10pCiBfQUNf
+REVGSU5FX1FVT1RFRF9BTkRfU1VCU1QoW0NNRF9ERVNDUl9ESVNBQkxFX1JPVEFUSU9OXSwgW1Vu
+c2V0IGEgcm90YXRpb24gc2NoZWR1bGVdKQogX0FDX0RFRklORV9RVU9URURfQU5EX1NVQlNUKFtD
+TURfREVTQ1JfRU5BQkxFX1JPVEFUSU9OXSwgW1NldCBhIHJvdGF0aW9uIHNjaGVkdWxlXSkKLV9B
+Q19ERUZJTkVfUVVPVEVEX0FORF9TVUJTVChbQ01EX0RFU0NSX1JPVEFURV0sIFtBcmNoaXZlIGEg
+dHJhY2luZyBzZXNzaW9u4oCZcyBjdXJyZW50IHRyYWNlIGNodW5rXSkKIF9BQ19ERUZJTkVfUVVP
+VEVEX0FORF9TVUJTVChbQ01EX0RFU0NSX1RSQUNLXSwgW1RyYWNrIHNwZWNpZmljIHN5c3RlbSBy
+ZXNvdXJjZXNdKQogX0FDX0RFRklORV9RVU9URURfQU5EX1NVQlNUKFtDTURfREVTQ1JfVU5UUkFD
+S10sIFtVbnRyYWNrIHNwZWNpZmljIHN5c3RlbSByZXNvdXJjZXNdKQogX0FDX0RFRklORV9RVU9U
+RURfQU5EX1NVQlNUKFtDTURfREVTQ1JfVkVSU0lPTl0sIFtTaG93IHZlcnNpb24gaW5mb3JtYXRp
+b25dKQotLSAKMi4yMS4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
