@@ -1,25 +1,17 @@
-From: Carlo Caione <carlo.caione@gmail.com>
-Subject: babeltrace python binding and multiple streams with out
- of order samples
-Date: Tue, 28 May 2019 14:11:22 +0100
-Message-ID: <ee93b1b8-6e02-d40a-067a-99ab88b2cadf__17085.395408661$1559049109$gmane$org@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [lttng-ust RFC v3] Add setuid wrappers for per-UID
+ buffers
+Date: Tue, 28 May 2019 10:02:43 -0400 (EDT)
+Message-ID: <914116098.15558.1559052163427.JavaMail.zimbra__8265.81749586097$1559052193$gmane$org@efficios.com>
+References: <20190527215101.13744-1-gabriel.pollo-guilbert@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by lists.lttng.org (Postfix) with ESMTPS id 45CvPB2Lgrz128t
- for <lttng-dev@lists.lttng.org>; Tue, 28 May 2019 09:11:25 -0400 (EDT)
-Received: by mail-wr1-x430.google.com with SMTP id m3so20185099wrv.2
- for <lttng-dev@lists.lttng.org>; Tue, 28 May 2019 06:11:25 -0700 (PDT)
-Received: from ?IPv6:2a00:23c4:f78c:d00:1570:f96d:dab8:76ae?
- ([2a00:23c4:f78c:d00:1570:f96d:dab8:76ae])
- by smtp.gmail.com with ESMTPSA id j82sm2889542wmj.40.2019.05.28.06.11.23
- for <lttng-dev@lists.lttng.org>
- (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
- Tue, 28 May 2019 06:11:23 -0700 (PDT)
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 45CwXP6X3cz12FH
+ for <lttng-dev@lists.lttng.org>; Tue, 28 May 2019 10:02:45 -0400 (EDT)
+In-Reply-To: <20190527215101.13744-1-gabriel.pollo-guilbert@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,45 +21,55 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-I'm using the babeltrace python bindings (v1.5.x) to convert some raw 
-data I have into a CTF file.
+----- On May 27, 2019, at 5:51 PM, Gabriel-Andrew Pollo-Guilbert gabriel.pollo-guilbert@efficios.com wrote:
 
-This raw data is organized in fixed data chunks composed by serializing 
-the events for each CPU:
+> In case of a per-UID buffer, events following a change of user ID should be
+> forwarded to buffers of the new UID. In order to do so, we add a wrapper around
+> setuid(3), setreuid(3) and setresuid(2) that unregister and re-register the
+> application from the session daemon.
+> 
+> While there exist some other functions such as seteuid(3) or setfsuid(2), we
+> don't need to add a wrapper for them since they do not edit the real user ID,
+> the actual ID returned by getuid(3) and used for creating the buffers.
 
-[cpu0, cpu0, cpu0, ..., cpu1, cpu1, cpu1, ..., cpu2,... ]
+The general approach looks good.
 
-Each event for each CPU has a timestamp that is monotonic within each 
-CPU set.
+The missing part is adding tests within lttng-tools "destructive" tests (because
+they will likely change the system configuration to add users (?)).
 
-I wanted to create one stream per CPU and since the events are the same 
-for each CPU, I was using a single stream_class linked to a stream 
-object for each CPU. Something in the structure similar to [0] with:
+One nit below since we are here...
 
-stream_cpu0 = writer.create_stream(stream_class)
-stream_cpu1 = writer.create_stream(stream_class)
-stream_cpu2 = writer.create_stream(stream_class)
-...
+> diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+> index 61dbb41b..0d0b9eb4 100644
+> --- a/liblttng-ust/lttng-ust-comm.c
+> +++ b/liblttng-ust/lttng-ust-comm.c
+> @@ -225,10 +225,12 @@ void ust_unlock(void)
+>  *   daemon problems).
+>  */
+> static sem_t constructor_wait;
+> +
+> /*
+>  * Doing this for both the global and local sessiond.
+>  */
+> -static int sem_count = { 2 };
+> +#define LTTNG_UST_INIT_SEM_COUNT 2
 
-The problem is that being the clock one for the stream_class when 
-feeding the events to the library I get a:
+I know I'm the one who asked for a #define, but in general, it's better
+to use:
 
-ValueError: Invalid time value
+enum { LTTNG_UST_INIT_SEM_COUNT = 2 };
 
-When the first event on cpu1 is parsed, because the timestamp is in the 
-past with respect to the timestamp of the latest event of the cpu0.
+So we do not pollute the preprocessor namespace (e.g. output of gcc -dM -E file.c).
 
-I can sort the events before feeding them to babeltrace but this seems 
-sub-optimal to me. My question is: am I using the library correctly or 
-there is any way to achieve this?
+Thanks,
 
-Thank you,
+Mathieu
 
-[0] https://lists.lttng.org/pipermail/lttng-dev/2015-November/025231.html
-
---
-Carlo Caione
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
