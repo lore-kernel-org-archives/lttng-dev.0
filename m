@@ -1,21 +1,21 @@
-From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace 1/1] Fix: test_bitfield: extend
- coverage by removing off-by-one in bound check
-Date: Wed, 29 May 2019 16:57:04 -0400
-Message-ID: <20190529205704.GB31251__31574.8121751071$1559163450$gmane$org@gmail.com>
-References: <20190529190659.23235-1-mathieu.desnoyers@efficios.com>
+From: Ravindra Kumar Meena <rmeena840@gmail.com>
+Subject: Re: Need help in converting trace data into CTF
+Date: Wed, 29 May 2019 21:58:35 +0530
+Message-ID: <CAEWVvOSdmSsfGiN2fd7yAO6m5-Ke=GuamNR6jKYCLRnSym9Hcw__46101.3534035132$1559165590$gmane$org@mail.gmail.com>
+References: <CAEWVvOSE6QJQvQEdTLEhNQTE7H1Py1ggoqynSj3w-uOYBkTMCQ@mail.gmail.com>
+ <72388180.2647.1558032721255.JavaMail.zimbra@efficios.com>
+ <CAEWVvOS6WyAkE+5GAyn_WEoFW_6h_fWbze-im0w7oqvXS-+dBw@mail.gmail.com>
+ <1448366760.18406.1559146893765.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============5438687086608085136=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com
- [209.85.222.196])
- by lists.lttng.org (Postfix) with ESMTPS id 45Djh417v3z10sL
- for <lttng-dev@lists.lttng.org>; Wed, 29 May 2019 16:57:07 -0400 (EDT)
-Received: by mail-qk1-f196.google.com with SMTP id s22so396892qkj.12
- for <lttng-dev@lists.lttng.org>; Wed, 29 May 2019 13:57:07 -0700 (PDT)
-Content-Disposition: inline
-In-Reply-To: <20190529190659.23235-1-mathieu.desnoyers@efficios.com>
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
+ [IPv6:2607:f8b0:4864:20::22e])
+ by lists.lttng.org (Postfix) with ESMTPS id 45Dbl12smxz10cV
+ for <lttng-dev@lists.lttng.org>; Wed, 29 May 2019 12:29:17 -0400 (EDT)
+Received: by mail-oi1-x22e.google.com with SMTP id v2so2565110oie.6
+ for <lttng-dev@lists.lttng.org>; Wed, 29 May 2019 09:29:17 -0700 (PDT)
+In-Reply-To: <1448366760.18406.1559146893765.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,137 +26,77 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged in master and stable-2.0.
+--===============5438687086608085136==
+Content-Type: multipart/alternative; boundary="00000000000033cf8e058a094800"
 
-Thanks!
-J=E9r=E9mie
+--00000000000033cf8e058a094800
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, May 29, 2019 at 03:06:59PM -0400, Mathieu Desnoyers wrote:
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Change-Id: I4fbf927d4b2ff1c8b68b05c7843298c64b68f5a4
-> ---
->  tests/lib/test_bitfield.c | 20 ++++++++++++--------
->  1 file changed, 12 insertions(+), 8 deletions(-)
-> =
+>
+> With babeltrace 1.5.x: No.
+>
 
-> diff --git a/tests/lib/test_bitfield.c b/tests/lib/test_bitfield.c
-> index bc61e118..5188335b 100644
-> --- a/tests/lib/test_bitfield.c
-> +++ b/tests/lib/test_bitfield.c
-> @@ -161,11 +161,12 @@ void run_test_unsigned_write(unsigned int src_ui, u=
-nsigned long long src_ull)
->  	unsigned long long readval;
->  	unsigned int s, l;
->  =
+Okay
 
-> +	/* The number of bits needed to represent 0 is 0. */
->  	nrbits_ui =3D fls_u32(src_ui);
->  =
+>
+>
+> With babeltrace master branch (currently in -pre stage before 2.0): Yes.
+>
+Okay. That's great!!
+Are there examples available on it?
 
->  	/* Write from unsigned integer src input. */
->  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
-> -		for (l =3D nrbits_ui; l < (CHAR_BIT * TEST_LEN) - s; l++) {
-> +		for (l =3D nrbits_ui; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
->  			init_byte_array(target.c, TEST_LEN, 0xFF);
->  			bt_bitfield_write(target.c, unsigned char, s, l, src_ui);
->  			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
-> @@ -209,11 +210,12 @@ void run_test_unsigned_write(unsigned int src_ui, u=
-nsigned long long src_ull)
->  	}
->  	pass(UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR, src_ui);
->  =
+Can the conversion be done directly via command-line?
 
-> +	/* The number of bits needed to represent 0 is 0. */
->  	nrbits_ull =3D fls_u64(src_ull);
->  =
+Thanks
 
->  	/* Write from unsigned long long src input. */
->  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
-> -		for (l =3D nrbits_ull; l < (CHAR_BIT * TEST_LEN) - s; l++) {
-> +		for (l =3D nrbits_ull; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
->  			init_byte_array(target.c, TEST_LEN, 0xFF);
->  			bt_bitfield_write(target.c, unsigned char, s, l, src_ull);
->  			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
-> @@ -271,11 +273,12 @@ void run_test_unsigned_read(unsigned int src_ui, un=
-signed long long src_ull)
->  	unsigned long long readval_ull;
->  	unsigned int s, l;
->  =
 
-> +	/* The number of bits needed to represent 0 is 0. */
->  	nrbits_ui =3D fls_u32(src_ui);
->  =
 
->  	/* Read to unsigned integer readval output. */
->  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
-> -		for (l =3D nrbits_ui; l < (CHAR_BIT * TEST_LEN) - s; l++) {
-> +		for (l =3D nrbits_ui; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
->  			init_byte_array(target.c, TEST_LEN, 0xFF);
->  			bt_bitfield_write(target.c, unsigned char, s, l, src_ui);
->  			bt_bitfield_read(target.c, unsigned char, s, l, &readval_ui);
-> @@ -319,11 +322,12 @@ void run_test_unsigned_read(unsigned int src_ui, un=
-signed long long src_ull)
->  	}
->  	pass(UNSIGNED_INT_READ_TEST_DESC_FMT_STR, src_ui);
->  =
 
-> +	/* The number of bits needed to represent 0 is 0. */
->  	nrbits_ull =3D fls_u64(src_ull);
->  =
+-- 
+*Ravindra Kumar Meena*,
+B. Tech. Computer Science and Engineering,
+Indian Institute of Technology (Indian School of Mines)
+<https://www.iitism.ac.in/>, Dhanbad
 
->  	/* Read to unsigned long long readval output. */
->  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
-> -		for (l =3D nrbits_ull; l < (CHAR_BIT * TEST_LEN) - s; l++) {
-> +		for (l =3D nrbits_ull; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
->  			init_byte_array(target.c, TEST_LEN, 0xFF);
->  			bt_bitfield_write(target.c, unsigned char, s, l, src_ull);
->  			bt_bitfield_read(target.c, unsigned char, s, l, &readval_ull);
-> @@ -394,7 +398,7 @@ void run_test_signed_write(int src_i, long long src_l=
-l)
->  =
+--00000000000033cf8e058a094800
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
->  	/* Write from signed integer src input. */
->  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
-> -		for (l =3D nrbits_i; l < (CHAR_BIT * TEST_LEN) - s; l++) {
-> +		for (l =3D nrbits_i; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
->  			init_byte_array(target.c, TEST_LEN, 0x0);
->  			bt_bitfield_write(target.c, signed char, s, l, src_i);
->  			bt_bitfield_read(target.c, signed char, s, l, &readval);
-> @@ -445,7 +449,7 @@ void run_test_signed_write(int src_i, long long src_l=
-l)
->  =
+<div dir=3D"ltr"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
+;padding-left:1ex"><div style=3D"font-family:arial,helvetica,sans-serif;fon=
+t-size:12pt;color:rgb(0,0,0)"><div><span style=3D"font-size:12pt">With babe=
+ltrace 1.5.x: No.</span></div></div></blockquote><div><br></div><div>Okay=
+=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
+.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div style=3D=
+"font-family:arial,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,0)"><d=
+iv><br></div><div><br></div><div>With babeltrace master branch (currently i=
+n -pre stage before 2.0): Yes.<br></div></div></blockquote><div>Okay. That&=
+#39;s great!!</div><div>Are there examples available on it?=C2=A0</div><div=
+><br></div><div>Can the conversion be done directly via command-line?</div>=
+<div><br></div><div>Thanks</div><div><br></div><div><br></div></div><br cle=
+ar=3D"all"><div><br></div>-- <br><div dir=3D"ltr" class=3D"gmail_signature"=
+><div dir=3D"ltr"><div><div dir=3D"ltr"><font size=3D"4"><b>Ravindra Kumar =
+Meena</b></font>,<div><span style=3D"color:rgb(102,102,102)">B. Tech. Compu=
+ter Science and Engineering,<br></span></div><div><span style=3D"color:rgb(=
+102,102,102)"><a href=3D"https://www.iitism.ac.in/" style=3D"color:rgb(17,8=
+5,204)" target=3D"_blank">Indian Institute of Technology (Indian School of =
+Mines)</a>, Dhanbad</span></div></div></div></div></div></div>
 
->  	/* Write from signed long long src input. */
->  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
-> -		for (l =3D nrbits_ll; l < (CHAR_BIT * TEST_LEN) - s; l++) {
-> +		for (l =3D nrbits_ll; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
->  			init_byte_array(target.c, TEST_LEN, 0x0);
->  			bt_bitfield_write(target.c, signed char, s, l, src_ll);
->  			bt_bitfield_read(target.c, signed char, s, l, &readval);
-> @@ -510,7 +514,7 @@ void run_test_signed_read(int src_i, long long src_ll)
->  =
+--00000000000033cf8e058a094800--
 
->  	/* Read to signed integer readval output. */
->  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
-> -		for (l =3D nrbits_i; l < (CHAR_BIT * TEST_LEN) - s; l++) {
-> +		for (l =3D nrbits_i; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
->  			init_byte_array(target.c, TEST_LEN, 0xFF);
->  			bt_bitfield_write(target.c, signed char, s, l, src_i);
->  			bt_bitfield_read(target.c, signed char, s, l, &readval_i);
-> @@ -561,7 +565,7 @@ void run_test_signed_read(int src_i, long long src_ll)
->  =
+--===============5438687086608085136==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
->  	/* Read to signed long long readval output. */
->  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
-> -		for (l =3D nrbits_ll; l < (CHAR_BIT * TEST_LEN) - s; l++) {
-> +		for (l =3D nrbits_ll; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
->  			init_byte_array(target.c, TEST_LEN, 0xFF);
->  			bt_bitfield_write(target.c, signed char, s, l, src_ll);
->  			bt_bitfield_read(target.c, signed char, s, l, &readval_ll);
-> -- =
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-> 2.11.0
-> =
+--===============5438687086608085136==--
