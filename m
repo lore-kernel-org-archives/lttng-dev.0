@@ -1,21 +1,21 @@
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
 Subject: Re: [PATCH babeltrace 1/1] Fix: test_bitfield: extend
- coverage: 0-len signed write/read
-Date: Wed, 29 May 2019 16:56:37 -0400
-Message-ID: <20190529205637.GA31251__48937.529120461$1559163421$gmane$org@gmail.com>
-References: <20190529193625.24465-1-mathieu.desnoyers@efficios.com>
+ coverage by removing off-by-one in bound check
+Date: Wed, 29 May 2019 16:57:04 -0400
+Message-ID: <20190529205704.GB31251__31574.8121751071$1559163450$gmane$org@gmail.com>
+References: <20190529190659.23235-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-f196.google.com (mail-qt1-f196.google.com
- [209.85.160.196])
- by lists.lttng.org (Postfix) with ESMTPS id 45DjgX6pcCz10rt
- for <lttng-dev@lists.lttng.org>; Wed, 29 May 2019 16:56:40 -0400 (EDT)
-Received: by mail-qt1-f196.google.com with SMTP id l3so4368221qtj.5
- for <lttng-dev@lists.lttng.org>; Wed, 29 May 2019 13:56:40 -0700 (PDT)
+Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com
+ [209.85.222.196])
+ by lists.lttng.org (Postfix) with ESMTPS id 45Djh417v3z10sL
+ for <lttng-dev@lists.lttng.org>; Wed, 29 May 2019 16:57:07 -0400 (EDT)
+Received: by mail-qk1-f196.google.com with SMTP id s22so396892qkj.12
+ for <lttng-dev@lists.lttng.org>; Wed, 29 May 2019 13:57:07 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <20190529193625.24465-1-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20190529190659.23235-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -34,81 +34,128 @@ Merged in master and stable-2.0.
 Thanks!
 J=E9r=E9mie
 
-On Wed, May 29, 2019 at 03:36:25PM -0400, Mathieu Desnoyers wrote:
-> By convention, a 0-len bitfield write is a no-op, and a 0-len read
-> sets the value of the output to 0.
-> =
-
-> So we can "encode" the value 0 over a length of 0 bit. Cover this
-> in the test-cases for signed types. It is already covered for the
-> unsigned test-cases.
-> =
-
+On Wed, May 29, 2019 at 03:06:59PM -0400, Mathieu Desnoyers wrote:
 > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Change-Id: Ib6038b98167ef2cfa8c504d7ac29498e71827b38
+> Change-Id: I4fbf927d4b2ff1c8b68b05c7843298c64b68f5a4
 > ---
->  tests/lib/test_bitfield.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
+>  tests/lib/test_bitfield.c | 20 ++++++++++++--------
+>  1 file changed, 12 insertions(+), 8 deletions(-)
 > =
 
 > diff --git a/tests/lib/test_bitfield.c b/tests/lib/test_bitfield.c
-> index 5188335b..05547c07 100644
+> index bc61e118..5188335b 100644
 > --- a/tests/lib/test_bitfield.c
 > +++ b/tests/lib/test_bitfield.c
-> @@ -391,7 +391,9 @@ void run_test_signed_write(int src_i, long long src_l=
-l)
->  	long long readval;
+> @@ -161,11 +161,12 @@ void run_test_unsigned_write(unsigned int src_ui, u=
+nsigned long long src_ull)
+>  	unsigned long long readval;
 >  	unsigned int s, l;
 >  =
 
-> -	if (src_i & 0x80000000U)
-> +	if (!src_i)
-> +		nrbits_i =3D 0;			/* The number of bits needed to represent 0 is 0. */
-> +	else if (src_i & 0x80000000U)
->  		nrbits_i =3D fls_u32(~src_i) + 1;	/* Find least significant bit convey=
-ing sign */
->  	else
->  		nrbits_i =3D fls_u32(src_i) + 1;	/* Keep sign at 0 */
-> @@ -442,7 +444,9 @@ void run_test_signed_write(int src_i, long long src_l=
-l)
->  	}
->  	pass(SIGNED_INT_WRITE_TEST_DESC_FMT_STR, src_i);
+> +	/* The number of bits needed to represent 0 is 0. */
+>  	nrbits_ui =3D fls_u32(src_ui);
 >  =
 
-> -	if (src_ll & 0x8000000000000000ULL)
-> +	if (!src_ll)
-> +		nrbits_ll =3D 0;				/* The number of bits needed to represent 0 is 0. =
-*/
-> +	else if (src_ll & 0x8000000000000000ULL)
->  		nrbits_ll =3D fls_u64(~src_ll) + 1;	/* Find least significant bit conv=
-eying sign */
->  	else
->  		nrbits_ll =3D fls_u64(src_ll) + 1;	/* Keep sign at 0 */
-> @@ -507,7 +511,9 @@ void run_test_signed_read(int src_i, long long src_ll)
->  	long long readval_ll;
+>  	/* Write from unsigned integer src input. */
+>  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> -		for (l =3D nrbits_ui; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> +		for (l =3D nrbits_ui; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
+>  			init_byte_array(target.c, TEST_LEN, 0xFF);
+>  			bt_bitfield_write(target.c, unsigned char, s, l, src_ui);
+>  			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> @@ -209,11 +210,12 @@ void run_test_unsigned_write(unsigned int src_ui, u=
+nsigned long long src_ull)
+>  	}
+>  	pass(UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR, src_ui);
+>  =
+
+> +	/* The number of bits needed to represent 0 is 0. */
+>  	nrbits_ull =3D fls_u64(src_ull);
+>  =
+
+>  	/* Write from unsigned long long src input. */
+>  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> -		for (l =3D nrbits_ull; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> +		for (l =3D nrbits_ull; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
+>  			init_byte_array(target.c, TEST_LEN, 0xFF);
+>  			bt_bitfield_write(target.c, unsigned char, s, l, src_ull);
+>  			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> @@ -271,11 +273,12 @@ void run_test_unsigned_read(unsigned int src_ui, un=
+signed long long src_ull)
+>  	unsigned long long readval_ull;
 >  	unsigned int s, l;
 >  =
 
-> -	if (src_i & 0x80000000U)
-> +	if (!src_i)
-> +		nrbits_i =3D 0;			/* The number of bits needed to represent 0 is 0. */
-> +	else if (src_i & 0x80000000U)
->  		nrbits_i =3D fls_u32(~src_i) + 1;	/* Find least significant bit convey=
-ing sign */
->  	else
->  		nrbits_i =3D fls_u32(src_i) + 1;	/* Keep sign at 0 */
-> @@ -558,6 +564,8 @@ void run_test_signed_read(int src_i, long long src_ll)
->  	}
->  	pass(SIGNED_INT_READ_TEST_DESC_FMT_STR, src_i);
+> +	/* The number of bits needed to represent 0 is 0. */
+>  	nrbits_ui =3D fls_u32(src_ui);
 >  =
 
-> +	if (!src_ll)
-> +		nrbits_ll =3D 0;				/* The number of bits needed to represent 0 is 0. =
-*/
->  	if (src_ll & 0x8000000000000000ULL)
->  		nrbits_ll =3D fls_u64(~src_ll) + 1;	/* Find least significant bit conv=
-eying sign */
->  	else
+>  	/* Read to unsigned integer readval output. */
+>  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> -		for (l =3D nrbits_ui; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> +		for (l =3D nrbits_ui; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
+>  			init_byte_array(target.c, TEST_LEN, 0xFF);
+>  			bt_bitfield_write(target.c, unsigned char, s, l, src_ui);
+>  			bt_bitfield_read(target.c, unsigned char, s, l, &readval_ui);
+> @@ -319,11 +322,12 @@ void run_test_unsigned_read(unsigned int src_ui, un=
+signed long long src_ull)
+>  	}
+>  	pass(UNSIGNED_INT_READ_TEST_DESC_FMT_STR, src_ui);
+>  =
+
+> +	/* The number of bits needed to represent 0 is 0. */
+>  	nrbits_ull =3D fls_u64(src_ull);
+>  =
+
+>  	/* Read to unsigned long long readval output. */
+>  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> -		for (l =3D nrbits_ull; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> +		for (l =3D nrbits_ull; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
+>  			init_byte_array(target.c, TEST_LEN, 0xFF);
+>  			bt_bitfield_write(target.c, unsigned char, s, l, src_ull);
+>  			bt_bitfield_read(target.c, unsigned char, s, l, &readval_ull);
+> @@ -394,7 +398,7 @@ void run_test_signed_write(int src_i, long long src_l=
+l)
+>  =
+
+>  	/* Write from signed integer src input. */
+>  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> -		for (l =3D nrbits_i; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> +		for (l =3D nrbits_i; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
+>  			init_byte_array(target.c, TEST_LEN, 0x0);
+>  			bt_bitfield_write(target.c, signed char, s, l, src_i);
+>  			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> @@ -445,7 +449,7 @@ void run_test_signed_write(int src_i, long long src_l=
+l)
+>  =
+
+>  	/* Write from signed long long src input. */
+>  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> -		for (l =3D nrbits_ll; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> +		for (l =3D nrbits_ll; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
+>  			init_byte_array(target.c, TEST_LEN, 0x0);
+>  			bt_bitfield_write(target.c, signed char, s, l, src_ll);
+>  			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> @@ -510,7 +514,7 @@ void run_test_signed_read(int src_i, long long src_ll)
+>  =
+
+>  	/* Read to signed integer readval output. */
+>  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> -		for (l =3D nrbits_i; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> +		for (l =3D nrbits_i; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
+>  			init_byte_array(target.c, TEST_LEN, 0xFF);
+>  			bt_bitfield_write(target.c, signed char, s, l, src_i);
+>  			bt_bitfield_read(target.c, signed char, s, l, &readval_i);
+> @@ -561,7 +565,7 @@ void run_test_signed_read(int src_i, long long src_ll)
+>  =
+
+>  	/* Read to signed long long readval output. */
+>  	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> -		for (l =3D nrbits_ll; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> +		for (l =3D nrbits_ll; l <=3D (CHAR_BIT * TEST_LEN) - s; l++) {
+>  			init_byte_array(target.c, TEST_LEN, 0xFF);
+>  			bt_bitfield_write(target.c, signed char, s, l, src_ll);
+>  			bt_bitfield_read(target.c, signed char, s, l, &readval_ll);
 > -- =
 
 > 2.11.0
