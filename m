@@ -1,15 +1,15 @@
 From: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
-Subject: [PATCH lttng-ust] Add setuid wrappers for per-UID
- buffers
-Date: Fri, 31 May 2019 17:04:01 -0400
-Message-ID: <20190531210401.13480-1-gabriel.pollo-guilbert__40095.5644132168$1559336718$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Tests: add optional test for
+ setuid() wrapper
+Date: Fri, 31 May 2019 17:41:35 -0400
+Message-ID: <20190531214135.3041-1-gabriel.pollo-guilbert__45469.9444979028$1559338948$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45FxmG16TpzySj
- for <lttng-dev@lists.lttng.org>; Fri, 31 May 2019 17:05:01 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 45FyZp6b37zyWC
+ for <lttng-dev@lists.lttng.org>; Fri, 31 May 2019 17:41:54 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,266 +22,575 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-In case of a per-UID buffer, events following a change of user ID should be
-forwarded to buffers of the new UID. In order to do so, we add a wrapper around
-setuid(3), setreuid(3) and setresuid(2) that unregister and re-register the
-application from the session daemon.
+This test requires liblttng-ust-setuid library wrapper around the family of
+setuid() system calls. In per-UID mode, it makes sure that events following
+one of these system calls are put in the correct buffers.
 
-While there exist some other functions such as seteuid(3) or setfsuid(2), we
-don't need to add a wrapper for them since they do not edit the real user ID,
-the actual ID returned by getuid(3) and used for creating the buffers.
+The test is destructive as it may add new users to the system and modify
+their groups. It requires the LTTNG_ENABLE_DESTRUCTIVE_TESTS environment
+variable to be set to "will-break-my-system".
 
 Signed-off-by: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
 ---
- Makefile.am                     |   1 +
- configure.ac                    |   1 +
- doc/man/lttng-ust.3.txt         |  11 ++++
- include/lttng/ust.h             |   1 +
- liblttng-ust-setuid/Makefile.am |  10 +++
- liblttng-ust-setuid/ustsetuid.c | 105 ++++++++++++++++++++++++++++++++
- liblttng-ust/lttng-ust-comm.c   |  29 ++++++++-
- 7 files changed, 156 insertions(+), 2 deletions(-)
- create mode 100644 liblttng-ust-setuid/Makefile.am
- create mode 100644 liblttng-ust-setuid/ustsetuid.c
+ .gitignore                                    |   1 +
+ configure.ac                                  |   1 +
+ tests/destructive/Makefile.am                 |   3 +
+ tests/destructive/setuid-wrapper/Makefile.am  |   9 +
+ .../destructive/setuid-wrapper/change_user.c  | 157 ++++++++++
+ .../setuid-wrapper/test-setuid-wrapper        | 276 ++++++++++++++++++
+ tests/destructive/setuid-wrapper/tp.c         |   2 +
+ .../destructive/setuid-wrapper/tp_provider.h  |  36 +++
+ 8 files changed, 485 insertions(+)
+ create mode 100644 tests/destructive/setuid-wrapper/Makefile.am
+ create mode 100644 tests/destructive/setuid-wrapper/change_user.c
+ create mode 100755 tests/destructive/setuid-wrapper/test-setuid-wrapper
+ create mode 100644 tests/destructive/setuid-wrapper/tp.c
+ create mode 100644 tests/destructive/setuid-wrapper/tp_provider.h
 
-diff --git a/Makefile.am b/Makefile.am
-index 810761ca..e8812e59 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -5,6 +5,7 @@ SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
- 		liblttng-ust-ctl \
- 		liblttng-ust-fd \
- 		liblttng-ust-fork \
-+		liblttng-ust-setuid \
- 		liblttng-ust-libc-wrapper \
- 		liblttng-ust-cyg-profile \
- 		tools
+diff --git a/.gitignore b/.gitignore
+index b5d2a55a..a86c13b4 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -88,6 +88,7 @@ gen-events-time
+ gen-events
+ gen-ust-events
+ health_check
++/tests/destructive/setuid-wrapper/change_user
+ /tests/regression/kernel/select_poll_epoll
+ /tests/regression/tools/mi/extract_xml
+ /tests/regression/tools/mi/validate_xml
 diff --git a/configure.ac b/configure.ac
-index 52fc3f68..95780dba 100644
+index 214d58ac..55b3b11f 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -522,6 +522,7 @@ AC_CONFIG_FILES([
- 	liblttng-ust/Makefile
- 	liblttng-ust-ctl/Makefile
- 	liblttng-ust-fork/Makefile
-+	liblttng-ust-setuid/Makefile
- 	liblttng-ust-dl/Makefile
- 	liblttng-ust-fd/Makefile
- 	liblttng-ust-java/Makefile
-diff --git a/doc/man/lttng-ust.3.txt b/doc/man/lttng-ust.3.txt
-index 5c9c9f5d..b252c11d 100644
---- a/doc/man/lttng-ust.3.txt
-+++ b/doc/man/lttng-ust.3.txt
-@@ -744,6 +744,17 @@ library before you start the application. Typical use cases include
- daemons closing all file descriptors after man:fork(2), and buggy
- applications doing ``double-closes''.
- 
-+Using LTTng-UST with applications that change user
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+If your application is traced using per-UID buffers and changes user ID using
-+man:setuid(2), the library `liblttng-ust-setuid.so` needs to be preloaded
-+before starting the application with the `LD_PRELOAD` environment variable (see
-+man:ld.so(8)). This way, events generated after the UID change will be fowarded
-+to the correct buffer.
+@@ -1113,6 +1113,7 @@ AC_CONFIG_FILES([
+ 	src/bin/lttng-crash/Makefile
+ 	tests/Makefile
+ 	tests/destructive/Makefile
++	tests/destructive/setuid-wrapper/Makefile
+ 	tests/regression/Makefile
+ 	tests/regression/kernel/Makefile
+ 	tests/regression/tools/Makefile
+diff --git a/tests/destructive/Makefile.am b/tests/destructive/Makefile.am
+index 6bf70b43..887c590c 100644
+--- a/tests/destructive/Makefile.am
++++ b/tests/destructive/Makefile.am
+@@ -1,3 +1,6 @@
++SUBDIRS = setuid-wrapper
++DIST_SUBDIRS = setuid-wrapper
 +
-+This workaround requires that the tracing session be global (root
-+lttng-sessiond) in order to avoid permission problems between a session
-+daemon started by another user.
+ noinst_SCRIPTS = metadata-regeneration
+ EXTRA_DIST = metadata-regeneration
  
- Context information
- ~~~~~~~~~~~~~~~~~~~
-diff --git a/include/lttng/ust.h b/include/lttng/ust.h
-index 2779d7a7..5495e564 100644
---- a/include/lttng/ust.h
-+++ b/include/lttng/ust.h
-@@ -32,6 +32,7 @@ extern "C" {
- extern void ust_before_fork(sigset_t *save_sigset);
- extern void ust_after_fork_parent(sigset_t *restore_sigset);
- extern void ust_after_fork_child(sigset_t *restore_sigset);
-+extern void ust_after_setuid(void);
- 
- #ifdef __cplusplus 
- }
-diff --git a/liblttng-ust-setuid/Makefile.am b/liblttng-ust-setuid/Makefile.am
+diff --git a/tests/destructive/setuid-wrapper/Makefile.am b/tests/destructive/setuid-wrapper/Makefile.am
 new file mode 100644
-index 00000000..df3cd622
+index 00000000..08735e6c
 --- /dev/null
-+++ b/liblttng-ust-setuid/Makefile.am
-@@ -0,0 +1,10 @@
-+AM_CPPFLAGS = -I$(top_srcdir)/include
-+AM_CFLAGS += -fno-strict-aliasing
++++ b/tests/destructive/setuid-wrapper/Makefile.am
+@@ -0,0 +1,9 @@
++AM_CPPFLAGS += -I$(srcdir)
 +
-+lib_LTLIBRARIES = liblttng-ust-setuid.la
-+liblttng_ust_setuid_la_SOURCES = ustsetuid.c
-+liblttng_ust_setuid_la_LIBADD = \
-+	$(top_builddir)/liblttng-ust/liblttng-ust.la \
-+	$(DL_LIBS)
++noinst_PROGRAMS = change_user
 +
-+liblttng_ust_setuid_la_CFLAGS = -DUST_COMPONENT=liblttng-ust-setuid $(AM_CFLAGS)
-diff --git a/liblttng-ust-setuid/ustsetuid.c b/liblttng-ust-setuid/ustsetuid.c
++change_user_SOURCES = change_user.c tp.c
++change_user_LDADD = -llttng-ust -llttng-ust-setuid $(DL_LIBS)
++
++noinst_SCRIPTS = test-setuid-wrapper
++
+diff --git a/tests/destructive/setuid-wrapper/change_user.c b/tests/destructive/setuid-wrapper/change_user.c
 new file mode 100644
-index 00000000..d221e8fb
+index 00000000..99c9d28d
 --- /dev/null
-+++ b/liblttng-ust-setuid/ustsetuid.c
-@@ -0,0 +1,105 @@
++++ b/tests/destructive/setuid-wrapper/change_user.c
+@@ -0,0 +1,157 @@
 +/*
-+ * Copyright (C) 2019 Gabriel-Andrew Pollo-Guilbert
++ * Copyright (c) - 2019 Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
 + *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; version 2.1 of
-+ * the License.
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * as published by the Free Software Foundation; only version 2
++ * of the License.
 + *
-+ * This library is distributed in the hope that it will be useful,
++ * This program is distributed in the hope that it will be useful,
 + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
 + *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 + */
 +
-+#define _GNU_SOURCE
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
 +#include <unistd.h>
 +#include <errno.h>
-+#include <stdio.h>
-+#include <lttng/ust-dlfcn.h>
-+#include <lttng/ust.h>
++#include <sys/capability.h>
 +
-+int setuid(uid_t uid)
++#define TRACEPOINT_DEFINE
++#include "tp_provider.h"
++
++int call_setuid(int argc, char** argv)
 +{
-+	static int (*plibc_func)(uid_t) = NULL;
-+	int retval;
-+	uid_t before_uid;
++	uid_t uid;
 +
-+	if (plibc_func == NULL) {
-+		plibc_func = dlsym(RTLD_NEXT, __func__);
-+		if (plibc_func == NULL) {
-+			fprintf(stderr, "libustsetuid: unable to find \"%s\" symbol\n", __func__);
-+			errno = ENOSYS;
-+			return -1;
-+		}
++	if (argc != 1) {
++		fprintf(stderr, "Usage: setuid UID\n");
++		exit(1);
 +	}
 +
-+	before_uid = getuid();
-+
-+	retval = plibc_func(uid);
-+	if (retval < 0)
-+		return retval;
-+
-+	if (before_uid != getuid())
-+		ust_after_setuid();
-+
-+	return retval;
-+}
-+
-+int setreuid(uid_t ruid, uid_t euid)
-+{
-+	static int (*plibc_func)(uid_t, uid_t) = NULL;
-+	int retval;
-+	uid_t before_uid;
-+
-+	if (plibc_func == NULL) {
-+		plibc_func = dlsym(RTLD_NEXT, __func__);
-+		if (plibc_func == NULL) {
-+			fprintf(stderr, "libustsetuid: unable to find \"%s\" symbol\n", __func__);
-+			errno = ENOSYS;
-+			return -1;
-+		}
++	if(sscanf(argv[0], "%u", &uid) == 0) {
++		fprintf(stderr, "sscanf: failed to parse UID=%s\n", argv[0]);
++		exit(1);
 +	}
 +
-+	before_uid = getuid();
-+
-+	retval = plibc_func(ruid, euid);
-+	if (retval < 0)
-+		return retval;
-+
-+	if (before_uid != getuid())
-+		ust_after_setuid();
-+
-+	return retval;
++	return setuid(uid);
 +}
 +
-+int setresuid(uid_t ruid, uid_t euid, uid_t suid)
++int call_seteuid(int argc, char** argv)
 +{
-+	static int (*plibc_func)(uid_t, uid_t, uid_t) = NULL;
-+	int retval;
-+	uid_t before_uid;
++	uid_t uid;
 +
-+	if (plibc_func == NULL) {
-+		plibc_func = dlsym(RTLD_NEXT, __func__);
-+		if (plibc_func == NULL) {
-+			fprintf(stderr, "libustsetuid: unable to find \"%s\" symbol\n", __func__);
-+			errno = ENOSYS;
-+			return -1;
-+		}
++	if (argc != 1) {
++		fprintf(stderr, "Usage: seteuid UID\n");
++		exit(1);
 +	}
 +
-+	before_uid = getuid();
++	if (sscanf(argv[0], "%u", &uid) == 0) {
++		fprintf(stderr, "sscanf: failed to parse UID=%s\n", argv[0]);
++		exit(1);
++	}
 +
-+	retval = plibc_func(ruid, euid, suid);
-+	if (retval < 0)
-+		return retval;
-+
-+	if (before_uid != getuid())
-+		ust_after_setuid();
-+
-+	return retval;
++	return seteuid(uid);
 +}
-diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
-index 61dbb41b..36c876a4 100644
---- a/liblttng-ust/lttng-ust-comm.c
-+++ b/liblttng-ust/lttng-ust-comm.c
-@@ -225,10 +225,12 @@ void ust_unlock(void)
-  *   daemon problems).
-  */
- static sem_t constructor_wait;
 +
- /*
-  * Doing this for both the global and local sessiond.
-  */
--static int sem_count = { 2 };
-+enum { LTTNG_UST_INIT_SEM_COUNT = 2 };
-+static int sem_count = LTTNG_UST_INIT_SEM_COUNT;
- 
- /*
-  * Counting nesting within lttng-ust. Used to ensure that calling fork()
-@@ -1922,7 +1924,7 @@ void lttng_ust_cleanup(int exiting)
- 	exit_tracepoint();
- 	if (!exiting) {
- 		/* Reinitialize values for fork */
--		sem_count = 2;
-+		sem_count = LTTNG_UST_INIT_SEM_COUNT;
- 		lttng_ust_comm_should_quit = 0;
- 		initialized = 0;
- 	}
-@@ -2072,3 +2074,26 @@ void lttng_ust_sockinfo_session_enabled(void *owner)
- 	struct sock_info *sock_info = owner;
- 	sock_info->statedump_pending = 1;
- }
-+
-+/*
-+ * Re-register the application when changing user ID. This is especially
-+ * important for per-UID buffers. It is not strictly needed for per-PID
-+ * buffers, but a slight extra overhead when changing user ID is considered
-+ * harmless for a relatively infrequent operation.
-+ */
-+void ust_after_setuid(void)
++int call_setreuid(int argc, char** argv)
 +{
-+	DBG("Unregistering the process");
-+	lttng_ust_fixup_tls();
-+	lttng_ust_exit();
++	uid_t ruid, euid;
 +
-+	sem_count = LTTNG_UST_INIT_SEM_COUNT;
-+	lttng_ust_comm_should_quit = 0;
-+	initialized = 0;
++	if (argc != 2) {
++		fprintf(stderr, "Usage: seteuid RUID EUID\n");
++		exit(1);
++	}
 +
-+	global_apps.wait_shm_mmap = NULL;
-+	local_apps.wait_shm_mmap = NULL;
++	if (sscanf(argv[0], "%u", &ruid) == 0) {
++		fprintf(stderr, "sscanf: failed to parse RUID=%s\n", argv[0]);
++		exit(1);
++	}
 +
-+	DBG("Registering the process under new UID=%u", getuid());
-+	lttng_ust_init();
++	if (sscanf(argv[1], "%u", &euid) == 0) {
++		fprintf(stderr, "sscanf: failed to parse EUID=%s\n", argv[1]);
++		exit(1);
++	}
++
++	return setreuid(ruid, euid);
 +}
++
++int call_setresuid(int argc, char** argv)
++{
++	uid_t ruid, euid, suid;
++
++	if (argc != 3) {
++		fprintf(stderr, "Usage: setresuid RUID EUID SUID\n");
++		exit(1);
++	}
++
++	if (sscanf(argv[0], "%u", &ruid) == 0) {
++		fprintf(stderr, "sscanf: failed to parse RUID=%s\n", argv[0]);
++		exit(1);
++	}
++
++	if (sscanf(argv[1], "%u", &euid) == 0) {
++		fprintf(stderr, "sscanf: failed to parse EUID=%s\n", argv[1]);
++		exit(1);
++	}
++
++	if (sscanf(argv[2], "%u", &suid) == 0) {
++		fprintf(stderr, "sscanf: failed to parse SUID=%s\n", argv[2]);
++		exit(1);
++	}
++
++	return setresuid(ruid, euid, suid);
++}
++
++int main(int argc, char** argv)
++{
++	char* call_func;
++	char** call_params;
++	int call_params_count, ret;
++
++	if (argc <= 1) {
++		fprintf(stderr, "Usage: %s CALL [OPTIONS]\n", argv[0]);
++		exit(1);
++	}
++
++	call_func = argv[1];
++	call_params = &argv[2];
++	call_params_count = argc - 2;
++
++	tracepoint(setuid_wrapper, before, getuid());
++
++	/*
++	 * Under Linux, we could check that the program has the CAP_SETUID
++	 * capability, but the interface isn't standard and may change in the
++	 * future. If the program doesn't have the capability, the call will
++	 * simply fail with EPERM.
++	 */
++	if (strcmp("setuid", call_func) == 0) {
++		ret = call_setuid(call_params_count, call_params);
++	} else if (strcmp("seteuid", call_func) == 0) {
++		ret = call_seteuid(call_params_count, call_params);
++	} else if (strcmp("setreuid", call_func) == 0) {
++		ret = call_setreuid(call_params_count, call_params);
++	} else if (strcmp("setresuid", call_func) == 0) {
++		ret = call_setresuid(call_params_count, call_params);
++	} else {
++		fprintf(stderr, "%s: %s is not a valid call\n", argv[0], argv[1]);
++		exit(1);
++	}
++
++	/* All of these system calls return -1 and set errno on error. */
++	if (ret < 0) {
++		fprintf(stderr, "%s failed: %s\n", argv[1], strerror(errno));
++		exit(1);
++	}
++
++	tracepoint(setuid_wrapper, after, getuid());
++
++	return 0;
++}
+diff --git a/tests/destructive/setuid-wrapper/test-setuid-wrapper b/tests/destructive/setuid-wrapper/test-setuid-wrapper
+new file mode 100755
+index 00000000..3a928733
+--- /dev/null
++++ b/tests/destructive/setuid-wrapper/test-setuid-wrapper
+@@ -0,0 +1,276 @@
++#!/bin/bash
++#
++# Copyright (C) - 2019 Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
++#
++# This program is free software; you can redistribute it and/or modify it
++# under the terms of the GNU General Public License, version 2 only, as
++# published by the Free Software Foundation.
++#
++# This program is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++# more details.
++#
++# You should have received a copy of the GNU General Public License along with
++# this program; if not, write to the Free Software Foundation, Inc., 51
++# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++#
++# WARNING: This test must be run with as a root. It adds a new user to the
++#          machine, changes their groups and then proceed to starts a global
++#          session daemon that record traces. It does not do any cleanup.
++
++TEST_USER1=alice
++TEST_USER2=bob
++ROOT_USER=root
++
++TEST_PROGRAM=./change_user
++
++SESSION_NAME=test-session
++CHANNEL_NAME=test-channel
++
++LIB_LTTNG_UST_SETUID=$(ldconfig -p | grep liblttng-ust-setuid.so | tail -n1 | sed 's/.*=> \(.*\)/\1/g')
++
++TP_BEFORE="setuid_wrapper:before"
++TP_AFTER="setuid_wrapper:after"
++
++TESTDIR=$(dirname "$0")/../..
++TESTCOUNT=272
++TESTDESC="Wrappers for setuid() system call family"
++
++source "$TESTDIR"/utils/utils.sh
++plan_tests $TESTCOUNT
++print_test_banner "$TESTDESC"
++
++function assert_eq()
++{
++	local msg=$1
++	local expected=$2
++	local got=$3
++
++	if [[ ! "$expected" == "$got" ]]; then
++		fail "$msg: expected=$expected, got=$got"
++	else
++		pass "$msg"
++	fi
++}
++
++function assert_tracepoint_in()
++{
++	local trace_dir=$1
++	local username=$2
++	local tracepoint=$3
++
++	local uid_expected=$(id -u "$username")
++	local msg="$tracepoint tracepoint should be in $username's ($uid_expected) trace"
++
++	local trace_dir_uid="$trace_dir/ust/uid/$uid_expected/"
++	local event_count=$(babeltrace "$trace_dir_uid" | grep -c "$tracepoint")
++	if [[ ! $event_count -eq 1 ]]; then
++		fail "$msg"
++	fi
++
++	local uid_field=$(babeltrace "$trace_dir_uid" | grep "$tracepoint" | sed 's/.*{ uid = \(.*\) }.*/\1/g')
++	if [[ ! "$uid_field" == "$uid_expected" ]]; then
++		fail "$msg (UID mismatch)"
++	fi
++
++	pass "$msg"
++}
++
++function assert_before()
++{
++	local trace_dir=$1
++	local username=$2
++
++	assert_tracepoint_in "$trace_dir" "$username" $TP_BEFORE
++}
++
++function assert_after()
++{
++	local trace_dir=$1
++	local username=$2
++
++	assert_tracepoint_in "$trace_dir" "$username" $TP_AFTER
++}
++
++function add_capability()
++{
++	setcap CAP_SETUID+ep $TEST_PROGRAM
++}
++
++function setup_user()
++{
++	local username=$1
++
++	if ! id -u "$username" 2> /dev/null > /dev/null; then
++		useradd "$username"
++	fi
++
++	if groups "$username" | grep -q tracing; then
++		usermod -a -G tracing "$username"
++	fi
++}
++
++function setup_users()
++{
++	setup_user $TEST_USER1
++	setup_user $TEST_USER2
++}
++
++function start_tracing_session()
++{
++	local trace_path=$1
++
++	create_lttng_session_ok $SESSION_NAME "$trace_path"
++	enable_ust_lttng_channel_ok $SESSION_NAME $CHANNEL_NAME "--buffers-uid"
++	enable_ust_lttng_event_ok $SESSION_NAME $TP_BEFORE $CHANNEL_NAME
++	enable_ust_lttng_event_ok $SESSION_NAME $TP_AFTER $CHANNEL_NAME
++	start_lttng_tracing_ok $SESSION_NAME
++}
++
++function test_program()
++{
++	local command=$1
++	local expected_user_before=$2
++	local expected_user_after=$3
++	local args=${*:4}
++
++	local uid_before=$(id -u "$expected_user_before")
++
++	diag "Test $command($args) as $expected_user_before ($uid_before)"
++
++	local trace_dir=$(mktemp -d)
++	start_tracing_session "$trace_dir"
++
++	su "$expected_user_before" -c "LD_PRELOAD=$LIB_LTTNG_UST_SETUID $TEST_PROGRAM $command $args"
++
++	local trace_count=$(find "$trace_dir" -maxdepth 3 -mindepth 3 | wc -l)
++	if [[ "$expected_user_before" == "$expected_user_after" ]]; then
++		local msg="$command($args) as $expected_user_before ($uid_before) should generate one trace"
++		assert_eq "$msg" 1 "$trace_count"
++	else
++		local msg="$command($args) as $expected_user_before ($uid_before) should generate two traces"
++		assert_eq "$msg" 2 "$trace_count"
++	fi
++
++	stop_lttng_tracing_ok $SESSION_NAME
++
++	assert_before "$trace_dir" "$expected_user_before"
++	assert_after "$trace_dir" "$expected_user_after"
++
++	destroy_lttng_session_ok $SESSION_NAME
++}
++
++function test_setuid()
++{
++	local expected_user_before=$1
++	local expected_user_after=$2
++	local arg_uid=$(id -u "$2")
++
++	test_program setuid "$expected_user_before" "$expected_user_after" "$arg_uid"
++}
++
++function test_seteuid()
++{
++	local expected_user_before=$1
++	local expected_user_after=$expected_user_before
++	local arg_euid=$(id -u "$2")
++
++	test_program seteuid "$expected_user_before" "$expected_user_after" "$arg_euid"
++}
++
++function test_setreuid()
++{
++	local expected_user_before=$1
++	local expected_user_after=$2
++	local arg_ruid=$(id -u "$2")
++	local arg_euid=$(id -u "$3")
++
++	test_program setreuid "$expected_user_before" "$expected_user_after" "$arg_ruid $arg_euid"
++}
++
++function test_setresuid()
++{
++	local expected_user_before=$1
++	local expected_user_after=$2
++	local arg_ruid=$(id -u "$2")
++	local arg_euid=$(id -u "$3") 
++	local arg_suid=$(id -u "$4")
++
++	test_program setresuid "$expected_user_before" "$expected_user_after" "$arg_ruid" "$arg_euid" "$arg_suid"
++}
++
++function setup_test_bench()
++{
++	add_capability
++	setup_users
++	start_lttng_sessiond
++}
++
++function run_tests()
++{
++	# setuid() tests
++	test_setuid $TEST_USER1 "$TEST_USER1"
++	test_setuid $TEST_USER1 "$TEST_USER2"
++	test_setuid $TEST_USER1 "$ROOT_USER"
++
++	test_setuid $ROOT_USER $TEST_USER1
++	test_setuid $ROOT_USER $TEST_USER2
++	test_setuid $ROOT_USER $ROOT_USER
++
++	# seteuid() tests
++	test_seteuid $TEST_USER1 $TEST_USER1
++	test_seteuid $TEST_USER1 $TEST_USER2
++	test_seteuid $TEST_USER1 $ROOT_USER
++
++	test_seteuid $ROOT_USER $TEST_USER1
++	test_seteuid $ROOT_USER $TEST_USER2
++	test_seteuid $ROOT_USER $ROOT_USER
++
++	# setreuid() tests
++	test_setreuid $TEST_USER1 $TEST_USER1 $TEST_USER1
++	test_setreuid $TEST_USER1 $TEST_USER2 $TEST_USER2
++	test_setreuid $TEST_USER1 $ROOT_USER $ROOT_USER
++
++	test_setreuid $ROOT_USER $TEST_USER1 $TEST_USER1
++	test_setreuid $ROOT_USER $TEST_USER2 $TEST_USER2
++	test_setreuid $ROOT_USER $ROOT_USER $ROOT_USER
++
++	# setresuid() tests
++	test_setresuid $TEST_USER1 $TEST_USER1 $TEST_USER1 $TEST_USER1
++	test_setresuid $TEST_USER1 $TEST_USER1 $TEST_USER1 $TEST_USER2
++	test_setresuid $TEST_USER1 $TEST_USER1 $TEST_USER1 $ROOT_USER
++
++	test_setresuid $TEST_USER1 $TEST_USER2 $TEST_USER2 $TEST_USER1
++	test_setresuid $TEST_USER1 $TEST_USER2 $TEST_USER2 $TEST_USER2
++	test_setresuid $TEST_USER1 $TEST_USER2 $TEST_USER2 $ROOT_USER
++
++	test_setresuid $TEST_USER1 $ROOT_USER $ROOT_USER $TEST_USER1
++	test_setresuid $TEST_USER1 $ROOT_USER $ROOT_USER $TEST_USER2
++	test_setresuid $TEST_USER1 $ROOT_USER $ROOT_USER $ROOT_USER
++}
++
++function teardown_test_bench()
++{
++	stop_lttng_sessiond
++}
++
++if [ "$(id -u)" == "0" ]; then
++	IS_ROOT=1
++else
++	IS_ROOT=0
++fi
++
++if ! destructive_tests_enabled ; then
++	echo "You need to set the LTTNG_ENABLE_DESTRUCTIVE_TESTS to \"will-break-my-system\" as argument to run this test"
++	exit 0
++fi
++
++skip $IS_ROOT "Root access is needed. Skipping all tests." $TESTCOUNT ||
++{
++	setup_test_bench
++	run_tests
++	teardown_test_bench
++}
++
++
+diff --git a/tests/destructive/setuid-wrapper/tp.c b/tests/destructive/setuid-wrapper/tp.c
+new file mode 100644
+index 00000000..97197006
+--- /dev/null
++++ b/tests/destructive/setuid-wrapper/tp.c
+@@ -0,0 +1,2 @@
++#define TRACEPOINT_CREATE_PROBES
++#include "tp_provider.h"
+diff --git a/tests/destructive/setuid-wrapper/tp_provider.h b/tests/destructive/setuid-wrapper/tp_provider.h
+new file mode 100644
+index 00000000..21f893c9
+--- /dev/null
++++ b/tests/destructive/setuid-wrapper/tp_provider.h
+@@ -0,0 +1,36 @@
++#undef TRACEPOINT_PROVIDER
++#define TRACEPOINT_PROVIDER setuid_wrapper
++
++#undef TRACEPOINT_INCLUDE
++#define TRACEPOINT_INCLUDE "./tp_provider.h"
++
++#if !defined(_TP_PROVIDER_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
++#define _TP_PROVIDER_H
++
++#include <lttng/tracepoint.h> 
++
++TRACEPOINT_EVENT(
++	setuid_wrapper,
++	before,
++	TP_ARGS(
++		unsigned int, uid
++	),
++	TP_FIELDS(
++		ctf_integer(unsigned int, uid, uid)
++	)
++)
++
++TRACEPOINT_EVENT(
++	setuid_wrapper,
++	after,
++	TP_ARGS(
++		unsigned int, uid
++	),
++	TP_FIELDS(
++		ctf_integer(unsigned int, uid, uid)
++	)
++)
++
++#endif /* _TP_PROVIDER_H */
++
++#include <lttng/tracepoint-event.h>
 -- 
 2.21.0
