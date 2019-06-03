@@ -1,19 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RELEASE] Userspace RCU 0.11
-Date: Mon, 3 Jun 2019 17:32:40 -0400 (EDT)
-Message-ID: <1807476901.26032.1559597560952.JavaMail.zimbra__7557.6691235014$1559597581$gmane$org@efficios.com>
-References: <990796059.510.1557174774246.JavaMail.zimbra@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: namespace our gettid wrapper
+Date: Mon, 3 Jun 2019 17:40:43 -0400 (EDT)
+Message-ID: <542119639.26055.1559598043121.JavaMail.zimbra__28933.9609489375$1559598086$gmane$org@efficios.com>
+References: <20190603192532.18903-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45HpDr31Hzz10gw
- for <lttng-dev@lists.lttng.org>; Mon,  3 Jun 2019 17:32:43 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 522E11E9744
- for <lttng-dev@lists.lttng.org>; Mon,  3 Jun 2019 17:32:42 -0400 (EDT)
-In-Reply-To: <990796059.510.1557174774246.JavaMail.zimbra@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 45HpQ52Jnvz10j8
+ for <lttng-dev@lists.lttng.org>; Mon,  3 Jun 2019 17:40:44 -0400 (EDT)
+In-Reply-To: <20190603192532.18903-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,164 +20,92 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: linux-kernel <linux-kernel@vger.kernel.org>, lttng-dev <lttng-dev@lists.lttng.org>, rp <rp@svcs.cs.pdx.edu>
-Cc: Stephen Hemminger <stephen@networkplumber.org>, Alan Stern <stern@rowland.harvard.edu>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <jiangshanlai@gmail.com>
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On May 6, 2019, at 4:32 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
-
-> Hi,
-> 
-> This is a 0.11 release of the Userspace RCU project.
-
-FYI, I just released a 0.11.1 tag of Userspace RCU which does a
-mandatory soname bump. Distributions wishing to package it should
-grab 0.11.1. The prior release 0.11.0 changed the soname from 6.0.0 down
-to 5.1.0, which was not intended. This release bumps it to 6.1.0 as
-originally intended.
-
-Changes:
-
-2019-06-03 Userspace RCU 0.11.1
-        * Fix: SONAME bump to 6.1.0
-        * Fix: urcu/futex.h: users of struct timespec should include time.h
-
-Thanks,
+Merged into master, backported to 2.11, 2.10, 2.9 branches, thanks!
 
 Mathieu
 
+----- On Jun 3, 2019, at 3:25 PM, Michael Jeanson mjeanson@efficios.com wrote:
 
+> Since glibc 2.30, a gettid wrapper was added that conflicts with our
+> static declaration. Namespace our wrapper so there is no conflict,
+> we'll add support for the glibc provided wrapper in a further commit.
 > 
-> liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-> data synchronization library provides read-side access which scales
-> linearly with the number of cores. It does so by allowing multiple
-> copies of a given data structure to live at the same time, and by
-> monitoring the data structure accesses to detect grace periods after
-> which memory reclamation is possible.
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+> include/lttng/ust-tid.h           | 12 +++++++-----
+> include/usterr-signal-safe.h      |  2 +-
+> liblttng-ust/lttng-context-vtid.c |  2 +-
+> 3 files changed, 9 insertions(+), 7 deletions(-)
 > 
-> liburcu-cds provides efficient data structures based on RCU and
-> lock-free algorithms. Those structures include hash tables, queues,
-> stacks, and doubly-linked lists.
+> diff --git a/include/lttng/ust-tid.h b/include/lttng/ust-tid.h
+> index e669d7e7..e637718a 100644
+> --- a/include/lttng/ust-tid.h
+> +++ b/include/lttng/ust-tid.h
+> @@ -31,23 +31,25 @@
+> #include <syscall.h>
+> #endif
 > 
-> Here is the high-level view of the changes introduced in this release:
+> -#if defined(_syscall0)
+> -_syscall0(pid_t, gettid)
+> -#elif defined(__NR_gettid)
+> +#if defined(__NR_gettid)
+> +
+> #include <unistd.h>
+> -static inline pid_t gettid(void)
+> +static inline pid_t lttng_gettid(void)
+> {
+> 	return syscall(__NR_gettid);
+> }
+> +
+> #else
+> +
+> #include <sys/types.h>
+> #include <unistd.h>
 > 
-> * Allow combining many urcu flavors within the same
->  compile unit. Prefix public APIs with urcu_<flavor>_ prefix. Keep old
->  symbols as aliases for backward compatibility.
+> /* Fall-back on getpid for tid if not available. */
+> -static inline pid_t gettid(void)
+> +static inline pid_t lttng_gettid(void)
+> {
+> 	return getpid();
+> }
+> +
+> #endif
 > 
-> * liburcu flavors public headers are moved, including them from previous
->  headers for backward compatibility:
+> #endif /* _LTTNG_UST_TID_H */
+> diff --git a/include/usterr-signal-safe.h b/include/usterr-signal-safe.h
+> index 1df5ada0..d987c1f0 100644
+> --- a/include/usterr-signal-safe.h
+> +++ b/include/usterr-signal-safe.h
+> @@ -95,7 +95,7 @@ do {									\
+> 	do {					\
+> 		sigsafe_print_err(UST_STR_COMPONENT "[%ld/%ld]: " fmt " (in %s() at " __FILE__
+> 		":" UST_XSTR(__LINE__) ")\n", \
+> 		(long) getpid(),		\
+> -		(long) gettid(),		\
+> +		(long) lttng_gettid(),		\
+> 		## args, __func__);		\
+> 	} while(0)
 > 
->  urcu-bp.h -> urcu/urcu-bp.h
->  urcu-qsbr.h -> urcu/urcu-qsbr.h
->  urcu.h -> urcu/urcu-memb.h
->  urcu.h (after #define RCU_MEMBARRIER) -> urcu/urcu-memb.h
->  urcu.h (after #define RCU_MB) -> urcu/urcu-mb.h
->  urcu.h (after #define RCU_SIGNAL) -> urcu/urcu-mb.h
+> diff --git a/liblttng-ust/lttng-context-vtid.c
+> b/liblttng-ust/lttng-context-vtid.c
+> index 80661f63..36e5695d 100644
+> --- a/liblttng-ust/lttng-context-vtid.c
+> +++ b/liblttng-ust/lttng-context-vtid.c
+> @@ -63,7 +63,7 @@ pid_t wrapper_getvtid(void)
 > 
-> * The library liburcu is renamed to liburcu-memb, keeping the old
->  library name as alias for backward compatibility.
-> 
-> * RCU lock-free hash table debugging:
-> 
->  --enable-cds-lfht-iter-debug is introduced.
-> 
->  Building liburcu with --enable-cds-lfht-iter-debug and rebuilding
->  application to match the ABI change allows finding cases where the hash
->  table iterator is re-purposed to be used on a different hash table
->  while still being used to iterate on a hash table.
-> 
->  This option alters the rculfhash ABI. Make sure to compile both library
->  and application with matching configuration.
-> 
-> * Added support for RISC-V architecture.
-> 
-> * Use membarrier PRIVATE_EXPEDITED when available from liburcu-bp and
->  liburcu-memb flavors.
-> 
-> The backward compatibility header files, library shared objects, and
-> symbols will be kept for a few liburcu versions before being removed, at
-> which point a major soname bump will happen.
-> 
-> As always, feedback is welcome!
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> Changelog:
-> 
-> 2019-05-06 Userspace RCU 0.11.0
->        * Bump library version to 6:0:1
->        * Cleanup: update code layout to fix old gcc warning
->        * Fix: typo CPPLAGS in examples Makefile
->        * Harmonize pprint macro across projects
->        * Check for TLS support after CC detection
->        * Update macros from the autotools archive
->        * tap-driver.sh: flush stdout after each test result
->        * Update dead link in lgpl-relicensing.txt
->        * Add multiflavor compat identifiers
->        * Cleanup: missing sign compare fixes
->        * Cleanup: enable signed/unsigned compare compiler warning
->        * Cleanup: compiler warning on 32-bit architectures
->        * config.h.in: rename CONFIG_RCU_MULTIFLAVOR to CONFIG_RCU_HAVE_MULTIFLAVOR
->        * rculfhash: implement iterator debugging config option
->        * Fix: examples silent rules on Solaris
->        * Add missing fall through annotations
->        * Fix: symbol aliases with TLS compat
->        * Port: no symbols aliases on MacOS
->        * Add -Wextra to CFLAGS
->        * Add silent mode to examples Makefiles
->        * doc: update examples to API changes
->        * test multiflavor single compile unit
->        * Update README following API changes
->        * Use new header locations for includes from urcu code
->        * Update call-rcu.h and defer.h comments and include guards
->        * rculfqueue.h: do not include urcu-call-rcu.h
->        * rculfhash: support use with multiple flavors per compile unit
->        * rculfhash: do not include urcu-call-rcu.h from public API
->        * Refactor liburcu to support many flavors per compile unit
->        * Fix: only wait if work queue is empty in real-time mode
->        * Fix: don't wait after completion of a work queue job batch
->        * Fix: don't wait after completion of job batch if work queue is empty
->        * Fix: workqueue: struct urcu_work vs rcu_head mixup
->        * Cleanup: workqueue: update comments referring to call-rcu
->        * Fix: mixup between URCU_WORKQUEUE_RT and URCU_CALL_RCU_RT
->        * test_rwlock: Add per-thread count to verbose output
->        * Add *.exe to gitignore for Cygwin
->        * Fix: pthread_rwlock initialization on Cygwin
->        * Fix: compat_futex_noasync on Cygwin
->        * wfcqueue: allow defining CDS_WFCQ_WAIT_SLEEP to override `poll'
->        * Update documentation for call_rcu before/after fork
->        * Add support for the RISC-V architecture
->        * Tests: Add tap-driver.sh for automake < 1.12
->        * Tests: Replace prove by autotools tap runner
->        * liburcu-bp: Use membarrier private expedited when available
->        * liburcu: Use membarrier private expedited when available
->        * rculfhash: improve error handling of mmap backend
->        * Fix: don't use overlapping mmap mappings on Cygwin
->        * Tests fix: errors in shell scripts
->        * Revert "Use initial-exec tls model"
->        * Use initial-exec tls model
->        * Fix: don't use membarrier SHARED syscall command in liburcu-bp
->        * Tests fix: add missing Cygwin thread id
->        * Fix: assignment from incompatible pointer type warnings
->        * Tests fix: unused variable warnings
->        * Fix: add missing m68k headers to dist
->        * Bump version to 0.11-pre
-> 
-> 
-> Project website: http://liburcu.org
-> Git repository: git://git.liburcu.org/urcu.git
-> 
+> 	vtid = CMM_LOAD_SHARED(URCU_TLS(cached_vtid));
+> 	if (caa_unlikely(!vtid)) {
+> -		vtid = gettid();
+> +		vtid = lttng_gettid();
+> 		CMM_STORE_SHARED(URCU_TLS(cached_vtid), vtid);
+> 	}
+> 	return vtid;
 > --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 2.17.1
 
 -- 
 Mathieu Desnoyers
