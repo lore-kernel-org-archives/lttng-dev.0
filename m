@@ -1,23 +1,17 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: Need help in converting trace data into CTF
-Date: Tue, 4 Jun 2019 10:53:12 -0400
-Message-ID: <20190604145312.GB13240__14702.8134715342$1559660010$gmane$org@joraj-alpa>
-References: <CAEWVvOSE6QJQvQEdTLEhNQTE7H1Py1ggoqynSj3w-uOYBkTMCQ@mail.gmail.com>
- <72388180.2647.1558032721255.JavaMail.zimbra@efficios.com>
- <CAEWVvOS6WyAkE+5GAyn_WEoFW_6h_fWbze-im0w7oqvXS-+dBw@mail.gmail.com>
- <1448366760.18406.1559146893765.JavaMail.zimbra@efficios.com>
- <CAEWVvOSdmSsfGiN2fd7yAO6m5-Ke=GuamNR6jKYCLRnSym9Hcw@mail.gmail.com>
- <CAEWVvOSorZyz=JOaf-7go-EyZxcmiOzcVbnUpb7crdKM_SVejA@mail.gmail.com>
- <20190604143917.GA13240@joraj-alpa>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Add setuid wrappers for per-UID
+ buffers
+Date: Tue, 4 Jun 2019 15:47:14 -0400 (EDT)
+Message-ID: <1438409627.28159.1559677634718.JavaMail.zimbra__28445.8440075227$1559677652$gmane$org@efficios.com>
+References: <20190531210401.13480-1-gabriel.pollo-guilbert@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45JFKR2R8TzyVT
- for <lttng-dev@lists.lttng.org>; Tue,  4 Jun 2019 10:53:14 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <20190604143917.GA13240@joraj-alpa>
+ by lists.lttng.org (Postfix) with ESMTPS id 45JMrh5lWkzylq
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Jun 2019 15:47:16 -0400 (EDT)
+In-Reply-To: <20190531210401.13480-1-gabriel.pollo-guilbert@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,26 +21,54 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Ravindra Kumar Meena <rmeena840@gmail.com>
+To: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-> See this dmesg source plugin for a base example of a source plugin [1]. This is
-> valid for babeltrace 2.0 only (AKA the current master branch of babeltrace)
+----- On May 31, 2019, at 5:04 PM, Gabriel-Andrew Pollo-Guilbert gabriel.pollo-guilbert@efficios.com wrote:
+
+> In case of a per-UID buffer, events following a change of user ID should be
+> forwarded to buffers of the new UID. In order to do so, we add a wrapper around
+> setuid(3), setreuid(3) and setresuid(2) that unregister and re-register the
+> application from the session daemon.
 > 
-> For a more complete example of a source plugin,  you can take a look at the one for
-> ctf [2]. Once a source plugin is done you will be able to reuse all the current
-> infrastructure of babeltrace to output to ctf (ctf.sink).
+> While there exist some other functions such as seteuid(3) or setfsuid(2), we
+> don't need to add a wrapper for them since they do not edit the real user ID,
+> the actual ID returned by getuid(3) and used for creating the buffers.
+
+[...]
+
 > 
-> There is no magic solution here, you will need to write a decoder (source
-> plugin) for your format.
+> diff --git a/doc/man/lttng-ust.3.txt b/doc/man/lttng-ust.3.txt
+> index 5c9c9f5d..b252c11d 100644
+> --- a/doc/man/lttng-ust.3.txt
+> +++ b/doc/man/lttng-ust.3.txt
+> @@ -744,6 +744,17 @@ library before you start the application. Typical use cases
+> include
+> daemons closing all file descriptors after man:fork(2), and buggy
+> applications doing ``double-closes''.
 > 
-> [1] https://github.com/efficios/babeltrace/tree/master/plugins/text/dmesg
+> +Using LTTng-UST with applications that change user
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +If your application is traced using per-UID buffers and changes user ID using
+> +man:setuid(2), the library `liblttng-ust-setuid.so` needs to be preloaded
+> +before starting the application with the `LD_PRELOAD` environment variable (see
+> +man:ld.so(8)). This way, events generated after the UID change will be fowarded
 
-For all the people coming here from the future:
+fowarded -> forwarded
 
-[1] http://git.efficios.com/?p=babeltrace.git;a=tree;f=plugins/text/dmesg;h=a45918aaf266dac29db6f7a0e4d08ffdb056131a
+The rest looks good, please add this tag to your next round for this patch:
 
-> [2] https://github.com/efficios/babeltrace/tree/master/plugins/ctf/fs-src
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-[2] http://git.efficios.com/?p=babeltrace.git;a=tree;f=plugins/ctf/fs-sink;h=b96b435706cac0ed50cb64918603172b67afc424
+I'll wait until feedback is provided on the testing side (lttng-tools) and
+the work on that front is finalized before merging this patch into lttng-ust.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
