@@ -1,17 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Add setuid wrappers for per-UID
- buffers
-Date: Tue, 4 Jun 2019 15:47:14 -0400 (EDT)
-Message-ID: <1438409627.28159.1559677634718.JavaMail.zimbra__28445.8440075227$1559677652$gmane$org@efficios.com>
-References: <20190531210401.13480-1-gabriel.pollo-guilbert@efficios.com>
+From: Zvi Vered <veredz72@gmail.com>
+Subject: Read CTF file
+Date: Wed, 5 Jun 2019 06:56:01 +0300
+Message-ID: <CABRndgySWvqFy_0HKbKyVbqWivFhLkq9mnhpA_Tea3OkLa3z5A__1208.41603945649$1559707236$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7615111380793512643=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45JMrh5lWkzylq
- for <lttng-dev@lists.lttng.org>; Tue,  4 Jun 2019 15:47:16 -0400 (EDT)
-In-Reply-To: <20190531210401.13480-1-gabriel.pollo-guilbert@efficios.com>
+Received: from mail-yw1-xc36.google.com (mail-yw1-xc36.google.com
+ [IPv6:2607:f8b0:4864:20::c36])
+ by lists.lttng.org (Postfix) with ESMTPS id 45JZnW6Tv3z109c
+ for <lttng-dev@lists.lttng.org>; Wed,  5 Jun 2019 00:00:15 -0400 (EDT)
+Received: by mail-yw1-xc36.google.com with SMTP id s5so9855987ywd.9
+ for <lttng-dev@lists.lttng.org>; Tue, 04 Jun 2019 21:00:15 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,54 +20,49 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ On May 31, 2019, at 5:04 PM, Gabriel-Andrew Pollo-Guilbert gabriel.pollo-guilbert@efficios.com wrote:
+--===============7615111380793512643==
+Content-Type: multipart/alternative; boundary="0000000000007ae5a9058a8ba261"
 
-> In case of a per-UID buffer, events following a change of user ID should be
-> forwarded to buffers of the new UID. In order to do so, we add a wrapper around
-> setuid(3), setreuid(3) and setresuid(2) that unregister and re-register the
-> application from the session daemon.
-> 
-> While there exist some other functions such as seteuid(3) or setfsuid(2), we
-> don't need to add a wrapper for them since they do not edit the real user ID,
-> the actual ID returned by getuid(3) and used for creating the buffers.
+--0000000000007ae5a9058a8ba261
+Content-Type: text/plain; charset="UTF-8"
 
-[...]
+Hello,
 
-> 
-> diff --git a/doc/man/lttng-ust.3.txt b/doc/man/lttng-ust.3.txt
-> index 5c9c9f5d..b252c11d 100644
-> --- a/doc/man/lttng-ust.3.txt
-> +++ b/doc/man/lttng-ust.3.txt
-> @@ -744,6 +744,17 @@ library before you start the application. Typical use cases
-> include
-> daemons closing all file descriptors after man:fork(2), and buggy
-> applications doing ``double-closes''.
-> 
-> +Using LTTng-UST with applications that change user
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +If your application is traced using per-UID buffers and changes user ID using
-> +man:setuid(2), the library `liblttng-ust-setuid.so` needs to be preloaded
-> +before starting the application with the `LD_PRELOAD` environment variable (see
-> +man:ld.so(8)). This way, events generated after the UID change will be fowarded
+I downloaded babeltrace from git using:
+git clone git://git.efficios.com/babeltrace.git
 
-fowarded -> forwarded
+Where can I find a sample code that reads a CTF file ?
 
-The rest looks good, please add this tag to your next round for this patch:
+Thank you,
+Zvika
 
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+--0000000000007ae5a9058a8ba261
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I'll wait until feedback is provided on the testing side (lttng-tools) and
-the work on that front is finalized before merging this patch into lttng-ust.
+<div dir=3D"ltr">Hello,<br><div><br></div><div>I downloaded babeltrace from=
+ git using:</div><div><span style=3D"color:rgba(0,0,0,0.7);font-family:Mona=
+co,&quot;Droid Sans Mono&quot;,&quot;DejaVu Sans Mono&quot;,Consolas,monosp=
+ace;font-size:11.2px;white-space:nowrap">git clone git://<a href=3D"http://=
+git.efficios.com/babeltrace.git">git.efficios.com/babeltrace.git</a></span>=
+=C2=A0</div><div><br></div><div>Where can I find a sample code that reads a=
+ CTF file ?</div><div><br></div><div>Thank you,</div><div>Zvika=C2=A0=C2=A0=
+<br></div></div>
 
-Thanks,
+--0000000000007ae5a9058a8ba261--
 
-Mathieu
+--===============7615111380793512643==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============7615111380793512643==--
