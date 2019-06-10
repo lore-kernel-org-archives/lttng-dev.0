@@ -1,36 +1,19 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: babeltrace python binding and multiple streams with
- out of order samples
-Date: Mon, 10 Jun 2019 13:59:01 -0400
-Message-ID: <CA+jJMxv+Mt6WdG+gk+86kY3AQsMD1wwfUWAEisBYU1X0obrFcQ__6319.30439719639$1560189602$gmane$org@mail.gmail.com>
-References: <ee93b1b8-6e02-d40a-067a-99ab88b2cadf@gmail.com>
+From: "Stanciu, Alin" <Alin.Stanciu@spirent.com>
+Subject: Re: Kernel trace on Linux distro called YOCTO
+Date: Mon, 10 Jun 2019 17:03:55 +0000
+Message-ID: <MN2PR10MB3327EA7E07E221C78D0EF6FF81130__12220.8331756823$1560207064$gmane$org@MN2PR10MB3327.namprd10.prod.outlook.com>
+References: <MN2PR10MB3327979A543665A00CE7474E81170@MN2PR10MB3327.namprd10.prod.outlook.com>
+ <20190607213233.GA2770@joraj-alpa>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1317518056147157984=="
+Content-Type: multipart/mixed;
+ boundary="_003_MN2PR10MB3327EA7E07E221C78D0EF6FF81130MN2PR10MB3327namp_"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45N19m69BMz18fg
- for <lttng-dev@lists.lttng.org>; Mon, 10 Jun 2019 13:59:40 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 39C451E9A33
- for <lttng-dev@lists.lttng.org>; Mon, 10 Jun 2019 13:59:40 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id CgI0O-1Wcc7t for <lttng-dev@lists.lttng.org>;
- Mon, 10 Jun 2019 13:59:39 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id C16141E9A22
- for <lttng-dev@lists.lttng.org>; Mon, 10 Jun 2019 13:59:39 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id WCB8sv5v5NW1 for <lttng-dev@lists.lttng.org>;
- Mon, 10 Jun 2019 13:59:39 -0400 (EDT)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com
- [209.85.208.178])
- by mail.efficios.com (Postfix) with ESMTPSA id 660951E9A03
- for <lttng-dev@lists.lttng.org>; Mon, 10 Jun 2019 13:59:39 -0400 (EDT)
-Received: by mail-lj1-f178.google.com with SMTP id m23so8811826lje.12
- for <lttng-dev@lists.lttng.org>; Mon, 10 Jun 2019 10:59:39 -0700 (PDT)
-In-Reply-To: <ee93b1b8-6e02-d40a-067a-99ab88b2cadf@gmail.com>
+Received: from NAM05-DM3-obe.outbound.protection.outlook.com
+ (mail-eopbgr730133.outbound.protection.outlook.com [40.107.73.133])
+ by lists.lttng.org (Postfix) with ESMTPS id 45N0HY0xp3z18dY
+ for <lttng-dev@lists.lttng.org>; Mon, 10 Jun 2019 13:19:36 -0400 (EDT)
+In-Reply-To: <20190607213233.GA2770@joraj-alpa>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -40,161 +23,270 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Carlo Caione <carlo.caione@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1317518056147157984==
-Content-Type: multipart/alternative; boundary="0000000000009548bf058afbf133"
-
---0000000000009548bf058afbf133
-Content-Type: text/plain; charset="UTF-8"
+--_003_MN2PR10MB3327EA7E07E221C78D0EF6FF81130MN2PR10MB3327namp_
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Carlo,
+Hello Jonathan,
 
-Events do indeed need to be passed in order. You
-can use a heap to sort the streams as they are read. This is the strategy
-used
-by babeltrace to multiplex streams and present them chronologically.
+Indeed, it was a library lookup problem, certainly not a problem with LTTng=
+.
 
-Otherwise, if the streams contain the same event descriptions, you could
-convert
-the per-CPU event sets independently and combine the stream files with
-a single metadata file to obtain a "complete" trace.
+Attached is the solution.=20
 
-Regards,
-J=C3=A9r=C3=A9mie
+Many Thanks for the help.
 
-On Tue, 28 May 2019 at 09:11, Carlo Caione <carlo.caione@gmail.com> wrote:
+Kind Regards,
 
+ALIN STANCIU
+Assistant Software Team Manager
+
+T: +44(0)1803.546.306 =A0| M: 07518.071.507
+Alin.Stanciu@spirent.com=A0|=A0www.spirent.com
+Aspen Way, Yalberton Industrial Estate, Paignton, U.K. TQ47QR
+=A0=A0=A0
+
+Spirent Communications e-mail confidentiality.
+This email and the information contained therein may contain private, confi=
+dential or privileged material solely meant for the intended recipient. If =
+you are not the intended recipient review, copying or distribution is forbi=
+dden. Further, if you are not the intended recipient, please contact the se=
+nder immediately and permanently delete this email and any copies or attach=
+ments.=A0
+
+-----Original Message-----
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>=20
+Sent: 07 June 2019 22:33
+To: Stanciu, Alin <Alin.Stanciu@spirent.com>
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] Kernel trace on Linux distro called YOCTO
+
+Hi Alin,
+
+If I'm not mistaken, we had a *debugging* session on IRC together regarding=
+ this.
+
+From what I gather it was mostly a library lookup problem for lttng-consume=
+rd.
+
+Please post a summary of the solution here just in case even if it does not=
+ seem to be directly lttng's fault so far.
+
+Cheers.
+
+On Thu, Jun 06, 2019 at 10:21:10PM +0000, Stanciu, Alin wrote:
 > Hi,
-> I'm using the babeltrace python bindings (v1.5.x) to convert some raw
-> data I have into a CTF file.
->
-> This raw data is organized in fixed data chunks composed by serializing
-> the events for each CPU:
->
-> [cpu0, cpu0, cpu0, ..., cpu1, cpu1, cpu1, ..., cpu2,... ]
->
-> Each event for each CPU has a timestamp that is monotonic within each
-> CPU set.
->
-> I wanted to create one stream per CPU and since the events are the same
-> for each CPU, I was using a single stream_class linked to a stream
-> object for each CPU. Something in the structure similar to [0] with:
->
-> stream_cpu0 =3D writer.create_stream(stream_class)
-> stream_cpu1 =3D writer.create_stream(stream_class)
-> stream_cpu2 =3D writer.create_stream(stream_class)
-> ...
->
-> The problem is that being the clock one for the stream_class when
-> feeding the events to the library I get a:
->
-> ValueError: Invalid time value
->
-> When the first event on cpu1 is parsed, because the timestamp is in the
-> past with respect to the timestamp of the latest event of the cpu0.
->
-> I can sort the events before feeding them to babeltrace but this seems
-> sub-optimal to me. My question is: am I using the library correctly or
-> there is any way to achieve this?
->
-> Thank you,
->
-> [0] https://lists.lttng.org/pipermail/lttng-dev/2015-November/025231.html
->
-> --
-> Carlo Caione
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+>=20
+> I'm trying to use LTTng to trace Linux events on a Linux distro called YO=
+CTO.
+> Using the following commands, I do not get any kernel events in the=20
+> LTTng trace
+>=20
+> "
+> lttng create my-kernel-session --output=3D/tmp/my-kernel-trace lttng=20
+> enable-channel test --kernel --subbuf-size=3D10000000 lttng enable-event=
+=20
+> --kernel --all -c test lttng add-context -k -t vpid -t vtid -t=20
+> procname lttng start "
+>=20
+> The resulting trace is empty.
+>=20
+> No matter what I try, I can't seem to get any kernel events thorough to L=
+TTng.
+>=20
+> Using v2.8.8.
+>=20
+> Any ideas?
+>=20
+> Thanks in advance.
+>=20
+> Best Regards,
+> alin stanciu
+> Assistant Software Team Manager
 
+--
+Jonathan Rajotte-Julien
+EfficiOS
 
---=20
-J=C3=A9r=C3=A9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+--_003_MN2PR10MB3327EA7E07E221C78D0EF6FF81130MN2PR10MB3327namp_
+Content-Type: text/plain; name="enable_kernel_tracing_history.txt"
+Content-Description: enable_kernel_tracing_history.txt
+Content-Disposition: attachment; filename="enable_kernel_tracing_history.txt";
+	size=4405; creation-date="Mon, 10 Jun 2019 17:03:42 GMT";
+	modification-date="Mon, 10 Jun 2019 17:02:38 GMT"
+Content-Transfer-Encoding: base64
 
---0000000000009548bf058afbf133
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ICA1NzUgIHVuYW1lIC1yCiAgNTc2ICA0LjQuMTEzLXlvY3RvLXN0YW5kYXJkCiAgNTc3ICBsdHRu
+ZyBjcmVhdGUgbXkta2VybmVsLXNlc3Npb24gLS1vdXRwdXQ9L3RtcC9teS1rZXJuZWwtdHJhY2UK
+ICA1NzggIGx0dG5nIGVuYWJsZS1jaGFubmVsIHRlc3QgLS1rZXJuZWwgLS1zdWJidWYtc2l6ZT0x
+MDAwMDAwMAogIDU3OSAgbHR0bmcgZW5hYmxlLWNoYW5uZWwgdGVzdCAtLWtlcm5lbAogIDU4MCAg
+bHR0bmcgLS12ZXJzaW9uCiAgNTgxICBsdHRuZyAoTFRUbmcgVHJhY2UgQ29udHJvbCkgMi44Ljgg
+LSBJc3Nla2kgTmljaG8KICA1ODIgIGx0dG5nIGVuYWJsZS1ldmVudCAtLWtlcm5lbCAtLWFsbCAt
+YyB0ZXN0CiAgNTgzICBsdHRuZyBhZGQtY29udGV4dCAtayAtdCB2cGlkIC10IHZ0aWQgLXQgcHJv
+Y25hbWUKICA1ODQgIGx0dG5nIHN0YXJ0CiAgNTg1ICBta2RpciB0ZXN0CiAgNTg2ICBybWRpciB0
+ZXN0CiAgNTg3ICBsdHRuZy1zZXNzaW9uZCAtdnZ2CiAgNTg4ICBjZCAvdG1wL215LWtlcm5lbC10
+cmFjZQogIDU4OSAgbHMgLWwKICA1OTAgIGNkIC9tbnQvc3BpcmVudC9wb3NhcHAvc2hhcmUvcG9z
+YXBwL3NvZnR3YXJlL1Y2XzA2XzAwL2VuZ2luZQogIDU5MSAgbHR0bmcgc3RvcAogIDU5MiAgbHR0
+bmcgZGVzdHJveQogIDU5MyAgcHMgYXV4IHwgZ3JlcCBlbmdpbmUKICA1OTQgIHNlcnZpY2UgcG9z
+YXBwX2VuZ2luZSByZXN0YXJ0CiAgNTk1ICBwcyBhdXggfCBncmVwIGVuZ2luZQogIDU5NiAgcHMg
+YXV4IHwgZ3JlcCBlbmdpbmUKICA1OTcgIHNlcnZpY2UgcG9zYXBwX2VuZ2luZSByZXN0YXJ0CiAg
+NTk4ICBzZXJ2aWNlIHBvc2FwcF9lbmdpbmUgcmVzdGFydAogIDU5OSAgc3lzdGVtY3RsIHN0b3Ag
+bHR0bmctc2Vzc2lvbmQuc2VydmljZQogIDYwMCAgc3lzdGVtY3RsIAogIDYwMSAgc2VydmljZSBs
+dHRuZy1zZXNzaW9uZC5zZXJ2aWNlIHN0b3AKICA2MDIgIHNlcnZpY2UgbHR0bmctc2Vzc2lvbmRl
+IHN0b3AKICA2MDMgIHNlcnZpY2UgbHR0bmctc2Vzc2lvbmQgc3RvcAogIDYwNCAgc2VydmljZSBs
+aXN0CiAgNjA1ICBzZXJ2aWNlIGx0dG5nLXNlc3Npb25kIHN0b3AKICA2MDYgIGNkIC9ldGMvaW5p
+dC5kLwogIDYwNyAgbHMgLWwKICA2MDggIGZpbmQgLiAtbmFtZSBsdHRuZyoKICA2MDkgIGZpbmQg
+LiAtbmFtZSAibHR0bmcqIgogIDYxMCAgcHMgYXV4IHwgZ3JlcCBsdHRuZwogIDYxMSAga2lsbCAt
+OSAxNzg4CiAgNjEyICBsdHRuZy1zZXNzaW9uZCAtdnZ2IC0tdmVyYm9zZS1jb25zdW1lciA+IGxv
+Zy50eHQgMj4mMSAmCiAgNjEzICBjYXQgbG9nLnR4dCAKICA2MTQgIGx0dG5nIGNyZWF0ZQogIDYx
+NSAgbHR0bmcgZW5hYmxlLWV2ZW50IC1rIC1hCiAgNjE2ICBsdHRuZyBlbmFibGUtZXZlbnQgLWsg
+LWEKICA2MTcgIGx0dG5nIHN0YXJ0CiAgNjE4ICBzbGVlcCAxCiAgNjE5ICBsdHRuZyBzdG9wCiAg
+NjIwICBjZCAvaG9tZS9yb290L2x0dG5nLXRyYWNlcy8KICA2MjEgIGxzCiAgNjIyICBjZCBhdXRv
+LTIwMTkwNjA3LTE3MzYxOC8KICA2MjMgIGxzIC1sCiAgNjI0ICBwd2QKICA2MjUgIGxzIC1sCiAg
+NjI2ICB1bmFtZSAtcgogIDYyNyAgdW5hbWUgLWEKICA2MjggIGNkIC9ldGMvaW5pdC5kLwogIDYy
+OSAgbHMgLWwKICA2MzAgIGNhdCBsb2cudHh0IAogIDYzMSAgY2QgLwogIDYzMiAgZmluZCAvIC1u
+YW1lIGxpYnVyY3UtY29tbW9uLnNvLjUKICA2MzMgIGNwIC91c3IvbG9jYWwvbGliL2xpYnVyY3Ut
+Y29tbW9uLnNvLjUgL3Vzci9saWIKICA2MzQgIGxzIC1sIC91c3IvbGliCiAgNjM1ICBmaW5kIC8g
+LW5hbWUgImxpYnVud2luZCoiCiAgNjM2ICBsZGQgL3Vzci9sb2NhbC9saWIvbHR0bmcvbGliZXhl
+Yy9sdHRuZy1jb25zdW1lcmQKICA2MzcgIGZpbmQgLyAtbmFtZSBsaWJjLnNvLjYKICA2MzggIGNw
+IC91c3IvbG9jYWwvbGliL2xpYnVyY3UtY29tbW9uLnNvLjUgL2xpYgogIDYzOSAgZmluZCAvIC1u
+YW1lIGxpYnVyY3Uuc28uNQogIDY0MCAgY3AgL3Vzci9sb2NhbC9saWIvbGlidXJjdS5zby41IC9s
+aWIKICA2NDEgIGZpbmQgLyAtbmFtZSBsaWJsdHRuZy11c3QtY3RsLnNvLjIKICA2NDIgIGNwIC91
+c3IvbG9jYWwvbGliL2xpYmx0dG5nLXVzdC1jdGwuc28uMiAvbGliCiAgNjQzICBmaW5kIC8gLW5h
+bWUgbGlidXJjdS1jZHMuc28uNSAKICA2NDQgIGNwIC91c3IvbG9jYWwvbGliL2xpYnVyY3UtY2Rz
+LnNvLjUgL2xpYgogIDY0NSAgbGRkIC91c3IvbG9jYWwvbGliL2x0dG5nL2xpYmV4ZWMvbHR0bmct
+Y29uc3VtZXJkCiAgNjQ2ICBmaW5kIC8gLW5hbWUgIGxpbnV4LXZkc28uc28uMSAKICA2NDcgIGZp
+bmQgLyAtbmFtZSBsaW51eC12ZHNvLnNvLjEgCiAgNjQ4ICBmaW5kIC8gLW5hbWUgIGxpYnhtbDIu
+c28uMgogIDY0OSAgY3AgL3Vzci9sb2NhbC9saWIvbGlidXJjdS1jb21tb24uc28uNSAvdXNyL2xp
+YjY0CiAgNjUwICBjcCAvdXNyL2xvY2FsL2xpYi9saWJ1cmN1LnNvLjUgL3Vzci9saWI2NAogIDY1
+MSAgY3AgL3Vzci9sb2NhbC9saWIvbGlibHR0bmctdXN0LWN0bC5zby4yIC91c3IvbGliNjQKICA2
+NTIgIGNwIC91c3IvbG9jYWwvbGliL2xpYnVyY3UtY2RzLnNvLjUgL3Vzci9saWI2NAogIDY1MyAg
+bGRkIC91c3IvbG9jYWwvbGliL2x0dG5nL2xpYmV4ZWMvbHR0bmctY29uc3VtZXJkCiAgNjU0ICBm
+aW5kIC8gLW5hbWUgbGlidXJjdS1icC5zby41CiAgNjU1ICBjcCAvdXNyL2xvY2FsL2xpYi9saWJ1
+cmN1LWJwLnNvLjUgL3Vzci9saWI2NAogIDY1NiAgbGRkIC91c3IvbG9jYWwvbGliL2x0dG5nL2xp
+YmV4ZWMvbHR0bmctY29uc3VtZXJkCiAgNjU3ICBjbGVhcgogIDY1OCAgbHR0bmcgc3RvcAogIDY1
+OSAgbHR0bmcgc3RvcAogIDY2MCAgbHR0bmcgc3RvcAogIDY2MSAgbHR0bmcgc3RvcAogIDY2MiAg
+Y2QgL21udC9zcGlyZW50L3Bvc2FwcC9zaGFyZS9wb3NhcHAvc29mdHdhcmUvVjZfMDZfMDAvZW5n
+aW5lLwogIDY2MyAgZmluZCAvIC1uYW1lIGx0dG5nLXNlc3NzaW9uZAogIDY2NCAgZmluZCAvIC1u
+YW1lIGx0dG5nLXNlc3NzaW9uZAogIDY2NSAgZmluZCAvIC1uYW1lIGx0dG5nLSoKICA2NjYgIGZp
+bmQgLyAtbmFtZSBsdHRuZy0qc2VzcyoKICA2NjcgIGZpbmQgLyAtbmFtZSBsdHRuZy0qc2Vzc2lv
+bmQqCiAgNjY4ICBsZGQgbHR0bmctc2Vzc2lvbmQKICA2NjkgIGxkZCAvaG9tZS9yb290L2x0dG5n
+LXRvb2xzLTIuOC44L3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQKICA2NzAgIGxkZCAvdXNyL2xvY2Fs
+L2Jpbi9sdHRuZy1zZXNzaW9uZAogIDY3MSAgY2xlYXIKICA2NzIgIGx0dG5nIGNyZWF0ZQogIDY3
+MyAgbHR0bmcgZW5hYmxlLWV2ZW50IC1rIC1hCiAgNjc0ICBsdHRuZyBzdGFydAogIDY3NSAgc2xl
+ZXAgMQogIDY3NiAgbHR0bmcgc3RvcAogIDY3NyAgY2QgL2hvbWUvcm9vdC9sdHRuZy10cmFjZXMv
+YXV0by0yMDE5MDYwNy0xNzU0MzIKICA2NzggIGxzIC1sCiAgNjc5ICBmaW5kIC8gLW5hbWUgbG9n
+LnR4dAogIDY4MCAgcHMgYXV4IHwgZ3JlcCAqc2Vzc2lvbmQKICA2ODEgIHBzIGF1eCAKICA2ODIg
+IHBzIGF1eCB8IGdyZXAgKnNlc3Npb25kKgogIDY4MyAgcHMgYXV4IHwgZ3JlcCAqbHR0bmcqCiAg
+Njg0ICBsdHRuZyBzdGF0dXMKICA2ODUgIGx0dG5nIHN0b3AKICA2ODYgIHBzIGF1eCB8IGdyZXAK
+ICA2ODcgIHBzIGF1eAogIDY4OCAgcHMgYXV4IHwgZ3JlcCAibHR0bmcqIgogIDY4OSAga2lsbCAt
+OSA4ODUwCiAgNjkwICBsdHRuZyBjcmVhdGUKICA2OTEgIGx0dG5nIGVuYWJsZS1ldmVudCAtayAt
+YQogIDY5MiAgbHR0bmcgc3RhcnQKICA2OTMgIHNsZWVwIDEKICA2OTQgIGx0dG5nIHN0b3AKICA2
+OTUgIGNkICAvaG9tZS9yb290L2x0dG5nLXRyYWNlcy9hdXRvLTIwMTkwNjA3LTE3NTcyNQogIDY5
+NiAgbHMgLWwKICA2OTcgIGNkIGtlcm5lbC8KICA2OTggIGxzIC1sCiAgNjk5ICBjZCAuLgogIDcw
+MCAgY2QgLi4KICA3MDEgIGNwIC1hdnIgYXV0by0yMDE5MDYwNy0xNyAvbW50L3NwaXJlbnQvcG9z
+YXBwL3NoYXJlL3Bvc2FwcC8KICA3MDIgIGNwIC1hdnIgYXV0by0yMDE5MDYwNy0xNyAvbW50L3Nw
+aXJlbnQvcG9zYXBwL3NoYXJlL3Bvc2FwcC8KICA3MDMgIGNkIGF1dG8tMjAxOTA2MDctMTcKICA3
+MDQgIGxzIC1sCiAgNzA1ICBjZCBhdXRvLTIwMTkwNjA3LTE3NTcyNS8KICA3MDYgIGxzIC1sCiAg
+NzA3ICBjZCAuLgogIDcwOCAgY3AgLWF2ciBhdXRvLTIwMTkwNjA3LTE3NTcyNS8gL21udC9zcGly
+ZW50L3Bvc2FwcC9zaGFyZS9wb3NhcHAvCiAgNzA5ICBsdHRuZyBzdG9wCiAgNzEwICBsdHRuZyBk
+ZXN0cm95CiAgNzExICBjcCAtYXZyIGF1dG8tMjAxOTA2MDctMTc1NzI1LyAvbW50L3NwaXJlbnQv
+cG9zYXBwL3NoYXJlL3Bvc2FwcC8KICA3MTIgIHB3ZAogIDcxMyAgY2QgL21udC9zcGlyZW50L3Bv
+c2FwcC9zaGFyZS9wb3NhcHAvc29mdHdhcmUvVjZfMDZfMDAvZW5naW5lLwogIDcxNCAgaGlzdG9y
+eSA+IGhpc3RvcnkudHh0Cg==
 
-<div dir=3D"ltr"><div>Hi Carlo,</div><div><br></div><div>Events do indeed n=
-eed to be passed in order. You</div><div>can use a heap to sort the streams=
- as they are read. This is the strategy used</div><div>by babeltrace to mul=
-tiplex streams and present them chronologically.</div><div><br></div><div>O=
-therwise, if the streams contain the same event descriptions, you could con=
-vert</div><div>the per-CPU event sets independently and combine the stream =
-files with</div><div>a single metadata file to obtain a &quot;complete&quot=
-; trace.</div><div><br></div><div>Regards,<br></div><div>J=C3=A9r=C3=A9mie<=
-br></div><div></div><div><br></div><div class=3D"gmail_quote"><div dir=3D"l=
-tr" class=3D"gmail_attr">On Tue, 28 May 2019 at 09:11, Carlo Caione &lt;<a =
-href=3D"mailto:carlo.caione@gmail.com">carlo.caione@gmail.com</a>&gt; wrote=
-:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.=
-8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi,<br>
-I&#39;m using the babeltrace python bindings (v1.5.x) to convert some raw <=
-br>
-data I have into a CTF file.<br>
-<br>
-This raw data is organized in fixed data chunks composed by serializing <br=
->
-the events for each CPU:<br>
-<br>
-[cpu0, cpu0, cpu0, ..., cpu1, cpu1, cpu1, ..., cpu2,... ]<br>
-<br>
-Each event for each CPU has a timestamp that is monotonic within each <br>
-CPU set.<br>
-<br>
-I wanted to create one stream per CPU and since the events are the same <br=
->
-for each CPU, I was using a single stream_class linked to a stream <br>
-object for each CPU. Something in the structure similar to [0] with:<br>
-<br>
-stream_cpu0 =3D writer.create_stream(stream_class)<br>
-stream_cpu1 =3D writer.create_stream(stream_class)<br>
-stream_cpu2 =3D writer.create_stream(stream_class)<br>
-...<br>
-<br>
-The problem is that being the clock one for the stream_class when <br>
-feeding the events to the library I get a:<br>
-<br>
-ValueError: Invalid time value<br>
-<br>
-When the first event on cpu1 is parsed, because the timestamp is in the <br=
->
-past with respect to the timestamp of the latest event of the cpu0.<br>
-<br>
-I can sort the events before feeding them to babeltrace but this seems <br>
-sub-optimal to me. My question is: am I using the library correctly or <br>
-there is any way to achieve this?<br>
-<br>
-Thank you,<br>
-<br>
-[0] <a href=3D"https://lists.lttng.org/pipermail/lttng-dev/2015-November/02=
-5231.html" rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/pip=
-ermail/lttng-dev/2015-November/025231.html</a><br>
-<br>
---<br>
-Carlo Caione<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailman/l=
-istinfo/lttng-dev</a><br>
-</blockquote></div><br clear=3D"all"><br>-- <br><div dir=3D"ltr" class=3D"g=
-mail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS Inc.<br><a href=3D"=
-http://www.efficios.com" target=3D"_blank">http://www.efficios.com</a></div=
-></div>
+--_003_MN2PR10MB3327EA7E07E221C78D0EF6FF81130MN2PR10MB3327namp_
+Content-Type: text/plain; name="enable_kernel_tracing_history.txt"
+Content-Description: enable_kernel_tracing_history.txt
+Content-Disposition: attachment; filename="enable_kernel_tracing_history.txt";
+	size=4405; creation-date="Mon, 10 Jun 2019 17:03:43 GMT";
+	modification-date="Mon, 10 Jun 2019 17:02:38 GMT"
+Content-Transfer-Encoding: base64
 
---0000000000009548bf058afbf133--
+ICA1NzUgIHVuYW1lIC1yCiAgNTc2ICA0LjQuMTEzLXlvY3RvLXN0YW5kYXJkCiAgNTc3ICBsdHRu
+ZyBjcmVhdGUgbXkta2VybmVsLXNlc3Npb24gLS1vdXRwdXQ9L3RtcC9teS1rZXJuZWwtdHJhY2UK
+ICA1NzggIGx0dG5nIGVuYWJsZS1jaGFubmVsIHRlc3QgLS1rZXJuZWwgLS1zdWJidWYtc2l6ZT0x
+MDAwMDAwMAogIDU3OSAgbHR0bmcgZW5hYmxlLWNoYW5uZWwgdGVzdCAtLWtlcm5lbAogIDU4MCAg
+bHR0bmcgLS12ZXJzaW9uCiAgNTgxICBsdHRuZyAoTFRUbmcgVHJhY2UgQ29udHJvbCkgMi44Ljgg
+LSBJc3Nla2kgTmljaG8KICA1ODIgIGx0dG5nIGVuYWJsZS1ldmVudCAtLWtlcm5lbCAtLWFsbCAt
+YyB0ZXN0CiAgNTgzICBsdHRuZyBhZGQtY29udGV4dCAtayAtdCB2cGlkIC10IHZ0aWQgLXQgcHJv
+Y25hbWUKICA1ODQgIGx0dG5nIHN0YXJ0CiAgNTg1ICBta2RpciB0ZXN0CiAgNTg2ICBybWRpciB0
+ZXN0CiAgNTg3ICBsdHRuZy1zZXNzaW9uZCAtdnZ2CiAgNTg4ICBjZCAvdG1wL215LWtlcm5lbC10
+cmFjZQogIDU4OSAgbHMgLWwKICA1OTAgIGNkIC9tbnQvc3BpcmVudC9wb3NhcHAvc2hhcmUvcG9z
+YXBwL3NvZnR3YXJlL1Y2XzA2XzAwL2VuZ2luZQogIDU5MSAgbHR0bmcgc3RvcAogIDU5MiAgbHR0
+bmcgZGVzdHJveQogIDU5MyAgcHMgYXV4IHwgZ3JlcCBlbmdpbmUKICA1OTQgIHNlcnZpY2UgcG9z
+YXBwX2VuZ2luZSByZXN0YXJ0CiAgNTk1ICBwcyBhdXggfCBncmVwIGVuZ2luZQogIDU5NiAgcHMg
+YXV4IHwgZ3JlcCBlbmdpbmUKICA1OTcgIHNlcnZpY2UgcG9zYXBwX2VuZ2luZSByZXN0YXJ0CiAg
+NTk4ICBzZXJ2aWNlIHBvc2FwcF9lbmdpbmUgcmVzdGFydAogIDU5OSAgc3lzdGVtY3RsIHN0b3Ag
+bHR0bmctc2Vzc2lvbmQuc2VydmljZQogIDYwMCAgc3lzdGVtY3RsIAogIDYwMSAgc2VydmljZSBs
+dHRuZy1zZXNzaW9uZC5zZXJ2aWNlIHN0b3AKICA2MDIgIHNlcnZpY2UgbHR0bmctc2Vzc2lvbmRl
+IHN0b3AKICA2MDMgIHNlcnZpY2UgbHR0bmctc2Vzc2lvbmQgc3RvcAogIDYwNCAgc2VydmljZSBs
+aXN0CiAgNjA1ICBzZXJ2aWNlIGx0dG5nLXNlc3Npb25kIHN0b3AKICA2MDYgIGNkIC9ldGMvaW5p
+dC5kLwogIDYwNyAgbHMgLWwKICA2MDggIGZpbmQgLiAtbmFtZSBsdHRuZyoKICA2MDkgIGZpbmQg
+LiAtbmFtZSAibHR0bmcqIgogIDYxMCAgcHMgYXV4IHwgZ3JlcCBsdHRuZwogIDYxMSAga2lsbCAt
+OSAxNzg4CiAgNjEyICBsdHRuZy1zZXNzaW9uZCAtdnZ2IC0tdmVyYm9zZS1jb25zdW1lciA+IGxv
+Zy50eHQgMj4mMSAmCiAgNjEzICBjYXQgbG9nLnR4dCAKICA2MTQgIGx0dG5nIGNyZWF0ZQogIDYx
+NSAgbHR0bmcgZW5hYmxlLWV2ZW50IC1rIC1hCiAgNjE2ICBsdHRuZyBlbmFibGUtZXZlbnQgLWsg
+LWEKICA2MTcgIGx0dG5nIHN0YXJ0CiAgNjE4ICBzbGVlcCAxCiAgNjE5ICBsdHRuZyBzdG9wCiAg
+NjIwICBjZCAvaG9tZS9yb290L2x0dG5nLXRyYWNlcy8KICA2MjEgIGxzCiAgNjIyICBjZCBhdXRv
+LTIwMTkwNjA3LTE3MzYxOC8KICA2MjMgIGxzIC1sCiAgNjI0ICBwd2QKICA2MjUgIGxzIC1sCiAg
+NjI2ICB1bmFtZSAtcgogIDYyNyAgdW5hbWUgLWEKICA2MjggIGNkIC9ldGMvaW5pdC5kLwogIDYy
+OSAgbHMgLWwKICA2MzAgIGNhdCBsb2cudHh0IAogIDYzMSAgY2QgLwogIDYzMiAgZmluZCAvIC1u
+YW1lIGxpYnVyY3UtY29tbW9uLnNvLjUKICA2MzMgIGNwIC91c3IvbG9jYWwvbGliL2xpYnVyY3Ut
+Y29tbW9uLnNvLjUgL3Vzci9saWIKICA2MzQgIGxzIC1sIC91c3IvbGliCiAgNjM1ICBmaW5kIC8g
+LW5hbWUgImxpYnVud2luZCoiCiAgNjM2ICBsZGQgL3Vzci9sb2NhbC9saWIvbHR0bmcvbGliZXhl
+Yy9sdHRuZy1jb25zdW1lcmQKICA2MzcgIGZpbmQgLyAtbmFtZSBsaWJjLnNvLjYKICA2MzggIGNw
+IC91c3IvbG9jYWwvbGliL2xpYnVyY3UtY29tbW9uLnNvLjUgL2xpYgogIDYzOSAgZmluZCAvIC1u
+YW1lIGxpYnVyY3Uuc28uNQogIDY0MCAgY3AgL3Vzci9sb2NhbC9saWIvbGlidXJjdS5zby41IC9s
+aWIKICA2NDEgIGZpbmQgLyAtbmFtZSBsaWJsdHRuZy11c3QtY3RsLnNvLjIKICA2NDIgIGNwIC91
+c3IvbG9jYWwvbGliL2xpYmx0dG5nLXVzdC1jdGwuc28uMiAvbGliCiAgNjQzICBmaW5kIC8gLW5h
+bWUgbGlidXJjdS1jZHMuc28uNSAKICA2NDQgIGNwIC91c3IvbG9jYWwvbGliL2xpYnVyY3UtY2Rz
+LnNvLjUgL2xpYgogIDY0NSAgbGRkIC91c3IvbG9jYWwvbGliL2x0dG5nL2xpYmV4ZWMvbHR0bmct
+Y29uc3VtZXJkCiAgNjQ2ICBmaW5kIC8gLW5hbWUgIGxpbnV4LXZkc28uc28uMSAKICA2NDcgIGZp
+bmQgLyAtbmFtZSBsaW51eC12ZHNvLnNvLjEgCiAgNjQ4ICBmaW5kIC8gLW5hbWUgIGxpYnhtbDIu
+c28uMgogIDY0OSAgY3AgL3Vzci9sb2NhbC9saWIvbGlidXJjdS1jb21tb24uc28uNSAvdXNyL2xp
+YjY0CiAgNjUwICBjcCAvdXNyL2xvY2FsL2xpYi9saWJ1cmN1LnNvLjUgL3Vzci9saWI2NAogIDY1
+MSAgY3AgL3Vzci9sb2NhbC9saWIvbGlibHR0bmctdXN0LWN0bC5zby4yIC91c3IvbGliNjQKICA2
+NTIgIGNwIC91c3IvbG9jYWwvbGliL2xpYnVyY3UtY2RzLnNvLjUgL3Vzci9saWI2NAogIDY1MyAg
+bGRkIC91c3IvbG9jYWwvbGliL2x0dG5nL2xpYmV4ZWMvbHR0bmctY29uc3VtZXJkCiAgNjU0ICBm
+aW5kIC8gLW5hbWUgbGlidXJjdS1icC5zby41CiAgNjU1ICBjcCAvdXNyL2xvY2FsL2xpYi9saWJ1
+cmN1LWJwLnNvLjUgL3Vzci9saWI2NAogIDY1NiAgbGRkIC91c3IvbG9jYWwvbGliL2x0dG5nL2xp
+YmV4ZWMvbHR0bmctY29uc3VtZXJkCiAgNjU3ICBjbGVhcgogIDY1OCAgbHR0bmcgc3RvcAogIDY1
+OSAgbHR0bmcgc3RvcAogIDY2MCAgbHR0bmcgc3RvcAogIDY2MSAgbHR0bmcgc3RvcAogIDY2MiAg
+Y2QgL21udC9zcGlyZW50L3Bvc2FwcC9zaGFyZS9wb3NhcHAvc29mdHdhcmUvVjZfMDZfMDAvZW5n
+aW5lLwogIDY2MyAgZmluZCAvIC1uYW1lIGx0dG5nLXNlc3NzaW9uZAogIDY2NCAgZmluZCAvIC1u
+YW1lIGx0dG5nLXNlc3NzaW9uZAogIDY2NSAgZmluZCAvIC1uYW1lIGx0dG5nLSoKICA2NjYgIGZp
+bmQgLyAtbmFtZSBsdHRuZy0qc2VzcyoKICA2NjcgIGZpbmQgLyAtbmFtZSBsdHRuZy0qc2Vzc2lv
+bmQqCiAgNjY4ICBsZGQgbHR0bmctc2Vzc2lvbmQKICA2NjkgIGxkZCAvaG9tZS9yb290L2x0dG5n
+LXRvb2xzLTIuOC44L3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQKICA2NzAgIGxkZCAvdXNyL2xvY2Fs
+L2Jpbi9sdHRuZy1zZXNzaW9uZAogIDY3MSAgY2xlYXIKICA2NzIgIGx0dG5nIGNyZWF0ZQogIDY3
+MyAgbHR0bmcgZW5hYmxlLWV2ZW50IC1rIC1hCiAgNjc0ICBsdHRuZyBzdGFydAogIDY3NSAgc2xl
+ZXAgMQogIDY3NiAgbHR0bmcgc3RvcAogIDY3NyAgY2QgL2hvbWUvcm9vdC9sdHRuZy10cmFjZXMv
+YXV0by0yMDE5MDYwNy0xNzU0MzIKICA2NzggIGxzIC1sCiAgNjc5ICBmaW5kIC8gLW5hbWUgbG9n
+LnR4dAogIDY4MCAgcHMgYXV4IHwgZ3JlcCAqc2Vzc2lvbmQKICA2ODEgIHBzIGF1eCAKICA2ODIg
+IHBzIGF1eCB8IGdyZXAgKnNlc3Npb25kKgogIDY4MyAgcHMgYXV4IHwgZ3JlcCAqbHR0bmcqCiAg
+Njg0ICBsdHRuZyBzdGF0dXMKICA2ODUgIGx0dG5nIHN0b3AKICA2ODYgIHBzIGF1eCB8IGdyZXAK
+ICA2ODcgIHBzIGF1eAogIDY4OCAgcHMgYXV4IHwgZ3JlcCAibHR0bmcqIgogIDY4OSAga2lsbCAt
+OSA4ODUwCiAgNjkwICBsdHRuZyBjcmVhdGUKICA2OTEgIGx0dG5nIGVuYWJsZS1ldmVudCAtayAt
+YQogIDY5MiAgbHR0bmcgc3RhcnQKICA2OTMgIHNsZWVwIDEKICA2OTQgIGx0dG5nIHN0b3AKICA2
+OTUgIGNkICAvaG9tZS9yb290L2x0dG5nLXRyYWNlcy9hdXRvLTIwMTkwNjA3LTE3NTcyNQogIDY5
+NiAgbHMgLWwKICA2OTcgIGNkIGtlcm5lbC8KICA2OTggIGxzIC1sCiAgNjk5ICBjZCAuLgogIDcw
+MCAgY2QgLi4KICA3MDEgIGNwIC1hdnIgYXV0by0yMDE5MDYwNy0xNyAvbW50L3NwaXJlbnQvcG9z
+YXBwL3NoYXJlL3Bvc2FwcC8KICA3MDIgIGNwIC1hdnIgYXV0by0yMDE5MDYwNy0xNyAvbW50L3Nw
+aXJlbnQvcG9zYXBwL3NoYXJlL3Bvc2FwcC8KICA3MDMgIGNkIGF1dG8tMjAxOTA2MDctMTcKICA3
+MDQgIGxzIC1sCiAgNzA1ICBjZCBhdXRvLTIwMTkwNjA3LTE3NTcyNS8KICA3MDYgIGxzIC1sCiAg
+NzA3ICBjZCAuLgogIDcwOCAgY3AgLWF2ciBhdXRvLTIwMTkwNjA3LTE3NTcyNS8gL21udC9zcGly
+ZW50L3Bvc2FwcC9zaGFyZS9wb3NhcHAvCiAgNzA5ICBsdHRuZyBzdG9wCiAgNzEwICBsdHRuZyBk
+ZXN0cm95CiAgNzExICBjcCAtYXZyIGF1dG8tMjAxOTA2MDctMTc1NzI1LyAvbW50L3NwaXJlbnQv
+cG9zYXBwL3NoYXJlL3Bvc2FwcC8KICA3MTIgIHB3ZAogIDcxMyAgY2QgL21udC9zcGlyZW50L3Bv
+c2FwcC9zaGFyZS9wb3NhcHAvc29mdHdhcmUvVjZfMDZfMDAvZW5naW5lLwogIDcxNCAgaGlzdG9y
+eSA+IGhpc3RvcnkudHh0Cg==
 
---===============1317518056147157984==
+--_003_MN2PR10MB3327EA7E07E221C78D0EF6FF81130MN2PR10MB3327namp_
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -205,4 +297,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1317518056147157984==--
+--_003_MN2PR10MB3327EA7E07E221C78D0EF6FF81130MN2PR10MB3327namp_--
