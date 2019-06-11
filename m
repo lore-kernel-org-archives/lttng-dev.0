@@ -1,19 +1,18 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
- <jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-modules] Don't print ring-buffer's records
- count when it is not used
-Date: Tue, 11 Jun 2019 18:34:32 -0400
-Message-ID: <20190611223432.32304-1-jeremie.galarneau__30010.3684001201$1560292495$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.9.13, 2.10.10,
+ 2.11.0-rc5 (Linux kernel tracer)
+Date: Tue, 11 Jun 2019 18:58:08 -0400 (EDT)
+Message-ID: <1011523982.42412.1560293888405.JavaMail.zimbra__21063.1183975906$1560293907$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lj1-f195.google.com (mail-lj1-f195.google.com
- [209.85.208.195])
- by lists.lttng.org (Postfix) with ESMTPS id 45NlDb2CKHz10Pv
- for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2019 18:34:39 -0400 (EDT)
-Received: by mail-lj1-f195.google.com with SMTP id s21so13283315lji.8
- for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2019 15:34:39 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 45Nllj50Hwz10RP
+ for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2019 18:58:09 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 27D83248C18
+ for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2019 18:58:09 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,52 +22,107 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>, diamon-discuss@lists.linuxfoundation.org
+Cc: linux-kernel <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIHRlYXJkb3duIG9mIGEgcmluZyBidWZmZXIgY2F1c2VzIGEgbnVtYmVyIG9mIGRpYWdub3N0
-aWMgbWVzc2FnZXMKdG8gYmUgcHJpbnRlZCB0byB1c2luZyBwcmludGsuIE9uZSBvZiB0aG9zZSBj
-b250YWlucyB0aGUgInJlY29yZHMKY291bnQiLCB3aGljaCBpcyBvbmx5IHVwZGF0ZWQgd2hlbiBs
-dHRuZy1tb2R1bGVzIGlzIGJ1aWx0IHdpdGgKTFRUTkdfUklOR19CVUZGRVJfQ09VTlRfRVZFTlRT
-IGRlZmluZWQuCgpNb3ZlIHRoZSAicmVjb3JkcyBjb3VudCIgcHJpbnRpbmcgdG8gYSBkaWZmZXJl
-bnQgZnVuY3Rpb24gYW5kIHN0dWIgaXQKb3V0IHdoZW4gTFRUTkdfUklOR19CVUZGRVJfQ09VTlRf
-RVZFTlRTIGlzIG5vdCBkZWZpbmVkCihkZWZhdWx0IGNvbmZpZ3VyYXRpb24pLgoKVGhpcyBlbGlt
-aW5hdGVzIG1lc3NhZ2VzIG9mIHRoZSBmb2xsb3dpbmcgZm9ybSBmcm9tIHRoZSBkbWVzZyBvdXRw
-dXQKd2hlbiBhbiBMVFRuZyBzZXNzaW9uIGlzIHRvcm4gZG93bi4KClsuLi5dIHJpbmcgYnVmZmVy
-IHJlbGF5LWRpc2NhcmQsIGNwdSAwOiAwIHJlY29yZHMgd3JpdHRlbiwgMCByZWNvcmRzIG92ZXJy
-dW4KClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1
-QGVmZmljaW9zLmNvbT4KLS0tCiBsaWIvcmluZ2J1ZmZlci9yaW5nX2J1ZmZlcl9mcm9udGVuZC5j
-IHwgMjYgKysrKysrKysrKysrKysrKysrKysrKystLS0KIDEgZmlsZSBjaGFuZ2VkLCAyMyBpbnNl
-cnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2xpYi9yaW5nYnVmZmVyL3Jp
-bmdfYnVmZmVyX2Zyb250ZW5kLmMgYi9saWIvcmluZ2J1ZmZlci9yaW5nX2J1ZmZlcl9mcm9udGVu
-ZC5jCmluZGV4IDkwYzY2NWQuLjI5MTA3ZjAgMTAwNjQ0Ci0tLSBhL2xpYi9yaW5nYnVmZmVyL3Jp
-bmdfYnVmZmVyX2Zyb250ZW5kLmMKKysrIGIvbGliL3JpbmdidWZmZXIvcmluZ19idWZmZXJfZnJv
-bnRlbmQuYwpAQCAtMTUwMiwxMiArMTUwMiwxMyBAQCB2b2lkIGxpYl9yaW5nX2J1ZmZlcl9wcmlu
-dF9idWZmZXJfZXJyb3JzKHN0cnVjdCBsaWJfcmluZ19idWZmZXIgKmJ1ZiwKIAkJCQkJCSAgICAg
-ICBjcHUpOwogfQogCisjaWZkZWYgTFRUTkdfUklOR19CVUZGRVJfQ09VTlRfRVZFTlRTCiBzdGF0
-aWMKLXZvaWQgbGliX3JpbmdfYnVmZmVyX3ByaW50X2Vycm9ycyhzdHJ1Y3QgY2hhbm5lbCAqY2hh
-biwKLQkJCQkgIHN0cnVjdCBsaWJfcmluZ19idWZmZXIgKmJ1ZiwgaW50IGNwdSkKK3ZvaWQgbGli
-X3JpbmdfYnVmZmVyX3ByaW50X3JlY29yZHNfY291bnQoc3RydWN0IGNoYW5uZWwgKmNoYW4sCisJ
-CQkJCSBzdHJ1Y3QgbGliX3JpbmdfYnVmZmVyICpidWYsCisJCQkJCSBpbnQgY3B1KQogewogCWNv
-bnN0IHN0cnVjdCBsaWJfcmluZ19idWZmZXJfY29uZmlnICpjb25maWcgPSAmY2hhbi0+YmFja2Vu
-ZC5jb25maWc7Ci0Jdm9pZCAqcHJpdiA9IGNoYW4tPmJhY2tlbmQucHJpdjsKIAogCWlmICghc3Ry
-Y21wKGNoYW4tPmJhY2tlbmQubmFtZSwgInJlbGF5LW1ldGFkYXRhIikpIHsKIAkJcHJpbnRrKEtF
-Uk5fREVCVUcgInJpbmcgYnVmZmVyICVzOiAlbHUgcmVjb3JkcyB3cml0dGVuLCAiCkBAIC0xNTIx
-LDcgKzE1MjIsMjYgQEAgdm9pZCBsaWJfcmluZ19idWZmZXJfcHJpbnRfZXJyb3JzKHN0cnVjdCBj
-aGFubmVsICpjaGFuLAogCQkJY2hhbi0+YmFja2VuZC5uYW1lLCBjcHUsCiAJCQl2X3JlYWQoY29u
-ZmlnLCAmYnVmLT5yZWNvcmRzX2NvdW50KSwKIAkJCXZfcmVhZChjb25maWcsICZidWYtPnJlY29y
-ZHNfb3ZlcnJ1bikpOworCX0KK30KKyNlbHNlCitzdGF0aWMKK3ZvaWQgbGliX3JpbmdfYnVmZmVy
-X3ByaW50X3JlY29yZHNfY291bnQoc3RydWN0IGNoYW5uZWwgKmNoYW4sCisJCQkJCSBzdHJ1Y3Qg
-bGliX3JpbmdfYnVmZmVyICpidWYsCisJCQkJCSBpbnQgY3B1KQoreworfQorI2VuZGlmCisKK3N0
-YXRpYwordm9pZCBsaWJfcmluZ19idWZmZXJfcHJpbnRfZXJyb3JzKHN0cnVjdCBjaGFubmVsICpj
-aGFuLAorCQkJCSAgc3RydWN0IGxpYl9yaW5nX2J1ZmZlciAqYnVmLCBpbnQgY3B1KQoreworCWNv
-bnN0IHN0cnVjdCBsaWJfcmluZ19idWZmZXJfY29uZmlnICpjb25maWcgPSAmY2hhbi0+YmFja2Vu
-ZC5jb25maWc7CisJdm9pZCAqcHJpdiA9IGNoYW4tPmJhY2tlbmQucHJpdjsKIAorCWxpYl9yaW5n
-X2J1ZmZlcl9wcmludF9yZWNvcmRzX2NvdW50KGNoYW4sIGJ1ZiwgY3B1KTsKKwlpZiAoc3RyY21w
-KGNoYW4tPmJhY2tlbmQubmFtZSwgInJlbGF5LW1ldGFkYXRhIikpIHsKIAkJaWYgKHZfcmVhZChj
-b25maWcsICZidWYtPnJlY29yZHNfbG9zdF9mdWxsKQogCQkgICAgfHwgdl9yZWFkKGNvbmZpZywg
-JmJ1Zi0+cmVjb3Jkc19sb3N0X3dyYXApCiAJCSAgICB8fCB2X3JlYWQoY29uZmlnLCAmYnVmLT5y
-ZWNvcmRzX2xvc3RfYmlnKSkKLS0gCjIuMjIuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+Hi,
+
+These releases to the LTTng 2.9 and 2.10 stable branches, as well
+as the release candidate for the LTTng 2.11 branch, contain a
+series of bugfixes, and adds support for the 5.1 and 5.2-rc Linux
+kernels.
+
+One user-impacting fix is the following:
+
+"Fix: don't access packet header for stream_id and stream_instance_id getters"
+
+which can cause the consumer daemon to get an erroneous value of
+stream ID and stream instance ID (0) when a live timer is fired at
+the beginning of the buffer lifetime. This affects users of the live
+streaming mode.
+
+Project website: http://lttng.org
+Documentation: http://lttng.org/docs
+Download link: http://lttng.org/download
+
+Changelog:
+
+2019-06-12 (National Peanut Butter Cookie Day) LTTng modules 2.11.0-rc5
+        * Fix: Don't print ring-buffer's records count when it is not used
+        * Fix: do not set quiescent state on channel destroy
+        * Fix: ring_buffer_frontend.c: init read timer with uninitialized flags
+        * Introduce callstack stackwalk implementation header
+        * Prepare callstack common code for stackwalk
+        * Introduce callstack legacy implementation header
+        * fix: random: only read from /dev/random after its pool has received 128 bits (v5.2)
+        * fix: mm: move recent_rotated pages calculation to shrink_inactive_list() (v5.2)
+        * fix: mm/vmscan: simplify trace_reclaim_flags and trace_shrink_flags (v5.2)
+        * fix: mm/vmscan: drop may_writepage and classzone_idx from direct reclaim begin template (v5.2)
+        * fix: timer/trace: Improve timer tracing (v5.2)
+        * Cleanup: bitfields: streamline use of underscores
+        * Silence compiler "always false comparison" warning
+        * Fix: bitfield: shift undefined/implementation defined behaviors
+        * Fix: timestamp_end field should include all events within sub-buffer
+        * Fix: Remove start and number from syscall_get_arguments() args (v5.1)
+        * lttng abi documentation: clarify getter usage requirements
+        * Fix: don't access packet header for stream_id and stream_instance_id getters
+        * Fix: atomic_long_add_unless() returns a boolean
+        * Fix: Revert "KVM: MMU: show mmu_valid_gen..." (v5.1)
+        * Fix: pipe: stop using ->can_merge (v5.1)
+        * Fix: rcu: Remove wrapper definitions for obsolete RCU... (v5.1)
+        * Fix: mm: create the new vm_fault_t type (v5.1)
+        * Fix: extra-version-git.sh redirect stderr to /dev/null
+
+2019-06-12 (National Peanut Butter Cookie Day) LTTng modules 2.10.10
+        * Fix: Don't print ring-buffer's records count when it is not used
+        * Fix: do not set quiescent state on channel destroy
+        * Fix: ring_buffer_frontend.c: init read timer with uninitialized flags
+        * fix: random: only read from /dev/random after its pool has received 128 bits (v5.2)
+        * fix: mm: move recent_rotated pages calculation to shrink_inactive_list() (v5.2)
+        * fix: mm/vmscan: simplify trace_reclaim_flags and trace_shrink_flags (v5.2)
+        * fix: mm/vmscan: drop may_writepage and classzone_idx from direct reclaim begin template (v5.2)
+        * fix: timer/trace: Improve timer tracing (v5.2)
+        * Cleanup: bitfields: streamline use of underscores
+        * Silence compiler "always false comparison" warning
+        * Fix: bitfield: shift undefined/implementation defined behaviors
+        * Cleanup: bitfield.h: move to kernel style SPDX license identifiers
+        * Fix: timestamp_end field should include all events within sub-buffer
+        * Fix: Remove start and number from syscall_get_arguments() args (v5.1)
+        * lttng abi documentation: clarify getter usage requirements
+        * Fix: don't access packet header for stream_id and stream_instance_id getters
+        * Fix: atomic_long_add_unless() returns a boolean
+        * Fix: Revert "KVM: MMU: show mmu_valid_gen..." (v5.1)
+        * Fix: pipe: stop using ->can_merge (v5.1)
+        * Fix: rcu: Remove wrapper definitions for obsolete RCU... (v5.1)
+        * Fix: mm: create the new vm_fault_t type (v5.1)
+        * Fix: extra-version-git.sh redirect stderr to /dev/null
+
+2019-06-12 (National Peanut Butter Cookie Day) LTTng modules 2.9.13
+        * Fix: Don't print ring-buffer's records count when it is not used
+        * Fix: do not set quiescent state on channel destroy
+        * Fix: ring_buffer_frontend.c: init read timer with uninitialized flags
+        * fix: random: only read from /dev/random after its pool has received 128 bits (v5.2)
+        * fix: mm: move recent_rotated pages calculation to shrink_inactive_list() (v5.2)
+        * fix: mm/vmscan: simplify trace_reclaim_flags and trace_shrink_flags (v5.2)
+        * fix: mm/vmscan: drop may_writepage and classzone_idx from direct reclaim begin template (v5.2)
+        * fix: timer/trace: Improve timer tracing (v5.2)
+        * Cleanup: bitfields: streamline use of underscores
+        * Silence compiler "always false comparison" warning
+        * Fix: bitfield: shift undefined/implementation defined behaviors
+        * Cleanup: bitfield.h: move to kernel style SPDX license identifiers
+        * Fix: timestamp_end field should include all events within sub-buffer
+        * Fix: Remove start and number from syscall_get_arguments() args (v5.1)
+        * lttng abi documentation: clarify getter usage requirements
+        * Fix: don't access packet header for stream_id and stream_instance_id getters
+        * Fix: atomic_long_add_unless() returns a boolean
+        * Fix: Revert "KVM: MMU: show mmu_valid_gen..." (v5.1)
+        * Fix: pipe: stop using ->can_merge (v5.1)
+        * Fix: rcu: Remove wrapper definitions for obsolete RCU... (v5.1)
+        * Fix: mm: create the new vm_fault_t type (v5.1)
+        * Fix: extra-version-git.sh redirect stderr to /dev/null
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
