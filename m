@@ -1,21 +1,25 @@
-From: Zvi Vered <veredz72@gmail.com>
-Subject: Re: (no subject)
-Date: Fri, 14 Jun 2019 07:30:08 +0300
-Message-ID: <CABRndgz4GtnhKE3g+GgCAmQD=6U-6PzfKPJL1cUgo2dM8Vcwqw__343.156924803623$1560486887$gmane$org@mail.gmail.com>
-References: <CABRndgyzXQaYpefcMEMt1ShbqVKaf9vLJOXaL2cgUZMik4=xxw@mail.gmail.com>
- <CAB4xu_0h-q6En3_hDODbKuXd1=4_e0car73pP8Cf=LNWMKjh_g@mail.gmail.com>
- <CABRndgwEg3wYLbyfobjxdEKd8O1dAu+B+PwS-0A5gxURjKj_WA@mail.gmail.com>
- <20190613153823.GC972@joraj-alpa>
+From: Ravindra Kumar Meena <rmeena840@gmail.com>
+Subject: Re: Need help in converting trace data into CTF
+Date: Mon, 17 Jun 2019 21:25:05 +0530
+Message-ID: <CAEWVvOR0wv2Du2KNCZE0dpNAhMaFh7JvDFG0FOQ8uWyTBpSoOw__20174.364831631$1560787014$gmane$org@mail.gmail.com>
+References: <CAEWVvOSE6QJQvQEdTLEhNQTE7H1Py1ggoqynSj3w-uOYBkTMCQ@mail.gmail.com>
+ <72388180.2647.1558032721255.JavaMail.zimbra@efficios.com>
+ <CAEWVvOS6WyAkE+5GAyn_WEoFW_6h_fWbze-im0w7oqvXS-+dBw@mail.gmail.com>
+ <1448366760.18406.1559146893765.JavaMail.zimbra@efficios.com>
+ <CAEWVvOSdmSsfGiN2fd7yAO6m5-Ke=GuamNR6jKYCLRnSym9Hcw@mail.gmail.com>
+ <CAEWVvOSorZyz=JOaf-7go-EyZxcmiOzcVbnUpb7crdKM_SVejA@mail.gmail.com>
+ <20190604143917.GA13240@joraj-alpa> <20190604145312.GB13240@joraj-alpa>
+ <CAEWVvORHWTQLe_uhw2M+aT6tEjgdz3emfxEUosbo+bMsqdN=QA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9102997432094379024=="
+Content-Type: multipart/mixed; boundary="===============4018821732926620748=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw1-xc34.google.com (mail-yw1-xc34.google.com
- [IPv6:2607:f8b0:4864:20::c34])
- by lists.lttng.org (Postfix) with ESMTPS id 45Q76q1PHFz18Pq
- for <lttng-dev@lists.lttng.org>; Fri, 14 Jun 2019 00:34:27 -0400 (EDT)
-Received: by mail-yw1-xc34.google.com with SMTP id t126so541538ywf.3
- for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2019 21:34:27 -0700 (PDT)
-In-Reply-To: <20190613153823.GC972@joraj-alpa>
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by lists.lttng.org (Postfix) with ESMTPS id 45SG5X37Zfzykx
+ for <lttng-dev@lists.lttng.org>; Mon, 17 Jun 2019 11:55:44 -0400 (EDT)
+Received: by mail-wr1-x430.google.com with SMTP id d18so10563211wrs.5
+ for <lttng-dev@lists.lttng.org>; Mon, 17 Jun 2019 08:55:44 -0700 (PDT)
+In-Reply-To: <CAEWVvORHWTQLe_uhw2M+aT6tEjgdz3emfxEUosbo+bMsqdN=QA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,148 +33,53 @@ To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============9102997432094379024==
-Content-Type: multipart/alternative; boundary="00000000000057963a058b412905"
+--===============4018821732926620748==
+Content-Type: multipart/alternative; boundary="0000000000003e1be5058b870703"
 
---00000000000057963a058b412905
+--0000000000003e1be5058b870703
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Jonathan,
+Hi developers,
 
-I need a windows library (+ sample code that uses it) that can read events
-from a pre-recorded CTF file created by ltt-ng (metadata, channels)
-I think (not sure) that compiling babeltrace (e.g 1.5.23) with Mingw is not
-simple.
-As a start, the bootstrap, cannot run under windows.
+I am trying to write a metadata file. I am following https://diamon.org/ctf/.
+I found one metadata file on GitHub repository
+https://github.com/efficios/epiphany-examples/tree/barectf-tracing/apps/barectf-tracing/ctf
 
-Thank you,
-Zvika
+ Which file format is used for the metadata files?
 
+Thanks
 
 
+-- 
+*Ravindra Kumar Meena*,
+B. Tech. Computer Science and Engineering,
+Indian Institute of Technology (Indian School of Mines)
+<https://www.iitism.ac.in/>, Dhanbad
 
-On Thu, Jun 13, 2019 at 6:38 PM Jonathan Rajotte-Julien <
-jonathan.rajotte-julien@efficios.com> wrote:
-
-> Hi,
->
-> > Can you please estimate when version 2 will be released ?
->
-> When it is ready. A lot of work was done on that side in the last 6 month,
-> the
-> list of bugs and stuff to get done is shrinking everyday.
->
-> > Can you please provide sample code that uses Babeltrace to read metadata,
-> > channel ?
->
-> The source code for decoding the metadata TSDL is available here [1] if
-> I'm not
-> mistaken. The header is only the tip of the iceberg.
->
-> [1]
-> https://github.com/efficios/babeltrace/tree/stable-1.5/formats/ctf/metadata
->
-> I'm not sure if we expose the metadata information directly to the API.
->
-> See [2] for the API documentation of babeltrace 1.5
->
-> [2]
-> http://git.efficios.com/?p=babeltrace.git;a=blob;f=doc/API.txt;h=e13e6adf3545d306e36c2496dd2feb50479d1eea
->
-> > > >
-> > > > I want to write a simple babeltrace for windows.
-> > >
->
-> I'm not convinced that rewriting an open source project is the right way
-> to go
-> about that. Even more when there is already efforts being conducted for
-> supporting
-> Windows.
->
-> What is the end goal here? What are you trying to achieve?
->
-> Do you want a basic cli that can read traces and output text trace?
-> Do you want to build a tool around ctf and need a reader/writer lib?
->
-> Please provide context so that we can help you achieve your goal.
->
-> Cheers
-> --
-> Jonathan Rajotte-Julien
-> EfficiOS
->
-
---00000000000057963a058b412905
+--0000000000003e1be5058b870703
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi Jonathan,<div><br></div><div>I need a windows library (=
-+ sample code that uses it) that can read events from a pre-recorded CTF fi=
-le created by ltt-ng (metadata, channels)=C2=A0</div><div>I think (not sure=
-) that compiling babeltrace (e.g 1.5.23) with Mingw is not simple.=C2=A0</d=
-iv><div>As a start, the bootstrap, cannot run under windows.</div><div><br>=
-</div><div>Thank you,</div><div>Zvika=C2=A0</div><div>=C2=A0=C2=A0<br></div=
-><div><br></div><div><br></div></div><br><div class=3D"gmail_quote"><div di=
-r=3D"ltr" class=3D"gmail_attr">On Thu, Jun 13, 2019 at 6:38 PM Jonathan Raj=
-otte-Julien &lt;<a href=3D"mailto:jonathan.rajotte-julien@efficios.com">jon=
-athan.rajotte-julien@efficios.com</a>&gt; wrote:<br></div><blockquote class=
-=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
-b(204,204,204);padding-left:1ex">Hi,<br>
-<br>
-&gt; Can you please estimate when version 2 will be released ?<br>
-<br>
-When it is ready. A lot of work was done on that side in the last 6 month, =
-the<br>
-list of bugs and stuff to get done is shrinking everyday.<br>
-<br>
-&gt; Can you please provide sample code that uses Babeltrace to read metada=
-ta,<br>
-&gt; channel ?<br>
-<br>
-The source code for decoding the metadata TSDL is available here [1] if I&#=
-39;m not<br>
-mistaken. The header is only the tip of the iceberg.<br>
-<br>
-[1] <a href=3D"https://github.com/efficios/babeltrace/tree/stable-1.5/forma=
-ts/ctf/metadata" rel=3D"noreferrer" target=3D"_blank">https://github.com/ef=
-ficios/babeltrace/tree/stable-1.5/formats/ctf/metadata</a><br>
-<br>
-I&#39;m not sure if we expose the metadata information directly to the API.=
-<br>
-<br>
-See [2] for the API documentation of babeltrace 1.5<br>
-<br>
-[2] <a href=3D"http://git.efficios.com/?p=3Dbabeltrace.git;a=3Dblob;f=3Ddoc=
-/API.txt;h=3De13e6adf3545d306e36c2496dd2feb50479d1eea" rel=3D"noreferrer" t=
-arget=3D"_blank">http://git.efficios.com/?p=3Dbabeltrace.git;a=3Dblob;f=3Dd=
-oc/API.txt;h=3De13e6adf3545d306e36c2496dd2feb50479d1eea</a><br>
-<br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt; I want to write a simple babeltrace for windows.<br>
-&gt; &gt;<br>
-<br>
-I&#39;m not convinced that rewriting an open source project is the right wa=
-y to go<br>
-about that. Even more when there is already efforts being conducted for sup=
-porting<br>
-Windows.<br>
-<br>
-What is the end goal here? What are you trying to achieve?<br>
-<br>
-Do you want a basic cli that can read traces and output text trace?<br>
-Do you want to build a tool around ctf and need a reader/writer lib?<br>
-<br>
-Please provide context so that we can help you achieve your goal.<br>
-<br>
-Cheers<br>
--- <br>
-Jonathan Rajotte-Julien<br>
-EfficiOS<br>
-</blockquote></div>
+<div dir=3D"ltr"><div class=3D"gmail_quote"><div><br></div><div>Hi develope=
+rs,</div><div><br></div><div>I am trying to write a metadata file. I am fol=
+lowing=C2=A0<a href=3D"https://diamon.org/ctf/" target=3D"_blank">https://d=
+iamon.org/ctf/</a>. I found one metadata file on GitHub repository=C2=A0<a =
+href=3D"https://github.com/efficios/epiphany-examples/tree/barectf-tracing/=
+apps/barectf-tracing/ctf" target=3D"_blank">https://github.com/efficios/epi=
+phany-examples/tree/barectf-tracing/apps/barectf-tracing/ctf</a></div><div>=
+<br></div><div>=C2=A0Which file format is used for the metadata files?<br><=
+/div><div><br></div><div>Thanks</div><div><br></div><div>=C2=A0</div></div>=
+-- <br><div dir=3D"ltr" class=3D"m_7573831376688641738gmail_signature"><div=
+ dir=3D"ltr"><div><div dir=3D"ltr"><font size=3D"4"><b>Ravindra Kumar Meena=
+</b></font>,<div><span style=3D"color:rgb(102,102,102)">B. Tech. Computer S=
+cience and Engineering,<br></span></div><div><span style=3D"color:rgb(102,1=
+02,102)"><a href=3D"https://www.iitism.ac.in/" style=3D"color:rgb(17,85,204=
+)" target=3D"_blank">Indian Institute of Technology (Indian School of Mines=
+)</a>, Dhanbad</span></div></div></div></div></div></div>
 
---00000000000057963a058b412905--
+--0000000000003e1be5058b870703--
 
---===============9102997432094379024==
+--===============4018821732926620748==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -181,4 +90,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============9102997432094379024==--
+--===============4018821732926620748==--
