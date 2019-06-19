@@ -1,127 +1,126 @@
-From: Francis Deslauriers <francis.deslauriers@efficios.com>
-Subject: Re: Tracing Summit 2019: Announcement and Call for Proposals, August
- 20th, 2019, San Diego, CA
-Date: Wed, 19 Jun 2019 10:47:05 -0400
-Message-ID: <CADcCL0gpbfk28_E1otW0Ttz0Osot3CYymh=t5fVR77WrqoU6uQ@mail.gmail.com>
-References: <CADcCL0irokZ8Xp7S3eBV728qpL5yipwW+=2QvwiZrixqSdtBog@mail.gmail.com>
+From: Ravindra Kumar Meena <rmeena840@gmail.com>
+Subject: Re: Need help in converting trace data into CTF
+Date: Wed, 19 Jun 2019 21:34:55 +0530
+Message-ID: <CAEWVvOS-Xe_q7BuPiV7LEJ0Cx96tjsydYALvytvrzg-D+8TYhg__46841.670751904$1560960356$gmane$org@mail.gmail.com>
+References: <CAEWVvOS6WyAkE+5GAyn_WEoFW_6h_fWbze-im0w7oqvXS-+dBw@mail.gmail.com>
+ <1448366760.18406.1559146893765.JavaMail.zimbra@efficios.com>
+ <CAEWVvOSdmSsfGiN2fd7yAO6m5-Ke=GuamNR6jKYCLRnSym9Hcw@mail.gmail.com>
+ <CAEWVvOSorZyz=JOaf-7go-EyZxcmiOzcVbnUpb7crdKM_SVejA@mail.gmail.com>
+ <20190604143917.GA13240@joraj-alpa> <20190604145312.GB13240@joraj-alpa>
+ <CAEWVvORHWTQLe_uhw2M+aT6tEjgdz3emfxEUosbo+bMsqdN=QA@mail.gmail.com>
+ <CAEWVvOR0wv2Du2KNCZE0dpNAhMaFh7JvDFG0FOQ8uWyTBpSoOw@mail.gmail.com>
+ <20190617165154.GA7208@joraj-alpa>
+ <CAEWVvOSXKF=Ey_edFSFp=CqUDHyhoB_iZQEdTHwcwwYNM3LpJg@mail.gmail.com>
+ <20190618141714.GC7208@joraj-alpa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <CADcCL0irokZ8Xp7S3eBV728qpL5yipwW+=2QvwiZrixqSdtBog@mail.gmail.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: diamon-discuss@lists.linuxfoundation.org, linux-kernel <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org, linux-trace-devel@vger.kernel.org, linux-trace-users@vger.kernel.org, linuxtools-dev@eclipse.org, lttng-dev <lttng-dev@lists.lttng.org>, lwn@lwn.net, tracecompass-dev@eclipse.org
-Cc: info@tracingsummit.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: multipart/mixed; boundary="===============5107159723232934706=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by lists.lttng.org (Postfix) with ESMTPS id 45TVCy10Grz17Tm
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Jun 2019 12:05:33 -0400 (EDT)
+Received: by mail-wm1-x336.google.com with SMTP id v19so55862wmj.5
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Jun 2019 09:05:33 -0700 (PDT)
+In-Reply-To: <20190618141714.GC7208@joraj-alpa>
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
-This is a friendly reminder that the deadline for submitting talk
-proposals for the Tracing Summit 2019 [1] is coming up soon (July
-1st). Submit you talk today through this form:
-https://forms.gle/L6mR2ZN3Nt7bUxY98.
+--===============5107159723232934706==
+Content-Type: multipart/alternative; boundary="0000000000001fb521058baf66dd"
 
-The Tracing Summit 2019 will be held in San Diego, California on
-August 20th, 2019, at the Hilton San Diego Bayfront, co-located with
-the Open Source Summit & Embedded Linux Conference North America 2019
+--0000000000001fb521058baf66dd
+Content-Type: text/plain; charset="UTF-8"
 
-This year tickets are $100 and seating is limited to 100 people. To
-register, you can add the Tracing Summit as an addon to your Open
-Source Summit ticket or use this link to register solely for the
-Tracing Summit:
-https://www.cvent.com/events/tracing-summit-2019/registration-63351d06945a46d890b8e5a200dbc0fc.aspx.
+>
+> > I used "barectf config.yaml -m ctf" command. It helpled me generating the
+> > metadata file. I looked at some other metadata file but they are binary
+> > packetized. The one I generated using barectf is not binary packetized.
+> >
+> > Are these file different?
+>
+> Yes, they are. As you said one is packetized and the other simply text.
+>
+> > Will both work the same way?
+>
+> It will work the same as long as you use a reader that does not care.
+> AFAIK, Babeltrace is one of those readers.
+>
+Okay. This was helpful.
 
-We are actively looking for sponsors to support the Tracing Summit.
-Contact us at info@tracingsummit.org.
+I will be storing the event stream in a file and I will pass metadata file
+to babeltrace in order to read the CTF.
 
-More info: https://tracingsummit.org/wiki/TracingSummit2019
+ I want to make babeltrace read my metadata file and event stream stored in
+a file. How does babeltrace read an arbitrary CTF session(CTF+event stream)?
 
-Thank you,
+What should be the file format to store the event stream? I will use
+fwrite() to store the events.
 
-On behalf of the Diagnostic and Monitoring Workgroup,
-Tracing Summit organizers
-
-Le mar. 16 avr. 2019, à 11 h 54, Francis Deslauriers
-<francis.deslauriers@efficios.com> a écrit :
->
-> Hi all,
->
-> This is a Call for Proposals for the Tracing Summit 2019 [0] which
-> will be held in San Diego, California, USA at the Hilton San Diego
-> Bayfront, co-located with the Open Source Summit & Embedded Linux
-> Conference North America 2019 [1] on August 20th, 2019.
->
-> You can subscribe to our mailing list ot get the latest info on the event: [2]
->
-> The Tracing Summit is single-day, single-track conference on the topic
-> of tracing. The event focuses on the field of software and hardware
-> tracing, gathering developers and end-users of tracing and trace
-> analysis tools. The main goal of the Tracing Summit is to provide
-> space for discussion between people of the various areas that benefit
-> from tracing, namely parallel, distributed and/or real-time systems,
-> as well as kernel development.
->
-> We are welcoming 30 minute presentations from both end users and
-> developers, on topics covering, but not limited to:
-> -Investigation workflow of Real-Time, latency, and throughput issues,
-> -Trace collection and extraction,
-> -Trace filtering,
-> -Trace aggregation,
-> -Trace formats,
-> -Tracing multi-core systems,
-> -Trace abstraction,
-> -Trace modeling,
-> -Automated trace analysis (e.g. dependency analysis),
-> -Tracing large clusters and distributed systems,
-> -Hardware-level tracing (e.g. DSP, GPU, bare-metal),
-> -Trace visualisation,
-> -Interaction between debugging and tracing,
-> -Tracing remote control,
-> -Analysis of large trace datasets,
-> -Cloud trace collection and analysis,
-> -Integration between trace tools,
-> -Live tracing & monitoring,
-> -Programmable tracing (e.g. eBPF).
->
-> Those can cover recently available technologies, ongoing work, and yet
-> non-existing technologies (which are compellingly interesting to
-> end-users). Please understand that this open forum is not the proper
-> place to present sales or marketing pitches, nor technologies which
-> are prevented from being freely used in open source.
->
-> * Submit you talk today using this form: https://forms.gle/L6mR2ZN3Nt7bUxY98 *
->
-> The submission deadline is July 1st 2019 at 23:59 EST.
->
-> This year tickets are $100 and seating is limited to 100 people. To
-> register, you can add the Tracing Summit as an addon to your Open
-> Source Summit ticket [3] or use this link [4] to register solely for
-> the Tracing Summit.
->
-> The Tracing Summit is sponsored by EfficiOS. We are actively looking
-> for sponsors to support the Tracing Summit. Contact us at
-> info@tracingsummit.org.
->
-> Please send any query about this conference to info@tracingsummit.org.
->
-> This event is organized by Francis Deslauriers and Mathieu Desnoyers
-> on the behalf of the Linux Foundation Diagnostic and Monitoring
-> Workgroup [5].
->
-> [0] : https://tracingsummit.org
-> [1]: https://events.linuxfoundation.org/events/open-source-summit-north-america-2019
-> [2]: http://eepurl.com/goakfv
-> [3]: https://www.cvent.com/events/open-source-summit-embedded-linux-conference-north-america-2019/registration-0ed1330c38bd4845be29b91c9d2444ce.aspx?fqp=true
-> [4]: https://www.cvent.com/events/tracing-summit-2019/registration-63351d06945a46d890b8e5a200dbc0fc.aspx?fqp=true
-> [5]: https://diamon.org
->
-> --
-> Francis Deslauriers
-> Computer Engineer
-> EfficiOS inc.
-
-
+Thanks
 
 -- 
-Francis Deslauriers
-Computer Engineer
-EfficiOS inc.
+*Ravindra Kumar Meena*,
+B. Tech. Computer Science and Engineering,
+Indian Institute of Technology (Indian School of Mines)
+<https://www.iitism.ac.in/>, Dhanbad
+
+--0000000000001fb521058baf66dd
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
+;padding-left:1ex">&gt; I used &quot;barectf config.yaml -m ctf&quot; comma=
+nd. It helpled me generating the<br>
+&gt; metadata file. I looked at some other metadata file but they are binar=
+y<br>
+&gt; packetized. The one I generated using barectf is not binary packetized=
+.<br>
+&gt; <br>
+&gt; Are these file different?<br>
+<br>
+Yes, they are. As you said one is packetized and the other simply text.<br>
+<br>
+&gt; Will both work the same way?<br>
+<br>
+It will work the same as long as you use a reader that does not care.<br>
+AFAIK, Babeltrace is one of those readers.<br></blockquote><div>Okay. This =
+was helpful.</div><div><br></div><div>I will be storing the event stream in=
+ a file and I will pass metadata file to babeltrace in order to read the CT=
+F.</div><div><br></div><div>=C2=A0I want to make babeltrace read my metadat=
+a file and event stream stored in a file. How does babeltrace read an arbit=
+rary CTF session(CTF+event stream)?</div><div><br></div><div>What should be=
+ the file format to store the event stream? I will use fwrite() to store th=
+e events.</div><div><br></div><div>Thanks</div></div><div><br></div>-- <br>=
+<div dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><div><div dir=
+=3D"ltr"><font size=3D"4"><b>Ravindra Kumar Meena</b></font>,<div><span sty=
+le=3D"color:rgb(102,102,102)">B. Tech. Computer Science and Engineering,<br=
+></span></div><div><span style=3D"color:rgb(102,102,102)"><a href=3D"https:=
+//www.iitism.ac.in/" style=3D"color:rgb(17,85,204)" target=3D"_blank">India=
+n Institute of Technology (Indian School of Mines)</a>, Dhanbad</span></div=
+></div></div></div></div></div>
+
+--0000000000001fb521058baf66dd--
+
+--===============5107159723232934706==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============5107159723232934706==--
