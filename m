@@ -1,15 +1,17 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-ust 1/2] Fix: missing define when not
- building with gcc
-Date: Thu,  4 Jul 2019 14:51:36 -0400
-Message-ID: <20190704185137.24943-1-jonathan.rajotte-julien__28456.0718968109$1562266339$gmane$org@efficios.com>
+Subject: [PATCH lttng-ust 2/2] Fix: do not use diagnostic pragma
+ when GCC version is lower than 4.6.0
+Date: Thu,  4 Jul 2019 14:51:37 -0400
+Message-ID: <20190704185137.24943-2-jonathan.rajotte-julien__37762.4271599174$1562266378$gmane$org@efficios.com>
+References: <20190704185137.24943-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45fnC75R2pz10XL
- for <lttng-dev@lists.lttng.org>; Thu,  4 Jul 2019 14:52:03 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 45fnCF2kD0z10Xl
+ for <lttng-dev@lists.lttng.org>; Thu,  4 Jul 2019 14:52:09 -0400 (EDT)
+In-Reply-To: <20190704185137.24943-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,20 +26,24 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- include/lttng/bitfield.h | 1 +
- 1 file changed, 1 insertion(+)
+ include/lttng/bitfield.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/include/lttng/bitfield.h b/include/lttng/bitfield.h
-index 7faf23f9..92f1c2c9 100644
+index 92f1c2c9..5ed62938 100644
 --- a/include/lttng/bitfield.h
 +++ b/include/lttng/bitfield.h
-@@ -59,6 +59,7 @@
- # define _BT_DIAG_PUSH
- # define _BT_DIAG_POP
- # define _BT_DIAG_IGNORE
-+# define _BT_DIAG_IGNORE_TYPE_LIMITS
- #endif
+@@ -44,8 +44,10 @@
+ /*
+  * _bt_is_signed_type() willingly generates comparison of unsigned
+  * expression < 0, which is always false. Silence compiler warnings.
++ * GCC versions lower than 4.6.0 do not accept diagnostic pragma inside
++ * functions.
+  */
+-#ifdef __GNUC__
++#if defined (__GNUC__) && (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__) >= 40600
+ # define _BT_DIAG_PUSH			_Pragma("GCC diagnostic push")
+ # define _BT_DIAG_POP			_Pragma("GCC diagnostic pop")
  
- #define _bt_is_signed_type(type)	((type) -1 < (type) 0)
 -- 
 2.17.1
