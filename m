@@ -1,18 +1,18 @@
-From: Ravindra Kumar Meena <rmeena840@gmail.com>
-Subject: Re: How to read multiple stream file via babeltrace?
-Date: Tue, 9 Jul 2019 21:35:46 +0530
-Message-ID: <CAEWVvORCMhp_Xq4cLpVg8yvAdxgreH8WvqZ+57iooMBMFiEFJQ__5192.90067474998$1562688400$gmane$org@mail.gmail.com>
-References: <CAEWVvOSCySxpcKw3dmmmW03Sbk1aT-+C3ZR5-LuKgt5w92pkYw@mail.gmail.com>
+From: Junchang Wang <junchangwang@gmail.com>
+Subject: [RFC 0/4] userspace-rcu: Add lock-free,
+ ordered singly linked list rculflist
+Date: Wed, 10 Jul 2019 11:28:06 +0800
+Message-ID: <1562729290-6437-1-git-send-email-junchangwang__16397.3349657439$1562729342$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6983610854360468358=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by lists.lttng.org (Postfix) with ESMTPS id 45jnHh3ZRlz15kS
- for <lttng-dev@lists.lttng.org>; Tue,  9 Jul 2019 12:06:24 -0400 (EDT)
-Received: by mail-wr1-x42c.google.com with SMTP id p17so10479812wrf.11
- for <lttng-dev@lists.lttng.org>; Tue, 09 Jul 2019 09:06:24 -0700 (PDT)
-In-Reply-To: <CAEWVvOSCySxpcKw3dmmmW03Sbk1aT-+C3ZR5-LuKgt5w92pkYw@mail.gmail.com>
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com
+ [IPv6:2607:f8b0:4864:20::441])
+ by lists.lttng.org (Postfix) with ESMTPS id 45k4R359D4z162l
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Jul 2019 23:28:47 -0400 (EDT)
+Received: by mail-pf1-x441.google.com with SMTP id p184so372346pfp.7
+ for <lttng-dev@lists.lttng.org>; Tue, 09 Jul 2019 20:28:47 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,94 +22,68 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: mathieu.desnoyers@efficios.com, lttng-dev@lists.lttng.org
+Cc: paulmck@linux.ibm.com
 List-Id: lttng-dev@lists.lttng.org
 
---===============6983610854360468358==
-Content-Type: multipart/alternative; boundary="000000000000f15e1e058d41bd0e"
+Hi Mathieu and the list,
 
---000000000000f15e1e058d41bd0e
-Content-Type: text/plain; charset="UTF-8"
+I'm recently using userspace-rcu to build lock-free data structures. Thanks for
+sharing this excellent project!
 
-Okay. The babeltrace was able to read multiple stream files with one
-metadata but for this to get working I had to read so many stream_id in
-metadata.
-Curretn metadata looks like this:
-https://github.com/rmeena840/rtems-tools/commit/5acaea6b5983c903ce904f17220655664b57513b
+In building a hash table, I am looking for an ordered singly linked list
+that is lock-free. It seems such a list is missing in userspace-rcu. I
+discussed this with Paul in the mailing list of perfbook, and he kindly
+suggested me to submit my implementation to userspace-rcu. So here is the
+RFC. Any comments and suggestions are warmly welcome.
 
-Now, I want to reduce multiple stream_id in metadata. For this I used
-compact header from your CTF documentation [1]. The new metadata looks like
-this [2] but babeltrace gives the following error:
+This singly linked list is based on the following research paper:
+ - Maged M. Michael. High performance dynamic lock-free hash tables
+   and list-based sets. In Proceedings of the fourteenth annual ACM
+   symposium on Parallel algorithms and architectures, ACM Press,
+   (2002), 73-82.
 
-[error] Stream 17 is not declared in metadata.
-[error] Stream index creation error.
-[error] Open file stream error.
-[warning] [Context] Cannot open_trace of format ctf at path ctf.
-[warning] [Context] cannot open trace "ctf" from ctf for reading.
-[error] Cannot open any trace for reading.
+And this implementation has the following unique features:
+ (1) Insert, Delete, and Find operations are protected by RCU read_lock,
+     such that the existence guarantees are provided by the RCU mechanism,
+     and that no special memory management schemes (e.g., hazard pointers)
+     is required anymore.
+ (2) The use of the RCU mechanism can naturally prevent the ABA problem,
+     such that no flag field is required in this implementation. Hence,
+     we save a long integer (typically 8 bytes) for each node.
 
-[error] opening trace "ctf" for reading.
+This is my first patch to this mailing list, so please let me know if
+I messed anything up. Any comments and suggestions are warmly welcome.
 
-[error] none of the specified trace paths could be opened.
+Thanks,
+--Junchang
 
-Any suggestions to resolve this? Thanks
+Junchang Wang (4):
+  userspace-rcu: Add lock-free singly linked list rculflist
+  userspace-rcu: Add sample code of rculflist
+  userspace-rcu: Update Makefile.am to include rculflist into the
+    project
+  userspace-rcu: Add a brief description of rculflist in cds-api.md
 
-[1] https://diamon.org/ctf/#spec6.1
-[2] http://ideone.com/OltS9k
-
->
+ doc/cds-api.md                                     |   7 +
+ doc/examples/Makefile.am                           |  13 +-
+ .../rculflist/Makefile.cds_lflist_delete_rcu       |  21 ++
+ .../rculflist/Makefile.cds_lflist_find_rcu         |  21 ++
+ .../rculflist/Makefile.cds_lflist_insert_rcu       |  21 ++
+ doc/examples/rculflist/cds_lflist_delete_rcu.c     | 100 ++++++++
+ doc/examples/rculflist/cds_lflist_find_rcu.c       |  96 +++++++
+ doc/examples/rculflist/cds_lflist_insert_rcu.c     |  66 +++++
+ include/Makefile.am                                |   1 +
+ include/urcu/cds.h                                 |   1 +
+ include/urcu/rculflist.h                           | 279 +++++++++++++++++++++
+ 11 files changed, 625 insertions(+), 1 deletion(-)
+ create mode 100644 doc/examples/rculflist/Makefile.cds_lflist_delete_rcu
+ create mode 100644 doc/examples/rculflist/Makefile.cds_lflist_find_rcu
+ create mode 100644 doc/examples/rculflist/Makefile.cds_lflist_insert_rcu
+ create mode 100644 doc/examples/rculflist/cds_lflist_delete_rcu.c
+ create mode 100644 doc/examples/rculflist/cds_lflist_find_rcu.c
+ create mode 100644 doc/examples/rculflist/cds_lflist_insert_rcu.c
+ create mode 100644 include/urcu/rculflist.h
 
 -- 
-*Ravindra Kumar Meena*,
-B. Tech. Computer Science and Engineering,
-Indian Institute of Technology (Indian School of Mines)
-<https://www.iitism.ac.in/>, Dhanbad
-
---000000000000f15e1e058d41bd0e
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Okay. The babeltrace was able to read multiple stream=
- files with one metadata but for this to get working I had to read so many =
-stream_id in metadata.</div><div>Curretn metadata looks like this:</div><di=
-v><a href=3D"https://github.com/rmeena840/rtems-tools/commit/5acaea6b5983c9=
-03ce904f17220655664b57513b">https://github.com/rmeena840/rtems-tools/commit=
-/5acaea6b5983c903ce904f17220655664b57513b</a><br></div><div><br></div><div>=
-Now, I want to reduce multiple stream_id in metadata. For this I used compa=
-ct header from your CTF documentation [1]. The new metadata looks like this=
- [2] but babeltrace gives the following error:</div><div><br></div><div>[er=
-ror] Stream 17 is not declared in metadata.<br>[error] Stream index creatio=
-n error.<br>[error] Open file stream error.<br>[warning] [Context] Cannot o=
-pen_trace of format ctf at path ctf.<br>[warning] [Context] cannot open tra=
-ce &quot;ctf&quot; from ctf for reading.<br>[error] Cannot open any trace f=
-or reading.<br><br>[error] opening trace &quot;ctf&quot; for reading.<br><b=
-r>[error] none of the specified trace paths could be opened.<br></div><div>=
-<br></div><div>Any suggestions to resolve this? Thanks</div><div><br></div>=
-<div>[1]=C2=A0<a href=3D"https://diamon.org/ctf/#spec6.1">https://diamon.or=
-g/ctf/#spec6.1</a></div><div>[2]=C2=A0<a href=3D"http://ideone.com/OltS9k">=
-http://ideone.com/OltS9k</a></div><div class=3D"gmail_quote"><blockquote cl=
-ass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid=
- rgb(204,204,204);padding-left:1ex">
-</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
- class=3D"m_3363556408289764410gmail_signature"><div dir=3D"ltr"><div><div =
-dir=3D"ltr"><font size=3D"4"><b>Ravindra Kumar Meena</b></font>,<div><span =
-style=3D"color:rgb(102,102,102)">B. Tech. Computer Science and Engineering,=
-<br></span></div><div><span style=3D"color:rgb(102,102,102)"><a href=3D"htt=
-ps://www.iitism.ac.in/" style=3D"color:rgb(17,85,204)" target=3D"_blank">In=
-dian Institute of Technology (Indian School of Mines)</a>, Dhanbad</span></=
-div></div></div></div></div></div>
-
---000000000000f15e1e058d41bd0e--
-
---===============6983610854360468358==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============6983610854360468358==--
+2.7.4
