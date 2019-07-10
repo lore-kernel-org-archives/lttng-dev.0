@@ -1,20 +1,19 @@
-From: Junchang Wang <junchangwang@gmail.com>
-Subject: [RFC 4/4] userspace-rcu: Add a brief description of
- rculflist in cds-api.md
-Date: Wed, 10 Jul 2019 11:28:10 +0800
-Message-ID: <1562729290-6437-5-git-send-email-junchangwang__18411.4226185315$1562729605$gmane$org@gmail.com>
-References: <1562729290-6437-1-git-send-email-junchangwang@gmail.com>
+From: Ravindra Kumar Meena <rmeena840@gmail.com>
+Subject: Re: How to read multiple stream file via babeltrace?
+Date: Wed, 10 Jul 2019 16:49:56 +0530
+Message-ID: <CAEWVvOQfxCgJove39P89nZVwELGc0ZCjSGOCwMzNb8OL=6KVxA__34654.2716653616$1562757648$gmane$org@mail.gmail.com>
+References: <CAEWVvOSCySxpcKw3dmmmW03Sbk1aT-+C3ZR5-LuKgt5w92pkYw@mail.gmail.com>
+ <CAEWVvORCMhp_Xq4cLpVg8yvAdxgreH8WvqZ+57iooMBMFiEFJQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5313361377518777516=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com
- [IPv6:2607:f8b0:4864:20::443])
- by lists.lttng.org (Postfix) with ESMTPS id 45k4S55pZ7z164C
- for <lttng-dev@lists.lttng.org>; Tue,  9 Jul 2019 23:29:41 -0400 (EDT)
-Received: by mail-pf1-x443.google.com with SMTP id b13so385730pfo.1
- for <lttng-dev@lists.lttng.org>; Tue, 09 Jul 2019 20:29:41 -0700 (PDT)
-In-Reply-To: <1562729290-6437-1-git-send-email-junchangwang@gmail.com>
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by lists.lttng.org (Postfix) with ESMTPS id 45kGvQ50rPz16Mk
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Jul 2019 07:20:34 -0400 (EDT)
+Received: by mail-wr1-x432.google.com with SMTP id p13so2007248wru.10
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Jul 2019 04:20:34 -0700 (PDT)
+In-Reply-To: <CAEWVvORCMhp_Xq4cLpVg8yvAdxgreH8WvqZ+57iooMBMFiEFJQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,29 +23,55 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: mathieu.desnoyers@efficios.com, lttng-dev@lists.lttng.org
-Cc: paulmck@linux.ibm.com
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Junchang Wang <junchangwang@gmail.com>
----
- doc/cds-api.md | 7 +++++++
- 1 file changed, 7 insertions(+)
+--===============5313361377518777516==
+Content-Type: multipart/alternative; boundary="00000000000093f1dc058d51dd6a"
 
-diff --git a/doc/cds-api.md b/doc/cds-api.md
-index 49a3c7c..577126a 100644
---- a/doc/cds-api.md
-+++ b/doc/cds-api.md
-@@ -82,3 +82,10 @@ are supported. Provides "uniquify add" and "replace add"
- operations, along with associated read-side traversal uniqueness
- guarantees. Automatic hash table resize based on number of
- elements is supported. See the API for more details.
-+
-+
-+### `urcu/rculflist.h`
-+
-+Ordered singly linked list with lock-free insert, delete and find operations.
-+This list relies on RCU for existence guarantees and ABA-problem prevention.
-+It is useful for implementing hash tables.
+--00000000000093f1dc058d51dd6a
+Content-Type: text/plain; charset="UTF-8"
+
+Is it possible to read(babeltrace) multiple binary stream file(32 binary
+files) with just one stream(id=0) in metadata?
+
+>
+
 -- 
-2.7.4
+*Ravindra Kumar Meena*,
+B. Tech. Computer Science and Engineering,
+Indian Institute of Technology (Indian School of Mines)
+<https://www.iitism.ac.in/>, Dhanbad
+
+--00000000000093f1dc058d51dd6a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Is it possible to read(babeltrace) multiple binary st=
+ream file(32 binary files) with just one stream(id=3D0) in metadata?</div><=
+div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=3D"margin=
+:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"=
+>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+ class=3D"gmail_signature"><div dir=3D"ltr"><div><div dir=3D"ltr"><font siz=
+e=3D"4"><b>Ravindra Kumar Meena</b></font>,<div><span style=3D"color:rgb(10=
+2,102,102)">B. Tech. Computer Science and Engineering,<br></span></div><div=
+><span style=3D"color:rgb(102,102,102)"><a href=3D"https://www.iitism.ac.in=
+/" style=3D"color:rgb(17,85,204)" target=3D"_blank">Indian Institute of Tec=
+hnology (Indian School of Mines)</a>, Dhanbad</span></div></div></div></div=
+></div></div>
+
+--00000000000093f1dc058d51dd6a--
+
+--===============5313361377518777516==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============5313361377518777516==--
