@@ -1,21 +1,19 @@
-From: "Martin, Wilson" <Wilson.Martin@gtri.gatech.edu>
-Subject: Function tracer question
-Date: Thu, 11 Jul 2019 17:45:58 +0000
-Message-ID: <D03AF9AF-DCC4-4F87-ACAD-ED14DACD0031__38704.987701361$1562867195$gmane$org@gtri.gatech.edu>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: Need help with CTF
+Date: Fri, 12 Jul 2019 09:22:03 -0400
+Message-ID: <CAB4xu_3oTAYHrmYg5pLBy+OT0rwzmEm3G0jeWxTOPnhFKPgQVg__9654.277602543$1562937769$gmane$org@mail.gmail.com>
+References: <CAEWVvOQHcvj3A=8Rufusv9Ti3aF=+yR4ZqWQFc-DpOvgVZUfvg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay3.gtri.gatech.edu (relay3.gtri.gatech.edu
- [130.207.199.162])
- by lists.lttng.org (Postfix) with ESMTPS id 45l3Pj3zZVz17l1
- for <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2019 13:46:01 -0400 (EDT)
-Received: from jekyll.core.gtri.org (jekyll.core.gtri.org [10.41.1.48]) by
- relay3.gtri.gatech.edu with ESMTP id leA80hUNpWfRRy9w (version=TLSv1.2
- cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=NO) for
- <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2019 13:45:59 -0400 (EDT)
-Content-Language: en-US
-Content-ID: <B27F71895352EF40A317ED054CAA7632@gtri.org>
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by lists.lttng.org (Postfix) with ESMTPS id 45lYWD0t3Bz1DGn
+ for <lttng-dev@lists.lttng.org>; Fri, 12 Jul 2019 09:22:31 -0400 (EDT)
+Received: by mail-lf1-x134.google.com with SMTP id h28so6477198lfj.5
+ for <lttng-dev@lists.lttng.org>; Fri, 12 Jul 2019 06:22:31 -0700 (PDT)
+In-Reply-To: <CAEWVvOQHcvj3A=8Rufusv9Ti3aF=+yR4ZqWQFc-DpOvgVZUfvg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,39 +23,61 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Ravindra Kumar Meena <rmeena840@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-U28sIHRoaXMgaXMgbWFpbmx5IGZvciBhIGtlcm5lbCBmdW5jdGlvbi4gRGV0YWlscyBiZWxvdzoN
-CnVuc2lnbmVkIGludCBnZXRfcmFuZG9tX2ludCh2b2lkKTsNCg0KbHR0bmcgZW5hYmxlLWV2ZW50
-IGdldF9yYW5kb21faW50IC0ta2VybmVsIC0tZnVuY3Rpb24gZ2V0X3JhbmRvbV9pbnQNCg0KZ2V0
-X3JhbmRvbV9pbnRfZW50cnk6IHsgY3B1X2lkID0gMCB9LCB7IHBpZCA9IDIyNTk2LCB0aWQgPSAy
-MjU5NiB9LCB7IGlwID0gMHhGRkZGRkZGRjgxNTJCOEIwLCBwYXJlbnRfaXAgPSAweEZGRkZGRkZG
-ODEwNkY4QjUgfQ0KZ2V0X3JhbmRvbV9pbnRfcmV0dXJuOiB7IGNwdV9pZCA9IDAgfSwgeyBwaWQg
-PSAyMjU5NiwgdGlkID0gMjI1OTYgfSwgeyBpcCA9IDB4RkZGRkZGRkY4MTUyQjhCMCwgcGFyZW50
-X2lwID0gMHhGRkZGRkZGRjgxMjZDQzZBIH0NCg0KSSBkb27igJl0IGdldCB0aGUgcmV0dXJuIHZh
-bHVlIGZyb20gdGhlIHRyYWNlLiBTbywgaG93IGRvIEkgY2FwdHVyZSB0aGF0Pw0KQW5kLCBmb3Ig
-b3RoZXIga2VybmVsIGZ1bmN0aW9ucywgaG93IGRvIEkgY2FwdHVyZSB0aGUgZnVuY3Rpb24gYXJn
-dW1lbnRzPw0KDQpSZWdhcmRpbmcgdGhlIGtlcm5lbHMgYnVpbHQtaW4gZnRyYWNlIHN5c3RlbSwg
-eW91IGNhbiBjYXB0dXJlIGFueSBmdW5jdGlvbnMgYXJndW1lbnRzIGFuZCByZXR1cm4gdmFsdWUu
-IFRoZSBmdHJhY2Ugc3lzY2FsbCBjYXB0dXJlIGlzIGEgZ29vZCBleGFtcGxlOiAoTlI9MCAtPiBz
-eXNfcmVhZCkNCnNzaGQtMjAwNjUgWzAwMF0gMTk4NzEzMS43MDI4NzE6IHN5c19lbnRlcjogICAg
-ICAgICAgICBOUiAwIChiLCAzMGY2NDM4MCwgNDAwMCwgOCwgMCwgMCkNCnNzaGQtMjAwNjUgWzAw
-MF0gMTk4NzEzMS43MDI4NzE6IHN5c19leGl0OiAgICAgICAgICAgICBOUiAwID0gMg0KDQpFeGFt
-cGxlIGZyb20gbHR0bmcgc3lzY2FsbCBjYXB0dXJlLCB3aXRoIGFyZ3MgYW5kIHJldHVybjoNCnN5
-c2NhbGxfZW50cnlfcmVhZDogeyBjcHVfaWQgPSAwIH0sIHsgcGlkID0gMjI1OTYsIHRpZCA9IDIy
-NTk2IH0sIHsgZmQgPSAzLCBjb3VudCA9IDgzMiB9DQpzeXNjYWxsX2V4aXRfcmVhZDogeyBjcHVf
-aWQgPSAwIH0sIHsgcGlkID0gMjI1OTYsIHRpZCA9IDIyNTk2IH0sIHsgcmV0ID0gODMyLCBidWYg
-PSAxNDA3MjI3NTExMjEzMzYgfQ0KDQpTbywgbGV04oCZcyBhbHNvIHNheSB0aGF0IHRoZSBidWls
-dC1pbiBjYXBhYmlsaXRpZXMganVzdCBkb27igJl0IHN1cHBvcnQgd2hhdCBJIHdhbnQuDQpXaGF0
-IGlmIEkgd2VyZSB0byBkZXZlbG9wIGEgY3VzdG9tIGtlcm5lbCBwcm9iZSB1c2luZyB0aGUgTFRU
-TkdfKiBtYWNyb3M/DQpIb3cgd291bGQgSSBnbyBhYm91dCBjYXB0dXJpbmcgc29tZSBuYW1lZCBm
-dW5jdGlvbiAobm9uLXRyYWNlcG9pbnQpPyBBbmQsIGl0cyBhcmd1bWVudHMgYW5kIHJldHVybiB2
-YWx1ZT8NCkhvdyB3b3VsZCBJIGdvIGFib3V0IG1ha2luZyBhIGN1c3RvbSBzeXNjYWxsIHByb2Jl
-IHRoYXQgYWRkcyBhZGRpdGlvbmFsIGFyZ3VtZW50cyB0byB0aGUgY29udGV4dD8NCg0KSSBndWVz
-cyBJIGNvdWxkIGNvZGUgbXkgb3duIGZ0cmFjZSBob29rIGZ1bmN0aW9uLCBwdXQgYSBjdXN0b20g
-dHJhY2Vwb2ludCBpbiB0aGUgY29kZSwgYW5kIHRoZW4gdXNlIHRoZSBtYWNyb3MgdG8gcHVzaCBp
-bnRvIGx0dG5nIHJpbmcgYnVmZmVycy4gTWF5YmU/DQoNClRoYW5rcywNCndpbHNvbg0KDQpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+On Fri, Jul 12, 2019 at 2:04 AM Ravindra Kumar Meena
+<rmeena840@gmail.com> wrote:
+>
+> Hi developers,
+>
+> trace {
+>     major = 1;
+>     minor = 8;
+>     uuid = "6a7715d0-b502-4c65-8678-6777ac7f755a";
+>     byte_order = le;
+>     packet.header := struct {
+>         uint32_t magic;
+>         uint8_t  uuid[16];
+>         uint32_t stream_id;
+>         uint64_t stream_instance_id;
+>     };
+> };
+>
+> In the above what does stream_instance_id does? In CTF documentation [1] it looks like packet.header can contain three values(magic, uuid, stream_id) then what is stream_instance_id?
+
+This is the ID of the stream itself, whereas `stream_id` is in fact the
+ID of the class or type of stream. Many streams (one per CPU, for
+example) can share the same stream class ID (`stream_id`), but have
+different stream IDs (`stream_instance_id`).
+
+In LTTng, we use the stream ID property to group different stream files
+which contain data which belong to the same logical stream, in
+particular when you use the trace file rotation feature. It's important
+to do that because otherwise you can't know which stream file contains
+which stream. There's `cpu_id` in the packet context, but that's not
+specified.
+
+When the `stream_instance_id` member does not exist, then, for a CTF
+trace on the file system, each stream file implicitly represents a
+different stream.
+
+>
+> Please attend this ASAP
+
+Was that turnaround time good enough for you?
+
+Phil
+
+>
+> Thanks
+>
+> --
+> Ravindra Kumar Meena,
+> B. Tech. Computer Science and Engineering,
+> Indian Institute of Technology (Indian School of Mines), Dhanbad
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
