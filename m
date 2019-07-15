@@ -1,19 +1,20 @@
-From: Ravindra Kumar Meena <rmeena840@gmail.com>
-Subject: Re: Need help with CTF
-Date: Mon, 15 Jul 2019 21:07:17 +0530
-Message-ID: <CAEWVvOSL0TbGYPW6bPwYrP=KHQ5bJ_mqjFs7Rp+hZThnMkfj7Q__31905.5520625383$1563205098$gmane$org@mail.gmail.com>
-References: <CAEWVvOQHcvj3A=8Rufusv9Ti3aF=+yR4ZqWQFc-DpOvgVZUfvg@mail.gmail.com>
- <CAB4xu_3oTAYHrmYg5pLBy+OT0rwzmEm3G0jeWxTOPnhFKPgQVg@mail.gmail.com>
+From: Yiteng Guo <guoyiteng@gmail.com>
+Subject: Re: HugePages shared memory support in LLTng
+Date: Mon, 15 Jul 2019 15:21:28 -0400
+Message-ID: <CAO+PNdHW7O98QSdWyA5U6e=gtLmdFt77wHOT=eHb-Py1W3A-oQ__10438.2545848907$1563218516$gmane$org@mail.gmail.com>
+References: <CAO+PNdHdLFk=Q0L2BLGnz8xCvdgMw3aYpZuAZumBOWKraKTnAw@mail.gmail.com>
+ <20190715143302.GA2017@joraj-alpa>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3249643077259330601=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by lists.lttng.org (Postfix) with ESMTPS id 45nSN35Ttkz16CR
- for <lttng-dev@lists.lttng.org>; Mon, 15 Jul 2019 11:37:55 -0400 (EDT)
-Received: by mail-wr1-x435.google.com with SMTP id 31so17650714wrm.1
- for <lttng-dev@lists.lttng.org>; Mon, 15 Jul 2019 08:37:55 -0700 (PDT)
-In-Reply-To: <CAB4xu_3oTAYHrmYg5pLBy+OT0rwzmEm3G0jeWxTOPnhFKPgQVg@mail.gmail.com>
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by lists.lttng.org (Postfix) with ESMTPS id 45nYLD5CSxz16Ls
+ for <lttng-dev@lists.lttng.org>; Mon, 15 Jul 2019 15:21:40 -0400 (EDT)
+Received: by mail-wr1-x432.google.com with SMTP id r1so18285968wrl.7
+ for <lttng-dev@lists.lttng.org>; Mon, 15 Jul 2019 12:21:40 -0700 (PDT)
+In-Reply-To: <20190715143302.GA2017@joraj-alpa>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,143 +24,282 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============3249643077259330601==
-Content-Type: multipart/alternative; boundary="00000000000028a62e058dba0b81"
+Hi Jonathan,
 
---00000000000028a62e058dba0b81
-Content-Type: text/plain; charset="UTF-8"
+Thank you for your prompt reply.
 
+On Mon, Jul 15, 2019 at 10:33 AM Jonathan Rajotte-Julien
+<jonathan.rajotte-julien@efficios.com> wrote:
 >
-> > trace {
-> >     major = 1;
-> >     minor = 8;
-> >     uuid = "6a7715d0-b502-4c65-8678-6777ac7f755a";
-> >     byte_order = le;
-> >     packet.header := struct {
-> >         uint32_t magic;
-> >         uint8_t  uuid[16];
-> >         uint32_t stream_id;
-> >         uint64_t stream_instance_id;
-> >     };
-> > };
+> Hi Yiteng,
+>
+> On Fri, Jul 12, 2019 at 06:18:44PM -0400, Yiteng Guo wrote:
+> > Hello,
 > >
-> > In the above what does stream_instance_id does? In CTF documentation [1]
-> it looks like packet.header can contain three values(magic, uuid,
-> stream_id) then what is stream_instance_id?
->
-> This is the ID of the stream itself, whereas `stream_id` is in fact the
-> ID of the class or type of stream. Many streams (one per CPU, for
-> example) can share the same stream class ID (`stream_id`), but have
-> different stream IDs (`stream_instance_id`).
-
-
-Okay. This was very helpful. I have a doubt about packet.context.
-
-struct packet_context {
-uint64_clock_monotonic_t timestamp_begin;
-uint64_clock_monotonic_t timestamp_end;
-uint64_t content_size;
-uint64_t packet_size;
-uint64_t packet_seq_num;
-unsigned long events_discarded;
-uint32_t cpu_id;
-};
-
-In CTF documentation information is provided about all packet.context
-members except for packet_seq_num and events_discarded. Some of them just
-have the name on CTF documentation.
-
-What are these two variables(packet_seq_num and events_discarded)?
-
-
+> > I am wondering if there is any way for lttng-ust to create its shm on
+> > hugepages. I noticed that there was an option `--shm-path` which can be
+> > used to change the location of shm. However, if I specified the path to a
+> > `hugetlbfs` such as /dev/hugepages, I would get errors in lttng-sessiond
+> > and no trace data were generated.
 > >
-> > Please attend this ASAP
+> > The error I got was
+> > ```
+> > PERROR - 17:54:56.740674 [8163/8168]: Error appending to metadata file:
+> > Invalid argument (in lttng_metadata_printf() at ust-metadata.c:176)
+> > Error: Failed to generate session metadata (errno = -1)
+> > ```
+> > I took a look at lttng code base and found that lttng used `write` to
+> > generate a metadata file under `--shm-path`. However, it looks like
+> > `hugetlbfs` does not support `write` operation. I did a simple patch with
+> > `mmap` to get around this problem. Then, I got another error:
 >
-> Was that turnaround time good enough for you?
+> Would you be interested in sharing this patch so we can help you figure out the
+> problem?
 >
-Thanks for helping me out. I am GSoC 2019 student at RTEMS. I have been
-assigned a few tasks which I have to complete before 22nd July. The 2nd
-evaluation will begin on 22nd July.
-That's why I am in a rush. :) :)
+> A github branch would be perfect.
+>
 
+You can check out my patch here:
+https://github.com/guoyiteng/lttng-tools/compare/master...guoyiteng:hugepage
 
--- 
-*Ravindra Kumar Meena*,
-B. Tech. Computer Science and Engineering,
-Indian Institute of Technology (Indian School of Mines)
-<https://www.iitism.ac.in/>, Dhanbad
+> > ```
+> > Error: Error creating UST channel "my-channel" on the consumer daemon
+> > ```
+>
+> Make sure to pass "--verbose-consumer" to lttng-sessiond. It will ensure that
+> the lttng-consumerd output is present in lttng-sesssiond logs. It should help a
+> bit
+>
+> I suspect that we fail on buffers allocation.
+>
 
---00000000000028a62e058dba0b81
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+After I passed "--verbose-consumer", I got the following logs.
 
-<div dir=3D"ltr"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quot=
-e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
-;padding-left:1ex">&gt; trace {<br>
-&gt;=C2=A0 =C2=A0 =C2=A0major =3D 1;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0minor =3D 8;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0uuid =3D &quot;6a7715d0-b502-4c65-8678-6777ac7f755a=
-&quot;;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0byte_order =3D le;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0packet.header :=3D struct {<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uint32_t magic;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uint8_t=C2=A0 uuid[16];<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uint32_t stream_id;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uint64_t stream_instance_id;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0};<br>
-&gt; };<br>
-&gt;<br>
-&gt; In the above what does stream_instance_id does? In CTF documentation [=
-1] it looks like packet.header can contain three values(magic, uuid, stream=
-_id) then what is stream_instance_id?<br>
-<br>
-This is the ID of the stream itself, whereas `stream_id` is in fact the<br>
-ID of the class or type of stream. Many streams (one per CPU, for<br>
-example) can share the same stream class ID (`stream_id`), but have<br>
-different stream IDs (`stream_instance_id`).</blockquote><div>=C2=A0</div><=
-div>Okay. This was very helpful. I have a doubt about packet.context.</div>=
-<div><br></div><div>struct packet_context {<br>	uint64_clock_monotonic_t ti=
-mestamp_begin;<br>	uint64_clock_monotonic_t timestamp_end;<br>	uint64_t con=
-tent_size;<br>	uint64_t packet_size;<br>	uint64_t packet_seq_num;<br>	unsig=
-ned long events_discarded;<br>	uint32_t cpu_id;<br>};<br></div><div><br></d=
-iv><div>In CTF documentation information is provided about all packet.conte=
-xt members except for packet_seq_num and events_discarded. Some of them jus=
-t have the name on CTF documentation.</div><div><br></div><div>What are the=
-se two variables(packet_seq_num and events_discarded)?</div><div><br></div>=
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-&gt;<br>
-&gt; Please attend this ASAP<br>
-<br>
-Was that turnaround time good enough for you?<br></blockquote><div>Thanks f=
-or helping me out. I am GSoC 2019 student at RTEMS. I have been assigned a =
-few tasks which I have to complete before 22nd July. The 2nd evaluation wil=
-l begin on 22nd July.</div><div>That&#39;s why I am in a rush. :) :)</div><=
-/div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr" class=3D"m_-8=
-678806957642640150gmail_signature"><div dir=3D"ltr"><div><div dir=3D"ltr"><=
-font size=3D"4"><b>Ravindra Kumar Meena</b></font>,<div><span style=3D"colo=
-r:rgb(102,102,102)">B. Tech. Computer Science and Engineering,<br></span></=
-div><div><span style=3D"color:rgb(102,102,102)"><a href=3D"https://www.iiti=
-sm.ac.in/" style=3D"color:rgb(17,85,204)" target=3D"_blank">Indian Institut=
-e of Technology (Indian School of Mines)</a>, Dhanbad</span></div></div></d=
-iv></div></div></div>
+DEBUG1 - 18:59:55.773387304 [8844/8844]: Health check time delta in
+seconds set to 20 (in health_init() at health.c:73)
+DEBUG3 - 18:59:55.773544396 [8844/8844]: Created hashtable size 4 at
+0x5625c427d4c0 of type 2 (in lttng_ht_new() at hashtable.c:145)
+DEBUG3 - 18:59:55.773560630 [8844/8844]: Created hashtable size 4 at
+0x5625c427dc00 of type 2 (in lttng_ht_new() at hashtable.c:145)
+DEBUG3 - 18:59:55.773566277 [8844/8844]: Created hashtable size 4 at
+0x5625c427df30 of type 2 (in lttng_ht_new() at hashtable.c:145)
+DEBUG3 - 18:59:55.773572450 [8844/8844]: Created hashtable size 4 at
+0x5625c427ead0 of type 2 (in lttng_ht_new() at hashtable.c:145)
+DEBUG3 - 18:59:55.773576515 [8844/8844]: Created hashtable size 4 at
+0x5625c427f210 of type 2 (in lttng_ht_new() at hashtable.c:145)
+DEBUG3 - 18:59:55.773582290 [8844/8844]: Created hashtable size 4 at
+0x5625c427f950 of type 2 (in lttng_ht_new() at hashtable.c:145)
+DEBUG1 - 18:59:55.773605669 [8844/8844]: TCP inet operation timeout
+set to 216 sec (in lttcomm_inet_init() at inet.c:546)
+DEBUG1 - 18:59:55.773627249 [8844/8844]: Connecting to error socket
+/home/vagrant/.lttng/ustconsumerd64/error (in main() at
+lttng-consumerd.c:464)
+DEBUG1 - 18:59:55.773767487 [8844/8848]: [thread] Manage health check
+started (in thread_manage_health() at health-consumerd.c:167)
+DEBUG1 - 18:59:55.773849241 [8844/8848]: epoll set max size is 1659863
+(in compat_epoll_set_max_size() at compat-epoll.c:337)
+DEBUG1 - 18:59:55.773884368 [8844/8848]: Health check ready (in
+thread_manage_health() at health-consumerd.c:247)
+DEBUG3 - 18:59:55.883547291 [8844/8850]: Created hashtable size 4 at
+0x7ff5ec000b40 of type 2 (in lttng_ht_new() at hashtable.c:145)
+DEBUG1 - 18:59:55.884682278 [8844/8850]: Thread channel poll started
+(in consumer_thread_channel_poll() at consumer.c:2941)
+DEBUG1 - 18:59:55.883573028 [8844/8853]: Creating command socket
+/home/vagrant/.lttng/ustconsumerd64/command (in
+consumer_thread_sessiond_poll() at consumer.c:3204)
+DEBUG1 - 18:59:55.885435478 [8844/8853]: Sending ready command to
+lttng-sessiond (in consumer_thread_sessiond_poll() at consumer.c:3217)
+DEBUG1 - 18:59:55.883646301 [8844/8852]: Updating poll fd array (in
+update_poll_array() at consumer.c:1103)
+DEBUG1 - 18:59:55.885574718 [8844/8853]: Connection on client_socket
+(in consumer_thread_sessiond_poll() at consumer.c:3239)
+DEBUG1 - 18:59:55.885583183 [8844/8852]: polling on 2 fd (in
+consumer_thread_data_poll() at consumer.c:2630)
+DEBUG1 - 18:59:55.885596572 [8844/8853]: Metadata connection on
+client_socket (in set_metadata_socket() at consumer.c:3165)
+DEBUG1 - 18:59:55.885612073 [8844/8853]: Incoming command on sock (in
+consumer_thread_sessiond_poll() at consumer.c:3285)
+DEBUG1 - 18:59:55.883553158 [8844/8851]: Thread metadata poll started
+(in consumer_thread_metadata_poll() at consumer.c:2351)
+DEBUG1 - 18:59:55.885714717 [8844/8851]: Metadata main loop started
+(in consumer_thread_metadata_poll() at consumer.c:2367)
+DEBUG1 - 18:59:55.885726270 [8844/8851]: Metadata poll wait (in
+consumer_thread_metadata_poll() at consumer.c:2373)
+DEBUG1 - 18:59:55.885781919 [8844/8853]: Received channel monitor pipe
+(29) (in lttng_ustconsumer_recv_cmd() at ust-consumer.c:1903)
+DEBUG1 - 18:59:55.885803340 [8844/8853]: Channel monitor pipe set as
+non-blocking (in lttng_ustconsumer_recv_cmd() at ust-consumer.c:1924)
+DEBUG1 - 18:59:55.885810860 [8844/8853]: received command on sock (in
+consumer_thread_sessiond_poll() at consumer.c:3301)
+DEBUG1 - 18:59:55.887146328 [8844/8850]: Channel main loop started (in
+consumer_thread_channel_poll() at consumer.c:2956)
+DEBUG1 - 18:59:55.887497303 [8844/8850]: Channel poll wait (in
+consumer_thread_channel_poll() at consumer.c:2961)
+DEBUG1 - 18:59:55.892440821 [8844/8853]: Incoming command on sock (in
+consumer_thread_sessiond_poll() at consumer.c:3285)
+DEBUG1 - 18:59:55.892479711 [8844/8853]: Consumer mkdir
+/home/vagrant/lttng-traces/auto-20190715-185955//ust in session 0 (in
+lttng_ustconsumer_recv_cmd() at ust-consumer.c:2093)
+DEBUG3 - 18:59:55.892486547 [8844/8853]: mkdirat() recursive fd = -100
+(AT_FDCWD), path =
+/home/vagrant/lttng-traces/auto-20190715-185955//ust, mode = 504, uid
+= 1000, gid = 1000 (in run_as_mkdirat_recursive() at runas.c:1147)
+DEBUG1 - 18:59:55.892500964 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG1 - 18:59:55.892852801 [8844/8853]: received command on sock (in
+consumer_thread_sessiond_poll() at consumer.c:3301)
+DEBUG1 - 18:59:57.964977091 [8844/8853]: Incoming command on sock (in
+consumer_thread_sessiond_poll() at consumer.c:3285)
+DEBUG1 - 18:59:57.965041124 [8844/8853]: Allocated channel (key 1) (in
+consumer_allocate_channel() at consumer.c:1043)
+DEBUG3 - 18:59:57.965052309 [8844/8853]: Creating channel to ustctl
+with attr: [overwrite: 0, subbuf_size: 524288, num_subbuf: 4,
+switch_timer_interval: 0, read_timer_interval: 0, output: 0, type: 0
+(in create_ust_channel() at ust-consumer.c:457)
+DEBUG3 - 18:59:57.965104805 [8844/8853]: open()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_0
+with flags C2 mode 384 for uid 1000 and gid 1000 (in run_as_open() at
+runas.c:1212)
+DEBUG1 - 18:59:57.965120609 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.965317517 [8844/8853]: open()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_1
+with flags C2 mode 384 for uid 1000 and gid 1000 (in run_as_open() at
+runas.c:1212)
+DEBUG1 - 18:59:57.965335148 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.965445811 [8844/8853]: open()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_2
+with flags C2 mode 384 for uid 1000 and gid 1000 (in run_as_open() at
+runas.c:1212)
+DEBUG1 - 18:59:57.965461438 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.966116363 [8844/8853]: open()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_3
+with flags C2 mode 384 for uid 1000 and gid 1000 (in run_as_open() at
+runas.c:1212)
+DEBUG1 - 18:59:57.966145191 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.966341799 [8844/8853]: open()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_4
+with flags C2 mode 384 for uid 1000 and gid 1000 (in run_as_open() at
+runas.c:1212)
+DEBUG1 - 18:59:57.966420313 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.966548533 [8844/8853]: open()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_5
+with flags C2 mode 384 for uid 1000 and gid 1000 (in run_as_open() at
+runas.c:1212)
+DEBUG1 - 18:59:57.966567778 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.966932907 [8844/8853]: unlink()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_5
+with for uid 1000 and gid 1000 (in run_as_unlink() at runas.c:1233)
+DEBUG1 - 18:59:57.966950256 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.967061802 [8844/8853]: unlink()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_4
+with for uid 1000 and gid 1000 (in run_as_unlink() at runas.c:1233)
+DEBUG1 - 18:59:57.967081332 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.967366982 [8844/8853]: unlink()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_3
+with for uid 1000 and gid 1000 (in run_as_unlink() at runas.c:1233)
+DEBUG1 - 18:59:57.967419957 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.967562353 [8844/8853]: unlink()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_2
+with for uid 1000 and gid 1000 (in run_as_unlink() at runas.c:1233)
+DEBUG1 - 18:59:57.967587355 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.968008237 [8844/8853]: unlink()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_1
+with for uid 1000 and gid 1000 (in run_as_unlink() at runas.c:1233)
+DEBUG1 - 18:59:57.968104447 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.968327138 [8844/8853]: unlink()
+/dev/hugepages/auto-20190715-185955/ust/uid/1000/64-bit/channel0_0
+with for uid 1000 and gid 1000 (in run_as_unlink() at runas.c:1233)
+DEBUG1 - 18:59:57.968349750 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG3 - 18:59:57.968562473 [8844/8853]: rmdir_recursive()
+/dev/hugepages/auto-20190715-185955 with for uid 1000 and gid 1000 (in
+run_as_rmdir_recursive() at runas.c:1251)
+DEBUG1 - 18:59:57.968582498 [8844/8853]: Using run_as worker (in
+run_as() at runas.c:1100)
+DEBUG1 - 18:59:57.968934753 [8844/8853]: UST consumer cleaning stream
+list (in destroy_channel() at ust-consumer.c:67)
+DEBUG1 - 18:59:57.969019502 [8844/8853]: received command on sock (in
+consumer_thread_sessiond_poll() at consumer.c:3301)
+Error: ask_channel_creation consumer command failed
+Error: Error creating UST channel "channel0" on the consumer daemon
 
---00000000000028a62e058dba0b81--
+> > This time, I could not locate the problem anymore :(. Do you have any idea
+> > of how to get hugepages shm work in lttng?
+> >
+> > To give you more context here, I was tracing a performance sensitive
+> > program. I didn't want to suffer from the sub-buffer switch cost so I
+> > created a very large sub-buffer (1MB).
+>
+> If you don't mind, how many core are present? How much memory is available on
+> the host?
 
---===============3249643077259330601==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+I compiled and played around with lttng source codes on my vagrant vm
+environment. I assigned 6 cores and 7.8G memory to it. My vm OS is
+Ubuntu 18.04.2 LTS (GNU/Linux 4.15.0-51-generic x86_64).
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+> Could you share with us the complete sequence of command you use to setup your
+> tracing session?
+>
 
---===============3249643077259330601==--
+I used the following commands to test if lttng works with hugepages.
+```
+lttng create --shm-path=/dev/hugepages
+lttng enable-event --userspace hello_world:my_first_tracepoint
+lttng start
+```
+And the binary program I traced was the hello_world example in lttng
+documentation page.
+
+> If it is not much trouble could you also share the step you took to setup/mount
+> your hugetlbfs path?
+>
+
+I followed the first section in https://wiki.debian.org/Hugepages to
+set up my hugetlbfs, except I used /dev/hugepages instead of
+/hugepages.
+
+> > I did a benchmark on my tracepoint
+> > and noticed that after running a certain number of tracepoints, I got a
+> > noticeably larger overhead (1200ns larger than other) for every ~130
+> > tracepoints. It turned out that this large overhead was due to a page
+> > fault. The numbers were matched up (130 * 32 bytes = 4160 bytes, which is
+> > approximately the size of a normal page 4kB) and I also used lttng perf
+> > page fault counters to verify it. Therefore, I am looking for a solution to
+> > have lttng create shm on hugepages.
+>
+> Quite interesting!
+>
+> >
+> > Thank you very much! I look forward to hearing from you.
+> >
+> > Best,
+> > Yiteng
+>
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+> --
+> Jonathan Rajotte-Julien
+> EfficiOS
+
+Best,
+Yiteng
