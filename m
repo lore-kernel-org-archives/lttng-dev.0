@@ -1,20 +1,19 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: HugePages shared memory support in LLTng
-Date: Mon, 15 Jul 2019 10:33:02 -0400
-Message-ID: <20190715143302.GA2017__45059.7121309087$1563201209$gmane$org@joraj-alpa>
-References: <CAO+PNdHdLFk=Q0L2BLGnz8xCvdgMw3aYpZuAZumBOWKraKTnAw@mail.gmail.com>
+From: Ravindra Kumar Meena <rmeena840@gmail.com>
+Subject: Re: Need help with CTF
+Date: Mon, 15 Jul 2019 21:07:17 +0530
+Message-ID: <CAEWVvOSL0TbGYPW6bPwYrP=KHQ5bJ_mqjFs7Rp+hZThnMkfj7Q__31905.5520625383$1563205098$gmane$org@mail.gmail.com>
+References: <CAEWVvOQHcvj3A=8Rufusv9Ti3aF=+yR4ZqWQFc-DpOvgVZUfvg@mail.gmail.com>
+ <CAB4xu_3oTAYHrmYg5pLBy+OT0rwzmEm3G0jeWxTOPnhFKPgQVg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3249643077259330601=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45nQxN3JHtz168R
- for <lttng-dev@lists.lttng.org>; Mon, 15 Jul 2019 10:33:12 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id AF13F24AD0A
- for <lttng-dev@lists.lttng.org>; Mon, 15 Jul 2019 10:33:06 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <CAO+PNdHdLFk=Q0L2BLGnz8xCvdgMw3aYpZuAZumBOWKraKTnAw@mail.gmail.com>
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by lists.lttng.org (Postfix) with ESMTPS id 45nSN35Ttkz16CR
+ for <lttng-dev@lists.lttng.org>; Mon, 15 Jul 2019 11:37:55 -0400 (EDT)
+Received: by mail-wr1-x435.google.com with SMTP id 31so17650714wrm.1
+ for <lttng-dev@lists.lttng.org>; Mon, 15 Jul 2019 08:37:55 -0700 (PDT)
+In-Reply-To: <CAB4xu_3oTAYHrmYg5pLBy+OT0rwzmEm3G0jeWxTOPnhFKPgQVg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,86 +23,143 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Yiteng Guo <guoyiteng@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: Philippe Proulx <eeppeliteloop@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Yiteng,
+--===============3249643077259330601==
+Content-Type: multipart/alternative; boundary="00000000000028a62e058dba0b81"
 
-On Fri, Jul 12, 2019 at 06:18:44PM -0400, Yiteng Guo wrote:
-> Hello,
-> 
-> I am wondering if there is any way for lttng-ust to create its shm on
-> hugepages. I noticed that there was an option `--shm-path` which can be
-> used to change the location of shm. However, if I specified the path to a
-> `hugetlbfs` such as /dev/hugepages, I would get errors in lttng-sessiond
-> and no trace data were generated.
-> 
-> The error I got was
-> ```
-> PERROR - 17:54:56.740674 [8163/8168]: Error appending to metadata file:
-> Invalid argument (in lttng_metadata_printf() at ust-metadata.c:176)
-> Error: Failed to generate session metadata (errno = -1)
-> ```
-> I took a look at lttng code base and found that lttng used `write` to
-> generate a metadata file under `--shm-path`. However, it looks like
-> `hugetlbfs` does not support `write` operation. I did a simple patch with
-> `mmap` to get around this problem. Then, I got another error:
+--00000000000028a62e058dba0b81
+Content-Type: text/plain; charset="UTF-8"
 
-Would you be interested in sharing this patch so we can help you figure out the
-problem?
+>
+> > trace {
+> >     major = 1;
+> >     minor = 8;
+> >     uuid = "6a7715d0-b502-4c65-8678-6777ac7f755a";
+> >     byte_order = le;
+> >     packet.header := struct {
+> >         uint32_t magic;
+> >         uint8_t  uuid[16];
+> >         uint32_t stream_id;
+> >         uint64_t stream_instance_id;
+> >     };
+> > };
+> >
+> > In the above what does stream_instance_id does? In CTF documentation [1]
+> it looks like packet.header can contain three values(magic, uuid,
+> stream_id) then what is stream_instance_id?
+>
+> This is the ID of the stream itself, whereas `stream_id` is in fact the
+> ID of the class or type of stream. Many streams (one per CPU, for
+> example) can share the same stream class ID (`stream_id`), but have
+> different stream IDs (`stream_instance_id`).
 
-A github branch would be perfect.
 
-> ```
-> Error: Error creating UST channel "my-channel" on the consumer daemon
-> ```
+Okay. This was very helpful. I have a doubt about packet.context.
 
-Make sure to pass "--verbose-consumer" to lttng-sessiond. It will ensure that
-the lttng-consumerd output is present in lttng-sesssiond logs. It should help a
-bit
+struct packet_context {
+uint64_clock_monotonic_t timestamp_begin;
+uint64_clock_monotonic_t timestamp_end;
+uint64_t content_size;
+uint64_t packet_size;
+uint64_t packet_seq_num;
+unsigned long events_discarded;
+uint32_t cpu_id;
+};
 
-I suspect that we fail on buffers allocation.
+In CTF documentation information is provided about all packet.context
+members except for packet_seq_num and events_discarded. Some of them just
+have the name on CTF documentation.
 
-> This time, I could not locate the problem anymore :(. Do you have any idea
-> of how to get hugepages shm work in lttng?
-> 
-> To give you more context here, I was tracing a performance sensitive
-> program. I didn't want to suffer from the sub-buffer switch cost so I
-> created a very large sub-buffer (1MB).
+What are these two variables(packet_seq_num and events_discarded)?
 
-If you don't mind, how many core are present? How much memory is available on
-the host?
 
-Could you share with us the complete sequence of command you use to setup your
-tracing session?
-
-If it is not much trouble could you also share the step you took to setup/mount
-your hugetlbfs path?
-
-> I did a benchmark on my tracepoint
-> and noticed that after running a certain number of tracepoints, I got a
-> noticeably larger overhead (1200ns larger than other) for every ~130
-> tracepoints. It turned out that this large overhead was due to a page
-> fault. The numbers were matched up (130 * 32 bytes = 4160 bytes, which is
-> approximately the size of a normal page 4kB) and I also used lttng perf
-> page fault counters to verify it. Therefore, I am looking for a solution to
-> have lttng create shm on hugepages.
-
-Quite interesting!
-
-> 
-> Thank you very much! I look forward to hearing from you.
-> 
-> Best,
-> Yiteng
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
+> > Please attend this ASAP
+>
+> Was that turnaround time good enough for you?
+>
+Thanks for helping me out. I am GSoC 2019 student at RTEMS. I have been
+assigned a few tasks which I have to complete before 22nd July. The 2nd
+evaluation will begin on 22nd July.
+That's why I am in a rush. :) :)
 
 
 -- 
-Jonathan Rajotte-Julien
-EfficiOS
+*Ravindra Kumar Meena*,
+B. Tech. Computer Science and Engineering,
+Indian Institute of Technology (Indian School of Mines)
+<https://www.iitism.ac.in/>, Dhanbad
+
+--00000000000028a62e058dba0b81
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
+;padding-left:1ex">&gt; trace {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0major =3D 1;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0minor =3D 8;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0uuid =3D &quot;6a7715d0-b502-4c65-8678-6777ac7f755a=
+&quot;;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0byte_order =3D le;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0packet.header :=3D struct {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uint32_t magic;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uint8_t=C2=A0 uuid[16];<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uint32_t stream_id;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uint64_t stream_instance_id;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0};<br>
+&gt; };<br>
+&gt;<br>
+&gt; In the above what does stream_instance_id does? In CTF documentation [=
+1] it looks like packet.header can contain three values(magic, uuid, stream=
+_id) then what is stream_instance_id?<br>
+<br>
+This is the ID of the stream itself, whereas `stream_id` is in fact the<br>
+ID of the class or type of stream. Many streams (one per CPU, for<br>
+example) can share the same stream class ID (`stream_id`), but have<br>
+different stream IDs (`stream_instance_id`).</blockquote><div>=C2=A0</div><=
+div>Okay. This was very helpful. I have a doubt about packet.context.</div>=
+<div><br></div><div>struct packet_context {<br>	uint64_clock_monotonic_t ti=
+mestamp_begin;<br>	uint64_clock_monotonic_t timestamp_end;<br>	uint64_t con=
+tent_size;<br>	uint64_t packet_size;<br>	uint64_t packet_seq_num;<br>	unsig=
+ned long events_discarded;<br>	uint32_t cpu_id;<br>};<br></div><div><br></d=
+iv><div>In CTF documentation information is provided about all packet.conte=
+xt members except for packet_seq_num and events_discarded. Some of them jus=
+t have the name on CTF documentation.</div><div><br></div><div>What are the=
+se two variables(packet_seq_num and events_discarded)?</div><div><br></div>=
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+&gt;<br>
+&gt; Please attend this ASAP<br>
+<br>
+Was that turnaround time good enough for you?<br></blockquote><div>Thanks f=
+or helping me out. I am GSoC 2019 student at RTEMS. I have been assigned a =
+few tasks which I have to complete before 22nd July. The 2nd evaluation wil=
+l begin on 22nd July.</div><div>That&#39;s why I am in a rush. :) :)</div><=
+/div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr" class=3D"m_-8=
+678806957642640150gmail_signature"><div dir=3D"ltr"><div><div dir=3D"ltr"><=
+font size=3D"4"><b>Ravindra Kumar Meena</b></font>,<div><span style=3D"colo=
+r:rgb(102,102,102)">B. Tech. Computer Science and Engineering,<br></span></=
+div><div><span style=3D"color:rgb(102,102,102)"><a href=3D"https://www.iiti=
+sm.ac.in/" style=3D"color:rgb(17,85,204)" target=3D"_blank">Indian Institut=
+e of Technology (Indian School of Mines)</a>, Dhanbad</span></div></div></d=
+iv></div></div></div>
+
+--00000000000028a62e058dba0b81--
+
+--===============3249643077259330601==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============3249643077259330601==--
