@@ -1,14 +1,22 @@
-From: "=?utf-8?B?5p2o5rW3?=" <hai.yang@magic-shield.com>
-Subject: =?utf-8?b?5Zue5aSNOlJlOiAgUHJvcyBhbmQgQ29ucyBvZiBM?=
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re:
+ =?utf-8?b?5Zue5aSNOlJlOiAgUHJvcyBhbmQgQ29ucyBvZiBM?=
  =?utf-8?q?TTng?=
-Date: Tue, 16 Jul 2019 22:50:40 +0800
-Message-ID: <tencent_512CCCEA391C638F165F4530__8214.95195138908$1563288688$gmane$org@qq.com>
+Date: Tue, 16 Jul 2019 11:30:57 -0400
+Message-ID: <20190716153057.GC20789__5980.75229661248$1563291081$gmane$org@joraj-alpa>
+References: <tencent_512CCCEA391C638F165F4530@qq.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1449411254967201075=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
- by lists.lttng.org (Postfix) with ESMTPS id 45p3Hh2nZnz17HN
- for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2019 10:51:11 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 45p49h3DS1z17Kx
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2019 11:31:04 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id AB03F2A7F0F
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2019 11:30:58 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <tencent_512CCCEA391C638F165F4530@qq.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -18,118 +26,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?utf-8?B?am9uYXRoYW4gcmFqb3R0ZS1qdWxpZW4=?= <jonathan.rajotte-julien@efficios.com>
-Cc: =?utf-8?B?bHR0bmctZGV2?= <lttng-dev@lists.lttng.org>
+To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
+> From somewhere, I saw CPU cycles % with LTTng is even 1-2% lower than vanilla.
 
---===============1449411254967201075==
-Content-Type: multipart/alternative;
-	boundary="----=_NextPart_5D2DE440_0964ACF0_223A46F4"
-Content-Transfer-Encoding: 8Bit
+You might be referring to section 5.3 of [1], last paragraph.
 
-This is a multi-part message in MIME format.
+[1] https://www.dorsal.polymtl.ca/en/system/files/desnoyers.pdf
 
-------=_NextPart_5D2DE440_0964ACF0_223A46F4
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
+In any cases, there is always an overhead when actively tracing (recording to
+disk, network or even in flight recorder mode).
 
-VGhhbmtzIEpvbmF0aGFuLiANCg0KDQpGcm9tIHNvbWV3aGVyZSwgSSBzYXcgQ1BVIGN5Y2xl
-cyAlIHdpdGggTFRUbmcgaXMgZXZlbiAxLTIlIGxvd2VyIHRoYW4gdmFuaWxsYS4gSXMgaXQg
-Y29udHJpYnV0ZWQgYnkgZHluYW1pYyBicmFuY2ggcHJlZGljdGlvbiBvciBvdGhlciBpbnN0
-cnVjdGlvbiBsZXZlbCBvcHRpbWl6YXRpb24/DQpJbiB0aGF0IHdheSwgdGhlIGtlcm5lbCBv
-ciBhdCBsZWFzdCBrZXkgbGlicmFyaWVzIGxpa2UgbGliYyBpcyBraW5kIG9mIHJlLWNvbXBp
-bGVkLCByaWdodD8NCg0KDQpSZWdhcmRzDQpIYWkNCg0KLS0tLS0tLS0tLS0tLS3ljp/lp4vp
-gq7ku7YtLS0tLS0tLS0tLS0tLQ0K5Y+R5Lu25Lq677yaIkpvbmF0aGFuIFJham90dGUtSnVs
-aWVuICI8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPjsNCuWPkemAgeaX
-tumXtO+8mjIwMTnlubQ35pyIMTbml6Uo5pif5pyf5LqMKSDmmZrkuIoxMDoyOA0K5pS25Lu2
-5Lq677yaIuadqOa1tyIgPGhhaS55YW5nQG1hZ2ljLXNoaWVsZC5jb20+Ow0K5oqE6YCB77ya
-Imx0dG5nLWRldiAiPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Ow0K5Li76aKY77yaUmU6
-IFtsdHRuZy1kZXZdIFByb3MgYW5kIENvbnMgb2YgTFRUbmcNCi0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tDQoNCiBIaSBIYWksDQoNCk9uIFR1ZSwgSnVsIDE2LCAyMDE5
-IGF0IDEwOjE5OjM4QU0gKzA4MDAsIOadqOa1tyB3cm90ZToNCj4gT2J2aW91c2x5IExUVG5n
-IGhhcyBtdWNoIGxvd2VyIG92ZXJoZWFkIGNvbXBhcmVkIHRvIGF1ZGl0ZCwgd2hlbiB3ZSB0
-dXJuIG9uDQo+IGFsbCBzeXN0ZW0gY2FsbHMgYW5kIHVzZSB0aGUgc2FtZSBsb2FkLiBJcyBp
-dCB0cnVlIGZvciBib3RoIHVzZXIgc3BhY2UgYW5kDQo+IGtlcm5lbCBzcGFjZT8NCg0KbHR0
-bmctdXN0ICh1c2Vyc3BhY2UgdHJhY2VyKSBtb3N0bHkgdXNlIHRoZSBzYW1lIGNvbmNlcHQg
-YXMgdGhlIGtlcm5lbHRyYWNlcg0KKHBlci1jcHUgcmluZyBidWZmZXJzLCBiaW5hcnkgb3V0
-cHV0L0NURiwgZGVsYXllZCBjb25zdW1wdGlvbiBvZiBldmVudHMsIGV0Yy4pLg0KVGhlcmUg
-aXMgc29tZSBwZW5hbHR5IGZvciBkb2luZyB0aGluZ3MgaW4gdXNlcnNwYWNlIHNpbmNlIHdl
-IG5lZWQgc29tZQ0KaW5mb3JtYXRpb24gZnJvbSB0aGUga2VybmVsIGZvciBlYWNoIHRyYWNl
-cG9pbnQgaGl0IChlLmcgdGhlIGN1cnJlbnQgY3B1DQpudW1iZXIpLiBCdXQgYWdhaW4gbW9z
-dCBvZiB0aGVzZSBob3QgcGF0aHMgYXJlIHF1aXRlIG9wdGltaXplZC4NCg0KSW4gYW55IGNh
-c2UgSSBlbmNvdXJhZ2UgeW91IHRvIHRyeSBpdCBvdXQgb24geW91ciB3b3JrbG9hZCBhbmQg
-bHR0bmcgZml0IHlvdXINCm5lZWRzLg0KDQpJZiB5b3UgZG8gbm90IGZpbmQgYSBwYXJ0aWN1
-bGFyIGZlYXR1cmUgaW4gdGhlIGRvYyBbMV0sIGRvIG5vdCBoZXNpdGF0ZSB0byBjb250YWN0
-DQp0aGlzIG1haWxpbmcgbGlzdCBmb3IgbW9yZSBpbmZvcm1hdGlvbi4NCg0KPlNvIGZhciBJ
-IGhhdmVuJ3Qgc2VlbiBhbnkgcmVwb3J0IGNvbXBhcmUgTFRUbmcgYW5kIGF1ZGl0ZCwNCj4g
-YW55b25lIGtub3dzPw0KDQpJIGRvIG5vdCByZW1lbWJlciBhbnkgY29udmVyc2F0aW9uIG9u
-IHRoaXMgdG9waWMuIEFmdGVyIHJlYWRpbmcgYSBiaXQgb24gYXVkaXRkLA0KbHR0bmcgbWln
-aHQgYmUgYSBnb29kIHJlcGxhY2VtZW50IGRlcGVuZGluZyBvbiB5b3VyIGNvbnN0cmFpbnRz
-IGFuZCBuZWVkcy4NCg0KWzFdIGh0dHBzOi8vbHR0bmcub3JnL2RvY3MvdjIuMTAvDQoNCkNo
-ZWVycw0KLS0gDQpKb25hdGhhbiBSYWpvdHRlLUp1bGllbg0KRWZmaWNpT1M=
+> Is it contributed by dynamic branch prediction or other instruction level
+> optimization?
 
-------=_NextPart_5D2DE440_0964ACF0_223A46F4
-Content-Type: text/html;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
+Note that these numbers were for a 2.6.30 kernel. Things might have changed a bit
+since. As far as I know, the performance of an instrumented kernel is
+independent from lttng since instrumentation of the kernel is a not only used by
+lttng but by multiple projects. But it might help system engineers to accept to
+turn on instrumentation for their kernel.
 
-PGRpdj5UaGFua3MgSm9uYXRoYW4uJm5ic3A7PC9kaXY+PGRpdj48YnI+PC9kaXY+PGRpdj5G
-cm9tIHNvbWV3aGVyZSwgSSBzYXcgQ1BVIGN5Y2xlcyAlIHdpdGggTFRUbmcgaXMgZXZlbiAx
-LTIlIGxvd2VyIHRoYW4gdmFuaWxsYS4gSXMgaXQgY29udHJpYnV0ZWQgYnkgZHluYW1pYyBi
-cmFuY2ggcHJlZGljdGlvbiBvciBvdGhlciBpbnN0cnVjdGlvbiBsZXZlbCBvcHRpbWl6YXRp
-b24/PC9kaXY+PGRpdj5JbiB0aGF0IHdheSwgdGhlIGtlcm5lbCBvciBhdCBsZWFzdCBrZXkg
-bGlicmFyaWVzIGxpa2UgbGliYyBpcyBraW5kIG9mIHJlLWNvbXBpbGVkLCByaWdodD88L2Rp
-dj48ZGl2Pjxicj48L2Rpdj48ZGl2PlJlZ2FyZHM8L2Rpdj48ZGl2PkhhaTwvZGl2PjxkaXY+
-PGJyPi0tLS0tLS0tLS0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0tLS0tLS0tLS08YnI+5Y+R5Lu2
-5Lq677yaIkpvbmF0aGFuIFJham90dGUtSnVsaWVuICImbHQ7am9uYXRoYW4ucmFqb3R0ZS1q
-dWxpZW5AZWZmaWNpb3MuY29tJmd0Ozs8YnI+5Y+R6YCB5pe26Ze077yaMjAxOeW5tDfmnIgx
-NuaXpSjmmJ/mnJ/kuowpIOaZmuS4ijEwOjI4PGJyPuaUtuS7tuS6uu+8miLmnajmtbciICZs
-dDtoYWkueWFuZ0BtYWdpYy1zaGllbGQuY29tJmd0Ozs8YnI+5oqE6YCB77yaImx0dG5nLWRl
-diAiJmx0O2x0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcmZ3Q7Ozxicj7kuLvpopjvvJpSZTog
-W2x0dG5nLWRldl0gUHJvcyBhbmQgQ29ucyBvZiBMVFRuZzxicj4tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLTxicj48L2Rpdj4gPGRpdiBjbGFzcz0ibWFpbF9jb250ZW50
-Ij48ZGl2PkhpIEhhaSw8YnI+PGJyPk9uIFR1ZSwgSnVsIDE2LCAyMDE5IGF0IDEwOjE5OjM4
-QU0gKzA4MDAsIOadqOa1tyB3cm90ZTo8YnI+Jmd0OyBPYnZpb3VzbHkgTFRUbmcgaGFzIG11
-Y2ggbG93ZXIgb3ZlcmhlYWQgY29tcGFyZWQgdG8gYXVkaXRkLCB3aGVuIHdlIHR1cm4gb248
-YnI+Jmd0OyBhbGwgc3lzdGVtIGNhbGxzIGFuZCB1c2UgdGhlIHNhbWUgbG9hZC4gSXMgaXQg
-dHJ1ZSBmb3IgYm90aCB1c2VyIHNwYWNlIGFuZDxicj4mZ3Q7IGtlcm5lbCBzcGFjZT88YnI+
-PGJyPmx0dG5nLXVzdCAodXNlcnNwYWNlIHRyYWNlcikgbW9zdGx5IHVzZSB0aGUgc2FtZSBj
-b25jZXB0IGFzIHRoZSBrZXJuZWx0cmFjZXI8YnI+KHBlci1jcHUgcmluZyBidWZmZXJzLCBi
-aW5hcnkgb3V0cHV0L0NURiwgZGVsYXllZCBjb25zdW1wdGlvbiBvZiBldmVudHMsIGV0Yy4p
-Ljxicj5UaGVyZSBpcyBzb21lIHBlbmFsdHkgZm9yIGRvaW5nIHRoaW5ncyBpbiB1c2Vyc3Bh
-Y2Ugc2luY2Ugd2UgbmVlZCBzb21lPGJyPmluZm9ybWF0aW9uIGZyb20gdGhlIGtlcm5lbCBm
-b3IgZWFjaCB0cmFjZXBvaW50IGhpdCAoZS5nIHRoZSBjdXJyZW50IGNwdTxicj5udW1iZXIp
-LiBCdXQgYWdhaW4gbW9zdCBvZiB0aGVzZSBob3QgcGF0aHMgYXJlIHF1aXRlIG9wdGltaXpl
-ZC48YnI+PGJyPkluIGFueSBjYXNlIEkgZW5jb3VyYWdlIHlvdSB0byB0cnkgaXQgb3V0IG9u
-IHlvdXIgd29ya2xvYWQgYW5kIGx0dG5nIGZpdCB5b3VyPGJyPm5lZWRzLjxicj48YnI+SWYg
-eW91IGRvIG5vdCBmaW5kIGEgcGFydGljdWxhciBmZWF0dXJlIGluIHRoZSBkb2MgWzFdLCBk
-byBub3QgaGVzaXRhdGUgdG8gY29udGFjdDxicj50aGlzIG1haWxpbmcgbGlzdCBmb3IgbW9y
-ZSBpbmZvcm1hdGlvbi48YnI+PGJyPiZndDtTbyBmYXIgSSBoYXZlbid0IHNlZW4gYW55IHJl
-cG9ydCBjb21wYXJlIExUVG5nIGFuZCBhdWRpdGQsPGJyPiZndDsgYW55b25lIGtub3dzPzxi
-cj48YnI+SSBkbyBub3QgcmVtZW1iZXIgYW55IGNvbnZlcnNhdGlvbiBvbiB0aGlzIHRvcGlj
-LiBBZnRlciByZWFkaW5nIGEgYml0IG9uIGF1ZGl0ZCw8YnI+bHR0bmcgbWlnaHQgYmUgYSBn
-b29kIHJlcGxhY2VtZW50IGRlcGVuZGluZyBvbiB5b3VyIGNvbnN0cmFpbnRzIGFuZCBuZWVk
-cy48YnI+PGJyPlsxXSBodHRwczovL2x0dG5nLm9yZy9kb2NzL3YyLjEwLzxicj48YnI+Q2hl
-ZXJzPGJyPi0tIDxicj5Kb25hdGhhbiBSYWpvdHRlLUp1bGllbjxicj5FZmZpY2lPUzxicj48
-L2Rpdj48L2Rpdj4=
+Anyhow, the speedup was attributed to the modification to the instruction and
+data cache layout.
 
-------=_NextPart_5D2DE440_0964ACF0_223A46F4--
+>In that way, the kernel or at least key libraries like libc is
+> kind of re-compiled, right?
 
+lttng-modules does not require any kernel recompilation. It uses kernel modules
+to function.
 
+Instrumenting libc directly might not ideal due to its nature. You can use
+LD_PRELOAD and lttng-ust to shim and instrument libc function you are interested
+in. For example, we already ship a shim for some libc functions [1] that you can
+LD_PRELOAD.
 
+[1] https://github.com/lttng/lttng-ust/tree/9d4d2a639afc19a1bd705ea560782917ac892596/liblttng-ust-libc-wrapper
 
---===============1449411254967201075==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Hope this helps.
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Cheers
 
---===============1449411254967201075==--
+-- 
+Jonathan Rajotte-Julien
+EfficiOS
