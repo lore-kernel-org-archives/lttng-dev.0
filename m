@@ -1,16 +1,16 @@
-From: Ravindra Kumar Meena <rmeena840@gmail.com>
-Subject: How to add event_header_compact?
-Date: Thu, 18 Jul 2019 20:04:57 +0530
-Message-ID: <CAEWVvOQiuENK7uAFD_kSyhTTCQd=vcV9WBmD3YSfnCnSuyqEpA__15891.5712659777$1563460580$gmane$org@mail.gmail.com>
+From: Zvi Vered <veredz72@gmail.com>
+Subject: Understand userspace events in babeltrace output
+Date: Fri, 19 Jul 2019 17:28:48 +0300
+Message-ID: <CABRndgykKYN-OxyDKDp1Nn4J0Ta4p54_kB5Wh9B5-AUSsdxLsg__34259.4307194062$1563546822$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0512856866406899634=="
+Content-Type: multipart/mixed; boundary="===============8835203996039577013=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by lists.lttng.org (Postfix) with ESMTPS id 45qGrm0fcHz1FPP
- for <lttng-dev@lists.lttng.org>; Thu, 18 Jul 2019 10:35:35 -0400 (EDT)
-Received: by mail-wm1-x32d.google.com with SMTP id x15so25846214wmj.3
- for <lttng-dev@lists.lttng.org>; Thu, 18 Jul 2019 07:35:35 -0700 (PDT)
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com
+ [IPv6:2607:f8b0:4864:20::b29])
+ by lists.lttng.org (Postfix) with ESMTPS id 45qtlq6gSbz1GLD
+ for <lttng-dev@lists.lttng.org>; Fri, 19 Jul 2019 10:33:27 -0400 (EDT)
+Received: by mail-yb1-xb29.google.com with SMTP id p85so33725yba.2
+ for <lttng-dev@lists.lttng.org>; Fri, 19 Jul 2019 07:33:27 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,71 +23,80 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0512856866406899634==
-Content-Type: multipart/alternative; boundary="000000000000c09dba058df58500"
+--===============8835203996039577013==
+Content-Type: multipart/alternative; boundary="0000000000000015af058e099c56"
 
---000000000000c09dba058df58500
+--0000000000000015af058e099c56
 Content-Type: text/plain; charset="UTF-8"
 
-Hi developers,
+Hello,
 
-I have added event_header_compact in metadata and I have to add it in C
-language so the binary stream have this header. I followed the CTF
-documentation https://diamon.org/ctf/#spec6.1
+Using babeltrace I created a text trace.
+How can I understand it ?
 
-struct event_header_compact {
-enum : uint5_t { compact = 0 ... 30, extended = 31 } id;
-variant <id> {
-struct {
-uint27_clock_monotonic_t timestamp;
-} compact;
-struct {
-uint32_t id;
-uint64_clock_monotonic_t timestamp;
-} extended;
-} v;
-} align(8);
+For example:
+I logged userspace events. One of my threads is called: RSPOn3
+I can see the following lines:
 
-Since C does not have variant data-type. I am facing problem in adding it C
-language. What should be the approach for the same? Do you have any
-examples where it's been already done?
+sched_switch: { cpu_id = 0 }, { prev_comm = "RSPOn3", prev_tid = 27307,
+prev_prio = -58, prev_state = 1, next_comm = "swapper/0", next_tid = 0,
+next_prio = 20 }
 
-Thanks
+sched_wakeup: { cpu_id = 0 }, { comm = "RSPOn3", tid = 27307, prio = -58,
+success = 1, target_cpu = 0 }
 
--- 
-*Ravindra Kumar Meena*,
-B. Tech. Computer Science and Engineering,
-Indian Institute of Technology (Indian School of Mines)
-<https://www.iitism.ac.in/>, Dhanbad
+sched_switch: { cpu_id = 0 }, { prev_comm = "swapper/0", prev_tid = 0,
+prev_prio = 20, prev_state = 0, next_comm = "RSPOn3", next_tid = 27307,
+next_prio = -58 }
 
---000000000000c09dba058df58500
+sched_switch: { cpu_id = 0 }, { prev_comm = "RSPOn3", prev_tid = 27307,
+prev_prio = -58, prev_state = 1, next_comm = "swapper/0", next_tid = 0,
+next_prio = 20 }
+
+How can I know the meaning of each field in each line ?
+1. sched_switch, sched_wakeup
+2. prev_comm
+3. prev_state
+4. next_comm
+
+If a task is blocked (e.g waiting for TCP) and then runs for some time and
+then waits again, how this will be logged ?
+
+Curently I need help only on userspace events.
+
+Thank you,
+Zvika
+
+--0000000000000015af058e099c56
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi developers,<div><br></div><div>I have added event_heade=
-r_compact in metadata and I have to add it in C language so the binary stre=
-am have this header. I followed the CTF documentation=C2=A0<a href=3D"https=
-://diamon.org/ctf/#spec6.1">https://diamon.org/ctf/#spec6.1</a></div><div><=
-br></div><div>struct event_header_compact {<br>	enum : uint5_t { compact =
-=3D 0 ... 30, extended =3D 31 } id;<br>	variant &lt;id&gt; {<br>		struct {<=
-br>			uint27_clock_monotonic_t timestamp;<br>		} compact;<br>		struct {<br>=
-			uint32_t id;<br>			uint64_clock_monotonic_t timestamp;<br>		} extended;<=
-br>	} v;<br>} align(8);</div><div><br></div><div>Since C does not have vari=
-ant data-type. I am facing problem in adding it C language. What should be =
-the approach for the same? Do you have any examples where it&#39;s been alr=
-eady done?</div><div><br></div><div>Thanks<br clear=3D"all"><div><br></div>=
--- <br><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmail_s=
-ignature"><div dir=3D"ltr"><div><div dir=3D"ltr"><font size=3D"4"><b>Ravind=
-ra Kumar Meena</b></font>,<div><span style=3D"color:rgb(102,102,102)">B. Te=
-ch. Computer Science and Engineering,<br></span></div><div><span style=3D"c=
-olor:rgb(102,102,102)"><a href=3D"https://www.iitism.ac.in/" style=3D"color=
-:rgb(17,85,204)" target=3D"_blank">Indian Institute of Technology (Indian S=
-chool of Mines)</a>, Dhanbad</span></div></div></div></div></div></div></di=
-v>
+<div dir=3D"ltr">Hello,<br><div><br></div><div>Using babeltrace I created a=
+ text trace.=C2=A0</div><div>How can I understand it ?</div><div><br></div>=
+<div>For example:=C2=A0</div><div>I logged userspace events. One of my thre=
+ads is called:=C2=A0RSPOn3</div><div>I can see the following lines:</div><d=
+iv><br></div><div>sched_switch: { cpu_id =3D 0 }, { prev_comm =3D &quot;RSP=
+On3&quot;, prev_tid =3D 27307, prev_prio =3D -58, prev_state =3D 1, next_co=
+mm =3D &quot;swapper/0&quot;, next_tid =3D 0, next_prio =3D 20 }<br></div><=
+div><br></div><div>sched_wakeup: { cpu_id =3D 0 }, { comm =3D &quot;RSPOn3&=
+quot;, tid =3D 27307, prio =3D -58, success =3D 1, target_cpu =3D 0 }<br></=
+div><div><br></div><div>sched_switch: { cpu_id =3D 0 }, { prev_comm =3D &qu=
+ot;swapper/0&quot;, prev_tid =3D 0, prev_prio =3D 20, prev_state =3D 0, nex=
+t_comm =3D &quot;RSPOn3&quot;, next_tid =3D 27307, next_prio =3D -58 }<br><=
+/div><div><br></div><div>sched_switch: { cpu_id =3D 0 }, { prev_comm =3D &q=
+uot;RSPOn3&quot;, prev_tid =3D 27307, prev_prio =3D -58, prev_state =3D 1, =
+next_comm =3D &quot;swapper/0&quot;, next_tid =3D 0, next_prio =3D 20 }<br>=
+</div><div><br></div><div>How can I know the meaning of each field in each =
+line ?</div><div>1. sched_switch, sched_wakeup</div><div>2. prev_comm</div>=
+<div>3. prev_state</div><div>4. next_comm</div><div><br></div><div>If a tas=
+k is blocked (e.g waiting for TCP) and then runs for some time and then wai=
+ts again, how this will be logged ?</div><div><br></div><div>Curently I nee=
+d help only on userspace events.=C2=A0</div><div><br></div><div>Thank you,<=
+/div><div>Zvika=C2=A0</div><div><br></div><div><br></div></div>
 
---000000000000c09dba058df58500--
+--0000000000000015af058e099c56--
 
---===============0512856866406899634==
+--===============8835203996039577013==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -98,4 +107,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0512856866406899634==--
+--===============8835203996039577013==--
