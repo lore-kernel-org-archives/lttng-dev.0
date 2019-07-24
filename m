@@ -1,19 +1,25 @@
-From: Sebastien Boisvert <sboisvert@gydle.com>
-Subject: Re: What is _prev_state in sched_switch?
-Date: Wed, 24 Jul 2019 10:30:40 -0400
-Message-ID: <18d63d8c-da2d-54c3-3a9a-1d77a5a3a675__12241.4233091817$1563978661$gmane$org@gydle.com>
-References: <CAEWVvOS48D3Jfp4==qrrODzdSSjo+-UOuvZyya1O_f2t9B9Z1A@mail.gmail.com>
- <0e850b02-3fec-a335-3f37-8579ad1b704d@gydle.com>
- <CAEWVvOSu4vbiDpMCCTHdP59xNaMsAJ74orA52amRaFfoN7jfXQ@mail.gmail.com>
+From: Yiteng Guo <guoyiteng@gmail.com>
+Subject: Re: HugePages shared memory support in LLTng
+Date: Wed, 24 Jul 2019 11:54:38 -0400
+Message-ID: <CAO+PNdFc8XReaL+1hj9_Amfa+P_F5fjbGMeFter7hQZBBTczuQ__15495.0344747462$1563983715$gmane$org@mail.gmail.com>
+References: <CAO+PNdHdLFk=Q0L2BLGnz8xCvdgMw3aYpZuAZumBOWKraKTnAw@mail.gmail.com>
+ <20190715143302.GA2017@joraj-alpa>
+ <CAO+PNdHW7O98QSdWyA5U6e=gtLmdFt77wHOT=eHb-Py1W3A-oQ@mail.gmail.com>
+ <CAO+PNdFotFk6uCF1dySZi9dV6PYpAazWoQpsnU+N58F2b-73FQ@mail.gmail.com>
+ <20190722192308.GA803@joraj-alpa> <20190723150744.GC803@joraj-alpa>
+ <CAO+PNdGhEgeTo35du4ysMcCOUQ0PKE4tuyGg593AE5feZZ4_JQ@mail.gmail.com>
+ <20190723202723.GD803@joraj-alpa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
- by lists.lttng.org (Postfix) with ESMTPS id 45tySQ28c4z1G9N
- for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2019 10:30:46 -0400 (EDT)
-In-Reply-To: <CAEWVvOSu4vbiDpMCCTHdP59xNaMsAJ74orA52amRaFfoN7jfXQ@mail.gmail.com>
-Content-Language: en-US
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by lists.lttng.org (Postfix) with ESMTPS id 45v0KQ3H48z1GDf
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2019 11:54:50 -0400 (EDT)
+Received: by mail-wr1-x432.google.com with SMTP id n4so47633022wrs.3
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2019 08:54:50 -0700 (PDT)
+In-Reply-To: <20190723202723.GD803@joraj-alpa>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,73 +29,39 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Ravindra Kumar Meena <rmeena840@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGVsbG8gUmF2aW5kcmEsCgpPbiAyMDE5LTA3LTI0IDEwOjA5IGEubS4sIFJhdmluZHJhIEt1bWFy
-IE1lZW5hIHdyb3RlOgo+IAo+IAo+IE9uIFdlZCwgSnVsIDI0LCAyMDE5LCA3OjMzIFBNIFNlYmFz
-dGllbiBCb2lzdmVydCA8c2JvaXN2ZXJ0QGd5ZGxlLmNvbSA8bWFpbHRvOnNib2lzdmVydEBneWRs
-ZS5jb20+PiB3cm90ZToKPiAKPiAKPiAKPiAgICAgT24gMjAxOS0wNy0yNCAyOjQ0IGEubS4sIFJh
-dmluZHJhIEt1bWFyIE1lZW5hIHdyb3RlOgo+ICAgICA+IEhpLAo+ICAgICA+Cj4gICAgID4gSSBo
-YWQgYSBsb29rZWQgYXQgVHJhY2VDb21wYXNzIGV4YW1wbGUuIEkgY2FtZSBhY3Jvc3Mgc2NoZWRf
-c3dpdGhjIGV2ZW50IGluIHByZXNlbnQgaW4gdGhlIG1ldGFkYXRhLgo+ICAgICA+Cj4gICAgID4g
-ZXZlbnQgewo+ICAgICA+IG5hbWUgPSAic2NoZWRfc3dpdGNoIjsKPiAgICAgPiBpZCA9IDI3Owo+
-ICAgICA+IHN0cmVhbV9pZCA9IDA7Cj4gICAgID4gZmllbGRzIDo9IHN0cnVjdCB7Cj4gICAgID4g
-aW50ZWdlciB7IHNpemUgPSA4OyBhbGlnbiA9IDg7IHNpZ25lZCA9IDA7IGVuY29kaW5nID0gVVRG
-ODsgYmFzZSA9IDEwOyB9IF9wcmV2X2NvbW1bMTZdOwo+ICAgICA+IGludGVnZXIgeyBzaXplID0g
-MzI7IGFsaWduID0gODsgc2lnbmVkID0gMTsgZW5jb2RpbmcgPSBub25lOyBiYXNlID0gMTA7IH0g
-X3ByZXZfdGlkOwo+ICAgICA+IGludGVnZXIgeyBzaXplID0gMzI7IGFsaWduID0gODsgc2lnbmVk
-ID0gMTsgZW5jb2RpbmcgPSBub25lOyBiYXNlID0gMTA7IH0gX3ByZXZfcHJpbzsKPiAgICAgPiBp
-bnRlZ2VyIHsgc2l6ZSA9IDY0OyBhbGlnbiA9IDg7IHNpZ25lZCA9IDE7IGVuY29kaW5nID0gbm9u
-ZTsgYmFzZSA9IDEwOyB9IF9wcmV2X3N0YXRlOwo+ICAgICA+IGludGVnZXIgeyBzaXplID0gODsg
-YWxpZ24gPSA4OyBzaWduZWQgPSAwOyBlbmNvZGluZyA9IFVURjg7IGJhc2UgPSAxMDsgfSBfbmV4
-dF9jb21tWzE2XTsKPiAgICAgPiBpbnRlZ2VyIHsgc2l6ZSA9IDMyOyBhbGlnbiA9IDg7IHNpZ25l
-ZCA9IDE7IGVuY29kaW5nID0gbm9uZTsgYmFzZSA9IDEwOyB9IF9uZXh0X3RpZDsKPiAgICAgPiBp
-bnRlZ2VyIHsgc2l6ZSA9IDMyOyBhbGlnbiA9IDg7IHNpZ25lZCA9IDE7IGVuY29kaW5nID0gbm9u
-ZTsgYmFzZSA9IDEwOyB9IF9uZXh0X3ByaW87Cj4gICAgID4gfTsKPiAgICAgPiB9Owo+ICAgICA+
-Cj4gICAgID4gQWxsIGV2ZW50LmZpZWxkcyB2YXJpYWJsZXMgYXJlIGNsZWFyIHRvIG1lIGJ1dCB3
-aGF0IGRvZXMgX3ByZXZfc3RhdGUgZG8gaGVyZT8gSSBoYWQgYSBsb29rZWQgYXQgaXRzIGJhYmVs
-dHJhY2Ugb3V0cHV0IGJ1dCBmb3VuZCBubyBwYXR0ZXJuIGluIF9wcmV2X3N0YXRlIHZhbHVlLgo+
-ICAgICA+Cj4gICAgID4gUGxlYXNlIGF0dGVuZCB0aGlzIGVtYWlsIEFTQVAuCj4gCj4gICAgIEkg
-dGhpbmsgdGhhdCB3cml0aW5nICJQbGVhc2UgYXR0ZW5kIHRoaXMgZW1haWwgQVNBUCIgaXMgc29t
-ZWhvdyBydWRlLgo+IAo+IE9rYXkuIFNvcnJ5IGZvciB0aGF0LiBJdCB3b24ndCBoYXBwZW4gYWdh
-aW4uCj4gCj4gSSB3YW50IHRvIGtub3cgd2hhdMKgX3ByZXZfc3RhdGUgbWVhbnMgaW4gc2NoZWRf
-c3dpdGNoIGV2ZW50Lgo+IAoKSW4gdGhlIExpbnV4IGtlcm5lbCwgdGhlIHRyYWNlcG9pbnQgZm9y
-IHNjaGVkX3N3aXRjaCBkb2VzIG5vdCBoYXZlIHRoZQpmaWVsZCBwcmV2X3N0YXRlOgoKaHR0cHM6
-Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXgu
-Z2l0L3RyZWUvaW5jbHVkZS9saW51eC90cmFjZXBvaW50Lmg/aWQ9NTJhNmU4MmFjMjcyODhmNTkx
-Yzc1MGYyMDFkZTVjM2U2ZWYyNDM4NSNuNDY1CgoKSW4gbHR0bmctbW9kdWxlcywgaG93ZXZlciwg
-dGhlcmUgaXMgdGhlIGZpZWxkIHByZXZfc3RhdGU6CgpodHRwOi8vZ2l0Lmx0dG5nLm9yZy8/cD1s
-dHRuZy1tb2R1bGVzLmdpdDthPWJsb2I7Zj1pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1v
-ZHVsZS9zY2hlZC5oO2g9NzdkNzdiMmFlZWRkYmU2YWMzNGUyMjI4YjA3NzczNDcyMWY0NWIxODto
-Yj00ZWE5YjdjOThhZGU2MDNiMDhmMGQ5NDVmNGQ5OWJjMDc5ZWI1N2I2I2wyMzcKCgpNeSBndWVz
-cyB3b3VsZCBiZSB0aGF0IHByZXZfc3RhdGUgaXMgdGhlIHByZXZpb3VzIHN0YXRlIG9mIHRoZSB0
-aHJlYWQgKFRJRCk6CgppbiAibWFuIHBzIjoKClBST0NFU1MgU1RBVEUgQ09ERVMKICAgICAgIEhl
-cmUgYXJlIHRoZSBkaWZmZXJlbnQgdmFsdWVzIHRoYXQgdGhlIHMsIHN0YXQgYW5kIHN0YXRlIG91
-dHB1dCBzcGVjaWZpZXJzIChoZWFkZXIgIlNUQVQiIG9yICJTIikgd2lsbCBkaXNwbGF5IHRvIGRl
-c2NyaWJlIHRoZSBzdGF0ZSBvZiBhIHByb2Nlc3M6CgogICAgICAgICAgICAgICBEICAgIHVuaW50
-ZXJydXB0aWJsZSBzbGVlcCAodXN1YWxseSBJTykKICAgICAgICAgICAgICAgUiAgICBydW5uaW5n
-IG9yIHJ1bm5hYmxlIChvbiBydW4gcXVldWUpCiAgICAgICAgICAgICAgIFMgICAgaW50ZXJydXB0
-aWJsZSBzbGVlcCAod2FpdGluZyBmb3IgYW4gZXZlbnQgdG8gY29tcGxldGUpCiAgICAgICAgICAg
-ICAgIFQgICAgc3RvcHBlZCBieSBqb2IgY29udHJvbCBzaWduYWwKICAgICAgICAgICAgICAgdCAg
-ICBzdG9wcGVkIGJ5IGRlYnVnZ2VyIGR1cmluZyB0aGUgdHJhY2luZwogICAgICAgICAgICAgICBX
-ICAgIHBhZ2luZyAobm90IHZhbGlkIHNpbmNlIHRoZSAyLjYueHgga2VybmVsKQogICAgICAgICAg
-ICAgICBYICAgIGRlYWQgKHNob3VsZCBuZXZlciBiZSBzZWVuKQogICAgICAgICAgICAgICBaICAg
-IGRlZnVuY3QgKCJ6b21iaWUiKSBwcm9jZXNzLCB0ZXJtaW5hdGVkIGJ1dCBub3QgcmVhcGVkIGJ5
-IGl0cyBwYXJlbnQKCgpJbiB0aGUgTGludXgga2VybmVsOgoKJCBncmVwICIjZGVmaW5lIFRBU0tf
-IiBpbmNsdWRlL2xpbnV4L3NjaGVkLmgKI2RlZmluZSBUQVNLX1JVTk5JTkcJCQkweDAwMDAKI2Rl
-ZmluZSBUQVNLX0lOVEVSUlVQVElCTEUJCTB4MDAwMQojZGVmaW5lIFRBU0tfVU5JTlRFUlJVUFRJ
-QkxFCQkweDAwMDIKI2RlZmluZSBUQVNLX1BBUktFRAkJCTB4MDA0MAojZGVmaW5lIFRBU0tfREVB
-RAkJCTB4MDA4MAojZGVmaW5lIFRBU0tfV0FLRUtJTEwJCQkweDAxMDAKI2RlZmluZSBUQVNLX1dB
-S0lORwkJCTB4MDIwMAojZGVmaW5lIFRBU0tfTk9MT0FECQkJMHgwNDAwCiNkZWZpbmUgVEFTS19O
-RVcJCQkweDA4MDAKI2RlZmluZSBUQVNLX1NUQVRFX01BWAkJCTB4MTAwMAojZGVmaW5lIFRBU0tf
-S0lMTEFCTEUJCQkoVEFTS19XQUtFS0lMTCB8IFRBU0tfVU5JTlRFUlJVUFRJQkxFKQojZGVmaW5l
-IFRBU0tfU1RPUFBFRAkJCShUQVNLX1dBS0VLSUxMIHwgX19UQVNLX1NUT1BQRUQpCiNkZWZpbmUg
-VEFTS19UUkFDRUQJCQkoVEFTS19XQUtFS0lMTCB8IF9fVEFTS19UUkFDRUQpCiNkZWZpbmUgVEFT
-S19JRExFCQkJKFRBU0tfVU5JTlRFUlJVUFRJQkxFIHwgVEFTS19OT0xPQUQpCiNkZWZpbmUgVEFT
-S19OT1JNQUwJCQkoVEFTS19JTlRFUlJVUFRJQkxFIHwgVEFTS19VTklOVEVSUlVQVElCTEUpCiNk
-ZWZpbmUgVEFTS19SRVBPUlQJCQkoVEFTS19SVU5OSU5HIHwgVEFTS19JTlRFUlJVUFRJQkxFIHwg
-XAoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+(Forgot to cc mailing list in the previous email)
+
+Hi Jonathan,
+
+On Tue, Jul 23, 2019 at 4:27 PM Jonathan Rajotte-Julien
+<jonathan.rajotte-julien@efficios.com> wrote:
+>
+> CC'ing the mailing list back.
+>
+> On Tue, Jul 23, 2019 at 03:58:09PM -0400, Yiteng Guo wrote:
+> > Hi Jonathan,
+> >
+> > Thank you for the patch! It is really helpful.
+>
+> Were you able to observe a positive impact?
+>
+> This is something we might be interested in upstreaming if we have good
+> feedback.
+
+Yes, page faults disappeared and I didn't get those periodic overheads anymore.
+
+And I also solved the problem that hugepages are not closed correctly
+in my patch. It is my fault that I forgot to close the mmap pointer. I
+updated the patch here:
+https://github.com/lttng/lttng-ust/compare/master...guoyiteng:hugepages
+The current prefault solution works well for me and I will use that
+for now. In my opinion, using hugepages could further reduce the TLB
+misses, but that involved more changes in source codes than the
+prefault solution.
+
+Best,
+Yiteng
