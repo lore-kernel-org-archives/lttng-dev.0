@@ -1,16 +1,18 @@
 From: Sebastien Boisvert <sboisvert@gydle.com>
 Subject: Re: What is _prev_state in sched_switch?
-Date: Wed, 24 Jul 2019 10:02:54 -0400
-Message-ID: <0e850b02-3fec-a335-3f37-8579ad1b704d__22150.1503068552$1563977507$gmane$org@gydle.com>
+Date: Wed, 24 Jul 2019 10:30:40 -0400
+Message-ID: <18d63d8c-da2d-54c3-3a9a-1d77a5a3a675__12241.4233091817$1563978661$gmane$org@gydle.com>
 References: <CAEWVvOS48D3Jfp4==qrrODzdSSjo+-UOuvZyya1O_f2t9B9Z1A@mail.gmail.com>
+ <0e850b02-3fec-a335-3f37-8579ad1b704d@gydle.com>
+ <CAEWVvOSu4vbiDpMCCTHdP59xNaMsAJ74orA52amRaFfoN7jfXQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
- by lists.lttng.org (Postfix) with ESMTPS id 45ty2C6NfWz1G84
- for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2019 10:11:31 -0400 (EDT)
-In-Reply-To: <CAEWVvOS48D3Jfp4==qrrODzdSSjo+-UOuvZyya1O_f2t9B9Z1A@mail.gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 45tySQ28c4z1G9N
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2019 10:30:46 -0400 (EDT)
+In-Reply-To: <CAEWVvOSu4vbiDpMCCTHdP59xNaMsAJ74orA52amRaFfoN7jfXQ@mail.gmail.com>
 Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -21,47 +23,73 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Ravindra Kumar Meena <rmeena840@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>
+To: Ravindra Kumar Meena <rmeena840@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-
-
-On 2019-07-24 2:44 a.m., Ravindra Kumar Meena wrote:
-> Hi,
-> 
-> I had a looked at TraceCompass example. I came across sched_swithc event in present in the metadata.
-> 
-> event {
-> name = "sched_switch";
-> id = 27;
-> stream_id = 0;
-> fields := struct {
-> integer { size = 8; align = 8; signed = 0; encoding = UTF8; base = 10; } _prev_comm[16];
-> integer { size = 32; align = 8; signed = 1; encoding = none; base = 10; } _prev_tid;
-> integer { size = 32; align = 8; signed = 1; encoding = none; base = 10; } _prev_prio;
-> integer { size = 64; align = 8; signed = 1; encoding = none; base = 10; } _prev_state;
-> integer { size = 8; align = 8; signed = 0; encoding = UTF8; base = 10; } _next_comm[16];
-> integer { size = 32; align = 8; signed = 1; encoding = none; base = 10; } _next_tid;
-> integer { size = 32; align = 8; signed = 1; encoding = none; base = 10; } _next_prio;
-> };
-> };
-> 
-> All event.fields variables are clear to me but what does _prev_state do here? I had a looked at its babeltrace output but found no pattern in _prev_state value.
-> 
-> Please attend this email ASAP.
-
-I think that writing "Please attend this email ASAP" is somehow rude.
-
-> 
-> Thanks
-> 
-> -- 
-> *Ravindra Kumar Meena*,
-> B. Tech. Computer Science and Engineering,
-> Indian Institute of Technology (Indian School of Mines) <https://www.iitism.ac.in/>, Dhanbad
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
+SGVsbG8gUmF2aW5kcmEsCgpPbiAyMDE5LTA3LTI0IDEwOjA5IGEubS4sIFJhdmluZHJhIEt1bWFy
+IE1lZW5hIHdyb3RlOgo+IAo+IAo+IE9uIFdlZCwgSnVsIDI0LCAyMDE5LCA3OjMzIFBNIFNlYmFz
+dGllbiBCb2lzdmVydCA8c2JvaXN2ZXJ0QGd5ZGxlLmNvbSA8bWFpbHRvOnNib2lzdmVydEBneWRs
+ZS5jb20+PiB3cm90ZToKPiAKPiAKPiAKPiAgICAgT24gMjAxOS0wNy0yNCAyOjQ0IGEubS4sIFJh
+dmluZHJhIEt1bWFyIE1lZW5hIHdyb3RlOgo+ICAgICA+IEhpLAo+ICAgICA+Cj4gICAgID4gSSBo
+YWQgYSBsb29rZWQgYXQgVHJhY2VDb21wYXNzIGV4YW1wbGUuIEkgY2FtZSBhY3Jvc3Mgc2NoZWRf
+c3dpdGhjIGV2ZW50IGluIHByZXNlbnQgaW4gdGhlIG1ldGFkYXRhLgo+ICAgICA+Cj4gICAgID4g
+ZXZlbnQgewo+ICAgICA+IG5hbWUgPSAic2NoZWRfc3dpdGNoIjsKPiAgICAgPiBpZCA9IDI3Owo+
+ICAgICA+IHN0cmVhbV9pZCA9IDA7Cj4gICAgID4gZmllbGRzIDo9IHN0cnVjdCB7Cj4gICAgID4g
+aW50ZWdlciB7IHNpemUgPSA4OyBhbGlnbiA9IDg7IHNpZ25lZCA9IDA7IGVuY29kaW5nID0gVVRG
+ODsgYmFzZSA9IDEwOyB9IF9wcmV2X2NvbW1bMTZdOwo+ICAgICA+IGludGVnZXIgeyBzaXplID0g
+MzI7IGFsaWduID0gODsgc2lnbmVkID0gMTsgZW5jb2RpbmcgPSBub25lOyBiYXNlID0gMTA7IH0g
+X3ByZXZfdGlkOwo+ICAgICA+IGludGVnZXIgeyBzaXplID0gMzI7IGFsaWduID0gODsgc2lnbmVk
+ID0gMTsgZW5jb2RpbmcgPSBub25lOyBiYXNlID0gMTA7IH0gX3ByZXZfcHJpbzsKPiAgICAgPiBp
+bnRlZ2VyIHsgc2l6ZSA9IDY0OyBhbGlnbiA9IDg7IHNpZ25lZCA9IDE7IGVuY29kaW5nID0gbm9u
+ZTsgYmFzZSA9IDEwOyB9IF9wcmV2X3N0YXRlOwo+ICAgICA+IGludGVnZXIgeyBzaXplID0gODsg
+YWxpZ24gPSA4OyBzaWduZWQgPSAwOyBlbmNvZGluZyA9IFVURjg7IGJhc2UgPSAxMDsgfSBfbmV4
+dF9jb21tWzE2XTsKPiAgICAgPiBpbnRlZ2VyIHsgc2l6ZSA9IDMyOyBhbGlnbiA9IDg7IHNpZ25l
+ZCA9IDE7IGVuY29kaW5nID0gbm9uZTsgYmFzZSA9IDEwOyB9IF9uZXh0X3RpZDsKPiAgICAgPiBp
+bnRlZ2VyIHsgc2l6ZSA9IDMyOyBhbGlnbiA9IDg7IHNpZ25lZCA9IDE7IGVuY29kaW5nID0gbm9u
+ZTsgYmFzZSA9IDEwOyB9IF9uZXh0X3ByaW87Cj4gICAgID4gfTsKPiAgICAgPiB9Owo+ICAgICA+
+Cj4gICAgID4gQWxsIGV2ZW50LmZpZWxkcyB2YXJpYWJsZXMgYXJlIGNsZWFyIHRvIG1lIGJ1dCB3
+aGF0IGRvZXMgX3ByZXZfc3RhdGUgZG8gaGVyZT8gSSBoYWQgYSBsb29rZWQgYXQgaXRzIGJhYmVs
+dHJhY2Ugb3V0cHV0IGJ1dCBmb3VuZCBubyBwYXR0ZXJuIGluIF9wcmV2X3N0YXRlIHZhbHVlLgo+
+ICAgICA+Cj4gICAgID4gUGxlYXNlIGF0dGVuZCB0aGlzIGVtYWlsIEFTQVAuCj4gCj4gICAgIEkg
+dGhpbmsgdGhhdCB3cml0aW5nICJQbGVhc2UgYXR0ZW5kIHRoaXMgZW1haWwgQVNBUCIgaXMgc29t
+ZWhvdyBydWRlLgo+IAo+IE9rYXkuIFNvcnJ5IGZvciB0aGF0LiBJdCB3b24ndCBoYXBwZW4gYWdh
+aW4uCj4gCj4gSSB3YW50IHRvIGtub3cgd2hhdMKgX3ByZXZfc3RhdGUgbWVhbnMgaW4gc2NoZWRf
+c3dpdGNoIGV2ZW50Lgo+IAoKSW4gdGhlIExpbnV4IGtlcm5lbCwgdGhlIHRyYWNlcG9pbnQgZm9y
+IHNjaGVkX3N3aXRjaCBkb2VzIG5vdCBoYXZlIHRoZQpmaWVsZCBwcmV2X3N0YXRlOgoKaHR0cHM6
+Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXgu
+Z2l0L3RyZWUvaW5jbHVkZS9saW51eC90cmFjZXBvaW50Lmg/aWQ9NTJhNmU4MmFjMjcyODhmNTkx
+Yzc1MGYyMDFkZTVjM2U2ZWYyNDM4NSNuNDY1CgoKSW4gbHR0bmctbW9kdWxlcywgaG93ZXZlciwg
+dGhlcmUgaXMgdGhlIGZpZWxkIHByZXZfc3RhdGU6CgpodHRwOi8vZ2l0Lmx0dG5nLm9yZy8/cD1s
+dHRuZy1tb2R1bGVzLmdpdDthPWJsb2I7Zj1pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1v
+ZHVsZS9zY2hlZC5oO2g9NzdkNzdiMmFlZWRkYmU2YWMzNGUyMjI4YjA3NzczNDcyMWY0NWIxODto
+Yj00ZWE5YjdjOThhZGU2MDNiMDhmMGQ5NDVmNGQ5OWJjMDc5ZWI1N2I2I2wyMzcKCgpNeSBndWVz
+cyB3b3VsZCBiZSB0aGF0IHByZXZfc3RhdGUgaXMgdGhlIHByZXZpb3VzIHN0YXRlIG9mIHRoZSB0
+aHJlYWQgKFRJRCk6CgppbiAibWFuIHBzIjoKClBST0NFU1MgU1RBVEUgQ09ERVMKICAgICAgIEhl
+cmUgYXJlIHRoZSBkaWZmZXJlbnQgdmFsdWVzIHRoYXQgdGhlIHMsIHN0YXQgYW5kIHN0YXRlIG91
+dHB1dCBzcGVjaWZpZXJzIChoZWFkZXIgIlNUQVQiIG9yICJTIikgd2lsbCBkaXNwbGF5IHRvIGRl
+c2NyaWJlIHRoZSBzdGF0ZSBvZiBhIHByb2Nlc3M6CgogICAgICAgICAgICAgICBEICAgIHVuaW50
+ZXJydXB0aWJsZSBzbGVlcCAodXN1YWxseSBJTykKICAgICAgICAgICAgICAgUiAgICBydW5uaW5n
+IG9yIHJ1bm5hYmxlIChvbiBydW4gcXVldWUpCiAgICAgICAgICAgICAgIFMgICAgaW50ZXJydXB0
+aWJsZSBzbGVlcCAod2FpdGluZyBmb3IgYW4gZXZlbnQgdG8gY29tcGxldGUpCiAgICAgICAgICAg
+ICAgIFQgICAgc3RvcHBlZCBieSBqb2IgY29udHJvbCBzaWduYWwKICAgICAgICAgICAgICAgdCAg
+ICBzdG9wcGVkIGJ5IGRlYnVnZ2VyIGR1cmluZyB0aGUgdHJhY2luZwogICAgICAgICAgICAgICBX
+ICAgIHBhZ2luZyAobm90IHZhbGlkIHNpbmNlIHRoZSAyLjYueHgga2VybmVsKQogICAgICAgICAg
+ICAgICBYICAgIGRlYWQgKHNob3VsZCBuZXZlciBiZSBzZWVuKQogICAgICAgICAgICAgICBaICAg
+IGRlZnVuY3QgKCJ6b21iaWUiKSBwcm9jZXNzLCB0ZXJtaW5hdGVkIGJ1dCBub3QgcmVhcGVkIGJ5
+IGl0cyBwYXJlbnQKCgpJbiB0aGUgTGludXgga2VybmVsOgoKJCBncmVwICIjZGVmaW5lIFRBU0tf
+IiBpbmNsdWRlL2xpbnV4L3NjaGVkLmgKI2RlZmluZSBUQVNLX1JVTk5JTkcJCQkweDAwMDAKI2Rl
+ZmluZSBUQVNLX0lOVEVSUlVQVElCTEUJCTB4MDAwMQojZGVmaW5lIFRBU0tfVU5JTlRFUlJVUFRJ
+QkxFCQkweDAwMDIKI2RlZmluZSBUQVNLX1BBUktFRAkJCTB4MDA0MAojZGVmaW5lIFRBU0tfREVB
+RAkJCTB4MDA4MAojZGVmaW5lIFRBU0tfV0FLRUtJTEwJCQkweDAxMDAKI2RlZmluZSBUQVNLX1dB
+S0lORwkJCTB4MDIwMAojZGVmaW5lIFRBU0tfTk9MT0FECQkJMHgwNDAwCiNkZWZpbmUgVEFTS19O
+RVcJCQkweDA4MDAKI2RlZmluZSBUQVNLX1NUQVRFX01BWAkJCTB4MTAwMAojZGVmaW5lIFRBU0tf
+S0lMTEFCTEUJCQkoVEFTS19XQUtFS0lMTCB8IFRBU0tfVU5JTlRFUlJVUFRJQkxFKQojZGVmaW5l
+IFRBU0tfU1RPUFBFRAkJCShUQVNLX1dBS0VLSUxMIHwgX19UQVNLX1NUT1BQRUQpCiNkZWZpbmUg
+VEFTS19UUkFDRUQJCQkoVEFTS19XQUtFS0lMTCB8IF9fVEFTS19UUkFDRUQpCiNkZWZpbmUgVEFT
+S19JRExFCQkJKFRBU0tfVU5JTlRFUlJVUFRJQkxFIHwgVEFTS19OT0xPQUQpCiNkZWZpbmUgVEFT
+S19OT1JNQUwJCQkoVEFTS19JTlRFUlJVUFRJQkxFIHwgVEFTS19VTklOVEVSUlVQVElCTEUpCiNk
+ZWZpbmUgVEFTS19SRVBPUlQJCQkoVEFTS19SVU5OSU5HIHwgVEFTS19JTlRFUlJVUFRJQkxFIHwg
+XAoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
+Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
