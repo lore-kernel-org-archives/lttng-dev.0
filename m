@@ -1,17 +1,27 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re:
- =?utf-8?b?5Zue5aSNOlJlOiAg5Zue5aSNOlJlOiAgUHJvcyBh?=
- =?utf-8?q?nd_Cons_of_LTTng?=
-Date: Thu, 25 Jul 2019 11:48:32 -0400 (EDT)
-Message-ID: <438504875.11742.1564069712337.JavaMail.zimbra__28558.2121390448$1564069732$gmane$org@efficios.com>
-References: <tencent_264479D416B7725164217DB5@qq.com>
+From: Trent Piepho via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: HugePages shared memory support in LLTng
+Date: Thu, 25 Jul 2019 17:59:22 +0000
+Message-ID: <1564077561.2343.121.camel__20838.545686432$1564077583$gmane$org@impinj.com>
+References: <CAO+PNdHdLFk=Q0L2BLGnz8xCvdgMw3aYpZuAZumBOWKraKTnAw@mail.gmail.com>
+ <20190715143302.GA2017@joraj-alpa>
+ <CAO+PNdHW7O98QSdWyA5U6e=gtLmdFt77wHOT=eHb-Py1W3A-oQ@mail.gmail.com>
+ <CAO+PNdFotFk6uCF1dySZi9dV6PYpAazWoQpsnU+N58F2b-73FQ@mail.gmail.com>
+ <20190722192308.GA803@joraj-alpa> <20190723150744.GC803@joraj-alpa>
+ <CAO+PNdGhEgeTo35du4ysMcCOUQ0PKE4tuyGg593AE5feZZ4_JQ@mail.gmail.com>
+ <20190723202723.GD803@joraj-alpa>
+ <1962899258.11638.1564069223526.JavaMail.zimbra@efficios.com>
+Reply-To: Trent Piepho <tpiepho@impinj.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2730114321318119752=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45vc7p0xWBz1HJW
- for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 11:48:38 -0400 (EDT)
-In-Reply-To: <tencent_264479D416B7725164217DB5@qq.com>
+Received: from us-smtp-delivery-168.mimecast.com
+ (us-smtp-delivery-168.mimecast.com [63.128.21.168])
+ by lists.lttng.org (Postfix) with ESMTPS id 45vg2k3XGZz1HQv
+ for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 13:59:26 -0400 (EDT)
+In-Reply-To: <1962899258.11638.1564069223526.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
+Content-ID: <8E6FAE7143806C4E96A71866E205C2E0@namprd06.prod.outlook.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,162 +31,59 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, "guoyiteng@gmail.com" <guoyiteng@gmail.com>, "jonathan.rajotte-julien@efficios.com" <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2730114321318119752==
-Content-Type: multipart/alternative;
-	boundary="=_815e93dd-d341-4a12-b7f1-29d99cfb2d63"
+On Thu, 2019-07-25 at 11:40 -0400, Mathieu Desnoyers wrote:
+> There are a few reasons for using per-uid buffers over per-pid:
+> 
+> - Lower memory consumption for use-cases with many processes,
+> - Faster process launch time: no need to allocate buffers for each process.
+> Useful for use-cases with short-lived processes.
+> - Keep a flight recorder "snapshot" available for all processes, including
+> those which recently exited. Indeed, the per-pid buffers don't stay around
+> for snapshot after a process exits or is killed.
+> 
+> There are however a few advantages for per-pid buffers:
+> 
+> - Isolation: if one PID generates corrupted trace data, it does not interfere
+> with other PIDs buffers,
+> - If one PID is killed between reserve and commit, it does not make that specific
+> per-cpu ring buffer unusable for the rest of the tracing session lifetime.
+> 
+> Hoping this information helps making the right choice for your deployment!
 
---=_815e93dd-d341-4a12-b7f1-29d99cfb2d63
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+We recently had this discussion for an embedded product that uses LTTng
+to gather trace data during operation.  In our case, we want to have a flight recorder of the last X seconds of trace data, for the entire device.  X seconds times Y byte/sec data generation rate ends up being a very large portion (~30%) of the total memory available.  This has to be in RAM, using flash memory for this is not a good idea.
 
------ On Jul 25, 2019, at 4:21 PM, =E6=9D=A8=E6=B5=B7 <hai.yang@magic-shiel=
-d.com> wrote:=20
+If we use per-PID buffers, then the buffer size needed for the largest
+producer of trace data times the total number of processes is too
+large: far larger than the device's memory size.  Some processes
+produce trace data at a much higher rate than others.  A buffer for X
+seconds of data on one processes ends up being a buffer for 10*X
+seconds of data on another.  There's not enough RAM for 10*X second
+buffers.
 
-> Hi
+If we use per-UID buffers, then we must run everything as one UID. 
+Which, on an embedded system, is not that bad, but negatively impacts
+the security of the software.  Now all processes, which generate data
+at different rates, can share one buffer.  Much more efficient that
+having to reserve space the same space for the largest and smallest
+producers.
 
-> Thanks for quick response.
-> LTTng is really impressive on performance=EF=BC=8Cespecially under heavy =
-workload. When
-> using it on critical machines=EF=BC=8Cstability is also essential.
-> I wonder how LTTng is commercialized and any products or OS distributions
-> already enabled it.
-> I took a look at lttng-modules bug list=EF=BC=8Cthere are a few kernel oo=
-ps years ago
-> and got resolved. May I say it is very stable or it has not been fully te=
-sted?
+But there ends up being another problem, the flight recorder data needs
+to be saved to make use of.  To tmpfs in RAM, since the device's flash
+is not suitable and used elsewhere anyway.  So one needs 2x the RAM,
+one for the ring buffer and one for the trace data dump in tmpfs of the
+ring buffer.
 
-Hi,=20
+So what we did was not use flight recorder mode.  We configured lttng
+to use a limited number of smaller trace files and trace file rotation.
+ And used small ring buffers, which ended up not needing to be very
+large to avoid overflow (I imagine saving the data to tmpfs is fast).
 
-EfficiOS has had commercial customers using LTTng in production for many ye=
-ars now.=20
-LTTng per-se is distributed as packages in all major Linux distributions. E=
-fficiOS also provides=20
-more up-to-date packages for some distributions through [ http://packages.e=
-fficios.com/ | http://packages.efficios.com/ ]=20
-
-The way we commercialize LTTng is through funding for design and implementa=
-tion of=20
-customer's feature requests. We also provide commercial support tailored to=
- specific=20
-customer's environments, which includes SLA and continuous integration test=
-ing of specific=20
-environments.=20
-
-If those are services you are interested in, please feel free to contact us=
- in private so we=20
-can further discuss your needs.=20
-
-Best regards,=20
-
-Mathieu=20
-
-> regards
-> Hai
-
-> --------------=E5=8E=9F=E5=A7=8B=E9=82=AE=E4=BB=B6--------------
-> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9A"Jonathan Rajotte-Julien "<jonathan.r=
-ajotte-julien@efficios.com>;
-> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2019=E5=B9=B47=E6=9C=8823=E6=
-=97=A5(=E6=98=9F=E6=9C=9F=E4=BA=8C) =E4=B8=8A=E5=8D=886:20
-> =E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9A"=E6=9D=A8=E6=B5=B7" <hai.yang@magic-=
-shield.com>;
-> =E6=8A=84=E9=80=81=EF=BC=9A"lttng-dev "<lttng-dev@lists.lttng.org>;
-> =E4=B8=BB=E9=A2=98=EF=BC=9ARe: =E5=9B=9E=E5=A4=8D:Re: [lttng-dev] Pros an=
-d Cons of LTTng
-> -----------------------------------
-> Hi,
-
->> As to LD_PRELOAD, it is also used for privilege escalation. Will it be r=
-egarded
-> > as vulnerability and forbidden on some Linux systems?
-
-> It could yes.
-> In that case you will be limited to the syscalls interface for the libc
-> observability unless you instrument it and distribute it.
-
-> Cheers.
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
---=_815e93dd-d341-4a12-b7f1-29d99cfb2d63
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On Jul 25, 2019, at 4:21 PM, =E6=9D=A8=E6=B5=B7 &lt;hai.yang@magi=
-c-shield.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__=
-"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;paddin=
-g-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:=
-none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div>Hi</div><=
-br><div>Thanks for quick response.&nbsp;</div><div>LTTng is really impressi=
-ve on performance=EF=BC=8Cespecially under heavy workload. When using it on=
- critical machines=EF=BC=8Cstability is also essential.&nbsp;</div><div>I w=
-onder how LTTng is commercialized and any products or OS distributions alre=
-ady enabled it.&nbsp;</div><div>I took a look at lttng-modules bug list=EF=
-=BC=8Cthere are a few kernel oops years ago and got resolved. May I say it =
-is very stable or it has not been fully tested?&nbsp;</div></blockquote><di=
-v><br></div><div>Hi,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
-=3D"1"></div><div>EfficiOS has had commercial customers using LTTng in prod=
-uction for many years now.</div><div>LTTng per-se is distributed as package=
-s in all major Linux distributions. EfficiOS also provides<br data-mce-bogu=
-s=3D"1"></div><div>more up-to-date packages for some distributions through =
-<a href=3D"http://packages.efficios.com/">http://packages.efficios.com/</a>=
-</div><div><br data-mce-bogus=3D"1"></div><div>The way we commercialize LTT=
-ng is through funding for design and implementation of</div><div>customer's=
- feature requests. We also provide commercial support tailored to specific<=
-/div><div>customer's environments, which includes SLA and continuous integr=
-ation testing of specific</div><div>environments.<br data-mce-bogus=3D"1"><=
-/div><div><br data-mce-bogus=3D"1"></div><div>If those are services you are=
- interested in, please feel free to contact us in private so we</div><div>c=
-an further discuss your needs.<br data-mce-bogus=3D"1"></div><div><br data-=
-mce-bogus=3D"1"></div><div>Best regards,<br data-mce-bogus=3D"1"></div><div=
-><br data-mce-bogus=3D"1"></div><div>Mathieu</div><div><br data-mce-bogus=
-=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;margin-left=
-:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-=
-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><br=
-><div>regards</div><div>Hai<br><p><br><br></p><br><br>--------------=E5=8E=
-=9F=E5=A7=8B=E9=82=AE=E4=BB=B6--------------<br>=E5=8F=91=E4=BB=B6=E4=BA=BA=
-=EF=BC=9A"Jonathan Rajotte-Julien "&lt;jonathan.rajotte-julien@efficios.com=
-&gt;;<br>=E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2019=E5=B9=B47=E6=9C=
-=8823=E6=97=A5(=E6=98=9F=E6=9C=9F=E4=BA=8C) =E4=B8=8A=E5=8D=886:20<br>=E6=
-=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9A"=E6=9D=A8=E6=B5=B7" &lt;hai.yang@magic-sh=
-ield.com&gt;;<br>=E6=8A=84=E9=80=81=EF=BC=9A"lttng-dev "&lt;lttng-dev@lists=
-.lttng.org&gt;;<br>=E4=B8=BB=E9=A2=98=EF=BC=9ARe:  =E5=9B=9E=E5=A4=8D:Re: [=
-lttng-dev] Pros and Cons of LTTng<br>-----------------------------------<br=
-></div> <div><div>Hi,<br><br>&gt; As to LD_PRELOAD, it is also used for pri=
-vilege escalation. Will it be regarded as vulnerability and forbidden on so=
-me Linux systems?<br><br>It could yes.<br>In that case you will be limited =
-to the syscalls interface for the libc<br>observability unless you instrume=
-nt it and distribute it.<br><br>Cheers.<br></div></div><br>________________=
-_______________________________<br>lttng-dev mailing list<br>lttng-dev@list=
-s.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<b=
-r></blockquote></div><div><br></div><div data-marker=3D"__SIG_POST__">-- <b=
-r></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com<=
-/div></div></body></html>
---=_815e93dd-d341-4a12-b7f1-29d99cfb2d63--
-
---===============2730114321318119752==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2730114321318119752==--
+The trace files are in effect a per-session buffer, which is what we
+want for greatest efficiency in space utilization.  And we can archive
+those and download them when "something happens" without paying extra
+cost for space.
