@@ -1,23 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: HugePages shared memory support in LLTng
-Date: Thu, 25 Jul 2019 11:40:23 -0400 (EDT)
-Message-ID: <1962899258.11638.1564069223526.JavaMail.zimbra__45876.3324118749$1564069310$gmane$org@efficios.com>
-References: <CAO+PNdHdLFk=Q0L2BLGnz8xCvdgMw3aYpZuAZumBOWKraKTnAw@mail.gmail.com>
- <20190715143302.GA2017@joraj-alpa>
- <CAO+PNdHW7O98QSdWyA5U6e=gtLmdFt77wHOT=eHb-Py1W3A-oQ@mail.gmail.com>
- <CAO+PNdFotFk6uCF1dySZi9dV6PYpAazWoQpsnU+N58F2b-73FQ@mail.gmail.com>
- <20190722192308.GA803@joraj-alpa> <20190723150744.GC803@joraj-alpa>
- <CAO+PNdGhEgeTo35du4ysMcCOUQ0PKE4tuyGg593AE5feZZ4_JQ@mail.gmail.com>
- <20190723202723.GD803@joraj-alpa>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re:
+ =?utf-8?b?5Zue5aSNOlJlOiAg5Zue5aSNOlJlOiAgIFByb3Mg?=
+ =?utf-8?q?and_Cons_of_LTTng?=
+Date: Thu, 25 Jul 2019 11:45:14 -0400
+Message-ID: <20190725154514.GA9592__40935.7493206457$1564069537$gmane$org@joraj-alpa>
+References: <tencent_264479D416B7725164217DB5@qq.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 45vbyQ3X5Gz1HGs
- for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 11:40:30 -0400 (EDT)
-In-Reply-To: <20190723202723.GD803@joraj-alpa>
+ by lists.lttng.org (Postfix) with ESMTPS id 45vc3z2WlSz1HHY
+ for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 11:45:19 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 123622AD71A
+ for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 11:45:19 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <tencent_264479D416B7725164217DB5@qq.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,75 +27,40 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>, Yiteng Guo <guoyiteng@gmail.com>
+To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jul 23, 2019, at 9:27 PM, Jonathan Rajotte jonathan.rajotte-julien@efficios.com wrote:
-
-> CC'ing the mailing list back.
-> 
-> On Tue, Jul 23, 2019 at 03:58:09PM -0400, Yiteng Guo wrote:
->> Hi Jonathan,
->> 
->> Thank you for the patch! It is really helpful.
-> 
-> Were you able to observe a positive impact?
-> 
-> This is something we might be interested in upstreaming if we have good
-> feedback.
-> 
->> 
->> Is there any disadvantage of per-pid buffering? I don't want to have
->> processes interfere with each other so I choose per-pid buffering.
-> 
-> The main downside is that each registered applications will get their own
-> subbuffers resulting in a lot of memory usage depending on your session
-> configuration. This can get out of hand quickly, especially on systems withs
-> lots
-> of cores and unknown number of instrumented applications.
-
-I can add 2 extra cents (or actually a few more) to this answer:
-
-There are a few reasons for using per-uid buffers over per-pid:
-
-- Lower memory consumption for use-cases with many processes,
-- Faster process launch time: no need to allocate buffers for each process.
-  Useful for use-cases with short-lived processes.
-- Keep a flight recorder "snapshot" available for all processes, including
-  those which recently exited. Indeed, the per-pid buffers don't stay around
-  for snapshot after a process exits or is killed.
-
-There are however a few advantages for per-pid buffers:
-
-- Isolation: if one PID generates corrupted trace data, it does not interfere
-  with other PIDs buffers,
-- If one PID is killed between reserve and commit, it does not make that specific
-  per-cpu ring buffer unusable for the rest of the tracing session lifetime.
-
-Hoping this information helps making the right choice for your deployment!
-
-Thanks,
-
-Mathieu
-
-
-> 
-> If you completely control the runtime, for example when doing benchmarking or
-> simple analysis, feel free to use what make more sense to you as long as you
-> understand the pitfalls of each mode.
-> 
-> Cheers
-> 
-> --
-> Jonathan Rajotte-Julien
-> EfficiOS
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgWWl0ZW5nLAoKPiBUaGFua3MgZm9yIHF1aWNrIHJlc3BvbnNlLiAKPiBMVFRuZyBpcyByZWFs
+bHkgaW1wcmVzc2l2ZSBvbiBwZXJmb3JtYW5jZe+8jGVzcGVjaWFsbHkgdW5kZXIgaGVhdnkgd29y
+a2xvYWQuIFdoZW4gdXNpbmcgaXQgb24gY3JpdGljYWwgbWFjaGluZXPvvIxzdGFiaWxpdHkgaXMg
+YWxzbyBlc3NlbnRpYWwuIAo+IEkgd29uZGVyIGhvdyBMVFRuZyBpcyBjb21tZXJjaWFsaXplZCBh
+bmQgYW55IHByb2R1Y3RzIG9yIE9TIGRpc3RyaWJ1dGlvbnMgYWxyZWFkeSBlbmFibGVkIGl0LgoK
+TFRUbmcgaXMgb3Blbi1zb3VyY2UgYW5kIGZyZWUgYW5kIGFzIGZhciBhcyBJIGNhbiB0ZWxsIHdp
+bGwgYmUgZm9yIHRoZSBmb3Jlc2VlYWJsZSBmdXR1cmUuCgpUaGUgbWFpbiBjb250cmlidXRvciBi
+ZWhpbmQgdGhlIGx0dG5nIGVjb3N5dGVtIGlzIEVmZmljaU9TLiBXZSBvZmZlciBjb21tZXJjaWFs
+CnN1cHBvcnQgYW5kIGZlYXR1cmUgZGV2ZWxvcG1lbnRzIGZvciBsdHRuZyBhbmQgc2ltaWxhciB0
+b29scy4gSSBlbmNvdXJhZ2UgeW91IHRvCnRha2UgYSBsb29rIGF0IG91ciB3ZWJzaXRlIFsxXSBh
+bmQgY29udGFjdCB1cyBbMl0gaWYgeW91IG5lZWQgY29tbWVyY2lhbApzdXBwb3J0LgoKTFRUbmcg
+bW9zdGx5IGV4aXN0cyB0b2RheSBkdWUgdG8gRWZmaWNpT1MgYW5kIGl0cyBjb21tZXJjaWFsIHBh
+cnRuZXJzLiBFZmZpY2lPUwplbXBsb3lzIGFsbCBtYWpvciBjb250cmlidXRvcnMgb2YgdGhlIGx0
+dG5nIGVjb3N5c3RlbS4KClsxXSBodHRwczovL3d3dy5lZmZpY2lvcy5jb20vClsyXSBodHRwczov
+L3d3dy5lZmZpY2lvcy5jb20vY29udGFjdC8KCkxUVG5nIGlzIGFscmVhZHkgYXZhaWxhYmxlIGZv
+ciBtdWx0aXBsZSBkaXN0cmlidXRpb25zIFszXVs0XS4KClszXSBodHRwczovL2x0dG5nLm9yZy9k
+b3dubG9hZC8KWzRdIFlvY3RvOiBodHRwczovL2dpdC55b2N0b3Byb2plY3Qub3JnL2NnaXQuY2dp
+L3Bva3kvcGxhaW4vbWV0YS9yZWNpcGVzLWtlcm5lbC9sdHRuZwoKPiBJIHRvb2sgYSBsb29rIGF0
+IGx0dG5nLW1vZHVsZXMgYnVnIGxpc3TvvIx0aGVyZSBhcmUgYSBmZXcga2VybmVsIG9vcHMgeWVh
+cnMgYWdvIGFuZCBnb3QgcmVzb2x2ZWQuIE1heSBJIHNheSBpdCBpcyB2ZXJ5IHN0YWJsZSBvciBp
+dCBoYXMgbm90IGJlZW4gZnVsbHkgdGVzdGVkPyAKCldlIGRvIHBlcmZvcm0gZXh0ZW5zaXZlIHRl
+c3RpbmcgZm9yIG91ciB1c2Vyc3BhY2UgWzVdWzZdIGFuZCBrZXJuZWwKdHJhY2VyWzddWzhdLiBX
+ZSBhaW0gZm9yIHN0YWJpbGl0eS4gQXMgeW91IGtub3cgYnVncyBhcmUgYWx3YXlzIGEgcG9zc2li
+aWxpdHkuClRoZSBrZXJuZWwgaXMgYSBmb3JldmVyIG1vdmluZyB0YXJnZXQgYW5kIGRpc3RybyBr
+ZXJuZWwgc29tZXRpbWUgcGVyZm9ybSBza2V0Y2h5CnJlYmFzZS4gV2UgY29uc2lkZXIgbHR0bmct
+bW9kdWxlcyB0byBiZSB2ZXJ5IHN0YWJsZSBhbmQgd2Ugc3RyaXZlIHRvIG1ha2Ugc3VyZQppdCBp
+cyB0aGUgY2FzZS4KCls1XSBodHRwczovL2NpLmx0dG5nLm9yZy92aWV3L0xUVG5nLXVzdC8KWzZd
+IGh0dHBzOi8vY2kubHR0bmcub3JnL3ZpZXcvTFRUbmctdG9vbHMvCls3XSBodHRwczovL2NpLmx0
+dG5nLm9yZy92aWV3L0xUVG5nLW1vZHVsZXMvCls4XSBodHRwczovL2NpLmx0dG5nLm9yZy92aWV3
+L1N5c3RlbSUyMFRlc3RzLwoKQ2hlZXJzCgotLSAKSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZm
+aWNpT1MKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
+bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
