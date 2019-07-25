@@ -1,23 +1,24 @@
 From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Subject: Re:
- =?utf-8?b?5Zue5aSNOlJlOiAg5Zue5aSNOlJlOiAgIFByb3Mg?=
- =?utf-8?q?and_Cons_of_LTTng?=
-Date: Thu, 25 Jul 2019 11:45:14 -0400
-Message-ID: <20190725154514.GA9592__40935.7493206457$1564069537$gmane$org@joraj-alpa>
+ =?utf-8?b?5Zue5aSNOlJlOiAg5Zue5aSNOlJlOiBQcm9zIGFu?=
+ =?utf-8?q?d_Cons_of_LTTng?=
+Date: Thu, 25 Jul 2019 11:48:01 -0400
+Message-ID: <20190725154801.GB9592__21687.6084845111$1564069698$gmane$org@joraj-alpa>
 References: <tencent_264479D416B7725164217DB5@qq.com>
+ <20190725154514.GA9592@joraj-alpa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 45vc3z2WlSz1HHY
- for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 11:45:19 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 45vc762y95z1HJ4
+ for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 11:48:02 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 123622AD71A
- for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 11:45:19 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id D73372AD88F
+ for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 11:48:01 -0400 (EDT)
 Content-Disposition: inline
-In-Reply-To: <tencent_264479D416B7725164217DB5@qq.com>
+In-Reply-To: <20190725154514.GA9592@joraj-alpa>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -31,36 +32,16 @@ To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgWWl0ZW5nLAoKPiBUaGFua3MgZm9yIHF1aWNrIHJlc3BvbnNlLiAKPiBMVFRuZyBpcyByZWFs
-bHkgaW1wcmVzc2l2ZSBvbiBwZXJmb3JtYW5jZe+8jGVzcGVjaWFsbHkgdW5kZXIgaGVhdnkgd29y
-a2xvYWQuIFdoZW4gdXNpbmcgaXQgb24gY3JpdGljYWwgbWFjaGluZXPvvIxzdGFiaWxpdHkgaXMg
-YWxzbyBlc3NlbnRpYWwuIAo+IEkgd29uZGVyIGhvdyBMVFRuZyBpcyBjb21tZXJjaWFsaXplZCBh
-bmQgYW55IHByb2R1Y3RzIG9yIE9TIGRpc3RyaWJ1dGlvbnMgYWxyZWFkeSBlbmFibGVkIGl0LgoK
-TFRUbmcgaXMgb3Blbi1zb3VyY2UgYW5kIGZyZWUgYW5kIGFzIGZhciBhcyBJIGNhbiB0ZWxsIHdp
-bGwgYmUgZm9yIHRoZSBmb3Jlc2VlYWJsZSBmdXR1cmUuCgpUaGUgbWFpbiBjb250cmlidXRvciBi
-ZWhpbmQgdGhlIGx0dG5nIGVjb3N5dGVtIGlzIEVmZmljaU9TLiBXZSBvZmZlciBjb21tZXJjaWFs
-CnN1cHBvcnQgYW5kIGZlYXR1cmUgZGV2ZWxvcG1lbnRzIGZvciBsdHRuZyBhbmQgc2ltaWxhciB0
-b29scy4gSSBlbmNvdXJhZ2UgeW91IHRvCnRha2UgYSBsb29rIGF0IG91ciB3ZWJzaXRlIFsxXSBh
-bmQgY29udGFjdCB1cyBbMl0gaWYgeW91IG5lZWQgY29tbWVyY2lhbApzdXBwb3J0LgoKTFRUbmcg
-bW9zdGx5IGV4aXN0cyB0b2RheSBkdWUgdG8gRWZmaWNpT1MgYW5kIGl0cyBjb21tZXJjaWFsIHBh
-cnRuZXJzLiBFZmZpY2lPUwplbXBsb3lzIGFsbCBtYWpvciBjb250cmlidXRvcnMgb2YgdGhlIGx0
-dG5nIGVjb3N5c3RlbS4KClsxXSBodHRwczovL3d3dy5lZmZpY2lvcy5jb20vClsyXSBodHRwczov
-L3d3dy5lZmZpY2lvcy5jb20vY29udGFjdC8KCkxUVG5nIGlzIGFscmVhZHkgYXZhaWxhYmxlIGZv
-ciBtdWx0aXBsZSBkaXN0cmlidXRpb25zIFszXVs0XS4KClszXSBodHRwczovL2x0dG5nLm9yZy9k
-b3dubG9hZC8KWzRdIFlvY3RvOiBodHRwczovL2dpdC55b2N0b3Byb2plY3Qub3JnL2NnaXQuY2dp
-L3Bva3kvcGxhaW4vbWV0YS9yZWNpcGVzLWtlcm5lbC9sdHRuZwoKPiBJIHRvb2sgYSBsb29rIGF0
-IGx0dG5nLW1vZHVsZXMgYnVnIGxpc3TvvIx0aGVyZSBhcmUgYSBmZXcga2VybmVsIG9vcHMgeWVh
-cnMgYWdvIGFuZCBnb3QgcmVzb2x2ZWQuIE1heSBJIHNheSBpdCBpcyB2ZXJ5IHN0YWJsZSBvciBp
-dCBoYXMgbm90IGJlZW4gZnVsbHkgdGVzdGVkPyAKCldlIGRvIHBlcmZvcm0gZXh0ZW5zaXZlIHRl
-c3RpbmcgZm9yIG91ciB1c2Vyc3BhY2UgWzVdWzZdIGFuZCBrZXJuZWwKdHJhY2VyWzddWzhdLiBX
-ZSBhaW0gZm9yIHN0YWJpbGl0eS4gQXMgeW91IGtub3cgYnVncyBhcmUgYWx3YXlzIGEgcG9zc2li
-aWxpdHkuClRoZSBrZXJuZWwgaXMgYSBmb3JldmVyIG1vdmluZyB0YXJnZXQgYW5kIGRpc3RybyBr
-ZXJuZWwgc29tZXRpbWUgcGVyZm9ybSBza2V0Y2h5CnJlYmFzZS4gV2UgY29uc2lkZXIgbHR0bmct
-bW9kdWxlcyB0byBiZSB2ZXJ5IHN0YWJsZSBhbmQgd2Ugc3RyaXZlIHRvIG1ha2Ugc3VyZQppdCBp
-cyB0aGUgY2FzZS4KCls1XSBodHRwczovL2NpLmx0dG5nLm9yZy92aWV3L0xUVG5nLXVzdC8KWzZd
-IGh0dHBzOi8vY2kubHR0bmcub3JnL3ZpZXcvTFRUbmctdG9vbHMvCls3XSBodHRwczovL2NpLmx0
-dG5nLm9yZy92aWV3L0xUVG5nLW1vZHVsZXMvCls4XSBodHRwczovL2NpLmx0dG5nLm9yZy92aWV3
-L1N5c3RlbSUyMFRlc3RzLwoKQ2hlZXJzCgotLSAKSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZm
-aWNpT1MKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
-bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlz
-dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hi Hai,
+
+On Thu, Jul 25, 2019 at 11:45:14AM -0400, Jonathan Rajotte-Julien wrote:
+> Hi Yiteng,
+
+I missed up name here. Sorry for that. I will teach me to have multiple email
+client side by side.
+
+Cheers
+
+-- 
+Jonathan Rajotte-Julien
+EfficiOS
