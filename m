@@ -1,27 +1,18 @@
-From: Yiteng Guo <guoyiteng@gmail.com>
-Subject: Re: HugePages shared memory support in LLTng
-Date: Fri, 26 Jul 2019 00:37:46 -0400
-Message-ID: <CAO+PNdGRD3BkfEOgjCLo+kgXreZD_GqYnW6LB7-ELjnowk+GjQ__17954.5657521643$1564115901$gmane$org@mail.gmail.com>
-References: <CAO+PNdHdLFk=Q0L2BLGnz8xCvdgMw3aYpZuAZumBOWKraKTnAw@mail.gmail.com>
- <20190715143302.GA2017@joraj-alpa>
- <CAO+PNdHW7O98QSdWyA5U6e=gtLmdFt77wHOT=eHb-Py1W3A-oQ@mail.gmail.com>
- <CAO+PNdFotFk6uCF1dySZi9dV6PYpAazWoQpsnU+N58F2b-73FQ@mail.gmail.com>
- <20190722192308.GA803@joraj-alpa> <20190723150744.GC803@joraj-alpa>
- <CAO+PNdGhEgeTo35du4ysMcCOUQ0PKE4tuyGg593AE5feZZ4_JQ@mail.gmail.com>
- <20190723202723.GD803@joraj-alpa>
- <1962899258.11638.1564069223526.JavaMail.zimbra@efficios.com>
- <1564077561.2343.121.camel@impinj.com>
+From: Khem Raj <raj.khem@gmail.com>
+Subject: [lttng-ust][PATCH] Add config time check for new gettid
+ API
+Date: Fri, 26 Jul 2019 10:07:31 -0700
+Message-ID: <20190726170731.16080-1-raj.khem__39279.0890926094$1564160877$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by lists.lttng.org (Postfix) with ESMTPS id 45vxCY2jptz1Hw8
- for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2019 00:38:01 -0400 (EDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 207so46768856wma.1
- for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2019 21:38:01 -0700 (PDT)
-In-Reply-To: <1564077561.2343.121.camel@impinj.com>
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com
+ [IPv6:2607:f8b0:4864:20::544])
+ by lists.lttng.org (Postfix) with ESMTPS id 45wFrZ0StDz1JZs
+ for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2019 13:07:41 -0400 (EDT)
+Received: by mail-pg1-x544.google.com with SMTP id x15so14716881pgg.8
+ for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2019 10:07:41 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -31,19 +22,55 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Trent Piepho <tpiepho@impinj.com>, "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, "jonathan.rajotte-julien@efficios.com" <jonathan.rajotte-julien@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hello,
+glibc 2.30 introdoced this function see [1]
+so its best to detect it
+and provide fallbacks only if its not present
 
-Thank you very much for all the information about per-uid and per-pid
-buffer. It is really helpful for me to make a decision.
+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=6399
 
-@Jonathan: This is my first time to get involved in an open-source
-project on the mailing list. I don't quite know how RFC works. Should
-I just do `git format-patch` and copy-paste the diff to an email? Is
-there any specific format for the RFC email and its title?
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ configure.ac            | 1 +
+ include/lttng/ust-tid.h | 7 +++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-Best,
-Yiteng
+diff --git a/configure.ac b/configure.ac
+index 7fa059a..b1099c1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -137,6 +137,7 @@ AC_CHECK_FUNCS([ \
+ 	clock_gettime \
+ 	ftruncate \
+ 	getpagesize \
++	gettid \
+ 	gettimeofday \
+ 	localeconv \
+ 	memchr \
+diff --git a/include/lttng/ust-tid.h b/include/lttng/ust-tid.h
+index e669d7e..7995c78 100644
+--- a/include/lttng/ust-tid.h
++++ b/include/lttng/ust-tid.h
+@@ -26,7 +26,10 @@
+  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  * SOFTWARE.
+  */
+-
++#include <config.h>
++#if HAVE_GETTID
++#include <unistd.h>
++#else
+ #ifdef __linux__
+ #include <syscall.h>
+ #endif
+@@ -49,5 +52,5 @@ static inline pid_t gettid(void)
+ 	return getpid();
+ }
+ #endif
+-
++#endif /* HAVE_GETTID */
+ #endif /* _LTTNG_UST_TID_H */
+-- 
+2.22.0
