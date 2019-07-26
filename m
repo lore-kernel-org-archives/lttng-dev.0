@@ -1,23 +1,15 @@
-From: Khem Raj <raj.khem@gmail.com>
-Subject: Re: [lttng-ust][PATCH V2] Add config time check for new
- gettid API
-Date: Fri, 26 Jul 2019 14:27:56 -0700
-Message-ID: <CAMKF1so6z7dk7GkpVLR9bp72c2AD47+j9Cd9xOw=fw8+EG7oQg__22137.2728863329$1564176514$gmane$org@mail.gmail.com>
-References: <20190726190223.38027-1-raj.khem@gmail.com>
- <8c60fd3c-398e-98ef-796b-028bf1fb5647@gydle.com>
- <CAMKF1sqVkKeEYMn1sPWgKfqFuaEnk68Hd4MfccUJKW4UkT0L=Q@mail.gmail.com>
- <dd43d88d-15e5-cafe-b2a5-c2be84ac361d@gydle.com>
+From: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+Subject: [PATCH lttng-ust] Fix: address GCC unaligned pointer
+ warnings
+Date: Fri, 26 Jul 2019 18:00:07 -0400
+Message-ID: <20190726220007.21275-1-gabriel.pollo-guilbert__26100.5516558484$1564178497$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com
- [IPv6:2607:f8b0:4864:20::842])
- by lists.lttng.org (Postfix) with ESMTPS id 45wMd85glnz1Fm3
- for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2019 17:28:12 -0400 (EDT)
-Received: by mail-qt1-x842.google.com with SMTP id r6so49820146qtt.0
- for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2019 14:28:12 -0700 (PDT)
-In-Reply-To: <dd43d88d-15e5-cafe-b2a5-c2be84ac361d@gydle.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 45wNMQ2MYPz1FpG
+ for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2019 18:01:22 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,101 +19,151 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Sebastien Boisvert <sboisvert@gydle.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Jul 26, 2019 at 2:09 PM Sebastien Boisvert <sboisvert@gydle.com> wrote:
->
->
->
-> On 2019-07-26 4:55 p.m., Khem Raj wrote:
-> > On Fri, Jul 26, 2019 at 12:23 PM Sebastien Boisvert <sboisvert@gydle.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2019-07-26 3:02 p.m., Khem Raj wrote:
-> >>> glibc 2.30 introduced this function see [1]
-> >>> so it's best to detect it
-> >>> and provide fallback only if its not present
-> >>
-> >> nit:
-> >>
-> >> -if its not present
-> >> +if it's not present
-> >>
-> >
-> > I sent a v3 with this fixed.
-> >
-> >> I cloned the git repository of the glibc, but I could not find
-> >> the definition of gettid().
-> >>
-> >> Do you know where it is located in glibc ?
-> >>
-> > see
-> > https://sourceware.org/git/?p=glibc.git;a=commit;h=1d0fc213824eaa2a8f8c4385daaa698ee8fb7c92
-> >
->
-> In the commit diff at https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=1d0fc213824eaa2a8f8c4385daaa698ee8fb7c92;hp=f289e656ec8221756519a601042bc9fbe1b310fb
-> I don't see the definition of gettid().
->
-> I see the declaration.
->
-> There are a bunch of *ABI changes (*.abilist), and test changes (*tst-*).
->
+The release of GCC 9 added the following warning:
 
-its a syscall wrapper which is generated during build from
-sysdeps/unix/sysv/linux/syscalls.list
+	-Waddress-of-packed-member, enabled by default, warns about an
+	unaligned pointer value from the address of a packed member of a
+	struct or union.
 
->
-> >> Thanks.
-> >>
-> >>>
-> >>> [1] https://sourceware.org/bugzilla/show_bug.cgi?id=6399
-> >>>
-> >>> Upstream-Status: Submitted [https://lists.lttng.org/pipermail/lttng-dev/2019-July/029131.html]
-> >>>
-> >>> Signed-off-by: Khem Raj <raj.khem@gmail.com>
-> >>> ---
-> >>> v2: Fix typos in commit message
-> >>>
-> >>>  configure.ac            | 1 +
-> >>>  include/lttng/ust-tid.h | 7 +++++--
-> >>>  2 files changed, 6 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/configure.ac b/configure.ac
-> >>> index 7fa059a..b1099c1 100644
-> >>> --- a/configure.ac
-> >>> +++ b/configure.ac
-> >>> @@ -137,6 +137,7 @@ AC_CHECK_FUNCS([ \
-> >>>       clock_gettime \
-> >>>       ftruncate \
-> >>>       getpagesize \
-> >>> +     gettid \
-> >>>       gettimeofday \
-> >>>       localeconv \
-> >>>       memchr \
-> >>> diff --git a/include/lttng/ust-tid.h b/include/lttng/ust-tid.h
-> >>> index e669d7e..7995c78 100644
-> >>> --- a/include/lttng/ust-tid.h
-> >>> +++ b/include/lttng/ust-tid.h
-> >>> @@ -26,7 +26,10 @@
-> >>>   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> >>>   * SOFTWARE.
-> >>>   */
-> >>> -
-> >>> +#include <config.h>
-> >>> +#if HAVE_GETTID
-> >>> +#include <unistd.h>
-> >>> +#else
-> >>>  #ifdef __linux__
-> >>>  #include <syscall.h>
-> >>>  #endif
-> >>> @@ -49,5 +52,5 @@ static inline pid_t gettid(void)
-> >>>       return getpid();
-> >>>  }
-> >>>  #endif
-> >>> -
-> >>> +#endif /* HAVE_GETTID */
-> >>>  #endif /* _LTTNG_UST_TID_H */
-> >>>
+The warning is triggered in some place in LTTng-UST in cases where we
+pass a pointer to get a result. Rather than passing the pointer directly
+from the struct member, we get the result into a local storage, then
+write it in the struct.
+
+Signed-off-by: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+---
+ liblttng-ust-comm/lttng-ust-comm.c | 26 +++++++++++++++++++-------
+ liblttng-ust/lttng-ust-comm.c      |  6 +++++-
+ 2 files changed, 24 insertions(+), 8 deletions(-)
+
+diff --git a/liblttng-ust-comm/lttng-ust-comm.c b/liblttng-ust-comm/lttng-ust-comm.c
+index 679b40e6..92d86d4e 100644
+--- a/liblttng-ust-comm/lttng-ust-comm.c
++++ b/liblttng-ust-comm/lttng-ust-comm.c
+@@ -853,12 +853,15 @@ static
+ int serialize_integer_type(struct ustctl_integer_type *uit,
+ 		const struct lttng_integer_type *lit)
+ {
++	int32_t encoding;
++
+ 	uit->size = lit->size;
+ 	uit->signedness = lit->signedness;
+ 	uit->reverse_byte_order = lit->reverse_byte_order;
+ 	uit->base = lit->base;
+-	if (serialize_string_encoding(&uit->encoding, lit->encoding))
++	if (serialize_string_encoding(&encoding, lit->encoding))
+ 		return -EINVAL;
++	uit->encoding = encoding;
+ 	uit->alignment = lit->alignment;
+ 	return 0;
+ }
+@@ -880,9 +883,11 @@ int serialize_basic_type(struct lttng_session *session,
+ 	}
+ 	case atype_string:
+ 	{
+-		if (serialize_string_encoding(&ubt->string.encoding,
+-				lbt->string.encoding))
++		int32_t encoding;
++
++		if (serialize_string_encoding(&encoding, lbt->string.encoding))
+ 			return -EINVAL;
++		ubt->string.encoding = encoding;
+ 		*uatype = ustctl_atype_string;
+ 		break;
+ 	}
+@@ -1007,13 +1012,15 @@ int serialize_one_field(struct lttng_session *session,
+ 	{
+ 		struct ustctl_field *uf = &fields[*iter_output];
+ 		struct ustctl_type *ut = &uf->type;
++		enum ustctl_abstract_types atype;
+ 
+ 		strncpy(uf->name, lf->name, LTTNG_UST_SYM_NAME_LEN);
+ 		uf->name[LTTNG_UST_SYM_NAME_LEN - 1] = '\0';
+-		ret = serialize_basic_type(session, &ut->atype, lt->atype,
++		ret = serialize_basic_type(session, &atype, lt->atype,
+ 			&ut->u.basic, &lt->u.basic);
+ 		if (ret)
+ 			return ret;
++		ut->atype = atype;
+ 		(*iter_output)++;
+ 		break;
+ 	}
+@@ -1023,6 +1030,7 @@ int serialize_one_field(struct lttng_session *session,
+ 		struct ustctl_type *ut = &uf->type;
+ 		struct ustctl_basic_type *ubt;
+ 		const struct lttng_basic_type *lbt;
++		enum ustctl_abstract_types atype;
+ 
+ 		strncpy(uf->name, lf->name, LTTNG_UST_SYM_NAME_LEN);
+ 		uf->name[LTTNG_UST_SYM_NAME_LEN - 1] = '\0';
+@@ -1030,10 +1038,11 @@ int serialize_one_field(struct lttng_session *session,
+ 		ubt = &ut->u.array.elem_type;
+ 		lbt = &lt->u.array.elem_type;
+ 		ut->u.array.length = lt->u.array.length;
+-		ret = serialize_basic_type(session, &ubt->atype, lbt->atype,
++		ret = serialize_basic_type(session, &atype, lbt->atype,
+ 			&ubt->u.basic, &lbt->u.basic);
+ 		if (ret)
+ 			return -EINVAL;
++		ubt->atype = atype;
+ 		ut->atype = ustctl_atype_array;
+ 		(*iter_output)++;
+ 		break;
+@@ -1044,6 +1053,7 @@ int serialize_one_field(struct lttng_session *session,
+ 		struct ustctl_type *ut = &uf->type;
+ 		struct ustctl_basic_type *ubt;
+ 		const struct lttng_basic_type *lbt;
++		enum ustctl_abstract_types atype;
+ 		int ret;
+ 
+ 		strncpy(uf->name, lf->name, LTTNG_UST_SYM_NAME_LEN);
+@@ -1051,16 +1061,18 @@ int serialize_one_field(struct lttng_session *session,
+ 		uf->type.atype = ustctl_atype_sequence;
+ 		ubt = &ut->u.sequence.length_type;
+ 		lbt = &lt->u.sequence.length_type;
+-		ret = serialize_basic_type(session, &ubt->atype, lbt->atype,
++		ret = serialize_basic_type(session, &atype, lbt->atype,
+ 			&ubt->u.basic, &lbt->u.basic);
+ 		if (ret)
+ 			return -EINVAL;
++		ubt->atype = atype;
+ 		ubt = &ut->u.sequence.elem_type;
+ 		lbt = &lt->u.sequence.elem_type;
+-		ret = serialize_basic_type(session, &ubt->atype, lbt->atype,
++		ret = serialize_basic_type(session, &atype, lbt->atype,
+ 			&ubt->u.basic, &lbt->u.basic);
+ 		if (ret)
+ 			return -EINVAL;
++		ubt->atype = atype;
+ 		ut->atype = ustctl_atype_sequence;
+ 		(*iter_output)++;
+ 		break;
+diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+index 61dbb41b..4bc350e2 100644
+--- a/liblttng-ust/lttng-ust-comm.c
++++ b/liblttng-ust/lttng-ust-comm.c
+@@ -875,14 +875,18 @@ int handle_message(struct sock_info *sock_info,
+ 	}
+ 	case LTTNG_UST_STREAM:
+ 	{
++		uint64_t memory_map_size;
++
+ 		/* Receive shm_fd, wakeup_fd */
+ 		ret = ustcomm_recv_stream_from_sessiond(sock,
+-			&lum->u.stream.len,
++			&memory_map_size,
+ 			&args.stream.shm_fd,
+ 			&args.stream.wakeup_fd);
+ 		if (ret) {
+ 			goto error;
+ 		}
++		lum->u.stream.len = memory_map_size;
++
+ 		if (ops->cmd)
+ 			ret = ops->cmd(lum->handle, lum->cmd,
+ 					(unsigned long) &lum->u,
+-- 
+2.22.0
