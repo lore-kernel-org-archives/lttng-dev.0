@@ -1,22 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v2 1/4] userspace-rcu: Add lock-free singly
- linked list rculflist
-Date: Mon, 29 Jul 2019 09:45:24 -0400 (EDT)
-Message-ID: <2135438495.917.1564407924224.JavaMail.zimbra__41842.3551179998$1564407953$gmane$org@efficios.com>
-References: <1564407331-25820-1-git-send-email-junchangwang@gmail.com>
- <1564407331-25820-2-git-send-email-junchangwang@gmail.com>
+From: Sebastien Boisvert <sboisvert@gydle.com>
+Subject: Re: [lttng-ust][PATCH V2] Add config time check for new
+ gettid API
+Date: Mon, 29 Jul 2019 09:48:52 -0400
+Message-ID: <61c3cf80-f730-5253-ec03-bc35eaad2594__1696.75627710006$1564408162$gmane$org@gydle.com>
+References: <20190726190223.38027-1-raj.khem@gmail.com>
+ <8c60fd3c-398e-98ef-796b-028bf1fb5647@gydle.com>
+ <CAMKF1sqVkKeEYMn1sPWgKfqFuaEnk68Hd4MfccUJKW4UkT0L=Q@mail.gmail.com>
+ <dd43d88d-15e5-cafe-b2a5-c2be84ac361d@gydle.com>
+ <CAMKF1so6z7dk7GkpVLR9bp72c2AD47+j9Cd9xOw=fw8+EG7oQg@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 45y1Ct3YMgz187W
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 09:45:30 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id E645325DFEE
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 09:45:24 -0400 (EDT)
-In-Reply-To: <1564407331-25820-2-git-send-email-junchangwang@gmail.com>
+Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
+ by lists.lttng.org (Postfix) with ESMTPS id 45y1J20lHxz188p
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 09:49:05 -0400 (EDT)
+In-Reply-To: <CAMKF1so6z7dk7GkpVLR9bp72c2AD47+j9Cd9xOw=fw8+EG7oQg@mail.gmail.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,39 +26,16 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Junchang Wang <junchangwang@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@linux.ibm.com>
+To: Khem Raj <raj.khem@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jul 29, 2019, at 9:35 AM, Junchang Wang junchangwang@gmail.com wrote:
+On 2019-07-26 5:27 p.m., Khem Raj wrote:
+>>
+>> I don't see the definition of gettid().
+> 
+> its a syscall wrapper which is generated during build from
+> sysdeps/unix/sysv/linux/syscalls.list
+> 
 
-> Signed-off-by: Junchang Wang <junchangwang@gmail.com>
-
-Hi Junchang,
-
-Thanks for submitting this! I've been on vacation for the past two weeks,
-hence the delay in reply.
-
-A few points:
-
-I think we should move the implementation of find/insert/delete to a .c
-file (rather than headers) because at least two of those functions are
-larger than 10 lines, and therefore don't fall under the "trivial"
-category.
-
-I also notice that the implementation you propose is GPLv2+. Would you
-be willing to re-license your contribution under LGPLv2.1 or LGPLv2.1+ ?
-This is the license we use for the entire Userspace RCU library. liburcu
-is meant to be used by non-GPL/LGPL programs as well.
-
-I'll wait until I get an answer from you on those points before digging
-further into the code.
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+OK, now I understand, thanks !
