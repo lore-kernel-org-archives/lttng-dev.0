@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust v2] Use MAP_POPULATE to reduce
- pagefault when available
-Date: Mon, 29 Jul 2019 14:55:29 -0400 (EDT)
-Message-ID: <22738144.2494.1564426529986.JavaMail.zimbra__19972.0077029028$1564426736$gmane$org@efficios.com>
-References: <20190729184959.23802-1-jonathan.rajotte-julien@efficios.com>
+From: =?UTF-8?Q?Christophe_B=C3=A9dard?= <bedard.christophe@gmail.com>
+Subject: gcc plugin for instrumenting individual functions
+Date: Mon, 29 Jul 2019 20:56:15 +0200
+Message-ID: <CAAS9doaz=dF_42vWaKO9mnRgua8hTNrgx+aHQZ0j9XTAhy0vmw__33849.5971330971$1564426770$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7037082290779282648=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 45y85b1qYXz1FtM
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 14:55:31 -0400 (EDT)
-In-Reply-To: <20190729184959.23802-1-jonathan.rajotte-julien@efficios.com>
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by lists.lttng.org (Postfix) with ESMTPS id 45y8783nN2z1Ftf
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 14:56:52 -0400 (EDT)
+Received: by mail-io1-xd34.google.com with SMTP id k8so122451335iot.1
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 11:56:52 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,123 +20,62 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: Yiteng Guo <guoyiteng@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jul 29, 2019, at 2:49 PM, Jonathan Rajotte jonathan.rajotte-julien@efficios.com wrote:
+--===============7037082290779282648==
+Content-Type: multipart/alternative; boundary="000000000000730392058ed674bd"
 
-> Any ring buffer configuration bigger than PAGE_SIZE would result
-> in an increased latency for the first tracepoint hit (1200ns) landing on a
-> new PAGE_SIZE sized chunk of the mapped memory. This happens at least
-> for the first ring buffer traversal.
-> 
-> To alleviate this we can use MAP_POPULATE that will "prefault" the page
-> tables.
-> 
-> A similar flag seems to exist on freebsd (MAP_PREFAULT_READ) but I do
-> not have access to a system to test it and ensure it does indeed results
-> in the same effect. It mostly indicates that it prefaults for the
-> read case so I doubt it is the case.
-> 
-> Default to using MAP_POPULATE on Linux only for now. Support of
-> prefaulting on other platforms will be added as needed.
-> 
-> Links: https://lists.lttng.org/pipermail/lttng-dev/2019-July/029116.html
->       https://lists.lttng.org/pipermail/lttng-dev/2019-July/029122.html
+--000000000000730392058ed674bd
+Content-Type: text/plain; charset="UTF-8"
 
-Next time please do:
+Hi,
 
-Link: https://lists.lttng.org/pipermail/lttng-dev/2019-July/029116.html
-Link: https://lists.lttng.org/pipermail/lttng-dev/2019-July/029122.html
+Sharing this just in case it can help someone!
 
-I'll edit it on my side,
+gcc only lets you disable instrumentation, using the
+`no_instrument_function` attribute, or by matching file names. It does not
+let you explicitly choose the individual functions you want to instrument.
 
-Thanks,
+I've searched many times for a way to do it, but never found anything for
+some reason, so I wrote this plugin:
+https://github.com/christophebedard/instrument-attribute-gcc-plugin
 
-Mathieu
+It simply enables instrumentation for functions with the
+`instrument_function` attribute, and disables instrumentation for all other
+functions.
 
-> 
-> Tested-by: Yiteng Guo <guoyiteng@gmail.com>
-> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-> ---
-> libringbuffer/mmap.h | 30 ++++++++++++++++++++++++++++++
-> libringbuffer/shm.c  |  5 +++--
-> 2 files changed, 33 insertions(+), 2 deletions(-)
-> create mode 100644 libringbuffer/mmap.h
-> 
-> diff --git a/libringbuffer/mmap.h b/libringbuffer/mmap.h
-> new file mode 100644
-> index 00000000..f195c152
-> --- /dev/null
-> +++ b/libringbuffer/mmap.h
-> @@ -0,0 +1,30 @@
-> +#ifndef _LTTNG_MMAP_H
-> +#define _LTTNG_MMAP_H
-> +
-> +/*
-> + * Copyright (c) 2019 - Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; only
-> + * version 2.1 of the License.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> + */
-> +
-> +#include <sys/mman.h>
-> +
-> +#if defined(__linux__) && defined(MAP_POPULATE)
-> +# define LTTNG_MAP_POPULATE MAP_POPULATE
-> +#else
-> +# define LTTNG_MAP_POPULATE 0
-> +#endif /* __linux__ && MAP_POPULATE */
-> +
-> +#endif /* _LTTNG_MMAP_H */
-> diff --git a/libringbuffer/shm.c b/libringbuffer/shm.c
-> index 10b3bcef..909991ed 100644
-> --- a/libringbuffer/shm.c
-> +++ b/libringbuffer/shm.c
-> @@ -40,6 +40,7 @@
-> #endif
-> #include <helper.h>
-> #include <ust-fd.h>
-> +#include "mmap.h"
-> 
-> /*
->  * Ensure we have the required amount of space available by writing 0
-> @@ -154,7 +155,7 @@ struct shm_object *_shm_object_table_alloc_shm(struct
-> shm_object_table *table,
-> 
-> 	/* memory_map: mmap */
-> 	memory_map = mmap(NULL, memory_map_size, PROT_READ | PROT_WRITE,
-> -			  MAP_SHARED, shmfd, 0);
-> +			  MAP_SHARED | LTTNG_MAP_POPULATE, shmfd, 0);
-> 	if (memory_map == MAP_FAILED) {
-> 		PERROR("mmap");
-> 		goto error_mmap;
-> @@ -341,7 +342,7 @@ struct shm_object *shm_object_table_append_shm(struct
-> shm_object_table *table,
-> 
-> 	/* memory_map: mmap */
-> 	memory_map = mmap(NULL, memory_map_size, PROT_READ | PROT_WRITE,
-> -			  MAP_SHARED, shm_fd, 0);
-> +			  MAP_SHARED | LTTNG_MAP_POPULATE, shm_fd, 0);
-> 	if (memory_map == MAP_FAILED) {
-> 		PERROR("mmap");
-> 		goto error_mmap;
-> --
-> 2.17.1
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Christophe
+
+--000000000000730392058ed674bd
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div>Sharing this just in case it can he=
+lp someone!<br></div><div><br></div><div>gcc only lets you disable instrume=
+ntation, using the `no_instrument_function` attribute, or by matching file =
+names. It does not let you explicitly choose the individual functions you w=
+ant to instrument.</div><div><br></div><div>I&#39;ve searched many times fo=
+r a way to do it, but never found anything for some reason, so I wrote this=
+ plugin:=C2=A0<a href=3D"https://github.com/christophebedard/instrument-att=
+ribute-gcc-plugin" target=3D"_blank">https://github.com/christophebedard/in=
+strument-attribute-gcc-plugin</a></div><div><br></div><div>It simply enable=
+s instrumentation for functions with the `instrument_function` attribute, a=
+nd disables instrumentation for all other functions.</div><div><br></div><d=
+iv><br></div><div>Christophe</div><div><br></div></div>
+
+--000000000000730392058ed674bd--
+
+--===============7037082290779282648==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============7037082290779282648==--
