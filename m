@@ -1,19 +1,19 @@
 From: Junchang Wang <junchangwang@gmail.com>
-Subject: [PATCH v2 3/4] userspace-rcu: Update Makefile.am to
- include rculflist into the project
-Date: Mon, 29 Jul 2019 21:35:30 +0800
-Message-ID: <1564407331-25820-4-git-send-email-junchangwang__45235.6059498683$1564407508$gmane$org@gmail.com>
+Subject: [PATCH v2 4/4] userspace-rcu: Add a brief description
+ of rculflist in cds-api.md
+Date: Mon, 29 Jul 2019 21:35:31 +0800
+Message-ID: <1564407331-25820-5-git-send-email-junchangwang__46177.1471354709$1564407541$gmane$org@gmail.com>
 References: <1564407331-25820-1-git-send-email-junchangwang@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com
- [IPv6:2607:f8b0:4864:20::544])
- by lists.lttng.org (Postfix) with ESMTPS id 45y11y05Bgz180j
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 09:36:53 -0400 (EDT)
-Received: by mail-pg1-x544.google.com with SMTP id i18so28286776pgl.11
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 06:36:53 -0700 (PDT)
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com
+ [IPv6:2607:f8b0:4864:20::543])
+ by lists.lttng.org (Postfix) with ESMTPS id 45y1250sbDz181D
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 09:37:00 -0400 (EDT)
+Received: by mail-pg1-x543.google.com with SMTP id x15so17942307pgg.8
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 06:37:00 -0700 (PDT)
 In-Reply-To: <1564407331-25820-1-git-send-email-junchangwang@gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -30,33 +30,23 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Junchang Wang <junchangwang@gmail.com>
 ---
- include/Makefile.am | 1 +
- include/urcu/cds.h  | 1 +
- 2 files changed, 2 insertions(+)
+ doc/cds-api.md | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/Makefile.am b/include/Makefile.am
-index 34812d4..c4de329 100644
---- a/include/Makefile.am
-+++ b/include/Makefile.am
-@@ -2,6 +2,7 @@ nobase_dist_include_HEADERS = urcu/compiler.h urcu/hlist.h urcu/list.h \
- 		urcu/rculist.h urcu/rcuhlist.h urcu/system.h urcu/futex.h \
- 		urcu/uatomic/generic.h urcu/arch/generic.h urcu/wfstack.h \
- 		urcu/wfqueue.h urcu/rculfstack.h urcu/rculfqueue.h \
-+		urcu/rculflist.h \
- 		urcu/ref.h urcu/cds.h urcu/urcu_ref.h urcu/urcu-futex.h \
- 		urcu/uatomic_arch.h urcu/rculfhash.h urcu/wfcqueue.h \
- 		urcu/lfstack.h urcu/syscall-compat.h \
-diff --git a/include/urcu/cds.h b/include/urcu/cds.h
-index 78534bb..faa31ab 100644
---- a/include/urcu/cds.h
-+++ b/include/urcu/cds.h
-@@ -30,6 +30,7 @@
- #include <urcu/rculfqueue.h>
- #include <urcu/rculfstack.h>
- #include <urcu/rculfhash.h>
-+#include <urcu/rculflist.h>
- #include <urcu/wfqueue.h>
- #include <urcu/wfcqueue.h>
- #include <urcu/wfstack.h>
+diff --git a/doc/cds-api.md b/doc/cds-api.md
+index 49a3c7c..577126a 100644
+--- a/doc/cds-api.md
++++ b/doc/cds-api.md
+@@ -82,3 +82,10 @@ are supported. Provides "uniquify add" and "replace add"
+ operations, along with associated read-side traversal uniqueness
+ guarantees. Automatic hash table resize based on number of
+ elements is supported. See the API for more details.
++
++
++### `urcu/rculflist.h`
++
++Ordered singly linked list with lock-free insert, delete and find operations.
++This list relies on RCU for existence guarantees and ABA-problem prevention.
++It is useful for implementing hash tables.
 -- 
 1.8.3.1
