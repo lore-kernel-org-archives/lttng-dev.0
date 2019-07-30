@@ -1,15 +1,18 @@
-From: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
-Subject: [PATCH lttng-ust v2] Fix: wait for initial statedump
- before proceeding to the main program
-Date: Mon, 29 Jul 2019 18:05:35 -0400
-Message-ID: <20190729220535.26748-1-gabriel.pollo-guilbert__125.087604259022$1564438002$gmane$org@efficios.com>
+From: "=?utf-8?B?5p2o5rW3?=" <hai.yang@magic-shield.com>
+Subject: Re:
+ =?utf-8?b?5Zue5aSNOlJlOiAg5Zue5aSNOlJlOiAgUHJvcyBh?=
+ =?utf-8?q?nd_Cons_of_LTTng?=
+Date: Tue, 30 Jul 2019 08:34:32 +0800
+Message-ID: <tencent_3F4BC66C590FBA9B49519E62__20419.1765211121$1564447872$gmane$org@qq.com>
+References: <tencent_264479D416B7725164217DB5@qq.com>
+ <438504875.11742.1564069712337.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1025554782670587804=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 45yDKr3FFwz1GKC
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 18:06:24 -0400 (EDT)
+Received: from qq.com (smtpbg564.qq.com [183.3.255.184])
+ by lists.lttng.org (Postfix) with ESMTPS id 45yHzg3Ds0z1Gc7
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 20:50:54 -0400 (EDT)
+In-Reply-To: <438504875.11742.1564069712337.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,257 +22,194 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: =?utf-8?B?TWF0aGlldSBEZXNub3llcnM=?= <mathieu.desnoyers@efficios.com>
+Cc: =?utf-8?B?bHR0bmctZGV2?= <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-In the case of short lived applications, the application may exit before
-the initial statedump has completed.
+This is a multi-part message in MIME format.
 
-Higher-level trace analysis features such as translating addresses to
-symbols rely on statedump. That information is required for those
-analyses to work on such short-lived applications.
+--===============1025554782670587804==
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_5D3F9098_0BF635F0_69BABC39"
+Content-Transfer-Encoding: 8Bit
 
-Force the statedump to occur before handing the control to the
-application.
+This is a multi-part message in MIME format.
 
-Fixes #1190
+------=_NextPart_5D3F9098_0BF635F0_69BABC39
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Signed-off-by: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
-v2:
-	* renamed constructor_sem_posted -> registration_done
-	* add sem_count_initial_value
-	* add assert in decrement_sem_count()
-	* edit documentation for handle_pending_statedump
-	* reset registration_done and initial_statedump_done in cleanup_sock_info
+SGkgTWF0aGlldSwNCg0KVGhhbmtzLiBJIGFtIGxvb2tpbmcgZm9yIHBhY2thZ2VzIGZvciBv
+bGRlciBkaXN0cmlidXRpb25zIGxpa2UgQ2VudE9TIDYgKHdpdGgga2VybmVsIDIuNikgYnV0
+IGNvdWxkIG5vdCBmaW5kIGl0LiBBbmQgd2hpY2gga2VybmVsIHZlcnNpb24gaXMgbWluaW11
+bSByZXF1aXJlbWVudCBmb3IgTFRUbmc/DQoNCg0KUmVnYXJkcw0KSGFpDQoNCg0KDQoNCg0K
+DQotLS0tLS0tLS0tLS0tLS0tLS0gT3JpZ2luYWwgLS0tLS0tLS0tLS0tLS0tLS0tDQpGcm9t
+OiAgIk1hdGhpZXUgRGVzbm95ZXJzIjxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+
+Ow0KRGF0ZTogIFRodSwgSnVsIDI1LCAyMDE5IDExOjQ4IFBNDQpUbzogICLmnajmtbciPGhh
+aS55YW5nQG1hZ2ljLXNoaWVsZC5jb20+OyANCkNjOiAgIkpvbmF0aGFuIFJham90dGUiPGpv
+bmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT47ICJsdHRuZy1kZXYiPGx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmc+OyANClN1YmplY3Q6ICBSZTogW2x0dG5nLWRldl0g5Zue
+5aSNOlJlOiAg5Zue5aSNOlJlOiAgUHJvcyBhbmQgQ29ucyBvZiBMVFRuZw0KDQogDQoNCi0t
+LS0tIE9uIEp1bCAyNSwgMjAxOSwgYXQgNDoyMSBQTSwg5p2o5rW3IDxoYWkueWFuZ0BtYWdp
+Yy1zaGllbGQuY29tPiB3cm90ZToNCg0KSGkNCg0KVGhhbmtzIGZvciBxdWljayByZXNwb25z
+ZS4gDQpMVFRuZyBpcyByZWFsbHkgaW1wcmVzc2l2ZSBvbiBwZXJmb3JtYW5jZe+8jGVzcGVj
+aWFsbHkgdW5kZXIgaGVhdnkgd29ya2xvYWQuIFdoZW4gdXNpbmcgaXQgb24gY3JpdGljYWwg
+bWFjaGluZXPvvIxzdGFiaWxpdHkgaXMgYWxzbyBlc3NlbnRpYWwuIA0KSSB3b25kZXIgaG93
+IExUVG5nIGlzIGNvbW1lcmNpYWxpemVkIGFuZCBhbnkgcHJvZHVjdHMgb3IgT1MgZGlzdHJp
+YnV0aW9ucyBhbHJlYWR5IGVuYWJsZWQgaXQuIA0KSSB0b29rIGEgbG9vayBhdCBsdHRuZy1t
+b2R1bGVzIGJ1ZyBsaXN077yMdGhlcmUgYXJlIGEgZmV3IGtlcm5lbCBvb3BzIHllYXJzIGFn
+byBhbmQgZ290IHJlc29sdmVkLiBNYXkgSSBzYXkgaXQgaXMgdmVyeSBzdGFibGUgb3IgaXQg
+aGFzIG5vdCBiZWVuIGZ1bGx5IHRlc3RlZD8gDQoNCg0KSGksDQoNCg0KDQpFZmZpY2lPUyBo
+YXMgaGFkIGNvbW1lcmNpYWwgY3VzdG9tZXJzIHVzaW5nIExUVG5nIGluIHByb2R1Y3Rpb24g
+Zm9yIG1hbnkgeWVhcnMgbm93Lg0KTFRUbmcgcGVyLXNlIGlzIGRpc3RyaWJ1dGVkIGFzIHBh
+Y2thZ2VzIGluIGFsbCBtYWpvciBMaW51eCBkaXN0cmlidXRpb25zLiBFZmZpY2lPUyBhbHNv
+IHByb3ZpZGVzDQoNCm1vcmUgdXAtdG8tZGF0ZSBwYWNrYWdlcyBmb3Igc29tZSBkaXN0cmli
+dXRpb25zIHRocm91Z2ggaHR0cDovL3BhY2thZ2VzLmVmZmljaW9zLmNvbS8NCg0KDQpUaGUg
+d2F5IHdlIGNvbW1lcmNpYWxpemUgTFRUbmcgaXMgdGhyb3VnaCBmdW5kaW5nIGZvciBkZXNp
+Z24gYW5kIGltcGxlbWVudGF0aW9uIG9mDQpjdXN0b21lcidzIGZlYXR1cmUgcmVxdWVzdHMu
+IFdlIGFsc28gcHJvdmlkZSBjb21tZXJjaWFsIHN1cHBvcnQgdGFpbG9yZWQgdG8gc3BlY2lm
+aWMNCmN1c3RvbWVyJ3MgZW52aXJvbm1lbnRzLCB3aGljaCBpbmNsdWRlcyBTTEEgYW5kIGNv
+bnRpbnVvdXMgaW50ZWdyYXRpb24gdGVzdGluZyBvZiBzcGVjaWZpYw0KZW52aXJvbm1lbnRz
+Lg0KDQoNCg0KSWYgdGhvc2UgYXJlIHNlcnZpY2VzIHlvdSBhcmUgaW50ZXJlc3RlZCBpbiwg
+cGxlYXNlIGZlZWwgZnJlZSB0byBjb250YWN0IHVzIGluIHByaXZhdGUgc28gd2UNCmNhbiBm
+dXJ0aGVyIGRpc2N1c3MgeW91ciBuZWVkcy4NCg0KDQoNCkJlc3QgcmVnYXJkcywNCg0KDQoN
+Ck1hdGhpZXUNCg0KDQoNCnJlZ2FyZHMNCkhhaQ0KDQoNCg0KDQoNCg0KLS0tLS0tLS0tLS0t
+LS3ljp/lp4vpgq7ku7YtLS0tLS0tLS0tLS0tLQ0K5Y+R5Lu25Lq677yaIkpvbmF0aGFuIFJh
+am90dGUtSnVsaWVuICI8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPjsN
+CuWPkemAgeaXtumXtO+8mjIwMTnlubQ35pyIMjPml6Uo5pif5pyf5LqMKSDkuIrljYg2OjIw
+DQrmlLbku7bkurrvvJoi5p2o5rW3IiA8aGFpLnlhbmdAbWFnaWMtc2hpZWxkLmNvbT47DQrm
+ioTpgIHvvJoibHR0bmctZGV2ICI8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz47DQrkuLvp
+opjvvJpSZTogIOWbnuWkjTpSZTogW2x0dG5nLWRldl0gUHJvcyBhbmQgQ29ucyBvZiBMVFRu
+Zw0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCg0KIEhpLA0KDQo+IEFz
+IHRvIExEX1BSRUxPQUQsIGl0IGlzIGFsc28gdXNlZCBmb3IgcHJpdmlsZWdlIGVzY2FsYXRp
+b24uIFdpbGwgaXQgYmUgcmVnYXJkZWQgYXMgdnVsbmVyYWJpbGl0eSBhbmQgZm9yYmlkZGVu
+IG9uIHNvbWUgTGludXggc3lzdGVtcz8NCg0KSXQgY291bGQgeWVzLg0KSW4gdGhhdCBjYXNl
+IHlvdSB3aWxsIGJlIGxpbWl0ZWQgdG8gdGhlIHN5c2NhbGxzIGludGVyZmFjZSBmb3IgdGhl
+IGxpYmMNCm9ic2VydmFiaWxpdHkgdW5sZXNzIHlvdSBpbnN0cnVtZW50IGl0IGFuZCBkaXN0
+cmlidXRlIGl0Lg0KDQpDaGVlcnMuDQoNCg0KDQpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXw0KbHR0bmctZGV2IG1haWxpbmcgbGlzdA0KbHR0bmct
+ZGV2QGxpc3RzLmx0dG5nLm9yZw0KaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldg0KDQoNCg0KLS0gDQoNCk1hdGhpZXUgRGVzbm95
+ZXJzDQpFZmZpY2lPUyBJbmMuDQpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQ==
 
- liblttng-ust/lttng-ust-comm.c | 88 ++++++++++++++++++++++++++---------
- 1 file changed, 67 insertions(+), 21 deletions(-)
+------=_NextPart_5D3F9098_0BF635F0_69BABC39
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
 
-diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
-index a299ba84..0c6db9fe 100644
---- a/liblttng-ust/lttng-ust-comm.c
-+++ b/liblttng-ust/lttng-ust-comm.c
-@@ -228,7 +228,11 @@ static sem_t constructor_wait;
- /*
-  * Doing this for both the global and local sessiond.
-  */
--static int sem_count = { 2 };
-+enum {
-+	sem_count_initial_value = 4,
-+};
-+
-+static int sem_count = sem_count_initial_value;
- 
- /*
-  * Counting nesting within lttng-ust. Used to ensure that calling fork()
-@@ -243,7 +247,7 @@ struct sock_info {
- 	const char *name;
- 	pthread_t ust_listener;	/* listener thread */
- 	int root_handle;
--	int constructor_sem_posted;
-+	int registration_done;
- 	int allowed;
- 	int global;
- 	int thread_active;
-@@ -256,6 +260,7 @@ struct sock_info {
- 	char *wait_shm_mmap;
- 	/* Keep track of lazy state dump not performed yet. */
- 	int statedump_pending;
-+	int initial_statedump_done;
- };
- 
- /* Socket from app (connect) to session daemon (listen) for communication */
-@@ -264,6 +269,7 @@ struct sock_info global_apps = {
- 	.global = 1,
- 
- 	.root_handle = -1,
-+	.registration_done = 0,
- 	.allowed = 0,
- 	.thread_active = 0,
- 
-@@ -274,6 +280,7 @@ struct sock_info global_apps = {
- 	.wait_shm_path = "/" LTTNG_UST_WAIT_FILENAME,
- 
- 	.statedump_pending = 0,
-+	.initial_statedump_done = 0,
- };
- 
- /* TODO: allow global_apps_sock_path override */
-@@ -282,6 +289,7 @@ struct sock_info local_apps = {
- 	.name = "local",
- 	.global = 0,
- 	.root_handle = -1,
-+	.registration_done = 0,
- 	.allowed = 0,	/* Check setuid bit first */
- 	.thread_active = 0,
- 
-@@ -289,6 +297,7 @@ struct sock_info local_apps = {
- 	.notify_socket = -1,
- 
- 	.statedump_pending = 0,
-+	.initial_statedump_done = 0,
- };
- 
- static int wait_poll_fallback;
-@@ -621,45 +630,81 @@ int send_reply(int sock, struct ustcomm_ust_reply *lur)
- }
- 
- static
--int handle_register_done(struct sock_info *sock_info)
-+void decrement_sem_count(unsigned int count)
- {
- 	int ret;
- 
--	if (sock_info->constructor_sem_posted)
--		return 0;
--	sock_info->constructor_sem_posted = 1;
-+	assert(uatomic_read(&sem_count) >= count);
-+
- 	if (uatomic_read(&sem_count) <= 0) {
--		return 0;
-+		return;
- 	}
--	ret = uatomic_add_return(&sem_count, -1);
-+
-+	ret = uatomic_add_return(&sem_count, -count);
- 	if (ret == 0) {
- 		ret = sem_post(&constructor_wait);
- 		assert(!ret);
- 	}
-+}
-+
-+static
-+int handle_register_done(struct sock_info *sock_info)
-+{
-+	if (sock_info->registration_done)
-+		return 0;
-+	sock_info->registration_done = 1;
-+
-+	decrement_sem_count(1);
-+
-+	return 0;
-+}
-+
-+static
-+int handle_register_failed(struct sock_info *sock_info)
-+{
-+	if (sock_info->registration_done)
-+		return 0;
-+	sock_info->registration_done = 1;
-+	sock_info->initial_statedump_done = 1;
-+
-+	decrement_sem_count(2);
-+
- 	return 0;
- }
- 
- /*
-  * Only execute pending statedump after the constructor semaphore has
-- * been posted by each listener thread. This means statedump will only
-- * be performed after the "registration done" command is received from
-- * each session daemon the application is connected to.
-+ * been posted by the current listener thread. This means statedump will
-+ * only be performed after the "registration done" command is received
-+ * from this thread's session daemon.
-  *
-  * This ensures we don't run into deadlock issues with the dynamic
-  * loader mutex, which is held while the constructor is called and
-  * waiting on the constructor semaphore. All operations requiring this
-  * dynamic loader lock need to be postponed using this mechanism.
-+ *
-+ * In a scenario with two session daemons connected to the application,
-+ * it is possible that the first listener thread which receives the
-+ * registration done command issues its statedump while the dynamic
-+ * loader lock is still held by the application constructor waiting on
-+ * the semaphore. It will however be allowed to proceed when the
-+ * second session daemon sends the registration done command to the
-+ * second listener thread. This situation therefore does not produce
-+ * a deadlock.
-  */
- static
- void handle_pending_statedump(struct sock_info *sock_info)
- {
--	int ctor_passed = sock_info->constructor_sem_posted;
--
--	if (ctor_passed && sock_info->statedump_pending) {
-+	if (sock_info->registration_done && sock_info->statedump_pending) {
- 		sock_info->statedump_pending = 0;
- 		pthread_mutex_lock(&ust_fork_mutex);
- 		lttng_handle_pending_statedump(sock_info);
- 		pthread_mutex_unlock(&ust_fork_mutex);
-+
-+		if (!sock_info->initial_statedump_done) {
-+			sock_info->initial_statedump_done = 1;
-+			decrement_sem_count(1);
-+		}
- 	}
- }
- 
-@@ -1069,7 +1114,8 @@ void cleanup_sock_info(struct sock_info *sock_info, int exiting)
- 		}
- 		sock_info->root_handle = -1;
- 	}
--	sock_info->constructor_sem_posted = 0;
-+	sock_info->registration_done = 0;
-+	sock_info->initial_statedump_done = 0;
- 
- 	/*
- 	 * wait_shm_mmap, socket and notify socket are used by listener
-@@ -1477,7 +1523,7 @@ restart:
- 		 * If we cannot find the sessiond daemon, don't delay
- 		 * constructor execution.
- 		 */
--		ret = handle_register_done(sock_info);
-+		ret = handle_register_failed(sock_info);
- 		assert(!ret);
- 		ust_unlock();
- 		goto restart;
-@@ -1531,7 +1577,7 @@ restart:
- 		 * If we cannot register to the sessiond daemon, don't
- 		 * delay constructor execution.
- 		 */
--		ret = handle_register_done(sock_info);
-+		ret = handle_register_failed(sock_info);
- 		assert(!ret);
- 		ust_unlock();
- 		goto restart;
-@@ -1560,7 +1606,7 @@ restart:
- 		 * If we cannot find the sessiond daemon, don't delay
- 		 * constructor execution.
- 		 */
--		ret = handle_register_done(sock_info);
-+		ret = handle_register_failed(sock_info);
- 		assert(!ret);
- 		ust_unlock();
- 		goto restart;
-@@ -1624,7 +1670,7 @@ restart:
- 		 * If we cannot register to the sessiond daemon, don't
- 		 * delay constructor execution.
- 		 */
--		ret = handle_register_done(sock_info);
-+		ret = handle_register_failed(sock_info);
- 		assert(!ret);
- 		ust_unlock();
- 		goto restart;
-@@ -1654,7 +1700,7 @@ restart:
- 			 * If we cannot register to the sessiond daemon, don't
- 			 * delay constructor execution.
- 			 */
--			ret = handle_register_done(sock_info);
-+			ret = handle_register_failed(sock_info);
- 			assert(!ret);
- 			ust_unlock();
- 			goto end;
-@@ -1923,7 +1969,7 @@ void lttng_ust_cleanup(int exiting)
- 	exit_tracepoint();
- 	if (!exiting) {
- 		/* Reinitialize values for fork */
--		sem_count = 2;
-+		sem_count = sem_count_initial_value;
- 		lttng_ust_comm_should_quit = 0;
- 		initialized = 0;
- 	}
--- 
-2.22.0
+PHNwYW4gc3R5bGU9ImRpc3BsYXk6IGlubGluZSAhaW1wb3J0YW50OyBmbG9hdDogbm9uZTsg
+YmFja2dyb3VuZC1jb2xvcjogdHJhbnNwYXJlbnQ7IGNvbG9yOiByZ2IoMCwgMCwgMCk7IGZv
+bnQtZmFtaWx5OiBhcmlhbCxoZWx2ZXRpY2Esc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxNnB4
+OyBmb250LXN0eWxlOiBub3JtYWw7IGZvbnQtdmFyaWFudDogbm9ybWFsOyBmb250LXdlaWdo
+dDogNDAwOyBsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBvcnBoYW5zOiAyOyB0ZXh0LWFsaWdu
+OiBsZWZ0OyB0ZXh0LWRlY29yYXRpb246IG5vbmU7IHRleHQtaW5kZW50OiAwcHg7IHRleHQt
+dHJhbnNmb3JtOiBub25lOyAtd2Via2l0LXRleHQtc3Ryb2tlLXdpZHRoOiAwcHg7IHdoaXRl
+LXNwYWNlOiBub3JtYWw7IHdvcmQtc3BhY2luZzogMHB4OyI+SGkgTWF0aGlldSw8L3NwYW4+
+PGRpdj48YnI+PC9kaXY+PGRpdj5UaGFua3MuIEkgYW0gbG9va2luZyBmb3IgcGFja2FnZXMg
+Zm9yIG9sZGVyIGRpc3RyaWJ1dGlvbnMgbGlrZSBDZW50T1MgNiAod2l0aCBrZXJuZWwgMi42
+KSBidXQgY291bGQgbm90IGZpbmQgaXQuIEFuZCB3aGljaCBrZXJuZWwgdmVyc2lvbiBpcyBt
+aW5pbXVtIHJlcXVpcmVtZW50IGZvciBMVFRuZz88L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2
+PlJlZ2FyZHM8L2Rpdj48ZGl2PkhhaTwvZGl2PjxkaXY+PGJyPjwvZGl2PjxkaXYgc3R5bGU9
+ImNvbG9yOiM5MDkwOTA7Zm9udC1mYW1pbHk6QXJpYWwgTmFycm93O2ZvbnQtc2l6ZToxMnB4
+Ij48ZGl2PjxzaWduIHNpZ25pZD0iOTgiPjxicj48YnI+PC9zaWduPjwvZGl2PjwvZGl2Pjxk
+aXY+PGluY2x1ZGV0YWlsPjxkaXYgc3R5bGU9ImZvbnQ6VmVyZGFuYSBub3JtYWwgMTRweDtj
+b2xvcjojMDAwOyI+PGRpdiBzdHlsZT0iRk9OVC1TSVpFOiAxMnB4O0ZPTlQtRkFNSUxZOiBB
+cmlhbCBOYXJyb3c7cGFkZGluZzoycHggMCAycHggMDsiPi0tLS0tLS0tLS0tLS0tLS0tLSZu
+YnNwO09yaWdpbmFsJm5ic3A7LS0tLS0tLS0tLS0tLS0tLS0tPC9kaXY+PGRpdiBzdHlsZT0i
+Rk9OVC1TSVpFOiAxMnB4O2JhY2tncm91bmQ6I2VmZWZlZjtwYWRkaW5nOjhweDsiPjxkaXYg
+aWQ9Im1lbnVfc2VuZGVyIj48Yj5Gcm9tOiA8L2I+Jm5ic3A7Ik1hdGhpZXUgRGVzbm95ZXJz
+IiZsdDttYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20mZ3Q7OzwvZGl2PjxkaXY+PGI+
+RGF0ZTogPC9iPiZuYnNwO1RodSwgSnVsIDI1LCAyMDE5IDExOjQ4IFBNPC9kaXY+PGRpdj48
+Yj5UbzogPC9iPiZuYnNwOyLmnajmtbciJmx0O2hhaS55YW5nQG1hZ2ljLXNoaWVsZC5jb20m
+Z3Q7OyA8d2JyPjwvZGl2PjxkaXY+PGI+Q2M6IDwvYj4mbmJzcDsiSm9uYXRoYW4gUmFqb3R0
+ZSImbHQ7am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tJmd0OzsgImx0dG5n
+LWRldiImbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs7IDx3YnI+PC9kaXY+PGRp
+dj48Yj5TdWJqZWN0OiA8L2I+Jm5ic3A7UmU6IFtsdHRuZy1kZXZdIOWbnuWkjTpSZTogIOWb
+nuWkjTpSZTogIFByb3MgYW5kIENvbnMgb2YgTFRUbmc8L2Rpdj48L2Rpdj48ZGl2PiZuYnNw
+OzwvZGl2PjxkaXYgc3R5bGU9InBvc2l0aW9uOnJlbGF0aXZlOyI+PGRpdiBpZD0idG1wY29u
+dGVudF9yZXMiPjwvZGl2PjxkaXYgc3R5bGU9ImZvbnQtZmFtaWx5OiBhcmlhbCwgaGVsdmV0
+aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiAjMDAwMDAwIj48ZGl2
+PjxzcGFuIGlkPSJ6d2NociIgZGF0YS1tYXJrZXI9Il9fRElWSURFUl9fIj4tLS0tLSBPbiBK
+dWwgMjUsIDIwMTksIGF0IDQ6MjEgUE0sIOadqOa1tyAmbHQ7aGFpLnlhbmdAbWFnaWMtc2hp
+ZWxkLmNvbSZndDsgd3JvdGU6PGJyPjwvc3Bhbj48L2Rpdj48ZGl2IGRhdGEtbWFya2VyPSJf
+X1FVT1RFRF9URVhUX18iPjxibG9ja3F1b3RlIHN0eWxlPSJib3JkZXItbGVmdDoycHggc29s
+aWQgIzEwMTBGRjttYXJnaW4tbGVmdDo1cHg7cGFkZGluZy1sZWZ0OjVweDtjb2xvcjojMDAw
+O2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0eWxlOm5vcm1hbDt0ZXh0LWRlY29yYXRpb246
+bm9uZTtmb250LWZhbWlseTpIZWx2ZXRpY2EsQXJpYWwsc2Fucy1zZXJpZjtmb250LXNpemU6
+MTJwdDsiPjxkaXY+SGk8L2Rpdj48YnI+PGRpdj5UaGFua3MgZm9yIHF1aWNrIHJlc3BvbnNl
+LiA8L2Rpdj48ZGl2PkxUVG5nIGlzIHJlYWxseSBpbXByZXNzaXZlIG9uIHBlcmZvcm1hbmNl
+77yMZXNwZWNpYWxseSB1bmRlciBoZWF2eSB3b3JrbG9hZC4gV2hlbiB1c2luZyBpdCBvbiBj
+cml0aWNhbCBtYWNoaW5lc++8jHN0YWJpbGl0eSBpcyBhbHNvIGVzc2VudGlhbC4gPC9kaXY+
+PGRpdj5JIHdvbmRlciBob3cgTFRUbmcgaXMgY29tbWVyY2lhbGl6ZWQgYW5kIGFueSBwcm9k
+dWN0cyBvciBPUyBkaXN0cmlidXRpb25zIGFscmVhZHkgZW5hYmxlZCBpdC4gPC9kaXY+PGRp
+dj5JIHRvb2sgYSBsb29rIGF0IGx0dG5nLW1vZHVsZXMgYnVnIGxpc3TvvIx0aGVyZSBhcmUg
+YSBmZXcga2VybmVsIG9vcHMgeWVhcnMgYWdvIGFuZCBnb3QgcmVzb2x2ZWQuIE1heSBJIHNh
+eSBpdCBpcyB2ZXJ5IHN0YWJsZSBvciBpdCBoYXMgbm90IGJlZW4gZnVsbHkgdGVzdGVkPyA8
+L2Rpdj48L2Jsb2NrcXVvdGU+PGRpdj48YnI+PC9kaXY+PGRpdj5IaSw8YnIgZGF0YS1tY2Ut
+Ym9ndXM9IjEiPjwvZGl2PjxkaXY+PGJyIGRhdGEtbWNlLWJvZ3VzPSIxIj48L2Rpdj48ZGl2
+PkVmZmljaU9TIGhhcyBoYWQgY29tbWVyY2lhbCBjdXN0b21lcnMgdXNpbmcgTFRUbmcgaW4g
+cHJvZHVjdGlvbiBmb3IgbWFueSB5ZWFycyBub3cuPC9kaXY+PGRpdj5MVFRuZyBwZXItc2Ug
+aXMgZGlzdHJpYnV0ZWQgYXMgcGFja2FnZXMgaW4gYWxsIG1ham9yIExpbnV4IGRpc3RyaWJ1
+dGlvbnMuIEVmZmljaU9TIGFsc28gcHJvdmlkZXM8YnIgZGF0YS1tY2UtYm9ndXM9IjEiPjwv
+ZGl2PjxkaXY+bW9yZSB1cC10by1kYXRlIHBhY2thZ2VzIGZvciBzb21lIGRpc3RyaWJ1dGlv
+bnMgdGhyb3VnaCA8YSBocmVmPSJodHRwOi8vcGFja2FnZXMuZWZmaWNpb3MuY29tLyI+aHR0
+cDovL3BhY2thZ2VzLmVmZmljaW9zLmNvbS88L2E+PC9kaXY+PGRpdj48YnIgZGF0YS1tY2Ut
+Ym9ndXM9IjEiPjwvZGl2PjxkaXY+VGhlIHdheSB3ZSBjb21tZXJjaWFsaXplIExUVG5nIGlz
+IHRocm91Z2ggZnVuZGluZyBmb3IgZGVzaWduIGFuZCBpbXBsZW1lbnRhdGlvbiBvZjwvZGl2
+PjxkaXY+Y3VzdG9tZXIncyBmZWF0dXJlIHJlcXVlc3RzLiBXZSBhbHNvIHByb3ZpZGUgY29t
+bWVyY2lhbCBzdXBwb3J0IHRhaWxvcmVkIHRvIHNwZWNpZmljPC9kaXY+PGRpdj5jdXN0b21l
+cidzIGVudmlyb25tZW50cywgd2hpY2ggaW5jbHVkZXMgU0xBIGFuZCBjb250aW51b3VzIGlu
+dGVncmF0aW9uIHRlc3Rpbmcgb2Ygc3BlY2lmaWM8L2Rpdj48ZGl2PmVudmlyb25tZW50cy48
+YnIgZGF0YS1tY2UtYm9ndXM9IjEiPjwvZGl2PjxkaXY+PGJyIGRhdGEtbWNlLWJvZ3VzPSIx
+Ij48L2Rpdj48ZGl2PklmIHRob3NlIGFyZSBzZXJ2aWNlcyB5b3UgYXJlIGludGVyZXN0ZWQg
+aW4sIHBsZWFzZSBmZWVsIGZyZWUgdG8gY29udGFjdCB1cyBpbiBwcml2YXRlIHNvIHdlPC9k
+aXY+PGRpdj5jYW4gZnVydGhlciBkaXNjdXNzIHlvdXIgbmVlZHMuPGJyIGRhdGEtbWNlLWJv
+Z3VzPSIxIj48L2Rpdj48ZGl2PjxiciBkYXRhLW1jZS1ib2d1cz0iMSI+PC9kaXY+PGRpdj5C
+ZXN0IHJlZ2FyZHMsPGJyIGRhdGEtbWNlLWJvZ3VzPSIxIj48L2Rpdj48ZGl2PjxiciBkYXRh
+LW1jZS1ib2d1cz0iMSI+PC9kaXY+PGRpdj5NYXRoaWV1PC9kaXY+PGRpdj48YnIgZGF0YS1t
+Y2UtYm9ndXM9IjEiPjwvZGl2PjxibG9ja3F1b3RlIHN0eWxlPSJib3JkZXItbGVmdDoycHgg
+c29saWQgIzEwMTBGRjttYXJnaW4tbGVmdDo1cHg7cGFkZGluZy1sZWZ0OjVweDtjb2xvcjoj
+MDAwO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0eWxlOm5vcm1hbDt0ZXh0LWRlY29yYXRp
+b246bm9uZTtmb250LWZhbWlseTpIZWx2ZXRpY2EsQXJpYWwsc2Fucy1zZXJpZjtmb250LXNp
+emU6MTJwdDsiPjxicj48ZGl2PnJlZ2FyZHM8L2Rpdj48ZGl2PkhhaTxicj48cD48YnI+PGJy
+PjwvcD48YnI+PGJyPi0tLS0tLS0tLS0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0tLS0tLS0tLS08
+YnI+5Y+R5Lu25Lq677yaIkpvbmF0aGFuIFJham90dGUtSnVsaWVuICImbHQ7am9uYXRoYW4u
+cmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tJmd0Ozs8YnI+5Y+R6YCB5pe26Ze077yaMjAx
+OeW5tDfmnIgyM+aXpSjmmJ/mnJ/kuowpIOS4iuWNiDY6MjA8YnI+5pS25Lu25Lq677yaIuad
+qOa1tyIgJmx0O2hhaS55YW5nQG1hZ2ljLXNoaWVsZC5jb20mZ3Q7Ozxicj7mioTpgIHvvJoi
+bHR0bmctZGV2ICImbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs7PGJyPuS4u+mi
+mO+8mlJlOiAg5Zue5aSNOlJlOiBbbHR0bmctZGV2XSBQcm9zIGFuZCBDb25zIG9mIExUVG5n
+PGJyPi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tPGJyPjwvZGl2PiA8ZGl2
+PjxkaXY+SGksPGJyPjxicj4mZ3Q7IEFzIHRvIExEX1BSRUxPQUQsIGl0IGlzIGFsc28gdXNl
+ZCBmb3IgcHJpdmlsZWdlIGVzY2FsYXRpb24uIFdpbGwgaXQgYmUgcmVnYXJkZWQgYXMgdnVs
+bmVyYWJpbGl0eSBhbmQgZm9yYmlkZGVuIG9uIHNvbWUgTGludXggc3lzdGVtcz88YnI+PGJy
+Pkl0IGNvdWxkIHllcy48YnI+SW4gdGhhdCBjYXNlIHlvdSB3aWxsIGJlIGxpbWl0ZWQgdG8g
+dGhlIHN5c2NhbGxzIGludGVyZmFjZSBmb3IgdGhlIGxpYmM8YnI+b2JzZXJ2YWJpbGl0eSB1
+bmxlc3MgeW91IGluc3RydW1lbnQgaXQgYW5kIGRpc3RyaWJ1dGUgaXQuPGJyPjxicj5DaGVl
+cnMuPGJyPjwvZGl2PjwvZGl2Pjxicj5fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXzxicj5sdHRuZy1kZXYgbWFpbGluZyBsaXN0PGJyPmx0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmc8YnI+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldjxicj48L2Jsb2NrcXVvdGU+PC9kaXY+PGRpdj48
+YnI+PC9kaXY+PGRpdiBkYXRhLW1hcmtlcj0iX19TSUdfUE9TVF9fIj4tLSA8YnI+PC9kaXY+
+PGRpdj5NYXRoaWV1IERlc25veWVyczxicj5FZmZpY2lPUyBJbmMuPGJyPmh0dHA6Ly93d3cu
+ZWZmaWNpb3MuY29tPC9kaXY+PC9kaXY+DQo8L2Rpdj48L2Rpdj48IS0tPCFbZW5kaWZdLS0+
+PC9pbmNsdWRldGFpbD48L2Rpdj4=
+
+------=_NextPart_5D3F9098_0BF635F0_69BABC39--
+
+
+
+
+--===============1025554782670587804==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1025554782670587804==--
