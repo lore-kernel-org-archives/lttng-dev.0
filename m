@@ -1,19 +1,18 @@
-From: =?UTF-8?Q?Christophe_B=C3=A9dard?= <bedard.christophe@gmail.com>
-Subject: Re: gcc plugin for instrumenting individual functions
-Date: Tue, 30 Jul 2019 16:05:15 +0200
-Message-ID: <CAAS9doY5DNPWY6KBsv6sBxaaN8u+1MDw7HGJrGiN9cvLWOx45A__25184.5215958141$1564495565$gmane$org@mail.gmail.com>
-References: <CAAS9doaz=dF_42vWaKO9mnRgua8hTNrgx+aHQZ0j9XTAhy0vmw@mail.gmail.com>
- <20190729192259.GA28213@joraj-alpa>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust v2] Fix: wait for initial
+ statedump before proceeding to the main program
+Date: Tue, 30 Jul 2019 10:13:25 -0400 (EDT)
+Message-ID: <2114560350.4445.1564496005755.JavaMail.zimbra__12468.7901510455$1564496036$gmane$org@efficios.com>
+References: <20190729220535.26748-1-gabriel.pollo-guilbert@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5629095666522041138=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by lists.lttng.org (Postfix) with ESMTPS id 45ydcw4fyPz1JD1
- for <lttng-dev@lists.lttng.org>; Tue, 30 Jul 2019 10:05:52 -0400 (EDT)
-Received: by mail-io1-xd32.google.com with SMTP id q22so8525153iog.4
- for <lttng-dev@lists.lttng.org>; Tue, 30 Jul 2019 07:05:52 -0700 (PDT)
-In-Reply-To: <20190729192259.GA28213@joraj-alpa>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 45ydnm69vSz1JFy
+ for <lttng-dev@lists.lttng.org>; Tue, 30 Jul 2019 10:13:32 -0400 (EDT)
+In-Reply-To: <20190729220535.26748-1-gabriel.pollo-guilbert@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,97 +22,271 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+To: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============5629095666522041138==
-Content-Type: multipart/alternative; boundary="0000000000009d58aa058ee681d1"
+Merged into master, 2.11, 2.10, 2.9, thanks!
 
---0000000000009d58aa058ee681d1
-Content-Type: text/plain; charset="UTF-8"
+Mathieu
 
-Hi,
+----- On Jul 29, 2019, at 6:05 PM, Gabriel-Andrew Pollo-Guilbert gabriel.pollo-guilbert@efficios.com wrote:
 
-On Mon, 29 Jul 2019 at 21:23, Jonathan Rajotte-Julien <
-jonathan.rajotte-julien@efficios.com> wrote:
+> In the case of short lived applications, the application may exit before
+> the initial statedump has completed.
+> 
+> Higher-level trace analysis features such as translating addresses to
+> symbols rely on statedump. That information is required for those
+> analyses to work on such short-lived applications.
+> 
+> Force the statedump to occur before handing the control to the
+> application.
+> 
+> Fixes #1190
+> 
+> Signed-off-by: Gabriel-Andrew Pollo-Guilbert
+> <gabriel.pollo-guilbert@efficios.com>
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+> v2:
+>	* renamed constructor_sem_posted -> registration_done
+>	* add sem_count_initial_value
+>	* add assert in decrement_sem_count()
+>	* edit documentation for handle_pending_statedump
+>	* reset registration_done and initial_statedump_done in cleanup_sock_info
+> 
+> liblttng-ust/lttng-ust-comm.c | 88 ++++++++++++++++++++++++++---------
+> 1 file changed, 67 insertions(+), 21 deletions(-)
+> 
+> diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+> index a299ba84..0c6db9fe 100644
+> --- a/liblttng-ust/lttng-ust-comm.c
+> +++ b/liblttng-ust/lttng-ust-comm.c
+> @@ -228,7 +228,11 @@ static sem_t constructor_wait;
+> /*
+>  * Doing this for both the global and local sessiond.
+>  */
+> -static int sem_count = { 2 };
+> +enum {
+> +	sem_count_initial_value = 4,
+> +};
+> +
+> +static int sem_count = sem_count_initial_value;
+> 
+> /*
+>  * Counting nesting within lttng-ust. Used to ensure that calling fork()
+> @@ -243,7 +247,7 @@ struct sock_info {
+> 	const char *name;
+> 	pthread_t ust_listener;	/* listener thread */
+> 	int root_handle;
+> -	int constructor_sem_posted;
+> +	int registration_done;
+> 	int allowed;
+> 	int global;
+> 	int thread_active;
+> @@ -256,6 +260,7 @@ struct sock_info {
+> 	char *wait_shm_mmap;
+> 	/* Keep track of lazy state dump not performed yet. */
+> 	int statedump_pending;
+> +	int initial_statedump_done;
+> };
+> 
+> /* Socket from app (connect) to session daemon (listen) for communication */
+> @@ -264,6 +269,7 @@ struct sock_info global_apps = {
+> 	.global = 1,
+> 
+> 	.root_handle = -1,
+> +	.registration_done = 0,
+> 	.allowed = 0,
+> 	.thread_active = 0,
+> 
+> @@ -274,6 +280,7 @@ struct sock_info global_apps = {
+> 	.wait_shm_path = "/" LTTNG_UST_WAIT_FILENAME,
+> 
+> 	.statedump_pending = 0,
+> +	.initial_statedump_done = 0,
+> };
+> 
+> /* TODO: allow global_apps_sock_path override */
+> @@ -282,6 +289,7 @@ struct sock_info local_apps = {
+> 	.name = "local",
+> 	.global = 0,
+> 	.root_handle = -1,
+> +	.registration_done = 0,
+> 	.allowed = 0,	/* Check setuid bit first */
+> 	.thread_active = 0,
+> 
+> @@ -289,6 +297,7 @@ struct sock_info local_apps = {
+> 	.notify_socket = -1,
+> 
+> 	.statedump_pending = 0,
+> +	.initial_statedump_done = 0,
+> };
+> 
+> static int wait_poll_fallback;
+> @@ -621,45 +630,81 @@ int send_reply(int sock, struct ustcomm_ust_reply *lur)
+> }
+> 
+> static
+> -int handle_register_done(struct sock_info *sock_info)
+> +void decrement_sem_count(unsigned int count)
+> {
+> 	int ret;
+> 
+> -	if (sock_info->constructor_sem_posted)
+> -		return 0;
+> -	sock_info->constructor_sem_posted = 1;
+> +	assert(uatomic_read(&sem_count) >= count);
+> +
+> 	if (uatomic_read(&sem_count) <= 0) {
+> -		return 0;
+> +		return;
+> 	}
+> -	ret = uatomic_add_return(&sem_count, -1);
+> +
+> +	ret = uatomic_add_return(&sem_count, -count);
+> 	if (ret == 0) {
+> 		ret = sem_post(&constructor_wait);
+> 		assert(!ret);
+> 	}
+> +}
+> +
+> +static
+> +int handle_register_done(struct sock_info *sock_info)
+> +{
+> +	if (sock_info->registration_done)
+> +		return 0;
+> +	sock_info->registration_done = 1;
+> +
+> +	decrement_sem_count(1);
+> +
+> +	return 0;
+> +}
+> +
+> +static
+> +int handle_register_failed(struct sock_info *sock_info)
+> +{
+> +	if (sock_info->registration_done)
+> +		return 0;
+> +	sock_info->registration_done = 1;
+> +	sock_info->initial_statedump_done = 1;
+> +
+> +	decrement_sem_count(2);
+> +
+> 	return 0;
+> }
+> 
+> /*
+>  * Only execute pending statedump after the constructor semaphore has
+> - * been posted by each listener thread. This means statedump will only
+> - * be performed after the "registration done" command is received from
+> - * each session daemon the application is connected to.
+> + * been posted by the current listener thread. This means statedump will
+> + * only be performed after the "registration done" command is received
+> + * from this thread's session daemon.
+>  *
+>  * This ensures we don't run into deadlock issues with the dynamic
+>  * loader mutex, which is held while the constructor is called and
+>  * waiting on the constructor semaphore. All operations requiring this
+>  * dynamic loader lock need to be postponed using this mechanism.
+> + *
+> + * In a scenario with two session daemons connected to the application,
+> + * it is possible that the first listener thread which receives the
+> + * registration done command issues its statedump while the dynamic
+> + * loader lock is still held by the application constructor waiting on
+> + * the semaphore. It will however be allowed to proceed when the
+> + * second session daemon sends the registration done command to the
+> + * second listener thread. This situation therefore does not produce
+> + * a deadlock.
+>  */
+> static
+> void handle_pending_statedump(struct sock_info *sock_info)
+> {
+> -	int ctor_passed = sock_info->constructor_sem_posted;
+> -
+> -	if (ctor_passed && sock_info->statedump_pending) {
+> +	if (sock_info->registration_done && sock_info->statedump_pending) {
+> 		sock_info->statedump_pending = 0;
+> 		pthread_mutex_lock(&ust_fork_mutex);
+> 		lttng_handle_pending_statedump(sock_info);
+> 		pthread_mutex_unlock(&ust_fork_mutex);
+> +
+> +		if (!sock_info->initial_statedump_done) {
+> +			sock_info->initial_statedump_done = 1;
+> +			decrement_sem_count(1);
+> +		}
+> 	}
+> }
+> 
+> @@ -1069,7 +1114,8 @@ void cleanup_sock_info(struct sock_info *sock_info, int
+> exiting)
+> 		}
+> 		sock_info->root_handle = -1;
+> 	}
+> -	sock_info->constructor_sem_posted = 0;
+> +	sock_info->registration_done = 0;
+> +	sock_info->initial_statedump_done = 0;
+> 
+> 	/*
+> 	 * wait_shm_mmap, socket and notify socket are used by listener
+> @@ -1477,7 +1523,7 @@ restart:
+> 		 * If we cannot find the sessiond daemon, don't delay
+> 		 * constructor execution.
+> 		 */
+> -		ret = handle_register_done(sock_info);
+> +		ret = handle_register_failed(sock_info);
+> 		assert(!ret);
+> 		ust_unlock();
+> 		goto restart;
+> @@ -1531,7 +1577,7 @@ restart:
+> 		 * If we cannot register to the sessiond daemon, don't
+> 		 * delay constructor execution.
+> 		 */
+> -		ret = handle_register_done(sock_info);
+> +		ret = handle_register_failed(sock_info);
+> 		assert(!ret);
+> 		ust_unlock();
+> 		goto restart;
+> @@ -1560,7 +1606,7 @@ restart:
+> 		 * If we cannot find the sessiond daemon, don't delay
+> 		 * constructor execution.
+> 		 */
+> -		ret = handle_register_done(sock_info);
+> +		ret = handle_register_failed(sock_info);
+> 		assert(!ret);
+> 		ust_unlock();
+> 		goto restart;
+> @@ -1624,7 +1670,7 @@ restart:
+> 		 * If we cannot register to the sessiond daemon, don't
+> 		 * delay constructor execution.
+> 		 */
+> -		ret = handle_register_done(sock_info);
+> +		ret = handle_register_failed(sock_info);
+> 		assert(!ret);
+> 		ust_unlock();
+> 		goto restart;
+> @@ -1654,7 +1700,7 @@ restart:
+> 			 * If we cannot register to the sessiond daemon, don't
+> 			 * delay constructor execution.
+> 			 */
+> -			ret = handle_register_done(sock_info);
+> +			ret = handle_register_failed(sock_info);
+> 			assert(!ret);
+> 			ust_unlock();
+> 			goto end;
+> @@ -1923,7 +1969,7 @@ void lttng_ust_cleanup(int exiting)
+> 	exit_tracepoint();
+> 	if (!exiting) {
+> 		/* Reinitialize values for fork */
+> -		sem_count = 2;
+> +		sem_count = sem_count_initial_value;
+> 		lttng_ust_comm_should_quit = 0;
+> 		initialized = 0;
+> 	}
+> --
+> 2.22.0
 
-> Hi,
->
-> For those at home wondering why this would be relevant to lttng,
-> lttng-ust comes with a utility shared object allowing you to leverage the
-> -finstrument-function sites to hook lttng tracepoints [1].
->
-> [1] https://lttng.org/man/3/lttng-ust-cyg-profile/v2.10/
->
->
-Thank you for providing some context!
-
-
-> Thanks Christophe for this contribution.
->
-> Do you know why GCC does not support this out of the box?
->
-
-I'm not sure. I looked at the the relevant parts of the gcc codebase, and
-came to the conclusion that it just wasn't written with this feature in
-mind (which is why the plugin uses a sort of workaround).
-
-Is this something that
-> could be presented to the GCC community?
-
-
-If people think it should be presented!
-
-
-Christophe
-
---0000000000009d58aa058ee681d1
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi,<div><br></div><div>On Mon, 29 Jul 201=
-9 at 21:23, Jonathan Rajotte-Julien &lt;<a href=3D"mailto:jonathan.rajotte-=
-julien@efficios.com" target=3D"_blank">jonathan.rajotte-julien@efficios.com=
-</a>&gt; wrote:<br></div></div><div class=3D"gmail_quote"><blockquote class=
-=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
-b(204,204,204);padding-left:1ex">Hi,<br>
-<br>
-For those at home wondering why this would be relevant to lttng,<br>
-lttng-ust comes with a utility shared object allowing you to leverage the<b=
-r>
--finstrument-function sites to hook lttng tracepoints [1].<br>
-<br>
-[1] <a href=3D"https://lttng.org/man/3/lttng-ust-cyg-profile/v2.10/" rel=3D=
-"noreferrer" target=3D"_blank">https://lttng.org/man/3/lttng-ust-cyg-profil=
-e/v2.10/</a><br>
-<br></blockquote><div><br></div><div>Thank you for providing some context!<=
-br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin=
-:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"=
->
-Thanks Christophe for this contribution.<br>
-<br>
-Do you know why GCC does not support this out of the box?<br></blockquote><=
-div>=C2=A0</div><div>I&#39;m not sure. I looked at the the relevant parts o=
-f the gcc codebase, and came to the conclusion that it just wasn&#39;t writ=
-ten with this feature in mind (which is why the plugin uses a sort of worka=
-round).</div><div><br></div><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1e=
-x">Is this something that<br>could be presented to the GCC community?</bloc=
-kquote><div><br></div><div>If people think it should be presented!</div><di=
-v><br></div><div><br></div><div>Christophe</div></div></div>
-
---0000000000009d58aa058ee681d1--
-
---===============5629095666522041138==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5629095666522041138==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
