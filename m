@@ -1,18 +1,21 @@
-From: "=?utf-8?B?5p2o5rW3?=" <hai.yang@magic-shield.com>
-Subject: Re:
- =?utf-8?b?5Zue5aSNOlJlOiAg5Zue5aSNOlJlOiAgUHJvcyBh?=
- =?utf-8?q?nd_Cons_of_LTTng?=
-Date: Tue, 30 Jul 2019 08:34:32 +0800
-Message-ID: <tencent_3F4BC66C590FBA9B49519E62__20419.1765211121$1564447872$gmane$org@qq.com>
-References: <tencent_264479D416B7725164217DB5@qq.com>
- <438504875.11742.1564069712337.JavaMail.zimbra@efficios.com>
+From: Junchang Wang <junchangwang@gmail.com>
+Subject: Re: [PATCH v2 0/4] userspace-rcu: Add lock-free,
+ ordered singly linked list
+Date: Tue, 30 Jul 2019 21:34:19 +0800
+Message-ID: <CABoNC821qnePU4Enrs8mSseVq-_Hp3Cehh93DO0+s=cKtDTZXQ__22161.6179029056$1564493686$gmane$org@mail.gmail.com>
+References: <1564407331-25820-1-git-send-email-junchangwang@gmail.com>
+ <1759632476.1182.1564408558415.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1025554782670587804=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from qq.com (smtpbg564.qq.com [183.3.255.184])
- by lists.lttng.org (Postfix) with ESMTPS id 45yHzg3Ds0z1Gc7
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2019 20:50:54 -0400 (EDT)
-In-Reply-To: <438504875.11742.1564069712337.JavaMail.zimbra@efficios.com>
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com
+ [IPv6:2607:f8b0:4864:20::242])
+ by lists.lttng.org (Postfix) with ESMTPS id 45ycwm2xWjz1J7c
+ for <lttng-dev@lists.lttng.org>; Tue, 30 Jul 2019 09:34:32 -0400 (EDT)
+Received: by mail-oi1-x242.google.com with SMTP id m202so47904911oig.6
+ for <lttng-dev@lists.lttng.org>; Tue, 30 Jul 2019 06:34:32 -0700 (PDT)
+In-Reply-To: <1759632476.1182.1564408558415.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,194 +25,133 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?utf-8?B?TWF0aGlldSBEZXNub3llcnM=?= <mathieu.desnoyers@efficios.com>
-Cc: =?utf-8?B?bHR0bmctZGV2?= <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@linux.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
+On Mon, Jul 29, 2019 at 9:55 PM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> ----- On Jul 29, 2019, at 9:35 AM, Junchang Wang junchangwang@gmail.com wrote:
+>
+> > Hi Mathieu and the list,
+> >
+> > I'm recently using userspace-rcu to build lock-free data structures. Thanks for
+> > sharing this excellent project!
+> >
+> > In building a hash table, I am looking for an ordered singly linked list
+> > that is lock-free. It seems such a list is missing in userspace-rcu. I
+> > discussed this with Paul in the mailing list of perfbook, and he kindly
+> > suggested me to submit my implementation to userspace-rcu. So here is the
+> > RFC. Any comments and suggestions are warmly welcome.
+>
+> One point worth mentioning: the rculfhash data structure (rcu lock-free hash
+> table) already implements such list internally. You might want to have a look
+> at it, and perhaps just lift out its implementation into a separate .c file
+> and header file so we can expose its implementation publicly ?
+>
+> Items are linked through the struct cds_lfht_node next field.
+>
+> The struct cds_lfht_iter is used as a iterator on the list.
+>
+> struct cds_lfht tbl_oder, tbl_chunk and tbl_mmap contain the
+> linked lists heads for each memory allocation scheme.
 
---===============1025554782670587804==
-Content-Type: multipart/alternative;
-	boundary="----=_NextPart_5D3F9098_0BF635F0_69BABC39"
-Content-Transfer-Encoding: 8Bit
+Hi Mathieu,
 
-This is a multi-part message in MIME format.
+Thanks for the note. I checked rculfhash today, and the list
+implementation within rculfhash is indeed quite similar to the one I'm
+working on. I will check to see if we can merge the two versions and
+provide an independent rculflist.
 
-------=_NextPart_5D3F9098_0BF635F0_69BABC39
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
+>
+> I'm wondering why you need to re-implement a hash table though. What is
+> missing from rculfhash to suit your needs ?
+>
 
-SGkgTWF0aGlldSwNCg0KVGhhbmtzLiBJIGFtIGxvb2tpbmcgZm9yIHBhY2thZ2VzIGZvciBv
-bGRlciBkaXN0cmlidXRpb25zIGxpa2UgQ2VudE9TIDYgKHdpdGgga2VybmVsIDIuNikgYnV0
-IGNvdWxkIG5vdCBmaW5kIGl0LiBBbmQgd2hpY2gga2VybmVsIHZlcnNpb24gaXMgbWluaW11
-bSByZXF1aXJlbWVudCBmb3IgTFRUbmc/DQoNCg0KUmVnYXJkcw0KSGFpDQoNCg0KDQoNCg0K
-DQotLS0tLS0tLS0tLS0tLS0tLS0gT3JpZ2luYWwgLS0tLS0tLS0tLS0tLS0tLS0tDQpGcm9t
-OiAgIk1hdGhpZXUgRGVzbm95ZXJzIjxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+
-Ow0KRGF0ZTogIFRodSwgSnVsIDI1LCAyMDE5IDExOjQ4IFBNDQpUbzogICLmnajmtbciPGhh
-aS55YW5nQG1hZ2ljLXNoaWVsZC5jb20+OyANCkNjOiAgIkpvbmF0aGFuIFJham90dGUiPGpv
-bmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT47ICJsdHRuZy1kZXYiPGx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmc+OyANClN1YmplY3Q6ICBSZTogW2x0dG5nLWRldl0g5Zue
-5aSNOlJlOiAg5Zue5aSNOlJlOiAgUHJvcyBhbmQgQ29ucyBvZiBMVFRuZw0KDQogDQoNCi0t
-LS0tIE9uIEp1bCAyNSwgMjAxOSwgYXQgNDoyMSBQTSwg5p2o5rW3IDxoYWkueWFuZ0BtYWdp
-Yy1zaGllbGQuY29tPiB3cm90ZToNCg0KSGkNCg0KVGhhbmtzIGZvciBxdWljayByZXNwb25z
-ZS4gDQpMVFRuZyBpcyByZWFsbHkgaW1wcmVzc2l2ZSBvbiBwZXJmb3JtYW5jZe+8jGVzcGVj
-aWFsbHkgdW5kZXIgaGVhdnkgd29ya2xvYWQuIFdoZW4gdXNpbmcgaXQgb24gY3JpdGljYWwg
-bWFjaGluZXPvvIxzdGFiaWxpdHkgaXMgYWxzbyBlc3NlbnRpYWwuIA0KSSB3b25kZXIgaG93
-IExUVG5nIGlzIGNvbW1lcmNpYWxpemVkIGFuZCBhbnkgcHJvZHVjdHMgb3IgT1MgZGlzdHJp
-YnV0aW9ucyBhbHJlYWR5IGVuYWJsZWQgaXQuIA0KSSB0b29rIGEgbG9vayBhdCBsdHRuZy1t
-b2R1bGVzIGJ1ZyBsaXN077yMdGhlcmUgYXJlIGEgZmV3IGtlcm5lbCBvb3BzIHllYXJzIGFn
-byBhbmQgZ290IHJlc29sdmVkLiBNYXkgSSBzYXkgaXQgaXMgdmVyeSBzdGFibGUgb3IgaXQg
-aGFzIG5vdCBiZWVuIGZ1bGx5IHRlc3RlZD8gDQoNCg0KSGksDQoNCg0KDQpFZmZpY2lPUyBo
-YXMgaGFkIGNvbW1lcmNpYWwgY3VzdG9tZXJzIHVzaW5nIExUVG5nIGluIHByb2R1Y3Rpb24g
-Zm9yIG1hbnkgeWVhcnMgbm93Lg0KTFRUbmcgcGVyLXNlIGlzIGRpc3RyaWJ1dGVkIGFzIHBh
-Y2thZ2VzIGluIGFsbCBtYWpvciBMaW51eCBkaXN0cmlidXRpb25zLiBFZmZpY2lPUyBhbHNv
-IHByb3ZpZGVzDQoNCm1vcmUgdXAtdG8tZGF0ZSBwYWNrYWdlcyBmb3Igc29tZSBkaXN0cmli
-dXRpb25zIHRocm91Z2ggaHR0cDovL3BhY2thZ2VzLmVmZmljaW9zLmNvbS8NCg0KDQpUaGUg
-d2F5IHdlIGNvbW1lcmNpYWxpemUgTFRUbmcgaXMgdGhyb3VnaCBmdW5kaW5nIGZvciBkZXNp
-Z24gYW5kIGltcGxlbWVudGF0aW9uIG9mDQpjdXN0b21lcidzIGZlYXR1cmUgcmVxdWVzdHMu
-IFdlIGFsc28gcHJvdmlkZSBjb21tZXJjaWFsIHN1cHBvcnQgdGFpbG9yZWQgdG8gc3BlY2lm
-aWMNCmN1c3RvbWVyJ3MgZW52aXJvbm1lbnRzLCB3aGljaCBpbmNsdWRlcyBTTEEgYW5kIGNv
-bnRpbnVvdXMgaW50ZWdyYXRpb24gdGVzdGluZyBvZiBzcGVjaWZpYw0KZW52aXJvbm1lbnRz
-Lg0KDQoNCg0KSWYgdGhvc2UgYXJlIHNlcnZpY2VzIHlvdSBhcmUgaW50ZXJlc3RlZCBpbiwg
-cGxlYXNlIGZlZWwgZnJlZSB0byBjb250YWN0IHVzIGluIHByaXZhdGUgc28gd2UNCmNhbiBm
-dXJ0aGVyIGRpc2N1c3MgeW91ciBuZWVkcy4NCg0KDQoNCkJlc3QgcmVnYXJkcywNCg0KDQoN
-Ck1hdGhpZXUNCg0KDQoNCnJlZ2FyZHMNCkhhaQ0KDQoNCg0KDQoNCg0KLS0tLS0tLS0tLS0t
-LS3ljp/lp4vpgq7ku7YtLS0tLS0tLS0tLS0tLQ0K5Y+R5Lu25Lq677yaIkpvbmF0aGFuIFJh
-am90dGUtSnVsaWVuICI8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPjsN
-CuWPkemAgeaXtumXtO+8mjIwMTnlubQ35pyIMjPml6Uo5pif5pyf5LqMKSDkuIrljYg2OjIw
-DQrmlLbku7bkurrvvJoi5p2o5rW3IiA8aGFpLnlhbmdAbWFnaWMtc2hpZWxkLmNvbT47DQrm
-ioTpgIHvvJoibHR0bmctZGV2ICI8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz47DQrkuLvp
-opjvvJpSZTogIOWbnuWkjTpSZTogW2x0dG5nLWRldl0gUHJvcyBhbmQgQ29ucyBvZiBMVFRu
-Zw0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCg0KIEhpLA0KDQo+IEFz
-IHRvIExEX1BSRUxPQUQsIGl0IGlzIGFsc28gdXNlZCBmb3IgcHJpdmlsZWdlIGVzY2FsYXRp
-b24uIFdpbGwgaXQgYmUgcmVnYXJkZWQgYXMgdnVsbmVyYWJpbGl0eSBhbmQgZm9yYmlkZGVu
-IG9uIHNvbWUgTGludXggc3lzdGVtcz8NCg0KSXQgY291bGQgeWVzLg0KSW4gdGhhdCBjYXNl
-IHlvdSB3aWxsIGJlIGxpbWl0ZWQgdG8gdGhlIHN5c2NhbGxzIGludGVyZmFjZSBmb3IgdGhl
-IGxpYmMNCm9ic2VydmFiaWxpdHkgdW5sZXNzIHlvdSBpbnN0cnVtZW50IGl0IGFuZCBkaXN0
-cmlidXRlIGl0Lg0KDQpDaGVlcnMuDQoNCg0KDQpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXw0KbHR0bmctZGV2IG1haWxpbmcgbGlzdA0KbHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZw0KaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldg0KDQoNCg0KLS0gDQoNCk1hdGhpZXUgRGVzbm95
-ZXJzDQpFZmZpY2lPUyBJbmMuDQpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQ==
+The major reason is that I want a hash table that can change its hash
+function on-the-fly. Split-ordered list is not adequate because it can
+only increase/decrease the number of buckets. Besides, I doubt the
+reverse operation is always efficient on platforms where hardware
+cannot help reverse bit strings. Hence I'm working on the new hash
+table algorithm, which, of course, is built on top of the linked list
+we are working on :-).
 
-------=_NextPart_5D3F9098_0BF635F0_69BABC39
-Content-Type: text/html;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
+Thanks,
+--Junchang
 
-PHNwYW4gc3R5bGU9ImRpc3BsYXk6IGlubGluZSAhaW1wb3J0YW50OyBmbG9hdDogbm9uZTsg
-YmFja2dyb3VuZC1jb2xvcjogdHJhbnNwYXJlbnQ7IGNvbG9yOiByZ2IoMCwgMCwgMCk7IGZv
-bnQtZmFtaWx5OiBhcmlhbCxoZWx2ZXRpY2Esc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxNnB4
-OyBmb250LXN0eWxlOiBub3JtYWw7IGZvbnQtdmFyaWFudDogbm9ybWFsOyBmb250LXdlaWdo
-dDogNDAwOyBsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBvcnBoYW5zOiAyOyB0ZXh0LWFsaWdu
-OiBsZWZ0OyB0ZXh0LWRlY29yYXRpb246IG5vbmU7IHRleHQtaW5kZW50OiAwcHg7IHRleHQt
-dHJhbnNmb3JtOiBub25lOyAtd2Via2l0LXRleHQtc3Ryb2tlLXdpZHRoOiAwcHg7IHdoaXRl
-LXNwYWNlOiBub3JtYWw7IHdvcmQtc3BhY2luZzogMHB4OyI+SGkgTWF0aGlldSw8L3NwYW4+
-PGRpdj48YnI+PC9kaXY+PGRpdj5UaGFua3MuIEkgYW0gbG9va2luZyBmb3IgcGFja2FnZXMg
-Zm9yIG9sZGVyIGRpc3RyaWJ1dGlvbnMgbGlrZSBDZW50T1MgNiAod2l0aCBrZXJuZWwgMi42
-KSBidXQgY291bGQgbm90IGZpbmQgaXQuIEFuZCB3aGljaCBrZXJuZWwgdmVyc2lvbiBpcyBt
-aW5pbXVtIHJlcXVpcmVtZW50IGZvciBMVFRuZz88L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2
-PlJlZ2FyZHM8L2Rpdj48ZGl2PkhhaTwvZGl2PjxkaXY+PGJyPjwvZGl2PjxkaXYgc3R5bGU9
-ImNvbG9yOiM5MDkwOTA7Zm9udC1mYW1pbHk6QXJpYWwgTmFycm93O2ZvbnQtc2l6ZToxMnB4
-Ij48ZGl2PjxzaWduIHNpZ25pZD0iOTgiPjxicj48YnI+PC9zaWduPjwvZGl2PjwvZGl2Pjxk
-aXY+PGluY2x1ZGV0YWlsPjxkaXYgc3R5bGU9ImZvbnQ6VmVyZGFuYSBub3JtYWwgMTRweDtj
-b2xvcjojMDAwOyI+PGRpdiBzdHlsZT0iRk9OVC1TSVpFOiAxMnB4O0ZPTlQtRkFNSUxZOiBB
-cmlhbCBOYXJyb3c7cGFkZGluZzoycHggMCAycHggMDsiPi0tLS0tLS0tLS0tLS0tLS0tLSZu
-YnNwO09yaWdpbmFsJm5ic3A7LS0tLS0tLS0tLS0tLS0tLS0tPC9kaXY+PGRpdiBzdHlsZT0i
-Rk9OVC1TSVpFOiAxMnB4O2JhY2tncm91bmQ6I2VmZWZlZjtwYWRkaW5nOjhweDsiPjxkaXYg
-aWQ9Im1lbnVfc2VuZGVyIj48Yj5Gcm9tOiA8L2I+Jm5ic3A7Ik1hdGhpZXUgRGVzbm95ZXJz
-IiZsdDttYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20mZ3Q7OzwvZGl2PjxkaXY+PGI+
-RGF0ZTogPC9iPiZuYnNwO1RodSwgSnVsIDI1LCAyMDE5IDExOjQ4IFBNPC9kaXY+PGRpdj48
-Yj5UbzogPC9iPiZuYnNwOyLmnajmtbciJmx0O2hhaS55YW5nQG1hZ2ljLXNoaWVsZC5jb20m
-Z3Q7OyA8d2JyPjwvZGl2PjxkaXY+PGI+Q2M6IDwvYj4mbmJzcDsiSm9uYXRoYW4gUmFqb3R0
-ZSImbHQ7am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tJmd0OzsgImx0dG5n
-LWRldiImbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs7IDx3YnI+PC9kaXY+PGRp
-dj48Yj5TdWJqZWN0OiA8L2I+Jm5ic3A7UmU6IFtsdHRuZy1kZXZdIOWbnuWkjTpSZTogIOWb
-nuWkjTpSZTogIFByb3MgYW5kIENvbnMgb2YgTFRUbmc8L2Rpdj48L2Rpdj48ZGl2PiZuYnNw
-OzwvZGl2PjxkaXYgc3R5bGU9InBvc2l0aW9uOnJlbGF0aXZlOyI+PGRpdiBpZD0idG1wY29u
-dGVudF9yZXMiPjwvZGl2PjxkaXYgc3R5bGU9ImZvbnQtZmFtaWx5OiBhcmlhbCwgaGVsdmV0
-aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiAjMDAwMDAwIj48ZGl2
-PjxzcGFuIGlkPSJ6d2NociIgZGF0YS1tYXJrZXI9Il9fRElWSURFUl9fIj4tLS0tLSBPbiBK
-dWwgMjUsIDIwMTksIGF0IDQ6MjEgUE0sIOadqOa1tyAmbHQ7aGFpLnlhbmdAbWFnaWMtc2hp
-ZWxkLmNvbSZndDsgd3JvdGU6PGJyPjwvc3Bhbj48L2Rpdj48ZGl2IGRhdGEtbWFya2VyPSJf
-X1FVT1RFRF9URVhUX18iPjxibG9ja3F1b3RlIHN0eWxlPSJib3JkZXItbGVmdDoycHggc29s
-aWQgIzEwMTBGRjttYXJnaW4tbGVmdDo1cHg7cGFkZGluZy1sZWZ0OjVweDtjb2xvcjojMDAw
-O2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0eWxlOm5vcm1hbDt0ZXh0LWRlY29yYXRpb246
-bm9uZTtmb250LWZhbWlseTpIZWx2ZXRpY2EsQXJpYWwsc2Fucy1zZXJpZjtmb250LXNpemU6
-MTJwdDsiPjxkaXY+SGk8L2Rpdj48YnI+PGRpdj5UaGFua3MgZm9yIHF1aWNrIHJlc3BvbnNl
-LiA8L2Rpdj48ZGl2PkxUVG5nIGlzIHJlYWxseSBpbXByZXNzaXZlIG9uIHBlcmZvcm1hbmNl
-77yMZXNwZWNpYWxseSB1bmRlciBoZWF2eSB3b3JrbG9hZC4gV2hlbiB1c2luZyBpdCBvbiBj
-cml0aWNhbCBtYWNoaW5lc++8jHN0YWJpbGl0eSBpcyBhbHNvIGVzc2VudGlhbC4gPC9kaXY+
-PGRpdj5JIHdvbmRlciBob3cgTFRUbmcgaXMgY29tbWVyY2lhbGl6ZWQgYW5kIGFueSBwcm9k
-dWN0cyBvciBPUyBkaXN0cmlidXRpb25zIGFscmVhZHkgZW5hYmxlZCBpdC4gPC9kaXY+PGRp
-dj5JIHRvb2sgYSBsb29rIGF0IGx0dG5nLW1vZHVsZXMgYnVnIGxpc3TvvIx0aGVyZSBhcmUg
-YSBmZXcga2VybmVsIG9vcHMgeWVhcnMgYWdvIGFuZCBnb3QgcmVzb2x2ZWQuIE1heSBJIHNh
-eSBpdCBpcyB2ZXJ5IHN0YWJsZSBvciBpdCBoYXMgbm90IGJlZW4gZnVsbHkgdGVzdGVkPyA8
-L2Rpdj48L2Jsb2NrcXVvdGU+PGRpdj48YnI+PC9kaXY+PGRpdj5IaSw8YnIgZGF0YS1tY2Ut
-Ym9ndXM9IjEiPjwvZGl2PjxkaXY+PGJyIGRhdGEtbWNlLWJvZ3VzPSIxIj48L2Rpdj48ZGl2
-PkVmZmljaU9TIGhhcyBoYWQgY29tbWVyY2lhbCBjdXN0b21lcnMgdXNpbmcgTFRUbmcgaW4g
-cHJvZHVjdGlvbiBmb3IgbWFueSB5ZWFycyBub3cuPC9kaXY+PGRpdj5MVFRuZyBwZXItc2Ug
-aXMgZGlzdHJpYnV0ZWQgYXMgcGFja2FnZXMgaW4gYWxsIG1ham9yIExpbnV4IGRpc3RyaWJ1
-dGlvbnMuIEVmZmljaU9TIGFsc28gcHJvdmlkZXM8YnIgZGF0YS1tY2UtYm9ndXM9IjEiPjwv
-ZGl2PjxkaXY+bW9yZSB1cC10by1kYXRlIHBhY2thZ2VzIGZvciBzb21lIGRpc3RyaWJ1dGlv
-bnMgdGhyb3VnaCA8YSBocmVmPSJodHRwOi8vcGFja2FnZXMuZWZmaWNpb3MuY29tLyI+aHR0
-cDovL3BhY2thZ2VzLmVmZmljaW9zLmNvbS88L2E+PC9kaXY+PGRpdj48YnIgZGF0YS1tY2Ut
-Ym9ndXM9IjEiPjwvZGl2PjxkaXY+VGhlIHdheSB3ZSBjb21tZXJjaWFsaXplIExUVG5nIGlz
-IHRocm91Z2ggZnVuZGluZyBmb3IgZGVzaWduIGFuZCBpbXBsZW1lbnRhdGlvbiBvZjwvZGl2
-PjxkaXY+Y3VzdG9tZXIncyBmZWF0dXJlIHJlcXVlc3RzLiBXZSBhbHNvIHByb3ZpZGUgY29t
-bWVyY2lhbCBzdXBwb3J0IHRhaWxvcmVkIHRvIHNwZWNpZmljPC9kaXY+PGRpdj5jdXN0b21l
-cidzIGVudmlyb25tZW50cywgd2hpY2ggaW5jbHVkZXMgU0xBIGFuZCBjb250aW51b3VzIGlu
-dGVncmF0aW9uIHRlc3Rpbmcgb2Ygc3BlY2lmaWM8L2Rpdj48ZGl2PmVudmlyb25tZW50cy48
-YnIgZGF0YS1tY2UtYm9ndXM9IjEiPjwvZGl2PjxkaXY+PGJyIGRhdGEtbWNlLWJvZ3VzPSIx
-Ij48L2Rpdj48ZGl2PklmIHRob3NlIGFyZSBzZXJ2aWNlcyB5b3UgYXJlIGludGVyZXN0ZWQg
-aW4sIHBsZWFzZSBmZWVsIGZyZWUgdG8gY29udGFjdCB1cyBpbiBwcml2YXRlIHNvIHdlPC9k
-aXY+PGRpdj5jYW4gZnVydGhlciBkaXNjdXNzIHlvdXIgbmVlZHMuPGJyIGRhdGEtbWNlLWJv
-Z3VzPSIxIj48L2Rpdj48ZGl2PjxiciBkYXRhLW1jZS1ib2d1cz0iMSI+PC9kaXY+PGRpdj5C
-ZXN0IHJlZ2FyZHMsPGJyIGRhdGEtbWNlLWJvZ3VzPSIxIj48L2Rpdj48ZGl2PjxiciBkYXRh
-LW1jZS1ib2d1cz0iMSI+PC9kaXY+PGRpdj5NYXRoaWV1PC9kaXY+PGRpdj48YnIgZGF0YS1t
-Y2UtYm9ndXM9IjEiPjwvZGl2PjxibG9ja3F1b3RlIHN0eWxlPSJib3JkZXItbGVmdDoycHgg
-c29saWQgIzEwMTBGRjttYXJnaW4tbGVmdDo1cHg7cGFkZGluZy1sZWZ0OjVweDtjb2xvcjoj
-MDAwO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0eWxlOm5vcm1hbDt0ZXh0LWRlY29yYXRp
-b246bm9uZTtmb250LWZhbWlseTpIZWx2ZXRpY2EsQXJpYWwsc2Fucy1zZXJpZjtmb250LXNp
-emU6MTJwdDsiPjxicj48ZGl2PnJlZ2FyZHM8L2Rpdj48ZGl2PkhhaTxicj48cD48YnI+PGJy
-PjwvcD48YnI+PGJyPi0tLS0tLS0tLS0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0tLS0tLS0tLS08
-YnI+5Y+R5Lu25Lq677yaIkpvbmF0aGFuIFJham90dGUtSnVsaWVuICImbHQ7am9uYXRoYW4u
-cmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tJmd0Ozs8YnI+5Y+R6YCB5pe26Ze077yaMjAx
-OeW5tDfmnIgyM+aXpSjmmJ/mnJ/kuowpIOS4iuWNiDY6MjA8YnI+5pS25Lu25Lq677yaIuad
-qOa1tyIgJmx0O2hhaS55YW5nQG1hZ2ljLXNoaWVsZC5jb20mZ3Q7Ozxicj7mioTpgIHvvJoi
-bHR0bmctZGV2ICImbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs7PGJyPuS4u+mi
-mO+8mlJlOiAg5Zue5aSNOlJlOiBbbHR0bmctZGV2XSBQcm9zIGFuZCBDb25zIG9mIExUVG5n
-PGJyPi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tPGJyPjwvZGl2PiA8ZGl2
-PjxkaXY+SGksPGJyPjxicj4mZ3Q7IEFzIHRvIExEX1BSRUxPQUQsIGl0IGlzIGFsc28gdXNl
-ZCBmb3IgcHJpdmlsZWdlIGVzY2FsYXRpb24uIFdpbGwgaXQgYmUgcmVnYXJkZWQgYXMgdnVs
-bmVyYWJpbGl0eSBhbmQgZm9yYmlkZGVuIG9uIHNvbWUgTGludXggc3lzdGVtcz88YnI+PGJy
-Pkl0IGNvdWxkIHllcy48YnI+SW4gdGhhdCBjYXNlIHlvdSB3aWxsIGJlIGxpbWl0ZWQgdG8g
-dGhlIHN5c2NhbGxzIGludGVyZmFjZSBmb3IgdGhlIGxpYmM8YnI+b2JzZXJ2YWJpbGl0eSB1
-bmxlc3MgeW91IGluc3RydW1lbnQgaXQgYW5kIGRpc3RyaWJ1dGUgaXQuPGJyPjxicj5DaGVl
-cnMuPGJyPjwvZGl2PjwvZGl2Pjxicj5fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXzxicj5sdHRuZy1kZXYgbWFpbGluZyBsaXN0PGJyPmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmc8YnI+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldjxicj48L2Jsb2NrcXVvdGU+PC9kaXY+PGRpdj48
-YnI+PC9kaXY+PGRpdiBkYXRhLW1hcmtlcj0iX19TSUdfUE9TVF9fIj4tLSA8YnI+PC9kaXY+
-PGRpdj5NYXRoaWV1IERlc25veWVyczxicj5FZmZpY2lPUyBJbmMuPGJyPmh0dHA6Ly93d3cu
-ZWZmaWNpb3MuY29tPC9kaXY+PC9kaXY+DQo8L2Rpdj48L2Rpdj48IS0tPCFbZW5kaWZdLS0+
-PC9pbmNsdWRldGFpbD48L2Rpdj4=
-
-------=_NextPart_5D3F9098_0BF635F0_69BABC39--
-
-
-
-
---===============1025554782670587804==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1025554782670587804==--
+> Thanks,
+>
+> Mathieu
+>
+>
+> >
+> > This singly linked list is based on the following research paper:
+> > - Maged M. Michael. High performance dynamic lock-free hash tables
+> >   and list-based sets. In Proceedings of the fourteenth annual ACM
+> >   symposium on Parallel algorithms and architectures, ACM Press,
+> >   (2002), 73-82.
+> >
+> > And we made the following two major improvements:
+> > (1) Insert, Delete, and Find operations are protected by RCU read_lock,
+> >     such that the existence guarantees are provided by the RCU mechanism,
+> >     and that no special memory management schemes (e.g., hazard pointers)
+> >     is required anymore.
+> > (2) The use of the RCU mechanism can naturally prevent the ABA problem,
+> >     such that no flag field is required in this implementation. Hence,
+> >     we save a variable of 8 bytes (typically sizeof(long)) for each node.
+> >
+> > In the past two weeks, I found some bugs in the first version of the
+> > list in building a lock-free hash table on top it. So this is the second
+> > version which fixes the known issues. Please review this version, if
+> > possible. The major changes are as follows. Sorry for the inconvenience.
+> > Any suggestions and comments are warmly welcome.
+> >
+> > v1 -> v2:
+> >  - Functions insert(), delete(), and find() return 0 in success, and
+> >    return -Exxx otherwise.
+> >  - Fix a bug in function is_removed().
+> >
+> > Cheers,
+> > --Junchang
+> >
+> > Junchang Wang (4):
+> >  userspace-rcu: Add lock-free singly linked list rculflist
+> >  userspace-rcu: Add sample code of rculflist
+> >  userspace-rcu: Update Makefile.am to include rculflist into the
+> >    project
+> >  userspace-rcu: Add a brief description of rculflist in cds-api.md
+> >
+> > doc/cds-api.md                                     |   7 +
+> > doc/examples/rculflist/Makefile                    |  24 ++
+> > .../rculflist/Makefile.cds_lflist_delete_rcu       |  21 ++
+> > .../rculflist/Makefile.cds_lflist_find_rcu         |  21 ++
+> > .../rculflist/Makefile.cds_lflist_insert_rcu       |  21 ++
+> > doc/examples/rculflist/cds_lflist_delete_rcu.c     | 101 ++++++++
+> > doc/examples/rculflist/cds_lflist_find_rcu.c       |  96 +++++++
+> > doc/examples/rculflist/cds_lflist_insert_rcu.c     |  69 +++++
+> > include/Makefile.am                                |   1 +
+> > include/urcu/cds.h                                 |   1 +
+> > include/urcu/rculflist.h                           | 284 +++++++++++++++++++++
+> > 11 files changed, 646 insertions(+)
+> > create mode 100644 doc/examples/rculflist/Makefile
+> > create mode 100644 doc/examples/rculflist/Makefile.cds_lflist_delete_rcu
+> > create mode 100644 doc/examples/rculflist/Makefile.cds_lflist_find_rcu
+> > create mode 100644 doc/examples/rculflist/Makefile.cds_lflist_insert_rcu
+> > create mode 100644 doc/examples/rculflist/cds_lflist_delete_rcu.c
+> > create mode 100644 doc/examples/rculflist/cds_lflist_find_rcu.c
+> > create mode 100644 doc/examples/rculflist/cds_lflist_insert_rcu.c
+> > create mode 100644 include/urcu/rculflist.h
+> >
+> > --
+> > 1.8.3.1
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
