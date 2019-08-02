@@ -1,17 +1,17 @@
 From: contact-oss-cct <contact-oss.cct@fr.thalesgroup.com>
-Subject: Export status for lttng-tools (2.6.0)
-Date: Fri, 2 Aug 2019 13:52:36 +0000
-Message-ID: <3d94203c5f5f44e5b70cdf05be6fa18d__13214.000901074$1564756740$gmane$org@fr.thalesgroup.com>
+Subject: Export status for lttng-modules (2.6.0)
+Date: Fri, 2 Aug 2019 13:52:41 +0000
+Message-ID: <2b5fb5a96e7e419ebc15b2caf66701f8__27163.4429971286$1564756765$gmane$org@fr.thalesgroup.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0608294818033279080=="
+Content-Type: multipart/mixed; boundary="===============2843982162888263338=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from thsbbfxrt01p.thalesgroup.com (thsbbfxrt01p.thalesgroup.com
  [192.54.144.131])
- by lists.lttng.org (Postfix) with ESMTPS id 460TBH2mG3z1GJH
- for <lttng-dev@lists.lttng.org>; Fri,  2 Aug 2019 09:52:39 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 460TBM25WHz1GJf
+ for <lttng-dev@lists.lttng.org>; Fri,  2 Aug 2019 09:52:43 -0400 (EDT)
 Received: from thsbbfxrt01p.thalesgroup.com (localhost [127.0.0.1])
- by localhost (Postfix) with SMTP id 460TBF4hBfz454w
- for <lttng-dev@lists.lttng.org>; Fri,  2 Aug 2019 15:52:37 +0200 (CEST)
+ by localhost (Postfix) with SMTP id 460TBL3xHrz454y
+ for <lttng-dev@lists.lttng.org>; Fri,  2 Aug 2019 15:52:42 +0200 (CEST)
 Content-Language: fr-FR
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,17 +25,17 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0608294818033279080==
+--===============2843982162888263338==
 Content-Language: fr-FR
 Content-Type: multipart/alternative;
-	boundary="_000_3d94203c5f5f44e5b70cdf05be6fa18dfrthalesgroupcom_"
+	boundary="_000_2b5fb5a96e7e419ebc15b2caf66701f8frthalesgroupcom_"
 
---_000_3d94203c5f5f44e5b70cdf05be6fa18dfrthalesgroupcom_
+--_000_2b5fb5a96e7e419ebc15b2caf66701f8frthalesgroupcom_
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
 Hi
-Thanks for maintaining lttng-tools.
+Thanks for maintaining lttng-modules.
 Do you know whether it is Not controlled, or if it has an Export control cl=
 assification number (ECCN) in compliance with US export control laws ?
 
@@ -44,7 +44,7 @@ Thanks for your time.
 Best regards.
 THALES Group
 
---_000_3d94203c5f5f44e5b70cdf05be6fa18dfrthalesgroupcom_
+--_000_2b5fb5a96e7e419ebc15b2caf66701f8frthalesgroupcom_
 Content-Type: text/html; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
@@ -106,7 +106,7 @@ div.WordSection1
 <p><span style=3D"font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Hi =
 </span><br>
 <span style=3D"font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Thanks=
- for maintaining lttng-tools.</span>
+ for maintaining lttng-modules.</span>
 <br>
 <span style=3D"font-family:&quot;Arial&quot;,&quot;sans-serif&quot;">Do you=
  know whether it is Not controlled, or if it has an Export control classifi=
@@ -126,9 +126,9 @@ egards.</span> <br>
 </body>
 </html>
 
---_000_3d94203c5f5f44e5b70cdf05be6fa18dfrthalesgroupcom_--
+--_000_2b5fb5a96e7e419ebc15b2caf66701f8frthalesgroupcom_--
 
---===============0608294818033279080==
+--===============2843982162888263338==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -139,4 +139,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0608294818033279080==--
+--===============2843982162888263338==--
