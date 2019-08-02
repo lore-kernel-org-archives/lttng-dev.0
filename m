@@ -1,21 +1,21 @@
 From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: Export status for lttng-tools (2.6.0)
-Date: Fri, 2 Aug 2019 10:40:23 -0400
-Message-ID: <20190802144023.GH28213__18874.3768305116$1564756950$gmane$org@joraj-alpa>
-References: <3d94203c5f5f44e5b70cdf05be6fa18d@fr.thalesgroup.com>
+Subject: Re: Export status for lttng-modules (2.6.0)
+Date: Fri, 2 Aug 2019 10:41:10 -0400
+Message-ID: <20190802144110.GI28213__45114.3381813139$1564756985$gmane$org@joraj-alpa>
+References: <2b5fb5a96e7e419ebc15b2caf66701f8@fr.thalesgroup.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 460VFV6dmzz1GRb
- for <lttng-dev@lists.lttng.org>; Fri,  2 Aug 2019 10:40:30 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 460VGH3rHpz1GS5
+ for <lttng-dev@lists.lttng.org>; Fri,  2 Aug 2019 10:41:11 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id A854C2AEF31
- for <lttng-dev@lists.lttng.org>; Fri,  2 Aug 2019 10:40:24 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 602C52AEF7F
+ for <lttng-dev@lists.lttng.org>; Fri,  2 Aug 2019 10:41:11 -0400 (EDT)
 Content-Disposition: inline
-In-Reply-To: <3d94203c5f5f44e5b70cdf05be6fa18d@fr.thalesgroup.com>
+In-Reply-To: <2b5fb5a96e7e419ebc15b2caf66701f8@fr.thalesgroup.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -39,9 +39,9 @@ entity behind the lttng-* projects: info@efficios.com
 
 Cheers
 
-On Fri, Aug 02, 2019 at 01:52:36PM +0000, contact-oss-cct wrote:
+On Fri, Aug 02, 2019 at 01:52:41PM +0000, contact-oss-cct wrote:
 > Hi
-> Thanks for maintaining lttng-tools.
+> Thanks for maintaining lttng-modules.
 > Do you know whether it is Not controlled, or if it has an Export control classification number (ECCN) in compliance with US export control laws ?
 > 
 > (Bureau of Industry and Security website : http://www.bis.doc.gov/)
