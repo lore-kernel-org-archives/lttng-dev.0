@@ -1,18 +1,16 @@
-From: Yiteng Guo <guoyiteng@gmail.com>
-Subject: [RFC PATCH lttng-tools] Hugepages Shared Memory Support
- in LTTng
-Date: Wed, 7 Aug 2019 10:44:28 -0400
-Message-ID: <CAO+PNdHPpMAn4EoHv8wn2BtD=a4tsib_hadE6BxAPjyRhbUY6g__5285.57198574475$1565189095$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] pprint.m4: add missing copyright
+ header
+Date: Thu,  8 Aug 2019 10:49:23 -0400
+Message-ID: <20190808144923.2417-1-mathieu.desnoyers__26078.4455853113$1565275782$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com
- [IPv6:2a00:1450:4864:20::444])
- by lists.lttng.org (Postfix) with ESMTPS id 463Z6073q8z16cl
- for <lttng-dev@lists.lttng.org>; Wed,  7 Aug 2019 10:44:40 -0400 (EDT)
-Received: by mail-wr1-x444.google.com with SMTP id n9so91776999wru.0
- for <lttng-dev@lists.lttng.org>; Wed, 07 Aug 2019 07:44:40 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 464B934Cqjz1MY2
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Aug 2019 10:49:27 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,62 +20,61 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org, Philippe Proulx <pproulx@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-This patch is not expected to be integrated into LTTng. Its purpose is
-to show the viability and advantages of hugepages.
+Add the missing copyright header to pprint.m4, clarifying that it is
+GPLv2+ with the special exception applying to Autoconf Macros.
 
-To use hugepages for the shared memory, we need to create a memory
-mapped files on a hugetlbfs directory /dev/hugepages instead of
-/dev/shm. See [1] for the instruction to mount a hugetlbfs virtual file
-system.
-
-This patch simply changes the location of the shm file and replaces
-shm_open/shm_unlink with open/unlink. This patch could not work
-independently. It should be used together with another patch in
-lttng-ust [2]. See that patch for more hugepages information.
-
-This patch is based on commit 4e328cceb6ff5fd6240c866b52b29234946c5c66.
-
-[1] https://wiki.debian.org/Hugepages
-[2] [RFC PATCH lttng-ust] Hugepages Shared Memory Support in LTTng
-
-Signed-off-by: Yiteng Guo <guoyiteng@gmail.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+CC: Philippe Proulx <pproulx@efficios.com>
 ---
- src/common/ust-consumer/ust-consumer.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ m4/pprint.m4 | 34 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
 
-diff --git a/src/common/ust-consumer/ust-consumer.c
-b/src/common/ust-consumer/ust-consumer.c
-index 94b761cb..aadb25c6 100644
---- a/src/common/ust-consumer/ust-consumer.c
-+++ b/src/common/ust-consumer/ust-consumer.c
-@@ -378,7 +378,8 @@ int create_posix_shm(void)
-  char tmp_name[NAME_MAX];
-  int shmfd, ret;
-
-- ret = snprintf(tmp_name, NAME_MAX, "/ust-shm-consumer-%d", getpid());
-+ // use HugePage dir.
-+ ret = snprintf(tmp_name, NAME_MAX,
-"/dev/hugepages/ust-shm-consumer-%d", getpid());
-  if (ret < 0) {
-  PERROR("snprintf");
-  return -1;
-@@ -390,12 +391,12 @@ int create_posix_shm(void)
-  * pathname so that some OS implementations can keep it local to
-  * the process (POSIX leaves this implementation-defined).
-  */
-- shmfd = shm_open(tmp_name, O_CREAT | O_EXCL | O_RDWR, 0700);
-+ shmfd = open(tmp_name, O_CREAT | O_EXCL | O_RDWR, 0700);
-  if (shmfd < 0) {
-  PERROR("shm_open");
-  goto error_shm_open;
-  }
-- ret = shm_unlink(tmp_name);
-+ ret = unlink(tmp_name);
-  if (ret < 0 && errno != ENOENT) {
-  PERROR("shm_unlink");
-  goto error_shm_release;
+diff --git a/m4/pprint.m4 b/m4/pprint.m4
+index a7cfd94c..a18a2ac6 100644
+--- a/m4/pprint.m4
++++ b/m4/pprint.m4
+@@ -1,6 +1,36 @@
+-# Pretty printing macros.
++# DESCRIPTION
+ #
+-# Author: Philippe Proulx <pproulx@efficios.com>
++#   Pretty printing macros.
++#
++# LICENSE
++#
++#   Copyright (c) 2016 Philippe Proulx <pproulx@efficios.com>
++#
++#   This program is free software; you can redistribute it and/or modify it
++#   under the terms of the GNU General Public License as published by the
++#   Free Software Foundation; either version 2 of the License, or (at your
++#   option) any later version.
++#
++#   This program is distributed in the hope that it will be useful, but
++#   WITHOUT ANY WARRANTY; without even the implied warranty of
++#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
++#   Public License for more details.
++#
++#   You should have received a copy of the GNU General Public License along
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
++#
++#   As a special exception, the respective Autoconf Macro's copyright owner
++#   gives unlimited permission to copy, distribute and modify the configure
++#   scripts that are the output of Autoconf when processing the Macro. You
++#   need not follow the terms of the GNU General Public License when using
++#   or distributing such scripts, even though portions of the text of the
++#   Macro appear in them. The GNU General Public License (GPL) does govern
++#   all other use of the material that constitutes the Autoconf Macro.
++#
++#   This special exception to the GPL applies to versions of the Autoconf
++#   Macro released by the Autoconf Archive. When you make and distribute a
++#   modified version of the Autoconf Macro, you may extend this special
++#   exception to the GPL to apply to your modified version as well.
+ 
+ #serial 1
+ 
 -- 
-2.17.1
+2.11.0
