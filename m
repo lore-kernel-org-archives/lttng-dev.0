@@ -1,16 +1,16 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-modules 1/3] Introduce
- LTTNG_KERNEL_SESSION_SET_NAME
-Date: Tue, 13 Aug 2019 14:14:23 -0400
-Message-ID: <20190813181425.9536-1-jonathan.rajotte-julien__38197.1242067934$1565720099$gmane$org@efficios.com>
+Subject: [PATCH lttng-modules 2/3] Add metadata env fields
+Date: Tue, 13 Aug 2019 14:14:24 -0400
+Message-ID: <20190813181425.9536-2-jonathan.rajotte-julien__36299.5787801751$1565720133$gmane$org@efficios.com>
+References: <20190813181425.9536-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 467LTb4nvZzsTg
- for <lttng-dev@lists.lttng.org>; Tue, 13 Aug 2019 14:14:43 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 467LTl4y1SzsV2
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Aug 2019 14:14:51 -0400 (EDT)
+In-Reply-To: <20190813181425.9536-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,12 +23,13 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The tracer controller (lttng-sessiond) can now inform the kernel tracer
-of the name of the created session. This will allow the tracer to
-propagate the information inside the trace metadata under a "env" field.
+Add the following fields:
 
-This information is normally inferred from the generated folder
-structure where a trace rests.
+  - tracer_buffering_scheme
+      The buffering scheme used by the tracer. lttng-modules sole
+      buffering scheme is "global".
+  - trace_name
+      The name of the trace. Use the session name.
 
 Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
@@ -39,106 +40,98 @@ traces from archived data (rotation) and output a trace with similar
 lttng tree hierarchy.
 
 ---
- lttng-abi.c    | 27 +++++++++++++++++++++++++++
- lttng-abi.h    | 10 +++++++++-
- lttng-events.h |  1 +
- 3 files changed, 37 insertions(+), 1 deletion(-)
+ lttng-events.c | 65 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 64 insertions(+), 1 deletion(-)
 
-diff --git a/lttng-abi.c b/lttng-abi.c
-index ca94379..aab2cac 100644
---- a/lttng-abi.c
-+++ b/lttng-abi.c
-@@ -453,6 +453,23 @@ fd_error:
- 	return ret;
+diff --git a/lttng-events.c b/lttng-events.c
+index a4570b7..2e7670b 100644
+--- a/lttng-events.c
++++ b/lttng-events.c
+@@ -2478,6 +2478,60 @@ int64_t measure_clock_offset(void)
+ 	return offset;
  }
  
 +static
-+int lttng_abi_session_set_name(struct lttng_session *session,
-+		struct lttng_kernel_session_name *name)
++int print_escaped_ctf_string(struct lttng_session *session, const char *string)
 +{
-+	size_t len;
++	int ret;
++	size_t i;
++	char cur;
 +
-+	len = strnlen(name->name, LTTNG_KERNEL_SESSION_NAME_LEN);
++	i = 0;
++	cur = string[i];
++	while (cur != '\0') {
++		switch (cur) {
++		case '\n':
++			ret = lttng_metadata_printf(session, "%s", "\\n");
++			break;
++		case '\\':
++		case '"':
++			ret = lttng_metadata_printf(session, "%c", '\\');
++			if (ret)
++				goto error;
++			/* We still print the current char */
++			/* Fallthrough */
++		default:
++			ret = lttng_metadata_printf(session, "%c", cur);
++			break;
++		}
 +
-+	if (len == LTTNG_KERNEL_SESSION_NAME_LEN) {
-+		/* Name is too long/malformed */
-+		return -EINVAL;
++		if (ret)
++			goto error;
++
++		cur = string[++i];
 +	}
-+
-+	strcpy(session->name, name->name);
-+	return 0;
++error:
++	return ret;
 +}
 +
- /**
-  *	lttng_session_ioctl - lttng session fd ioctl
-  *
-@@ -562,6 +579,16 @@ long lttng_session_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 		return lttng_session_metadata_regenerate(session);
- 	case LTTNG_KERNEL_SESSION_STATEDUMP:
- 		return lttng_session_statedump(session);
-+	case LTTNG_KERNEL_SESSION_SET_NAME:
-+	{
-+		struct lttng_kernel_session_name name;
++static
++int print_metadata_session_name(struct lttng_session *session)
++{
++	int ret;
 +
-+		if (copy_from_user(&name,
-+				(struct lttng_kernel_session_name __user *) arg,
-+				sizeof(struct lttng_kernel_session_name)))
-+			return -EFAULT;
-+		return lttng_abi_session_set_name(session, &name);
-+	}
- 	default:
- 		return -ENOIOCTLCMD;
- 	}
-diff --git a/lttng-abi.h b/lttng-abi.h
-index 83bf931..0dd9a9f 100644
---- a/lttng-abi.h
-+++ b/lttng-abi.h
-@@ -17,9 +17,10 @@
-  * should be increased when an incompatible ABI change is done.
-  */
- #define LTTNG_MODULES_ABI_MAJOR_VERSION		2
--#define LTTNG_MODULES_ABI_MINOR_VERSION		3
-+#define LTTNG_MODULES_ABI_MINOR_VERSION		4
- 
- #define LTTNG_KERNEL_SYM_NAME_LEN	256
-+#define LTTNG_KERNEL_SESSION_NAME_LEN	256
- 
- enum lttng_kernel_instrumentation {
- 	LTTNG_KERNEL_TRACEPOINT	= 0,
-@@ -119,6 +120,10 @@ struct lttng_kernel_tracer_abi_version {
- 	uint32_t minor;
- } __attribute__((packed));
- 
-+struct lttng_kernel_session_name {
-+	char name[LTTNG_KERNEL_SESSION_NAME_LEN];
-+} __attribute__((packed));
++	ret = lttng_metadata_printf(session, "	trace_name = \"");
++	if (ret)
++		goto error;
 +
- enum lttng_kernel_calibrate_type {
- 	LTTNG_KERNEL_CALIBRATE_KRETPROBE,
- };
-@@ -209,8 +214,11 @@ struct lttng_kernel_filter_bytecode {
-  */
- #define LTTNG_KERNEL_SESSION_LIST_TRACKER_PIDS	_IO(0xF6, 0x58)
- #define LTTNG_KERNEL_SESSION_METADATA_REGEN	_IO(0xF6, 0x59)
++	ret = print_escaped_ctf_string(session, session->name);
++	if (ret)
++		goto error;
 +
- /* 0x5A and 0x5B are reserved for a future ABI-breaking cleanup. */
- #define LTTNG_KERNEL_SESSION_STATEDUMP		_IO(0xF6, 0x5C)
-+#define LTTNG_KERNEL_SESSION_SET_NAME		\
-+	_IOR(0xF6, 0x5D, struct lttng_kernel_session_name)
++	ret = lttng_metadata_printf(session, "\";\n");
++
++error:
++	return ret;
++}
++
+ /*
+  * Output metadata into this session's metadata buffers.
+  * Must be called with sessions_mutex held.
+@@ -2553,7 +2607,7 @@ int _lttng_session_metadata_statedump(struct lttng_session *session)
+ 		"	tracer_major = %d;\n"
+ 		"	tracer_minor = %d;\n"
+ 		"	tracer_patchlevel = %d;\n"
+-		"};\n\n",
++		"	trace_buffering_scheme = \"global\";\n",
+ 		current->nsproxy->uts_ns->name.nodename,
+ 		utsname()->sysname,
+ 		utsname()->release,
+@@ -2565,6 +2619,15 @@ int _lttng_session_metadata_statedump(struct lttng_session *session)
+ 	if (ret)
+ 		goto end;
  
- /* Channel FD ioctl */
- #define LTTNG_KERNEL_STREAM			_IO(0xF6, 0x62)
-diff --git a/lttng-events.h b/lttng-events.h
-index 1903706..bdd73ff 100644
---- a/lttng-events.h
-+++ b/lttng-events.h
-@@ -521,6 +521,7 @@ struct lttng_session {
- 	struct list_head enablers_head;
- 	/* Hash table of events */
- 	struct lttng_event_ht events_ht;
-+	char name[LTTNG_KERNEL_SESSION_NAME_LEN];
- };
- 
- struct lttng_metadata_cache {
++	ret = print_metadata_session_name(session);
++	if (ret)
++		goto end;
++
++	/* Close env */
++	ret = lttng_metadata_printf(session, "};\n\n");
++	if (ret)
++		goto end;
++
+ 	ret = lttng_metadata_printf(session,
+ 		"clock {\n"
+ 		"	name = \"%s\";\n",
 -- 
 2.17.1
