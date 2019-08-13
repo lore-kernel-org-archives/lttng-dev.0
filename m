@@ -1,17 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools v2 1/4] Save registration time
- for app
-Date: Tue, 13 Aug 2019 16:28:33 -0400 (EDT)
-Message-ID: <1548146053.2292.1565728113064.JavaMail.zimbra__7550.93043423898$1565728129$gmane$org@efficios.com>
-References: <20190813202519.31043-1-jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-modules 1/3] Introduce
+ LTTNG_KERNEL_SESSION_SET_NAME
+Date: Tue, 13 Aug 2019 16:31:10 -0400 (EDT)
+Message-ID: <722692438.2332.1565728270822.JavaMail.zimbra__20425.5464415596$1565728286$gmane$org@efficios.com>
+References: <20190813181425.9536-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 467PS16nBzzr88
- for <lttng-dev@lists.lttng.org>; Tue, 13 Aug 2019 16:28:33 -0400 (EDT)
-In-Reply-To: <20190813202519.31043-1-jonathan.rajotte-julien@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 467PW434y7zr8q
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Aug 2019 16:31:12 -0400 (EDT)
+In-Reply-To: <20190813181425.9536-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,77 +22,135 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged this patch as well in my dev branch, thanks,
+All 3 patches merged into modules 2.11 and master, thanks!
 
 Mathieu
 
------ On Aug 13, 2019, at 4:25 PM, Jonathan Rajotte jonathan.rajotte-julien@efficios.com wrote:
+----- On Aug 13, 2019, at 2:14 PM, Jonathan Rajotte jonathan.rajotte-julien@efficios.com wrote:
 
-> Reuse the registration time for path generation.
+> The tracer controller (lttng-sessiond) can now inform the kernel tracer
+> of the name of the created session. This will allow the tracer to
+> propagate the information inside the trace metadata under a "env" field.
 > 
+> This information is normally inferred from the generated folder
+> structure where a trace rests.
+> 
+> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 > ---
-> src/bin/lttng-sessiond/ust-app.c | 7 +++----
-> src/bin/lttng-sessiond/ust-app.h | 5 +++++
-> 2 files changed, 8 insertions(+), 4 deletions(-)
 > 
-> diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/ust-app.c
-> index 4bee50496..443232e79 100644
-> --- a/src/bin/lttng-sessiond/ust-app.c
-> +++ b/src/bin/lttng-sessiond/ust-app.c
-> @@ -1831,15 +1831,12 @@ static void shadow_copy_channel(struct ust_app_channel
-> *ua_chan,
-> static void shadow_copy_session(struct ust_app_session *ua_sess,
-> 		struct ltt_ust_session *usess, struct ust_app *app)
-> {
-> -	time_t rawtime;
-> 	struct tm *timeinfo;
-> 	char datetime[16];
-> 	int ret;
-> 	char tmp_shm_path[PATH_MAX];
+> This should also be backported to 2.11 allowing Babeltrace 2 to merge
+> traces from archived data (rotation) and output a trace with similar
+> lttng tree hierarchy.
 > 
-> -	/* Get date and time for unique app path */
-> -	time(&rawtime);
-> -	timeinfo = localtime(&rawtime);
-> +	timeinfo = localtime(&app->registration_time);
-> 	strftime(datetime, sizeof(datetime), "%Y%m%d-%H%M%S", timeinfo);
+> ---
+> lttng-abi.c    | 27 +++++++++++++++++++++++++++
+> lttng-abi.h    | 10 +++++++++-
+> lttng-events.h |  1 +
+> 3 files changed, 37 insertions(+), 1 deletion(-)
 > 
-> 	DBG2("Shadow copy of session handle %d", ua_sess->handle);
-> @@ -3376,6 +3373,8 @@ void ust_app_add(struct ust_app *app)
-> 	assert(app);
-> 	assert(app->notify_sock >= 0);
+> diff --git a/lttng-abi.c b/lttng-abi.c
+> index ca94379..aab2cac 100644
+> --- a/lttng-abi.c
+> +++ b/lttng-abi.c
+> @@ -453,6 +453,23 @@ fd_error:
+> 	return ret;
+> }
 > 
-> +	app->registration_time = time(NULL);
+> +static
+> +int lttng_abi_session_set_name(struct lttng_session *session,
+> +		struct lttng_kernel_session_name *name)
+> +{
+> +	size_t len;
 > +
-> 	rcu_read_lock();
+> +	len = strnlen(name->name, LTTNG_KERNEL_SESSION_NAME_LEN);
+> +
+> +	if (len == LTTNG_KERNEL_SESSION_NAME_LEN) {
+> +		/* Name is too long/malformed */
+> +		return -EINVAL;
+> +	}
+> +
+> +	strcpy(session->name, name->name);
+> +	return 0;
+> +}
+> +
+> /**
+>  *	lttng_session_ioctl - lttng session fd ioctl
+>  *
+> @@ -562,6 +579,16 @@ long lttng_session_ioctl(struct file *file, unsigned int
+> cmd, unsigned long arg)
+> 		return lttng_session_metadata_regenerate(session);
+> 	case LTTNG_KERNEL_SESSION_STATEDUMP:
+> 		return lttng_session_statedump(session);
+> +	case LTTNG_KERNEL_SESSION_SET_NAME:
+> +	{
+> +		struct lttng_kernel_session_name name;
+> +
+> +		if (copy_from_user(&name,
+> +				(struct lttng_kernel_session_name __user *) arg,
+> +				sizeof(struct lttng_kernel_session_name)))
+> +			return -EFAULT;
+> +		return lttng_abi_session_set_name(session, &name);
+> +	}
+> 	default:
+> 		return -ENOIOCTLCMD;
+> 	}
+> diff --git a/lttng-abi.h b/lttng-abi.h
+> index 83bf931..0dd9a9f 100644
+> --- a/lttng-abi.h
+> +++ b/lttng-abi.h
+> @@ -17,9 +17,10 @@
+>  * should be increased when an incompatible ABI change is done.
+>  */
+> #define LTTNG_MODULES_ABI_MAJOR_VERSION		2
+> -#define LTTNG_MODULES_ABI_MINOR_VERSION		3
+> +#define LTTNG_MODULES_ABI_MINOR_VERSION		4
 > 
-> 	/*
-> diff --git a/src/bin/lttng-sessiond/ust-app.h b/src/bin/lttng-sessiond/ust-app.h
-> index b90ff4bce..d9279f0e4 100644
-> --- a/src/bin/lttng-sessiond/ust-app.h
-> +++ b/src/bin/lttng-sessiond/ust-app.h
-> @@ -298,6 +298,11 @@ struct ust_app {
-> 	 * to a negative value indicating that the agent application is gone.
-> 	 */
-> 	int agent_app_sock;
-> +	/*
-> +	 * Time at which the app is registred.
-> +	 * Used for path creation
-> +	 */
-> +	time_t registration_time;
+> #define LTTNG_KERNEL_SYM_NAME_LEN	256
+> +#define LTTNG_KERNEL_SESSION_NAME_LEN	256
+> 
+> enum lttng_kernel_instrumentation {
+> 	LTTNG_KERNEL_TRACEPOINT	= 0,
+> @@ -119,6 +120,10 @@ struct lttng_kernel_tracer_abi_version {
+> 	uint32_t minor;
+> } __attribute__((packed));
+> 
+> +struct lttng_kernel_session_name {
+> +	char name[LTTNG_KERNEL_SESSION_NAME_LEN];
+> +} __attribute__((packed));
+> +
+> enum lttng_kernel_calibrate_type {
+> 	LTTNG_KERNEL_CALIBRATE_KRETPROBE,
+> };
+> @@ -209,8 +214,11 @@ struct lttng_kernel_filter_bytecode {
+>  */
+> #define LTTNG_KERNEL_SESSION_LIST_TRACKER_PIDS	_IO(0xF6, 0x58)
+> #define LTTNG_KERNEL_SESSION_METADATA_REGEN	_IO(0xF6, 0x59)
+> +
+> /* 0x5A and 0x5B are reserved for a future ABI-breaking cleanup. */
+> #define LTTNG_KERNEL_SESSION_STATEDUMP		_IO(0xF6, 0x5C)
+> +#define LTTNG_KERNEL_SESSION_SET_NAME		\
+> +	_IOR(0xF6, 0x5D, struct lttng_kernel_session_name)
+> 
+> /* Channel FD ioctl */
+> #define LTTNG_KERNEL_STREAM			_IO(0xF6, 0x62)
+> diff --git a/lttng-events.h b/lttng-events.h
+> index 1903706..bdd73ff 100644
+> --- a/lttng-events.h
+> +++ b/lttng-events.h
+> @@ -521,6 +521,7 @@ struct lttng_session {
+> 	struct list_head enablers_head;
+> 	/* Hash table of events */
+> 	struct lttng_event_ht events_ht;
+> +	char name[LTTNG_KERNEL_SESSION_NAME_LEN];
 > };
 > 
-> #ifdef HAVE_LIBLTTNG_UST_CTL
+> struct lttng_metadata_cache {
 > --
 > 2.17.1
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
 Mathieu Desnoyers
