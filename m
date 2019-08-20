@@ -1,17 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Make bitfield.h C++-friendly
-Date: Mon, 19 Aug 2019 22:04:15 -0400 (EDT)
-Message-ID: <444260908.662.1566266655731.JavaMail.zimbra__2111.39544132806$1566266671$gmane$org@efficios.com>
-References: <20190820015152.22528-1-simon.marchi@efficios.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re:
+ =?utf-8?b?5Zue5aSNOlJlOiAg5Zue5aSNOlJlOiAg5Zue5aSN?=
+ =?utf-8?q?=3ARe=3A_Pros_and_Cons_of_LTTng?=
+Date: Tue, 20 Aug 2019 12:02:20 -0400
+Message-ID: <20190820160220.GA31760__19432.4774130777$1566316968$gmane$org@joraj-alpa>
+References: <tencent_7650B3E62F4AC4C75D42A69A@qq.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 46CDcc2xV1zscF
- for <lttng-dev@lists.lttng.org>; Mon, 19 Aug 2019 22:04:16 -0400 (EDT)
-In-Reply-To: <20190820015152.22528-1-simon.marchi@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 46CbCn604jzrht
+ for <lttng-dev@lists.lttng.org>; Tue, 20 Aug 2019 12:02:29 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <tencent_7650B3E62F4AC4C75D42A69A@qq.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,61 +24,100 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Simon Marchi <simon.marchi@efficios.com>
+To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into master branch, thanks!
-
-Mathieu
-
------ On Aug 19, 2019, at 6:51 PM, Simon Marchi simon.marchi@efficios.com wrote:
-
-> This patch changes bitfield.h to be usable in C++11.
-> 
-> It will probably never be compiled as C++ in the context of
-> lttng-modules, but this is just to keep things sync'ed across projects.
-> 
-> Signed-off-by: Simon Marchi <simon.marchi@efficios.com>
-> ---
-> lib/bitfield.h | 6 +++++-
-> 1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/bitfield.h b/lib/bitfield.h
-> index a9e268b41530..7d5eaeaa068d 100644
-> --- a/lib/bitfield.h
-> +++ b/lib/bitfield.h
-> @@ -55,8 +55,12 @@
->  * Produce a build-time error if the condition `cond` is non-zero.
->  * Evaluates as a size_t expression.
->  */
-> +#ifdef __cplusplus
-> +#define _BT_BUILD_ASSERT(cond) ([]{static_assert((cond), "");}, 0)
-> +#else
-> #define _BT_BUILD_ASSERT(cond)					\
-> 	sizeof(struct { int f:(2 * !!(cond) - 1); })
-> +#endif
-> 
-> /*
->  * Cast value `v` to an unsigned integer of the same size as `v`.
-> @@ -362,7 +366,7 @@ do {									\
-> do {									\
-> 	__typeof__(*(vptr)) *_vptr = (vptr);				\
-> 	__typeof__(*_vptr) _v;						\
-> -	type *_ptr = (void *) (ptr);					\
-> +	type *_ptr = (type *) (ptr);					\
-> 	unsigned long _start = (start), _length = (length);		\
-> 	type _mask, _cmask;						\
-> 	unsigned long _ts = sizeof(type) * CHAR_BIT; /* type size */	\
-> --
-> 2.23.0
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgSGFpLAoKU29ycnkgZm9yIHRoZSBkZWxheS4KClRoZSBtYWluIG9ic3RydWN0aW9uIHRvIGtl
+cm5lbCB0cmFjaW5nIHN1cHBvcnQgZm9yIFJIRUw2IGlzIGluZGVlZCB0aGUga2VybmVsLgoKTm90
+ZSB0aGF0IHdlIGRyb3BwZWQgdGhlIHBhdGNoZXMgaW4gdGhlIG1hc3RlciBicmFuY2g6CgogIGNv
+bW1pdCBjYTJmY2E2YjY0Mjk3MjI3YjI1NjU3NzNhNDk1ODAzYWE5MGMxNDhlCiAgQXV0aG9yOiBN
+aWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9zLmNvbT4KICBEYXRlOiAgIFRodSBOb3Yg
+OCAxNToyNDowMSAyMDE4IC0wNTAwCgogICAgICBEcm9wIGNvbXBhdCBwYXRjaGVzIGZvciBrZXJu
+ZWxzIDwgMi42LjM2CgogICAgICBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFu
+c29uQGVmZmljaW9zLmNvbT4KICAgICAgU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMg
+PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KClN0aWxsLCB0aGUgc3RhYmxlIDIuMTAg
+YnJhbmNoIHN0aWxsIGNhcnJpZXMgdGhlIHBhdGNoZXMgdGhhdCB5b3Ugd291bGQgbmVlZCBbMV0u
+CkFzIHByZXZpb3VzbHkgbWVudGlvbmVkLCB0aG9zZSBwYXRjaGVzIG1pZ2h0IG5vdCBhcHBseSBj
+bGVhbmx5IHNpbmNlIGl0IGhhcwpiZWVuIGEgd2hpbGUgYW55IGVmZm9ydCB3YXMgcHV0IGluIHRl
+c3RpbmcgYWdhaW5zdCBSSEVMNi4KClsxXSBodHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmct
+bW9kdWxlcy90cmVlL3N0YWJsZS0yLjEwL2xpbnV4LXBhdGNoZXMKCkNoZWVycwoKT24gRnJpLCBB
+dWcgMDksIDIwMTkgYXQgMDc6NDQ6NTdBTSArMDgwMCwg5p2o5rW3IHdyb3RlOgo+IEhpIE1hdGhp
+ZXUsCj4gCj4gV2UgYWltIHRvIHRyYWNlIFNZU0NBTEwgaW4ga2VybmVsIHNwYWNlLiBJbiBnZW5l
+cmFsLCB3aGF0IHdvdWxkIGJlIHRoZSBvYnN0YWNsZXMgdG8gc3VwcG9ydCBSSEVMNj8gT3Igd2hh
+dCBhcmUga2V5IGtlcm5lbCBwYXRjaGVzIHRvIGJlIG5lY2Vzc2FyeT8gCj4gCj4gCj4gUmVnYXJk
+cwo+IEhhaSAKPiAKPiAKPiAKPiAKPiAKPiAKPiAKPiAtLS0tLS0tLS0tLS0tLeWOn+Wni+mCruS7
+ti0tLS0tLS0tLS0tLS0tCj4g5Y+R5Lu25Lq677yaIk1hdGhpZXUgRGVzbm95ZXJzICI8bWF0aGll
+dS5kZXNub3llcnNAZWZmaWNpb3MuY29tPjsKPiDlj5HpgIHml7bpl7TvvJoyMDE55bm0N+aciDMw
+5pelKOaYn+acn+S6jCkg5pma5LiKMTA6MDQKPiDmlLbku7bkurrvvJoi5p2o5rW3IiA8aGFpLnlh
+bmdAbWFnaWMtc2hpZWxkLmNvbT47Cj4g5oqE6YCB77yaIkpvbmF0aGFuIFJham90dGUgIjxqb25h
+dGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+OyJsdHRuZy1kZXYgIjxsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnPjsKPiDkuLvpopjvvJpSZTogW2x0dG5nLWRldl0g5Zue5aSNOlJlOiAg
+5Zue5aSNOlJlOiAgUHJvcyBhbmQgQ29ucyBvZiBMVFRuZwo+IC0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tCj4gCj4gIEhpLAo+IAo+IAo+IAo+IFRoZSBjdXJyZW50IExUVG5nIGtl
+cm5lbCB0cmFjZXIgKGx0dG5nLW1vZHVsZXMpIHN1cHBvcnRzIExpbnV4IDMuMCsgb25seS4KPiAK
+PiAKPiAKPiBJZiB5b3Ugb25seSBuZWVkIHRvIHRyYWNlIHVzZXItc3BhY2UsIHlvdSBtaWdodCBi
+ZSBhYmxlIHRvIHVzZSBsdHRuZy10b29scyBhbmQgbHR0bmctdXN0Cj4gCj4gb24gYW4gb2xkZXIg
+a2VybmVsLiBQbGVhc2UgcmVmZXIgdG8gdGhlIFJFQURNRS5tZCBmaWxlcyBvZiBlYWNoIHByb2pl
+Y3QgZm9yIGluZm9ybWF0aW9uCj4gCj4gYWJvdXQgdGhlaXIgZW52aXJvbm1lbnQgcHJlcmVxdWlz
+aXRlcy4KPiAKPiAKPiAKPiBUaGUgUkhFTDYga2VybmVsIHZhcmlhbnQgYmFzZWQgb24gMi42LjMy
+LTIuNi4zNSBMaW51eCBrZXJuZWxzIGhhcyBuZXZlciBiZWVuIHN1cHBvcnRlZCBieQo+IAo+IHRo
+ZSBMVFRuZyAyLngga2VybmVsIHRyYWNlcnMgd2l0aG91dCBrZXJuZWwgcGF0Y2hpbmcuCj4gCj4g
+Cj4gCj4gVGhhbmtzLAo+IAo+IAo+IAo+IE1hdGhpZXUKPiAKPiAKPiAKPiAtLS0tLSBPbiBKdWwg
+MjksIDIwMTksIGF0IDg6MzQgUE0sIOadqOa1tyA8aGFpLnlhbmdAbWFnaWMtc2hpZWxkLmNvbT4g
+d3JvdGU6Cj4gCj4gSGkgTWF0aGlldSwKPiBUaGFua3MuIEkgYW0gbG9va2luZyBmb3IgcGFja2Fn
+ZXMgZm9yIG9sZGVyIGRpc3RyaWJ1dGlvbnMgbGlrZSBDZW50T1MgNiAod2l0aCBrZXJuZWwgMi42
+KSBidXQgY291bGQgbm90IGZpbmQgaXQuIEFuZCB3aGljaCBrZXJuZWwgdmVyc2lvbiBpcyBtaW5p
+bXVtIHJlcXVpcmVtZW50IGZvciBMVFRuZz8KPiAKPiBSZWdhcmRzCj4gSGFpCj4gCj4gCj4gCj4g
+Cj4gCj4gLS0tLS0tLS0tLS0tLS0tLS0tIE9yaWdpbmFsIC0tLS0tLS0tLS0tLS0tLS0tLQo+IEZy
+b206ICAiTWF0aGlldSBEZXNub3llcnMiPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT47
+Cj4gRGF0ZTogIFRodSwgSnVsIDI1LCAyMDE5IDExOjQ4IFBNCj4gVG86ICAi5p2o5rW3IjxoYWku
+eWFuZ0BtYWdpYy1zaGllbGQuY29tPjsgCj4gQ2M6ICAiSm9uYXRoYW4gUmFqb3R0ZSI8am9uYXRo
+YW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPjsgImx0dG5nLWRldiI8bHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZz47IAo+IFN1YmplY3Q6ICBSZTogW2x0dG5nLWRldl0g5Zue5aSNOlJlOiAg
+5Zue5aSNOlJlOiAgUHJvcyBhbmQgQ29ucyBvZiBMVFRuZwo+IAo+ICAKPiAtLS0tLSBPbiBKdWwg
+MjUsIDIwMTksIGF0IDQ6MjEgUE0sIOadqOa1tyA8aGFpLnlhbmdAbWFnaWMtc2hpZWxkLmNvbT4g
+d3JvdGU6Cj4gCj4gSGkKPiAKPiBUaGFua3MgZm9yIHF1aWNrIHJlc3BvbnNlLiAKPiBMVFRuZyBp
+cyByZWFsbHkgaW1wcmVzc2l2ZSBvbiBwZXJmb3JtYW5jZe+8jGVzcGVjaWFsbHkgdW5kZXIgaGVh
+dnkgd29ya2xvYWQuIFdoZW4gdXNpbmcgaXQgb24gY3JpdGljYWwgbWFjaGluZXPvvIxzdGFiaWxp
+dHkgaXMgYWxzbyBlc3NlbnRpYWwuIAo+IEkgd29uZGVyIGhvdyBMVFRuZyBpcyBjb21tZXJjaWFs
+aXplZCBhbmQgYW55IHByb2R1Y3RzIG9yIE9TIGRpc3RyaWJ1dGlvbnMgYWxyZWFkeSBlbmFibGVk
+IGl0LiAKPiBJIHRvb2sgYSBsb29rIGF0IGx0dG5nLW1vZHVsZXMgYnVnIGxpc3TvvIx0aGVyZSBh
+cmUgYSBmZXcga2VybmVsIG9vcHMgeWVhcnMgYWdvIGFuZCBnb3QgcmVzb2x2ZWQuIE1heSBJIHNh
+eSBpdCBpcyB2ZXJ5IHN0YWJsZSBvciBpdCBoYXMgbm90IGJlZW4gZnVsbHkgdGVzdGVkPyAKPiAK
+PiBIaSwKPiAKPiAKPiBFZmZpY2lPUyBoYXMgaGFkIGNvbW1lcmNpYWwgY3VzdG9tZXJzIHVzaW5n
+IExUVG5nIGluIHByb2R1Y3Rpb24gZm9yIG1hbnkgeWVhcnMgbm93Lgo+IExUVG5nIHBlci1zZSBp
+cyBkaXN0cmlidXRlZCBhcyBwYWNrYWdlcyBpbiBhbGwgbWFqb3IgTGludXggZGlzdHJpYnV0aW9u
+cy4gRWZmaWNpT1MgYWxzbyBwcm92aWRlcwo+IAo+IG1vcmUgdXAtdG8tZGF0ZSBwYWNrYWdlcyBm
+b3Igc29tZSBkaXN0cmlidXRpb25zIHRocm91Z2ggaHR0cDovL3BhY2thZ2VzLmVmZmljaW9zLmNv
+bS8KPiAKPiAKPiBUaGUgd2F5IHdlIGNvbW1lcmNpYWxpemUgTFRUbmcgaXMgdGhyb3VnaCBmdW5k
+aW5nIGZvciBkZXNpZ24gYW5kIGltcGxlbWVudGF0aW9uIG9mCj4gY3VzdG9tZXIncyBmZWF0dXJl
+IHJlcXVlc3RzLiBXZSBhbHNvIHByb3ZpZGUgY29tbWVyY2lhbCBzdXBwb3J0IHRhaWxvcmVkIHRv
+IHNwZWNpZmljCj4gY3VzdG9tZXIncyBlbnZpcm9ubWVudHMsIHdoaWNoIGluY2x1ZGVzIFNMQSBh
+bmQgY29udGludW91cyBpbnRlZ3JhdGlvbiB0ZXN0aW5nIG9mIHNwZWNpZmljCj4gZW52aXJvbm1l
+bnRzLgo+IAo+IAo+IElmIHRob3NlIGFyZSBzZXJ2aWNlcyB5b3UgYXJlIGludGVyZXN0ZWQgaW4s
+IHBsZWFzZSBmZWVsIGZyZWUgdG8gY29udGFjdCB1cyBpbiBwcml2YXRlIHNvIHdlCj4gY2FuIGZ1
+cnRoZXIgZGlzY3VzcyB5b3VyIG5lZWRzLgo+IAo+IAo+IEJlc3QgcmVnYXJkcywKPiAKPiAKPiBN
+YXRoaWV1Cj4gCj4gCj4gcmVnYXJkcwo+IEhhaQo+IAo+IAo+IAo+IAo+IAo+IAo+IC0tLS0tLS0t
+LS0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0tLS0tLS0tLS0KPiDlj5Hku7bkurrvvJoiSm9uYXRoYW4g
+UmFqb3R0ZS1KdWxpZW4gIjxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+Owo+
+IOWPkemAgeaXtumXtO+8mjIwMTnlubQ35pyIMjPml6Uo5pif5pyf5LqMKSDkuIrljYg2OjIwCj4g
+5pS25Lu25Lq677yaIuadqOa1tyIgPGhhaS55YW5nQG1hZ2ljLXNoaWVsZC5jb20+Owo+IOaKhOmA
+ge+8miJsdHRuZy1kZXYgIjxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPjsKPiDkuLvpopjvvJpS
+ZTogIOWbnuWkjTpSZTogW2x0dG5nLWRldl0gUHJvcyBhbmQgQ29ucyBvZiBMVFRuZwo+IC0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gCj4gIEhpLAo+IAo+ID4gQXMgdG8gTERf
+UFJFTE9BRCwgaXQgaXMgYWxzbyB1c2VkIGZvciBwcml2aWxlZ2UgZXNjYWxhdGlvbi4gV2lsbCBp
+dCBiZSByZWdhcmRlZCBhcyB2dWxuZXJhYmlsaXR5IGFuZCBmb3JiaWRkZW4gb24gc29tZSBMaW51
+eCBzeXN0ZW1zPwo+IAo+IEl0IGNvdWxkIHllcy4KPiBJbiB0aGF0IGNhc2UgeW91IHdpbGwgYmUg
+bGltaXRlZCB0byB0aGUgc3lzY2FsbHMgaW50ZXJmYWNlIGZvciB0aGUgbGliYwo+IG9ic2VydmFi
+aWxpdHkgdW5sZXNzIHlvdSBpbnN0cnVtZW50IGl0IGFuZCBkaXN0cmlidXRlIGl0Lgo+IAo+IENo
+ZWVycy4KPiAKPiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgo+IAo+IAo+IC0tIAo+IAo+IE1hdGhpZXUgRGVzbm95ZXJzCj4gRWZmaWNpT1MgSW5j
+Lgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gCj4gIAo+IAo+IAo+IAo+IAo+IAo+IAo+IC0t
+IAo+IAo+IE1hdGhpZXUgRGVzbm95ZXJzCj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZm
+aWNpb3MuY29tCgotLSAKSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
+bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
