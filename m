@@ -1,35 +1,15 @@
 From: Simon Marchi <simon.marchi@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: fix compilation errors
- when using --disable-epoll
-Date: Mon, 19 Aug 2019 21:47:24 -0400
-Message-ID: <6030d176-429d-da43-be7d-a85c2014bb8a__45694.2745762476$1566265686$gmane$org@efficios.com>
-References: <20190527162838.11675-1-simon.marchi@efficios.com>
+Subject: [PATCH lttng-ust] Make bitfield.h C++-friendly
+Date: Mon, 19 Aug 2019 21:51:06 -0400
+Message-ID: <20190820015106.22331-1-simon.marchi__26730.8408206858$1566265898$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 46CDFB1nCJzsYB
- for <lttng-dev@lists.lttng.org>; Mon, 19 Aug 2019 21:47:26 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id BC6612C9816
- for <lttng-dev@lists.lttng.org>; Mon, 19 Aug 2019 21:47:25 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id spBvnrF622U2 for <lttng-dev@lists.lttng.org>;
- Mon, 19 Aug 2019 21:47:25 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 5A3852C980C
- for <lttng-dev@lists.lttng.org>; Mon, 19 Aug 2019 21:47:25 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id JplxT3hkm7FU for <lttng-dev@lists.lttng.org>;
- Mon, 19 Aug 2019 21:47:25 -0400 (EDT)
-Received: from [192.168.86.149] (ip98-176-129-60.sd.sd.cox.net [98.176.129.60])
- by mail.efficios.com (Postfix) with ESMTPSA id 1473E2C9807
- for <lttng-dev@lists.lttng.org>; Mon, 19 Aug 2019 21:47:24 -0400 (EDT)
-In-Reply-To: <20190527162838.11675-1-simon.marchi@efficios.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 46CDKl2HR8zsZ9
+ for <lttng-dev@lists.lttng.org>; Mon, 19 Aug 2019 21:51:23 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -40,65 +20,44 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAxOS0wNS0yNyAxMjoyOCBwLm0uLCBTaW1vbiBNYXJjaGkgd3JvdGU6Cj4gSSBnZXQgdGhp
-cyBlcnJvcjoKPiAKPiAgICAgICBDQyAgICAgICBjb21wYXQtcG9sbC5sbwo+ICAgICAvaG9tZS9z
-bWFyY2hpL3NyYy9sdHRuZy10b29scy9zcmMvY29tbW9uL2NvbXBhdC9jb21wYXQtcG9sbC5jOiBJ
-biBmdW5jdGlvbiDigJhjb21wYXRfcG9sbF93YWl04oCZOgo+ICAgICAvaG9tZS9zbWFyY2hpL3Ny
-Yy9sdHRuZy10b29scy9zcmMvY29tbW9uL2NvbXBhdC9jb21wYXQtcG9sbC5jOjM1Mzo3OiBlcnJv
-cjog4oCYaXBmZOKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKPiAg
-ICAgICAgaWYgKGlwZmQtPnJldmVudHMgIT0gMCkgewo+ICAgICAgICAgICAgXn5+fgo+IAo+IHdo
-aWNoIGp1c3Qgc2VlbXMgbGlrZSBhIHR5cG8uCj4gCj4gQSBzZWNvbmQgZXJyb3Igb2NjdXJzIGxh
-dGVyOgo+IAo+ICAgQ0MgICAgICAgdGVzdF91dGlsc19jb21wYXRfcG9sbC5vCj4gL2hvbWUvc21h
-cmNoaS9zcmMvbHR0bmctdG9vbHMvdGVzdHMvdW5pdC90ZXN0X3V0aWxzX2NvbXBhdF9wb2xsLmM6
-IEluIGZ1bmN0aW9uIOKAmHRlc3RfbW9kX3dhaXTigJk6Cj4gL2hvbWUvc21hcmNoaS9zcmMvbHR0
-bmctdG9vbHMvdGVzdHMvdW5pdC90ZXN0X3V0aWxzX2NvbXBhdF9wb2xsLmM6MTM4OjI0OiBlcnJv
-cjog4oCYTUFHSUNfVkFMVUXigJkgdW5kZWNsYXJlZCAoZmlyc3QgdXNlIGluIHRoaXMgZnVuY3Rp
-b24pCj4gICBjaGFyIHJidWYgPSAwLCB0YnVmID0gTUFHSUNfVkFMVUU7Cj4gICAgICAgICAgICAg
-ICAgICAgICAgICAgXn5+fn5+fn5+fn4KPiAKPiBUaGUgcHJvYmxlbSBpcyB0aGF0IE1BR0lDX1ZB
-TFVFIGlzIGRlZmluZWQgaW5zaWRlIGFuICNpZmRlZiBIQVZFX0VQT0xMLAo+IGJ1dCBpcyB1c2Vk
-IGV2ZW4gaWYgIUhBVkVfRVBPTEwuICBNb3ZlIGl0IG91dHNpZGUgdGhlIGlmZGVmLCBhbmQgYWRq
-dXN0Cj4gdGhlIHNwZWxsaW5nIGFuZCBncmFtbWF0aWNhbCBlcnJvcnMgaW4gdGhlIGNvbW1lbnRz
-Lgo+IAo+IE5vdGUgdGhhdCBjb21wYXQtcG9sbC5jIGlzIG9ubHkgY29tcGlsZWQgaWYgZXBvbGwg
-aXMgbm90IGF2YWlsYWJsZSBvcgo+IGRpc2FibGVkLCB3aGljaCB5b3UgY2FuIGRvIHdpdGggLS1k
-aXNhYmxlLWVwb2xsLiAgSW4gbXkgY2FzZSwKPiBJIGVuZGVkIHVwIHVzaW5nIGNvbXBhdC1wb2xs
-LmMgYmVjYXVzZSB0aGUgQVhfSEFWRV9FUE9MTCBtYWNybyBkb2VzIG5vdAo+IHdvcmsgY29ycmVj
-dGx5IHdoZW4gY29uZmlndXJpbmcgd2l0aCAiLVdhbGwgLVdlcnJvciIuICBJJ2xsIHRhY2tsZSB0
-aGlzCj4gaXNzdWUgc2VwYXJhdGVseS4KPiAKPiBJIG9ubHkgYnVpbHQtdGVzdGVkIHRoZSBwcm9w
-b3NlZCBjaGFuZ2UsIGFuZCBJIGRvbid0IGtub3cgYW55dGhpbmcgYWJvdXQKPiB0aGlzIGNvZGUs
-IHNvIHBsZWFzZSBjaGVjayBjYXJlZnVsbHkgdGhhdCBpdCBpcyByaWdodC4KPiAKPiBTaWduZWQt
-b2ZmLWJ5OiBTaW1vbiBNYXJjaGkgPHNpbW9uLm1hcmNoaUBlZmZpY2lvcy5jb20+Cj4gLS0tCj4g
-IHNyYy9jb21tb24vY29tcGF0L2NvbXBhdC1wb2xsLmMgICAgIHwgIDIgKy0KPiAgdGVzdHMvdW5p
-dC90ZXN0X3V0aWxzX2NvbXBhdF9wb2xsLmMgfCAxMiArKysrKysrLS0tLS0KPiAgMiBmaWxlcyBj
-aGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBh
-L3NyYy9jb21tb24vY29tcGF0L2NvbXBhdC1wb2xsLmMgYi9zcmMvY29tbW9uL2NvbXBhdC9jb21w
-YXQtcG9sbC5jCj4gaW5kZXggMDIyMGIyNzg1NGFiLi4yNTRjZTI3MWU3MWMgMTAwNjQ0Cj4gLS0t
-IGEvc3JjL2NvbW1vbi9jb21wYXQvY29tcGF0LXBvbGwuYwo+ICsrKyBiL3NyYy9jb21tb24vY29t
-cGF0L2NvbXBhdC1wb2xsLmMKPiBAQCAtMzUwLDcgKzM1MCw3IEBAIGludCBjb21wYXRfcG9sbF93
-YWl0KHN0cnVjdCBsdHRuZ19wb2xsX2V2ZW50ICpldmVudHMsIGludCB0aW1lb3V0KQo+ICAJCXN0
-cnVjdCBwb2xsZmQgKmlkbGVfcGZkID0gJmV2ZW50cy0+d2FpdC5ldmVudHNbaWRsZV9wZmRfaW5k
-ZXhdOwo+ICAJCXN0cnVjdCBwb2xsZmQgKmN1cnJlbnRfcGZkID0gJmV2ZW50cy0+d2FpdC5ldmVu
-dHNbaV07Cj4gIAo+IC0JCWlmIChpcGZkLT5yZXZlbnRzICE9IDApIHsKPiArCQlpZiAoaWRsZV9w
-ZmQtPnJldmVudHMgIT0gMCkgewo+ICAJCQlzd2FwX3BmZCA9ICpjdXJyZW50X3BmZDsKPiAgCQkJ
-KmN1cnJlbnRfcGZkID0gKmlkbGVfcGZkOwo+ICAJCQkqaWRsZV9wZmQgPSBzd2FwX3BmZDsKPiBk
-aWZmIC0tZ2l0IGEvdGVzdHMvdW5pdC90ZXN0X3V0aWxzX2NvbXBhdF9wb2xsLmMgYi90ZXN0cy91
-bml0L3Rlc3RfdXRpbHNfY29tcGF0X3BvbGwuYwo+IGluZGV4IDFlYjMyN2E2YTcwOC4uYzhjYWM1
-NDRkNTMxIDEwMDY0NAo+IC0tLSBhL3Rlc3RzL3VuaXQvdGVzdF91dGlsc19jb21wYXRfcG9sbC5j
-Cj4gKysrIGIvdGVzdHMvdW5pdC90ZXN0X3V0aWxzX2NvbXBhdF9wb2xsLmMKPiBAQCAtNDcsNiAr
-NDcsMTMgQEAgaW50IGx0dG5nX29wdF9taTsKPiAgI2RlZmluZSBOVU1fVEVTVFMgNDUKPiAgI2Vu
-ZGlmCj4gIAo+ICsvKgo+ICsgKiBOb24temVybyA4LWJpdHMgYXJiaXRyYXJ5IHZhbHVlIGJlbG93
-IDB4N2YgdG8gZW5zdXJlIG5vIHNpZ24gZXh0ZW5zaW9uCj4gKyAqIG9jY3Vycy4gIEl0IGlzIHVz
-ZWQgdG8gdmVyaWZ5IHRoYXQgdGhlIHZhbHVlIGlzIHByb3Blcmx5IHByb3BhZ2F0ZWQgdGhyb3Vn
-aAo+ICsgKiB0aGUgcGlwZS4KPiArICovCj4gKyNkZWZpbmUgTUFHSUNfVkFMVUUgKChjaGFyKTB4
-NUEpCj4gKwo+ICAjaWZkZWYgSEFWRV9FUE9MTAo+ICAjaWYgZGVmaW5lZChIQVZFX0VQT0xMX0NS
-RUFURTEpICYmIGRlZmluZWQoRVBPTExfQ0xPRVhFQykKPiAgI2RlZmluZSBDTE9FX1ZBTFVFIEVQ
-T0xMX0NMT0VYRUMKPiBAQCAtNTQsMTEgKzYxLDYgQEAgaW50IGx0dG5nX29wdF9taTsKPiAgI2Rl
-ZmluZSBDTE9FX1ZBTFVFIEZEX0NMT0VYRUMKPiAgI2VuZGlmCj4gIAo+IC0vKiBOb24temVybyA4
-LWJpdHMgYXJiaXRyYXJ5IHZhbHVlIGJlbG93IDB4N2YgdG8gZW5zdXJlIG5vIHNpZ24gZXh0ZW5z
-aW9uCj4gLSAqIHVzZWQgdG8gdmVyaWZ5IHRoYXQgdGhlIHZhbHVlIGlzIHByb3Blcmx5IHByb3Bh
-Z2F0ZWQgdGhyb3VnaHQgdGhlIHBpcGUuCj4gLSAqLwo+IC0jZGVmaW5lIE1BR0lDX1ZBTFVFICgo
-Y2hhcikweDVBKQo+IC0KPiAgdm9pZCB0ZXN0X2Vwb2xsX2NvbXBhdCh2b2lkKQo+ICB7Cj4gIAkv
-Kgo+IAoKUGluZy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBz
-Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+This patch changes bitfield.h to be usable in C++11.
+
+It will probably never be compiled as C++ in the context of
+lttng-ust, but this is just to keep things sync'ed across projects.
+
+Signed-off-by: Simon Marchi <simon.marchi@efficios.com>
+---
+ include/lttng/bitfield.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/include/lttng/bitfield.h b/include/lttng/bitfield.h
+index 5ed629381ac6..9386fade1b76 100644
+--- a/include/lttng/bitfield.h
++++ b/include/lttng/bitfield.h
+@@ -70,8 +70,12 @@
+  * Produce a build-time error if the condition `cond` is non-zero.
+  * Evaluates as a size_t expression.
+  */
++#ifdef __cplusplus
++#define _BT_BUILD_ASSERT(cond) ([]{static_assert((cond), "");}, 0)
++#else
+ #define _BT_BUILD_ASSERT(cond)					\
+ 	sizeof(struct { int f:(2 * !!(cond) - 1); })
++#endif
+ 
+ /*
+  * Cast value `v` to an unsigned integer of the same size as `v`.
+@@ -377,7 +381,7 @@ do {									\
+ do {									\
+ 	__typeof__(*(vptr)) *_vptr = (vptr);				\
+ 	__typeof__(*_vptr) _v;						\
+-	type *_ptr = (void *) (ptr);					\
++	type *_ptr = (type *) (ptr);					\
+ 	unsigned long _start = (start), _length = (length);		\
+ 	type _mask, _cmask;						\
+ 	unsigned long _ts = sizeof(type) * CHAR_BIT; /* type size */	\
+-- 
+2.23.0
