@@ -1,20 +1,15 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re:
- =?utf-8?b?5Zue5aSNOlJlOiAg5Zue5aSNOlJlOiAg5Zue5aSN?=
- =?utf-8?q?=3ARe=3A_Pros_and_Cons_of_LTTng?=
-Date: Tue, 20 Aug 2019 12:02:20 -0400
-Message-ID: <20190820160220.GA31760__19432.4774130777$1566316968$gmane$org@joraj-alpa>
-References: <tencent_7650B3E62F4AC4C75D42A69A@qq.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Fix: check validity of a stream
+ before invoking ust flush command
+Date: Wed, 28 Aug 2019 15:26:03 -0400
+Message-ID: <20190828192603.9698-1-jonathan.rajotte-julien__29481.5205664904$1567020392$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 46CbCn604jzrht
- for <lttng-dev@lists.lttng.org>; Tue, 20 Aug 2019 12:02:29 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <tencent_7650B3E62F4AC4C75D42A69A@qq.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 46JbMC6BlMzrYj
+ for <lttng-dev@lists.lttng.org>; Wed, 28 Aug 2019 15:26:15 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,100 +19,120 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgSGFpLAoKU29ycnkgZm9yIHRoZSBkZWxheS4KClRoZSBtYWluIG9ic3RydWN0aW9uIHRvIGtl
-cm5lbCB0cmFjaW5nIHN1cHBvcnQgZm9yIFJIRUw2IGlzIGluZGVlZCB0aGUga2VybmVsLgoKTm90
-ZSB0aGF0IHdlIGRyb3BwZWQgdGhlIHBhdGNoZXMgaW4gdGhlIG1hc3RlciBicmFuY2g6CgogIGNv
-bW1pdCBjYTJmY2E2YjY0Mjk3MjI3YjI1NjU3NzNhNDk1ODAzYWE5MGMxNDhlCiAgQXV0aG9yOiBN
-aWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9zLmNvbT4KICBEYXRlOiAgIFRodSBOb3Yg
-OCAxNToyNDowMSAyMDE4IC0wNTAwCgogICAgICBEcm9wIGNvbXBhdCBwYXRjaGVzIGZvciBrZXJu
-ZWxzIDwgMi42LjM2CgogICAgICBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFu
-c29uQGVmZmljaW9zLmNvbT4KICAgICAgU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMg
-PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KClN0aWxsLCB0aGUgc3RhYmxlIDIuMTAg
-YnJhbmNoIHN0aWxsIGNhcnJpZXMgdGhlIHBhdGNoZXMgdGhhdCB5b3Ugd291bGQgbmVlZCBbMV0u
-CkFzIHByZXZpb3VzbHkgbWVudGlvbmVkLCB0aG9zZSBwYXRjaGVzIG1pZ2h0IG5vdCBhcHBseSBj
-bGVhbmx5IHNpbmNlIGl0IGhhcwpiZWVuIGEgd2hpbGUgYW55IGVmZm9ydCB3YXMgcHV0IGluIHRl
-c3RpbmcgYWdhaW5zdCBSSEVMNi4KClsxXSBodHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmct
-bW9kdWxlcy90cmVlL3N0YWJsZS0yLjEwL2xpbnV4LXBhdGNoZXMKCkNoZWVycwoKT24gRnJpLCBB
-dWcgMDksIDIwMTkgYXQgMDc6NDQ6NTdBTSArMDgwMCwg5p2o5rW3IHdyb3RlOgo+IEhpIE1hdGhp
-ZXUsCj4gCj4gV2UgYWltIHRvIHRyYWNlIFNZU0NBTEwgaW4ga2VybmVsIHNwYWNlLiBJbiBnZW5l
-cmFsLCB3aGF0IHdvdWxkIGJlIHRoZSBvYnN0YWNsZXMgdG8gc3VwcG9ydCBSSEVMNj8gT3Igd2hh
-dCBhcmUga2V5IGtlcm5lbCBwYXRjaGVzIHRvIGJlIG5lY2Vzc2FyeT8gCj4gCj4gCj4gUmVnYXJk
-cwo+IEhhaSAKPiAKPiAKPiAKPiAKPiAKPiAKPiAKPiAtLS0tLS0tLS0tLS0tLeWOn+Wni+mCruS7
-ti0tLS0tLS0tLS0tLS0tCj4g5Y+R5Lu25Lq677yaIk1hdGhpZXUgRGVzbm95ZXJzICI8bWF0aGll
-dS5kZXNub3llcnNAZWZmaWNpb3MuY29tPjsKPiDlj5HpgIHml7bpl7TvvJoyMDE55bm0N+aciDMw
-5pelKOaYn+acn+S6jCkg5pma5LiKMTA6MDQKPiDmlLbku7bkurrvvJoi5p2o5rW3IiA8aGFpLnlh
-bmdAbWFnaWMtc2hpZWxkLmNvbT47Cj4g5oqE6YCB77yaIkpvbmF0aGFuIFJham90dGUgIjxqb25h
-dGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+OyJsdHRuZy1kZXYgIjxsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnPjsKPiDkuLvpopjvvJpSZTogW2x0dG5nLWRldl0g5Zue5aSNOlJlOiAg
-5Zue5aSNOlJlOiAgUHJvcyBhbmQgQ29ucyBvZiBMVFRuZwo+IC0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tCj4gCj4gIEhpLAo+IAo+IAo+IAo+IFRoZSBjdXJyZW50IExUVG5nIGtl
-cm5lbCB0cmFjZXIgKGx0dG5nLW1vZHVsZXMpIHN1cHBvcnRzIExpbnV4IDMuMCsgb25seS4KPiAK
-PiAKPiAKPiBJZiB5b3Ugb25seSBuZWVkIHRvIHRyYWNlIHVzZXItc3BhY2UsIHlvdSBtaWdodCBi
-ZSBhYmxlIHRvIHVzZSBsdHRuZy10b29scyBhbmQgbHR0bmctdXN0Cj4gCj4gb24gYW4gb2xkZXIg
-a2VybmVsLiBQbGVhc2UgcmVmZXIgdG8gdGhlIFJFQURNRS5tZCBmaWxlcyBvZiBlYWNoIHByb2pl
-Y3QgZm9yIGluZm9ybWF0aW9uCj4gCj4gYWJvdXQgdGhlaXIgZW52aXJvbm1lbnQgcHJlcmVxdWlz
-aXRlcy4KPiAKPiAKPiAKPiBUaGUgUkhFTDYga2VybmVsIHZhcmlhbnQgYmFzZWQgb24gMi42LjMy
-LTIuNi4zNSBMaW51eCBrZXJuZWxzIGhhcyBuZXZlciBiZWVuIHN1cHBvcnRlZCBieQo+IAo+IHRo
-ZSBMVFRuZyAyLngga2VybmVsIHRyYWNlcnMgd2l0aG91dCBrZXJuZWwgcGF0Y2hpbmcuCj4gCj4g
-Cj4gCj4gVGhhbmtzLAo+IAo+IAo+IAo+IE1hdGhpZXUKPiAKPiAKPiAKPiAtLS0tLSBPbiBKdWwg
-MjksIDIwMTksIGF0IDg6MzQgUE0sIOadqOa1tyA8aGFpLnlhbmdAbWFnaWMtc2hpZWxkLmNvbT4g
-d3JvdGU6Cj4gCj4gSGkgTWF0aGlldSwKPiBUaGFua3MuIEkgYW0gbG9va2luZyBmb3IgcGFja2Fn
-ZXMgZm9yIG9sZGVyIGRpc3RyaWJ1dGlvbnMgbGlrZSBDZW50T1MgNiAod2l0aCBrZXJuZWwgMi42
-KSBidXQgY291bGQgbm90IGZpbmQgaXQuIEFuZCB3aGljaCBrZXJuZWwgdmVyc2lvbiBpcyBtaW5p
-bXVtIHJlcXVpcmVtZW50IGZvciBMVFRuZz8KPiAKPiBSZWdhcmRzCj4gSGFpCj4gCj4gCj4gCj4g
-Cj4gCj4gLS0tLS0tLS0tLS0tLS0tLS0tIE9yaWdpbmFsIC0tLS0tLS0tLS0tLS0tLS0tLQo+IEZy
-b206ICAiTWF0aGlldSBEZXNub3llcnMiPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT47
-Cj4gRGF0ZTogIFRodSwgSnVsIDI1LCAyMDE5IDExOjQ4IFBNCj4gVG86ICAi5p2o5rW3IjxoYWku
-eWFuZ0BtYWdpYy1zaGllbGQuY29tPjsgCj4gQ2M6ICAiSm9uYXRoYW4gUmFqb3R0ZSI8am9uYXRo
-YW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPjsgImx0dG5nLWRldiI8bHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZz47IAo+IFN1YmplY3Q6ICBSZTogW2x0dG5nLWRldl0g5Zue5aSNOlJlOiAg
-5Zue5aSNOlJlOiAgUHJvcyBhbmQgQ29ucyBvZiBMVFRuZwo+IAo+ICAKPiAtLS0tLSBPbiBKdWwg
-MjUsIDIwMTksIGF0IDQ6MjEgUE0sIOadqOa1tyA8aGFpLnlhbmdAbWFnaWMtc2hpZWxkLmNvbT4g
-d3JvdGU6Cj4gCj4gSGkKPiAKPiBUaGFua3MgZm9yIHF1aWNrIHJlc3BvbnNlLiAKPiBMVFRuZyBp
-cyByZWFsbHkgaW1wcmVzc2l2ZSBvbiBwZXJmb3JtYW5jZe+8jGVzcGVjaWFsbHkgdW5kZXIgaGVh
-dnkgd29ya2xvYWQuIFdoZW4gdXNpbmcgaXQgb24gY3JpdGljYWwgbWFjaGluZXPvvIxzdGFiaWxp
-dHkgaXMgYWxzbyBlc3NlbnRpYWwuIAo+IEkgd29uZGVyIGhvdyBMVFRuZyBpcyBjb21tZXJjaWFs
-aXplZCBhbmQgYW55IHByb2R1Y3RzIG9yIE9TIGRpc3RyaWJ1dGlvbnMgYWxyZWFkeSBlbmFibGVk
-IGl0LiAKPiBJIHRvb2sgYSBsb29rIGF0IGx0dG5nLW1vZHVsZXMgYnVnIGxpc3TvvIx0aGVyZSBh
-cmUgYSBmZXcga2VybmVsIG9vcHMgeWVhcnMgYWdvIGFuZCBnb3QgcmVzb2x2ZWQuIE1heSBJIHNh
-eSBpdCBpcyB2ZXJ5IHN0YWJsZSBvciBpdCBoYXMgbm90IGJlZW4gZnVsbHkgdGVzdGVkPyAKPiAK
-PiBIaSwKPiAKPiAKPiBFZmZpY2lPUyBoYXMgaGFkIGNvbW1lcmNpYWwgY3VzdG9tZXJzIHVzaW5n
-IExUVG5nIGluIHByb2R1Y3Rpb24gZm9yIG1hbnkgeWVhcnMgbm93Lgo+IExUVG5nIHBlci1zZSBp
-cyBkaXN0cmlidXRlZCBhcyBwYWNrYWdlcyBpbiBhbGwgbWFqb3IgTGludXggZGlzdHJpYnV0aW9u
-cy4gRWZmaWNpT1MgYWxzbyBwcm92aWRlcwo+IAo+IG1vcmUgdXAtdG8tZGF0ZSBwYWNrYWdlcyBm
-b3Igc29tZSBkaXN0cmlidXRpb25zIHRocm91Z2ggaHR0cDovL3BhY2thZ2VzLmVmZmljaW9zLmNv
-bS8KPiAKPiAKPiBUaGUgd2F5IHdlIGNvbW1lcmNpYWxpemUgTFRUbmcgaXMgdGhyb3VnaCBmdW5k
-aW5nIGZvciBkZXNpZ24gYW5kIGltcGxlbWVudGF0aW9uIG9mCj4gY3VzdG9tZXIncyBmZWF0dXJl
-IHJlcXVlc3RzLiBXZSBhbHNvIHByb3ZpZGUgY29tbWVyY2lhbCBzdXBwb3J0IHRhaWxvcmVkIHRv
-IHNwZWNpZmljCj4gY3VzdG9tZXIncyBlbnZpcm9ubWVudHMsIHdoaWNoIGluY2x1ZGVzIFNMQSBh
-bmQgY29udGludW91cyBpbnRlZ3JhdGlvbiB0ZXN0aW5nIG9mIHNwZWNpZmljCj4gZW52aXJvbm1l
-bnRzLgo+IAo+IAo+IElmIHRob3NlIGFyZSBzZXJ2aWNlcyB5b3UgYXJlIGludGVyZXN0ZWQgaW4s
-IHBsZWFzZSBmZWVsIGZyZWUgdG8gY29udGFjdCB1cyBpbiBwcml2YXRlIHNvIHdlCj4gY2FuIGZ1
-cnRoZXIgZGlzY3VzcyB5b3VyIG5lZWRzLgo+IAo+IAo+IEJlc3QgcmVnYXJkcywKPiAKPiAKPiBN
-YXRoaWV1Cj4gCj4gCj4gcmVnYXJkcwo+IEhhaQo+IAo+IAo+IAo+IAo+IAo+IAo+IC0tLS0tLS0t
-LS0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0tLS0tLS0tLS0KPiDlj5Hku7bkurrvvJoiSm9uYXRoYW4g
-UmFqb3R0ZS1KdWxpZW4gIjxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+Owo+
-IOWPkemAgeaXtumXtO+8mjIwMTnlubQ35pyIMjPml6Uo5pif5pyf5LqMKSDkuIrljYg2OjIwCj4g
-5pS25Lu25Lq677yaIuadqOa1tyIgPGhhaS55YW5nQG1hZ2ljLXNoaWVsZC5jb20+Owo+IOaKhOmA
-ge+8miJsdHRuZy1kZXYgIjxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPjsKPiDkuLvpopjvvJpS
-ZTogIOWbnuWkjTpSZTogW2x0dG5nLWRldl0gUHJvcyBhbmQgQ29ucyBvZiBMVFRuZwo+IC0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gCj4gIEhpLAo+IAo+ID4gQXMgdG8gTERf
-UFJFTE9BRCwgaXQgaXMgYWxzbyB1c2VkIGZvciBwcml2aWxlZ2UgZXNjYWxhdGlvbi4gV2lsbCBp
-dCBiZSByZWdhcmRlZCBhcyB2dWxuZXJhYmlsaXR5IGFuZCBmb3JiaWRkZW4gb24gc29tZSBMaW51
-eCBzeXN0ZW1zPwo+IAo+IEl0IGNvdWxkIHllcy4KPiBJbiB0aGF0IGNhc2UgeW91IHdpbGwgYmUg
-bGltaXRlZCB0byB0aGUgc3lzY2FsbHMgaW50ZXJmYWNlIGZvciB0aGUgbGliYwo+IG9ic2VydmFi
-aWxpdHkgdW5sZXNzIHlvdSBpbnN0cnVtZW50IGl0IGFuZCBkaXN0cmlidXRlIGl0Lgo+IAo+IENo
-ZWVycy4KPiAKPiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo+IAo+IAo+IC0tIAo+IAo+IE1hdGhpZXUgRGVzbm95ZXJzCj4gRWZmaWNpT1MgSW5j
-Lgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gCj4gIAo+IAo+IAo+IAo+IAo+IAo+IAo+IC0t
-IAo+IAo+IE1hdGhpZXUgRGVzbm95ZXJzCj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZm
-aWNpb3MuY29tCgotLSAKSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
-bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+At the time ustctl_flush_buffer is called the ustream object might have
+already been freed on lttng-ust side.
+
+This can happen following a lttng_consumer_cleanup_relayd and concurrent
+consumer flush command (lttng stop).
+
+The train of events goes as follows.
+
+An error on communication with lttng-relayd occurs.
+lttng_consumer_cleanup_relayd flags the streams for deletion
+(CONSUMER_ENDPOINT_INACTIVE). validate_endpoint_status_data_stream calls
+consumer_del_stream.
+
+At the same time the hash table of streams is iterated over in the
+flush_channel function following a stop command. The loop is iterating on
+a given stream. The current thread is unscheduled before taking the stream
+lock.
+
+In the initial thread, the same stream is the current iteration of
+cds_lfht_for_each_entry in validate_endpoint_status_data_stream.
+
+consumer_del_stream is called on it. The stream lock is acquired, and
+destroy_close_stream is called. lttng_ustconsumer_del_stream is eventually
+called and at this point the ustream is freed.
+
+Going back to the iteration in flush_channel. The current stream is still
+valid from the point of view of the iteration, ustctl_flush_buffer is then
+called on a freed ustream object.
+
+This can lead to unknown behaviour since there is no validation on
+lttng-ust side. The underlying memory of the ustream object is garbage at
+this point.
+
+To prevent such scenario, we check for the presence of the node in the
+hash table via cds_lfht_is_node_deleted. This is valid because the node is
+removed from the hash table before deleting the ustream object on
+lttng-ust side. The removal from the hash table also requires the stream
+lock ensuring the validity of cds_lfht_is_node_deleted return value.
+
+This duplicate similar "validation" check of the stream object. [1][2]
+
+[1] src/common/consumer/consumer.c:consumer_close_channel_streams
+[2] src/common/ust-consumer/ust-consumer.c:close_metadata
+
+This issue can be reproduced by the following scenario:
+
+    Modify flush_channel to sleep (i.e 10s) before acquiring the lock on
+    a stream.
+
+    Modify lttng-ust ustctl_destroy_stream to set the
+    ring_buffer_clock_read callback to NULL.
+      Note: An assert on !cds_lfht_is_node_deleted in flush channel
+      after acquiring the lock can provide the same information. We are
+      modifying the callback to simulate the original backtrace from our
+      customer.
+
+    lttng-relayd
+    lttng-sessiond
+    lttng create --live
+    lttng enable-event -u -a
+    lttng start
+    Start some applications to generate data.
+    lttng stop
+      The stop command force a flush of the channel/streams.
+    pkill -9 lttng-relayd
+    Expect assert or segfault
+
+The original customer backtrace:
+
+  0  lib_ring_buffer_try_switch_slow (handle=<optimized out>, tsc=<synthetic pointer>, offsets=0x3fffa9b76c80, chan=0x3fff98006e90, buf=<optimized out>,
+     mode=<optimized out>) at /usr/src/debug/lttng-ust/2.9.1/git/libringbuffer/ring_buffer_frontend.c:1834
+  1  lib_ring_buffer_switch_slow (buf=0x3fff98016b40, mode=<optimized out>, handle=0x3fff98017670)
+     at /usr/src/debug/lttng-ust/2.9.1/git/libringbuffer/ring_buffer_frontend.c:1952
+  2  0x00003fffac680940 in ustctl_flush_buffer (stream=<optimized out>, producer_active=<optimized out>)
+     at /usr/src/debug/lttng-ust/2.9.1/git/liblttng-ust-ctl/ustctl.c:1568
+  3  0x0000000010031bc8 in flush_channel (chan_key=<optimized out>) at ust-consumer.c:772
+  4  lttng_ustconsumer_recv_cmd (ctx=<optimized out>, sock=<optimized out>, consumer_sockpoll=<optimized out>) at ust-consumer.c:1651
+  5  0x000000001000de50 in lttng_consumer_recv_cmd (ctx=<optimized out>, sock=<optimized out>, consumer_sockpoll=<optimized out>) at consumer.c:2011
+  6  0x0000000010014208 in consumer_thread_sessiond_poll (data=0x10079430) at consumer.c:3192
+  7  0x00003fffac608b30 in start_thread (arg=0x3fffa9b7bdb0) at pthread_create.c:462
+  8  0x00003fffac530d0c in .__clone () at ../sysdeps/unix/sysv/linux/powerpc/powerpc64/clone.S:96
+
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ src/common/ust-consumer/ust-consumer.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consumer/ust-consumer.c
+index 94b761cb8..f2e62d0ee 100644
+--- a/src/common/ust-consumer/ust-consumer.c
++++ b/src/common/ust-consumer/ust-consumer.c
+@@ -764,10 +764,19 @@ static int flush_channel(uint64_t chan_key)
+ 		health_code_update();
+ 
+ 		pthread_mutex_lock(&stream->lock);
++
++		/*
++		 * Protect against concurrent teardown of a stream.
++		 */
++		if (cds_lfht_is_node_deleted(&stream->node.node)) {
++			goto next;
++		}
++
+ 		if (!stream->quiescent) {
+ 			ustctl_flush_buffer(stream->ustream, 0);
+ 			stream->quiescent = true;
+ 		}
++next:
+ 		pthread_mutex_unlock(&stream->lock);
+ 	}
+ error:
+-- 
+2.17.1
