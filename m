@@ -1,15 +1,16 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools v2] Fix: check validity of a stream
- before invoking ust flush command
-Date: Wed, 28 Aug 2019 16:36:03 -0400
-Message-ID: <20190828203603.5316-1-jonathan.rajotte-julien__42714.8472679377$1567024590$gmane$org@efficios.com>
+From: Aleksander Twardowski via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Problem with vpid in lttng output
+Date: Mon, 2 Sep 2019 12:01:46 +0000
+Message-ID: <AM0PR07MB590692B318D8FC8187D54EEB96BE0__36656.3929639355$1567425726$gmane$org@AM0PR07MB5906.eurprd07.prod.outlook.com>
+Reply-To: Aleksander Twardowski <aleksander.twardowski@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8835637906020139480=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 46Jcvy2LJfzrcy
- for <lttng-dev@lists.lttng.org>; Wed, 28 Aug 2019 16:36:14 -0400 (EDT)
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com
+ (mail-eopbgr50064.outbound.protection.outlook.com [40.107.5.64])
+ by lists.lttng.org (Postfix) with ESMTPS id 46MTG52y1czs1W
+ for <lttng-dev@lists.lttng.org>; Mon,  2 Sep 2019 08:01:49 -0400 (EDT)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,120 +20,115 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-At the time ustctl_flush_buffer is called the ustream object might have
-already been freed on lttng-ust side.
+--===============8835637906020139480==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_AM0PR07MB590692B318D8FC8187D54EEB96BE0AM0PR07MB5906eurp_"
 
-This can happen following a lttng_consumer_cleanup_relayd and concurrent
-consumer flush command (lttng stop).
+--_000_AM0PR07MB590692B318D8FC8187D54EEB96BE0AM0PR07MB5906eurp_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-The chain of events goes as follows.
+SGksDQoNCkkgZG8gbm90IGtub3cgaWYgSSBhbSBhZGRyZXNzaW5nIHByb2JsZW0gY29ycmVjdGx5
+IGJ1dCBsZXTigJlzIHRyeSDwn5iKDQpJIGhhdmUgYSBwcm9ibGVtLCBvY2N1cnJpbmcgdmVyeSBy
+YXJlbHksIHdpdGggdnBpZCBpbiBsdHRuZyBvdXRwdXQuDQpTb21ldGltZXMsIEkgZG8gbm90IGtu
+b3cgd2h5LCB2cGlkIGlzIG5vdCB2aXNpYmxlLg0KDQpQcm9wZXIgbHR0bmcgbG9nOg0KWzE0OjA4
+OjM1LjE1NjMzMzY3MF0gKCswLjAwMDAxMDcyNCkgc2VsaWxzeDE3OTUgY29tX2VyaWNzc29uX2Nz
+aW1fdXA6RVJST1I6IHsgY3B1X2lkID0gMCB9LCB7IHZwaWQgPSAxNjgyNiB9LCB7IHNyYyA9ICIv
+aG9tZS9lYWxldHdhL3JlcG9zL2JwdS11cC9zcmMvUnB1cC5jcHA6MTI1OiIsIG9iaiA9ICJHRU5F
+UkFMIiwgbXNnID0gIkZhaWxlZCB0byBpbml0aWFsaXplIFNEUyBjb25uZWN0aW9uIiB9DQoNClBy
+b2JsZW1hdGljIGx0dG5nIGxvZzoNCuKAnFsxNDowODozNS4xNTYzMzM2NzBdICgrMC4wMDAwMTA3
+MjQpIHNlbGlsc3gxNzk1IGNvbV9lcmljc3Nvbl9jc2ltX3VwOkVSUk9SOiB7IGNwdV9pZCA9IDAg
+fSwgeyBzcmMgPSAiL2hvbWUvZWFsZXR3YS9yZXBvcy9icHUtdXAvc3JjL1JwdXAuY3BwOjEyNToi
+LCBvYmogPSAiR0VORVJBTCIsIG1zZyA9ICJGYWlsZWQgdG8gaW5pdGlhbGl6ZSBTRFMgY29ubmVj
+dGlvbiIgfeKAnQ0KDQpJZiB5b3UgY2FuIGhlbHAgbWUsIHRlbGwgbWUgaW4gd2hpY2ggY2FzZXMg
+dGhpcyBwcm9ibGVtIG9jY3VycmluZyB0aGF0IHdvdWxkIGJlIGdyZWF0Lg0KSSBjaGVja2VkIGh0
+dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy11c3QgYnV0IEkgZGlkIG5vdCBmb3VuZCBhbnkg
+Y2x1ZS4NCg0KQlIsDQpBbGVrc2FuZGVyDQo=
 
-An error on communication with lttng-relayd occurs.
-lttng_consumer_cleanup_relayd flags the streams for deletion
-(CONSUMER_ENDPOINT_INACTIVE). validate_endpoint_status_data_stream calls
-consumer_del_stream.
+--_000_AM0PR07MB590692B318D8FC8187D54EEB96BE0AM0PR07MB5906eurp_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-At the same time the hash table of streams is iterated over in the
-flush_channel function following a stop command. The loop is iterating on
-a given stream. The current thread is unscheduled before taking the stream
-lock.
+PGh0bWw+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0i
+dGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRvciIgY29udGVu
+dD0iTWljcm9zb2Z0IFdvcmQgMTUgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxlPjwhLS0NCi8q
+IEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6IkNhbWJyaWEg
+TWF0aCI7DQoJcGFub3NlLTE6MiA0IDUgMyA1IDQgNiAzIDIgNDt9DQpAZm9udC1mYWNlDQoJe2Zv
+bnQtZmFtaWx5OkNhbGlicmk7DQoJcGFub3NlLTE6MiAxNSA1IDIgMiAyIDQgMyAyIDQ7fQ0KLyog
+U3R5bGUgRGVmaW5pdGlvbnMgKi8NCnAuTXNvTm9ybWFsLCBsaS5Nc29Ob3JtYWwsIGRpdi5Nc29O
+b3JtYWwNCgl7bWFyZ2luOjBjbTsNCgltYXJnaW4tYm90dG9tOi4wMDAxcHQ7DQoJZm9udC1zaXpl
+OjExLjBwdDsNCglmb250LWZhbWlseToiQ2FsaWJyaSIsc2Fucy1zZXJpZjsNCgltc28tZmFyZWFz
+dC1sYW5ndWFnZTpFTi1VUzt9DQphOmxpbmssIHNwYW4uTXNvSHlwZXJsaW5rDQoJe21zby1zdHls
+ZS1wcmlvcml0eTo5OTsNCgljb2xvcjojMDU2M0MxOw0KCXRleHQtZGVjb3JhdGlvbjp1bmRlcmxp
+bmU7fQ0KYTp2aXNpdGVkLCBzcGFuLk1zb0h5cGVybGlua0ZvbGxvd2VkDQoJe21zby1zdHlsZS1w
+cmlvcml0eTo5OTsNCgljb2xvcjojOTU0RjcyOw0KCXRleHQtZGVjb3JhdGlvbjp1bmRlcmxpbmU7
+fQ0Kc3Bhbi5FbWFpbFN0eWxlMTcNCgl7bXNvLXN0eWxlLXR5cGU6cGVyc29uYWwtY29tcG9zZTsN
+Cglmb250LWZhbWlseToiQ2FsaWJyaSIsc2Fucy1zZXJpZjsNCgljb2xvcjp3aW5kb3d0ZXh0O30N
+Ci5Nc29DaHBEZWZhdWx0DQoJe21zby1zdHlsZS10eXBlOmV4cG9ydC1vbmx5Ow0KCWZvbnQtZmFt
+aWx5OiJDYWxpYnJpIixzYW5zLXNlcmlmOw0KCW1zby1mYXJlYXN0LWxhbmd1YWdlOkVOLVVTO30N
+CkBwYWdlIFdvcmRTZWN0aW9uMQ0KCXtzaXplOjYxMi4wcHQgNzkyLjBwdDsNCgltYXJnaW46NzIu
+MHB0IDcyLjBwdCA3Mi4wcHQgNzIuMHB0O30NCmRpdi5Xb3JkU2VjdGlvbjENCgl7cGFnZTpXb3Jk
+U2VjdGlvbjE7fQ0KLS0+PC9zdHlsZT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCjxvOnNoYXBl
+ZGVmYXVsdHMgdjpleHQ9ImVkaXQiIHNwaWRtYXg9IjEwMjYiIC8+DQo8L3htbD48IVtlbmRpZl0t
+LT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCjxvOnNoYXBlbGF5b3V0IHY6ZXh0PSJlZGl0Ij4N
+CjxvOmlkbWFwIHY6ZXh0PSJlZGl0IiBkYXRhPSIxIiAvPg0KPC9vOnNoYXBlbGF5b3V0PjwveG1s
+PjwhW2VuZGlmXS0tPg0KPC9oZWFkPg0KPGJvZHkgbGFuZz0iUEwiIGxpbms9IiMwNTYzQzEiIHZs
+aW5rPSIjOTU0RjcyIj4NCjxkaXYgY2xhc3M9IldvcmRTZWN0aW9uMSI+DQo8cCBjbGFzcz0iTXNv
+Tm9ybWFsIj5IaSw8bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxvOnA+Jm5i
+c3A7PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiPkkg
+ZG8gbm90IGtub3cgaWYgSSBhbSBhZGRyZXNzaW5nIHByb2JsZW0gY29ycmVjdGx5IGJ1dCBsZXTi
+gJlzIHRyeQ0KPC9zcGFuPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1
+b3Q7U2Vnb2UgVUkgRW1vamkmcXVvdDssc2Fucy1zZXJpZiI+8J+Yijwvc3Bhbj48c3BhbiBsYW5n
+PSJFTi1VUyI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNw
+YW4gbGFuZz0iRU4tVVMiPkkgaGF2ZSBhIHByb2JsZW0sIG9jY3VycmluZyB2ZXJ5IHJhcmVseSwg
+d2l0aCB2cGlkIGluIGx0dG5nIG91dHB1dC48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+U29tZXRpbWVzLCBJIGRvIG5vdCBrbm93
+IHdoeSwgdnBpZCBpcyBub3QgdmlzaWJsZS48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+
+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiPlByb3BlciBsdHRu
+ZyBsb2c6PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
+bGFuZz0iRU4tVVMiPlsxNDowODozNS4xNTYzMzM2NzBdICgmIzQzOzAuMDAwMDEwNzI0KSBzZWxp
+bHN4MTc5NSBjb21fZXJpY3Nzb25fY3NpbV91cDpFUlJPUjogeyBjcHVfaWQgPSAwIH0sDQo8c3Bh
+biBzdHlsZT0iY29sb3I6IzAwQjA1MCI+eyB2cGlkID0gMTY4MjYgfTwvc3Bhbj4sIHsgc3JjID0g
+JnF1b3Q7L2hvbWUvZWFsZXR3YS9yZXBvcy9icHUtdXAvc3JjL1JwdXAuY3BwOjEyNTomcXVvdDss
+IG9iaiA9ICZxdW90O0dFTkVSQUwmcXVvdDssIG1zZyA9ICZxdW90O0ZhaWxlZCB0byBpbml0aWFs
+aXplIFNEUyBjb25uZWN0aW9uJnF1b3Q7IH08bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+
+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiPlByb2JsZW1hdGlj
+IGx0dG5nIGxvZzo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
+c3BhbiBsYW5nPSJFTi1VUyI+4oCcWzE0OjA4OjM1LjE1NjMzMzY3MF0gKCYjNDM7MC4wMDAwMTA3
+MjQpIHNlbGlsc3gxNzk1IGNvbV9lcmljc3Nvbl9jc2ltX3VwOkVSUk9SOiB7IGNwdV9pZCA9IDAg
+fSwgeyBzcmMgPSAmcXVvdDsvaG9tZS9lYWxldHdhL3JlcG9zL2JwdS11cC9zcmMvUnB1cC5jcHA6
+MTI1OiZxdW90Oywgb2JqID0gJnF1b3Q7R0VORVJBTCZxdW90OywgbXNnID0gJnF1b3Q7RmFpbGVk
+IHRvIGluaXRpYWxpemUgU0RTIGNvbm5lY3Rpb24mcXVvdDsgfeKAnTxvOnA+PC9vOnA+PC9zcGFu
+PjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIj48bzpwPiZuYnNw
+OzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1V
+UyI+SWYgeW91IGNhbiBoZWxwIG1lLCB0ZWxsIG1lIGluIHdoaWNoIGNhc2VzIHRoaXMgcHJvYmxl
+bSBvY2N1cnJpbmcgdGhhdCB3b3VsZCBiZSBncmVhdC48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8
+cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+SSBjaGVja2VkIDxhIGhyZWY9
+Imh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy11c3QiPg0KaHR0cHM6Ly9naXRodWIuY29t
+L2x0dG5nL2x0dG5nLXVzdDwvYT4gYnV0IEkgZGlkIG5vdCBmb3VuZCBhbnkgY2x1ZS48bzpwPjwv
+bzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+
+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
+bGFuZz0iRU4tVVMiPkJSLDxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3Jt
+YWwiPjxzcGFuIGxhbmc9IkVOLVVTIj5BbGVrc2FuZGVyPG86cD48L286cD48L3NwYW4+PC9wPg0K
+PC9kaXY+DQo8L2JvZHk+DQo8L2h0bWw+DQo=
 
-In the initial thread, the same stream is the current iteration of
-cds_lfht_for_each_entry in validate_endpoint_status_data_stream.
+--_000_AM0PR07MB590692B318D8FC8187D54EEB96BE0AM0PR07MB5906eurp_--
 
-consumer_del_stream is called on it. The stream lock is acquired, and
-destroy_close_stream is called. lttng_ustconsumer_del_stream is eventually
-called and at this point the ustream is freed.
+--===============8835637906020139480==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Going back to the iteration in flush_channel. The current stream is still
-valid from the point of view of the iteration, ustctl_flush_buffer is then
-called on a freed ustream object.
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-This can lead to unknown behaviour since there is no validation on the
-lttng-ust side. The underlying memory of the ustream object is garbage at
-this point.
-
-To prevent such scenario, we check for the presence of the node in the
-hash table via cds_lfht_is_node_deleted while holding the stream lock.
-This is valid because the stream destruction removes the node from
-the hash table and frees the ustream object with the stream lock held.
-
-This duplicate similar "validation" check of the stream object. [1][2]
-
-[1] src/common/consumer/consumer.c:consumer_close_channel_streams
-[2] src/common/ust-consumer/ust-consumer.c:close_metadata
-
-This issue can be reproduced by the following scenario:
-
-    Modify flush_channel to sleep (i.e 10s) before acquiring the lock on
-    a stream.
-
-    Modify lttng-ust ustctl_destroy_stream to set the
-    ring_buffer_clock_read callback to NULL.
-      Note: An assert on !cds_lfht_is_node_deleted in flush channel
-      after acquiring the lock can provide the same information. We are
-      modifying the callback to simulate the original backtrace from our
-      customer.
-
-    lttng-relayd
-    lttng-sessiond
-    lttng create --live
-    lttng enable-event -u -a
-    lttng start
-    Start some applications to generate data.
-    lttng stop
-      The stop command force a flush of the channel/streams.
-    pkill -9 lttng-relayd
-    Expect assert or segfault
-
-The original customer backtrace:
-
-  0  lib_ring_buffer_try_switch_slow (handle=<optimized out>, tsc=<synthetic pointer>, offsets=0x3fffa9b76c80, chan=0x3fff98006e90, buf=<optimized out>,
-     mode=<optimized out>) at /usr/src/debug/lttng-ust/2.9.1/git/libringbuffer/ring_buffer_frontend.c:1834
-  1  lib_ring_buffer_switch_slow (buf=0x3fff98016b40, mode=<optimized out>, handle=0x3fff98017670)
-     at /usr/src/debug/lttng-ust/2.9.1/git/libringbuffer/ring_buffer_frontend.c:1952
-  2  0x00003fffac680940 in ustctl_flush_buffer (stream=<optimized out>, producer_active=<optimized out>)
-     at /usr/src/debug/lttng-ust/2.9.1/git/liblttng-ust-ctl/ustctl.c:1568
-  3  0x0000000010031bc8 in flush_channel (chan_key=<optimized out>) at ust-consumer.c:772
-  4  lttng_ustconsumer_recv_cmd (ctx=<optimized out>, sock=<optimized out>, consumer_sockpoll=<optimized out>) at ust-consumer.c:1651
-  5  0x000000001000de50 in lttng_consumer_recv_cmd (ctx=<optimized out>, sock=<optimized out>, consumer_sockpoll=<optimized out>) at consumer.c:2011
-  6  0x0000000010014208 in consumer_thread_sessiond_poll (data=0x10079430) at consumer.c:3192
-  7  0x00003fffac608b30 in start_thread (arg=0x3fffa9b7bdb0) at pthread_create.c:462
-  8  0x00003fffac530d0c in .__clone () at ../sysdeps/unix/sysv/linux/powerpc/powerpc64/clone.S:96
-
-Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- src/common/ust-consumer/ust-consumer.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consumer/ust-consumer.c
-index 94b761cb8..f2e62d0ee 100644
---- a/src/common/ust-consumer/ust-consumer.c
-+++ b/src/common/ust-consumer/ust-consumer.c
-@@ -764,10 +764,19 @@ static int flush_channel(uint64_t chan_key)
- 		health_code_update();
- 
- 		pthread_mutex_lock(&stream->lock);
-+
-+		/*
-+		 * Protect against concurrent teardown of a stream.
-+		 */
-+		if (cds_lfht_is_node_deleted(&stream->node.node)) {
-+			goto next;
-+		}
-+
- 		if (!stream->quiescent) {
- 			ustctl_flush_buffer(stream->ustream, 0);
- 			stream->quiescent = true;
- 		}
-+next:
- 		pthread_mutex_unlock(&stream->lock);
- 	}
- error:
--- 
-2.17.1
+--===============8835637906020139480==--
