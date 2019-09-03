@@ -1,20 +1,23 @@
-From: Aleksander Twardowski via lttng-dev <lttng-dev@lists.lttng.org>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Subject: Re: Problem with vpid in lttng output
-Date: Tue, 3 Sep 2019 06:52:08 +0000
-Message-ID: <AM0PR07MB5906EED53E454550B5A4503396B90__41870.8807950438$1567493549$gmane$org@AM0PR07MB5906.eurprd07.prod.outlook.com>
+Date: Tue, 3 Sep 2019 11:38:04 -0400
+Message-ID: <20190903153804.GB15770__35519.2201839358$1567525116$gmane$org@joraj-alpa>
 References: <AM0PR07MB590692B318D8FC8187D54EEB96BE0@AM0PR07MB5906.eurprd07.prod.outlook.com>
  <20190902193349.GA15770@joraj-alpa>
-Reply-To: Aleksander Twardowski <aleksander.twardowski@ericsson.com>
+ <AM0PR07MB5906EED53E454550B5A4503396B90@AM0PR07MB5906.eurprd07.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from EUR03-DB5-obe.outbound.protection.outlook.com
- (mail-eopbgr40043.outbound.protection.outlook.com [40.107.4.43])
- by lists.lttng.org (Postfix) with ESMTPS id 46MyLM4CPczsMr
- for <lttng-dev@lists.lttng.org>; Tue,  3 Sep 2019 02:52:11 -0400 (EDT)
-In-Reply-To: <20190902193349.GA15770@joraj-alpa>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 46NB1K2C6HzsYQ
+ for <lttng-dev@lists.lttng.org>; Tue,  3 Sep 2019 11:38:12 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id D8E70257835
+ for <lttng-dev@lists.lttng.org>; Tue,  3 Sep 2019 11:38:05 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <AM0PR07MB5906EED53E454550B5A4503396B90@AM0PR07MB5906.eurprd07.prod.outlook.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,117 +27,73 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+To: Aleksander Twardowski <aleksander.twardowski@ericsson.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksDQoNClRoYW5rcyBmb3IgeW91ciBhbnN3ZXIhDQpQbGVhc2UgZmluZCBteSBhbnN3ZXJzLg0K
-DQpCUiwNCkFsZWtzYW5kZXINCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEpv
-bmF0aGFuIFJham90dGUtSnVsaWVuIDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5j
-b20+IA0KU2VudDogcG9uaWVkemlhxYJlaywgMiB3cnplxZtuaWEgMjAxOSAyMTozNA0KVG86IEFs
-ZWtzYW5kZXIgVHdhcmRvd3NraSA8YWxla3NhbmRlci50d2FyZG93c2tpQGVyaWNzc29uLmNvbT4N
-CkNjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnDQpTdWJqZWN0OiBSZTogW2x0dG5nLWRldl0g
-UHJvYmxlbSB3aXRoIHZwaWQgaW4gbHR0bmcgb3V0cHV0DQoNCkhpIEFsZWtzYW5kZXIsDQoNCk9u
-IE1vbiwgU2VwIDAyLCAyMDE5IGF0IDEyOjAxOjQ2UE0gKzAwMDAsIEFsZWtzYW5kZXIgVHdhcmRv
-d3NraSB2aWEgbHR0bmctZGV2IHdyb3RlOg0KPiBIaSwNCj4gDQo+IEkgZG8gbm90IGtub3cgaWYg
-SSBhbSBhZGRyZXNzaW5nIHByb2JsZW0gY29ycmVjdGx5IGJ1dCBsZXTigJlzIHRyeSDwn5iKDQo+
-IEkgaGF2ZSBhIHByb2JsZW0sIG9jY3VycmluZyB2ZXJ5IHJhcmVseSwgd2l0aCB2cGlkIGluIGx0
-dG5nIG91dHB1dC4NCj4gU29tZXRpbWVzLCBJIGRvIG5vdCBrbm93IHdoeSwgdnBpZCBpcyBub3Qg
-dmlzaWJsZS4NCj4gDQo+IFByb3BlciBsdHRuZyBsb2c6DQo+IFsxNDowODozNS4xNTYzMzM2NzBd
-ICgrMC4wMDAwMTA3MjQpIHNlbGlsc3gxNzk1IA0KPiBjb21fZXJpY3Nzb25fY3NpbV91cDpFUlJP
-UjogeyBjcHVfaWQgPSAwIH0sIHsgdnBpZCA9IDE2ODI2IH0sIHsgc3JjID0gDQo+ICIvaG9tZS9l
-YWxldHdhL3JlcG9zL2JwdS11cC9zcmMvUnB1cC5jcHA6MTI1OiIsIG9iaiA9ICJHRU5FUkFMIiwg
-bXNnID0gDQo+ICJGYWlsZWQgdG8gaW5pdGlhbGl6ZSBTRFMgY29ubmVjdGlvbiIgfQ0KDQpTaWRl
-IG5vdGU6IG1ha2Ugc3VyZSB0byByZWRhY3QgaW5mb3JtYXRpb24gdGhhdCBjb3VsZCBiZSBzZW5z
-aXRpdmUuIEhlcmUgdGhlIHBheWxvYWQgYW5kIGV2ZW50IG5hbWUgY291bGQgYmUgY29uc2lkZXJl
-ZCBzZW5zaXRpdmUuIEl0IGlzIHVwIHRvIHlvdSB0byBldmFsdWF0ZSB3aGF0IGlzIHNlbnNpdGl2
-ZSBhbmQgd2hhdCBpcyBub3QuDQoNCj4gDQo+IFByb2JsZW1hdGljIGx0dG5nIGxvZzoNCj4g4oCc
-WzE0OjA4OjM1LjE1NjMzMzY3MF0gKCswLjAwMDAxMDcyNCkgc2VsaWxzeDE3OTUgY29tX2VyaWNz
-c29uX2NzaW1fdXA6RVJST1I6IHsgY3B1X2lkID0gMCB9LCB7IHNyYyA9ICIvaG9tZS9lYWxldHdh
-L3JlcG9zL2JwdS11cC9zcmMvUnB1cC5jcHA6MTI1OiIsIG9iaiA9ICJHRU5FUkFMIiwgbXNnID0g
-IkZhaWxlZCB0byBpbml0aWFsaXplIFNEUyBjb25uZWN0aW9uIiB94oCdDQoNCkRvZXMgdGhpcyBz
-aXR1YXRpb24gaGFwcGVuIGluc2lkZSB0aGUgc2FtZSB0cmFjZT8gT3IgZG9lcyBpdCBzZWVtcyB0
-byBoYXBwZW5zIGJldHdlZW4gdHJhY2VzPw0KW0FsZWtzYW5kZXJdIE5vcGUsIHNpdHVhdGlvbiBv
-Y2N1cnMgZm9yIGRpZmZlcmVudCB0cmFjZXMgYW5kIGV2ZW4gZGlmZmVyZW50IHNlc3Npb25zLiBO
-byBjb25uZWN0aW9uIGJldHdlZW4uIFdlIGFyZSBydW5uaW5nIG91ciBhcHBsaWNhdGlvbiBhbmQg
-cnVubmluZyBsdHRuZyB0cmFjZXMgZm9yIGV2ZXJ5IHRlc3QgY2FzZSB3aGljaCB3ZSBhcmUgcnVu
-bmluZy4NCg0KPiANCj4gSWYgeW91IGNhbiBoZWxwIG1lLCB0ZWxsIG1lIGluIHdoaWNoIGNhc2Vz
-IHRoaXMgcHJvYmxlbSBvY2N1cnJpbmcgdGhhdCB3b3VsZCBiZSBncmVhdC4NCg0KV2UgYXJlIG5v
-dCBhd2FyZSBvZiBhbnkgb25nb2luZyBpc3N1ZSB3aXRoIHRoZSBjb250ZXh0IHN1YnN5c3RlbS4g
-QSBmaXJzdCBzdGVwIHdvdWxkIGJlIHRvIHZhbGlkYXRlIHRoYXQgdGhlICJsdHRuZyBhZGQtY29u
-dGV4dCIgKG9yIGVxdWl2YWxlbnQpIHdhcyBwZXJmb3JtZWQgd2l0aG91dCBhbnkgZXJyb3IgZm9y
-IHRoZSBzZXNzaW9uIG9mIHRoZSB0cmFjZSB3aXRoIHRoZSB2cGlkIGluZm9ybWF0aW9uIG1pc3Np
-bmcuIE5vdGUgdGhhdCB5b3UgY2Fubm90IGFkZCBjb250ZXh0IGZpZWxkIGZvciBhIHRyYWNpbmcg
-c2Vzc2lvbiBpZiBpdCB3YXMgc3RhcnRlZCBhdCBsZWFzdCBvbmNlLg0KW0FsZWtzYW5kZXJdIDog
-TWF5YmUgSSB3aWxsIHNoYXJlIHN0ZXBzIGZvciBzZXR0aW5nIHVwIHNlc3Npb24uDQoNCmx0dG5n
-IGNyZWF0ZSBjc2ltX3Nlc3Npb25fcnB1cCAtbyAvdG1wL2NzaW1fc2Vzc2lvbl9ycHVwDQoJU2Vz
-c2lvbiBjc2ltX3Nlc3Npb25fcnB1cCBjcmVhdGVkLg0KCVRyYWNlcyB3aWxsIGJlIHdyaXR0ZW4g
-aW4gL3RtcC9jc2ltX3Nlc3Npb25fcnB1cA0KbHR0bmcgZW5hYmxlLWV2ZW50IC11IGNvbV9lcmlj
-c3Nvbl9jc2ltX2RwZGtfdXA6RVJST1IsY29tX2VyaWNzc29uX2NzaW1fZHBka191cDpXQVJOSU5H
-LGNvbV9lcmljc3Nvbl9jc2ltX2NsaV91cDpFUlJPUixjb21fZXJpY3Nzb25fY3NpbV9jbGlfdXA6
-V0FSTklORyxjb21fZXJpY3Nzb25fY3NpbV91cDpFUlJPUixjb21fZXJpY3Nzb25fY3NpbV91cDpX
-QVJOSU5HLGNvbV9lcmljc3Nvbl9jc2ltX3BhY2tldF91cDpFUlJPUixjb21fZXJpY3Nzb25fY3Np
-bV9wYWNrZXRfdXA6V0FSTklORyxjb21fZXJpY3Nzb25fY3NpbV9ncnBjX3NlcnZlcl91cDpFUlJP
-Uixjb21fZXJpY3Nzb25fY3NpbV9ncnBjX3NlcnZlcl91cDpXQVJOSU5HLA0KCVVTVCBldmVudCBj
-b21fZXJpY3Nzb25fY3NpbV9kcGRrX3VwOkVSUk9SIGNyZWF0ZWQgaW4gY2hhbm5lbCBjaGFubmVs
-MA0KIAlVU1QgZXZlbnQgY29tX2VyaWNzc29uX2NzaW1fZHBka191cDpXQVJOSU5HIGNyZWF0ZWQg
-aW4gY2hhbm5lbCBjaGFubmVsMA0KCSBVU1QgZXZlbnQgY29tX2VyaWNzc29uX2NzaW1fY2xpX3Vw
-OkVSUk9SIGNyZWF0ZWQgaW4gY2hhbm5lbCBjaGFubmVsMA0KCSBVU1QgZXZlbnQgY29tX2VyaWNz
-c29uX2NzaW1fY2xpX3VwOldBUk5JTkcgY3JlYXRlZCBpbiBjaGFubmVsIGNoYW5uZWwwDQoJIFVT
-VCBldmVudCBjb21fZXJpY3Nzb25fY3NpbV91cDpFUlJPUiBjcmVhdGVkIGluIGNoYW5uZWwgY2hh
-bm5lbDANCgkgVVNUIGV2ZW50IGNvbV9lcmljc3Nvbl9jc2ltX3VwOldBUk5JTkcgY3JlYXRlZCBp
-biBjaGFubmVsIGNoYW5uZWwwDQoJIFVTVCBldmVudCBjb21fZXJpY3Nzb25fY3NpbV9wYWNrZXRf
-dXA6RVJST1IgY3JlYXRlZCBpbiBjaGFubmVsIGNoYW5uZWwwDQoJIFVTVCBldmVudCBjb21fZXJp
-Y3Nzb25fY3NpbV9wYWNrZXRfdXA6V0FSTklORyBjcmVhdGVkIGluIGNoYW5uZWwgY2hhbm5lbDAN
-CgkgVVNUIGV2ZW50IGNvbV9lcmljc3Nvbl9jc2ltX2dycGNfc2VydmVyX3VwOkVSUk9SIGNyZWF0
-ZWQgaW4gY2hhbm5lbCBjaGFubmVsMA0KCSBVU1QgZXZlbnQgY29tX2VyaWNzc29uX2NzaW1fZ3Jw
-Y19zZXJ2ZXJfdXA6V0FSTklORyBjcmVhdGVkIGluIGNoYW5uZWwgY2hhbm5lbDANCg0KbHR0bmcg
-c3RhcnQgY3NpbV9zZXNzaW9uX3JwdXANCglUcmFjaW5nIHN0YXJ0ZWQgZm9yIHNlc3Npb24gY3Np
-bV9zZXNzaW9uX3JwdXANCmx0dG5nIGFkZC1jb250ZXh0IC11IC10IHZwaWQNCglVU1QgY29udGV4
-dCB2cGlkIGFkZGVkIHRvIGFsbCBjaGFubmVscw0KbHR0bmcgdHJhY2sgLXUgLXMgY3NpbV9zZXNz
-aW9uX3JwdXAgLS1hbGwNCglBbGwgUElEcyB0cmFja2VkIGluIHNlc3Npb24gY3NpbV9zZXNzaW9u
-X3JwdXANCg0KVGhlbiB3ZSBhcmUgc3RhcnRpbmcgb3VyIGFwcGxpY2F0aW9uLg0KDQpBdCB0aGUg
-ZW5kIG9mIFRDIHdlIGFyZSBjaGVja2luZyBsdHRuZyBsb2dzOg0KDQpsdHRuZyBsaXN0IGNzaW1f
-c2Vzc2lvbl9ycHVwDQoJVHJhY2luZyBzZXNzaW9uIGNzaW1fc2Vzc2lvbl9ycHVwOiBbYWN0aXZl
-XQ0KICAgICBUcmFjZSBwYXRoOiAvdG1wL2NzaW1fc2Vzc2lvbl9ycHVwDQogDQogPT09IERvbWFp
-bjogVVNUIGdsb2JhbCA9PT0NCiANCiBCdWZmZXIgdHlwZTogcGVyIFVJRA0KIA0KIENoYW5uZWxz
-Og0KIC0tLS0tLS0tLS0tLS0NCiAtIGNoYW5uZWwwOiBbZW5hYmxlZF0NCiANCiAgICAgQXR0cmli
-dXRlczoNCiAgICAgICBFdmVudC1sb3NzIG1vZGU6ICBkaXNjYXJkDQogICAgICAgU3ViLWJ1ZmZl
-ciBzaXplOiAgNTI0Mjg4IGJ5dGVzDQogICAgICAgU3ViLWJ1ZmZlciBjb3VudDogNA0KICAgICAg
-IFN3aXRjaCB0aW1lcjogICAgIGluYWN0aXZlDQogICAgICAgUmVhZCB0aW1lcjogICAgICAgaW5h
-Y3RpdmUNCiAgICAgICBNb25pdG9yIHRpbWVyOiAgICAxMDAwMDAwIMK1cw0KICAgICAgIEJsb2Nr
-aW5nIHRpbWVvdXQ6IDAgwrVzDQogICAgICAgVHJhY2UgZmlsZSBjb3VudDogMSBwZXIgc3RyZWFt
-DQogICAgICAgVHJhY2UgZmlsZSBzaXplOiAgdW5saW1pdGVkDQogICAgICAgT3V0cHV0IG1vZGU6
-ICAgICAgbW1hcA0KIA0KICAgICBTdGF0aXN0aWNzOg0KICAgICAgIERpc2NhcmRlZCBldmVudHM6
-IDANCiANCiAgICAgRXZlbnQgcnVsZXM6DQogICAgICAgY29tX2VyaWNzc29uX2NzaW1fZ3JwY19z
-ZXJ2ZXJfdXA6V0FSTklORyAodHlwZTogdHJhY2Vwb2ludCkgW2VuYWJsZWRdDQogICAgICAgY29t
-X2VyaWNzc29uX2NzaW1fZHBka191cDpXQVJOSU5HICh0eXBlOiB0cmFjZXBvaW50KSBbZW5hYmxl
-ZF0NCiAgICAgICBjb21fZXJpY3Nzb25fY3NpbV9wYWNrZXRfdXA6RVJST1IgKHR5cGU6IHRyYWNl
-cG9pbnQpIFtlbmFibGVkXQ0KICAgICAgIGNvbV9lcmljc3Nvbl9jc2ltX2dycGNfc2VydmVyX3Vw
-OkVSUk9SICh0eXBlOiB0cmFjZXBvaW50KSBbZW5hYmxlZF0NCiAgICAgICBjb21fZXJpY3Nzb25f
-Y3NpbV9kcGRrX3VwOkVSUk9SICh0eXBlOiB0cmFjZXBvaW50KSBbZW5hYmxlZF0NCiAgICAgICBj
-b21fZXJpY3Nzb25fY3NpbV91cDpFUlJPUiAodHlwZTogdHJhY2Vwb2ludCkgW2VuYWJsZWRdDQog
-ICAgICAgY29tX2VyaWNzc29uX2NzaW1fY2xpX3VwOldBUk5JTkcgKHR5cGU6IHRyYWNlcG9pbnQp
-IFtlbmFibGVkXQ0KICAgICAgIGNvbV9lcmljc3Nvbl9jc2ltX3BhY2tldF91cDpXQVJOSU5HICh0
-eXBlOiB0cmFjZXBvaW50KSBbZW5hYmxlZF0NCiAgICAgICBjb21fZXJpY3Nzb25fY3NpbV9jbGlf
-dXA6RVJST1IgKHR5cGU6IHRyYWNlcG9pbnQpIFtlbmFibGVkXQ0KICAgICAgIGNvbV9lcmljc3Nv
-bl9jc2ltX3VwOldBUk5JTkcgKHR5cGU6IHRyYWNlcG9pbnQpIFtlbmFibGVkXQ0KDQpsdHRuZyBz
-dG9wIGNzaW1fc2Vzc2lvbl9ycHVwDQoJV2FpdGluZyBmb3IgZGF0YSBhdmFpbGFiaWxpdHkuDQoJ
-IFRyYWNpbmcgc3RvcHBlZCBmb3Igc2Vzc2lvbiBjc2ltX3Nlc3Npb25fcnB1cA0KYmFiZWx0cmFj
-ZSAvdG1wL2NzaW1fc2Vzc2lvbl9ycHVwIC13IC90bXAvbHR0bmdfY3NpbV9zZXNzaW9uX3JwdXAu
-bG9nDQpybSAtcmYgL3RtcC9jc2ltX3Nlc3Npb25fcnB1cA0KbHR0bmcgZGVzdHJveSBjc2ltX3Nl
-c3Npb25fcnB1cA0KDQpBbmQgdGhlbiB3ZSBoYXZlIGEgY2hlY2sgbHR0bmcgbG9nIGlmIGV4cGVj
-dGVkIGxvZyBhcmUgaW4gcGxhY2UuIFRoZXJlLCBpbnNpZGUgdGhlIGxvZyB3ZSBoYXZlIHRoaXMg
-cHJvYmxlbWF0aWMgbG9nICh3aXRob3V0IHZwaWQpOg0KWzEzOjUyOjAwLjg5MTk2Njg1OF0gKCsw
-LjAwMDAwNzc1Mykgc2VsaWljczAyNzQ3IGNvbV9lcmljc3Nvbl9jc2ltX3VwOkVSUk9SOiB7IGNw
-dV9pZCA9IDAgfSwgeyBzcmMgPSAiL2xvY2FsL2plbmtpbnMvd29ya3NwYWNlL1QtU0JDX3JwdXAv
-YnB1LXVwL3NyYy9ScHVwLmNwcDoxMjQ6Iiwgb2JqID0gIkdFTkVSQUwiLCBtc2cgPSAiRmFpbGVk
-IHRvIGluaXRpYWxpemUgU0RTIGNvbm5lY3Rpb24iIH0NCgkNClByb2JsZW0gb2NjdXJzIHZlcnkg
-cmFyZWx5LCBsYXN0IHNlbnRlbmNlIGZyb20geW91ciBtYWlsIG1heWJlIGJlIHRoZSBjbHVlICIu
-IE5vdGUgdGhhdCB5b3UgY2Fubm90IGFkZCBjb250ZXh0IGZpZWxkIGZvciBhIHRyYWNpbmcgc2Vz
-c2lvbiBpZiBpdCB3YXMgc3RhcnRlZCBhdCBsZWFzdCBvbmNlIi4NCk1heWJlIGlmIHNlc3Npb24g
-aXMgbm90IGNsb3NlZCBwcm9wZXJseSwgdGhlbiB3ZSBjYW4gc2VlIHN1Y2ggcHJvYmxlbXM/DQoN
-CkNoZWVycw0KDQotLQ0KSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4NCkVmZmljaU9TDQpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi,
+
+Note that the restriction to prevent an add-context command on a
+started session is not present in 2.10.2. It is present starting at 2.10.3.
+
+ joraj@~/lttng/stable-2.10/lttng-tools [(v2.10.7)][]$ git tag --contains 3aaf55eaa5aee2db6e2a1a46685e45f2395fc15b
+ v2.10.3
+ v2.10.4
+ v2.10.5
+ v2.10.6
+ v2.10.7
+
+This would explain why you can issue the commands in the order you are issuing
+them currently (add-context after start).
+
+ lttng create csim_session_rpup -o /tmp/csim_session_rpup
+ lttng enable-event -u
+ lttng start csim_session_rpup
+ lttng add-context -u -t vpid
+ lttng track -u -s csim_session_rpup --all
+
+To comply with this without upgrading, you can swap the order of the add-context
+and start command.
+
+commands:
+
+ lttng create
+ lttng enable-event -u ...
+ lttng add-context -u -t vpid
+ lttng start
+ lttng track ...
+
+I did some experiment using v2.10.2 to reproduce the issue.
+I used the same sequence of commands you provided:
+
+ lttng create csim_session_rpup -o /tmp/csim_session_rpup
+ lttng enable-event -u
+ lttng start csim_session_rpup
+ lttng add-context -u -t vpid
+ lttng track -u -s csim_session_rpup --all
+
+At first, I tried a scenario where the only instrumented (registered) app is run
+after the add-context. No other instrumented apps were running at the moment the
+"lttng start" was issued. The trace produced contained the vpid context.
+
+What happen if an instrumented app is already running when the "lttng start"
+command is issued? The "lttng add-context" does not report any problem yet the
+resulting trace does not contain any vpid context.
+
+In the lttng-sessiond logs we see that the add-context command failed for the app:
+
+  DEBUG2 - 11:19:43.718781 [9499/9506]: UST app adding context to channel channel0 (in create_ust_app_channel_context() at ust-app.c:2357)
+  DEBUG3 - 11:19:43.718784 [9499/9506]: UST app context 1 allocated (in alloc_ust_app_ctx() at ust-app.c:1146)
+  Error: UST app create channel context failed for app (pid: 7350) with ret -1028
+  Error: Failed to add context to channel channel0
+
+The first scenario works because we delay the setup of the channel until an app
+eligible for tracing is present.
+
+That should be it.
+
+Cheers
+
+-- 
+Jonathan Rajotte-Julien
+EfficiOS
