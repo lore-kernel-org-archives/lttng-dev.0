@@ -1,19 +1,21 @@
-From: Kjeld Flarup via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: Kernel tracer not available with lttng compiled in
-Date: Fri, 6 Sep 2019 07:30:54 +0000
-Message-ID: <086e7eb8fb4a40e786d3cd0bebe9ca3c__49275.8830006764$1567755073$gmane$org@deif.com>
-References: <94d50c14661146d4b8dcf57123c12c8b@deif.com>,
- <20190905134826.GA15223@joraj-alpa>
-Reply-To: Kjeld Flarup <kfa@deif.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools 1/1] Fix: sessiond: handle NULL
+ control output in session descriptor base path getter
+Date: Fri, 6 Sep 2019 11:36:26 -0400
+Message-ID: <20190906153626.GA4501__43795.517615375$1567784208$gmane$org@gmail.com>
+References: <20190905191840.21430-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.deif.com (mail.deif.com [87.54.42.111])
- by lists.lttng.org (Postfix) with ESMTPS id 46Pq3h6Qgjzrdy
- for <lttng-dev@lists.lttng.org>; Fri,  6 Sep 2019 03:30:56 -0400 (EDT)
-In-Reply-To: <20190905134826.GA15223@joraj-alpa>
-Content-Language: en-US
+Received: from mail-qt1-f195.google.com (mail-qt1-f195.google.com
+ [209.85.160.195])
+ by lists.lttng.org (Postfix) with ESMTPS id 46Q1qy3KgYzsD9
+ for <lttng-dev@lists.lttng.org>; Fri,  6 Sep 2019 11:36:30 -0400 (EDT)
+Received: by mail-qt1-f195.google.com with SMTP id l22so7458370qtp.10
+ for <lttng-dev@lists.lttng.org>; Fri, 06 Sep 2019 08:36:30 -0700 (PDT)
+Content-Disposition: inline
+In-Reply-To: <20190905191840.21430-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,125 +25,60 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com, joraj@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Thanks for Your reply
+Merged in master and stable-2.11. Thanks!
 
-I didn't notice the buildin support in the Readme. I think this will bring me further.
+J=E9r=E9mie
 
+On Thu, Sep 05, 2019 at 03:18:40PM -0400, Mathieu Desnoyers wrote:
+> Creating a session with "lttng create --live" without specifying any
+> URL triggers a NULL pointer exception because the output is not set
 
-Regards
-Kjeld Flarup
-R&D Platform Software
+A NullPointerException, in C?! ;-)
 
+> when getting the session descriptor base path.
+> =
 
+> Indeed, the destination output URL will only be set later in
+> cmd_create_session_from_descriptor(), when setting the default output.
+> =
 
-________________________________________
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Sent: Thursday, September 5, 2019 3:48:26 PM
-To: Kjeld Flarup
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] Kernel tracer not available with lttng compiled in
+> When the default output is used, no base path override is possible,
+> therefore it is fine to assign the base_path to NULL in the base path
+> getter.
+> =
 
-Hi,
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+>  src/common/session-descriptor.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> =
 
-We will need more information.
+> diff --git a/src/common/session-descriptor.c b/src/common/session-descrip=
+tor.c
+> index b5fdb067..208eb46f 100644
+> --- a/src/common/session-descriptor.c
+> +++ b/src/common/session-descriptor.c
+> @@ -1186,8 +1186,12 @@ int lttng_session_descriptor_get_base_path(struct =
+lttng_session_descriptor *dst,
+>  	switch (dst->output_type) {
+>  	case LTTNG_SESSION_DESCRIPTOR_OUTPUT_TYPE_NETWORK:
+>  	{
+> -		*_base_path =3D dst->output.network.control->subdir[0] ?
+> -				dst->output.network.control->subdir : NULL;
+> +		if (dst->output.network.control &&
+> +				dst->output.network.control->subdir[0]) {
+> +			*_base_path =3D dst->output.network.control->subdir;
+> +		} else {
+> +			*_base_path =3D NULL;
+> +		}
+>  		break;
+>  	}
+>  	case LTTNG_SESSION_DESCRIPTOR_OUTPUT_TYPE_LOCAL:
+> -- =
 
-What version of lttng are we speaking of here?
-
-What kernel version/tree?
-
-Exactly how did you build your kernel with lttng-modules built-in?
-
-Did you follow this?:
-
-  https://github.com/lttng/lttng-modules/blob/master/README.md#kernel-built-in-support
-
-Cheers
-
-On Thu, Sep 05, 2019 at 12:23:40PM +0000, Kjeld Flarup via lttng-dev wrote:
-> Hello
->
-> I'm trying to get lttng working on an Power PC board
->
->
-> ~ # lttng create my-kernel-session --output=/tmp/my-kernel-trace
-> Spawning a session daemon
-> Session my-kernel-session created.
-> Traces will be written in /tmp/my-kernel-trace
-> ~ # lttng list --kernel
-> Error: Unable to list kernel events: Kernel tracer not available
-> Error: Command error
->
-> Now ALL that I can find when googling this error is that the kernel modules is not loaded.
-> However I'm not using modules, but compile everything in.
->
-> Here is a small extract of what is enabled in my kernel. I have attached the full /proc/config.gz
-> Am I missing something?
->
-> CONFIG_NOP_TRACER=y
-> CONFIG_HAVE_FUNCTION_TRACER=y
-> CONFIG_HAVE_FUNCTION_GRAPH_TRACER=y
-> CONFIG_TRACER_MAX_TRACE=y
-> CONFIG_CONTEXT_SWITCH_TRACER=y
-> CONFIG_GENERIC_TRACER=y
-> CONFIG_FUNCTION_TRACER=y
-> CONFIG_FUNCTION_GRAPH_TRACER=y
-> CONFIG_IRQSOFF_TRACER=y
-> CONFIG_PREEMPT_TRACER=y
-> CONFIG_SCHED_TRACER=y
-> # CONFIG_HWLAT_TRACER is not set
-> CONFIG_TRACER_SNAPSHOT=y
-> CONFIG_TRACER_SNAPSHOT_PER_CPU_SWAP=y
-> # CONFIG_STACK_TRACER is not set
->
-> CONFIG_HAVE_KPROBES_ON_FTRACE=y
-> CONFIG_HAVE_DYNAMIC_FTRACE=y
-> CONFIG_HAVE_FTRACE_MCOUNT_RECORD=y
-> CONFIG_FTRACE=y
-> CONFIG_FTRACE_SYSCALLS=y
-> CONFIG_DYNAMIC_FTRACE=y
-> CONFIG_FTRACE_MCOUNT_RECORD=y
-> # CONFIG_FTRACE_STARTUP_TEST is not set
->
->
-> CONFIG_EVENT_TRACING=y
-> CONFIG_PERF_EVENTS=y
-> CONFIG_HAVE_SYSCALL_TRACEPOINTS=y
->
-> CONFIG_KRETPROBES=y
->
-> CONFIG_HIGH_RES_TIMERS=y
-> CONFIG_TRACEPOINTS=y
-> CONFIG_TRACE_IRQFLAGS_SUPPORT=y
-> # CONFIG_TRACE_SINK is not set
-> CONFIG_TRACE_IRQFLAGS=y
-> CONFIG_TRACE_CLOCK=y
-> CONFIG_TRACE_PREEMPT_TOGGLE=y
-> CONFIG_TRACER_SNAPSHOT=y
-> CONFIG_TRACER_SNAPSHOT_PER_CPU_SWAP=y
-> # CONFIG_TRACEPOINT_BENCHMARK is not set
-> # CONFIG_TRACE_EVAL_MAP_FILE is not set
-> CONFIG_KALLSYMS=y
-> # CONFIG_KALLSYMS_ALL is not set
-> CONFIG_KALLSYMS_BASE_RELATIVE=y
->
->
->
-> Regards
-> Kjeld Flarup
-> DEIF A/S, R&D Platform Software
->
->
-
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---
-Jonathan Rajotte-Julien
-EfficiOS
+> 2.11.0
+> =
