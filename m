@@ -1,20 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: No session daemon is available
-Date: Sun, 8 Sep 2019 11:15:34 -0400 (EDT)
-Message-ID: <1666049472.300.1567955734285.JavaMail.zimbra__43170.0137605489$1567955754$gmane$org@efficios.com>
-References: <CANWMcmnyX8eqdGDxGJEW70z9kCpdc0kf3_qBFJZEXkVPyOA0jw@mail.gmail.com>
- <CANWMcmneyQzNv870bCSspGkSaFJF4i=YY19r9cvfA3TsTGRAAg@mail.gmail.com>
+From: Anders Johansson <epkboan@gmail.com>
+Subject: tracepoint_enabled returns true for disabled provider,
+ event
+Date: Sat, 7 Sep 2019 14:42:22 +0200
+Message-ID: <CACU0Kcsfzct94bxY06DoQ4x=H+fuKN5JGi6og94YYptOCmz5FQ__19645.2761463419$1568037033$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0702288575916308199=="
+Content-Type: multipart/mixed; boundary="===============4749101129742182588=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 46RFGv56f9zrZM
- for <lttng-dev@lists.lttng.org>; Sun,  8 Sep 2019 11:15:35 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 0D434BCC3D
- for <lttng-dev@lists.lttng.org>; Sun,  8 Sep 2019 11:15:35 -0400 (EDT)
-In-Reply-To: <CANWMcmneyQzNv870bCSspGkSaFJF4i=YY19r9cvfA3TsTGRAAg@mail.gmail.com>
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by lists.lttng.org (Postfix) with ESMTPS id 46QYwq53YrzsWS
+ for <lttng-dev@lists.lttng.org>; Sat,  7 Sep 2019 08:42:35 -0400 (EDT)
+Received: by mail-io1-xd30.google.com with SMTP id n197so18958091iod.9
+ for <lttng-dev@lists.lttng.org>; Sat, 07 Sep 2019 05:42:35 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,85 +21,69 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Rana Shakti singh <rana94302@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0702288575916308199==
-Content-Type: multipart/alternative;
-	boundary="=_124eb3fc-0718-423d-afd4-6c762b3d6148"
+--===============4749101129742182588==
+Content-Type: multipart/alternative; boundary="0000000000008cf6a10591f5e3f6"
 
---=_124eb3fc-0718-423d-afd4-6c762b3d6148
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--0000000000008cf6a10591f5e3f6
+Content-Type: text/plain; charset="UTF-8"
 
------ On Sep 6, 2019, at 4:42 PM, Rana Shakti singh <rana94302@gmail.com> wrote: 
+Hi
 
-> Hi,
+I troubleshooting a huge application where i experience the problem that
+even if tracepoint_enabled is used i get the huge overhead of formatting
+the output even if then the message is not sent to the lttng buffers.
 
-> I am enabling event using following steps but i am getting following error:
+The tracepoint loglevel is set to TRACE_INFO using the TRACEPOINT_LOGLEVEL
+macro. I managed to rebuild the application setting the level to
+TRACE_DEBUG instead and then i could print continuously that the
+tracepoint_enabled returned false. If i flip it back to TRACE_INFO
+tracepoint_enabled always returns true, hence do lots of string building
+but then no trace is actually sent off to lttng (which is correct since i
+haven't enabled the tracepoint). Even if i explicitly do disable event on
+the provider and tracepoint the TRACE_INFO tracepoints returns true in
+tracepoint_enabled
 
-> 1.$ lttng create my-test-trace
-> Spawning a session daemon
+Is this by design that tracepoint_enabled always returns true for
+TRACE_INFO and lower values or is this configurable in any way?
 
-This command run as user is launching a lttng-sessiond as that particular user, which is 
-not allowed to do any kernel tracing. 
+I am using this inside a docker image running Wind River Linux
+bash-4.3# lttng --version
+lttng (LTTng Trace Control) 2.10.6 - KeKriek - v2.10.6-11-g8fcbf96
+bash-4.3#
 
-You'll want to kill that daemon, and launch lttng-sessiond separately as root instead. 
+Any advice are welcome!
+//Anders
 
-Thanks, 
+--0000000000008cf6a10591f5e3f6
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Mathieu 
+<div dir=3D"ltr">Hi<div><br></div><div>I troubleshooting a huge application=
+ where i experience the problem that even if tracepoint_enabled is used i g=
+et the huge overhead of formatting the output even if then the message is n=
+ot sent to the lttng buffers.=C2=A0</div><div><br></div><div>The tracepoint=
+ loglevel is set to TRACE_INFO using the TRACEPOINT_LOGLEVEL macro. I manag=
+ed to rebuild the application setting the level to TRACE_DEBUG instead and =
+then i could print continuously=C2=A0that the tracepoint_enabled returned f=
+alse. If i flip it back to TRACE_INFO tracepoint_enabled always returns tru=
+e, hence do lots of string building but then no trace is actually sent off =
+to lttng (which is correct since i haven&#39;t enabled the tracepoint). Eve=
+n if i explicitly do disable event on the provider and tracepoint the TRACE=
+_INFO tracepoints returns true in tracepoint_enabled</div><div><br></div><d=
+iv>Is this by design that tracepoint_enabled always returns true for TRACE_=
+INFO and lower values or is this configurable=C2=A0in any way?</div><div><b=
+r></div><div>I am using this inside a docker image running Wind River Linux=
+=C2=A0</div><div>bash-4.3# lttng --version<br>lttng (LTTng Trace Control) 2=
+.10.6 - KeKriek - v2.10.6-11-g8fcbf96<br>bash-4.3#=C2=A0<br></div><div><br>=
+</div><div>Any advice are welcome!</div><div>//Anders</div><div><br></div><=
+div>=C2=A0</div></div>
 
-> Session my-test-trace created.
-> Traces will be output to /home/rana/lttng-traces/my-test-trace-20190905-220127
+--0000000000008cf6a10591f5e3f6--
 
-> 2.sudo lttng enable-channel --kernel --subbuf-size=8M chan1
-> Error: Channel chan1: No session daemon is available (session my-session)
-
-> 3.$ lttng enable-event --session=my-test-trace --kernel --channel=channel0
-> sched_switch
-> Error: Event sched_switch: No session daemon is available (channel channel0,
-> session my-test-trace)
-
-> Your suggestion will be appreciated
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_124eb3fc-0718-423d-afd4-6c762b3d6148
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
-<html><body><div style="font-family: arial, helvetica, sans-serif; font-size: 12pt; color: #000000"><div><br data-mce-bogus="1"></div><div><span id="zwchr" data-marker="__DIVIDER__">----- On Sep 6, 2019, at 4:42 PM, Rana Shakti singh &lt;rana94302@gmail.com&gt; wrote:<br></span></div><div data-marker="__QUOTED_TEXT__"><blockquote style="border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir="auto"><div dir="auto" class="elided-text"><div dir="ltr">Hi,<br></div><div dir="ltr"><p>I am enabling event using following steps but i am getting following error:<br>
-</p>
-<p>1.$ lttng create my-test-trace<br>
-Spawning a session daemon</p></div></div></div></blockquote><div><br></div><div>This command run as user is launching a lttng-sessiond as that particular user, which is<br data-mce-bogus="1"></div><div>not allowed to do any kernel tracing.<br data-mce-bogus="1"></div><div><br data-mce-bogus="1"></div><div>You'll want to kill that daemon, and launch lttng-sessiond separately as root instead.<br data-mce-bogus="1"></div><div><br data-mce-bogus="1"></div><div>Thanks,<br data-mce-bogus="1"></div><div><br data-mce-bogus="1"></div><div>Mathieu<br data-mce-bogus="1"></div><blockquote style="border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir="auto"><div 
- dir="auto" class="elided-text"><div dir="ltr"><p><br>
-Session my-test-trace created.<br>
-Traces will be output to /home/rana/lttng-traces/my-test-trace-20190905-220127<br>
-  <br>
-</p>
-<p>2.sudo lttng enable-channel --kernel --subbuf-size=8M chan1<br>
-Error: Channel chan1: No session daemon is available (session my-session)<br>
-  <br>
-</p>
-<p>3.$ lttng enable-event --session=my-test-trace --kernel --channel=channel0 sched_switch<br>
-Error: Event sched_switch: No session daemon is available (channel channel0, session my-test-trace)<br>
-</p>
-<p>Your suggestion will be appreciated</p></div>
-</div></div>
-<br>_______________________________________________<br>lttng-dev mailing list<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker="__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
---=_124eb3fc-0718-423d-afd4-6c762b3d6148--
-
---===============0702288575916308199==
+--===============4749101129742182588==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -113,4 +94,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0702288575916308199==--
+--===============4749101129742182588==--
