@@ -1,16 +1,18 @@
-From: Rana Shakti singh <rana94302@gmail.com>
-Subject: lttng Error:unable to list kernal events
-Date: Sun, 15 Sep 2019 15:56:10 +0530
-Message-ID: <CANWMcm=POVXxh-zjrgz0divwq8sDMuNC8DykvxV5+8Vr-fPUZw__21453.7930021592$1568543200$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: lttng Error:unable to list kernal events
+Date: Sun, 15 Sep 2019 10:27:28 -0400 (EDT)
+Message-ID: <1880859292.4883.1568557648971.JavaMail.zimbra__41221.2569893867$1568557673$gmane$org@efficios.com>
+References: <CANWMcm=POVXxh-zjrgz0divwq8sDMuNC8DykvxV5+8Vr-fPUZw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4410217062794248957=="
+Content-Type: multipart/mixed; boundary="===============1246545185435959504=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by lists.lttng.org (Postfix) with ESMTPS id 46WQWz62tPzqfx
- for <lttng-dev@lists.lttng.org>; Sun, 15 Sep 2019 06:26:23 -0400 (EDT)
-Received: by mail-wr1-x435.google.com with SMTP id i18so5293553wru.11
- for <lttng-dev@lists.lttng.org>; Sun, 15 Sep 2019 03:26:23 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 46WWtH38ldzqsD
+ for <lttng-dev@lists.lttng.org>; Sun, 15 Sep 2019 10:27:35 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id C31EB2BBDFD
+ for <lttng-dev@lists.lttng.org>; Sun, 15 Sep 2019 10:27:29 -0400 (EDT)
+In-Reply-To: <CANWMcm=POVXxh-zjrgz0divwq8sDMuNC8DykvxV5+8Vr-fPUZw@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,54 +22,94 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Rana Shakti singh <rana94302@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============4410217062794248957==
-Content-Type: multipart/related; boundary="000000000000238d7c059294eb46"
+--===============1246545185435959504==
+Content-Type: multipart/alternative;
+	boundary="=_a2a1e764-9dd7-411c-aef4-5a8c96518f75"
 
---000000000000238d7c059294eb46
-Content-Type: multipart/alternative; boundary="000000000000238d76059294eb45"
+--=_a2a1e764-9dd7-411c-aef4-5a8c96518f75
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
---000000000000238d76059294eb45
-Content-Type: text/plain; charset="UTF-8"
+----- On Sep 15, 2019, at 6:26 AM, Rana Shakti singh <rana94302@gmail.com> wrote: 
 
-Hi,
+> Hi,
 
-even i am checking using lttng list command for checking event, following
-error are coming:
+> even i am checking using lttng list command for checking event, following error
+> are coming:
 
-[image: image.png]
+> Actually after run command
+> "sudo usermod -a -G tracing rana" then i have reboot the system for apply the
+> setting but same error i got.
 
-Actually after run command
-"sudo usermod -a -G tracing rana" then i have reboot the system for apply
-the setting but same error i got.
+> I have stuck with this, Please try to help me.
 
-I have stuck with this, Please try to help me.
+Please follow the Bug Reporting Guidelines at [ https://bugs.lttng.org/ | https://bugs.lttng.org/ ] 
 
-Regards,
-Rana Singh
+We need a lot of additional information that is missing from your request. 
 
---000000000000238d76059294eb45
-Content-Type: text/html; charset="UTF-8"
+Thanks, 
+
+Mathieu 
+
+> Regards,
+> Rana Singh
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+--=_a2a1e764-9dd7-411c-aef4-5a8c96518f75
+Content-Type: multipart/related;
+	boundary="=_6c5fc3df-8dfd-4e8a-8d8f-1a234e28c169"
+
+--=_6c5fc3df-8dfd-4e8a-8d8f-1a234e28c169
+Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi,<br><br>even i am checking using lttng list command for=
- checking event, following error are coming:<br><br><div><img src=3D"cid:ii=
-_k0ku2kxp0" alt=3D"image.png" width=3D"520" height=3D"59"><br></div><br>Act=
-ually after run command <br>&quot;sudo usermod -a -G tracing rana&quot; the=
-n i have reboot the system for apply the setting but same error i got.<br><=
-br>I have stuck with this, Please try to help me.<br><br>Regards,<br>Rana S=
-ingh<br></div>
-
---000000000000238d76059294eb45--
-
---000000000000238d7c059294eb46
-Content-Type: image/png; name="image.png"
-Content-Disposition: inline; filename="image.png"
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br data-mce-bogus=3D"1"></div><div><span i=
+d=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Sep 15, 2019, at 6:26 AM, =
+Rana Shakti singh &lt;rana94302@gmail.com&gt; wrote:<br></span></div><div d=
+ata-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #=
+1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-=
+style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;fo=
+nt-size:12pt;"><div dir=3D"ltr">Hi,<br><br>even i am checking using lttng l=
+ist command for checking event, following error are coming:<br><br><div><im=
+g src=3D"cid:ii_k0ku2kxp0" alt=3D"image.png" width=3D"520" height=3D"59"><b=
+r></div><br>Actually after run command <br>"sudo usermod -a -G tracing rana=
+" then i have reboot the system for apply the setting but same error i got.=
+<br><br>I have stuck with this, Please try to help me.</div></blockquote><d=
+iv>Please follow the Bug Reporting Guidelines at <a href=3D"https://bugs.lt=
+tng.org/">https://bugs.lttng.org/</a><br></div><div><br data-mce-bogus=3D"1=
+"></div><div>We need a lot of additional information that is missing from y=
+our request.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></=
+div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1=
+"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
+=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D=
+"1"></div><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5p=
+x;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-dec=
+oration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div d=
+ir=3D"ltr"><br><br>Regards,<br>Rana Singh<br></div>
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
+listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
+"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
+://www.efficios.com</div></div></body></html>
+--=_6c5fc3df-8dfd-4e8a-8d8f-1a234e28c169
+Content-Type: image/png; name=image.png
+Content-Disposition: inline; filename=image.png
 Content-Transfer-Encoding: base64
 Content-ID: <ii_k0ku2kxp0>
-X-Attachment-Id: ii_k0ku2kxp0
 
 iVBORw0KGgoAAAANSUhEUgAAAqcAAABNCAYAAACbpc3JAAAgAElEQVR4Aey9B3iUx7X//3m3arW7
 6l1IAiEhIarovfdqDBgbXNIcx0mcntzc/83NvSk3N81JbuI4cRKXxJViY2yascFUU1VAQr33utre
@@ -797,9 +839,11 @@ ukGlU5EMBgiHox9cc3rjDZDPkAl87AnIwunHfojkBsoEZAIyAZnA+xC4IJze2LL++1zwj/uVSNja
 wrm397Cv4G5Wrruf+/MqaO31EleDs+4wzS1WHON6Vf9xWyZfXSYgE5AJyARkAjIBmYBM4A9H4M9E
 OJXctX04zh1m9y98+B+4i1ULV7JmiYCQGKLO08JAtySc/uHAyFeSCfy5EbD1WTm679B1m93e1Hrd
 MnIBmYBMQCYgE5AJfFQE/j/8oC57alMtGQAAAABJRU5ErkJggg==
---000000000000238d7c059294eb46--
+--=_6c5fc3df-8dfd-4e8a-8d8f-1a234e28c169--
 
---===============4410217062794248957==
+--=_a2a1e764-9dd7-411c-aef4-5a8c96518f75--
+
+--===============1246545185435959504==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -810,4 +854,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============4410217062794248957==--
+--===============1246545185435959504==--
