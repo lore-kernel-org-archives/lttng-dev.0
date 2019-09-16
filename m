@@ -1,18 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules v2] Fix: update sched
- prev_state instrumentation for upstream kernel
-Date: Mon, 16 Sep 2019 15:30:11 -0400 (EDT)
-Message-ID: <220201180.7357.1568662211331.JavaMail.zimbra__6963.86293727613$1568662244$gmane$org@efficios.com>
-References: <20190916175738.27525-1-mjeanson@efficios.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: tracepoint_enabled returns true for disabled
+ provider, event
+Date: Mon, 16 Sep 2019 16:48:52 -0400
+Message-ID: <20190916204852.GA143064__451.05424230627$1568666953$gmane$org@joraj-alpa>
+References: <CACU0Kcsfzct94bxY06DoQ4x=H+fuKN5JGi6og94YYptOCmz5FQ@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 46XGY169QBzqZZ
- for <lttng-dev@lists.lttng.org>; Mon, 16 Sep 2019 15:30:12 -0400 (EDT)
-In-Reply-To: <20190916175738.27525-1-mjeanson@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 46XJHs3hM8zqfV
+ for <lttng-dev@lists.lttng.org>; Mon, 16 Sep 2019 16:48:57 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id C94372BB4F2
+ for <lttng-dev@lists.lttng.org>; Mon, 16 Sep 2019 16:48:56 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CACU0Kcsfzct94bxY06DoQ4x=H+fuKN5JGi6og94YYptOCmz5FQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,135 +26,55 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Anders Johansson <epkboan@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+Hi,
 
------ On Sep 16, 2019, at 1:57 PM, Michael Jeanson mjeanson@efficios.com wrote:
+In the end this was a problem involving automatic session creation
+(configuration) behind the back of Anders.
 
-> From: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
-> 
-> Introduced in upstream Linux kernel 4.14.
-> 
->    commit efb40f588b4370ffaeffafbd50f6ff213d954254
->    Author: Peter Zijlstra <peterz@infradead.org>
->    Date:   Fri Sep 22 18:19:53 2017 +0200
-> 
->        sched/tracing: Fix trace_sched_switch task-state printing
-> 
-> Introduced in upstream Linux kernel 4.15.
-> Backported in 13f12749af15 (4.14.64).
-> 
->    commit 3f5fe9fef5b2da06b6319fab8123056da5217c3f
->    Author: Thomas Gleixner <tglx@linutronix.de>
->    Date:   Wed Nov 22 13:05:48 2017 +0100
-> 
->        sched/debug: Fix task state recording/printout
-> 
-> Introduced in upstream Linux kernel 4.20.
-> Backported in e1e5fa73e466 (4.14.102) and fd8152818f11 (4.19.9).
-> 
->    commit 3054426dc68e5d63aa6a6e9b91ac4ec78e3f3805
->    Author: Pavankumar Kondeti <pkondeti@codeaurora.org>
->    Date:   Tue Oct 30 12:24:33 2018 +0530
-> 
->        sched, trace: Fix prev_state output in sched_switch tracepoint
-> 
-> Signed-off-by: Gabriel-Andrew Pollo-Guilbert
-> <gabriel.pollo-guilbert@efficios.com>
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
-> instrumentation/events/lttng-module/sched.h | 58 ++++++++++++++++++++-
-> 1 file changed, 57 insertions(+), 1 deletion(-)
-> 
-> diff --git a/instrumentation/events/lttng-module/sched.h
-> b/instrumentation/events/lttng-module/sched.h
-> index 77d77b2..a845c5f 100644
-> --- a/instrumentation/events/lttng-module/sched.h
-> +++ b/instrumentation/events/lttng-module/sched.h
-> @@ -25,7 +25,63 @@
-> #ifndef _TRACE_SCHED_DEF_
-> #define _TRACE_SCHED_DEF_
-> 
-> -#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,4,0))
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0))
-> +
-> +static inline long __trace_sched_switch_state(bool preempt, struct task_struct
-> *p)
-> +{
-> +        unsigned int state;
-> +
-> +#ifdef CONFIG_SCHED_DEBUG
-> +        BUG_ON(p != current);
-> +#endif /* CONFIG_SCHED_DEBUG */
-> +
-> +        /*
-> +         * Preemption ignores task state, therefore preempted tasks are always
-> +         * RUNNING (we will not have dequeued if state != RUNNING).
-> +         */
-> +        if (preempt)
-> +                return TASK_REPORT_MAX;
-> +
-> +        /*
-> +         * task_state_index() uses fls() and returns a value from 0-8 range.
-> +         * Decrement it by 1 (except TASK_RUNNING state i.e 0) before using
-> +         * it for left shift operation to get the correct task->state
-> +         * mapping.
-> +         */
-> +        state = task_state_index(p);
-> +
-> +        return state ? (1 << (state - 1)) : state;
-> +}
-> +
-> +#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0))
-> +
-> +static inline long __trace_sched_switch_state(bool preempt, struct task_struct
-> *p)
-> +{
-> +        unsigned int state;
-> +
-> +#ifdef CONFIG_SCHED_DEBUG
-> +        BUG_ON(p != current);
-> +#endif /* CONFIG_SCHED_DEBUG */
-> +
-> +        /*
-> +         * Preemption ignores task state, therefore preempted tasks are always
-> +         * RUNNING (we will not have dequeued if state != RUNNING).
-> +         */
-> +        if (preempt)
-> +                return TASK_REPORT_MAX;
-> +
-> +        /*
-> +         * task_state_index() uses fls() and returns a value from 0-8 range.
+A "lttng list" helped figure out the problem.
 
-The Linux kernel got this comment wrong. It should state "__get_task_state()".
-It's a simple error in their backport. I'll fix it in lttng-modules as I merge
-this patch.
+lttng behave as expected.
 
-Thanks!
+Cheers
 
-Mathieu
-
-
-> +         * Decrement it by 1 (except TASK_RUNNING state i.e 0) before using
-> +         * it for left shift operation to get the correct task->state
-> +         * mapping.
-> +         */
-> +        state = __get_task_state(p);
-> +
-> +        return state ? (1 << (state - 1)) : state;
-> +}
-> +
-> +#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,4,0))
+On Sat, Sep 07, 2019 at 02:42:22PM +0200, Anders Johansson wrote:
+> Hi
 > 
-> static inline long __trace_sched_switch_state(bool preempt, struct task_struct
-> *p)
-> {
-> --
-> 2.17.1
+> I troubleshooting a huge application where i experience the problem that
+> even if tracepoint_enabled is used i get the huge overhead of formatting
+> the output even if then the message is not sent to the lttng buffers.
+> 
+> The tracepoint loglevel is set to TRACE_INFO using the TRACEPOINT_LOGLEVEL
+> macro. I managed to rebuild the application setting the level to
+> TRACE_DEBUG instead and then i could print continuously that the
+> tracepoint_enabled returned false. If i flip it back to TRACE_INFO
+> tracepoint_enabled always returns true, hence do lots of string building
+> but then no trace is actually sent off to lttng (which is correct since i
+> haven't enabled the tracepoint). Even if i explicitly do disable event on
+> the provider and tracepoint the TRACE_INFO tracepoints returns true in
+> tracepoint_enabled
+> 
+> Is this by design that tracepoint_enabled always returns true for
+> TRACE_INFO and lower values or is this configurable in any way?
+> 
+> I am using this inside a docker image running Wind River Linux
+> bash-4.3# lttng --version
+> lttng (LTTng Trace Control) 2.10.6 - KeKriek - v2.10.6-11-g8fcbf96
+> bash-4.3#
+> 
+> Any advice are welcome!
+> //Anders
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Jonathan Rajotte-Julien
+EfficiOS
