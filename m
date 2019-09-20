@@ -1,15 +1,14 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Null check before destroying
- health_sessiond
-Date: Fri, 20 Sep 2019 11:15:12 -0400
-Message-ID: <20190920151512.12956-1-jonathan.rajotte-julien__21435.6738420733$1568992535$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Close socket handle on error
+Date: Fri, 20 Sep 2019 11:34:21 -0400
+Message-ID: <20190920153421.67837-1-jonathan.rajotte-julien__39195.9042217181$1568993685$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 46Zcj53vnZzqMk
- for <lttng-dev@lists.lttng.org>; Fri, 20 Sep 2019 11:15:21 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 46Zd776qP3zqPN
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Sep 2019 11:34:27 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,27 +22,29 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Fixes coverity #1399735
+Fixes coverity #1399739
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- src/bin/lttng-sessiond/main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ src/bin/lttng-sessiond/client.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index 5f99bdbf6..a428630f8 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -1819,7 +1819,9 @@ stop_threads:
- 	lttng_pipe_destroy(ust64_channel_monitor_pipe);
- 	lttng_pipe_destroy(kernel_channel_monitor_pipe);
- 
--	health_app_destroy(health_sessiond);
-+	if (health_sessiond) {
-+		health_app_destroy(health_sessiond);
-+	}
- exit_create_run_as_worker_cleanup:
- exit_options:
- 	sessiond_cleanup_lock_file();
+diff --git a/src/bin/lttng-sessiond/client.c b/src/bin/lttng-sessiond/client.c
+index 956dab8c8..870277534 100644
+--- a/src/bin/lttng-sessiond/client.c
++++ b/src/bin/lttng-sessiond/client.c
+@@ -1985,8 +1985,11 @@ static int create_client_sock(void)
+ 	/* File permission MUST be 660 */
+ 	ret = chmod(config.client_unix_sock_path.value, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+ 	if (ret < 0) {
+-		ERR("Set file permissions failed: %s", config.client_unix_sock_path.value);
++		ERR("Set file permissions failed: %s",
++				config.client_unix_sock_path.value);
+ 		PERROR("chmod");
++		(void) lttcomm_close_unix_sock(client_sock);
++		ret = -1;
+ 		goto end;
+ 	}
+ 	DBG("Created client socket (fd = %i)", client_sock);
 -- 
 2.17.1
