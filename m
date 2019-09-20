@@ -1,21 +1,21 @@
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Refactor: remove logically dead
- code
-Date: Fri, 20 Sep 2019 17:22:38 -0400
-Message-ID: <20190920212238.GA20024__32266.5368252032$1569014579$gmane$org@gmail.com>
-References: <20190920154037.74966-1-jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: Close socket handle on
+ error
+Date: Fri, 20 Sep 2019 17:23:37 -0400
+Message-ID: <20190920212337.GB20024__36938.0115925864$1569014634$gmane$org@gmail.com>
+References: <20190920153421.67837-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-f193.google.com (mail-qt1-f193.google.com
- [209.85.160.193])
- by lists.lttng.org (Postfix) with ESMTPS id 46Zmry5v1KzqrD
- for <lttng-dev@lists.lttng.org>; Fri, 20 Sep 2019 17:22:42 -0400 (EDT)
-Received: by mail-qt1-f193.google.com with SMTP id c3so10287416qtv.10
- for <lttng-dev@lists.lttng.org>; Fri, 20 Sep 2019 14:22:42 -0700 (PDT)
+Received: from mail-qt1-f196.google.com (mail-qt1-f196.google.com
+ [209.85.160.196])
+ by lists.lttng.org (Postfix) with ESMTPS id 46Zmt45qNXzqs9
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Sep 2019 17:23:40 -0400 (EDT)
+Received: by mail-qt1-f196.google.com with SMTP id 3so7883402qta.1
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Sep 2019 14:23:40 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <20190920154037.74966-1-jonathan.rajotte-julien@efficios.com>
+In-Reply-To: <20190920153421.67837-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -33,40 +33,36 @@ Merged in master and stable-2.11. Thanks!
 
 J=E9r=E9mie
 
-On Fri, Sep 20, 2019 at 11:40:37AM -0400, Jonathan Rajotte wrote:
-> Fixes coverity #1400681
+On Fri, Sep 20, 2019 at 11:34:21AM -0400, Jonathan Rajotte wrote:
+> Fixes coverity #1399739
 > =
 
 > Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 > ---
->  src/common/session-descriptor.c | 6 ------
->  1 file changed, 6 deletions(-)
+>  src/bin/lttng-sessiond/client.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > =
 
-> diff --git a/src/common/session-descriptor.c b/src/common/session-descrip=
-tor.c
-> index 208eb46ff..713731c3e 100644
-> --- a/src/common/session-descriptor.c
-> +++ b/src/common/session-descriptor.c
-> @@ -550,14 +550,8 @@ lttng_session_descriptor_live_create(
->  	struct lttng_session_descriptor_live *descriptor;
->  =
-
->  	descriptor =3D _lttng_session_descriptor_live_create(name, live_timer_u=
-s);
-> -	if (!descriptor) {
-> -		goto error;
-> -	}
->  =
-
->  	return descriptor ? &descriptor->base : NULL;
-> -error:
-> -	lttng_session_descriptor_destroy(descriptor ? &descriptor->base : NULL);
-> -	return NULL;
->  }
->  =
-
->  struct lttng_session_descriptor *
+> diff --git a/src/bin/lttng-sessiond/client.c b/src/bin/lttng-sessiond/cli=
+ent.c
+> index 956dab8c8..870277534 100644
+> --- a/src/bin/lttng-sessiond/client.c
+> +++ b/src/bin/lttng-sessiond/client.c
+> @@ -1985,8 +1985,11 @@ static int create_client_sock(void)
+>  	/* File permission MUST be 660 */
+>  	ret =3D chmod(config.client_unix_sock_path.value, S_IRUSR | S_IWUSR | S=
+_IRGRP | S_IWGRP);
+>  	if (ret < 0) {
+> -		ERR("Set file permissions failed: %s", config.client_unix_sock_path.va=
+lue);
+> +		ERR("Set file permissions failed: %s",
+> +				config.client_unix_sock_path.value);
+>  		PERROR("chmod");
+> +		(void) lttcomm_close_unix_sock(client_sock);
+> +		ret =3D -1;
+>  		goto end;
+>  	}
+>  	DBG("Created client socket (fd =3D %i)", client_sock);
 > -- =
 
 > 2.17.1
