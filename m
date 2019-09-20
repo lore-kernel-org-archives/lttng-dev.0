@@ -1,18 +1,17 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Free new_chunk on error
-Date: Fri, 20 Sep 2019 17:37:14 -0400
-Message-ID: <20190920213714.GB187569__44453.9786827349$1569015460$gmane$org@joraj-alpa>
-References: <20190920144730.163268-1-jonathan.rajotte-julien@efficios.com>
- <20190920213426.GE20024@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools master,
+ 2.11] Fix: destroy command: put consumer output after destroy
+ notifier
+Date: Fri, 20 Sep 2019 17:41:14 -0400
+Message-ID: <20190920214114.1073-1-mathieu.desnoyers__24535.2197600127$1569015722$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 46Zn9s4pY1zqwx
- for <lttng-dev@lists.lttng.org>; Fri, 20 Sep 2019 17:37:21 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <20190920213426.GE20024@gmail.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 46ZnGY4wxSzr04
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Sep 2019 17:41:25 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,61 +21,47 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Sep 20, 2019 at 05:34:26PM -0400, J=E9r=E9mie Galarneau wrote:
-> Merged in master and stable-2.11.
-> =
+The destroy notifier needs to access the consumer output to format
+the absolute path to the last chunk.
 
-> On Fri, Sep 20, 2019 at 10:47:30AM -0400, Jonathan Rajotte wrote:
-> > Fixes coverity #1405775
-> > =
+The observed problematic behavior can be observed by doing a
+rotate and a destroy command in quick succession. Sometimes,
+the resulting path printed by the destroy command is incomplete:
 
-> > Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-> > ---
-> >  src/common/trace-chunk.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > =
+e.g. /archives/20190920T163616-0400-20190920T163618-0400-1
 
-> > diff --git a/src/common/trace-chunk.c b/src/common/trace-chunk.c
-> > index 6770bd982..bad993bea 100644
-> > --- a/src/common/trace-chunk.c
-> > +++ b/src/common/trace-chunk.c
-> > @@ -367,6 +367,8 @@ end:
-> >  	return new_chunk;
-> >  error_unlock:
-> >  	pthread_mutex_unlock(&source_chunk->lock);
-> > +	lttng_trace_chunk_fini(new_chunk);
-> > +	free(new_chunk);
-> =
+when we would expect:
 
-> Changed this to lttng_trace_chunk_put(), which will drop the only
-> existing reference to `new_chunk` and perform the equivalent
-> operations to what you proposed here.
+/home/efficios/lttng-traces/auto-20190920-164425/archives/20190920T164437-0400-20190920T164439-0400-1
 
-Okai, I saw a similar pattern somewhere in the file. Might want to check if=
- the
-same can be applied there.
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/bin/lttng-sessiond/session.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> =
-
-> Thanks!
-> J=E9r=E9mie
-> =
-
-> >  	return NULL;
-> >  }
-> >  =
-
-> > -- =
-
-> > 2.17.1
-> > =
-
-
--- =
-
-Jonathan Rajotte-Julien
-EfficiOS
+diff --git a/src/bin/lttng-sessiond/session.c b/src/bin/lttng-sessiond/session.c
+index 9072a2ec..7fd4332e 100644
+--- a/src/bin/lttng-sessiond/session.c
++++ b/src/bin/lttng-sessiond/session.c
+@@ -811,7 +811,6 @@ void session_release(struct urcu_ref *ref)
+ 
+ 	DBG("Destroying session %s (id %" PRIu64 ")", session->name, session->id);
+ 
+-	consumer_output_put(session->consumer);
+ 	snapshot_destroy(&session->snapshot);
+ 
+ 	pthread_mutex_destroy(&session->lock);
+@@ -823,6 +822,7 @@ void session_release(struct urcu_ref *ref)
+ 	}
+ 	session_notify_destruction(session);
+ 
++	consumer_output_put(session->consumer);
+ 	kernel_free_session(ksess);
+ 	session->kernel_session = NULL;
+ 	if (usess) {
+-- 
+2.17.1
