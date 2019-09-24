@@ -1,16 +1,19 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools v2] Fix: use newly created event
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: use newly created event
  filter for condition check
-Date: Tue, 24 Sep 2019 11:21:14 -0400
-Message-ID: <20190924152114.45975-1-jonathan.rajotte-julien__32031.0827971966$1569338501$gmane$org@efficios.com>
+Date: Tue, 24 Sep 2019 11:22:23 -0400
+Message-ID: <20190924152223.GI187569__17868.9457288542$1569338557$gmane$org@joraj-alpa>
+References: <20190924145316.21302-1-jonathan.rajotte-julien@efficios.com>
+ <325249304.599.1569337736318.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 46d4fB2q1vz1Mvd
- for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 11:21:22 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 46d4gN03srz1MwD
+ for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 11:22:24 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <325249304.599.1569337736318.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,52 +23,18 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIGZvbGxvd2luZyBjb21taXQgaW50cm9kdWNlZCBhIHJlZ3Jlc3Npb24gd2hpbGUKZml4aW5n
-IHRoZSBmaWx0ZXIgYW5kIGZpbHRlcl9leHByZXNzaW9uIG93bmVyc2hpcC4KCmNvbW1pdCBiMGEy
-MzI5NjM0NGU1N2JkMmU0OGU2MmVjMmQ3ZTBkOGEzODY2MWJiCkF1dGhvcjogSsOpcsOpbWllIEdh
-bGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgpEYXRlOiAgIFNhdCBKYW4g
-MTIgMTQ6NTM6NTYgMjAxOSAtMDUwMAoKICAgIEZpeDogbGVhayBvZiBmaWx0ZXIgYnl0ZWNvZGUg
-YW5kIGV4cHJlc3Npb24gb24gYWdlbnQgZXZlbnQgcmUtZW5hYmxlCgogICAgVGhlIGFnZW50IHN1
-YnN5c3RlbSBkb2VzIG5vdCBwcm9wZXJseSBhc3N1bWUgdGhlIGNsZWFuLXVwIG9mIGFuCiAgICBl
-dmVudCdzIGZpbHRlciBieXRlY29kZSBhbmQgZXhwcmVzc2lvbiB3aGVuIGEgcHJldmlvdXNseSBk
-aXNhYmxlZAogICAgZXZlbnQgaXMgcmUtZW5hYmxlZC4KCiAgICBUaGlzIGNoYW5nZSBlbnN1cmVz
-IHRoYXQgdGhlIG93bmVyc2hpcCBvZiBib3RoIHRoZSBmaWx0ZXIgYnl0ZWNvZGUKICAgIGFuZCBl
-eHByZXNzaW9uIGlzIGFzc3VtZWQgYnkgdGhlIGFnZW50IHN1YnN5c3RlbSBhbmQgZGlzY2FyZGVk
-CiAgICB3aGVuIGEgbWF0Y2hpbmcgZXZlbnQgaXMgZm91bmQuCgogICAgU3RlcHMgdG8gcmVwcm9k
-dWNlIHRoZSBsZWFrOgogICAgJCBsdHRuZyBjcmVhdGUKICAgICQgbHR0bmcgZW5hYmxlLWV2ZW50
-IC0tcHl0aG9uIGFsbG8gLS1maWx0ZXIgJ2FbNDJdID09IDI0MScKICAgICQgbHR0bmcgZGlzYWJs
-ZS1ldmVudCAtLXB5dGhvbiBhbGxvCiAgICAkIGx0dG5nIGVuYWJsZS1ldmVudCAtLXB5dGhvbiBh
-bGxvIC0tZmlsdGVyICdhWzQyXSA9PSAyNDEnCgogICAgU2lnbmVkLW9mZi1ieTogSsOpcsOpbWll
-IEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgoKU2V0dGluZyB0aGUg
-ImZpbHRlciIgb2JqZWN0IHRvIE5VTEwgcHJldmVudHMgdGhlIGNhbGwgdG8KYWRkX2ZpbHRlcl9h
-cHBfY3R4IHdoZW4gbmVlZGVkLgoKV2UgdXNlIHRoZSBmaWx0ZXIgZnJvbSB0aGUgbmV3bHkgY3Jl
-YXRlZCBldmVudCB0bwpwZXJmb3JtIHRoZSBjaGVjayBhbmQgdGhlIGNhbGwgdG8gYWRkX2ZpbHRl
-cl9hcHBfY3R4LgoKRml4ZXMgY292ZXJpdHkgIzEzOTk3MzMKClNpZ25lZC1vZmYtYnk6IEpvbmF0
-aGFuIFJham90dGUgPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4KLS0tCiBz
-cmMvYmluL2x0dG5nLXNlc3Npb25kL2FnZW50LmMgfCAxICsKIHNyYy9iaW4vbHR0bmctc2Vzc2lv
-bmQvZXZlbnQuYyB8IDUgKysrLS0KIDIgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCAy
-IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvYWdlbnQu
-YyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvYWdlbnQuYwppbmRleCA5ZWE4OTlmNTcuLjc5MjMz
-YWI3YyAxMDA2NDQKLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9hZ2VudC5jCisrKyBiL3Ny
-Yy9iaW4vbHR0bmctc2Vzc2lvbmQvYWdlbnQuYwpAQCAtMTE0NSw2ICsxMTQ1LDcgQEAgc3RydWN0
-IGFnZW50X2V2ZW50ICphZ2VudF9jcmVhdGVfZXZlbnQoY29uc3QgY2hhciAqbmFtZSwKIAlldmVu
-dC0+bG9nbGV2ZWxfdHlwZSA9IGxvZ2xldmVsX3R5cGU7CiAJZXZlbnQtPmZpbHRlciA9IGZpbHRl
-cjsKIAlldmVudC0+ZmlsdGVyX2V4cHJlc3Npb24gPSBmaWx0ZXJfZXhwcmVzc2lvbjsKKwlldmVu
-dC0+ZW5hYmxlZCA9IDA7CiBlcnJvcjoKIAlyZXR1cm4gZXZlbnQ7CiB9CmRpZmYgLS1naXQgYS9z
-cmMvYmluL2x0dG5nLXNlc3Npb25kL2V2ZW50LmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2V2
-ZW50LmMKaW5kZXggZjMyZGI0NDI5Li5hOGI3NjQ2ZGEgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0
-bmctc2Vzc2lvbmQvZXZlbnQuYworKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2V2ZW50LmMK
-QEAgLTUxMyw4ICs1MTMsOSBAQCBpbnQgZXZlbnRfYWdlbnRfZW5hYmxlKHN0cnVjdCBsdHRfdXN0
-X3Nlc3Npb24gKnVzZXNzLAogCQljcmVhdGVkID0gMTsKIAl9CiAKLQlpZiAoY3JlYXRlZCAmJiBm
-aWx0ZXIpIHsKLQkJcmV0ID0gYWRkX2ZpbHRlcl9hcHBfY3R4KGZpbHRlciwgZmlsdGVyX2V4cHJl
-c3Npb24sIGFndCk7CisJaWYgKGNyZWF0ZWQgJiYgYWV2ZW50LT5maWx0ZXIpIHsKKwkJcmV0ID0g
-YWRkX2ZpbHRlcl9hcHBfY3R4KAorCQkJCWFldmVudC0+ZmlsdGVyLCBhZXZlbnQtPmZpbHRlcl9l
-eHByZXNzaW9uLCBhZ3QpOwogCQlpZiAocmV0ICE9IExUVE5HX09LKSB7CiAJCQlnb3RvIGVycm9y
-OwogCQl9Ci0tIAoyLjE3LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-ZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cg==
+> > 4c5e3185d75ffe90b04107744693964d9051fb6b introduced a regression while
+> > fixing the filter and filter_expression ownership.
+> 
+> What is this commit ? I'm having trouble finding it. Can you double-check and
+> provide the commit Subject as well ?
+
+Seems like I copied the parent tree commit.
+
+See v2
+
+Cheers
