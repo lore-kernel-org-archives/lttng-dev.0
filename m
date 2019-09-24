@@ -1,21 +1,25 @@
-From: "Kramer, Zach" <Zach.Kramer@cognex.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Subject: Re: [EXTERNAL] Re: Problem with application changing UID
-Date: Tue, 24 Sep 2019 16:13:13 +0000
-Message-ID: <SN4PR0601MB361479BD3396866D29AA39F791840__21000.0962646276$1569341610$gmane$org@SN4PR0601MB3614.namprd06.prod.outlook.com>
+Date: Tue, 24 Sep 2019 14:45:12 -0400
+Message-ID: <20190924184512.GL187569__26227.4043679767$1569350735$gmane$org@joraj-alpa>
 References: <SN4PR0601MB3614967ABCE12621B316C89D91840@SN4PR0601MB3614.namprd06.prod.outlook.com>
  <20190924150754.GG187569@joraj-alpa>
  <SN4PR0601MB36143DD719CB75559F9ABDD891840@SN4PR0601MB3614.namprd06.prod.outlook.com>
  <20190924160604.GK187569@joraj-alpa>
+ <SN4PR0601MB361479BD3396866D29AA39F791840@SN4PR0601MB3614.namprd06.prod.outlook.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from NAM04-BN3-obe.outbound.protection.outlook.com
- (mail-eopbgr680104.outbound.protection.outlook.com [40.107.68.104])
- by lists.lttng.org (Postfix) with ESMTPS id 46d5p24tWyz1N4c
- for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 12:13:14 -0400 (EDT)
-In-Reply-To: <20190924160604.GK187569@joraj-alpa>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 46d99P4L31z1NH9
+ for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 14:45:13 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 0A686333C15
+ for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 14:45:13 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <SN4PR0601MB361479BD3396866D29AA39F791840@SN4PR0601MB3614.namprd06.prod.outlook.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,32 +29,34 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+To: "Kramer, Zach" <Zach.Kramer@cognex.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Jonathan,
+On Tue, Sep 24, 2019 at 04:13:13PM +0000, Kramer, Zach wrote:
+> Hi Jonathan,
+> 
+> Thanks for the extra info. We do indeed fork without a following exec call and
+> I experimented with this preloading recently. When I experimented, I noticed
+> no difference in the tracing when I preload liblttng-ust-fork.so. What exactly
+> is the consequence of not doing this?
 
-Thanks for the extra info. We do indeed fork without a following exec call and I experimented with this preloading recently. When I experimented, I noticed no difference in the tracing when I preload liblttng-ust-fork.so. What exactly is the consequence of not doing this?
+It mostly ensure that the state of lttng-ust for the child is valid and the
+child will register to lttng-sessiond. It allows the child to trace between the
+fork call and the exec call if any.
 
-Thanks!
+https://github.com/lttng/lttng-ust/blob/f596de62e69d1942ec545b8ba6b8f8b7244f8fb4/liblttng-ust/lttng-ust-comm.c#L2097
 
+So in your case you definitely need it.
 
------Original Message-----
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com> 
-Sent: Tuesday, September 24, 2019 6:06 PM
-To: Kramer, Zach <Zach.Kramer@cognex.com>
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [EXTERNAL] Re: [lttng-dev] Problem with application changing UID
+The immediate consequence is that some context information will be completely wrong (pid/vtid).
 
-Hi Zach,
-
-Forgot to add that you might want to look at available UST wrappers depending on the nature of your daemon application.
-
-https://nam04.safelinks.protection.outlook.com/?url=https%3A%2F%2Flttng.org%2Fdocs%2Fv2.10%2F%23doc-using-lttng-ust-with-daemons&amp;data=02%7C01%7CZach.Kramer%40cognex.com%7C5bd45c30c5bd4c48ad4c08d741091b32%7Cc12007a4882b4381b05ab783431570c7%7C1%7C0%7C637049379681260582&amp;sdata=R8O%2Be9j9O4O7pUAX5TAmLGQLGoIRKgg5k9vOixhTDHg%3D&amp;reserved=0
-https://nam04.safelinks.protection.outlook.com/?url=https%3A%2F%2Flttng.org%2Fdocs%2Fv2.10%2F%23doc-liblttng-ust-fd&amp;data=02%7C01%7CZach.Kramer%40cognex.com%7C5bd45c30c5bd4c48ad4c08d741091b32%7Cc12007a4882b4381b05ab783431570c7%7C1%7C0%7C637049379681270586&amp;sdata=iNJnFMPDqCUzZS6a2hUrN4tGfpoInT5MgQYnANk6Y4g%3D&amp;reserved=0
+Mathieu Desnoyers could provide more information on the deeper side effects of
+not using the fork wrapper given that no exec call is done. I'm not completely
+sure of the possible side effects on the tracing buffers.
 
 Cheers
---
+
+-- 
 Jonathan Rajotte-Julien
 EfficiOS
