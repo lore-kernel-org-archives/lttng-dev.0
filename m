@@ -1,21 +1,17 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: Problem with application changing UID
-Date: Tue, 24 Sep 2019 11:07:54 -0400
-Message-ID: <20190924150754.GG187569__31478.2443152339$1569337692$gmane$org@joraj-alpa>
-References: <SN4PR0601MB3614967ABCE12621B316C89D91840@SN4PR0601MB3614.namprd06.prod.outlook.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: use newly created event
+ filter for condition check
+Date: Tue, 24 Sep 2019 11:08:56 -0400 (EDT)
+Message-ID: <325249304.599.1569337736318.JavaMail.zimbra__23321.3073269994$1569337751$gmane$org@efficios.com>
+References: <20190924145316.21302-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 46d4Lg3cHlz1MsD
- for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 11:07:55 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 0FFDA24FA8C
- for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 11:07:55 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <SN4PR0601MB3614967ABCE12621B316C89D91840@SN4PR0601MB3614.namprd06.prod.outlook.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 46d4Ms0h6Jz1Msh
+ for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 11:08:57 -0400 (EDT)
+In-Reply-To: <20190924145316.21302-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,73 +21,65 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "Kramer, Zach" <Zach.Kramer@cognex.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgWmFjaCwKClRoYW5rcyBmb3IgcmVhY2hpbmcgb3V0LgoKbHR0bmctdXN0IGRvZXMgbm90IHN1
-cHBvcnQgdGhlIGNoYW5nZSBvZiB1aWQgb25jZSB0aGUgYXBwbGljYXRpb24gaXMKcmVnaXN0ZXJl
-ZCB0byB0aGUgbHR0bmctc2Vzc2lvbmQgZGFlbW9uLiBJIHRoaW5rIHRoYXQgd2UgdXNlIHRoZSB1
-aWQgcmVjZWl2ZWQgb24KcmVnaXN0cmF0aW9uIGZvciBhbGwgc3Vic2VxdWVudCBvcGVyYXRpb25z
-LgoKR2FicmllbCBQb2xsby1HdWlsYmVydCBhY3R1YWxseSB3b3JrZWQgb24gdGhpcyB0aGlzIHN1
-bW1lci4gWW91IGNhbiBjaGVjayBvdXQgdGhlCnByb3Bvc2VkIHdyYXBwZXIgZm9yIHNldHVpZCBo
-ZXJlIFsxXS4gWW91IHdpbGwgbmVlZCB0byBMRF9QUkVMT0FEIGl0IG9uIHRoZQpzdGFydCBvZiB5
-b3UgYXBwbGljYXRpb24uIEl0IGJhc2ljYWxseSB1bnJlZ2lzdGVyIHRoZSBhcHBsaWNhdGlvbiBh
-bmQKcmUtcmVnaXN0ZXIgaXQuCgpbMV0gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvcGlwZXJtYWls
-L2x0dG5nLWRldi8yMDE5LUp1bmUvMDI5MDM1Lmh0bWwKIFRoaXMgc2hvdWxkIGJlIGFwcGxpZWQg
-b24gbWFzdGVyIG9mIGx0dG5nLXVzdC4KIE1ha2Ugc3VyZSB0byB1c2UgbHR0bmctdG9vbHMgbWFz
-dGVyIGFsc28uIFNhbWUgZm9yIGx0dG5nLW1vZHVsZXMgaWYgbmVjZXNzYXJ5LgoKV291bGQgeW91
-IGJlIGludGVyZXN0ZWQgaW4gZ2l2aW5nIGl0IGEgdHJ5PwoKQ2hlZXJzCgpPbiBUdWUsIFNlcCAy
-NCwgMjAxOSBhdCAwMjozMjo0MVBNICswMDAwLCBLcmFtZXIsIFphY2ggd3JvdGU6Cj4gSGksCj4g
-Cj4gSXMgTFRUbmcgaW50ZW5kZWQgdG8gc3VwcG9ydCB1c2Vyc3BhY2UgYXBwbGljYXRpb25zIHRo
-YXQgY2hhbmdlIHRoZWlyIFVJRCBhdCBydW4tdGltZT8gQXMgaW4sIGlzIHRoZXJlIGFuIGV4cGVj
-dGVkIGJlaGF2aW9yIGZvciB3aGVuIHRoaXMgaGFwcGVucz8KPiAKPiBGb3IgZXhhbXBsZToKPiAK
-PiAgIDEuICBFbWJlZGRlZCBkZXZpY2UgYm9vdHMKPiAgIDIuICBNeSBkYWVtb24gaXMgbGF1bmNo
-ZWQgYXMgcm9vdCB2aWEgc3lzdGVtZAo+ICAgMy4gIFJ1bnMgcHJpdmlsZWdlZCBjb2RlCj4gICA0
-LiAgQ2hhbmdlcyBVSUQgdG8gYSBsZXNzIHByaXZpbGVnZWQgdXNlciAoNTAwKQo+ICAgNS4gIENy
-ZWF0ZXMgTFRUbmcgc2Vzc2lvbgo+ICAgICAgKiAgIElmIHNlc3Npb24gYWxyZWFkeSBleGlzdHMs
-IGRlc3Ryb3kgaXQgZmlyc3QKPiAgIDYuICA8aWYg4oCYc3lzdGVtY3RsIHN0b3DigJkgaXMgY2Fs
-bGVkPjogRGVzdHJveSBzZXNzaW9uCj4gICAgICAqICAgT3RoZXJ3aXNlIGl0IHdpbGwgYmUgZGVz
-dHJveWVkIG5leHQgZGFlbW9uIGxhdW5jaCBpbiBzdGVwIDUKPiAKPiBUaGlzIGNhdXNlcyBtYW55
-IGNvbmZsaWN0cyB3aXRoIHRoZSB0cmFjZSBmb2xkZXJzIHRoYXQgYXJlIGNyZWF0ZWQuIE1vc3Qg
-b2YgdGhlIHRpbWUsIExUVG5nIGNyZWF0ZXMgYSBmb2xkZXIgKyBtZXRhZGF0YSBmb3IgYm90aCBy
-b290IGFuZCB0aGUgdXNlciwgdGhlbiBwdXRzIHRyYWNlcyBpbiB0aGUgdXNlciBmb2xkZXIuIE90
-aGVyIHRpbWVzLCBpdCBtYXkgY3JlYXRlIGEgZm9sZGVyIGp1c3QgZm9yIHRoZSB1c2VyLiBUaGlz
-IGlzIHNlZW1pbmdseSByYW5kb20sIHNpbmNlIGl04oCZcyBhIGZyZXNoIGRldmljZSBib290IGVh
-Y2ggdGltZS4gSWYgdGhlIGRhZW1vbiBpcyBsYXVuY2hlZCBkaXJlY3RseSAoaS5lLiBub3QgZnJv
-bSBzeXN0ZW1kKSwgdGhlbiB0aGUgcm9vdCBmb2xkZXIgZ2V0cyB0aGUgdHJhY2VzIGFuZCB0aGUg
-dXNlciBmb2xkZXIgZ2V0cyB0aGUgbWV0YWRhdGEuIEhlcmUgaXMgYSBtb3JlIGRldGFpbGVkIGV4
-cGxhbmF0aW9uOgo+IAo+IAo+IENhc2UKPiBDb21tYW5kCj4gUmVzdWx0Cj4gCj4gQ29tbWVudHMK
-PiAxCj4gW0RldmljZSBib290XQo+IHN5c3RlbWN0bCBzdGFydCBkYWVtb24KPiDigKYuLi91aWQv
-NTAwLzMyLWJpdCAtLT4gaGFzIG1ldGFkYXRhIGFuZCB0cmFjZSBsb2dzCj4gCj4gTW9zdCB0aW1l
-cywgdGhpcyBhbHNvIGhhcHBlbnM6Cj4g4oCmLi4vdWlkLzAvMzItYml0IC0tPiBoYXMgbWV0YWRh
-dGEgYnV0IG5vIHRyYWNlIGxvZ3MKPiAKPiBbY2lkOmltYWdlMDAxLnBuZ0AwMUQ1NkY5RC5BRjE1
-ODc3MF0KPiBPY2Nhc2lvbmFsbHksIHRoZSB1aWQvMCBmb2xkZXIgaXMgbm90IGNyZWF0ZWQgYXQg
-YWxsLiBUaGlzIHNlZW1zIHJhbmRvbSwgc2luY2UgdGhpcyBpcyB0ZXN0ZWQgYnkgcmVib290aW5n
-IHRoZSBkZXZpY2Ugc2V2ZXJhbCB0aW1lcy4KPiAyCj4gW0RldmljZSBib290XQo+IHN5c3RlbWN0
-bCBzdGFydCBkYWVtb24KPiBzeXN0ZW1jdGwgc3RvcCBkYWVtb24KPiAKPiAgICogICBUaGlzIHVz
-ZXMgTFRUbmcgQy1BUEkgdG8gZGVzdHJveSBzZXNzaW9uCj4g4oCmLi4vdWlkLzUwMC8zMi1iaXQg
-LS0+IGhhcyBtZXRhZGF0YSBidXQgdGhlIGxvZ3Mgd2VyZSBjbGVhcmVkCj4gCj4gTW9zdCB0aW1l
-cywgdGhpcyBhbHNvIGhhcHBlbnM6Cj4g4oCmLi4vdWlkLzAvMzItYml0IC0tPiBoYXMgbWV0YWRh
-dGEgYnV0IG5vIHRyYWNlIGxvZ3MKPiAKPiBbY2lkOmltYWdlMDAxLnBuZ0AwMUQ1NkY5RC5BRjE1
-ODc3MF0KPiBUaGUgbG9ncyBhcmUgY2xlYXJlZCB3aGVuIOKAmGx0dG5nIGRlc3Ryb3kgc2Vzc+KA
-mSBpcyBjYWxsZWQgdmlhIHRoZSBMVFRuZyBDLUFQSS4gRnJvbSBteSB1bmRlcnN0YW5kaW5nLCB0
-aGlzIHNob3VsZCBub3QgaGFwcGVuLgo+IAo+IERlc3Ryb3lpbmcgdGhlIGRhZW1vbiBmcm9tIGNv
-bW1hbmQgbGluZSBiZWhhdmVzIHByb3Blcmx5LiBGcm9tIG15IHVuZGVyc3RhbmRpbmcsIHRoaXMg
-c2hvdWxkIGJlIHByYWN0aWNhbGx5IHRoZSBleGFjdCBzYW1lIGNvbW1hbmQuCj4gMwo+IHJvb3RA
-ZGV2aWNlOiBkYWVtb24KPiAKPiAobGF1bmNoaW5nIHZpYSBjb21tYW5kLWxpbmUpCj4gV2hlbiBk
-YWVtb24gaXMga2lsbGVkIG9yIHNlc3Npb24gaXMgc3RvcHBlZDogbWltaWNzIGNhc2UgMQo+IAo+
-IFdoZW4gZGFlbW9uIGlzIGFsaXZlOgo+IOKApi4vdWlkLzAvMzItYml0IC0tPiBoYXMgdHJhY2Ug
-bG9ncyBidXQgZW1wdHkgbWV0YWRhdGEKPiAKPiDigKYuL3VpZC81MDAvMzItYml0IC0tPiBoYXMg
-bWV0YWRhdGEgYnV0IGVtcHR5IHRyYWNlIGxvZ3MKPiBbY2lkOmltYWdlMDAyLnBuZ0AwMUQ1NkY5
-RC5BRjE1ODc3MF0KPiAKPiAKPiBJcyB0aGlzIHVzZS1jYXNlIHN1cHBvcnRlZD8KPiAKPiBVbmZv
-cnR1bmF0ZWx5LCB0aGUgbG9ncyBhcmUgaHVnZSBhbmQgY29udGFpbiBzZW5zaXRpdmUgaW5mb3Jt
-YXRpb24uIElmIHRoZXkgY2FuIGhlbHAgYSBzdWJzdGFudGlhbCBhbW91bnQsIEkgY2FuIHBydW5l
-IHRoZW0uCj4gCj4gVGhhbmtzIGFuZCBiZXN0IHJlZ2FyZHMsCj4gWmFjaAoKCgoKPiBfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCi0tIApKb25hdGhhbiBS
-YWpvdHRlLUp1bGllbgpFZmZpY2lPUwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+----- On Sep 24, 2019, at 10:53 AM, Jonathan Rajotte jonathan.rajotte-julien@efficios.com wrote:
+
+> 4c5e3185d75ffe90b04107744693964d9051fb6b introduced a regression while
+> fixing the filter and filter_expression ownership.
+
+What is this commit ? I'm having trouble finding it. Can you double-check and
+provide the commit Subject as well ?
+
+Typically:
+
+commit 1234567890ab "Commit subject" ....
+
+Thanks,
+
+Mathieu
+
+> 
+> Setting the "filter" object to NULL prevents the call to
+> add_filter_app_ctx when needed.
+> 
+> We use the filter from the newly created event to
+> perform the check and the call to add_filter_app_ctx.
+> 
+> Fixes coverity #1399733
+> 
+> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+> ---
+> src/bin/lttng-sessiond/event.c | 5 +++--
+> 1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/src/bin/lttng-sessiond/event.c b/src/bin/lttng-sessiond/event.c
+> index f32db4429..a8b7646da 100644
+> --- a/src/bin/lttng-sessiond/event.c
+> +++ b/src/bin/lttng-sessiond/event.c
+> @@ -513,8 +513,9 @@ int event_agent_enable(struct ltt_ust_session *usess,
+> 		created = 1;
+> 	}
+> 
+> -	if (created && filter) {
+> -		ret = add_filter_app_ctx(filter, filter_expression, agt);
+> +	if (created && aevent->filter) {
+> +		ret = add_filter_app_ctx(
+> +				aevent->filter, aevent->filter_expression, agt);
+> 		if (ret != LTTNG_OK) {
+> 			goto error;
+> 		}
+> --
+> 2.17.1
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
