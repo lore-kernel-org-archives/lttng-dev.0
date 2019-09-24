@@ -1,17 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: use newly created event
- filter for condition check
-Date: Tue, 24 Sep 2019 11:08:56 -0400 (EDT)
-Message-ID: <325249304.599.1569337736318.JavaMail.zimbra__23321.3073269994$1569337751$gmane$org@efficios.com>
-References: <20190924145316.21302-1-jonathan.rajotte-julien@efficios.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: Problem with application changing UID
+Date: Tue, 24 Sep 2019 11:15:15 -0400
+Message-ID: <20190924151515.GH187569__21112.9796270811$1569338145$gmane$org@joraj-alpa>
+References: <SN4PR0601MB3614967ABCE12621B316C89D91840@SN4PR0601MB3614.namprd06.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 46d4Ms0h6Jz1Msh
- for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 11:08:57 -0400 (EDT)
-In-Reply-To: <20190924145316.21302-1-jonathan.rajotte-julien@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 46d4W86DD0z1Mtx
+ for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 11:15:16 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 8DDB724FEA7
+ for <lttng-dev@lists.lttng.org>; Tue, 24 Sep 2019 11:15:16 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <SN4PR0601MB3614967ABCE12621B316C89D91840@SN4PR0601MB3614.namprd06.prod.outlook.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,65 +24,28 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: "Kramer, Zach" <Zach.Kramer@cognex.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Sep 24, 2019, at 10:53 AM, Jonathan Rajotte jonathan.rajotte-julien@efficios.com wrote:
-
-> 4c5e3185d75ffe90b04107744693964d9051fb6b introduced a regression while
-> fixing the filter and filter_expression ownership.
-
-What is this commit ? I'm having trouble finding it. Can you double-check and
-provide the commit Subject as well ?
-
-Typically:
-
-commit 1234567890ab "Commit subject" ....
-
-Thanks,
-
-Mathieu
-
-> 
-> Setting the "filter" object to NULL prevents the call to
-> add_filter_app_ctx when needed.
-> 
-> We use the filter from the newly created event to
-> perform the check and the call to add_filter_app_ctx.
-> 
-> Fixes coverity #1399733
-> 
-> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-> ---
-> src/bin/lttng-sessiond/event.c | 5 +++--
-> 1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/src/bin/lttng-sessiond/event.c b/src/bin/lttng-sessiond/event.c
-> index f32db4429..a8b7646da 100644
-> --- a/src/bin/lttng-sessiond/event.c
-> +++ b/src/bin/lttng-sessiond/event.c
-> @@ -513,8 +513,9 @@ int event_agent_enable(struct ltt_ust_session *usess,
-> 		created = 1;
-> 	}
-> 
-> -	if (created && filter) {
-> -		ret = add_filter_app_ctx(filter, filter_expression, agt);
-> +	if (created && aevent->filter) {
-> +		ret = add_filter_app_ctx(
-> +				aevent->filter, aevent->filter_expression, agt);
-> 		if (ret != LTTNG_OK) {
-> 			goto error;
-> 		}
-> --
-> 2.17.1
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+T24gVHVlLCBTZXAgMjQsIDIwMTkgYXQgMDI6MzI6NDFQTSArMDAwMCwgS3JhbWVyLCBaYWNoIHdy
+b3RlOgo+IEhpLAo+IAo+IElzIExUVG5nIGludGVuZGVkIHRvIHN1cHBvcnQgdXNlcnNwYWNlIGFw
+cGxpY2F0aW9ucyB0aGF0IGNoYW5nZSB0aGVpciBVSUQgYXQgcnVuLXRpbWU/IEFzIGluLCBpcyB0
+aGVyZSBhbiBleHBlY3RlZCBiZWhhdmlvciBmb3Igd2hlbiB0aGlzIGhhcHBlbnM/Cj4gCj4gRm9y
+IGV4YW1wbGU6Cj4gCj4gICAxLiAgRW1iZWRkZWQgZGV2aWNlIGJvb3RzCj4gICAyLiAgTXkgZGFl
+bW9uIGlzIGxhdW5jaGVkIGFzIHJvb3QgdmlhIHN5c3RlbWQKPiAgIDMuICBSdW5zIHByaXZpbGVn
+ZWQgY29kZQo+ICAgNC4gIENoYW5nZXMgVUlEIHRvIGEgbGVzcyBwcml2aWxlZ2VkIHVzZXIgKDUw
+MCkKPiAgIDUuICBDcmVhdGVzIExUVG5nIHNlc3Npb24KPiAgICAgICogICBJZiBzZXNzaW9uIGFs
+cmVhZHkgZXhpc3RzLCBkZXN0cm95IGl0IGZpcnN0Cj4gICA2LiAgPGlmIOKAmHN5c3RlbWN0bCBz
+dG9w4oCZIGlzIGNhbGxlZD46IERlc3Ryb3kgc2Vzc2lvbgo+ICAgICAgKiAgIE90aGVyd2lzZSBp
+dCB3aWxsIGJlIGRlc3Ryb3llZCBuZXh0IGRhZW1vbiBsYXVuY2ggaW4gc3RlcCA1CgpXaGVuIGlu
+IHRoaXMgY2hhaW4gb2Ygb3BlcmF0aW9ucyBpcyBsdHRuZy1zZXNzaW9uZCBzdGFydGVkPwoKPiAK
+PiBbY2lkOmltYWdlMDAxLnBuZ0AwMUQ1NkY5RC5BRjE1ODc3MF0KPiBUaGUgbG9ncyBhcmUgY2xl
+YXJlZCB3aGVuIOKAmGx0dG5nIGRlc3Ryb3kgc2Vzc+KAmSBpcyBjYWxsZWQgdmlhIHRoZSBMVFRu
+ZyBDLUFQSS4gRnJvbSBteSB1bmRlcnN0YW5kaW5nLCB0aGlzIHNob3VsZCBub3QgaGFwcGVuLgoK
+SSB3b3VsZCB0ZW5kIHRvIGFncmVlIHdpdGggeW91IGhlcmUuIFdvdWxkIHlvdSBiZSBhYmxlIHRv
+IHByb3ZpZGUgYSBzbWFsbApyZXByb2R1Y2VyIGZvciB0aGlzPyBXaGF0IGlzIHRoZSB2ZXJzaW9u
+IG9mIGx0dG5nLSoKCi0tIApKb25hdGhhbiBSYWpvdHRlLUp1bGllbgpFZmZpY2lPUwpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
