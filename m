@@ -1,21 +1,21 @@
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools v3] Fix: use newly created event
- filter for condition check
-Date: Wed, 25 Sep 2019 12:41:41 -0400
-Message-ID: <20190925164141.GA12820__49669.8456395947$1569429847$gmane$org@gmail.com>
-References: <20190924152417.47028-1-jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: lttng-crash: detect
+ truncated files
+Date: Wed, 25 Sep 2019 12:45:01 -0400
+Message-ID: <20190925164501.GA41410__3819.9230375298$1569429920$gmane$org@gmail.com>
+References: <20190923183133.18786-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-f195.google.com (mail-qt1-f195.google.com
- [209.85.160.195])
- by lists.lttng.org (Postfix) with ESMTPS id 46dkNV0GnqzqQf
- for <lttng-dev@lists.lttng.org>; Wed, 25 Sep 2019 12:41:45 -0400 (EDT)
-Received: by mail-qt1-f195.google.com with SMTP id 3so116599qta.1
- for <lttng-dev@lists.lttng.org>; Wed, 25 Sep 2019 09:41:45 -0700 (PDT)
+Received: from mail-qt1-f196.google.com (mail-qt1-f196.google.com
+ [209.85.160.196])
+ by lists.lttng.org (Postfix) with ESMTPS id 46dkSL0QddzqRp
+ for <lttng-dev@lists.lttng.org>; Wed, 25 Sep 2019 12:45:05 -0400 (EDT)
+Received: by mail-qt1-f196.google.com with SMTP id u22so34962qtq.13
+ for <lttng-dev@lists.lttng.org>; Wed, 25 Sep 2019 09:45:05 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <20190924152417.47028-1-jonathan.rajotte-julien@efficios.com>
+In-Reply-To: <20190923183133.18786-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,86 +25,82 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Merged in master and stable-2.11.
+Merged in master, stable-2.11, stable-2.10, and stable-2.9. Thanks!
 
-Backported to stable-2.10, and stable-2.9.
-
-Thanks!
 J=E9r=E9mie
 
-On Tue, Sep 24, 2019 at 11:24:17AM -0400, Jonathan Rajotte wrote:
-> The following commit introduced a regression while
-> fixing the filter and filter_expression ownership.
+On Mon, Sep 23, 2019 at 02:31:33PM -0400, Mathieu Desnoyers wrote:
+> Detect truncated files which size is smaller than the ring buffer
+> header.
 > =
 
-> commit b0a23296344e57bd2e48e62ec2d7e0d8a38661bb
-> Author: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> Date:   Sat Jan 12 14:53:56 2019 -0500
+> This can be caused by a situation where sessiond is killed with SIGKILL
+> while doing a metadata regenerate command.
 > =
 
->     Fix: leak of filter bytecode and expression on agent event re-enable
+> Without this fix, lttng-crash is killed with a "Bus error" when
+> encountering a truncated file.
 > =
 
->     The agent subsystem does not properly assume the clean-up of an
->     event's filter bytecode and expression when a previously disabled
->     event is re-enabled.
-> =
-
->     This change ensures that the ownership of both the filter bytecode
->     and expression is assumed by the agent subsystem and discarded
->     when a matching event is found.
-> =
-
->     Steps to reproduce the leak:
->     $ lttng create
->     $ lttng enable-event --python allo --filter 'a[42] =3D=3D 241'
->     $ lttng disable-event --python allo
->     $ lttng enable-event --python allo --filter 'a[42] =3D=3D 241'
-> =
-
->     Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> =
-
-> Setting the "filter" object to NULL prevents the call to
-> add_filter_app_ctx when needed.
-> =
-
-> We use the filter from the newly created event to
-> perform the check and the call to add_filter_app_ctx.
-> =
-
-> Fixes coverity #1399733
-> =
-
-> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+> Fixes: #1166
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > ---
->  src/bin/lttng-sessiond/event.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  src/bin/lttng-crash/lttng-crash.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 > =
 
-> diff --git a/src/bin/lttng-sessiond/event.c b/src/bin/lttng-sessiond/even=
-t.c
-> index f32db4429..a8b7646da 100644
-> --- a/src/bin/lttng-sessiond/event.c
-> +++ b/src/bin/lttng-sessiond/event.c
-> @@ -513,8 +513,9 @@ int event_agent_enable(struct ltt_ust_session *usess,
->  		created =3D 1;
+> diff --git a/src/bin/lttng-crash/lttng-crash.c b/src/bin/lttng-crash/lttn=
+g-crash.c
+> index 298ed71a..47358df9 100644
+> --- a/src/bin/lttng-crash/lttng-crash.c
+> +++ b/src/bin/lttng-crash/lttng-crash.c
+> @@ -498,7 +498,8 @@ int check_magic(const uint8_t *magic)
+>  }
+>  =
+
+>  static
+> -int get_crash_layout(struct lttng_crash_layout *layout, int fd)
+> +int get_crash_layout(struct lttng_crash_layout *layout, int fd,
+> +		const char *input_file)
+>  {
+>  	char *map;
+>  	int ret =3D 0, unmapret;
+> @@ -509,7 +510,17 @@ int get_crash_layout(struct lttng_crash_layout *layo=
+ut, int fd)
+>  	const struct crash_abi_unknown *abi;
+>  	uint16_t endian;
+>  	enum lttng_crash_type layout_type;
+> +	struct stat stat;
+>  =
+
+> +	ret =3D fstat(fd, &stat);
+> +	if (ret < 0) {
+> +		PERROR("fstat");
+> +		return -1;
+> +	}
+> +	if (stat.st_size < RB_CRASH_DUMP_ABI_LEN) {
+> +		ERR("File: '%s' truncated", input_file);
+> +		return -1;
+> +	}
+>  	map =3D mmap(NULL, RB_CRASH_DUMP_ABI_LEN, PROT_READ, MAP_PRIVATE,
+>  		fd, 0);
+>  	if (map =3D=3D MAP_FAILED) {
+> @@ -838,7 +849,7 @@ int extract_file(int output_dir_fd, const char *outpu=
+t_file,
 >  	}
 >  =
 
-> -	if (created && filter) {
-> -		ret =3D add_filter_app_ctx(filter, filter_expression, agt);
-> +	if (created && aevent->filter) {
-> +		ret =3D add_filter_app_ctx(
-> +				aevent->filter, aevent->filter_expression, agt);
->  		if (ret !=3D LTTNG_OK) {
->  			goto error;
->  		}
+>  	/* Query the crash ABI layout */
+> -	ret =3D get_crash_layout(&layout, fd_src);
+> +	ret =3D get_crash_layout(&layout, fd_src, input_file);
+>  	if (ret) {
+>  		goto close_src;
+>  	}
 > -- =
 
-> 2.17.1
+> 2.11.0
 > =
