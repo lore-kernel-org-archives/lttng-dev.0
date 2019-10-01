@@ -1,24 +1,16 @@
-From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: =?iso-8859-1?q?=5BRELEASE=5D_LTTng-Tools_2=2E9=2E13_?=
- =?iso-8859-1?q?-_Joann=E8s?=
-Date: Tue, 1 Oct 2019 18:11:15 -0400
-Message-ID: <20191001221115.GC52120__29492.1534297586$1569967893$gmane$org@gmail.com>
+From: Eddie Kong via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Statically compiling LTTNG
+Date: Tue, 1 Oct 2019 23:19:07 +0000
+Message-ID: <MW2PR2101MB0988D353BB406B8292BEE9018B9D0__15112.2390570649$1570026803$gmane$org@MW2PR2101MB0988.namprd21.prod.outlook.com>
+Reply-To: Eddie Kong <Eddie.Kong@microsoft.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============6937879102002167520=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-f196.google.com (mail-qt1-f196.google.com
- [209.85.160.196])
- by lists.lttng.org (Postfix) with ESMTPS id 46jYPz6tprzq65
- for <lttng-dev@lists.lttng.org>; Tue,  1 Oct 2019 18:11:19 -0400 (EDT)
-Received: by mail-qt1-f196.google.com with SMTP id n7so23726131qtb.6
- for <lttng-dev@lists.lttng.org>; Tue, 01 Oct 2019 15:11:19 -0700 (PDT)
-Received: from gmail.com (192-222-181-218.qc.cable.ebox.net. [192.222.181.218])
- by smtp.gmail.com with ESMTPSA id t63sm8342943qkf.48.2019.10.01.15.11.17
- for <lttng-dev@lists.lttng.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Oct 2019 15:11:17 -0700 (PDT)
-Content-Disposition: inline
+Received: from NAM05-CO1-obe.outbound.protection.outlook.com
+ (mail-eopbgr720130.outbound.protection.outlook.com [40.107.72.130])
+ by lists.lttng.org (Postfix) with ESMTPS id 46jZwF5ldgzq7p
+ for <lttng-dev@lists.lttng.org>; Tue,  1 Oct 2019 19:19:09 -0400 (EDT)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,39 +20,90 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+--===============6937879102002167520==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_MW2PR2101MB0988D353BB406B8292BEE9018B9D0MW2PR2101MB0988_"
 
-The tirteenth bug-fix release of LTTng-Tools 2.9 - Joann=E8s has just
-been released. This release addresses a number of issues listed below.
+--_000_MW2PR2101MB0988D353BB406B8292BEE9018B9D0MW2PR2101MB0988_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-2019-10-01 lttng-tools 2.9.13 (International Coffee Day)
-	* Fix: lttng: out-of-bound copy of arguments in 'view' command handler
-	* sessiond: fix: strncpy called with source length
-	* sessiond: fix: possible unaligned access in packed structure
-	* inet: fix: possible unaligned access in packed structure (inet/inet6)
-	* consumer: fix: unaligned accesses to index fields
-	* lttng: fix: potential 0-length allocation in pid list parsing
-	* Tests: fix: uninitialized session_id used on list_sessions failure
-	* Tests: fix: uninitialized values passed to close() on error
-	* lttng-ctl: fix: lttng_data_pending confuses communication status
-	* Fix typo in regenerate statedump test util
-	* Fix: metadata stream is not marked as quiescent after packet commit
-	* Fix: sessiond: fs.protected_regular sysctl breaks app registration
-	* Fix: lttng-crash: detect truncated files
-	* Fix: use newly created event filter for condition check
-	* Fix: check validity of a stream before invoking ust flush command
-	* Fix: initialize syscall table when kernel tracer is lazily initialized
+SGVsbG8sDQoNClRoYW5rIHlvdSBmb3IgYWxsIHRoZSBnb29kIHdvcmsgd2l0aCBMVFRORyEgV2Xi
+gJlkIGxvdmUgdG8gdXNlIExUVE5HIHRvIGRvIGFuYWx5c2lzIGluIG91ciBzeXN0ZW1zIPCfmIog
+V2UgYXJlIHJ1bm5pbmcgd2l0aCBhIHZlcnkgc3RyaXBwZWQgZG93biB2ZXJzaW9uIG9mIGxpbnV4
+IChubyBwYWNrYWdlIG1hbmFnZXIsIGEgbG90IG9mIGJhc2ljIGZ1bmN0aW9uYWxpdGllcyByZW1v
+dmVkIGV0YykuIFdhcyB3b25kZXJpbmcgaWYgeW91IGtub3cgb2YgYSB3YXkgdG8gc3RhdGljYWxs
+eSBjb21waWxlIExUVE5HIHNvIHRoYXQgd2UgY2FuIHNpbXBseSB1bnBhY2sgb3VyIGluaXRyZC5p
+bWcsIGRyb3AgdGhlIExUVE5HIGJpbmFyaWVzIGluLCByZXBhY2sgaXQsIGFuZCBqdXN0IHJ1biBM
+VFRORyB0byBjb2xsZWN0IGRpYWdub3N0aWMgZGF0YS4gVGhlIGludGVudCBpcyB0byBrZWVwIHRo
+ZSBzeXN0ZW0gYXMgbWluaW1hbCBhcyBwb3NzaWJsZSB3aXRoIExUVE5HIHdvcmtpbmcgaW5zaWRl
+IGl0Lg0KDQpUaGFuayB5b3UsDQpFZGRpZQ0K
 
-As always, please report any issue you may encounter to bugs.lttng.org
-or on this mailing list.
+--_000_MW2PR2101MB0988D353BB406B8292BEE9018B9D0MW2PR2101MB0988_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Project website: https://lttng.org
+PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
+bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
+YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6ZHQ9InV1aWQ6QzJGNDEwMTAtNjVC
+My0xMWQxLUEyOUYtMDBBQTAwQzE0ODgyIiB4bWxuczptPSJodHRwOi8vc2NoZW1hcy5taWNyb3Nv
+ZnQuY29tL29mZmljZS8yMDA0LzEyL29tbWwiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy9UUi9S
+RUMtaHRtbDQwIj4NCjxoZWFkPg0KPG1ldGEgaHR0cC1lcXVpdj0iQ29udGVudC1UeXBlIiBjb250
+ZW50PSJ0ZXh0L2h0bWw7IGNoYXJzZXQ9dXRmLTgiPg0KPG1ldGEgbmFtZT0iR2VuZXJhdG9yIiBj
+b250ZW50PSJNaWNyb3NvZnQgV29yZCAxNSAoZmlsdGVyZWQgbWVkaXVtKSI+DQo8c3R5bGU+PCEt
+LQ0KLyogRm9udCBEZWZpbml0aW9ucyAqLw0KQGZvbnQtZmFjZQ0KCXtmb250LWZhbWlseToiQ2Ft
+YnJpYSBNYXRoIjsNCglwYW5vc2UtMToyIDQgNSAzIDUgNCA2IDMgMiA0O30NCkBmb250LWZhY2UN
+Cgl7Zm9udC1mYW1pbHk6Q2FsaWJyaTsNCglwYW5vc2UtMToyIDE1IDUgMiAyIDIgNCAzIDIgNDt9
+DQovKiBTdHlsZSBEZWZpbml0aW9ucyAqLw0KcC5Nc29Ob3JtYWwsIGxpLk1zb05vcm1hbCwgZGl2
+Lk1zb05vcm1hbA0KCXttYXJnaW46MGluOw0KCW1hcmdpbi1ib3R0b206LjAwMDFwdDsNCglmb250
+LXNpemU6MTEuMHB0Ow0KCWZvbnQtZmFtaWx5OiJDYWxpYnJpIixzYW5zLXNlcmlmO30NCmE6bGlu
+aywgc3Bhbi5Nc29IeXBlcmxpbmsNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0KCWNvbG9yOiMw
+NTYzQzE7DQoJdGV4dC1kZWNvcmF0aW9uOnVuZGVybGluZTt9DQphOnZpc2l0ZWQsIHNwYW4uTXNv
+SHlwZXJsaW5rRm9sbG93ZWQNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0KCWNvbG9yOiM5NTRG
+NzI7DQoJdGV4dC1kZWNvcmF0aW9uOnVuZGVybGluZTt9DQpzcGFuLkVtYWlsU3R5bGUxNw0KCXtt
+c28tc3R5bGUtdHlwZTpwZXJzb25hbC1jb21wb3NlOw0KCWZvbnQtZmFtaWx5OiJDYWxpYnJpIixz
+YW5zLXNlcmlmOw0KCWNvbG9yOndpbmRvd3RleHQ7fQ0KLk1zb0NocERlZmF1bHQNCgl7bXNvLXN0
+eWxlLXR5cGU6ZXhwb3J0LW9ubHk7DQoJZm9udC1mYW1pbHk6IkNhbGlicmkiLHNhbnMtc2VyaWY7
+fQ0KQHBhZ2UgV29yZFNlY3Rpb24xDQoJe3NpemU6OC41aW4gMTEuMGluOw0KCW1hcmdpbjoxLjBp
+biAxLjBpbiAxLjBpbiAxLjBpbjt9DQpkaXYuV29yZFNlY3Rpb24xDQoJe3BhZ2U6V29yZFNlY3Rp
+b24xO30NCi0tPjwvc3R5bGU+PCEtLVtpZiBndGUgbXNvIDldPjx4bWw+DQo8bzpzaGFwZWRlZmF1
+bHRzIHY6ZXh0PSJlZGl0IiBzcGlkbWF4PSIxMDI2IiAvPg0KPC94bWw+PCFbZW5kaWZdLS0+PCEt
+LVtpZiBndGUgbXNvIDldPjx4bWw+DQo8bzpzaGFwZWxheW91dCB2OmV4dD0iZWRpdCI+DQo8bzpp
+ZG1hcCB2OmV4dD0iZWRpdCIgZGF0YT0iMSIgLz4NCjwvbzpzaGFwZWxheW91dD48L3htbD48IVtl
+bmRpZl0tLT4NCjwvaGVhZD4NCjxib2R5IGxhbmc9IkVOLVVTIiBsaW5rPSIjMDU2M0MxIiB2bGlu
+az0iIzk1NEY3MiI+DQo8ZGl2IGNsYXNzPSJXb3JkU2VjdGlvbjEiPg0KPHAgY2xhc3M9Ik1zb05v
+cm1hbCI+SGVsbG8sPG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48bzpwPiZu
+YnNwOzwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPlRoYW5rIHlvdSBmb3IgYWxsIHRo
+ZSBnb29kIHdvcmsgd2l0aCBMVFRORyEgV2XigJlkIGxvdmUgdG8gdXNlIExUVE5HIHRvIGRvIGFu
+YWx5c2lzIGluIG91ciBzeXN0ZW1zDQo8c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7U2Vn
+b2UgVUkgRW1vamkmcXVvdDssc2Fucy1zZXJpZiI+JiMxMjg1MjI7PC9zcGFuPiBXZSBhcmUgcnVu
+bmluZyB3aXRoIGEgdmVyeSBzdHJpcHBlZCBkb3duIHZlcnNpb24gb2YgbGludXggKG5vIHBhY2th
+Z2UgbWFuYWdlciwgYSBsb3Qgb2YgYmFzaWMgZnVuY3Rpb25hbGl0aWVzIHJlbW92ZWQgZXRjKS4g
+V2FzIHdvbmRlcmluZyBpZiB5b3Uga25vdyBvZiBhIHdheSB0byBzdGF0aWNhbGx5IGNvbXBpbGUg
+TFRUTkcgc28gdGhhdA0KIHdlIGNhbiBzaW1wbHkgdW5wYWNrIG91ciBpbml0cmQuaW1nLCBkcm9w
+IHRoZSBMVFRORyBiaW5hcmllcyBpbiwgcmVwYWNrIGl0LCBhbmQganVzdCBydW4gTFRUTkcgdG8g
+Y29sbGVjdCBkaWFnbm9zdGljIGRhdGEuIFRoZSBpbnRlbnQgaXMgdG8ga2VlcCB0aGUgc3lzdGVt
+IGFzIG1pbmltYWwgYXMgcG9zc2libGUgd2l0aCBMVFRORyB3b3JraW5nIGluc2lkZSBpdC48bzpw
+PjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxvOnA+Jm5ic3A7PC9vOnA+PC9wPg0K
+PHAgY2xhc3M9Ik1zb05vcm1hbCI+VGhhbmsgeW91LDxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCI+RWRkaWU8bzpwPjwvbzpwPjwvcD4NCjwvZGl2Pg0KPC9ib2R5Pg0KPC9odG1s
+Pg0K
 
-Download link:
-https://lttng.org/files/lttng-tools/lttng-tools-2.9.13.tar.bz2
+--_000_MW2PR2101MB0988D353BB406B8292BEE9018B9D0MW2PR2101MB0988_--
 
-GPG sig:
-https://lttng.org/files/lttng-tools/lttng-tools-2.9.13.tar.bz2.asc
+--===============6937879102002167520==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============6937879102002167520==--
