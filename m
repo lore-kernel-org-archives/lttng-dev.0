@@ -1,20 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [EXTERNAL] Re: Problem with application changing UID
-Date: Mon, 30 Sep 2019 15:56:08 -0400 (EDT)
-Message-ID: <1505194855.4263.1569873368480.JavaMail.zimbra__31059.2722542182$1569873385$gmane$org@efficios.com>
-References: <SN4PR0601MB3614967ABCE12621B316C89D91840@SN4PR0601MB3614.namprd06.prod.outlook.com>
- <20190924150754.GG187569@joraj-alpa>
- <SN4PR0601MB36143DD719CB75559F9ABDD891840@SN4PR0601MB3614.namprd06.prod.outlook.com>
- <SN4PR0601MB36145C3D44B796739CD7AF0691810@SN4PR0601MB3614.namprd06.prod.outlook.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] LTTng-Tools 2.11.0-rc4 - Lafontaine
+Date: Tue, 1 Oct 2019 18:04:38 -0400
+Message-ID: <20191001220438.GA52120__34498.6433557764$1569967499$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 46htST5Wb7z1P75
- for <lttng-dev@lists.lttng.org>; Mon, 30 Sep 2019 15:56:09 -0400 (EDT)
-In-Reply-To: <SN4PR0601MB36145C3D44B796739CD7AF0691810@SN4PR0601MB3614.namprd06.prod.outlook.com>
+Received: from mail-qt1-f193.google.com (mail-qt1-f193.google.com
+ [209.85.160.193])
+ by lists.lttng.org (Postfix) with ESMTPS id 46jYGM3n8wzq4K
+ for <lttng-dev@lists.lttng.org>; Tue,  1 Oct 2019 18:04:43 -0400 (EDT)
+Received: by mail-qt1-f193.google.com with SMTP id u40so23697753qth.11
+ for <lttng-dev@lists.lttng.org>; Tue, 01 Oct 2019 15:04:43 -0700 (PDT)
+Received: from gmail.com (192-222-181-218.qc.cable.ebox.net. [192.222.181.218])
+ by smtp.gmail.com with ESMTPSA id r7sm8601174qkf.124.2019.10.01.15.04.39
+ for <lttng-dev@lists.lttng.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 01 Oct 2019 15:04:40 -0700 (PDT)
+Content-Disposition: inline
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,140 +27,119 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "Kramer, Zach" <Zach.Kramer@cognex.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gU2VwIDI3LCAyMDE5LCBhdCAxMDowNyBBTSwgS3JhbWVyLCBaYWNoIFphY2guS3Jh
-bWVyQGNvZ25leC5jb20gd3JvdGU6Cgo+IEhpLAo+IAo+IEZvbGxvd2luZyB1cCBvbiB0aGlzLgo+
-IAo+IFVuZm9ydHVuYXRlbHkgSSB3YXMgbm90IGFibGUgdG8gdGVzdCB0aGUgcGF0Y2ggYmVjYXVz
-ZSBvdXIgYnVpbGQgc3lzdGVtIHJlbGllcwo+IG9uIHVzaW5nIHRoZSBsdHRuZyB2ZXJzaW9uIHBy
-b3ZpZGVkIGJ5IHBva3kgLS0gdXBkYXRpbmcgaXMgbm90IHNvbWV0aGluZyB3ZSBjYW4KPiBlYXNp
-bHkgZG8uCj4gCj4gSSBzZWVtaW5nbHkgc29sdmVkIHRoaXMgcHJvYmxlbSBpbiBhbm90aGVyIG1h
-bm5lciwgdGhvdWdoLiBJIGJ1aWx0IHRoZQo+IHRyYWNlcG9pbnQgcHJvdmlkZXIgcGFja2FnZSBp
-bnRvIGEgc2hhcmVkIG9iamVjdCBhbmQgZGxvcGVuKCkgaXQgYWZ0ZXIgdGhlIHJvb3QKPiBwcml2
-aWxlZ2VzIGhhdmUgYmVlbiBkcm9wcGVkLiBUaGlzIHNlZW1zIHRvIGhhdmUgc29sdmVkIHRoZSBV
-SUQgcHJvYmxlbSwKPiBiZWNhdXNlIHRoZSBhcHAgb25seSByZWdpc3RlcnMgaXRzZWxmIHVuZGVy
-IHRoZSBVSUQgdGhhdCBpdCB3aWxsIHRyYWNlIHVuZGVyLgo+IAo+IFRoaXMgcmVzdWx0ZWQgaW4g
-YW5vdGhlciBwcm9ibGVtLCB3aGljaCBpcyB0aGF0IHRoZSBtZXRhZGF0YSBkb2VzIG5vdCBleGlz
-dAo+IHVudGlsIHRoZSBzZXNzaW9uIGlzIHN0b3BwZWQsCgpUaGlzIGlzIGV4cGVjdGVkLgoKPiBh
-bmQgb25jZSB0aGUgc2Vzc2lvbiBpcyBzdGFydGVkIGFnYWluIGl0IGlzIG5vIGxvbmdlciB0cmFj
-aW5nLgoKV2VsbCB0aGF0IG1lYW5zIHlvdXIgc29sdXRpb24gZG9lcyBub3QgY29tcGxldGVseSB3
-b3JrLgoKPiBJbiB0aGUgbHR0bmcgZG9jdW1lbnRhdGlvbiBJIGZvdW5kOgo+IAo+ICJJbXBvcnRh
-bnQ6IFlvdSBuZWVkIHRvIHN0b3AgdHJhY2luZyB0byBtYWtlIExUVG5nIGZsdXNoIHRoZSByZW1h
-aW5pbmcgdHJhY2UKPiBkYXRhIGFuZCBtYWtlIHRoZSB0cmFjZSByZWFkYWJsZS4iCj4gCj4gSSBp
-bnRlcnByZXRlZCB0aGlzIGFzICJ0aGUgbWV0YWRhdGEgd2lsbCBub3QgZXhpc3QgdW50aWwgdGhl
-IHNlc3Npb24gaXMKPiBzdG9wcGVkLiIgSXMgdGhpcyBjb3JyZWN0Pwo+IAo+IFJlZ2FyZGxlc3Ms
-IEkgZW5hYmxlZCB0aGUgY2hhbm5lbCAnbWV0YWRhdGEnIGFuZCBjb25maWd1cmVkIGl0IHRvIGZs
-dXNoIHZpYSB0aGUKPiBzd2l0Y2ggdGltZXIsIHdoaWNoIHRoZW4gZ2l2ZXMgbXkgdHJhY2VzIG1l
-dGFkYXRhLgo+IAo+IE15IHByb2JsZW0gdGh1cyBpcyBzZWVtaW5nbHkgc29sdmVkLiBEbyB5b3Ug
-c2VlIGFueSBmbGF3cyBvbiB0aGUgbHR0bmcgc2lkZSBvZgo+IHRoaXMgYXBwcm9hY2g/CgpJZiB5
-b3Ugd2FudCB0byBjb25zdW1lIHlvdXIgdHJhY2VzIHdpdGhvdXQgc3RvcHBpbmcgdHJhY2luZywg
-eW91IG5lZWQgdG8gdXNlCnRoZSBsdHRuZyAibGl2ZSIgbW9kZSBvciB0aGUgbmV3ICJzZXNzaW9u
-IHJvdGF0aW9uIiBmZWF0dXJlIGludHJvZHVjZWQgaW4gbHR0bmcKMi4xMS4KCldpdGhvdXQgdGhv
-c2UgZmVhdHVyZXMsIHJlYWRpbmcgYSB0cmFjZSB3aGlsZSBpdCdzIGJlaW5nIHByb2R1Y2VkIGlz
-IHJhY3kgYW5kIG1heQp5aWVsZCB0byBjb3JydXB0ZWQgdHJhY2VzLgoKVGhhbmtzLAoKTWF0aGll
-dQoKCj4gCj4gQmVzdCwKPiBaYWNoCj4gCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0KPiBG
-cm9tOiBsdHRuZy1kZXYgPGx0dG5nLWRldi1ib3VuY2VzQGxpc3RzLmx0dG5nLm9yZz4gT24gQmVo
-YWxmIE9mIEtyYW1lciwgWmFjaAo+IFNlbnQ6IFR1ZXNkYXksIFNlcHRlbWJlciAyNCwgMjAxOSA2
-OjAxIFBNCj4gVG86IEpvbmF0aGFuIFJham90dGUtSnVsaWVuIDxqb25hdGhhbi5yYWpvdHRlLWp1
-bGllbkBlZmZpY2lvcy5jb20+Cj4gQ2M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTdWJq
-ZWN0OiBSZTogW2x0dG5nLWRldl0gW0VYVEVSTkFMXSBSZTogUHJvYmxlbSB3aXRoIGFwcGxpY2F0
-aW9uIGNoYW5naW5nIFVJRAo+IAo+IEhpLAo+IAo+IFRoYW5rcyBmb3IgdGhlIHF1aWNrIHJlc3Bv
-bnNlISBUaGlzIGxvb2tzIGludGVyZXN0aW5nIC0tIEkgd2lsbCBleHBlcmltZW50IHdpdGgKPiBp
-dCBhbmQgY29tZSBiYWNrIHdpdGggYW55IHJlc3VsdHMuCj4gCj4gQ2hlZXJzLAo+IFphY2gKPiAK
-PiAKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQo+IEZyb206IEpvbmF0aGFuIFJham90dGUt
-SnVsaWVuIDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+Cj4gU2VudDogVHVl
-c2RheSwgU2VwdGVtYmVyIDI0LCAyMDE5IDU6MDggUE0KPiBUbzogS3JhbWVyLCBaYWNoIDxaYWNo
-LktyYW1lckBjb2duZXguY29tPgo+IENjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gU3Vi
-amVjdDogW0VYVEVSTkFMXSBSZTogW2x0dG5nLWRldl0gUHJvYmxlbSB3aXRoIGFwcGxpY2F0aW9u
-IGNoYW5naW5nIFVJRAo+IAo+IEhpIFphY2gsCj4gCj4gVGhhbmtzIGZvciByZWFjaGluZyBvdXQu
-Cj4gCj4gbHR0bmctdXN0IGRvZXMgbm90IHN1cHBvcnQgdGhlIGNoYW5nZSBvZiB1aWQgb25jZSB0
-aGUgYXBwbGljYXRpb24gaXMgcmVnaXN0ZXJlZAo+IHRvIHRoZSBsdHRuZy1zZXNzaW9uZCBkYWVt
-b24uIEkgdGhpbmsgdGhhdCB3ZSB1c2UgdGhlIHVpZCByZWNlaXZlZCBvbgo+IHJlZ2lzdHJhdGlv
-biBmb3IgYWxsIHN1YnNlcXVlbnQgb3BlcmF0aW9ucy4KPiAKPiBHYWJyaWVsIFBvbGxvLUd1aWxi
-ZXJ0IGFjdHVhbGx5IHdvcmtlZCBvbiB0aGlzIHRoaXMgc3VtbWVyLiBZb3UgY2FuIGNoZWNrIG91
-dAo+IHRoZSBwcm9wb3NlZCB3cmFwcGVyIGZvciBzZXR1aWQgaGVyZSBbMV0uIFlvdSB3aWxsIG5l
-ZWQgdG8gTERfUFJFTE9BRCBpdCBvbiB0aGUKPiBzdGFydCBvZiB5b3UgYXBwbGljYXRpb24uIEl0
-IGJhc2ljYWxseSB1bnJlZ2lzdGVyIHRoZSBhcHBsaWNhdGlvbiBhbmQKPiByZS1yZWdpc3RlciBp
-dC4KPiAKPiBbMV0KPiBodHRwczovL25hbTA0LnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2su
-Y29tLz91cmw9aHR0cHMlM0ElMkYlMkZsaXN0cy5sdHRuZy5vcmclMkZwaXBlcm1haWwlMkZsdHRu
-Zy1kZXYlMkYyMDE5LUp1bmUlMkYwMjkwMzUuaHRtbCZhbXA7ZGF0YT0wMiU3QzAxJTdDemFjaC5r
-cmFtZXIlNDBjb2duZXguY29tJTdDNTE1ZTgwMjJhODM4NDhjN2U5N2YwOGQ3NDEwODZiY2UlN0Nj
-MTIwMDdhNDg4MmI0MzgxYjA1YWI3ODM0MzE1NzBjNyU3QzElN0MwJTdDNjM3MDQ5Mzc2NzMxNzQ4
-MDUxJmFtcDtzZGF0YT1YWE11c050Y0xNeW5POFFoSFUyMjBQbHEwNlA3cXZyaGVuSUZCRmNUdTBB
-JTNEJmFtcDtyZXNlcnZlZD0wCj4gVGhpcyBzaG91bGQgYmUgYXBwbGllZCBvbiBtYXN0ZXIgb2Yg
-bHR0bmctdXN0Lgo+IE1ha2Ugc3VyZSB0byB1c2UgbHR0bmctdG9vbHMgbWFzdGVyIGFsc28uIFNh
-bWUgZm9yIGx0dG5nLW1vZHVsZXMgaWYgbmVjZXNzYXJ5Lgo+IAo+IFdvdWxkIHlvdSBiZSBpbnRl
-cmVzdGVkIGluIGdpdmluZyBpdCBhIHRyeT8KPiAKPiBDaGVlcnMKPiAKPiBPbiBUdWUsIFNlcCAy
-NCwgMjAxOSBhdCAwMjozMjo0MVBNICswMDAwLCBLcmFtZXIsIFphY2ggd3JvdGU6Cj4+IEhpLAo+
-Pgo+PiBJcyBMVFRuZyBpbnRlbmRlZCB0byBzdXBwb3J0IHVzZXJzcGFjZSBhcHBsaWNhdGlvbnMg
-dGhhdCBjaGFuZ2UgdGhlaXIgVUlEIGF0Cj4+IHJ1bi10aW1lPyBBcyBpbiwgaXMgdGhlcmUgYW4g
-ZXhwZWN0ZWQgYmVoYXZpb3IgZm9yIHdoZW4gdGhpcyBoYXBwZW5zPwo+Pgo+PiBGb3IgZXhhbXBs
-ZToKPj4KPj4gICAxLiAgRW1iZWRkZWQgZGV2aWNlIGJvb3RzCj4+ICAgMi4gIE15IGRhZW1vbiBp
-cyBsYXVuY2hlZCBhcyByb290IHZpYSBzeXN0ZW1kCj4+ICAgMy4gIFJ1bnMgcHJpdmlsZWdlZCBj
-b2RlCj4+ICAgNC4gIENoYW5nZXMgVUlEIHRvIGEgbGVzcyBwcml2aWxlZ2VkIHVzZXIgKDUwMCkK
-Pj4gICA1LiAgQ3JlYXRlcyBMVFRuZyBzZXNzaW9uCj4+ICAgICAgKiAgIElmIHNlc3Npb24gYWxy
-ZWFkeSBleGlzdHMsIGRlc3Ryb3kgaXQgZmlyc3QKPj4gICA2LiAgPGlmIOKAmHN5c3RlbWN0bCBz
-dG9w4oCZIGlzIGNhbGxlZD46IERlc3Ryb3kgc2Vzc2lvbgo+PiAgICAgICogICBPdGhlcndpc2Ug
-aXQgd2lsbCBiZSBkZXN0cm95ZWQgbmV4dCBkYWVtb24gbGF1bmNoIGluIHN0ZXAgNQo+Pgo+PiBU
-aGlzIGNhdXNlcyBtYW55IGNvbmZsaWN0cyB3aXRoIHRoZSB0cmFjZSBmb2xkZXJzIHRoYXQgYXJl
-IGNyZWF0ZWQuIE1vc3Qgb2YgdGhlCj4+IHRpbWUsIExUVG5nIGNyZWF0ZXMgYSBmb2xkZXIgKyBt
-ZXRhZGF0YSBmb3IgYm90aCByb290IGFuZCB0aGUgdXNlciwgdGhlbiBwdXRzCj4+IHRyYWNlcyBp
-biB0aGUgdXNlciBmb2xkZXIuIE90aGVyIHRpbWVzLCBpdCBtYXkgY3JlYXRlIGEgZm9sZGVyIGp1
-c3QgZm9yIHRoZQo+PiB1c2VyLiBUaGlzIGlzIHNlZW1pbmdseSByYW5kb20sIHNpbmNlIGl04oCZ
-cyBhIGZyZXNoIGRldmljZSBib290IGVhY2ggdGltZS4gSWYKPj4gdGhlIGRhZW1vbiBpcyBsYXVu
-Y2hlZCBkaXJlY3RseSAoaS5lLiBub3QgZnJvbSBzeXN0ZW1kKSwgdGhlbiB0aGUgcm9vdCBmb2xk
-ZXIKPj4gZ2V0cyB0aGUgdHJhY2VzIGFuZCB0aGUgdXNlciBmb2xkZXIgZ2V0cyB0aGUgbWV0YWRh
-dGEuIEhlcmUgaXMgYSBtb3JlIGRldGFpbGVkCj4+IGV4cGxhbmF0aW9uOgo+Pgo+Pgo+PiBDYXNl
-Cj4+IENvbW1hbmQKPj4gUmVzdWx0Cj4+Cj4+IENvbW1lbnRzCj4+IDEKPj4gW0RldmljZSBib290
-XQo+PiBzeXN0ZW1jdGwgc3RhcnQgZGFlbW9uCj4+IOKApi4uL3VpZC81MDAvMzItYml0IC0tPiBo
-YXMgbWV0YWRhdGEgYW5kIHRyYWNlIGxvZ3MKPj4KPj4gTW9zdCB0aW1lcywgdGhpcyBhbHNvIGhh
-cHBlbnM6Cj4+IOKApi4uL3VpZC8wLzMyLWJpdCAtLT4gaGFzIG1ldGFkYXRhIGJ1dCBubyB0cmFj
-ZSBsb2dzCj4+Cj4+IFtjaWQ6aW1hZ2UwMDEucG5nQDAxRDU2RjlELkFGMTU4NzcwXQo+PiBPY2Nh
-c2lvbmFsbHksIHRoZSB1aWQvMCBmb2xkZXIgaXMgbm90IGNyZWF0ZWQgYXQgYWxsLiBUaGlzIHNl
-ZW1zIHJhbmRvbSwgc2luY2UKPj4gdGhpcyBpcyB0ZXN0ZWQgYnkgcmVib290aW5nIHRoZSBkZXZp
-Y2Ugc2V2ZXJhbCB0aW1lcy4KPj4gMgo+PiBbRGV2aWNlIGJvb3RdCj4+IHN5c3RlbWN0bCBzdGFy
-dCBkYWVtb24KPj4gc3lzdGVtY3RsIHN0b3AgZGFlbW9uCj4+Cj4+ICAgKiAgIFRoaXMgdXNlcyBM
-VFRuZyBDLUFQSSB0byBkZXN0cm95IHNlc3Npb24KPj4g4oCmLi4vdWlkLzUwMC8zMi1iaXQgLS0+
-IGhhcyBtZXRhZGF0YSBidXQgdGhlIGxvZ3Mgd2VyZSBjbGVhcmVkCj4+Cj4+IE1vc3QgdGltZXMs
-IHRoaXMgYWxzbyBoYXBwZW5zOgo+PiDigKYuLi91aWQvMC8zMi1iaXQgLS0+IGhhcyBtZXRhZGF0
-YSBidXQgbm8gdHJhY2UgbG9ncwo+Pgo+PiBbY2lkOmltYWdlMDAxLnBuZ0AwMUQ1NkY5RC5BRjE1
-ODc3MF0KPj4gVGhlIGxvZ3MgYXJlIGNsZWFyZWQgd2hlbiDigJhsdHRuZyBkZXN0cm95IHNlc3Pi
-gJkgaXMgY2FsbGVkIHZpYSB0aGUgTFRUbmcgQy1BUEkuCj4+IEZyb20gbXkgdW5kZXJzdGFuZGlu
-ZywgdGhpcyBzaG91bGQgbm90IGhhcHBlbi4KPj4KPj4gRGVzdHJveWluZyB0aGUgZGFlbW9uIGZy
-b20gY29tbWFuZCBsaW5lIGJlaGF2ZXMgcHJvcGVybHkuIEZyb20gbXkgdW5kZXJzdGFuZGluZywK
-Pj4gdGhpcyBzaG91bGQgYmUgcHJhY3RpY2FsbHkgdGhlIGV4YWN0IHNhbWUgY29tbWFuZC4KPj4g
-Mwo+PiByb290QGRldmljZTogZGFlbW9uCj4+Cj4+IChsYXVuY2hpbmcgdmlhIGNvbW1hbmQtbGlu
-ZSkKPj4gV2hlbiBkYWVtb24gaXMga2lsbGVkIG9yIHNlc3Npb24gaXMgc3RvcHBlZDogbWltaWNz
-IGNhc2UgMQo+Pgo+PiBXaGVuIGRhZW1vbiBpcyBhbGl2ZToKPj4g4oCmLi91aWQvMC8zMi1iaXQg
-LS0+IGhhcyB0cmFjZSBsb2dzIGJ1dCBlbXB0eSBtZXRhZGF0YQo+Pgo+PiDigKYuL3VpZC81MDAv
-MzItYml0IC0tPiBoYXMgbWV0YWRhdGEgYnV0IGVtcHR5IHRyYWNlIGxvZ3MKPj4gW2NpZDppbWFn
-ZTAwMi5wbmdAMDFENTZGOUQuQUYxNTg3NzBdCj4+Cj4+Cj4+IElzIHRoaXMgdXNlLWNhc2Ugc3Vw
-cG9ydGVkPwo+Pgo+PiBVbmZvcnR1bmF0ZWx5LCB0aGUgbG9ncyBhcmUgaHVnZSBhbmQgY29udGFp
-biBzZW5zaXRpdmUgaW5mb3JtYXRpb24uIElmIHRoZXkgY2FuCj4+IGhlbHAgYSBzdWJzdGFudGlh
-bCBhbW91bnQsIEkgY2FuIHBydW5lIHRoZW0uCj4+Cj4+IFRoYW5rcyBhbmQgYmVzdCByZWdhcmRz
-LAo+PiBaYWNoCj4gCj4gCj4gCj4gCj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwo+PiBodHRwczovL25hbTA0LnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxv
-b2suY29tLz91cmw9aHR0cHMlM0ElMkYlMkZsaXN0Cj4+IHMubHR0bmcub3JnJTJGY2dpLWJpbiUy
-Rm1haWxtYW4lMkZsaXN0aW5mbyUyRmx0dG5nLWRldiZhbXA7ZGF0YT0wMiU3QzAKPj4gMSU3Q1ph
-Y2guS3JhbWVyJTQwY29nbmV4LmNvbSU3QzBmYTYxMDk0NWI2YTQ4NTdjZTA0MDhkNzQxMDBmYTcw
-JTdDYzEyMAo+PiAwN2E0ODgyYjQzODFiMDVhYjc4MzQzMTU3MGM3JTdDMSU3QzAlN0M2MzcwNDkz
-NDQ4MDg3MDI0NDImYW1wO3NkYXRhPW1BCj4+IHVZQ0JoeHFTZE51WVNlY21rNEZtbGF1akg4eUVY
-N0hHRWkwWXN3NGtvJTNEJmFtcDtyZXNlcnZlZD0wCj4gCj4gCj4gLS0KPiBKb25hdGhhbiBSYWpv
-dHRlLUp1bGllbgo+IEVmZmljaU9TCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwo+IGh0dHBzOi8vbmFtMDQuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5j
-b20vP3VybD1odHRwcyUzQSUyRiUyRmxpc3RzLmx0dG5nLm9yZyUyRmNnaS1iaW4lMkZtYWlsbWFu
-JTJGbGlzdGluZm8lMkZsdHRuZy1kZXYmYW1wO2RhdGE9MDIlN0MwMSU3Q3phY2gua3JhbWVyJTQw
-Y29nbmV4LmNvbSU3QzUxNWU4MDIyYTgzODQ4YzdlOTdmMDhkNzQxMDg2YmNlJTdDYzEyMDA3YTQ4
-ODJiNDM4MWIwNWFiNzgzNDMxNTcwYzclN0MxJTdDMCU3QzYzNzA0OTM3NjczMTc1ODA0MiZhbXA7
-c2RhdGE9bTJmNDVVdE5CZ0kyUFBGJTJCcUt4T2xTb2tiWm5UeVlEZkFKZVVMaUFGaHY0JTNEJmFt
-cDtyZXNlcnZlZD0wCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5n
-Lm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
-dHRuZy1kZXYKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cu
-ZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
-czovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi everyone!
+
+Today marks the release of the fourth release candidates of the LTTng
+2.11 "Lafontaine" release cycle.
+
+This release is named after a modern Saison beer from Montr=E9al's
+Oshlag microbrewery. It is a refreshing, zesty, rice beer with hints
+of fruit and spices. Some even say it makes for a great Somaek when
+mixed with Chamisul Soju, not that we've tried!
+
+Lafontaine is also a tongue-in-cheek reference to a water leak that
+affected EfficiOS's offices during the development of this release.
+
+A summary of the new features introduced in LTTng 2.11 is available
+here:
+https://github.com/lttng/lttng-tools/releases/tag/v2.11.0-rc1
+
+2019-10-01 lttng-tools 2.11.0-rc4 (International Coffee Day)
+	* Fix: Tests: Segfault in `test_utils_expand_path()`
+	* Fix: lttng-ctl: missing __cplusplus closing brace
+	* Fix: trace chunk reported unknown before close command execution
+	* Fix: sessiond: leak of application socket on chmod failure
+	* sessiond: clean-up: silence warning that agent event is leaked
+	* Fix: tests: leak of prefix on error to register lttng namespace
+	* Fix: use newly created event filter for condition check
+	* Fix: lttng-crash: detect truncated files
+	* Fix: sessiond: fs.protected_regular sysctl breaks app registration
+	* relayd: clean-up: mix-up between LTTNG_PATH_MAX and LTTNG_NAME_MAX
+	* Fix: destroy command: put consumer output after destroy notifier
+	* Refactor: remove logically dead code
+	* Fix: Null check before destroying health_sessiond
+	* Fix: Move initialization of queue_pipe_fd after null check of handle
+	* Fix: release reference to new chunk on copy error
+	* Fix: Close socket handle on error
+	* Fix: lttng: out-of-bound copy of arguments in 'view' command handler
+	* Revert "lttng: fix: out-of-bounds copy of original 'view' command argume=
+nts"
+	* Fix: relayd: session destruction does not complete in live mode
+	* Add a copy method to the trace chunk interface
+	* relayd: move viewer stream chunk reference release to destroy
+	* relayd: move relay_session locking outside of make_viewer_streams
+	* Fix: release reference to trace chunk on index file creation failure
+	* trace-chunk: clean-up: mark close command properties as static const
+	* trace-chunk: clean-up: misleading label name
+	* ust-consumer: fix: metadata stream lock taken before destroy
+	* sessiond: fix: memory leak of section name in elf parser
+	* kconsumer: clean-up: initialize ctf_index before populating it
+	* sessiond: fix: strncpy called with source length
+	* sessiond: fix: possible unaligned access in packed structure
+	* relayd: clean-up: strncpy uses the length of the source as length
+	* lttng: fix: out-of-bounds copy of original 'view' command arguments
+	* lttng: clean-up: silence bogus string truncation warning
+	* sessiond: clean-up: mixed log levels enums used to look-up event
+	* sessiond: fix: possible unaligned access in packed structure
+	* sessiond: fix: possible unaligned access in packed structure
+	* sessiond: fix: possible unaligned access in packed structure
+	* sessiond: fix: possible unaligned access in packed structure
+	* lttng-ctl: fix: possible unaligned access in packed structure
+	* lttng-ctl rotate: fix: possible unaligned access in packed structure
+	* runas: fix: possible unaligned access in packed structure
+	* consumer: fix: possible unaligned access in packed structure
+	* inet: fix: possible unaligned access in packed structure (inet/inet6)
+	* consumer: fix: unaligned accesses to index fields
+	* lttng-sessiond: clean-up: set free'd pointer to NULL
+	* lttng: fix: potential 0-length allocation in pid list parsing
+	* Tests: fix: uninitialized session_id used on list_sessions failure
+	* Tests: fix: uninitialized values passed to close() on error
+	* Clean-up: assert that get_count_order() returns a positive value
+	* Clean-up: suppress bogus scan-build warning
+	* Tests: fix: leak caused by misuse of realloc in multi-lib-test
+	* sessiond: clean-up: init ret value of _session_set_trace_chunk_no_lock_c=
+heck
+	* sessiond: fix: print_escaped_ctf_string mishandles empty string
+	* lttng-ctl: fix: lttng_data_pending confuses communication status
+	* relayd: fix: rotate_truncate_stream() assumes non-null next chunk
+	* Fix: dereference of NULL pointer in stream_write()
+	* Fix: report bytecode_push failure when pushing symbol
+	* Fix: only invoke PERROR() on failure to close sessiond_socket
+	* Clean-up: lttng: check status returned when checking rotation state
+	* Fix: communication error unreported in relay_rotate_session_streams
+	* Fix: unreported error in relay_close_trace_chunk
+	* Clean-up: remove dead assignment from ht cleanup thread launcher
+	* Clean-up: remove dead assignment from thread_rotation
+	* Clean-up: remove dead assignment in setup_channel_trace_path
+	* Clean-up: remove dead assignments while setting session trace chunk
+	* Fix: report path truncation on addition of local uri to consumer
+	* Clean-up: lttng: silence warning in regenerate command handler
+	* Clean-up: lttng: silence warning in metadata command handler
+	* Clean-up: remove NULL check on sesison_create mandatory arguments
+	* Fix: session may be NULL in relay_create_session error path
+	* Clean-up: silence erroneous leak warning
+	* Fix: leak of lttng_elf_shdr in lttng-elf.c
+	* Fix: leaked chunk reference in lttng_consumer_create_trace_chunk
+	* Clean-up: remove unused stream file creation and unlink functions
+	* Fix: use the trace chunk to truncate streams on late rotation
+	* Clean-up: format using remaining buffer len rather than total len
+	* Fix sessiond: report flush errors on session stop
+	* Fix: leak of trace_path on error in ust_app_snapshot_record
+	* Fix: uninitialized directory handle finalized on error path
+	* Fix: release reference to created chunk if it can't be published
+	* Fix: destroy chunk registry on element creation failure
+	* Fix: return NULL on trace chunk registry failure
+	* Fix: forward fatal error in evaluate_condition_for_client()
+	* Fix relayd: check for NULL in session_put
+	* Fix typo in regenerate statedump test util
+
+Links
+---
+
+Project website: https://lttng.org
+
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.11.0-rc4.tar.bz2
