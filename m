@@ -1,20 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: use of extern before tracepoint definition
-Date: Mon, 7 Oct 2019 12:12:29 -0400 (EDT)
-Message-ID: <1006210612.2621.1570464749934.JavaMail.zimbra__774.564726610549$1570464776$gmane$org@efficios.com>
-References: <CACJEY86Mkpd2umxzFbHo9b11RSyEcNAVJyS5vaOjNw4iJDj-qg@mail.gmail.com>
+Subject: Re: two tracepoints header files of one provider
+Date: Mon, 7 Oct 2019 12:22:19 -0400 (EDT)
+Message-ID: <625499791.2728.1570465339442.JavaMail.zimbra__10335.7583911688$1570465355$gmane$org@efficios.com>
+References: <CACJEY85GRrq=dHRfbnvuRqAgP_cF-ErWn4k3vK=DtCH6QvxSdQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 46n59C0w2Dzr4l
- for <lttng-dev@lists.lttng.org>; Mon,  7 Oct 2019 12:12:31 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 46n5NX3QgLz17H0
+ for <lttng-dev@lists.lttng.org>; Mon,  7 Oct 2019 12:22:20 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id A1066262DA9
- for <lttng-dev@lists.lttng.org>; Mon,  7 Oct 2019 12:12:30 -0400 (EDT)
-In-Reply-To: <CACJEY86Mkpd2umxzFbHo9b11RSyEcNAVJyS5vaOjNw4iJDj-qg@mail.gmail.com>
+ by mail.efficios.com (Postfix) with ESMTP id 00F4924638E
+ for <lttng-dev@lists.lttng.org>; Mon,  7 Oct 2019 12:22:20 -0400 (EDT)
+In-Reply-To: <CACJEY85GRrq=dHRfbnvuRqAgP_cF-ErWn4k3vK=DtCH6QvxSdQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,42 +27,38 @@ To: Yonghong Yan <yanyh15@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-CgotLS0tLSBPbiBPY3QgNywgMjAxOSwgYXQgMTI6MDYgUE0sIFlvbmdob25nIFlhbiB5YW55aDE1
-QGdtYWlsLmNvbSB3cm90ZToKCj4gSSBhbSBub3Qgc3VyZSB3aGV0aGVyIHRoaXMgaXMgYSBidWcg
-b3IgdGhlIHdyb25nIEkgYW0gdXNpbmcgaXQuIFdoZW4gSSB1c2UKPiBleHRlcm4gZGVjbGFyYXRp
-b24gYXMgZm9sbG93cywgSSBhbHdheXMgaGF2ZSBjb21waWxhdGlvbiBlcnJvci4gSSB1c2VkIHRo
-ZQo+IGVhc3ktdXN0IHRvIGRlbW9uc3RyYXRlOgoKPiBkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVz
-L2Vhc3ktdXN0L3NhbXBsZV9jb21wb25lbnRfcHJvdmlkZXIuaAo+IGIvZG9jL2V4YW1wbGVzL2Vh
-c3ktdXN0L3NhbXBsZV9jb21wb25lbnRfcHJvdmlkZXIuaAoKPiBpbmRleCBkZDNjNWYwLi5lNzBk
-NjUwIDEwMDY0NAoKPiAtLS0gYS9kb2MvZXhhbXBsZXMvZWFzeS11c3Qvc2FtcGxlX2NvbXBvbmVu
-dF9wcm92aWRlci5oCgo+ICsrKyBiL2RvYy9leGFtcGxlcy9lYXN5LXVzdC9zYW1wbGVfY29tcG9u
-ZW50X3Byb3ZpZGVyLmgKCj4gQEAgLTYxLDYgKzYxLDggQEAKCj4gKi8KCj4gI2luY2x1ZGUgPGx0
-dG5nL3RyYWNlcG9pbnQuaD4KCj4gK2V4dGVybiBpbnQgdGVzdGludChpbnQgaSk7CgpUaGUgdHJh
-Y2Vwb2ludCBwcm92aWRlciBoZWFkZXIgaXMgaW5jbHVkZWQgd2l0aGluIHRoZSBsdHRuZy11c3Qg
-dHJhY2Vwb2ludApoZWFkZXIgZ2VuZXJhdGlvbiBpbiBtdWx0aXBsZSBwYXNzZXMuIFRoZXJlZm9y
-ZSwgeW91IHNob3VsZCBub3QgYWRkICJhbnkiCmNvZGUgaW4gdGhpcyBoZWFkZXIuIEVsc2UgeW91
-IG5lZWQgdG8gZ3VhcmQgaXQgd2l0aCBwcmVjb21waWxlciBjb25kaXRpb25hbHMKdG8gZW5zdXJl
-IGl0IGlzIG9ubHkgZW1pdHRlZCB0aGUgZmlyc3QgdGltZSB0aGUgaGVhZGVyIGlzIGluY2x1ZGVk
-LCBhbmQgbm90CnRoZSBmb2xsb3dpbmcgdGltZXMuCgplLmcuCgojaWZuZGVmIFNBTVBMRV9DT01Q
-T05FTlRfUFJPVklERVJfT05DRQojZGVmaW5lIFNBTVBMRV9DT01QT05FTlRfUFJPVklERVJfT05D
-RQoKZXh0ZXJuIGludCB0ZXN0aW50KGludCBpKTsKCiNlbmRpZgoKVGhhbmtzLAoKTWF0aGlldQoK
-Cgo+ICsKCj4gLyoKCj4gKiBUaGUgZm9sbG93aW5nIHRyYWNlcG9pbnQgZXZlbnQgd3JpdGVzIGEg
-bWVzc2FnZSAoYyBzdHJpbmcpIGludG8gdGhlCgo+ICogZmllbGQgbWVzc2FnZSBvZiB0aGUgdHJh
-Y2UgZXZlbnQgbWVzc2FnZSBpbiB0aGUgcHJvdmlkZXIKCj4geWFueWhAdm0gOiB+L3Rvb2xzL2x0
-dG5nL2x0dG5nLXVzdC9kb2MvZXhhbXBsZXMvZWFzeS11c3QgJCBtYWtlCgo+IGNjIC1JLiBcCgo+
-IC1zYXZlLXRlbXBzIC1jIC1vIHNhbXBsZS5vIHNhbXBsZS5jCgo+IGNjIC1JLiBcCgo+IC1zYXZl
-LXRlbXBzIC1jIC1vIHRwLm8gdHAuYwoKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gL3Vzci9pbmNs
-dWRlL2x0dG5nL3VzdC10cmFjZXBvaW50LWV2ZW50Lmg6OTc0OjAgLAoKPiBmcm9tIC91c3IvaW5j
-bHVkZS9sdHRuZy90cmFjZXBvaW50LWV2ZW50Lmg6NTggLAoKPiBmcm9tIHNhbXBsZV9jb21wb25l
-bnRfcHJvdmlkZXIuaDoxMzcgLAoKPiBmcm9tIHRwLmM6MzMgOgoKPiAuLy4vc2FtcGxlX2NvbXBv
-bmVudF9wcm92aWRlci5oOjY0OjE6IGVycm9yOiBleHBlY3RlZCBleHByZXNzaW9uIGJlZm9yZSDi
-gJggZXh0ZXJuCj4g4oCZCgo+IGV4dGVybiBpbnQgdGVzdGludChpbnQgaSk7Cgo+IF4KCj4gTWFr
-ZWZpbGU6MzQ6IHJlY2lwZSBmb3IgdGFyZ2V0ICd0cC5vJyBmYWlsZWQKCj4gbWFrZTogKioqIFt0
-cC5vXSBFcnJvciAxCgo+IFRoYW5rIHlvdQoKPiBZb25naG9uZwoKPiBfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZm
-aWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgo=
+
+
+----- On Oct 7, 2019, at 9:59 AM, Yonghong Yan yanyh15@gmail.com wrote:
+
+> For lttng-ust, can I put the tracepoint definition in two files, but they use
+> the same provider.
+
+Based on the terminology here: https://lttng.org/docs/v2.10/#doc-tracing-your-own-user-application
+
+You need to have at most one instance of your tracepoint provider where
+the header is included with TRACEPOINT_CREATE_PROBES, and exactly one
+instance where TRACEPOINT_DEFINE is defined. (both can end up being within
+the same object if you wish).
+
+Then you can include your tracepoint provider header file at will across
+other compile units in your program. Just make sure none of 
+TRACEPOINT_CREATE_PROBES nor TRACEPOINT_DEFINE are defined in those other
+compile units. You can therefore call tracepoints from a given probe from
+various compile units in your program.
+
+Hoping this helps clarifying things,
+
+Mathieu
+
+> Thank you.
+> Yonghong
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
