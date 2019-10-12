@@ -1,14 +1,14 @@
 From: Milian Wolff via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: hiding lttng-ust-internal syscalls from record?
-Date: Sat, 12 Oct 2019 12:54:51 +0200
-Message-ID: <5322462.3xMDDC0yJl__2315.35911313898$1570878243$gmane$org@agathebauer>
+Subject: babeltrace: access to event domain?
+Date: Sat, 12 Oct 2019 13:57:26 +0200
+Message-ID: <524329382.RODtPacbDJ__3255.65552791289$1570881466$gmane$org@agathebauer>
 Reply-To: Milian Wolff <milian.wolff@kdab.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5249108759733898111=="
+Content-Type: multipart/mixed; boundary="===============2749281819905100846=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by lists.lttng.org (Postfix) with ESMTPS id 46r24c2cJlz1Phw
- for <lttng-dev@lists.lttng.org>; Sat, 12 Oct 2019 07:03:44 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 46r3Gf47hqz1Pl4
+ for <lttng-dev@lists.lttng.org>; Sat, 12 Oct 2019 07:57:30 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,126 +21,29 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============5249108759733898111==
-Content-Type: multipart/signed; boundary="nextPart4073216.vALiDWoFip";
+--===============2749281819905100846==
+Content-Type: multipart/signed; boundary="nextPart2763758.o1nkq3EQi5";
  micalg="sha256"; protocol="application/pkcs7-signature"
 
---nextPart4073216.vALiDWoFip
+--nextPart2763758.o1nkq3EQi5
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 
 Hey all,
 
-I'll give two presentations on LTTng in the coming months, at Qt World Summit 
-and then at ESE Kongress. For demo purposes I setup a yocto build on an older 
-NXP IMX.6 board I had flying around in the office. I stumbled upon an 
-unexpected trace point order issue with lttng-ust:
+how can I figure out what domain an event belongs to? I.e. whether it's an ust 
+or a kernel event? In the debug output of babeltrace I can see it, but looking 
+at the sources it seems to be quite convoluted to get access to the domain. Am 
+I overlooking something, or is it basically impossible to access that 
+information through the babeltrace API?
 
-These are the versions for the various LTTng related tools:
-
-```
-sources/poky/meta/recipes-kernel/lttng$ ls
-babeltrace_1.5.3.bb  lttng-modules  lttng-modules_2.10.5.bb  lttng-tools  
-lttng-tools_2.9.5.bb  lttng-ust  lttng-ust_2.10.1.bb
-```
-
-Everything works like a charm, except for a surprising side-effect when 
-recording LTTng-UST trace points. I have never seen the following two issues 
-before on my x86-64 host:
-
-1) The syscalls done by lttng-ust internally seem to be recorded, which is not 
-desirable for me - I would prefer to only record the syscalls actually done by 
-the user application itself, not by lttng-ust. Is there a way to do that?
-
-2) Oddly enough, the clock_gettime syscall is improperly nested with the ust 
-syscall, i.e. the order observed for all ust trace events is:
-
-    syscall_entry_getcpu
-    syscall_exit_getcpu
-    syscall_entry_clock_gettime
-    ust_event
-    syscall_exit_clock_gettime
-
-This cannot be correct. Has anyone ever seen that? How can I resolve this - 
-does anyone know? Here's an excerpt from babeltrace (v1.5.6 on my host):
-
-```
-[09:36:23.999290417] (+0.000320667) imx6qsabresd syscall_entry_getcpu: { 
-cpu_id = 3 }, { tcache = 0x0 }
-[09:36:23.999297084] (+0.000006667) imx6qsabresd syscall_exit_getcpu: { cpu_id 
-= 3 }, { ret = 0, cpup = 0x7EA3B8FC, nodep = 0x0, tcache = 0x0 }
-[09:36:23.999305084] (+0.000008000) imx6qsabresd syscall_entry_clock_gettime: 
-{ cpu_id = 3 }, { which_clock = 1 }
-[09:36:23.999308084] (+0.000003000) imx6qsabresd qtcore:QObject_ctor: { cpu_id 
-= 3 }, { object = 0x7EA3BC84 }
-[09:36:23.999311417] (+0.000003333) imx6qsabresd syscall_exit_clock_gettime: { 
-cpu_id = 3 }, { ret = 0, tp = 2124659000 }
-[09:36:23.999341084] (+0.000029667) imx6qsabresd syscall_entry_getcpu: { 
-cpu_id = 3 }, { tcache = 0x0 }
-[09:36:23.999345417] (+0.000004333) imx6qsabresd syscall_exit_getcpu: { cpu_id 
-= 3 }, { ret = 0, cpup = 0x7EA3B88C, nodep = 0x0, tcache = 0x0 }
-[09:36:23.999350417] (+0.000005000) imx6qsabresd syscall_entry_clock_gettime: 
-{ cpu_id = 3 }, { which_clock = 1 }
-[09:36:23.999352417] (+0.000002000) imx6qsabresd 
-qtgui:QGuiApplicationPrivate_init_entry: { cpu_id = 3 }, { }
-[09:36:23.999355084] (+0.000002667) imx6qsabresd syscall_exit_clock_gettime: { 
-cpu_id = 3 }, { ret = 0, tp = 2124658888 }
-[09:36:23.999376417] (+0.000021333) imx6qsabresd syscall_entry_getcpu: { 
-cpu_id = 3 }, { tcache = 0x0 }
-[09:36:23.999380417] (+0.000004000) imx6qsabresd syscall_exit_getcpu: { cpu_id 
-= 3 }, { ret = 0, cpup = 0x7EA3B844, nodep = 0x0, tcache = 0x0 }
-[09:36:23.999385084] (+0.000004667) imx6qsabresd syscall_entry_clock_gettime: 
-{ cpu_id = 3 }, { which_clock = 1 }
-[09:36:23.999387084] (+0.000002000) imx6qsabresd 
-qtcore:QCoreApplicationPrivate_init_entry: { cpu_id = 3 }, { }
-[09:36:23.999389084] (+0.000002000) imx6qsabresd syscall_exit_clock_gettime: { 
-cpu_id = 3 }, { ret = 0, tp = 2124658816 }
-```
-
-Here's how I configure the LTTng session:
-
-```
-#!/bin/sh
-
-if [ ! -d /tmp/lttng ]; then
-    mkdir /tmp/lttng
-fi
-
-lttng create -o /tmp/lttng/$(date -Iseconds)
-
-lttng enable-channel kernel -k
-
-kernel_events=(
-  "sched_switch,sched_process_*"
-  "lttng_statedump_*"
-  kmem_{mm_page,cache}_{alloc,free}
-  power_cpu_frequency
-  block_rq_{issue,complete,requeue}
-  "irq_*"
-  "signal_*"
-  "workqueue_*"
-)
-
-for event in "${kernel_events[@]}"; do
-    lttng enable-event -c kernel -k "$event"
-done
-
-lttng enable-event -c kernel -k --syscall -a
-
-lttng enable-channel ust -u
-lttng enable-event -c ust -u -a
-
-lttng start
-```
-
-Any help would be appreciated
-
+Thanks
 -- 
 Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
 KDAB (Deutschland) GmbH, a KDAB Group company
 Tel: +49-30-521325470
 KDAB - The Qt, C++ and OpenGL Experts
---nextPart4073216.vALiDWoFip
+--nextPart2763758.o1nkq3EQi5
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -205,21 +108,21 @@ cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
 c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
 BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
 EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkxMDEyMTA1NDUxWjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgazD6jPFAR6OPUn1qOkrFRVzvDqPx
-B2i8tdJUEfGMTA0wDQYJKoZIhvcNAQEBBQAEggEAGUuflpkIpEqMnDXIrZFdx1f/LNAtxlZEwraZ
-VJvvBM093Il6MGIFdiM/mk3VyFyVfvewwZCksmyxRyLfx7jP/OpqD0CUNum4KTTfUdqKQuO/vQty
-f+iZhCoEY00Z57xaOuvSTx5bjI7kolgZF7rUQNvlA7quNX89R5q+j7hYSDTtcxTonyl4L8PTLB3V
-nXvCjklY7tHwjT6i248KBjn2vSbOlHpRt/kPdHUiikiuZzXIdP5Achfn76PdjWY6xhI3VNSLTNa+
-hdBFl3zpLDB6g7ysPf7k1PSLfYN7kRTCR1U1Xqc4bHpiIJeOHum0yS3aWsaZJeMXZkEYWkK2AncH
-KAAAAAAAAA==
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkxMDEyMTE1NzI3WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgndLRVI7mvxLu0XqC5zaNeIz9OcDz
+XintbMoQnryNV1kwDQYJKoZIhvcNAQEBBQAEggEARQQfyt0wJ/o0gmnw2V8oA0qQwwSGaUlQoRAI
+cxhIDfS1JJ1FxJDDIpVLsJyKh1rVBN/DRpHjDqQaPsRo+ixGSBH8dF3BhiLcTlJqBpEDCXYjUtrP
+wnlcJ565IHQMcmd2Io/5+50gAqwtwH3QqAaK4CaO5htmbr4YDKWMhl01p0kcnEwTOHFODJVU83lI
+2E6xGnoa78TWYO4JdP9DuBOb8P0Ttk6Hu6RruIdwUwj7JtShoFUz/eLIucURfjgvs0fX+Xh5Jl8k
+U6JuW+d0NYX2Kv0jZ/iFUZVXV90KISHotfYubgLF//nvIv5ILdzRSZRM6xYw6ZGc2NHEtexRJiP8
+7gAAAAAAAA==
 
 
---nextPart4073216.vALiDWoFip--
+--nextPart2763758.o1nkq3EQi5--
 
 
 
---===============5249108759733898111==
+--===============2749281819905100846==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -230,4 +133,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============5249108759733898111==--
+--===============2749281819905100846==--
