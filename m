@@ -1,14 +1,18 @@
 From: Milian Wolff via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: babeltrace: access to event domain?
-Date: Sat, 12 Oct 2019 13:57:26 +0200
-Message-ID: <524329382.RODtPacbDJ__3255.65552791289$1570881466$gmane$org@agathebauer>
+Subject: Re: tracing page_faults with lttng?
+Date: Sat, 12 Oct 2019 23:31:51 +0200
+Message-ID: <3174598.JndGstr8t1__1357.6266517461$1570915940$gmane$org@agathebauer>
+References: <1807360.trHWC9KRqs@milian-kdab2>
+ <CADcCL0i-gZHviy_QZq_Krj_2zXiYvF-Z8BLu-3uQyA0anBfO-g@mail.gmail.com>
+ <2312247.5OrstNElbn@milian-kdab2>
 Reply-To: Milian Wolff <milian.wolff@kdab.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2749281819905100846=="
+Content-Type: multipart/mixed; boundary="===============4711851813061235902=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by lists.lttng.org (Postfix) with ESMTPS id 46r3Gf47hqz1Pl4
- for <lttng-dev@lists.lttng.org>; Sat, 12 Oct 2019 07:57:30 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 46rJ1T4ky9z1Q1V
+ for <lttng-dev@lists.lttng.org>; Sat, 12 Oct 2019 17:31:57 -0400 (EDT)
+In-Reply-To: <2312247.5OrstNElbn@milian-kdab2>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,29 +25,49 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2749281819905100846==
-Content-Type: multipart/signed; boundary="nextPart2763758.o1nkq3EQi5";
+--===============4711851813061235902==
+Content-Type: multipart/signed; boundary="nextPart4529615.6cTlKRxWR9";
  micalg="sha256"; protocol="application/pkcs7-signature"
 
---nextPart2763758.o1nkq3EQi5
+--nextPart4529615.6cTlKRxWR9
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 
-Hey all,
+On Montag, 29. Mai 2017 10:44:50 CEST Milian Wolff wrote:
+> On Wednesday, May 24, 2017 6:26:38 PM CEST Francis Deslauriers wrote:
+> > Hi Milian,
+> > Are you running on an x86 processor?
+> 
+> Yes, Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz.
+> 
+> > The pagefault tracepoints are called : x86_exceptions_page_fault_user,
+> > x86_exceptions_page_fault_kernel
+> > Can you see those tracepoints when you run: lttng list --kernel
+> 
+> Yes:
+> 
+> $ lttng list --kernel | grep fault
+>       x86_exceptions_page_fault_user (loglevel: TRACE_EMERG (0)) (type:
+> tracepoint)
+>       x86_exceptions_page_fault_kernel (loglevel: TRACE_EMERG (0)) (type:
+> tracepoint)
+>       kvm_async_pf_doublefault (loglevel: TRACE_EMERG (0)) (type:
+> tracepoint)
 
-how can I figure out what domain an event belongs to? I.e. whether it's an ust 
-or a kernel event? In the debug output of babeltrace I can see it, but looking 
-at the sources it seems to be quite convoluted to get access to the domain. Am 
-I overlooking something, or is it basically impossible to access that 
-information through the babeltrace API?
+Hey there,
+
+a follow up to the above question: What about tracing page faults on ARM? Perf 
+can do that, but I see no page_fault trace points in the output of `lttng list 
+-k`?
 
 Thanks
+
 -- 
 Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
 KDAB (Deutschland) GmbH, a KDAB Group company
 Tel: +49-30-521325470
 KDAB - The Qt, C++ and OpenGL Experts
---nextPart2763758.o1nkq3EQi5
+--nextPart4529615.6cTlKRxWR9
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -108,21 +132,21 @@ cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
 c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
 BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
 EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkxMDEyMTE1NzI3WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgndLRVI7mvxLu0XqC5zaNeIz9OcDz
-XintbMoQnryNV1kwDQYJKoZIhvcNAQEBBQAEggEARQQfyt0wJ/o0gmnw2V8oA0qQwwSGaUlQoRAI
-cxhIDfS1JJ1FxJDDIpVLsJyKh1rVBN/DRpHjDqQaPsRo+ixGSBH8dF3BhiLcTlJqBpEDCXYjUtrP
-wnlcJ565IHQMcmd2Io/5+50gAqwtwH3QqAaK4CaO5htmbr4YDKWMhl01p0kcnEwTOHFODJVU83lI
-2E6xGnoa78TWYO4JdP9DuBOb8P0Ttk6Hu6RruIdwUwj7JtShoFUz/eLIucURfjgvs0fX+Xh5Jl8k
-U6JuW+d0NYX2Kv0jZ/iFUZVXV90KISHotfYubgLF//nvIv5ILdzRSZRM6xYw6ZGc2NHEtexRJiP8
-7gAAAAAAAA==
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkxMDEyMjEzMTUxWjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgjs1L8BV6IPhkcW+ojwjdcSmObS73
+e3IkOSPzUAZtiT8wDQYJKoZIhvcNAQEBBQAEggEAcozJj1a4MKgsZvklLW3eotuAo/MiJMSCDRlP
+d88zVbhjODfNMAHuUjJfaFUlIkxYB/jEBZ2aQhYdHvvccYw05KSOO9oyPMvSQewer1vZi5IzG6St
+1SkSboyxLatnwPlNlIfrJBhq1b8Q78msN3u944U2AFfKzZ5pW+iPY2U+WVHm0RPcHPX36+dHEII5
+UZdfX9gLoARRypMu3Fi1pBpJRlmgqZaYX3tnVVz+M03PH8OzMrQkOXR8ul/BOGx3AgxRTONjRvXo
+qWUi/rSRAq0qgjzbtiru8VXEeeMz2f79L1Knftgsh3I/L237Ijg9VVkmJsrCiVCPwNMzaMNIR75X
+eQAAAAAAAA==
 
 
---nextPart2763758.o1nkq3EQi5--
+--nextPart4529615.6cTlKRxWR9--
 
 
 
---===============2749281819905100846==
+--===============4711851813061235902==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -133,4 +157,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2749281819905100846==--
+--===============4711851813061235902==--
