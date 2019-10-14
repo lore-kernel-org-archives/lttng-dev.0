@@ -1,18 +1,16 @@
-From: Milian Wolff via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: tracing page_faults with lttng?
-Date: Sat, 12 Oct 2019 23:31:51 +0200
-Message-ID: <3174598.JndGstr8t1__1357.6266517461$1570915940$gmane$org@agathebauer>
-References: <1807360.trHWC9KRqs@milian-kdab2>
- <CADcCL0i-gZHviy_QZq_Krj_2zXiYvF-Z8BLu-3uQyA0anBfO-g@mail.gmail.com>
- <2312247.5OrstNElbn@milian-kdab2>
-Reply-To: Milian Wolff <milian.wolff@kdab.com>
+From: David Boles <biblioboles@gmail.com>
+Subject: Difficulty extending existing tracepoint's reporting
+Date: Mon, 14 Oct 2019 16:23:51 -0500
+Message-ID: <CAOxd4f5xL_OWh79s0kG0X9cFbgdkqZqzodnkOjVHwGndHOT75g__7975.6045060762$1571146015$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4711851813061235902=="
+Content-Type: multipart/mixed; boundary="===============3100593212364199261=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by lists.lttng.org (Postfix) with ESMTPS id 46rJ1T4ky9z1Q1V
- for <lttng-dev@lists.lttng.org>; Sat, 12 Oct 2019 17:31:57 -0400 (EDT)
-In-Reply-To: <2312247.5OrstNElbn@milian-kdab2>
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com
+ [IPv6:2607:f8b0:4864:20::d43])
+ by lists.lttng.org (Postfix) with ESMTPS id 46sWlS3rXjzpdF
+ for <lttng-dev@lists.lttng.org>; Mon, 14 Oct 2019 17:24:04 -0400 (EDT)
+Received: by mail-io1-xd43.google.com with SMTP id z19so41204701ior.0
+ for <lttng-dev@lists.lttng.org>; Mon, 14 Oct 2019 14:24:04 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,128 +23,85 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============4711851813061235902==
-Content-Type: multipart/signed; boundary="nextPart4529615.6cTlKRxWR9";
- micalg="sha256"; protocol="application/pkcs7-signature"
+--===============3100593212364199261==
+Content-Type: multipart/alternative; boundary="000000000000a37a8b0594e57ca2"
 
---nextPart4529615.6cTlKRxWR9
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+--000000000000a37a8b0594e57ca2
+Content-Type: text/plain; charset="UTF-8"
 
-On Montag, 29. Mai 2017 10:44:50 CEST Milian Wolff wrote:
-> On Wednesday, May 24, 2017 6:26:38 PM CEST Francis Deslauriers wrote:
-> > Hi Milian,
-> > Are you running on an x86 processor?
-> 
-> Yes, Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz.
-> 
-> > The pagefault tracepoints are called : x86_exceptions_page_fault_user,
-> > x86_exceptions_page_fault_kernel
-> > Can you see those tracepoints when you run: lttng list --kernel
-> 
-> Yes:
-> 
-> $ lttng list --kernel | grep fault
->       x86_exceptions_page_fault_user (loglevel: TRACE_EMERG (0)) (type:
-> tracepoint)
->       x86_exceptions_page_fault_kernel (loglevel: TRACE_EMERG (0)) (type:
-> tracepoint)
->       kvm_async_pf_doublefault (loglevel: TRACE_EMERG (0)) (type:
-> tracepoint)
+I am trying to widen the information reported by the block_rq_complete()
+tracepoint, but am unable to get my extension to take affect. Basically,
+I'd like 3 additional numbers captured at that point.
 
-Hey there,
+So far, I've failed to succeed in this effort. As part of trying to
+determine what is going on, I've created a new tracepoint definition in
+include/trace/event/block.h which defines block_rq_complete_ex, which is
+just like block_rq_complete but with my additional fields. I've altered the
+trace_block_rq_complete() call in block/blk-core.c to be
+trace_block_rq_complete_ex().
 
-a follow up to the above question: What about tracing page faults on ARM? Perf 
-can do that, but I see no page_fault trace points in the output of `lttng list 
--k`?
+Other than block_rq_complete being mentioned in blktrace.c (which *seems*
+to be unrelated to the LTTng tracing), everywhere there is a mention of
+block_rq_complete there is a matching mention of block_rq_complete_ex.
 
-Thanks
+When I build a kernel (LTTng built in mode), the resulting kernel has
+block_rq_complete_ex text in it. When I boot it, start an LTTng session,
+and list the kernel tracepoints - my new tracepoint isn't listed. If I've
+put a new printk in the kernel, it's output is visible. Any ideas on what
+I'm missing? Things I've checked:
 
--- 
-Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
-KDAB (Deutschland) GmbH, a KDAB Group company
-Tel: +49-30-521325470
-KDAB - The Qt, C++ and OpenGL Experts
---nextPart4529615.6cTlKRxWR9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+ - Built from a distclean'd kernel tree
+ - lttng is "built in" (I ran the scripts/built_in.sh script and confirmed
+the CONFIG_* flags
+ - I can enable the original block_rq_complete tracepoint and collect data
+through it
+ - If instead of having a new tracepoint I just extend the old one, the new
+data doesn't show up
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDEIw
-ggXmMIIDzqADAgECAhBqm+E4O/8ra58B1dm4p1JWMA0GCSqGSIb3DQEBDAUAMIGFMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYD
-VQQKExFDT01PRE8gQ0EgTGltaXRlZDErMCkGA1UEAxMiQ09NT0RPIFJTQSBDZXJ0aWZpY2F0aW9u
-IEF1dGhvcml0eTAeFw0xMzAxMTAwMDAwMDBaFw0yODAxMDkyMzU5NTlaMIGXMQswCQYDVQQGEwJH
-QjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQK
-ExFDT01PRE8gQ0EgTGltaXRlZDE9MDsGA1UEAxM0Q09NT0RPIFJTQSBDbGllbnQgQXV0aGVudGlj
-YXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
-AL6znlesKHZ1QBbHOAOY08YYdiFQ8yV5C0y1oNF9Olg+nKcxLqf2NHbZhGra0D00SOTq9bus3/mx
-gUsg/Wh/eXQ0pnp8tZ8XZWAnlyKMpjL+qUByRjXCA6RQyDMqVaVUkbIr5SU0RDX/kSsKwer3H1pT
-/HUrBN0X8sKtPTdGX8XAWt/VdMLBrZBlgvnkCos+KQWWCo63OTTqRvaq8aWccm+KOMjTcE6s2mj6
-RkalweyDI7X+7U5lNo6jzC8RTXtVV4/Vwdax720YpMPJQaDaElmOupyTf1Qib+cpukNJnQmwygjD
-8m046DQkLnpXNCAGjuJy1F5NATksUsbfJAr7FLUCAwEAAaOCATwwggE4MB8GA1UdIwQYMBaAFLuv
-fgI9+qbxPISOre44mOzZMjLUMB0GA1UdDgQWBBSCr2yM+MX+lmF86B89K3FIXsSLwDAOBgNVHQ8B
-Af8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADARBgNVHSAECjAIMAYGBFUdIAAwTAYDVR0fBEUw
-QzBBoD+gPYY7aHR0cDovL2NybC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2VydGlmaWNhdGlvbkF1
-dGhvcml0eS5jcmwwcQYIKwYBBQUHAQEEZTBjMDsGCCsGAQUFBzAChi9odHRwOi8vY3J0LmNvbW9k
-b2NhLmNvbS9DT01PRE9SU0FBZGRUcnVzdENBLmNydDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3Au
-Y29tb2RvY2EuY29tMA0GCSqGSIb3DQEBDAUAA4ICAQB4XLKBKDRPPO5fVs6fl1bsj6JrF/bz9kkI
-BtTYLzXN30D+03Hj6OxCDBEaIeNmsBhrJmuubvyE7HtoSmR809AgcYboW+rcTNZ/8u/Hv+GTrNI/
-AhqX2/kiQNxmgUPt/eJPs92Qclj0HnVyy9TnSvGkSDU7I5Px+TbO+88G4zipA2psZaWeEykgzClZ
-lPz1FjTCkk77ZXp5cQYYexE6zeeN4/0OqqoAloFrjAF4o50YJafX8mnahjp3I2Y2mkjhk0xQfhNq
-bzlLWPoT3m7j7U26u7zg6swjOq8hITYc3/np5tM5aVyu6t99p17bTbY7+1RTWBviN9YJzK8HxzOb
-XYWBf/L+VGOYNsQDTxAk0Hbvb1j6KjUhg7fO294F29QIhhmiNOr84JHoy+fNLpfvYc/Q9EtFOI5I
-SYgOxLk3nD/whbUe9rmEQXLp8MB933Ij474gwwCPUpwv9mj2PMnXoc7mbrS22XUSeTwxCTP9bcmU
-dp4jmIoWfhQm7X9w/Zgddg+JZ/YnIHOwsGsaTUgj7fIvxqith7DoJC91WJ8Lce3CVJqb1XWeKIJ8
-4F7YLXZN0oa7TktYgDdmQVxYkZo1c5noaDKH9Oq9cbm/vOYRUM1cWcef20Wkyk5S/GFyyPJwG0fR
-1nRas3DqAf4cXxMiEKcff7PNa4M3RGTqH0pWR8p6EjCCBlQwggU8oAMCAQICEAf6KCF9+1doL2oE
-OTPysLwwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1h
-bmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0w
-OwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWls
-IENBMB4XDTE3MDUyMzAwMDAwMFoXDTIwMDUyMjIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0G
-A1UEERMGNjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNV
-BAkTD05vcnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRh
-bGVucyBEYXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNV
-BAsMOklzc3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1h
-bmFnZXIxHzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBX
-b2xmZjEkMCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAxrzfNBVvRbiAknuTBXuQnNm9sLIFLo0vbPB6kswk78A3tA++Zn5c
-lQUHhGlQq1cdYxagnUpqwvG3Sod15mPSOLkAPf/mabLN7p+lFbRaUP+97ZkTZtvb4BCC3osIEFI4
-G393OSFWqc2qmIPE/SwSASbAA20Fcaa2M6P1lhOk/ttUh2jIurTPF0wUycIA7lBddrOgaOA8e2m6
-iLTNHtlrfRbBaUX91D5ebY+UWmIjXSQ9+CtutMzBkwnF0rZKririvOkklg9VzEGNQVHrQfDF2s/U
-pOtmtuVSwElauGT/KALyCFuIrYC1pmaKH8S1xODJqiRaf6jH8E+KQzKjyM/ErwIDAQABo4IB1TCC
-AdEwHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFN+m99RtIuA1bSdw
-6b1brOX7X3AJMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
-BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
-dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
-LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
-Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
-Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
-KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29s
-ZmZAa2RhYi5jb20wDQYJKoZIhvcNAQELBQADggEBABf47LSJADqH+ow9INv3QM1NC/qq2bjxGvsZ
-68iD11VEUAFlsYfsVTgQqUirwPVTYenXtwVBELHZyywsui1JxL7HKQetLQegDDP/RyfjReVaWxhy
-3OpuItsgLVbru9QVgPifnoBFPtfZcwjeJDmeSbLT8oj4Rd0KYBOIve7WKvsfNPsNwfbLwY2zILkE
-LjxZcVi2AwZHDyab+dzL/3YcLuJj1lSawBGn7ilpcdZydlv4aye51pD/MemLIYLcylt+ImrmjnTV
-y+QlAHRF3s5FE8yAr+W1MBD/1bKZCSgFt8VQoAlz3hiQh8QqZp4Zl8WuVL4+mP/mT6VDEWgq/0Bo
-cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
-c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
-BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
-EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkxMDEyMjEzMTUxWjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgjs1L8BV6IPhkcW+ojwjdcSmObS73
-e3IkOSPzUAZtiT8wDQYJKoZIhvcNAQEBBQAEggEAcozJj1a4MKgsZvklLW3eotuAo/MiJMSCDRlP
-d88zVbhjODfNMAHuUjJfaFUlIkxYB/jEBZ2aQhYdHvvccYw05KSOO9oyPMvSQewer1vZi5IzG6St
-1SkSboyxLatnwPlNlIfrJBhq1b8Q78msN3u944U2AFfKzZ5pW+iPY2U+WVHm0RPcHPX36+dHEII5
-UZdfX9gLoARRypMu3Fi1pBpJRlmgqZaYX3tnVVz+M03PH8OzMrQkOXR8ul/BOGx3AgxRTONjRvXo
-qWUi/rSRAq0qgjzbtiru8VXEeeMz2f79L1Knftgsh3I/L237Ijg9VVkmJsrCiVCPwNMzaMNIR75X
-eQAAAAAAAA==
+It really seems like there is a cached or overriding definition of these
+tracepoints that I'm getting instead of what I've compiled. There are
+multiple kernels on the system, but I am booting the kernel I intend to.
 
+Any ideas would be highly appreciated.
 
---nextPart4529615.6cTlKRxWR9--
+ - db
 
+--000000000000a37a8b0594e57ca2
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+<div dir=3D"ltr"><div><div>I am trying to widen the information reported by=
+ the block_rq_complete() tracepoint, but am unable to get my extension to t=
+ake affect. Basically, I&#39;d like 3 additional numbers captured at that p=
+oint.<br></div><div><br></div><div>So far, I&#39;ve failed to succeed in th=
+is effort. As part of trying to determine what is going on, I&#39;ve create=
+d a new tracepoint definition in include/trace/event/block.h which defines =
+block_rq_complete_ex, which is just like block_rq_complete but with my addi=
+tional fields. I&#39;ve altered the trace_block_rq_complete() call in block=
+/blk-core.c to be trace_block_rq_complete_ex().</div><div><br></div><div> O=
+ther than block_rq_complete being mentioned in blktrace.c (which *seems* to=
+ be unrelated to the LTTng tracing), everywhere there is a mention of block=
+_rq_complete there is a matching mention of block_rq_complete_ex.</div><div=
+><br></div><div>When I build a kernel (LTTng built in mode), the resulting =
+kernel has block_rq_complete_ex text in it. When I boot it, start an LTTng =
+session, and list the kernel tracepoints - my new tracepoint isn&#39;t list=
+ed.  If I&#39;ve put a new printk in the kernel, it&#39;s output is visible=
+. Any ideas on what I&#39;m missing? Things I&#39;ve checked:</div><div><br=
+></div><div>=C2=A0- Built from a distclean&#39;d kernel tree</div><div>=C2=
+=A0- lttng is &quot;built in&quot; (I ran the scripts/built_in.sh script an=
+d confirmed the CONFIG_* flags</div><div>=C2=A0- I can enable the original =
+block_rq_complete tracepoint and collect data through it</div><div>=C2=A0- =
+If instead of having a new tracepoint I just extend the old one, the new da=
+ta doesn&#39;t show up<br></div><br></div><div>It really seems like there i=
+s a cached or overriding definition of these tracepoints that I&#39;m getti=
+ng instead of what I&#39;ve compiled. There are multiple kernels on the sys=
+tem, but I am booting the kernel I intend to.</div><div><br></div><div>Any =
+ideas would be highly appreciated.</div><div><br></div><div>=C2=A0- db</div=
+><div><br></div></div>
 
---===============4711851813061235902==
+--000000000000a37a8b0594e57ca2--
+
+--===============3100593212364199261==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -157,4 +112,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============4711851813061235902==--
+--===============3100593212364199261==--
