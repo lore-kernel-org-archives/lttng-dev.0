@@ -1,20 +1,33 @@
 From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: Difficulty extending existing tracepoint's reporting
-Date: Tue, 15 Oct 2019 09:36:42 -0400
-Message-ID: <20191015133642.GA23844__8093.08488839946$1571146627$gmane$org@joraj-alpa>
-References: <CAOxd4f5xL_OWh79s0kG0X9cFbgdkqZqzodnkOjVHwGndHOT75g@mail.gmail.com>
+Subject: LTTng 2.11 new features blog posts
+Date: Wed, 16 Oct 2019 15:33:10 -0400
+Message-ID: <20191016193310.GG23844__29089.248825197$1571254413$gmane$org@joraj-alpa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 46sxKw1w3Yzq83
- for <lttng-dev@lists.lttng.org>; Tue, 15 Oct 2019 09:36:52 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 46tjBc0b6xzr34
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Oct 2019 15:33:11 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id A85AD341DC3
- for <lttng-dev@lists.lttng.org>; Tue, 15 Oct 2019 09:36:46 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 4C8793430F4
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Oct 2019 15:33:11 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
+ with ESMTP id knv4iwPi1MpU for <lttng-dev@lists.lttng.org>;
+ Wed, 16 Oct 2019 15:33:11 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 004763430F1
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Oct 2019 15:33:11 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
+ with ESMTP id 5Q5lehaYQrTJ for <lttng-dev@lists.lttng.org>;
+ Wed, 16 Oct 2019 15:33:10 -0400 (EDT)
+Received: from joraj-alpa (192-222-181-218.qc.cable.ebox.net [192.222.181.218])
+ by mail.efficios.com (Postfix) with ESMTPSA id D47233430E3
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Oct 2019 15:33:10 -0400 (EDT)
 Content-Disposition: inline
-In-Reply-To: <CAOxd4f5xL_OWh79s0kG0X9cFbgdkqZqzodnkOjVHwGndHOT75g@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,17 +37,22 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: David Boles <biblioboles@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi David,
-
-Did you add the lttng tracepoint definition in instrumentation/events/lttng-module/block.h
-as it is done with block_rq_complete? (in lttng-modules source tree)
-
-Cheers
-
--- 
-Jonathan Rajotte-Julien
-EfficiOS
+SGVsbG8gZXZlcnlvbmUhCgpXZSByZWNlbnRseSBwdWJsaXNoZWQgdHdvIGJsb2cgcG9zdHMgWzFd
+WzJdIGNvbmNlcm5pbmcgdXBjb21pbmcgZmVhdHVyZXMgb2YKTFRUbmcgMi4xMS4KClsxXSBpbnRy
+b2R1Y2VzIHRoZSBuZXcgc2Vzc2lvbiByb3RhdGlvbiBmZWF0dXJlIGFsbG93aW5nIHVzZXJzIHRv
+IGNyZWF0ZQpzZWxmLWNvbnRhaW5lZCB0cmFjZSBhcmNoaXZlcyBvbi1kZW1hbmQgdGhhdCBjYW4g
+YmUgYW5hbHl6ZWQgd2hpbGUgdHJhY2luZwpjb250aW51ZXMgaW4gdGhlIGJhY2tncm91bmQuCgpb
+Ml0gZGVtb25zdHJhdGVzIGhvdyB0byBsZXZlcmFnZSB0aGUgbmV3IGR5bmFtaWMgdXNlcnNwYWNl
+IHByb2JlIHN1cHBvcnQuIEl0CmFsbG93cyB5b3UgdG8gYWRkIHRyYWNlcG9pbnRzIGluIHJ1bm5p
+bmcgYXBwcyB3aXRob3V0IG5lZWRpbmcgdG8gcmVjb21waWxlIG9yCmV2ZW4gcmVzdGFydCB0aGVt
+LiBJdCBzdXBwb3J0cyBpbnN0cnVtZW50YXRpb24gb24gRUxGIGZ1bmN0aW9uIHN5bWJvbCBhbmQK
+U3lzdGVtdGFw4oCZcyBTRFQgcHJvYmUgcG9pbnRzLgoKQ2hlZXJzCgpbMV0gaHR0cHM6Ly9sdHRu
+Zy5vcmcvYmxvZy8yMDE5LzEwLzE1L2x0dG5nLXNlc3Npb24tcm90YXRpb24vClsyXSBodHRwczov
+L2x0dG5nLm9yZy9ibG9nLzIwMTkvMTAvMTUvbmV3LWR5bmFtaWMtdXNlci1zcGFjZS10cmFjaW5n
+LWluLWx0dG5nLwoKLS0gCkpvbmF0aGFuIFJham90dGUtSnVsaWVuCkVmZmljaU9TCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
