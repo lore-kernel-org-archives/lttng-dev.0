@@ -1,18 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.9.7 (EOL),
- 2.10.6 (Linux user-space tracer)
-Date: Thu, 17 Oct 2019 16:01:07 -0400 (EDT)
-Message-ID: <656595855.12717.1571342467573.JavaMail.zimbra__504.994571541317$1571342487$gmane$org@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.9.15 (EOL),
+ 2.10.12 (Linux kernel tracer)
+Date: Thu, 17 Oct 2019 16:01:09 -0400 (EDT)
+Message-ID: <1993019012.12718.1571342469013.JavaMail.zimbra__20526.9261424959$1571342523$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 46vKmN4ksBz184D
- for <lttng-dev@lists.lttng.org>; Thu, 17 Oct 2019 16:01:08 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 46vKmP4KVRz184W
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Oct 2019 16:01:09 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 471233453BB
- for <lttng-dev@lists.lttng.org>; Thu, 17 Oct 2019 16:01:08 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 64DF33453CF
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Oct 2019 16:01:09 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,35 +28,22 @@ List-Id: lttng-dev@lists.lttng.org
 
 Hi,
 
-We are pleased to announce the 2.9.7 (EOL) and 2.10.6 stable releases
-of the LTTng-UST 2.9 and 2.10 stable branches.
+We are pleased to announce the 2.9.15 (EOL) and 2.10.12 stable releases
+of the LTTng-modules project 2.9 and 2.10 stable branches.
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer,
-is a low-overhead application tracer. The library "liblttng-ust" enables
-tracing of applications and libraries.
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+tracer toolset.
 
-* New in this release:
+* New in these release:
 
-Important fixes to the lttng-ust fd tracker (liblttng-ust-fd.so) were done,
-taking care of locking the fd tracker across fork() in the liblttng-ust-fork.so
-wrapper, eliminating hangs observed in the child if the parent was executing
-close() concurrently with fork(). Also, given that close() is an async-signal-safe
-function, ensure that the synchronization strategy is robust against signals
-by disabling signals and using a TLS nesting counter when taking the fd tracker
-lock. [1, 2]
+Both releases contain an update the the scheduler "prev_state" field
+of the sched_switch event. It now traces payload which matches the
+various changes that went through the various upstream Linux kernel
+versions.
 
-Another important fix to the lttng-ust fd tracker is disabling thread
-cancellation around fd tracker lock, and locking the fd tracker across
-fork() in the liblttng-ust-fork.so wrapper. Failure to do so causes
-deadlocks in child applications if a pthread cancellation is performed
-on a thread while it ran the liblttng-ust-fd close(3) wrapper. [3]
-
-The locking strategy of the LTTng perf counter contexts was revisited to
-eliminate a deadlock occurring once in a while when using the perf counters
-context with lttng-ust. [4]
-
-Now that the release of LTTng-UST 2.11.0 is imminent, version 2.9.7 marks
-the end of life (EOL) of the 2.9 stable branch of LTTng-UST.
+Now that the release of LTTng-modules 2.11.0 is imminent, version
+2.9.15 marks the end of life (EOL) of the 2.9 stable branch of
+LTTng-modules.
 
 Thanks!
 
@@ -64,11 +52,6 @@ Mathieu
 Project website: http://lttng.org
 Documentation: http://lttng.org/docs
 Download link: http://lttng.org/download
-
-[1] https://bugs.lttng.org/issues/1199
-[2] https://bugs.lttng.org/issues/1200
-[3] https://bugs.lttng.org/issues/1201
-[4] https://bugs.lttng.org/issues/1202
 
 -- 
 Mathieu Desnoyers
