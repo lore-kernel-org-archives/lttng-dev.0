@@ -1,14 +1,15 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-ust] fix: Add missing files to distribution
-Date: Mon, 21 Oct 2019 13:04:14 -0400
-Message-ID: <20191021170414.9048-1-mjeanson__46439.0465220035$1571677489$gmane$org@efficios.com>
+Subject: [PATCH lttng-ust] fix: document proper liburcu version
+ dependency
+Date: Mon, 21 Oct 2019 13:04:31 -0400
+Message-ID: <20191021170431.9141-1-mjeanson__45367.3870580801$1571677517$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 46xjfj1xLnz1QM9
- for <lttng-dev@lists.lttng.org>; Mon, 21 Oct 2019 13:04:29 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 46xjft1dxLz1QMp
+ for <lttng-dev@lists.lttng.org>; Mon, 21 Oct 2019 13:04:37 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,36 +22,22 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- Makefile.am | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile.am b/Makefile.am
-index 810761ca..73b51909 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -34,9 +34,18 @@ SUBDIRS += tests doc
- pkgconfigdir = $(libdir)/pkgconfig
- pkgconfig_DATA = lttng-ust.pc
+diff --git a/README.md b/README.md
+index ff491701..fc2cc6c0 100644
+--- a/README.md
++++ b/README.md
+@@ -11,7 +11,7 @@ user space tracing helpers for any application.
+ Prerequisites
+ -------------
  
--dist_doc_DATA = README.md ChangeLog
--
--dist_noinst_DATA = CodingStyle
-+dist_doc_DATA = \
-+	ChangeLog \
-+	COPYING \
-+	LICENSE \
-+	README.md
-+
-+dist_noinst_DATA = \
-+	CodingStyle \
-+	CONTRIBUTING.md \
-+	gpl-2.0.txt \
-+	lgpl-2.1.txt \
-+	mit-license.txt
+-LTTng-UST depends on [liburcu](http://liburcu.org/) v0.7.2 at build and
++LTTng-UST depends on **[liburcu](http://liburcu.org/) >= 0.11** at build and
+ run times. It also optionally depends on libnuma.
  
- check-loop:
- 	cd tests && $(MAKE) $(AM_MAKEFLAGS) check-loop
+ 
 -- 
 2.17.1
