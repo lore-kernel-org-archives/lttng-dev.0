@@ -1,16 +1,15 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools stable-2.11] fix: check for
- lttng-ust >= 2.11 at configure
-Date: Wed, 23 Oct 2019 11:08:34 -0400
-Message-ID: <20191023150834.6885-1-mjeanson__21637.4959026993$1571843343$gmane$org@efficios.com>
+Subject: [PATCH lttng-ust] Add pkgconfig support for
+ liblttng-ust-ctl
+Date: Wed, 23 Oct 2019 11:11:30 -0400
+Message-ID: <20191023151130.7321-1-mjeanson__44733.4343845554$1571843539$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 46yv0946FszqFn
- for <lttng-dev@lists.lttng.org>; Wed, 23 Oct 2019 11:08:41 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 46yv3Y0tpyzqH1
+ for <lttng-dev@lists.lttng.org>; Wed, 23 Oct 2019 11:11:37 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,38 +20,58 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
-
-We don't support building lttng-tools against an older version of
-lttng-ust, make this check explicitly at configure.
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- configure.ac | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ Makefile.am         |  2 +-
+ configure.ac        |  1 +
+ lttng-ust-ctl.pc.in | 12 ++++++++++++
+ 3 files changed, 14 insertions(+), 1 deletion(-)
+ create mode 100644 lttng-ust-ctl.pc.in
 
+diff --git a/Makefile.am b/Makefile.am
+index 73b51909..cc923c1d 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -32,7 +32,7 @@ SUBDIRS += tests doc
+ # liblttng-ust-malloc
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+-pkgconfig_DATA = lttng-ust.pc
++pkgconfig_DATA = lttng-ust.pc lttng-ust-ctl.pc
+ 
+ dist_doc_DATA = \
+ 	ChangeLog \
 diff --git a/configure.ac b/configure.ac
-index 5c4073ef8..357e2b888 100644
+index 52fc3f68..580e0ee3 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -562,14 +562,13 @@ AC_ARG_WITH([lttng-ust],
+@@ -555,6 +555,7 @@ AC_CONFIG_FILES([
+ 	tests/test-app-ctx/Makefile
+ 	tests/gcc-weak-hidden/Makefile
+ 	lttng-ust.pc
++	lttng-ust-ctl.pc
+ ])
  
- AS_IF([test "x$with_lttng_ust" = "xyes"],
-   [
--    AC_CHECK_LIB([lttng-ust-ctl], [ustctl_recv_channel_from_consumer],
-+    AC_CHECK_LIB([lttng-ust-ctl], [lttng_ust_enum_get_from_desc],
-       [
-         AC_DEFINE([HAVE_LIBLTTNG_UST_CTL], [1])
-       ],
-       [
--        AC_MSG_FAILURE([Cannot find LTTng-UST >= 2.2.x. Use [LDFLAGS]=-Ldir and [CPPFLAGS]=-Idir to specify its location, or specify --without-lttng-ust to build lttng-tools without LTTng-UST support.])
--      ],
--      [-lurcu-common -lurcu-bp -lurcu-cds -lrt -ldl]
-+        AC_MSG_FAILURE([Cannot find LTTng-UST >= 2.11.x. Use [LDFLAGS]=-Ldir and [CPPFLAGS]=-Idir to specify its location, or specify --without-lttng-ust to build lttng-tools without LTTng-UST support.])
-+      ]
-     )
-   ]
- )
+ # Create link for python agent for the VPATH guru.
+diff --git a/lttng-ust-ctl.pc.in b/lttng-ust-ctl.pc.in
+new file mode 100644
+index 00000000..3170b30a
+--- /dev/null
++++ b/lttng-ust-ctl.pc.in
+@@ -0,0 +1,12 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++
++Name: LTTng Userspace Tracer control
++Description: The LTTng Userspace Tracer (UST) is a library accompanied by a set of tools to trace userspace code.
++Version: @PACKAGE_VERSION@
++Requires:
++Libs: -L${libdir} -llttng-ust-ctl
++Cflags: -I${includedir}
++
 -- 
 2.17.1
