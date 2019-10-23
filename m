@@ -1,20 +1,16 @@
-From: "Kramer, Zach" <Zach.Kramer@cognex.com>
-Subject: Re: [EXTERNAL] Re: Trace Compass "Add contexts..."
- option displays XML file
-Date: Wed, 23 Oct 2019 14:10:36 +0000
-Message-ID: <SN4PR0601MB3614F26A2B4E08F215D400CD916B0__3090.64054615504$1571839941$gmane$org@SN4PR0601MB3614.namprd06.prod.outlook.com>
-References: <SN4PR0601MB3614EE30FD26BCBF77558110916B0@SN4PR0601MB3614.namprd06.prod.outlook.com>
- <20191023134848.GA7617@joraj-alpa>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-tools stable-2.11] fix: check for
+ lttng-ust >= 2.11 at configure
+Date: Wed, 23 Oct 2019 11:08:34 -0400
+Message-ID: <20191023150834.6885-1-mjeanson__21637.4959026993$1571843343$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from NAM01-BN3-obe.outbound.protection.outlook.com
- (mail-eopbgr740133.outbound.protection.outlook.com [40.107.74.133])
- by lists.lttng.org (Postfix) with ESMTPS id 46ysjB3jvTzqBD
- for <lttng-dev@lists.lttng.org>; Wed, 23 Oct 2019 10:10:38 -0400 (EDT)
-In-Reply-To: <20191023134848.GA7617@joraj-alpa>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 46yv0946FszqFn
+ for <lttng-dev@lists.lttng.org>; Wed, 23 Oct 2019 11:08:41 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,56 +20,39 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-SGksDQoNClRoYW5rcyBmb3IgdGhlIGFuc3dlci4gSSBmb3J3YXJkZWQgdGhpcyBhbG9uZyB0byB0
-aGVtLg0KDQooSSBhbHNvIGNvbmZpcm1lZCB0aGF0IHRoaXMgcHJvYmxlbSBvbmx5IGV4aXN0cyBp
-biAyLjExLjAgLS0gMi4xMC5YIGlzIHNhZmUgZnJvbSBpdCkuDQoNClRoYW5rcywNClphY2gNCg0K
-LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEpvbmF0aGFuIFJham90dGUtSnVsaWVu
-IDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+IA0KU2VudDogV2VkbmVzZGF5
-LCBPY3RvYmVyIDIzLCAyMDE5IDM6NDkgUE0NClRvOiBLcmFtZXIsIFphY2ggPFphY2guS3JhbWVy
-QGNvZ25leC5jb20+DQpDYzogbHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPg0K
-U3ViamVjdDogW0VYVEVSTkFMXSBSZTogW2x0dG5nLWRldl0gVHJhY2UgQ29tcGFzcyAiQWRkIGNv
-bnRleHRzLi4uIiBvcHRpb24gZGlzcGxheXMgWE1MIGZpbGUNCg0KSGksDQoNCk9uIFdlZCwgT2N0
-IDIzLCAyMDE5IGF0IDEyOjMzOjU5UE0gKzAwMDAsIEtyYW1lciwgWmFjaCB3cm90ZToNCj4gSGks
-DQo+IA0KPiBXaXRoIDIuMTEuMCwgYWRkaW5nIGNvbnRleHRzIG5vIGxvbmdlciB3b3JrcyBmb3Ig
-bWUgaW4gVHJhY2UgQ29tcGFzcyAoNS4xLjApLiBUaGlzIHdvcmtlZCBiZWZvcmUgaW4gbHR0bmct
-dG9vbHMgMi45LjExLg0KPiANCj4gV2hlbiBJIHRyeSB0byBhZGQgY29udGV4dHMgdG8gbXkgY2hh
-bm5lbCBJIGdldCB0aGUgZm9sbG93aW5nIG9wdGlvbnM6DQo+IA0KPiAgICogICBBbGwgQ29udGV4
-dHMNCj4gICAgICAqICAgPD94bWwgdmVyc2lvbj3igJ0xLjDigJ0gZW5jb2Rpbmc94oCdVVRGLTji
-gJ0/Pg0KPiAgICAgICogICA8Y29tbWFuZCB4bWxucz3igJ3igKYuPiAgLy8gRW50aXJlIFhNTCBm
-aWxlDQoNCkFjdHVhbGx5IHRoZSBtaSBzdXBwb3J0IGZvciBsaXN0aW5nIGNvbnRleHQgd2FzIGFk
-ZGVkIGluIDIuMTEgWzFdLiBUaGlzIHNlZW1zIHRvIGJlIHRyYWNlY29tcGFzcyBleHBlY3Rpbmcg
-cmVndWxhciB0ZXh0IG91dHB1dCBkZXNwaXRlIGl0IGlzIHBhc3NpbmcgdGhlICItLW1pIHhtbCIN
-Cm9wdGlvbnMuIFBsZWFzZSByZXBvc3QgdGhpcyBvbiB0aGUgdHJhY2Vjb21wYXNzIG1haWxpbmcg
-bGlzdCBbMl0uDQoNClsxXSBodHRwczovL25hbTA0LnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxv
-b2suY29tLz91cmw9aHR0cHMlM0ElMkYlMkZnaXRodWIuY29tJTJGbHR0bmclMkZsdHRuZy10b29s
-cyUyRmNvbW1pdCUyRjU5ZGVlYzBjMDliNTQ0ZDU0ODcxMWRlYWE2ZDgyMDZlZmU5OWVhMGQmYW1w
-O2RhdGE9MDIlN0MwMSU3Q1phY2guS3JhbWVyJTQwY29nbmV4LmNvbSU3Q2Q3NTE0MTlmNGE2NjRj
-NTAxYmU5MDhkNzU3YmZiZjY2JTdDYzEyMDA3YTQ4ODJiNDM4MWIwNWFiNzgzNDMxNTcwYzclN0Mx
-JTdDMCU3QzYzNzA3NDM1MzM4NTQwNDI4NiZhbXA7c2RhdGE9ZzdES3JkNlhXdzlTYmRIbSUyRndn
-MyUyRnNUdFg0eVpvaDdZSHZJWmYlMkJlZzFGdyUzRCZhbXA7cmVzZXJ2ZWQ9MA0KWzJdIGh0dHBz
-Oi8vbmFtMDQuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1odHRwcyUzQSUy
-RiUyRmFjY291bnRzLmVjbGlwc2Uub3JnJTJGbWFpbGluZy1saXN0JTJGdHJhY2Vjb21wYXNzLWRl
-diZhbXA7ZGF0YT0wMiU3QzAxJTdDWmFjaC5LcmFtZXIlNDBjb2duZXguY29tJTdDZDc1MTQxOWY0
-YTY2NGM1MDFiZTkwOGQ3NTdiZmJmNjYlN0NjMTIwMDdhNDg4MmI0MzgxYjA1YWI3ODM0MzE1NzBj
-NyU3QzElN0MwJTdDNjM3MDc0MzUzMzg1NDE0Mjg0JmFtcDtzZGF0YT13cUJLRThCWlM0NTZKV3Zo
-RmdJWkNuRjNDMWxBbUNrbm5BcjBuOFhZS1VNJTNEJmFtcDtyZXNlcnZlZD0wDQoNCkNoZWVycw0K
-DQo+IA0KPiBEb2VzIGFueW9uZSBlbHNlIGV4cGVyaWVuY2UgdGhpcz8gRGlkIHRoZSBYTUwgc2No
-ZW1hIGNoYW5nZSBpbiBhIHdheSB0aGF0IHJlcXVpcmVzIFRyYWNlIENvbXBhc3MgdG8gdXBkYXRl
-IGl0cyBwYXJzaW5nPw0KPiANCj4gbHR0bmcgYWRkLWNvbnRleHQg4oCTbGlzdCB3b3JrcyBhcyBl
-eHBlY3RlZC4NCj4gDQo+IEJlc3QsDQo+IFphY2gNCj4gDQoNCj4gX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdA0K
-PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnDQo+IGh0dHBzOi8vbmFtMDQuc2FmZWxpbmtzLnBy
-b3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1odHRwcyUzQSUyRiUyRmxpc3QNCj4gcy5sdHRuZy5v
-cmclMkZjZ2ktYmluJTJGbWFpbG1hbiUyRmxpc3RpbmZvJTJGbHR0bmctZGV2JmFtcDtkYXRhPTAy
-JTdDMA0KPiAxJTdDWmFjaC5LcmFtZXIlNDBjb2duZXguY29tJTdDZDc1MTQxOWY0YTY2NGM1MDFi
-ZTkwOGQ3NTdiZmJmNjYlN0NjMTIwDQo+IDA3YTQ4ODJiNDM4MWIwNWFiNzgzNDMxNTcwYzclN0Mx
-JTdDMCU3QzYzNzA3NDM1MzM4NTQxNDI4NCZhbXA7c2RhdGE9V3INCj4gWldjaUk3TTE4TzR5QnJV
-V2xsc1M3YXR6SUZ3YUslMkYlMkZrSnFkdlVUTmJFJTNEJmFtcDtyZXNlcnZlZD0wDQoNCg0KLS0N
-CkpvbmF0aGFuIFJham90dGUtSnVsaWVuDQpFZmZpY2lPUw0KX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYK
+We don't support building lttng-tools against an older version of
+lttng-ust, make this check explicitly at configure.
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ configure.ac | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 5c4073ef8..357e2b888 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -562,14 +562,13 @@ AC_ARG_WITH([lttng-ust],
+ 
+ AS_IF([test "x$with_lttng_ust" = "xyes"],
+   [
+-    AC_CHECK_LIB([lttng-ust-ctl], [ustctl_recv_channel_from_consumer],
++    AC_CHECK_LIB([lttng-ust-ctl], [lttng_ust_enum_get_from_desc],
+       [
+         AC_DEFINE([HAVE_LIBLTTNG_UST_CTL], [1])
+       ],
+       [
+-        AC_MSG_FAILURE([Cannot find LTTng-UST >= 2.2.x. Use [LDFLAGS]=-Ldir and [CPPFLAGS]=-Idir to specify its location, or specify --without-lttng-ust to build lttng-tools without LTTng-UST support.])
+-      ],
+-      [-lurcu-common -lurcu-bp -lurcu-cds -lrt -ldl]
++        AC_MSG_FAILURE([Cannot find LTTng-UST >= 2.11.x. Use [LDFLAGS]=-Ldir and [CPPFLAGS]=-Idir to specify its location, or specify --without-lttng-ust to build lttng-tools without LTTng-UST support.])
++      ]
+     )
+   ]
+ )
+-- 
+2.17.1
