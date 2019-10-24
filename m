@@ -1,17 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Docs: LTTNG-UST(3): missing
- references to some namespace man pages
-Date: Thu, 24 Oct 2019 15:23:14 -0400 (EDT)
-Message-ID: <1547589667.5125.1571944994559.JavaMail.zimbra__44937.6257996605$1571945012$gmane$org@efficios.com>
-References: <20191024190828.147584-1-jeremie.galarneau@efficios.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools stable-2.11] fix: check for
+ lttng-ust >= 2.11 at configure
+Date: Thu, 24 Oct 2019 16:07:36 -0400
+Message-ID: <20191024200736.GA149332__23556.8134159379$1571947683$gmane$org@gmail.com>
+References: <20191023150834.6885-1-mjeanson@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 46zcbR4gKfz1Qh0
- for <lttng-dev@lists.lttng.org>; Thu, 24 Oct 2019 15:23:15 -0400 (EDT)
-In-Reply-To: <20191024190828.147584-1-jeremie.galarneau@efficios.com>
+Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com
+ [209.85.222.194])
+ by lists.lttng.org (Postfix) with ESMTPS id 46zdZh4V8kz1Ql2
+ for <lttng-dev@lists.lttng.org>; Thu, 24 Oct 2019 16:07:40 -0400 (EDT)
+Received: by mail-qk1-f194.google.com with SMTP id f18so24048541qkm.1
+ for <lttng-dev@lists.lttng.org>; Thu, 24 Oct 2019 13:07:40 -0700 (PDT)
+Content-Disposition: inline
+In-Reply-To: <20191023150834.6885-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,43 +25,53 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jeremie Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-bWVyZ2VkIGludG8gdXN0IG1hc3RlciwgdGhhbmtzIQoKTWF0aGlldQoKLS0tLS0gT24gT2N0IDI0
-LCAyMDE5LCBhdCAzOjA4IFBNLCBKZXJlbWllIEdhbGFybmVhdSBqZXJlbWllLmdhbGFybmVhdUBl
-ZmZpY2lvcy5jb20gd3JvdGU6Cgo+IFRoZSBMVFRORy1VU1QoMykgbWFudWFsIHBhZ2UgaXMgbWlz
-c2luZyByZWZlcmVuY2VzIHRvIHRoZSBtb3VudCwKPiBuZXR3b3JrLCBpcGMsIGFuZCB1dHMgbmFt
-ZXNwYWNlIG1hbiBwYWdlcy4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1
-IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gZG9jL21hbi9sdHRuZy11
-c3QuMy50eHQgfCAxMCArKysrKy0tLS0tCj4gMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygr
-KSwgNSBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZG9jL21hbi9sdHRuZy11c3QuMy50
-eHQgYi9kb2MvbWFuL2x0dG5nLXVzdC4zLnR4dAo+IGluZGV4IDFiZDRkMWUwLi4yNTM0NjEyYSAx
-MDA2NDQKPiAtLS0gYS9kb2MvbWFuL2x0dG5nLXVzdC4zLnR4dAo+ICsrKyBiL2RvYy9tYW4vbHR0
-bmctdXN0LjMudHh0Cj4gQEAgLTgwNCwxNSArODA0LDE1IEBAIFRoZSBmb2xsb3dpbmcgbWFuOm5h
-bWVzcGFjZXMoNykgY29udGV4dCBmaWVsZHMgYXJlCj4gc3VwcG9ydGVkIGJ5IExUVG5nLVVTVDoK
-PiAKPiBgaXBjX25zYDo6Cj4gICAgIFN5c3RlbSBWIElQQywgUE9TSVggbWVzc2FnZSBxdWV1ZXMg
-bmFtZXNwYWNlOiBpbm9kZSBudW1iZXIgb2YgdGhlCj4gLSAgICBjdXJyZW50IElQQyBuYW1lc3Bh
-Y2UgaW4gdGhlIHByb2MgZmlsZXN5c3RlbS4KPiArICAgIGN1cnJlbnQgbWFuOmlwY19uYW1lc3Bh
-Y2VzKDcpIG5hbWVzcGFjZSBpbiB0aGUgcHJvYyBmaWxlc3lzdGVtLgo+IAo+IGBtbnRfbnNgOjoK
-PiAtICAgIE1vdW50IHBvaW50cyBuYW1lc3BhY2U6IGlub2RlIG51bWJlciBvZiB0aGUgY3VycmVu
-dCBNb3VudCBuYW1lc3BhY2UKPiAtICAgIGluIHRoZSBwcm9jIGZpbGVzeXN0ZW0uCj4gKyAgICBN
-b3VudCBwb2ludHMgbmFtZXNwYWNlOiBpbm9kZSBudW1iZXIgb2YgdGhlIGN1cnJlbnQKPiArICAg
-IG1hbjptb3VudF9uYW1lc3BhY2VzKDcpIGluIHRoZSBwcm9jIGZpbGVzeXN0ZW0uCj4gCj4gYG5l
-dF9uc2A6Ogo+ICAgICBOZXR3b3JrIGRldmljZXMsIHN0YWNrcywgcG9ydHMgbmFtZXNwYWNlOiBp
-bm9kZSBudW1iZXIgb2YgdGhlCj4gLSAgICBjdXJyZW50IE5ldHdvcmsgbmFtZXNwYWNlIGluIHRo
-ZSBwcm9jIGZpbGVzeXN0ZW0uCj4gKyAgICBjdXJyZW50IG1hbjpuZXR3b3JrX25hbWVzcGFjZXMo
-NykgaW4gdGhlIHByb2MgZmlsZXN5c3RlbS4KPiAKPiBgcGlkX25zYDo6Cj4gICAgIFByb2Nlc3Mg
-SURzIG5hbWVzcGFjZTogaW5vZGUgbnVtYmVyIG9mIHRoZSBjdXJyZW50Cj4gQEAgLTgyNCw3ICs4
-MjQsNyBAQCBUaGUgZm9sbG93aW5nIG1hbjpuYW1lc3BhY2VzKDcpIGNvbnRleHQgZmllbGRzIGFy
-ZSBzdXBwb3J0ZWQKPiBieSBMVFRuZy1VU1Q6Cj4gCj4gYHV0c19uc2A6Ogo+ICAgICBIb3N0bmFt
-ZSBhbmQgTklTIGRvbWFpbiBuYW1lIG5hbWVzcGFjZTogaW5vZGUgbnVtYmVyIG9mIHRoZQo+IC0g
-ICAgY3VycmVudCBVVFMgbmFtZXNwYWNlIGluIHRoZSBwcm9jIGZpbGVzeXN0ZW0uCj4gKyAgICBj
-dXJyZW50IG1hbjp1dHNfbmFtZXNwYWNlcyg3KSBpbiB0aGUgcHJvYyBmaWxlc3lzdGVtLgo+IAo+
-IFRoZSBmb2xsb3dpbmcgbWFuOmNyZWRlbnRpYWxzKDcpIGNvbnRleHQgZmllbGRzIGFyZSBzdXBw
-b3J0ZWQgYnkgTFRUbmctVVNUOgo+IAo+IC0tCj4gMi4yMy4wCgotLSAKTWF0aGlldSBEZXNub3ll
-cnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
-dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Merged in master and stable-2.11. Thanks!
+
+J=E9r=E9mie
+
+On Wed, Oct 23, 2019 at 11:08:34AM -0400, Michael Jeanson wrote:
+> We don't support building lttng-tools against an older version of
+> lttng-ust, make this check explicitly at configure.
+> =
+
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+>  configure.ac | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> =
+
+> diff --git a/configure.ac b/configure.ac
+> index 5c4073ef8..357e2b888 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -562,14 +562,13 @@ AC_ARG_WITH([lttng-ust],
+>  =
+
+>  AS_IF([test "x$with_lttng_ust" =3D "xyes"],
+>    [
+> -    AC_CHECK_LIB([lttng-ust-ctl], [ustctl_recv_channel_from_consumer],
+> +    AC_CHECK_LIB([lttng-ust-ctl], [lttng_ust_enum_get_from_desc],
+>        [
+>          AC_DEFINE([HAVE_LIBLTTNG_UST_CTL], [1])
+>        ],
+>        [
+> -        AC_MSG_FAILURE([Cannot find LTTng-UST >=3D 2.2.x. Use [LDFLAGS]=
+=3D-Ldir and [CPPFLAGS]=3D-Idir to specify its location, or specify --witho=
+ut-lttng-ust to build lttng-tools without LTTng-UST support.])
+> -      ],
+> -      [-lurcu-common -lurcu-bp -lurcu-cds -lrt -ldl]
+> +        AC_MSG_FAILURE([Cannot find LTTng-UST >=3D 2.11.x. Use [LDFLAGS]=
+=3D-Ldir and [CPPFLAGS]=3D-Idir to specify its location, or specify --witho=
+ut-lttng-ust to build lttng-tools without LTTng-UST support.])
+> +      ]
+>      )
+>    ]
+>  )
+> -- =
+
+> 2.17.1
+> =
