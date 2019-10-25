@@ -1,8 +1,8 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools 2/5] Refactor: Move set session path
- to own function
-Date: Fri, 25 Oct 2019 18:12:01 -0400
-Message-ID: <20191025221204.29696-2-jonathan.rajotte-julien__16019.0169861139$1572041608$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 3/5] Cleanup: remove unused internal
+ lttng_session_descriptor_get_base_path
+Date: Fri, 25 Oct 2019 18:12:02 -0400
+Message-ID: <20191025221204.29696-3-jonathan.rajotte-julien__21119.9904255167$1572041638$gmane$org@efficios.com>
 References: <20191025221204.29696-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 470JHx6pswz1PXc
- for <lttng-dev@lists.lttng.org>; Fri, 25 Oct 2019 18:12:13 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 470JHz0KQYz1PY3
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Oct 2019 18:12:15 -0400 (EDT)
 In-Reply-To: <20191025221204.29696-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -29,93 +29,56 @@ List-Id: lttng-dev@lists.lttng.org
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
 
-Feel free to squash this into the previous commit.
+Feel free to squash this into the previous commits.
 
 ---
- src/bin/lttng-sessiond/cmd.c | 64 +++++++++++++++++++++++++-----------
- 1 file changed, 44 insertions(+), 20 deletions(-)
+ include/lttng/session-descriptor-internal.h |  4 ----
+ src/common/session-descriptor.c             | 23 ---------------------
+ 2 files changed, 27 deletions(-)
 
-diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
-index 1dec61ea1..3ee390698 100644
---- a/src/bin/lttng-sessiond/cmd.c
-+++ b/src/bin/lttng-sessiond/cmd.c
-@@ -2739,6 +2739,42 @@ error:
+diff --git a/include/lttng/session-descriptor-internal.h b/include/lttng/session-descriptor-internal.h
+index 18a70bad4..09d493393 100644
+--- a/include/lttng/session-descriptor-internal.h
++++ b/include/lttng/session-descriptor-internal.h
+@@ -109,8 +109,4 @@ int lttng_session_descriptor_assign(
+ 		struct lttng_session_descriptor *dst_descriptor,
+ 		const struct lttng_session_descriptor *src_descriptor);
+ 
+-LTTNG_HIDDEN
+-int lttng_session_descriptor_get_base_path(struct lttng_session_descriptor *dst,
+-		const char **base_path);
+-
+ #endif /* LTTNG_SESSION_DESCRIPTOR_INTERNAL_H */
+diff --git a/src/common/session-descriptor.c b/src/common/session-descriptor.c
+index 6dea5ee7c..224138dd2 100644
+--- a/src/common/session-descriptor.c
++++ b/src/common/session-descriptor.c
+@@ -1176,26 +1176,3 @@ int lttng_session_descriptor_assign(
+ end:
  	return ret;
  }
- 
-+/*
-+ * Set the base_path of the session only if subdir of a control uris is set.
-+ * Return LTTNG_OK on success, otherwise LTTNG_ERR_*.
-+ */
-+static int set_session_base_path_from_uris(struct ltt_session *session,
-+		size_t nb_uri,
-+		struct lttng_uri *uris)
-+{
-+	int ret;
-+	for (int i = 0; i < nb_uri; i++) {
-+		if (uris[i].stype != LTTNG_STREAM_CONTROL ||
-+				uris[i].subdir[0] == '\0') {
-+			/* Not interested in these URIs */
-+			continue;
-+		}
-+
-+		if (session->base_path != NULL) {
-+			free(session->base_path);
-+			session->base_path = NULL;
-+		}
-+
-+		/* Set session base_path */
-+		session->base_path = strdup(uris[i].subdir);
-+		if (!session->base_path) {
-+			PERROR("Copying base path: %s", uris[i].subdir);
-+			ret = LTTNG_ERR_NOMEM;
-+			goto error;
-+		}
-+		DBG2("Setting base path for session %" PRIu64 ": %s",
-+				session->id, session->base_path);
-+	}
-+	ret = LTTNG_OK;
-+error:
-+	return ret;
-+}
-+
- /*
-  * Command LTTNG_SET_CONSUMER_URI processed by the client thread.
-  */
-@@ -2759,26 +2795,14 @@ int cmd_set_consumer_uri(struct ltt_session *session, size_t nb_uri,
- 		goto error;
- 	}
- 
--	for (i = 0; i < nb_uri; i++) {
--		if (uris[i].stype != LTTNG_STREAM_CONTROL ||
--				uris[i].subdir[0] == '\0') {
--			/* Not interested in these URIs */
--			continue;
--		}
 -
--		if (session->base_path != NULL) {
--			free(session->base_path);
--			session->base_path = NULL;
+-LTTNG_HIDDEN
+-int lttng_session_descriptor_get_base_path(struct lttng_session_descriptor *dst,
+-		const char **_base_path)
+-{
+-	switch (dst->output_type) {
+-	case LTTNG_SESSION_DESCRIPTOR_OUTPUT_TYPE_NETWORK:
+-	{
+-		if (dst->output.network.control &&
+-				dst->output.network.control->subdir[0]) {
+-			*_base_path = dst->output.network.control->subdir;
+-		} else {
+-			*_base_path = NULL;
 -		}
--
--		/* Set session base_path */
--		session->base_path = strdup(uris[i].subdir);
--		if (!session->base_path) {
--			PERROR("Copying base path: %s", uris[i].subdir);
--			goto error;
--		}
--		DBG2("Setting base path for session %" PRIu64 ": %s",
--				session->id, session->base_path);
-+	/*
-+	 * Set the session base path if any. This is done inside
-+	 * cmd_set_consumer_uri to preserve backward compatibility of the
-+	 * previous session creation api vs the session descriptor api.
-+	 */
-+	ret = set_session_base_path_from_uris(session, nb_uri, uris);
-+	if (ret != LTTNG_OK) {
-+		goto error;
- 	}
- 
- 	/* Set the "global" consumer URIs */
+-		break;
+-	}
+-	case LTTNG_SESSION_DESCRIPTOR_OUTPUT_TYPE_LOCAL:
+-	case LTTNG_SESSION_DESCRIPTOR_OUTPUT_TYPE_NONE:
+-		*_base_path = NULL;
+-		break;
+-	}
+-	return 0;
+-}
 -- 
 2.17.1
