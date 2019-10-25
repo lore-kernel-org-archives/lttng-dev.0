@@ -1,21 +1,15 @@
-From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools stable-2.11] fix: check for
- lttng-ust >= 2.11 at configure
-Date: Thu, 24 Oct 2019 16:07:36 -0400
-Message-ID: <20191024200736.GA149332__23556.8134159379$1571947683$gmane$org@gmail.com>
-References: <20191023150834.6885-1-mjeanson@efficios.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Fix: initialize sessions pointer to
+ NULL
+Date: Fri, 25 Oct 2019 17:56:26 -0400
+Message-ID: <20191025215626.19148-1-jonathan.rajotte-julien__46770.7557416119$1572040642$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com
- [209.85.222.194])
- by lists.lttng.org (Postfix) with ESMTPS id 46zdZh4V8kz1Ql2
- for <lttng-dev@lists.lttng.org>; Thu, 24 Oct 2019 16:07:40 -0400 (EDT)
-Received: by mail-qk1-f194.google.com with SMTP id f18so24048541qkm.1
- for <lttng-dev@lists.lttng.org>; Thu, 24 Oct 2019 13:07:40 -0700 (PDT)
-Content-Disposition: inline
-In-Reply-To: <20191023150834.6885-1-mjeanson@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 470Hxr64Ntz1PW2
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Oct 2019 17:56:32 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,53 +19,76 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Merged in master and stable-2.11. Thanks!
+lttng_list_sessions does not set the passed pointer to NULL on empty
+return. This lead to deallocation of non-allocated memory (segfault).
 
-J=E9r=E9mie
+For returns of size 0, the value of the passed argument should be
+considered "undefined".
 
-On Wed, Oct 23, 2019 at 11:08:34AM -0400, Michael Jeanson wrote:
-> We don't support building lttng-tools against an older version of
-> lttng-ust, make this check explicitly at configure.
-> =
+Refactor error handling a bit by removing the "error" jump. Always call
+free on the sessions object.
 
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
->  configure.ac | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> =
+Fixes #1205
 
-> diff --git a/configure.ac b/configure.ac
-> index 5c4073ef8..357e2b888 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -562,14 +562,13 @@ AC_ARG_WITH([lttng-ust],
->  =
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ src/bin/lttng/commands/list.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
->  AS_IF([test "x$with_lttng_ust" =3D "xyes"],
->    [
-> -    AC_CHECK_LIB([lttng-ust-ctl], [ustctl_recv_channel_from_consumer],
-> +    AC_CHECK_LIB([lttng-ust-ctl], [lttng_ust_enum_get_from_desc],
->        [
->          AC_DEFINE([HAVE_LIBLTTNG_UST_CTL], [1])
->        ],
->        [
-> -        AC_MSG_FAILURE([Cannot find LTTng-UST >=3D 2.2.x. Use [LDFLAGS]=
-=3D-Ldir and [CPPFLAGS]=3D-Idir to specify its location, or specify --witho=
-ut-lttng-ust to build lttng-tools without LTTng-UST support.])
-> -      ],
-> -      [-lurcu-common -lurcu-bp -lurcu-cds -lrt -ldl]
-> +        AC_MSG_FAILURE([Cannot find LTTng-UST >=3D 2.11.x. Use [LDFLAGS]=
-=3D-Ldir and [CPPFLAGS]=3D-Idir to specify its location, or specify --witho=
-ut-lttng-ust to build lttng-tools without LTTng-UST support.])
-> +      ]
->      )
->    ]
->  )
-> -- =
-
-> 2.17.1
-> =
+diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
+index 28166c8be..65d8ea6f5 100644
+--- a/src/bin/lttng/commands/list.c
++++ b/src/bin/lttng/commands/list.c
+@@ -1825,7 +1825,7 @@ static int list_sessions(const char *session_name)
+ 	int ret = CMD_SUCCESS;
+ 	int count, i;
+ 	unsigned int session_found = 0;
+-	struct lttng_session *sessions;
++	struct lttng_session *sessions = NULL;
+ 
+ 	count = lttng_list_sessions(&sessions);
+ 	DBG("Session count %d", count);
+@@ -1838,7 +1838,7 @@ static int list_sessions(const char *session_name)
+ 	if (lttng_opt_mi) {
+ 		/* Mi */
+ 		if (session_name == NULL) {
+-			/* List all session */
++			/* List all sessions */
+ 			ret = mi_list_sessions(sessions, count);
+ 		} else {
+ 			/* Note : this return an open session element */
+@@ -1846,7 +1846,7 @@ static int list_sessions(const char *session_name)
+ 		}
+ 		if (ret) {
+ 			ret = CMD_ERROR;
+-			goto error;
++			goto end;
+ 		}
+ 	} else {
+ 		/* Pretty print */
+@@ -1893,7 +1893,7 @@ static int list_sessions(const char *session_name)
+ 		if (!session_found && session_name != NULL) {
+ 			ERR("Session '%s' not found", session_name);
+ 			ret = CMD_ERROR;
+-			goto error;
++			goto end;
+ 		}
+ 
+ 		if (session_name == NULL) {
+@@ -1901,9 +1901,8 @@ static int list_sessions(const char *session_name)
+ 		}
+ 	}
+ 
+-error:
+-	free(sessions);
+ end:
++	free(sessions);
+ 	return ret;
+ }
+ 
+-- 
+2.17.1
