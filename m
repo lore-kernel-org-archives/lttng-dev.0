@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH urcu] cds_lfht_is_node_deleted parameter can
- be marked const
-Date: Mon, 28 Oct 2019 15:27:58 -0400 (EDT)
-Message-ID: <458869007.17979.1572290878981.JavaMail.zimbra__7654.35921946249$1572290900$gmane$org@efficios.com>
-References: <20191028192436.66672-1-jeremie.galarneau@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] Add missing include for kernels
+ between 3.8 and 3.15
+Date: Mon, 28 Oct 2019 16:28:43 -0400
+Message-ID: <20191028202843.17852-1-mjeanson__13555.7979041309$1572294544$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 4724WB07LgzqdW
- for <lttng-dev@lists.lttng.org>; Mon, 28 Oct 2019 15:28:05 -0400 (EDT)
-In-Reply-To: <20191028192436.66672-1-jeremie.galarneau@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 4725sD58G9zqkb
+ for <lttng-dev@lists.lttng.org>; Mon, 28 Oct 2019 16:28:48 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,42 +20,44 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jeremie Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGludG8gbGlidXJjdSBtYXN0ZXIsIHRoYW5rcyEKCk1hdGhpZXUKCi0tLS0tIE9uIE9j
-dCAyOCwgMjAxOSwgYXQgMzoyNCBQTSwgSmVyZW1pZSBHYWxhcm5lYXUgamVyZW1pZS5nYWxhcm5l
-YXVAZWZmaWNpb3MuY29tIHdyb3RlOgoKPiBNYXJrIHRoZSBjZHNfbGZodF9ub2RlIHBvaW50ZXIg
-cGFyYW1ldGVyIG9mIGNkc19sZmh0X2lzX25vZGVfZGVsZXRlZAo+IGFzIGNvbnN0LiBUaGUgZmFj
-dCB0aGF0IHRoaXMgcGFyYW1ldGVyIGlzIG11dGFibGUgbWFrZXMgaXQgaGFyZGVyIHRvCj4gdXNl
-IGxpYnVyY3UgaW4gY29uc3QtY29ycmVjdCBjb2RlLgo+IAo+IFNpZ25lZC1vZmYtYnk6IErDqXLD
-qW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiAtLS0KPiBp
-bmNsdWRlL3VyY3UvcmN1bGZoYXNoLmggfCAyICstCj4gc3JjL3JjdWxmaGFzaC5jICAgICAgICAg
-IHwgNCArKy0tCj4gMiBmaWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25z
-KC0pCj4gCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvdXJjdS9yY3VsZmhhc2guaCBiL2luY2x1ZGUv
-dXJjdS9yY3VsZmhhc2guaAo+IGluZGV4IGNiZjUxM2UuLjIwYjgyMmYgMTAwNjQ0Cj4gLS0tIGEv
-aW5jbHVkZS91cmN1L3JjdWxmaGFzaC5oCj4gKysrIGIvaW5jbHVkZS91cmN1L3JjdWxmaGFzaC5o
-Cj4gQEAgLTQ5OSw3ICs0OTksNyBAQCBpbnQgY2RzX2xmaHRfZGVsKHN0cnVjdCBjZHNfbGZodCAq
-aHQsIHN0cnVjdCBjZHNfbGZodF9ub2RlCj4gKm5vZGUpOwo+ICAqIFRoaXMgZnVuY3Rpb24gZG9l
-cyBub3QgaXNzdWUgYW55IG1lbW9yeSBiYXJyaWVyLgo+ICAqLwo+IGV4dGVybgo+IC1pbnQgY2Rz
-X2xmaHRfaXNfbm9kZV9kZWxldGVkKHN0cnVjdCBjZHNfbGZodF9ub2RlICpub2RlKTsKPiAraW50
-IGNkc19sZmh0X2lzX25vZGVfZGVsZXRlZChjb25zdCBzdHJ1Y3QgY2RzX2xmaHRfbm9kZSAqbm9k
-ZSk7Cj4gCj4gLyoKPiAgKiBjZHNfbGZodF9yZXNpemUgLSBGb3JjZSBhIGhhc2ggdGFibGUgcmVz
-aXplCj4gZGlmZiAtLWdpdCBhL3NyYy9yY3VsZmhhc2guYyBiL3NyYy9yY3VsZmhhc2guYwo+IGlu
-ZGV4IGZmNDJkZjAuLjhlNjBmMTkgMTAwNjQ0Cj4gLS0tIGEvc3JjL3JjdWxmaGFzaC5jCj4gKysr
-IGIvc3JjL3JjdWxmaGFzaC5jCj4gQEAgLTgyNSw3ICs4MjUsNyBAQCBzdHJ1Y3QgY2RzX2xmaHRf
-bm9kZSAqY2xlYXJfZmxhZyhzdHJ1Y3QgY2RzX2xmaHRfbm9kZSAqbm9kZSkKPiB9Cj4gCj4gc3Rh
-dGljCj4gLWludCBpc19yZW1vdmVkKHN0cnVjdCBjZHNfbGZodF9ub2RlICpub2RlKQo+ICtpbnQg
-aXNfcmVtb3ZlZChjb25zdCBzdHJ1Y3QgY2RzX2xmaHRfbm9kZSAqbm9kZSkKPiB7Cj4gCXJldHVy
-biAoKHVuc2lnbmVkIGxvbmcpIG5vZGUpICYgUkVNT1ZFRF9GTEFHOwo+IH0KPiBAQCAtMTgyOSw3
-ICsxODI5LDcgQEAgaW50IGNkc19sZmh0X2RlbChzdHJ1Y3QgY2RzX2xmaHQgKmh0LCBzdHJ1Y3Qg
-Y2RzX2xmaHRfbm9kZQo+ICpub2RlKQo+IAlyZXR1cm4gcmV0Owo+IH0KPiAKPiAtaW50IGNkc19s
-Zmh0X2lzX25vZGVfZGVsZXRlZChzdHJ1Y3QgY2RzX2xmaHRfbm9kZSAqbm9kZSkKPiAraW50IGNk
-c19sZmh0X2lzX25vZGVfZGVsZXRlZChjb25zdCBzdHJ1Y3QgY2RzX2xmaHRfbm9kZSAqbm9kZSkK
-PiB7Cj4gCXJldHVybiBpc19yZW1vdmVkKENNTV9MT0FEX1NIQVJFRChub2RlLT5uZXh0KSk7Cj4g
-fQo+IC0tCj4gMi4yMy4wCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRw
-Oi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo=
+This is required at least for:
+ v3.13.x
+ v3.11.x
+ v3.9.x
+ v3.8.x
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ lttng-context-mnt-ns.c | 1 +
+ lttng-context-net-ns.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/lttng-context-mnt-ns.c b/lttng-context-mnt-ns.c
+index 98d5b8e..b5bb955 100644
+--- a/lttng-context-mnt-ns.c
++++ b/lttng-context-mnt-ns.c
+@@ -13,6 +13,7 @@
+ #include <linux/slab.h>
+ #include <linux/sched.h>
+ #include <lttng-events.h>
++#include <linux/nsproxy.h>
+ #include <wrapper/ringbuffer/frontend_types.h>
+ #include <wrapper/vmalloc.h>
+ #include <wrapper/namespace.h>
+diff --git a/lttng-context-net-ns.c b/lttng-context-net-ns.c
+index 24d7ae3..6694037 100644
+--- a/lttng-context-net-ns.c
++++ b/lttng-context-net-ns.c
+@@ -12,6 +12,7 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/sched.h>
++#include <linux/nsproxy.h>
+ #include <net/net_namespace.h>
+ #include <lttng-events.h>
+ #include <wrapper/ringbuffer/frontend_types.h>
+-- 
+2.17.1
