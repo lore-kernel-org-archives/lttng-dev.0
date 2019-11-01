@@ -1,16 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 2/3] Fix: relayd: put chunk
- reference when closing stream
-Date: Fri,  1 Nov 2019 16:23:04 -0400
-Message-ID: <20191101202305.21496-2-mathieu.desnoyers__29137.1185144939$1572639844$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 3/3] Fix: sessiond: ust: deadlock
+ with per-pid buffers
+Date: Fri,  1 Nov 2019 16:23:05 -0400
+Message-ID: <20191101202305.21496-3-mathieu.desnoyers__49833.8739898585$1572639877$gmane$org@efficios.com>
 References: <20191101202305.21496-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 474YXz0ZvCzrTy
- for <lttng-dev@lists.lttng.org>; Fri,  1 Nov 2019 16:23:15 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 474YY04ydnzrVc
+ for <lttng-dev@lists.lttng.org>; Fri,  1 Nov 2019 16:23:16 -0400 (EDT)
 In-Reply-To: <20191101202305.21496-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,49 +25,132 @@ To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-If a stream is closed by an application exiting (per-pid buffers), it
-needs to put its reference on the stream trace chunk right away, because
-otherwise still holding the reference on the trace chunk could allow a
-viewer stream (which holds a reference to the stream) to postpone
-destroy waiting for the chunk to cease to exist endlessly until the
-viewer is detached.
+Do not hold the registry lock while communicating with the consumerd,
+because doing so causes inter-process deadlocks between consumerd and
+sessiond with the metadata request notification.
+
+The deadlock involves both sessiond and consumerd:
+
+* lttng-sessiond:
+
+thread 11 - thread_application_management
+
+close_metadata()
+  pthread_mutex_lock(&registry->lock);
+  consumer_close_metadata()
+    pthread_mutex_lock(socket->lock);
+
+thread 15 - thread_consumer_management
+
+ust_consumer_metadata_request()
+  pthread_mutex_lock(&ust_reg->lock);
+
+thread 8 - thread_manage_clients
+
+consumer_is_data_pending
+  pthread_mutex_lock(socket->lock);
+  consumer_socket_recv()
+
+* lttng-consumerd:
+
+thread 4 - consumer_timer_thread
+
+sample_channel_positions()
+  pthread_mutex_lock(&stream->lock);
+
+thread 8 - consumer_thread_sessiond_poll
+  consumer_data_pending
+  pthread_mutex_lock(&consumer_data.lock);
+  pthread_mutex_lock(&stream->lock);
+
+thread 7 - consumer_thread_data_poll
+
+lttng_consumer_read_subbuffer
+  pthread_mutex_lock(&stream->chan->lock);
+  pthread_mutex_lock(&stream->lock);
+  do_sync_metadata
+    pthread_mutex_lock(&metadata->lock);
+    lttng_ustconsumer_sync_metadata
+      pthread_mutex_unlock(&metadata_stream->lock);
+      lttng_ustconsumer_request_metadata()
+        pthread_mutex_lock(&ctx->metadata_socket_lock);
+        lttcomm_recv_unix_sock()
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- src/bin/lttng-relayd/stream.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ src/bin/lttng-sessiond/ust-app.c | 31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
 
-diff --git a/src/bin/lttng-relayd/stream.c b/src/bin/lttng-relayd/stream.c
-index 4d3d37a2..9d753bd0 100644
---- a/src/bin/lttng-relayd/stream.c
-+++ b/src/bin/lttng-relayd/stream.c
-@@ -923,6 +923,27 @@ void try_stream_close(struct relay_stream *stream)
- 	stream->closed = true;
- 	/* Relay indexes are only used by the "consumer/sessiond" end. */
- 	relay_index_close_all(stream);
-+
+diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/ust-app.c
+index 1731c368..1ecff438 100644
+--- a/src/bin/lttng-sessiond/ust-app.c
++++ b/src/bin/lttng-sessiond/ust-app.c
+@@ -741,6 +741,10 @@ error:
+  * nullified. The session lock MUST be held unless the application is
+  * in the destroy path.
+  *
++ * Do not hold the registry lock while communicating with the consumerd, because
++ * doing so causes inter-process deadlocks between consumerd and sessiond with
++ * the metadata request notification.
++ *
+  * Return 0 on success else a negative value.
+  */
+ static int close_metadata(struct ust_registry_session *registry,
+@@ -748,6 +752,7 @@ static int close_metadata(struct ust_registry_session *registry,
+ {
+ 	int ret;
+ 	struct consumer_socket *socket;
++	uint64_t metadata_key;
+ 
+ 	assert(registry);
+ 	assert(consumer);
+@@ -755,34 +760,34 @@ static int close_metadata(struct ust_registry_session *registry,
+ 	rcu_read_lock();
+ 
+ 	pthread_mutex_lock(&registry->lock);
+-
+-	if (!registry->metadata_key || registry->metadata_closed) {
++	metadata_key = registry->metadata_key;
++	if (!metadata_key || registry->metadata_closed) {
+ 		ret = 0;
++		pthread_mutex_unlock(&registry->lock);
+ 		goto end;
+ 	}
 +	/*
-+	 * If we are closed by an application exiting (per-pid buffers),
-+	 * we need to put our reference on the stream trace chunk right
-+	 * away, because otherwise still holding the reference on the
-+	 * trace chunk could allow a viewer stream (which holds a reference
-+	 * to the stream) to postpone destroy waiting for the chunk to cease
-+	 * to exist endlessly until the viewer is detached.
++	 * Metadata closed. Even on error this means that the consumer is not
++	 * responding or not found so either way a second close should NOT be emit
++	 * for this registry.
 +	 */
-+
-+	/* Put stream fd before put chunk. */
-+	if (stream->stream_fd) {
-+		stream_fd_put(stream->stream_fd);
-+		stream->stream_fd = NULL;
-+	}
-+	if (stream->index_file) {
-+		lttng_index_file_put(stream->index_file);
-+		stream->index_file = NULL;
-+	}
-+	lttng_trace_chunk_put(stream->trace_chunk);
-+	stream->trace_chunk = NULL;
- 	pthread_mutex_unlock(&stream->lock);
- 	DBG("Succeeded in closing stream %" PRIu64, stream->stream_handle);
- 	stream_put(stream);
++	registry->metadata_closed = 1;
++	pthread_mutex_unlock(&registry->lock);
+ 
+ 	/* Get consumer socket to use to push the metadata.*/
+ 	socket = consumer_find_socket_by_bitness(registry->bits_per_long,
+ 			consumer);
+ 	if (!socket) {
+ 		ret = -1;
+-		goto error;
++		goto end;
+ 	}
+ 
+-	ret = consumer_close_metadata(socket, registry->metadata_key);
++	ret = consumer_close_metadata(socket, metadata_key);
+ 	if (ret < 0) {
+-		goto error;
++		goto end;
+ 	}
+ 
+-error:
+-	/*
+-	 * Metadata closed. Even on error this means that the consumer is not
+-	 * responding or not found so either way a second close should NOT be emit
+-	 * for this registry.
+-	 */
+-	registry->metadata_closed = 1;
+ end:
+-	pthread_mutex_unlock(&registry->lock);
+ 	rcu_read_unlock();
+ 	return ret;
+ }
 -- 
 2.17.1
