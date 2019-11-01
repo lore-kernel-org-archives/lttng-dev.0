@@ -1,17 +1,35 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 3/3] Fix: sessiond: ust: deadlock
- with per-pid buffers
-Date: Fri,  1 Nov 2019 16:23:05 -0400
-Message-ID: <20191101202305.21496-3-mathieu.desnoyers__49833.8739898585$1572639877$gmane$org@efficios.com>
-References: <20191101202305.21496-1-mathieu.desnoyers@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] Babeltrace 2.0.0-rc2
+Date: Fri, 1 Nov 2019 18:49:43 -0400
+Message-ID: <CA+jJMxvsE7rE3sVnHWkUkwqzfyw-Rwyg_97Ay4RxiUPmUoBCqg__36242.9081391142$1572648640$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 474YY04ydnzrVc
- for <lttng-dev@lists.lttng.org>; Fri,  1 Nov 2019 16:23:16 -0400 (EDT)
-In-Reply-To: <20191101202305.21496-1-mathieu.desnoyers@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 474cpl3YBHzrfs
+ for <lttng-dev@lists.lttng.org>; Fri,  1 Nov 2019 18:50:23 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id EDAB63A378F
+ for <lttng-dev@lists.lttng.org>; Fri,  1 Nov 2019 18:50:22 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
+ with ESMTP id jskotan1KPOf for <lttng-dev@lists.lttng.org>;
+ Fri,  1 Nov 2019 18:50:22 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id EF3283A3782
+ for <lttng-dev@lists.lttng.org>; Fri,  1 Nov 2019 18:50:21 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
+ with ESMTP id IQwdV2mguAfN for <lttng-dev@lists.lttng.org>;
+ Fri,  1 Nov 2019 18:50:21 -0400 (EDT)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com
+ [209.85.208.172])
+ by mail.efficios.com (Postfix) with ESMTPSA id 999D13A376A
+ for <lttng-dev@lists.lttng.org>; Fri,  1 Nov 2019 18:50:21 -0400 (EDT)
+Received: by mail-lj1-f172.google.com with SMTP id g3so5630539ljl.11
+ for <lttng-dev@lists.lttng.org>; Fri, 01 Nov 2019 15:50:21 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,136 +39,93 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>, diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
-Do not hold the registry lock while communicating with the consumerd,
-because doing so causes inter-process deadlocks between consumerd and
-sessiond with the metadata request notification.
-
-The deadlock involves both sessiond and consumerd:
-
-* lttng-sessiond:
-
-thread 11 - thread_application_management
-
-close_metadata()
-  pthread_mutex_lock(&registry->lock);
-  consumer_close_metadata()
-    pthread_mutex_lock(socket->lock);
-
-thread 15 - thread_consumer_management
-
-ust_consumer_metadata_request()
-  pthread_mutex_lock(&ust_reg->lock);
-
-thread 8 - thread_manage_clients
-
-consumer_is_data_pending
-  pthread_mutex_lock(socket->lock);
-  consumer_socket_recv()
-
-* lttng-consumerd:
-
-thread 4 - consumer_timer_thread
-
-sample_channel_positions()
-  pthread_mutex_lock(&stream->lock);
-
-thread 8 - consumer_thread_sessiond_poll
-  consumer_data_pending
-  pthread_mutex_lock(&consumer_data.lock);
-  pthread_mutex_lock(&stream->lock);
-
-thread 7 - consumer_thread_data_poll
-
-lttng_consumer_read_subbuffer
-  pthread_mutex_lock(&stream->chan->lock);
-  pthread_mutex_lock(&stream->lock);
-  do_sync_metadata
-    pthread_mutex_lock(&metadata->lock);
-    lttng_ustconsumer_sync_metadata
-      pthread_mutex_unlock(&metadata_stream->lock);
-      lttng_ustconsumer_request_metadata()
-        pthread_mutex_lock(&ctx->metadata_socket_lock);
-        lttcomm_recv_unix_sock()
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- src/bin/lttng-sessiond/ust-app.c | 31 ++++++++++++++++++-------------
- 1 file changed, 18 insertions(+), 13 deletions(-)
-
-diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/ust-app.c
-index 1731c368..1ecff438 100644
---- a/src/bin/lttng-sessiond/ust-app.c
-+++ b/src/bin/lttng-sessiond/ust-app.c
-@@ -741,6 +741,10 @@ error:
-  * nullified. The session lock MUST be held unless the application is
-  * in the destroy path.
-  *
-+ * Do not hold the registry lock while communicating with the consumerd, because
-+ * doing so causes inter-process deadlocks between consumerd and sessiond with
-+ * the metadata request notification.
-+ *
-  * Return 0 on success else a negative value.
-  */
- static int close_metadata(struct ust_registry_session *registry,
-@@ -748,6 +752,7 @@ static int close_metadata(struct ust_registry_session *registry,
- {
- 	int ret;
- 	struct consumer_socket *socket;
-+	uint64_t metadata_key;
- 
- 	assert(registry);
- 	assert(consumer);
-@@ -755,34 +760,34 @@ static int close_metadata(struct ust_registry_session *registry,
- 	rcu_read_lock();
- 
- 	pthread_mutex_lock(&registry->lock);
--
--	if (!registry->metadata_key || registry->metadata_closed) {
-+	metadata_key = registry->metadata_key;
-+	if (!metadata_key || registry->metadata_closed) {
- 		ret = 0;
-+		pthread_mutex_unlock(&registry->lock);
- 		goto end;
- 	}
-+	/*
-+	 * Metadata closed. Even on error this means that the consumer is not
-+	 * responding or not found so either way a second close should NOT be emit
-+	 * for this registry.
-+	 */
-+	registry->metadata_closed = 1;
-+	pthread_mutex_unlock(&registry->lock);
- 
- 	/* Get consumer socket to use to push the metadata.*/
- 	socket = consumer_find_socket_by_bitness(registry->bits_per_long,
- 			consumer);
- 	if (!socket) {
- 		ret = -1;
--		goto error;
-+		goto end;
- 	}
- 
--	ret = consumer_close_metadata(socket, registry->metadata_key);
-+	ret = consumer_close_metadata(socket, metadata_key);
- 	if (ret < 0) {
--		goto error;
-+		goto end;
- 	}
- 
--error:
--	/*
--	 * Metadata closed. Even on error this means that the consumer is not
--	 * responding or not found so either way a second close should NOT be emit
--	 * for this registry.
--	 */
--	registry->metadata_closed = 1;
- end:
--	pthread_mutex_unlock(&registry->lock);
- 	rcu_read_unlock();
- 	return ret;
- }
--- 
-2.17.1
+SGkgZXZlcnlvbmUhCgpUd28gd2Vla3MgYWZ0ZXIgaGF2aW5nIHJlbGVhc2VkIFsxXSBCYWJlbHRy
+YWNlIDIncyBmaXJzdCByZWxlYXNlCmNhbmRpZGF0ZSwgdG9kYXkgd2UncmUgcmVsZWFzaW5nIEJh
+YmVsdHJhY2UgMi4wLjAtcmMyLgoKQSBwcmV0dGlmaWVkIHZlcnNpb24gb2YgdGhpcyBhbm5vdW5j
+ZW1lbnQgaXMgYXZhaWxhYmxlIGF0OgpodHRwczovL2RpYW1vbi5vcmcvYmFiZWx0cmFjZS9kb2Nz
+L3JlbGVhc2Utbm90ZXMvYmFiZWx0cmFjZS0yLjAuMC1yYzItcmVsZWFzZS1ub3Rlcy5odG1sCgpX
+aGF0J3MgbmV3IHNpbmNlIEJhYmVsdHJhY2UgMi4wLjAtcmMxPwo9PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PQoKSW1wcm92ZW1lbnRzCi0tLS0tLS0tLS0tLQpHZW5lcmFsOgog
+ICAgKiBJbnRyb2R1Y2UgYEJUX0FTU0VSVF9EQkcoKWAgZm9yIGFzc2VydGlvbnMgdGhhdCBtdXN0
+IG9ubHkgYmUKICAgICAgZXZhbHVhdGVkIGluIGRlYnVnZ2luZyBtb2RlICh3aGVuIHRoZSBgQkFC
+RUxUUkFDRV9ERUJVR19NT0RFYAogICAgICBlbnZpcm9ubWVudCB2YXJpYWJsZSBpcyBzZXQgdG8g
+YDFgIGF0IGNvbmZpZ3VyYXRpb24gdGltZSkuCgogICAgICBgQlRfQVNTRVJUKClgIGFzc2VydGlv
+bnMgYXJlIG5vdyBhbHdheXMgZXZhbHVhdGVkLCByZWdhcmRsZXNzIG9mCiAgICAgIHRoZSBkZWJ1
+Z2dpbmcvcHJvZHVjdGlvbiBtb2RlLgoKICAgICAgVGhpcyBjaGFuZ2UncyBwdXJwb3NlIGlzIHRv
+IGtlZXAgYXMgbWFueSBzbG93LXBhdGggYXNzZXJ0aW9ucyBhcwogICAgICBwb3NzaWJsZSB0byBk
+ZXRlY3QgbW9yZSBCYWJlbHRyYWNlIDIgcHJvZ3JhbW1pbmcgZXJyb3JzLCBldmVuIGluCiAgICAg
+IHByb2R1Y3Rpb24uCgogICAgICBTZWUgYDk4YjE1ODUxYC4KCiAgICAqIFJlbW92ZSBBQkkgdmVy
+c2lvbmluZyBpbiBCYWJlbHRyYWNlIDIgc2hhcmVkIG9iamVjdCBwbHVnaW5zIGFzIHdlCiAgICAg
+IGRvbid0IG5lZWQgdGhpcyBwcm9wZXJ0eS4KCiAgICAgIFNlZSBgN2MwMjQ0ZDZgLgoKICAgICog
+SW4gbGliYmFiZWx0cmFjZTIncyBBUEk6CgogICAgICAqIFJlbmFtZSBgQlRfUkFOR0VfU0VUX2Ag
+cHJlZml4ZXMgdG8gYEJUX0lOVEVHRVJfUkFOR0VfU0VUX2AuCgogICAgICAgIFNlZSBgZWIxNzFl
+ZTlgLgoKICAgICAgKiBNYWtlIGBidF92ZXJzaW9uX2dldF9tYWpvcigpYCwgYGJ0X3ZlcnNpb25f
+Z2V0X21pbm9yKClgLCBhbmQKICAgICAgICBgYnRfdmVyc2lvbl9nZXRfcGF0Y2goKWAgZnVuY3Rp
+b25zIHJldHVybiBgdW5zaWduZWQgaW50YCBpbnN0ZWFkCiAgICAgICAgb2YgYGludGAuCgogICAg
+ICAgIFNlZSBgNzhkZWI5MTNgLgoKICAgICAgKiBSZW1vdmUgdGhlIGBCVF9HUkFQSF9SVU5fU1RB
+VFVTX0VORGAgc3RhdHVzIGNvZGU6CiAgICAgICAgYGJ0X2dyYXBoX3J1bigpYCBub3cgcmV0dXJu
+cyBgQlRfR1JBUEhfUlVOX1NUQVRVU19PS2Agd2hlbiBhbGwKICAgICAgICB0aGUgZ3JhcGgncyBz
+aW5rIGNvbXBvbmVudHMgYXJlIGVuZGVkLgoKICAgICAgICBTZWUgYDk2NjlkNjkzYC4KCmBjdGZg
+IHBsdWdpbjoKICAgIEFwcGVuZCBlcnJvciBjYXVzZXMgYXQgbW9yZSBzb3VyY2UgbG9jYXRpb25z
+LgoKICAgIFRoaXMgbWVhbnMgbW9yZSBwcmVjaXNlIGVycm9yIG1lc3NhZ2VzIHJlcG9ydGVkIGJ5
+IHRoZSBgYmFiZWx0cmFjZTJgCiAgICBbMl0gQ0xJIHRvb2wsIGZvciBleGFtcGxlLgoKICAgIFNl
+ZSBgYjdkMjY5NWEsIGBiMzAyODRkMSwgYDIyNDZlOTlkYSwgYW5kIGAxNDE5ZGIyYmMuCgpgc291
+cmNlLmN0Zi5mc2AgY29tcG9uZW50IGNsYXNzOgogICAgUmV0dXJuIGFuIGVycm9yIHdoZW4gZmFp
+bGluZyB0byBsb2FkIG9yIGNyZWF0ZSBhbiBpbmRleCBmb3IgYQogICAgdHJhY2UuCgogICAgU2Vl
+IGAyOWE4MjI3YWAuCgpgZmlsdGVyLmx0dG5nLXV0aWxzLmRlYnVnLWluZm9gIGNvbXBvbmVudCBj
+bGFzczoKICAgIENyZWF0ZSBzdHJlYW0gY2xhc3NlcyBhbmQgZXZlbnQgY2xhc3NlcyB3aGljaCBj
+b3JyZXNwb25kIHRvIHN0cmVhbQogICAgY2xhc3NlcyBhbmQgZXZlbnQgY2xhc3NlcyBpbiBpbmNv
+bWluZyB0cmFjZSBjbGFzc2VzIGFzIHNvb24gYXMgd2UKICAgIGVuY291bnRlciBhIG5ldyB0cmFj
+ZSBjbGFzcywgcmF0aGVyIHRoYW4gYXMgbmVlZGVkLgoKICAgIFNlZSBgZGI1ZDc0NmRgLgoKUHl0
+aG9uIGJpbmRpbmdzOgogICAgSW4gYGJ0Mi5HcmFwaC5hZGRfY29tcG9uZW50KClgLCB2YWxpZGF0
+ZSB0aGF0IHRoZSBgcGFyYW1zYCBwYXJhbWV0ZXIKICAgIGlzIGltcGxpY2l0bHkgY29udmVydGli
+bGUgdG8gYSBgYnQyLk1hcHZhbHVlYCBvYmplY3QgKGBkaWN0YCwgZm9yCiAgICBleGFtcGxlKS4K
+CiAgICBTZWUgYDQwMWI3MDIyYC4KCkJ1ZyBmaXhlcwotLS0tLS0tLS0KR2VuZXJhbDoKICAgIEZp
+eCBtYW55IGlzc3VlcyByZXBvcnRlZCBieSBzdGF0aWMgYW5hbHlzaXMgdG9vbHMgKHNjYW4tYnVp
+bGQsCiAgICBDb3Zlcml0eSBbM10sIGFuZCBjb21waWxlciB3YXJuaW5ncykuCgpgc291cmNlLmN0
+Zi5mc2AgY29tcG9uZW50IGNsYXNzOgogICAgRml4IGFuIGluZGV4IGhhbmRsaW5nIGJ1ZyB3aGlj
+aCBvY2N1cmVkIHdoZW4gbXVsdGlwbGUgZGF0YSBzdHJlYW0KICAgIGZpbGVzIGluIGEgQ1RGIHRy
+YWNlIGJlbG9uZyB0byB0aGUgc2FtZSBkYXRhIHN0cmVhbS4KCiAgICBTZWUgYGNlNzVkZTE0YC4K
+CmBzb3VyY2UuY3RmLmx0dG5nLWxpdmVgIGNvbXBvbmVudCBjbGFzczoKICAgIEZpeCBhIGJ1ZyBp
+biB3aGljaCBhIGRpc2FwcGVhcmluZyBMVFRuZyBsaXZlIHRyYWNpbmcgc2Vzc2lvbiBjb3VsZAog
+ICAgbGVhZCB0byBhbiBhc3NlcnRpb24gZmFpbHVyZS4KCiAgICBTZWUgYGJhOTBiY2U3YC4KClB5
+dGhvbiBiaW5kaW5nczoKICAgIEZpeCBhbiBhc3NlcnRpb24gZmFpbHVyZSB3aGljaCBvY2N1cnMg
+d2hlbiBhIHRyYWNlIG9yIHRyYWNlIGNsYXNzCiAgICBkZXN0cnVjdGlvbiBsaXN0ZW5lciByYWlz
+ZXMgYW4gZXhjZXB0aW9uLgoKICAgIFNlZSBgNjQ5NjFmOGJgLgoKVXBjb21pbmcKPT09PT09PT0K
+V2UgYXJlIHN0aWxsIGhhcmQgYXQgd29yayBwdXR0aW5nIHRoZSBmaW5pc2hpbmcgdG91Y2hlcyBv
+biBvdXIgd2F5IHRvCnRoZSBmaW5hbCAyLjAuMCByZWxlYXNlLgoKV2UgaW52aXRlIHlvdSB0byB0
+cnkgdGhpcyByZWxlYXNlIGNhbmRpZGF0ZSBhbmQgcmVwb3J0IGFueSBwcm9ibGVtcyB5b3UKbWF5
+IGVuY291bnRlciB0byB0aGUgYGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmdgIFs0XSBtYWlsaW5n
+IGxpc3Qgb3IKdGhyb3VnaCB0aGUgQmFiZWx0cmFjZSBidWcgdHJhY2tlciBbNV0uCgpEb2N1bWVu
+dGF0aW9uCi0tLS0tLS0tLS0tLS0KV2UgYXJlIGN1cnJlbnRseSBkb2N1bWVudGluZyB0aGUgZW50
+aXJlIEJhYmVsdHJhY2UgMiBDIEFQSSB0byBtYWtlIHRoZQpkZXZlbG9wbWVudCBvZiBuZXcgY29t
+cG9uZW50IGNsYXNzZXMgYXMgZWFzeSBhcyBwb3NzaWJsZS4KCldlJ2xsIGFsc28gd29yayBvbiB0
+aGUgUHl0aG9uIGJpbmRpbmdzIGRvY3VtZW50YXRpb24uCgpUaGUgZG9jdW1lbnRhdGlvbiBvZiB0
+aGUgQVBJIHdpbGwgYmUgbWFkZSBhdmFpbGFibGUgb24gdGhlIG9mZmljaWFsCkJhYmVsdHJhY2Ug
+d2Vic2l0ZSBbNl0uCgpPdGhlciB0YXNrcwotLS0tLS0tLS0tLQoqIEltcHJvdmUgdGVzdCBjb3Zl
+cmFnZS4KKiBJbXByb3ZlIHJlc2lsaWVuY2UgdG8gY29ycnVwdGVkL21hbGZvcm1lZCBDVEYgdHJh
+Y2VzLgoqIE1pbm9yIGludGVybmFsIGNsZWFudXBzIGFuZCBidWcgZml4ZXMuCgpJbXBvcnRhbnQg
+bGlua3MKPT09PT09PT09PT09PT09CkJhYmVsdHJhY2UgMi4wLjAtcmMyIHRhcmJhbGw6CiAgICBo
+dHRwczovL3d3dy5lZmZpY2lvcy5jb20vZmlsZXMvYmFiZWx0cmFjZS9iYWJlbHRyYWNlLTIuMC4w
+LXJjMi50YXIuYnoyCgpCYWJlbHRyYWNlIHdlYnNpdGU6CiAgICBodHRwczovL2RpYW1vbi5vcmcv
+YmFiZWx0cmFjZQoKTWFpbGluZyBsaXN0IChmb3Igc3VwcG9ydCBhbmQgZGV2ZWxvcG1lbnQpOgog
+ICAgYGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmdgCgpJUkMgY2hhbm5lbDoKICAgIGAjbHR0bmdg
+IG9uIGBpcmMub2Z0Yy5uZXRgCgpHaXQgcmVwb3NpdG9yeToKICAgIGh0dHBzOi8vYnVncy5sdHRu
+Zy5vcmcvcHJvamVjdHMvYmFiZWx0cmFjZQoKR2l0SHViIHByb2plY3Q6CiAgICBodHRwczovL2dp
+dGh1Yi5jb20vZWZmaWNpb3MvYmFiZWx0cmFjZQoKQ29udGludW91cyBpbnRlZ3JhdGlvbjoKICAg
+IGh0dHBzOi8vY2kubHR0bmcub3JnL3ZpZXcvQmFiZWx0cmFjZS8KCkNvZGUgcmV2aWV3OgogICAg
+aHR0cHM6Ly9yZXZpZXcubHR0bmcub3JnL3EvcHJvamVjdDpiYWJlbHRyYWNlCgpSZWZlcmVuY2Vz
+Cj09PT09PT09PT0KWzFdOiBodHRwczovL2RpYW1vbi5vcmcvYmFiZWx0cmFjZS9kb2NzL3JlbGVh
+c2Utbm90ZXMvYmFiZWx0cmFjZS0yLjAuMC1yYzEtcmVsZWFzZS1ub3Rlcy5odG1sClsyXTogaHR0
+cHM6Ly9kaWFtb24ub3JnL2JhYmVsdHJhY2UvZG9jcy92Mi4wL21hbjEvYmFiZWx0cmFjZTIuMS8K
+WzNdOiBodHRwczovL3NjYW4uY292ZXJpdHkuY29tL3Byb2plY3RzL2JhYmVsdHJhY2UKWzRdOiBo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cls1XTogaHR0cHM6Ly9idWdzLmx0dG5nLm9yZy9wcm9qZWN0cy9iYWJlbHRyYWNlCls2XTogaHR0
+cHM6Ly9kaWFtb24ub3JnL2JhYmVsdHJhY2UvCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZp
+Y2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
+bGlzdGluZm8vbHR0bmctZGV2Cg==
