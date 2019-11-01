@@ -1,15 +1,15 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools] fix: check for dtrace and sdt.h
- before enabling SDT uprobe tests
-Date: Thu, 31 Oct 2019 16:12:46 -0400
-Message-ID: <20191031201246.5944-1-mjeanson__47051.7126073659$1572552799$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools 1/3] Fix: relayd: tracefile
+ rotation: viewer opening missing index file
+Date: Fri,  1 Nov 2019 16:23:03 -0400
+Message-ID: <20191101202305.21496-1-mathieu.desnoyers__3322.71063686989$1572639816$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 473xMZ4PKhzs8K
- for <lttng-dev@lists.lttng.org>; Thu, 31 Oct 2019 16:12:58 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 474YXy2wKnzrTr
+ for <lttng-dev@lists.lttng.org>; Fri,  1 Nov 2019 16:23:14 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,122 +19,216 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Add a configure switch '--enable-sdt-uprobe / --disable-sdt-uprobe', the
-default behavior of enabling the test if the requirements are found is
-kept but it's now possible to explicitly disable it.
+Moving the head position of the tracefile array when the data is
+received opens a window where a viewer attaching to the session could
+try to open a missing index file (which has not been received yet).
 
-Also add the detection of the dtrace binary and its override trough the
-DTRACE environment variable.
+However, we want to bump the tail position as soon as we receive
+data, because the prior tail is not valid anymore.
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+Solve this by introducing two head positions: the "read" head
+and the "write" head. The "write" head is the position of the
+newest data file (equivalent to the prior "head" position). We
+also introduce a "read" head position, which is only moved
+forward when the index is received.
+
+The viewer now uses the "read" head position as upper bound, which
+ensures it never attempts to open a non-existing index file.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- configure.ac                                  | 37 +++++++++++++++++--
- tests/utils/testapp/Makefile.am               |  4 +-
- .../userspace-probe-sdt-binary/Makefile.am    |  8 +++-
- 3 files changed, 42 insertions(+), 7 deletions(-)
+ src/bin/lttng-relayd/stream.c          |  4 +-
+ src/bin/lttng-relayd/tracefile-array.c | 58 ++++++++++++++++----------
+ src/bin/lttng-relayd/tracefile-array.h | 21 ++++++++--
+ src/bin/lttng-relayd/viewer-stream.c   |  2 +-
+ 4 files changed, 58 insertions(+), 27 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 8c0683fe2..ab0a15b2d 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -25,9 +25,6 @@ AC_PROG_CXX
- RW_PROG_CXX_WORKS
- AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
+diff --git a/src/bin/lttng-relayd/stream.c b/src/bin/lttng-relayd/stream.c
+index 94698f8d..4d3d37a2 100644
+--- a/src/bin/lttng-relayd/stream.c
++++ b/src/bin/lttng-relayd/stream.c
+@@ -958,7 +958,7 @@ int stream_init_packet(struct relay_stream *stream, size_t packet_size,
+ 				stream->stream_handle,
+ 				stream->tracefile_size_current, packet_size,
+ 				stream->tracefile_current_index, new_file_index);
+-		tracefile_array_file_rotate(stream->tfa);
++		tracefile_array_file_rotate(stream->tfa, TRACEFILE_ROTATE_WRITE);
+ 		stream->tracefile_current_index = new_file_index;
  
--LTTNG_CHECK_SDT_WORKS
--AM_CONDITIONAL([SDT_WORKS], [test "x$lttng_cv_sdt_works" = "xyes"])
--
- # Checks for programs.
- AC_PROG_GREP
- AC_PROG_MAKE_SET
-@@ -815,6 +812,36 @@ AC_SUBST([RUN_PYTHON_AGENT_TEST])
- AC_SUBST([PYTHON2_AGENT])
- AC_SUBST([PYTHON3_AGENT])
+ 		if (stream->stream_fd) {
+@@ -1095,6 +1095,7 @@ int stream_update_index(struct relay_stream *stream, uint64_t net_seq_num,
  
-+AC_ARG_ENABLE([test-sdt-uprobe],
-+  [AS_HELP_STRING([--enable-test-sdt-uprobe], [enable the LTTng UST SDT uprobe tests [default=autodetect]])],
-+  [test_sdt_uprobe="$enableval"],
-+  [test_sdt_uprobe=autodetect]
-+)
+ 	ret = relay_index_try_flush(index);
+ 	if (ret == 0) {
++		tracefile_array_file_rotate(stream->tfa, TRACEFILE_ROTATE_READ);
+ 		tracefile_array_commit_seq(stream->tfa);
+ 		stream->index_received_seqcount++;
+ 		*flushed = true;
+@@ -1188,6 +1189,7 @@ int stream_add_index(struct relay_stream *stream,
+ 	}
+ 	ret = relay_index_try_flush(index);
+ 	if (ret == 0) {
++		tracefile_array_file_rotate(stream->tfa, TRACEFILE_ROTATE_READ);
+ 		tracefile_array_commit_seq(stream->tfa);
+ 		stream->index_received_seqcount++;
+ 		stream->pos_after_last_complete_data_index += index->total_size;
+diff --git a/src/bin/lttng-relayd/tracefile-array.c b/src/bin/lttng-relayd/tracefile-array.c
+index 20b760c0..3d62317a 100644
+--- a/src/bin/lttng-relayd/tracefile-array.c
++++ b/src/bin/lttng-relayd/tracefile-array.c
+@@ -62,7 +62,8 @@ void tracefile_array_destroy(struct tracefile_array *tfa)
+ 	free(tfa);
+ }
+ 
+-void tracefile_array_file_rotate(struct tracefile_array *tfa)
++void tracefile_array_file_rotate(struct tracefile_array *tfa,
++		enum tracefile_rotate_type type)
+ {
+ 	uint64_t *headp, *tailp;
+ 
+@@ -70,24 +71,37 @@ void tracefile_array_file_rotate(struct tracefile_array *tfa)
+ 		/* Not in tracefile rotation mode. */
+ 		return;
+ 	}
+-	/* Rotate to next file.  */
+-	tfa->file_head = (tfa->file_head + 1) % tfa->count;
+-	if (tfa->file_head == tfa->file_tail) {
+-		/* Move tail. */
+-		tfa->file_tail = (tfa->file_tail + 1) % tfa->count;
+-	}
+-	headp = &tfa->tf[tfa->file_head].seq_head;
+-	tailp = &tfa->tf[tfa->file_head].seq_tail;
+-	/*
+-	 * If we overwrite a file with content, we need to push the tail
+-	 * to the position following the content we are overwriting.
+-	 */
+-	if (*headp != -1ULL) {
+-		tfa->seq_tail = tfa->tf[tfa->file_tail].seq_tail;
++	switch (type) {
++	case TRACEFILE_ROTATE_READ:
++		/*
++		 * Rotate read head to write head position, thus allowing
++		 * reader to consume the newly rotated head file.
++		 */
++		tfa->file_head_read = tfa->file_head_write;
++		break;
++	case TRACEFILE_ROTATE_WRITE:
++		/* Rotate write head to next file, pushing tail if needed.  */
++		tfa->file_head_write = (tfa->file_head_write + 1) % tfa->count;
++		if (tfa->file_head_write == tfa->file_tail) {
++			/* Move tail. */
++			tfa->file_tail = (tfa->file_tail + 1) % tfa->count;
++		}
++		headp = &tfa->tf[tfa->file_head_write].seq_head;
++		tailp = &tfa->tf[tfa->file_head_write].seq_tail;
++		/*
++		 * If we overwrite a file with content, we need to push the tail
++		 * to the position following the content we are overwriting.
++		 */
++		if (*headp != -1ULL) {
++			tfa->seq_tail = tfa->tf[tfa->file_tail].seq_tail;
++		}
++		/* Reset this file head/tail (overwrite). */
++		*headp = -1ULL;
++		*tailp = -1ULL;
++		break;
++	default:
++		abort();
+ 	}
+-	/* Reset this file head/tail (overwrite). */
+-	*headp = -1ULL;
+-	*tailp = -1ULL;
+ }
+ 
+ void tracefile_array_commit_seq(struct tracefile_array *tfa)
+@@ -104,8 +118,8 @@ void tracefile_array_commit_seq(struct tracefile_array *tfa)
+ 		/* Not in tracefile rotation mode. */
+ 		return;
+ 	}
+-	headp = &tfa->tf[tfa->file_head].seq_head;
+-	tailp = &tfa->tf[tfa->file_head].seq_tail;
++	headp = &tfa->tf[tfa->file_head_write].seq_head;
++	tailp = &tfa->tf[tfa->file_head_write].seq_tail;
+ 	/* Update head tracefile seq_head. */
+ 	*headp = tfa->seq_head;
+ 	/*
+@@ -117,9 +131,9 @@ void tracefile_array_commit_seq(struct tracefile_array *tfa)
+ 	}
+ }
+ 
+-uint64_t tracefile_array_get_file_index_head(struct tracefile_array *tfa)
++uint64_t tracefile_array_get_read_file_index_head(struct tracefile_array *tfa)
+ {
+-	return tfa->file_head;
++	return tfa->file_head_read;
+ }
+ 
+ uint64_t tracefile_array_get_seq_head(struct tracefile_array *tfa)
+diff --git a/src/bin/lttng-relayd/tracefile-array.h b/src/bin/lttng-relayd/tracefile-array.h
+index 9158f4fe..04d9123d 100644
+--- a/src/bin/lttng-relayd/tracefile-array.h
++++ b/src/bin/lttng-relayd/tracefile-array.h
+@@ -29,15 +29,30 @@ struct tracefile {
+ 	uint64_t seq_tail;	/* Oldest seqcount. Inclusive. */
+ };
+ 
++enum tracefile_rotate_type {
++	TRACEFILE_ROTATE_READ,
++	TRACEFILE_ROTATE_WRITE,
++};
 +
-+AS_IF([test "$test_sdt_uprobe" != "no"], [
-+  LTTNG_CHECK_SDT_WORKS
-+  AC_PATH_PROG([DTRACE], [dtrace])
-+])
-+
-+AS_IF([test "$test_sdt_uprobe" = "yes"], [
-+  AS_IF([test "$lttng_cv_sdt_works" = "no"], [
-+    AC_MSG_ERROR([Cannot find 'sys/sdt.h'.])
-+  ])
-+  AS_IF([test "x$DTRACE" = "x"], [
-+    AC_MSG_ERROR([Cannot find SystemTap dtrace. You can set the DTRACE variable to override automatic detection.])
-+  ])
-+])
-+
-+AS_IF([test "$test_sdt_uprobe" = "autodetect"], [
-+  AS_IF([test "$lttng_cv_sdt_works" = "yes"], [
-+    AS_IF([test "x$DTRACE" != "x"], [
-+      test_sdt_uprobe=yes
-+    ])
-+  ])
-+])
-+
-+AM_CONDITIONAL([TEST_SDT_UPROBE], [test "$test_sdt_uprobe" = "yes"])
-+
- # Arguments for binaries build exclusion
- AC_ARG_ENABLE([bin-lttng], AS_HELP_STRING([--disable-bin-lttng],[Disable the build of lttng binaries]))
- AC_ARG_ENABLE([bin-lttng-consumerd], AS_HELP_STRING([--disable-bin-lttng-consumerd],
-@@ -1243,6 +1270,10 @@ PPRINT_PROP_BOOL([LTTng-UST Python2 agent tests], $value)
- test ! -z "$PYTHON3_AGENT" && value=1 || value=0
- PPRINT_PROP_BOOL([LTTng-UST Python3 agent tests], $value)
+ /*
+  * Represents an array of trace files in a stream.
++ * head is the most recent file/trace packet.
++ * tail is the oldest file/trace packet.
++ *
++ * There are two heads: a "read" head and a "write" head. The "write" head is
++ * the position of the newest data file. The "read" head position is only moved
++ * forward when the index is received.
++ *
++ * The viewer uses the "read" head position as upper bound, which
++ * ensures it never attempts to open a non-existing index file.
+  */
+ struct tracefile_array {
+ 	struct tracefile *tf;
+ 	size_t count;
  
-+# LTTng UST Java agent Log4j tests enabled/disabled
-+test "x$test_sdt_uprobe" = "xyes" && value=1 || value=0
-+PPRINT_PROP_BOOL([LTTng-UST SDT uprobe tests], $value)
-+
- #Python binding enabled/disabled
- test "x$enable_python_binding" = xyes && value=1 || value=0
- AS_ECHO
-diff --git a/tests/utils/testapp/Makefile.am b/tests/utils/testapp/Makefile.am
-index 2a4cf5c7b..e2ad1f235 100644
---- a/tests/utils/testapp/Makefile.am
-+++ b/tests/utils/testapp/Makefile.am
-@@ -12,9 +12,9 @@ if CXX_WORKS
- SUBDIRS += userspace-probe-elf-cxx-binary
- endif # CXX_WORKS
+ 	/* Current head/tail files. */
+-	uint64_t file_head;
++	uint64_t file_head_read;
++	uint64_t file_head_write;
+ 	uint64_t file_tail;
  
--if SDT_WORKS
-+if TEST_SDT_UPROBE
- SUBDIRS += userspace-probe-sdt-binary
--endif # SDT_WORKS
-+endif # TEST_SDT_UPROBE
+ 	/* Overall head/tail seq for the entire array. Inclusive. */
+@@ -48,10 +63,10 @@ struct tracefile_array {
+ struct tracefile_array *tracefile_array_create(size_t count);
+ void tracefile_array_destroy(struct tracefile_array *tfa);
  
- if HAVE_MODULES_USERSPACE_CALLSTACK_CONTEXT
- SUBDIRS += gen-syscall-events-callstack
-diff --git a/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am b/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am
-index d79ce0ea3..591f4aa6c 100644
---- a/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am
-+++ b/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am
-@@ -26,10 +26,14 @@ libzzz_la_CFLAGS = -I$(abs_builddir)
- libzzz_la_LDFLAGS = -module -shared -avoid-version -rpath $(abs_builddir)/.libs/
- nodist_libzzz_la_SOURCES = $(abs_builddir)/foobar_provider.h
+-void tracefile_array_file_rotate(struct tracefile_array *tfa);
++void tracefile_array_file_rotate(struct tracefile_array *tfa, enum tracefile_rotate_type type);
+ void tracefile_array_commit_seq(struct tracefile_array *tfa);
  
-+dtrace_verbose = $(dtrace_verbose_@AM_V@)
-+dtrace_verbose_ = $(dtrace_verbose_@AM_DEFAULT_V@)
-+dtrace_verbose_0 = @echo "  DTRACE  " $@;
-+
- foobar_provider.h: foobar_provider.d
--	dtrace -s $< -o $@ -h
-+	$(dtrace_verbose)$(DTRACE) -s $< -o $@ -h
+-uint64_t tracefile_array_get_file_index_head(struct tracefile_array *tfa);
++uint64_t tracefile_array_get_read_file_index_head(struct tracefile_array *tfa);
+ /* May return -1ULL in the case where we have not received any indexes yet. */
+ uint64_t tracefile_array_get_seq_head(struct tracefile_array *tfa);
  
- foobar_provider.o: foobar_provider.d
--	dtrace -s $< -o $@ -G
-+	$(dtrace_verbose)$(DTRACE) -s $< -o $@ -G
- 
- CLEANFILES = foobar_provider.h
+diff --git a/src/bin/lttng-relayd/viewer-stream.c b/src/bin/lttng-relayd/viewer-stream.c
+index f41bbe1a..f3baf105 100644
+--- a/src/bin/lttng-relayd/viewer-stream.c
++++ b/src/bin/lttng-relayd/viewer-stream.c
+@@ -106,7 +106,7 @@ struct relay_viewer_stream *viewer_stream_create(struct relay_stream *stream,
+ 	}
+ 	case LTTNG_VIEWER_SEEK_LAST:
+ 		vstream->current_tracefile_id =
+-			tracefile_array_get_file_index_head(stream->tfa);
++			tracefile_array_get_read_file_index_head(stream->tfa);
+ 		/*
+ 		 * We seek at the very end of each stream, awaiting for
+ 		 * a future packet to eventually come in.
 -- 
 2.17.1
