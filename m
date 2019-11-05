@@ -1,21 +1,21 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re:
- =?utf-8?b?5Zue5aSNOlJlOiAg5Zue5aSNOlJlOiAg5Zue5aSN?=
- =?utf-8?q?=3ARe=3A_Pros_and_Cons_of_LTTng?=
-Date: Mon, 4 Nov 2019 11:55:04 -0500
-Message-ID: <20191104165454.GA2344__21113.1706064165$1572886639$gmane$org@joraj-alpa>
-References: <tencent_7650B3E62F4AC4C75D42A69A@qq.com>
- <20190820160220.GA31760@joraj-alpa>
- <tencent_690A1E7757901F8A10D2CB64@qq.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] fix: check for dtrace and sdt.h
+ before enabling SDT uprobe tests
+Date: Mon, 4 Nov 2019 22:30:21 -0500
+Message-ID: <20191105033021.GA8933__33484.2603349657$1572924643$gmane$org@gmail.com>
+References: <20191031201246.5944-1-mjeanson@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 476Jnb1MNFz18XV
- for <lttng-dev@lists.lttng.org>; Mon,  4 Nov 2019 11:55:14 -0500 (EST)
+Received: from mail-qt1-f196.google.com (mail-qt1-f196.google.com
+ [209.85.160.196])
+ by lists.lttng.org (Postfix) with ESMTPS id 476ZtT6kMzzrNs
+ for <lttng-dev@lists.lttng.org>; Mon,  4 Nov 2019 22:30:25 -0500 (EST)
+Received: by mail-qt1-f196.google.com with SMTP id o49so27367107qta.7
+ for <lttng-dev@lists.lttng.org>; Mon, 04 Nov 2019 19:30:25 -0800 (PST)
 Content-Disposition: inline
-In-Reply-To: <tencent_690A1E7757901F8A10D2CB64@qq.com>
+In-Reply-To: <20191031201246.5944-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,29 +25,149 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpPbiBNb24sIE5vdiAwNCwgMjAxOSBhdCAxMTo0Nzo1OEFNICswODAwLCDmnajmtbcgd3Jv
-dGU6Cj4gSGkKPiAKPiAKPiBBcyB5b3UgcHJldmlvdXNseSBjb21tZW50ZWQsIOKAnFRoZSBjdXJy
-ZW50IExUVG5nIGtlcm5lbCB0cmFjZXIgKGx0dG5nLW1vZHVsZXMpIHN1cHBvcnRzIExpbnV4IDMu
-MCsgb25seS7igJ0gYW5kIHdlIGNhbiBmaW5kIHRoZSBzdXBwb3J0IHBhY2thZ2UgbGlzdCBvbiBo
-dHRwOi8vcGFja2FnZXMuZWZmaWNpb3MuY29tLy4mbmJzcDsKPiBEb2VzIExUVG5nIGhhdmUgcm9h
-ZG1hcCBmb3IgdXBjb21pbmcgbmV3IGtlcm5lbCB2ZXJzaW9ucz8KCkkgcHJlc3VtZSB5b3UgYXJl
-IGV4cGxpY2l0bHkgYXNraW5nIGZvciBSSEVMICYgU1VTRSBrZXJuZWxzLiBUaGUgY3VycmVudApw
-YWNrYWdlcyBmb3IgdGhlc2UgZGlzdHJvIGFyZSBtYWludGFpbmVkIG9uIGEgYmVzdCBlZmZvcnQg
-YW5kIGNvbW1lcmNpYWwKaW5jZW50aXZlIG9mIEVmZmljaU9TLiBJZiB5b3UgYXJlIGludGVyZXN0
-ZWQgaW4gc3VwcG9ydGluZyB0aGlzIGVmZm9ydCBwbGVhc2UKY29udGFjdCBzYWxlc0BlZmZpY2lv
-cy5jb20uCgpBcyBmb3IgdGhlIGFjdHVhbCB1cHN0cmVhbSBrZXJuZWwsIHdlIGFyZSBtb25pdG9y
-aW5nIFsxXSBhbGwgbmV3IGtlcm5lbHMgYW5kCnN0YWJsZSBicmFuY2hlcy4KCgpbMV0gaHR0cHM6
-Ly9jaS5sdHRuZy5vcmcvdmlldy9MVFRuZy1tb2R1bGVzLwogICAgaHR0cHM6Ly9jaS5sdHRuZy5v
-cmcvdmlldy9MVFRuZy1tb2R1bGVzL2pvYi9sdHRuZy1tb2R1bGVzX3N0YWJsZS0yLjlfYnVpbGQt
-dmFuaWxsYS8KICAgIGh0dHBzOi8vY2kubHR0bmcub3JnL3ZpZXcvTFRUbmctbW9kdWxlcy9qb2Iv
-bHR0bmctbW9kdWxlc19zdGFibGUtMi4xMF9idWlsZC12YW5pbGxhLwogICAgaHR0cHM6Ly9jaS5s
-dHRuZy5vcmcvdmlldy9MVFRuZy1tb2R1bGVzL2pvYi9sdHRuZy1tb2R1bGVzX3N0YWJsZS0yLjEx
-X2J1aWxkLXZhbmlsbGEvCiAgICBodHRwczovL2NpLmx0dG5nLm9yZy92aWV3L0xUVG5nLW1vZHVs
-ZXMvam9iL2x0dG5nLW1vZHVsZXNfbWFzdGVyX2J1aWxkLXZhbmlsbGEvCgpDaGVlcnMKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
-bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Merged in master and stable-2.11.
+
+Thanks!
+J=E9r=E9mie
+
+On Thu, Oct 31, 2019 at 04:12:46PM -0400, Michael Jeanson wrote:
+> Add a configure switch '--enable-sdt-uprobe / --disable-sdt-uprobe', the
+> default behavior of enabling the test if the requirements are found is
+> kept but it's now possible to explicitly disable it.
+> =
+
+> Also add the detection of the dtrace binary and its override trough the
+> DTRACE environment variable.
+> =
+
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+>  configure.ac                                  | 37 +++++++++++++++++--
+>  tests/utils/testapp/Makefile.am               |  4 +-
+>  .../userspace-probe-sdt-binary/Makefile.am    |  8 +++-
+>  3 files changed, 42 insertions(+), 7 deletions(-)
+> =
+
+> diff --git a/configure.ac b/configure.ac
+> index 8c0683fe2..ab0a15b2d 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -25,9 +25,6 @@ AC_PROG_CXX
+>  RW_PROG_CXX_WORKS
+>  AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" =3D "xyes"])
+>  =
+
+> -LTTNG_CHECK_SDT_WORKS
+> -AM_CONDITIONAL([SDT_WORKS], [test "x$lttng_cv_sdt_works" =3D "xyes"])
+> -
+>  # Checks for programs.
+>  AC_PROG_GREP
+>  AC_PROG_MAKE_SET
+> @@ -815,6 +812,36 @@ AC_SUBST([RUN_PYTHON_AGENT_TEST])
+>  AC_SUBST([PYTHON2_AGENT])
+>  AC_SUBST([PYTHON3_AGENT])
+>  =
+
+> +AC_ARG_ENABLE([test-sdt-uprobe],
+> +  [AS_HELP_STRING([--enable-test-sdt-uprobe], [enable the LTTng UST SDT =
+uprobe tests [default=3Dautodetect]])],
+> +  [test_sdt_uprobe=3D"$enableval"],
+> +  [test_sdt_uprobe=3Dautodetect]
+> +)
+> +
+> +AS_IF([test "$test_sdt_uprobe" !=3D "no"], [
+> +  LTTNG_CHECK_SDT_WORKS
+> +  AC_PATH_PROG([DTRACE], [dtrace])
+> +])
+> +
+> +AS_IF([test "$test_sdt_uprobe" =3D "yes"], [
+> +  AS_IF([test "$lttng_cv_sdt_works" =3D "no"], [
+> +    AC_MSG_ERROR([Cannot find 'sys/sdt.h'.])
+> +  ])
+> +  AS_IF([test "x$DTRACE" =3D "x"], [
+> +    AC_MSG_ERROR([Cannot find SystemTap dtrace. You can set the DTRACE v=
+ariable to override automatic detection.])
+> +  ])
+> +])
+> +
+> +AS_IF([test "$test_sdt_uprobe" =3D "autodetect"], [
+> +  AS_IF([test "$lttng_cv_sdt_works" =3D "yes"], [
+> +    AS_IF([test "x$DTRACE" !=3D "x"], [
+> +      test_sdt_uprobe=3Dyes
+> +    ])
+> +  ])
+> +])
+> +
+> +AM_CONDITIONAL([TEST_SDT_UPROBE], [test "$test_sdt_uprobe" =3D "yes"])
+> +
+>  # Arguments for binaries build exclusion
+>  AC_ARG_ENABLE([bin-lttng], AS_HELP_STRING([--disable-bin-lttng],[Disable=
+ the build of lttng binaries]))
+>  AC_ARG_ENABLE([bin-lttng-consumerd], AS_HELP_STRING([--disable-bin-lttng=
+-consumerd],
+> @@ -1243,6 +1270,10 @@ PPRINT_PROP_BOOL([LTTng-UST Python2 agent tests], =
+$value)
+>  test ! -z "$PYTHON3_AGENT" && value=3D1 || value=3D0
+>  PPRINT_PROP_BOOL([LTTng-UST Python3 agent tests], $value)
+>  =
+
+> +# LTTng UST Java agent Log4j tests enabled/disabled
+> +test "x$test_sdt_uprobe" =3D "xyes" && value=3D1 || value=3D0
+> +PPRINT_PROP_BOOL([LTTng-UST SDT uprobe tests], $value)
+> +
+>  #Python binding enabled/disabled
+>  test "x$enable_python_binding" =3D xyes && value=3D1 || value=3D0
+>  AS_ECHO
+> diff --git a/tests/utils/testapp/Makefile.am b/tests/utils/testapp/Makefi=
+le.am
+> index 2a4cf5c7b..e2ad1f235 100644
+> --- a/tests/utils/testapp/Makefile.am
+> +++ b/tests/utils/testapp/Makefile.am
+> @@ -12,9 +12,9 @@ if CXX_WORKS
+>  SUBDIRS +=3D userspace-probe-elf-cxx-binary
+>  endif # CXX_WORKS
+>  =
+
+> -if SDT_WORKS
+> +if TEST_SDT_UPROBE
+>  SUBDIRS +=3D userspace-probe-sdt-binary
+> -endif # SDT_WORKS
+> +endif # TEST_SDT_UPROBE
+>  =
+
+>  if HAVE_MODULES_USERSPACE_CALLSTACK_CONTEXT
+>  SUBDIRS +=3D gen-syscall-events-callstack
+> diff --git a/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am b=
+/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am
+> index d79ce0ea3..591f4aa6c 100644
+> --- a/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am
+> +++ b/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am
+> @@ -26,10 +26,14 @@ libzzz_la_CFLAGS =3D -I$(abs_builddir)
+>  libzzz_la_LDFLAGS =3D -module -shared -avoid-version -rpath $(abs_buildd=
+ir)/.libs/
+>  nodist_libzzz_la_SOURCES =3D $(abs_builddir)/foobar_provider.h
+>  =
+
+> +dtrace_verbose =3D $(dtrace_verbose_@AM_V@)
+> +dtrace_verbose_ =3D $(dtrace_verbose_@AM_DEFAULT_V@)
+> +dtrace_verbose_0 =3D @echo "  DTRACE  " $@;
+> +
+>  foobar_provider.h: foobar_provider.d
+> -	dtrace -s $< -o $@ -h
+> +	$(dtrace_verbose)$(DTRACE) -s $< -o $@ -h
+>  =
+
+>  foobar_provider.o: foobar_provider.d
+> -	dtrace -s $< -o $@ -G
+> +	$(dtrace_verbose)$(DTRACE) -s $< -o $@ -G
+>  =
+
+>  CLEANFILES =3D foobar_provider.h
+> -- =
+
+> 2.17.1
+> =
