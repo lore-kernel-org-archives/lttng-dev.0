@@ -1,21 +1,16 @@
-From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] fix: Use DL_LIBS variable in
- ust multi-lib test
-Date: Tue, 5 Nov 2019 01:18:43 -0500
-Message-ID: <20191105061843.GA315567__31948.121897743$1572934743$gmane$org@gmail.com>
-References: <20191024153633.17551-1-mjeanson@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-tools] fix: Re-add link to urcu-bp for
+ _LGPL_SOURCE tests
+Date: Tue,  5 Nov 2019 11:30:24 -0500
+Message-ID: <20191105163024.5085-1-mjeanson__34213.2972365775$1572971454$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-f196.google.com (mail-qt1-f196.google.com
- [209.85.160.196])
- by lists.lttng.org (Postfix) with ESMTPS id 476fcl4NCdzrcX
- for <lttng-dev@lists.lttng.org>; Tue,  5 Nov 2019 01:18:47 -0500 (EST)
-Received: by mail-qt1-f196.google.com with SMTP id y10so21052036qto.3
- for <lttng-dev@lists.lttng.org>; Mon, 04 Nov 2019 22:18:47 -0800 (PST)
-Content-Disposition: inline
-In-Reply-To: <20191024153633.17551-1-mjeanson@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 476wBg6rj0zsQr
+ for <lttng-dev@lists.lttng.org>; Tue,  5 Nov 2019 11:30:35 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,47 +20,72 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Merged in master.
+Tests with tracepoints defined with _LGPL_SOURCE require to be
+explicitly linked against urcu-bp.
 
-Thanks!
-J=E9r=E9mie
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ tests/regression/ust/multi-session/Makefile.am      | 2 +-
+ tests/utils/testapp/gen-ust-events/Makefile.am      | 2 +-
+ tests/utils/testapp/gen-ust-nevents-str/Makefile.am | 2 +-
+ tests/utils/testapp/gen-ust-nevents/Makefile.am     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-On Thu, Oct 24, 2019 at 11:36:33AM -0400, Michael Jeanson wrote:
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
->  tests/regression/ust/multi-lib/Makefile.am | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> =
-
-> diff --git a/tests/regression/ust/multi-lib/Makefile.am b/tests/regressio=
-n/ust/multi-lib/Makefile.am
-> index 0ce46a7ff..52a1635c2 100644
-> --- a/tests/regression/ust/multi-lib/Makefile.am
-> +++ b/tests/regression/ust/multi-lib/Makefile.am
-> @@ -3,11 +3,11 @@ EXTRA_DIST =3D test_multi_lib
->  noinst_PROGRAMS =3D exec-with-callsites exec-without-callsites
->  =
-
->  exec_with_callsites_SOURCES =3D multi-lib-test.c callsites.c
-> -exec_with_callsites_LDFLAGS =3D -ldl $(POPT_LIBS)
-> +exec_with_callsites_LDFLAGS =3D $(DL_LIBS) $(POPT_LIBS)
->  exec_with_callsites_CFLAGS =3D $(POPT_CFLAGS) $(AM_CFLAGS) -DHAS_CALLSIT=
-ES=3D1
->  =
-
->  exec_without_callsites_SOURCES =3D multi-lib-test.c
-> -exec_without_callsites_LDFLAGS =3D -ldl $(POPT_LIBS) $(UST_LIBS)
-> +exec_without_callsites_LDFLAGS =3D $(DL_LIBS) $(POPT_LIBS) $(UST_LIBS)
->  exec_without_callsites_LDADD =3D probes.o
->  exec_without_callsites_CFLAGS =3D $(POPT_CFLAGS) $(AM_CFLAGS) -DHAS_CALL=
-SITES=3D0
->  =
-
-> -- =
-
-> 2.17.1
-> =
+diff --git a/tests/regression/ust/multi-session/Makefile.am b/tests/regression/ust/multi-session/Makefile.am
+index 0d807a878..676c26f21 100644
+--- a/tests/regression/ust/multi-session/Makefile.am
++++ b/tests/regression/ust/multi-session/Makefile.am
+@@ -2,7 +2,7 @@ AM_CFLAGS += -I$(srcdir)
+ 
+ noinst_PROGRAMS = gen-nevents
+ gen_nevents_SOURCES = gen-nevents.c tp.c ust_gen_nevents.h
+-gen_nevents_LDADD = $(UST_LIBS) $(DL_LIBS)
++gen_nevents_LDADD = $(UST_LIBS) -lurcu-bp $(DL_LIBS)
+ 
+ noinst_SCRIPTS = test_multi_session
+ EXTRA_DIST = test_multi_session
+diff --git a/tests/utils/testapp/gen-ust-events/Makefile.am b/tests/utils/testapp/gen-ust-events/Makefile.am
+index 38e620d75..8918fc80d 100644
+--- a/tests/utils/testapp/gen-ust-events/Makefile.am
++++ b/tests/utils/testapp/gen-ust-events/Makefile.am
+@@ -4,7 +4,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/tests/utils -I$(srcdir) \
+ if HAVE_LIBLTTNG_UST_CTL
+ noinst_PROGRAMS = gen-ust-events
+ gen_ust_events_SOURCES = gen-ust-events.c tp.c tp.h
+-gen_ust_events_LDADD = $(UST_LIBS) \
++gen_ust_events_LDADD = $(UST_LIBS) -lurcu-bp \
+ 		$(top_builddir)/tests/utils/libtestutils.la \
+ 		$(DL_LIBS)
+ endif
+diff --git a/tests/utils/testapp/gen-ust-nevents-str/Makefile.am b/tests/utils/testapp/gen-ust-nevents-str/Makefile.am
+index 0e961b4c4..27cb9efa7 100644
+--- a/tests/utils/testapp/gen-ust-nevents-str/Makefile.am
++++ b/tests/utils/testapp/gen-ust-nevents-str/Makefile.am
+@@ -4,7 +4,7 @@ AM_CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/tests/utils \
+ if HAVE_LIBLTTNG_UST_CTL
+ noinst_PROGRAMS = gen-ust-nevents-str
+ gen_ust_nevents_str_SOURCES = gen-ust-nevents-str.c tp.c tp.h
+-gen_ust_nevents_str_LDADD = $(UST_LIBS) \
++gen_ust_nevents_str_LDADD = $(UST_LIBS) -lurcu-bp \
+ 		$(top_builddir)/tests/utils/libtestutils.la \
+ 		$(DL_LIBS)
+ endif
+diff --git a/tests/utils/testapp/gen-ust-nevents/Makefile.am b/tests/utils/testapp/gen-ust-nevents/Makefile.am
+index c20910bd8..f85d35a13 100644
+--- a/tests/utils/testapp/gen-ust-nevents/Makefile.am
++++ b/tests/utils/testapp/gen-ust-nevents/Makefile.am
+@@ -4,7 +4,7 @@ AM_CPPFLAGS += -I$(srcdir) -I$(top_srcdir)/tests/utils \
+ if HAVE_LIBLTTNG_UST_CTL
+ noinst_PROGRAMS = gen-ust-nevents
+ gen_ust_nevents_SOURCES = gen-ust-nevents.c tp.c tp.h
+-gen_ust_nevents_LDADD = $(UST_LIBS) \
++gen_ust_nevents_LDADD = $(UST_LIBS) -lurcu-bp \
+ 		$(top_builddir)/tests/utils/libtestutils.la \
+ 		$(DL_LIBS)
+ endif
+-- 
+2.17.1
