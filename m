@@ -1,17 +1,21 @@
-From: Simon Marchi <simark@simark.ca>
+From: Rolf Eike Beer <eb@emlix.com>
 Subject: Re: Wrong "ar" used when cross-building lttng
-Date: Thu, 14 Nov 2019 11:01:54 -0500
-Message-ID: <2e655403-71d2-ee11-3675-d9ad81d6fe85__11895.9614819445$1573747692$gmane$org@simark.ca>
+Date: Thu, 14 Nov 2019 17:24:38 +0100
+Message-ID: <3241563.NbJrRt7XGO__24461.2829572119$1573748789$gmane$org@devpool35>
 References: <2357817.GzqeBO7jDX@devpool35>
+ <2e655403-71d2-ee11-3675-d9ad81d6fe85@simark.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5068348415382414498=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 47DRGK5p4pzrW0
- for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2019 11:07:53 -0500 (EST)
-In-Reply-To: <2357817.GzqeBO7jDX@devpool35>
-Content-Language: tl
+Received: from mx1.emlix.com (mx1.emlix.com [188.40.240.192])
+ by lists.lttng.org (Postfix) with ESMTPS id 47DRdm28vxzrXX
+ for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2019 11:24:43 -0500 (EST)
+Received: from mailer.emlix.com (unknown [81.20.119.6])
+ (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mx1.emlix.com (Postfix) with ESMTPS id 0506A5FD33
+ for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2019 17:24:42 +0100 (CET)
+In-Reply-To: <2e655403-71d2-ee11-3675-d9ad81d6fe85@simark.ca>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,73 +25,98 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Rolf Eike Beer <eb@emlix.com>, lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAxOS0xMS0xNCAyOjU4IGEubS4sIFJvbGYgRWlrZSBCZWVyIHdyb3RlOgo+IFRoZSB1bnBy
-ZWZpeGVkIHZlcnNpb24gb2YgImFyIiBpcyBiZWluZyB1c2VkLCBsZWFkaW5nIHRvIHRoaXMgZXJy
-b3I6Cj4gCj4gYXJtLXVua25vd24tbGludXgtZ251ZWFiaS1nY2MgIC1JLiAtV2FsbCAtSS4uLy4u
-Ly4uL2luY2x1ZGUvIC1JLi4vLi4vLi4vCj4gaW5jbHVkZS8gXAo+ICAgICAgICAgLU8yIC1nIC1t
-YXJjaD1hcm12Ny1hIC1tdHVuZT1jb3J0ZXgtYTkgLW1mcHU9bmVvbi1mcDE2IC1tZmxvYXQtCj4g
-YWJpPWhhcmQgLW10aHVtYi1pbnRlcndvcmsgLXBpcGUgLVdsLC0tbm8tY29weS1kdC1uZWVkZWQt
-ZW50cmllcywtLWFzLW5lZWRlZCAtCj4gV2wsLS1idWlsZC1pZCAtV2RhdGUtdGltZSAtYyAtbyBs
-dHRuZy11c3QtcHJvdmlkZXItaGVsbG8ubyB0cC5jCj4gYXIgLXJjIGx0dG5nLXVzdC1wcm92aWRl
-ci1oZWxsby5hIGx0dG5nLXVzdC1wcm92aWRlci1oZWxsby5vCj4gbWFrZVs0XTogYXI6IENvbW1h
-bmQgbm90IGZvdW5kCj4gCj4gSSBmaXhlZCBpdCBmb3IgdGhlIG1vbWVudCB3aXRoICJtYWtlIEFS
-PWFybS11bmtub3duLWxpbnV4LWdudWVhYmktYXIiLCBidXQgCj4gaWRlYWxseSB0aGlzIHdvdWxk
-IG5vdCBiZSBuZWVkZWQuCj4gCj4gR3JlZXRpbmdzLAo+IAo+IEVpa2UKPiAtLSAKPiBSb2xmIEVp
-a2UgQmVlciwgZW1saXggR21iSCwgaHR0cDovL3d3dy5lbWxpeC5jb20KPiBGb24gKzQ5IDU1MSAz
-MDY2NC0wLCBGYXggKzQ5IDU1MSAzMDY2NC0xMQo+IEdvdGhhZXIgUGxhdHogMywgMzcwODMgR8O2
-dHRpbmdlbiwgR2VybWFueQo+IFNpdHogZGVyIEdlc2VsbHNjaGFmdDogR8O2dHRpbmdlbiwgQW10
-c2dlcmljaHQgR8O2dHRpbmdlbiBIUiBCIDMxNjAKPiBHZXNjaMOkZnRzZsO8aHJ1bmc6IEhlaWtl
-IEpvcmRhbiwgRHIuIFV3ZSBLcmFja2Ug4oCTIFVzdC1JZE5yLjogREUgMjA1IDE5OCAwNTUKPiAK
-PiBlbWxpeCAtIHNtYXJ0IGVtYmVkZGVkIG9wZW4gc291cmNlCgpIaSBSb2ZsLAoKSW5kZWVkLCBJ
-IGNhbiBzZWUgdGhlIHByb2JsZW0uCgpDYW4geW91IHBsZWFzZSB0cnkgdGhlIHBhdGNoIGJlbG93
-PyAgSXQgYWRkcyBhbiBhdXRvY29uZiBjaGVjayBmb3IgYXIgYW5kIHRoZW4gcGFzc2VzCml0IGFz
-IGFuIGVudmlyb25tZW50IHZhcmlhYmxlIHRvIHRoZSBNYWtlZmlsZXMgb2YgZG9jL2V4YW1wbGVz
-LgoKTm90ZSB0aGF0IHRoZSBNYWtlZmlsZXMgaW4gZG9jL2V4YW1wbGVzIGFyZSB3cml0dGVuIGJ5
-IGhhbmQgdG8gYmUgc3RhbmRhbG9uZSBvbiBwdXJwb3NlLApzbyB0aGF0IG9uZSBjYW4gZWFzaWx5
-IGNvcHkgdGhlbSB0byBib290c3RyYXAgdGhlaXIgcHJvamVjdCAoYXQgbGVhc3QgdGhhdCdzIHdo
-YXQgSQpzdXBwb3NlZCkuICBUaGlzIG1lYW5zIHRoYXQgZG9jL2V4YW1wbGVzL2hlbGxvLXN0YXRp
-Yy1saWIvTWFrZWZpbGUgaXMgbm90IGRpcmVjdGx5CmluZmx1ZW5jZWQgYnkgdGhlIGNvbmZpZ3Vy
-ZSBjaGVja3MuICBJdCB3aWxsIG5vdCBwaWNrIHVwIHRoZSByaWdodCB0b29scyBpZiB5b3UKcnVu
-ICJtYWtlIiBkaXJlY3RseSBpbiAgZG9jL2V4YW1wbGVzL2hlbGxvLXN0YXRpYy1saWIsIGJ1dCBv
-bmx5IGlmIHlvdSBydW4gaXQgZnJvbSBhCmRpcmVjdG9yeSBhYm92ZS4KClNpbW9uCgoKRnJvbSBj
-YjgxOWJhMWU5ZGJiYTYxMmRkMjJkMTQzYzRmYjU3MTg1YjZhYzdiIE1vbiBTZXAgMTcgMDA6MDA6
-MDAgMjAwMQpGcm9tOiBTaW1vbiBNYXJjaGkgPHNpbW9uLm1hcmNoaUBlZmZpY2lvcy5jb20+CkRh
-dGU6IFRodSwgMTQgTm92IDIwMTkgMTA6NTQ6MzQgLTA1MDAKU3ViamVjdDogW1BBVENIXSBkb2M6
-IHBhc3MgQVIgd2hlbiBidWlsZGluZyBleGFtcGxlcwoKLS0tCiBjb25maWd1cmUuYWMgICAgICAg
-ICAgICAgfCAxICsKIGRvYy9leGFtcGxlcy9NYWtlZmlsZS5hbSB8IDIgKy0KIDIgZmlsZXMgY2hh
-bmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvY29uZmln
-dXJlLmFjIGIvY29uZmlndXJlLmFjCmluZGV4IDAwMWM0NDI4OTc5MC4uZTA3ODg4YzA5M2ZkIDEw
-MDY0NAotLS0gYS9jb25maWd1cmUuYWMKKysrIGIvY29uZmlndXJlLmFjCkBAIC02Niw2ICs2Niw3
-IEBAIEFTX0lGKFt0ZXN0ICJ4JHtheF9jdl9zeXNfd2Vha19hbGlhc30iID0gInhubyJdLCBbCiBd
-KQoKICMgQ2hlY2tzIGZvciBwcm9ncmFtcy4KK0FNX1BST0dfQVIKIEFDX1BST0dfU0VECiBBQ19Q
-Uk9HX0dSRVAKIEFDX1BST0dfTE5fUwpkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL01ha2VmaWxl
-LmFtIGIvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtCmluZGV4IGQ1ZDAwYjA5MGM2MS4uMmQ4Yjg2
-ZDEwMDFhIDEwMDY0NAotLS0gYS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KKysrIGIvZG9jL2V4
-YW1wbGVzL01ha2VmaWxlLmFtCkBAIC0xMjMsNyArMTIzLDcgQEAgYWxsLWxvY2FsOgogCQlyZWxf
-YnVpbGRfc3ViZGlyPSIuLi8iOyBcCiAJZmk7IFwKIAlmb3Igc3ViZGlyIGluICQoU1VCRElSU19Q
-Uk9YWSk7IGRvIFwKLQkJKGNkICQkc3ViZGlyICYmICQoTUFLRSkgQ0M9IiQoQ0MpIiBDUFBGTEFH
-Uz0iJChDUFBGTEFHUykiIEFNX0NQUEZMQUdTPSIkKEFNX0NQUEZMQUdTKSAtSSQkcmVsX3NyY19z
-dWJkaXIkKHRvcF9zcmNkaXIpL2luY2x1ZGUvIC1JJCRyZWxfYnVpbGRfc3ViZGlyJCh0b3BfYnVp
-bGRkaXIpL2luY2x1ZGUvIiBDRkxBR1M9JyQoQ0ZMQUdTKScgQU1fQ0ZMQUdTPSckKEFNX0NGTEFH
-UyknIExERkxBR1M9IiQoTERGTEFHUykiIEFNX0xERkxBR1M9JyQoQU1fTERGTEFHUykgLUwuLi8u
-Li8uLi9saWJsdHRuZy11c3QvLmxpYnMgLVdsLC1ycGF0aD0iJChQV0QpLy4uLy4uL2xpYmx0dG5n
-LXVzdC8ubGlicy8iIC1XbCwtcnBhdGgtbGluaz0iJChQV0QpLy4uLy4uL2xpYmx0dG5nLXVzdC8u
-bGlicy8iJyBMVFROR19HRU5fVFBfUEFUSD0iLi4vLi4vLi4vdG9vbHMvIiBBTV9WX1A9IiQoQU1f
-Vl9QKSIgQU1fVl9hdD0iJChBTV9WX2F0KSIgJChBTV9NQUtFRkxBR1MpIGFsbCAmJiBjZCAuLikg
-fHwgZXhpdCAxOyBcCisJCShjZCAkJHN1YmRpciAmJiAkKE1BS0UpIEFSPSIkKEFSKSIgQ0M9IiQo
-Q0MpIiBDUFBGTEFHUz0iJChDUFBGTEFHUykiIEFNX0NQUEZMQUdTPSIkKEFNX0NQUEZMQUdTKSAt
-SSQkcmVsX3NyY19zdWJkaXIkKHRvcF9zcmNkaXIpL2luY2x1ZGUvIC1JJCRyZWxfYnVpbGRfc3Vi
-ZGlyJCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUvIiBDRkxBR1M9JyQoQ0ZMQUdTKScgQU1fQ0ZMQUdT
-PSckKEFNX0NGTEFHUyknIExERkxBR1M9IiQoTERGTEFHUykiIEFNX0xERkxBR1M9JyQoQU1fTERG
-TEFHUykgLUwuLi8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMgLVdsLC1ycGF0aD0iJChQV0QpLy4u
-Ly4uL2xpYmx0dG5nLXVzdC8ubGlicy8iIC1XbCwtcnBhdGgtbGluaz0iJChQV0QpLy4uLy4uL2xp
-Ymx0dG5nLXVzdC8ubGlicy8iJyBMVFROR19HRU5fVFBfUEFUSD0iLi4vLi4vLi4vdG9vbHMvIiBB
-TV9WX1A9IiQoQU1fVl9QKSIgQU1fVl9hdD0iJChBTV9WX2F0KSIgJChBTV9NQUtFRkxBR1MpIGFs
-bCAmJiBjZCAuLikgfHwgZXhpdCAxOyBcCiAJZG9uZTsgXAogCWlmIFsgeCIkKFNVQkRJUlNfSlVM
-KSIgIT0geCIiIF07IHRoZW4gXAogCQlmb3Igc3ViZGlyIGluICQoU1VCRElSU19KVUwpOyBkbyBc
-Ci0tIAoyLjI0LjAKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
-cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============5068348415382414498==
+Content-Type: multipart/signed; boundary="nextPart1834589.XSYue2n15a"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+
+--nextPart1834589.XSYue2n15a
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+
+Simon Marchi wrote:
+> On 2019-11-14 2:58 a.m., Rolf Eike Beer wrote:
+> > The unprefixed version of "ar" is being used, leading to this error:
+> >=20
+> > arm-unknown-linux-gnueabi-gcc  -I. -Wall -I../../../include/ -I../../../
+> > include/ \
+> >=20
+> >         -O2 -g -march=3Darmv7-a -mtune=3Dcortex-a9 -mfpu=3Dneon-fp16 -m=
+float-
+> >=20
+> > abi=3Dhard -mthumb-interwork -pipe
+> > -Wl,--no-copy-dt-needed-entries,--as-needed - Wl,--build-id -Wdate-time
+> > -c -o lttng-ust-provider-hello.o tp.c
+> > ar -rc lttng-ust-provider-hello.a lttng-ust-provider-hello.o
+> > make[4]: ar: Command not found
+> >=20
+> > I fixed it for the moment with "make AR=3Darm-unknown-linux-gnueabi-ar"=
+, but
+> > ideally this would not be needed.
+> >=20
+> > Greetings,
+> >=20
+> > Eike
+>=20
+> Hi Rofl,
+>=20
+> Indeed, I can see the problem.
+>=20
+> Can you please try the patch below?  It adds an autoconf check for ar and
+> then passes it as an environment variable to the Makefiles of doc/example=
+s.
+
+Works for me.
+
+I have not checked latest git, but maybe you may want to fix this warning,=
+=20
+too?
+
+With 2.11.0 release tarball:
+
+=2D./configure: line 24663: test: -eq: unary operator expected
+
+Greetings,
+
+Eike
+=2D-=20
+Rolf Eike Beer, emlix GmbH, http://www.emlix.com
+=46on +49 551 30664-0, Fax +49 551 30664-11
+Gothaer Platz 3, 37083 G=C3=B6ttingen, Germany
+Sitz der Gesellschaft: G=C3=B6ttingen, Amtsgericht G=C3=B6ttingen HR B 3160
+Gesch=C3=A4ftsf=C3=BChrung: Heike Jordan, Dr. Uwe Kracke =E2=80=93 Ust-IdNr=
+=2E: DE 205 198 055
+
+emlix - smart embedded open source
+--nextPart1834589.XSYue2n15a
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iLMEAAEIAB0WIQQ/Uctzh31xzAxFCLur5FH7Xu2t/AUCXc1/xgAKCRCr5FH7Xu2t
+/DsuA/9cavIOBWyXdPeI6NTqqqlQ9eAL41pom0jwxH392aQOx6y2UXI/fyvihuiC
+1VWbt1c8vrw8YKYu6DzQctKSQ1kQGEk1HdYI34y2OcE2gmH6yHExNmo/00BMvSYm
+Zi17ZzMzMSb2lpOex3L/ZLvmYhAwixJt8F6OS6gSkp9ym9bgNA==
+=//JC
+-----END PGP SIGNATURE-----
+
+--nextPart1834589.XSYue2n15a--
+
+
+
+
+--===============5068348415382414498==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============5068348415382414498==--
