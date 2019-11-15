@@ -1,19 +1,18 @@
-From: Simon Marchi <simark@simark.ca>
-Subject: Re: Wrong "ar" used when cross-building lttng
-Date: Fri, 15 Nov 2019 10:34:33 -0500
-Message-ID: <50ff7646-3ca9-0fdd-f9bf-6bfa8e63bad3__25900.2562191867$1573832094$gmane$org@simark.ca>
-References: <2357817.GzqeBO7jDX@devpool35> <3241563.NbJrRt7XGO@devpool35>
- <3c62ba15-bb2d-702e-86f4-90e8decc9fb1@simark.ca>
- <4096513.X5kWAsihKE@devpool35>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] Babeltrace 2.0.0-rc4
+Date: Fri, 15 Nov 2019 18:03:00 -0500
+Message-ID: <20191115230300.GA44302__36299.0083800227$1573859009$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 47F2TR2kXNz1RL3
- for <lttng-dev@lists.lttng.org>; Fri, 15 Nov 2019 10:34:35 -0500 (EST)
-In-Reply-To: <4096513.X5kWAsihKE@devpool35>
-Content-Language: tl
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com
+ [209.85.222.173])
+ by lists.lttng.org (Postfix) with ESMTPS id 47FDQx17sSz1Rkr
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Nov 2019 18:03:04 -0500 (EST)
+Received: by mail-qk1-f173.google.com with SMTP id 205so9487873qkk.1
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Nov 2019 15:03:04 -0800 (PST)
+Content-Disposition: inline
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,40 +22,188 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Rolf Eike Beer <eb@emlix.com>, lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2019-11-15 3:18 a.m., Rolf Eike Beer wrote:
-> Simon Marchi wrote:
->> On 2019-11-14 11:24 a.m., Rolf Eike Beer wrote:
-> 
->>> I have not checked latest git, but maybe you may want to fix this warning,
->>> too?
->>>
->>> With 2.11.0 release tarball:
->>>
->>> -./configure: line 24663: test: -eq: unary operator expected
-> 
->> Hmm I don't remember seeing this error, and I don't see it now.
->>
->> Could you please try with master?  If it still happens, you can try to
->> find from which line of the configure.ac or an m4 file this line comes
->> from.  I presume it won't be too hard to fix.
-> 
-> Sorry, my fault. If I had looked a little closer I could have given you the 
-> context:
-> 
->  checking for tput... /usr/bin/tput
->  tput: No value for $TERM and no -T specified
-> ./configure: line 24663: test: -eq: unary operator expected
-> 
-> When the package is built inside our automated buildsystem these variables are 
-> not set because this is no interactive shell. If I build with an interactive 
-> shell these warnings are in fact not there.
+Hi everyone!
 
-It still sounds like the "test" command should be improved, it should not fail with
-an invalid syntax.  Can you give us the relevant lines of configure around 24663,
-and if possible match them to the source lines in configure.ac and/or one of the
-m4 files in the m4 directory?
+Two weeks after having released [1] Babeltrace 2's second release
+candidate, today we're releasing Babeltrace 2.0.0-rc4.
 
-Simon
+NOTE: Due to human error, Babeltrace 2.0.0-rc3 is a malformed release.
+Babeltrace 2.0.0-rc3 and Babeltrace 2.0.0-rc4 have the same changes
+since Babeltrace 2.0.0-rc2.
+
+What's new since Babeltrace 2.0.0-rc2?
+======================================
+Improvements
+~~~~~~~~~~~~
+General:
+    * Introduce the `BABELTRACE_EXEC_ON_ABORT` environment variable.
+
+      `BABELTRACE_EXEC_ON_ABORT` can contain a shell command line to
+      execute when any part of the Babeltrace project aborts (for
+      example, when an internal assertion fails) before the process
+      exits.
+
+      See `8403432f`.
+
+    * Add precondition assertions to verify that the current thread has
+      no error when you call a libbabeltrace2 function (except reference
+      count functions).
+
+      See `7c7324d3`.
+
+    * Add postcondition assertions to verify that the user functions
+      which libbabeltrace2 calls return an error status code when the
+      current thread has an error.
+
+      See `d6f6a5aa`.
+
+    * Emit dedicated bright terminal color codes if supported by the
+      terminal emulator.
+
+      This makes the `babeltrace2` [2] CLI tool and some project plugins
+      emit correct bright color codes for the kitty terminal
+      emulator [3], for example.
+
+      You can override this behaviour with the new
+      `BABELTRACE_TERM_COLOR_BRIGHT_MEANS_BOLD` environment variable.
+
+      See `4253e1eb`.
+
+    * In libbabeltrace2's API: make the
+      `bt_value_map_foreach_entry_func` and
+      `bt_value_map_foreach_entry_const_func` function types return a
+      status code instead of `bt_bool`.
+
+      This makes it possible for the user function to append a cause to
+      the current thread's error and return an error status code. When
+      the user function returns a general error status code,
+      `bt_value_map_foreach_entry()` returns
+      `BT_VALUE_MAP_FOREACH_ENTRY_STATUS_USER_ERROR` (and an equivalent
+      code for `bt_value_map_foreach_entry_const()`).
+
+      The new way to interrupt the outer loop from the user function is
+      to return `BT_VALUE_MAP_FOREACH_ENTRY_FUNC_STATUS_INTERRUPT`.
+
+      See `0589c646`.
+
+Command-line interface:
+    Exit with status 2 when the process receives the `SIGINT` signal.
+
+    This makes it possible to distinguish a successful execution
+    (status 0) from an execution that ends because of an error
+    (status 1).
+
+    See `851802b1`.
+
+`source.ctf.fs` component class:
+    * Check the version of LTTng [4] index files to avoid reading files
+      of future backwards-incompatible versions.
+
+      See `2068d50b`.
+
+    * If the same packets exist in different data stream files of a
+      given CTF trace, read each of them only once.
+
+      This feature makes it possible to open overlapping LTTng
+      snapshots [5] without emitting the event and packet messages twice
+      or more like Babeltrace 1 does.
+
+      For example:
+
+          $ babeltrace2 snapshot1 snapshot2 snapshot3
+
+          $ babeltrace2 snapshot-directory
+
+      See `148f02cb`.
+
+`source.ctf.lttng-live` component class:
+    Return
+    `BT_COMPONENT_CLASS_MESSAGE_ITERATOR_NEXT_METHOD_STATUS_AGAIN` when
+    a signal interrupts an I/O system call _and_ the graph's interrupter
+    is set; restart the system call otherwise.
+
+    Because the `babeltrace2` CLI tool sets the graph's interrupter when
+    it receives the `SIGINT` signal, this change makes it possible to
+    exit with status 2 (instead of status 1, an error) when it receives
+    the `SIGINT` signal and a `source.ctf.lttng-live` message iterator
+    is currently being executed.
+
+    See `8dd99d00`.
+
+`filter.utils.muxer` component class:
+    Append causes to the current thread's error when encountering some
+    error conditions.
+
+    See `f331468c`.
+
+Notable bug fixes
+~~~~~~~~~~~~~~~~~
+Simple sink component class:
+    Append error causes only when returning an error status code.
+
+    See `eb657c7b`.
+
+Upcoming
+========
+We are still hard at work putting the finishing touches on our way to
+the final 2.0.0 release.
+
+We invite you to try this release candidate and report any problems you
+may encounter to the `lttng-dev@lists.lttng.org` [6] mailing list or
+through the Babeltrace bug tracker [7].
+
+Documentation
+-------------
+We are currently documenting the entire Babeltrace 2 C API to make the
+development of new component classes as easy as possible.
+
+We'll also work on the Python bindings documentation.
+
+The documentation of the API will be made available on the official
+Babeltrace website [8].
+
+Other tasks
+-----------
+* Improve test coverage.
+* Improve resilience to corrupted/malformed CTF traces.
+* Minor internal cleanups and bug fixes.
+
+Important links
+===============
+Babeltrace 2.0.0-rc4 tarball:
+    https://www.efficios.com/files/babeltrace/babeltrace-2.0.0-rc4.tar.bz2
+
+Babeltrace website:
+    https://diamon.org/babeltrace
+
+Mailing list (for support and development):
+    `lttng-dev@lists.lttng.org`
+
+IRC channel:
+    `#lttng` on `irc.oftc.net`
+
+Git repository:
+    https://bugs.lttng.org/projects/babeltrace
+
+GitHub project:
+    https://github.com/efficios/babeltrace
+
+Continuous integration:
+    https://ci.lttng.org/view/Babeltrace/
+
+Code review:
+    https://review.lttng.org/q/project:babeltrace
+
+References
+==========
+[1]: https://diamon.org/babeltrace/docs/release-notes/babeltrace-2.0.0-rc2-release-notes.html
+[2]: https://diamon.org/babeltrace/docs/v2.0/man1/babeltrace2.1/
+[3]: https://sw.kovidgoyal.net/kitty/
+[4]: https://lttng.org/
+[5]: https://lttng.org/docs/#doc-taking-a-snapshot
+[6]: https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+[7]: https://bugs.lttng.org/projects/babeltrace
+[8]: https://diamon.org/babeltrace/
