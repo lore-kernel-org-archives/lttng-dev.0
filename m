@@ -1,15 +1,18 @@
 From: Simon Marchi <simon.marchi@efficios.com>
-Subject: [PATCH 1/2] doc: pass AR when building examples
-Date: Mon, 18 Nov 2019 12:07:50 -0500
-Message-ID: <20191118170751.32002-1-simon.marchi__42251.095936966$1574096898$gmane$org@efficios.com>
+Subject: [PATCH 2/2] doc: reformat long lines in
+ doc/examples/Makefile.am
+Date: Mon, 18 Nov 2019 12:07:51 -0500
+Message-ID: <20191118170751.32002-2-simon.marchi__31114.2645588674$1574096931$gmane$org@efficios.com>
+References: <20191118170751.32002-1-simon.marchi@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 47GwPs40mCzsZQ
+ by lists.lttng.org (Postfix) with ESMTPS id 47GwPs4k5RzsZT
  for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 12:08:01 -0500 (EST)
+In-Reply-To: <20191118170751.32002-1-simon.marchi@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,69 +23,88 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
-Cc: Simon Marchi <simon.marchi@efficios.com>, Rolf Eike Beer <eb@emlix.com>
+Cc: Simon Marchi <simon.marchi@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-As reported here [1], when cross-compiling lttng-ust, the
-"hello-static-lib" example uses the ar tool made for the --build machine
-instead of the prefixed one, for the --host machine.
-
-The Makefiles in the subdirectories of doc/examples are written by hand,
-so that they can be easily copied and modified by users.  They are
-therefore not integrated in the automake build system, and any value
-detected by configure must be passed explicitly when invoking it.
-For example, the CC value is already explicitly passed, so that the
-compiler value found by configure is passed down.  We just need to do
-the same for AR.
-
-This patch adds AM_PROG_AR in configure.ac, so that configure finds the
-prefixed version of ar, if cross-compiling.
-
-It then sets the AR variable in doc/examples/Makefile.am, when invoking
-sub-Makefiles.  I don't think we really need it in the cmake case, but
-it doesn't hurt to have it there.
-
-[1] https://lists.lttng.org/pipermail/lttng-dev/2019-November/029388.html
-
-Reported-by: Rolf Eike Beer <eb@emlix.com>
-Signed-off-by: Simon Marchi <simon.marchi@efficios.com>
----
- configure.ac             | 1 +
- doc/examples/Makefile.am | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/configure.ac b/configure.ac
-index 001c44289790..e07888c093fd 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -66,6 +66,7 @@ AS_IF([test "x${ax_cv_sys_weak_alias}" = "xno"], [
- ])
- 
- # Checks for programs.
-+AM_PROG_AR
- AC_PROG_SED
- AC_PROG_GREP
- AC_PROG_LN_S
-diff --git a/doc/examples/Makefile.am b/doc/examples/Makefile.am
-index d5d00b090c61..2f9811ea4f9b 100644
---- a/doc/examples/Makefile.am
-+++ b/doc/examples/Makefile.am
-@@ -123,7 +123,7 @@ all-local:
- 		rel_build_subdir="../"; \
- 	fi; \
- 	for subdir in $(SUBDIRS_PROXY); do \
--		(cd $$subdir && $(MAKE) CC="$(CC)" CPPFLAGS="$(CPPFLAGS)" AM_CPPFLAGS="$(AM_CPPFLAGS) -I$$rel_src_subdir$(top_srcdir)/include/ -I$$rel_build_subdir$(top_builddir)/include/" CFLAGS='$(CFLAGS)' AM_CFLAGS='$(AM_CFLAGS)' LDFLAGS="$(LDFLAGS)" AM_LDFLAGS='$(AM_LDFLAGS) -L../../../liblttng-ust/.libs -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/" -Wl,-rpath-link="$(PWD)/../../liblttng-ust/.libs/"' LTTNG_GEN_TP_PATH="../../../tools/" AM_V_P="$(AM_V_P)" AM_V_at="$(AM_V_at)" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
-+		(cd $$subdir && $(MAKE) AR="$(AR)" CC="$(CC)" CPPFLAGS="$(CPPFLAGS)" AM_CPPFLAGS="$(AM_CPPFLAGS) -I$$rel_src_subdir$(top_srcdir)/include/ -I$$rel_build_subdir$(top_builddir)/include/" CFLAGS='$(CFLAGS)' AM_CFLAGS='$(AM_CFLAGS)' LDFLAGS="$(LDFLAGS)" AM_LDFLAGS='$(AM_LDFLAGS) -L../../../liblttng-ust/.libs -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/" -Wl,-rpath-link="$(PWD)/../../liblttng-ust/.libs/"' LTTNG_GEN_TP_PATH="../../../tools/" AM_V_P="$(AM_V_P)" AM_V_at="$(AM_V_at)" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
- 	done; \
- 	if [ x"$(SUBDIRS_JUL)" != x"" ]; then \
- 		for subdir in $(SUBDIRS_JUL); do \
-@@ -141,6 +141,7 @@ all-local:
- 				cd $$subdir && \
- 				$(MKDIR_P) build && \
- 				cd build && \
-+				AR="$(AR)" \
- 				CC="$(CC)" \
- 				CXX="$(CXX)" \
- 				cmake \
--- 
-2.24.0
+Rm9ybWF0IHRoZSBsb25nIGxpbmVzIGluIHRoZSBhbGwtbG9jYWwgdGFyZ2V0IGEgYml0IGxpa2Ug
+dGhlICJjbWFrZSIKdGFyZ2V0IGlzIGZvcm1hdHRlZCBhbHJlYWR5LiAgSSB0aGluayBpdCBoZWxw
+cyByZWFkYWJpbGl0eSB0byBoYXZlIG9uZQphcmd1bWVudCBwZXIgbGluZSBpbnN0ZWFkIG9mIHZl
+cnkgbG9uZyBsaW5lcy4KCkF0IHRoZSBzYW1lIHRpbWUsIEkgcmVtb3ZlZCB0aGUgImNkIC4uIiBh
+dCB0aGUgZW5kIG9mIHBhcmVudGhlc2VzLiAgVGhlCnBhcmVudGhlc2VzIHN0YXJ0IGEgbmV3IHN1
+YnNoZWxsLCBzbyBpdCdzIHVubmVjZXNzYXJ5IHRvIGRvICJjZCAuLiIKYmVmb3JlIHRoZSBzdWJz
+aGVsbCBleGl0cy4KCkknbSBub3QgdG9vIHN1cmUgd2hhdCdzIHRoZSBiZXN0IHdheSB0byBpbmRl
+bnQgaXQsIGZlZWwgZnJlZSB0byBtb2RpZnkKaXQgYmVmb3JlIGNoYW5naW5nIHRoZSBwYXRjaC4K
+ClNpZ25lZC1vZmYtYnk6IFNpbW9uIE1hcmNoaSA8c2ltb24ubWFyY2hpQGVmZmljaW9zLmNvbT4K
+LS0tCiBkb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0gfCA1NiArKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKystLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgNDIgaW5zZXJ0aW9ucygrKSwgMTQg
+ZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIGIvZG9j
+L2V4YW1wbGVzL01ha2VmaWxlLmFtCmluZGV4IDJmOTgxMWVhNGY5Yi4uZGMzNzQ4OTY4N2UyIDEw
+MDY0NAotLS0gYS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KKysrIGIvZG9jL2V4YW1wbGVzL01h
+a2VmaWxlLmFtCkBAIC0xMjMsMTYgKzEyMyw0NSBAQCBhbGwtbG9jYWw6CiAJCXJlbF9idWlsZF9z
+dWJkaXI9Ii4uLyI7IFwKIAlmaTsgXAogCWZvciBzdWJkaXIgaW4gJChTVUJESVJTX1BST1hZKTsg
+ZG8gXAotCQkoY2QgJCRzdWJkaXIgJiYgJChNQUtFKSBBUj0iJChBUikiIENDPSIkKENDKSIgQ1BQ
+RkxBR1M9IiQoQ1BQRkxBR1MpIiBBTV9DUFBGTEFHUz0iJChBTV9DUFBGTEFHUykgLUkkJHJlbF9z
+cmNfc3ViZGlyJCh0b3Bfc3JjZGlyKS9pbmNsdWRlLyAtSSQkcmVsX2J1aWxkX3N1YmRpciQodG9w
+X2J1aWxkZGlyKS9pbmNsdWRlLyIgQ0ZMQUdTPSckKENGTEFHUyknIEFNX0NGTEFHUz0nJChBTV9D
+RkxBR1MpJyBMREZMQUdTPSIkKExERkxBR1MpIiBBTV9MREZMQUdTPSckKEFNX0xERkxBR1MpIC1M
+Li4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzIC1XbCwtcnBhdGg9IiQoUFdEKS8uLi8uLi9saWJs
+dHRuZy11c3QvLmxpYnMvIiAtV2wsLXJwYXRoLWxpbms9IiQoUFdEKS8uLi8uLi9saWJsdHRuZy11
+c3QvLmxpYnMvIicgTFRUTkdfR0VOX1RQX1BBVEg9Ii4uLy4uLy4uL3Rvb2xzLyIgQU1fVl9QPSIk
+KEFNX1ZfUCkiIEFNX1ZfYXQ9IiQoQU1fVl9hdCkiICQoQU1fTUFLRUZMQUdTKSBhbGwgJiYgY2Qg
+Li4pIHx8IGV4aXQgMTsgXAorCQkoIFwKKwkJCWNkICQkc3ViZGlyICYmIFwKKwkJCSQoTUFLRSkg
+YWxsIFwKKwkJCQlBUj0iJChBUikiIFwKKwkJCQlDQz0iJChDQykiIFwKKwkJCQlDUFBGTEFHUz0i
+JChDUFBGTEFHUykiIFwKKwkJCQlBTV9DUFBGTEFHUz0iJChBTV9DUFBGTEFHUykgXAorCQkJCS1J
+JCRyZWxfc3JjX3N1YmRpciQodG9wX3NyY2RpcikvaW5jbHVkZS8gXAorCQkJCS1JJCRyZWxfYnVp
+bGRfc3ViZGlyJCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUvIiBcCisJCQkJQ0ZMQUdTPSckKENGTEFH
+UyknIFwKKwkJCQlBTV9DRkxBR1M9JyQoQU1fQ0ZMQUdTKScgXAorCQkJCUxERkxBR1M9IiQoTERG
+TEFHUykiIFwKKwkJCQlBTV9MREZMQUdTPSckKEFNX0xERkxBR1MpIC1MLi4vLi4vLi4vbGlibHR0
+bmctdXN0Ly5saWJzIC1XbCwtcnBhdGg9IiQoUFdEKS8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMv
+IiAtV2wsLXJwYXRoLWxpbms9IiQoUFdEKS8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvIicgXAor
+CQkJCUxUVE5HX0dFTl9UUF9QQVRIPSIuLi8uLi8uLi90b29scy8iIFwKKwkJCQlBTV9WX1A9IiQo
+QU1fVl9QKSIgXAorCQkJCUFNX1ZfYXQ9IiQoQU1fVl9hdCkiIFwKKwkJCQkkKEFNX01BS0VGTEFH
+UykgXAorCQkpIHx8IGV4aXQgMTsgXAogCWRvbmU7IFwKIAlpZiBbIHgiJChTVUJESVJTX0pVTCki
+ICE9IHgiIiBdOyB0aGVuIFwKIAkJZm9yIHN1YmRpciBpbiAkKFNVQkRJUlNfSlVMKTsgZG8gXAot
+CQkJKGNkICQkc3ViZGlyICYmICQoTUFLRSkgSkFWQV9DTEFTU1BBVEhfT1ZFUlJJREVfSlVMPSIu
+Li8uLi8uLi9saWJsdHRuZy11c3QtamF2YS1hZ2VudC9qYXZhL2x0dG5nLXVzdC1hZ2VudC1qdWwi
+IEpBVkFfQ0xBU1NQQVRIX09WRVJSSURFX0NPTU1PTj0iLi4vLi4vLi4vbGlibHR0bmctdXN0LWph
+dmEtYWdlbnQvamF2YS9sdHRuZy11c3QtYWdlbnQtY29tbW9uIiAkKEFNX01BS0VGTEFHUykgYWxs
+ICYmIGNkIC4uKSB8fCBleGl0IDE7IFwKKwkJCSggXAorCQkJCWNkICQkc3ViZGlyICYmIFwKKwkJ
+CQkkKE1BS0UpIGFsbCBcCisJCQkJCUpBVkFfQ0xBU1NQQVRIX09WRVJSSURFX0pVTD0iLi4vLi4v
+Li4vbGlibHR0bmctdXN0LWphdmEtYWdlbnQvamF2YS9sdHRuZy11c3QtYWdlbnQtanVsIiBcCisJ
+CQkJCUpBVkFfQ0xBU1NQQVRIX09WRVJSSURFX0NPTU1PTj0iLi4vLi4vLi4vbGlibHR0bmctdXN0
+LWphdmEtYWdlbnQvamF2YS9sdHRuZy11c3QtYWdlbnQtY29tbW9uIiBcCisJCQkJCSQoQU1fTUFL
+RUZMQUdTKcKgXAorCQkJKSB8fCBleGl0IDE7IFwKIAkJZG9uZTsgXAogCWZpOyBcCiAJaWYgWyB4
+IiQoU1VCRElSU19MT0c0SikiICE9IHgiIiBdOyB0aGVuIFwKIAkJZm9yIHN1YmRpciBpbiAkKFNV
+QkRJUlNfTE9HNEopOyBkbyBcCi0JCQkoY2QgJCRzdWJkaXIgJiYgJChNQUtFKSBKQVZBX0NMQVNT
+UEFUSF9PVkVSUklERV9MT0c0Sj0iLi4vLi4vLi4vbGlibHR0bmctdXN0LWphdmEtYWdlbnQvamF2
+YS9sdHRuZy11c3QtYWdlbnQtbG9nNGoiIEpBVkFfQ0xBU1NQQVRIX09WRVJSSURFX0NPTU1PTj0i
+Li4vLi4vLi4vbGlibHR0bmctdXN0LWphdmEtYWdlbnQvamF2YS9sdHRuZy11c3QtYWdlbnQtY29t
+bW9uIiAkKEFNX01BS0VGTEFHUykgYWxsICYmIGNkIC4uKSB8fCBleGl0IDE7IFwKKwkJCSggXAor
+CQkJCWNkICQkc3ViZGlyICYmIFwKKwkJCQkkKE1BS0UpIGFsbCBcCisJCQkJCUpBVkFfQ0xBU1NQ
+QVRIX09WRVJSSURFX0xPRzRKPSIuLi8uLi8uLi9saWJsdHRuZy11c3QtamF2YS1hZ2VudC9qYXZh
+L2x0dG5nLXVzdC1hZ2VudC1sb2c0aiIgXAorCQkJCQlKQVZBX0NMQVNTUEFUSF9PVkVSUklERV9D
+T01NT049Ii4uLy4uLy4uL2xpYmx0dG5nLXVzdC1qYXZhLWFnZW50L2phdmEvbHR0bmctdXN0LWFn
+ZW50LWNvbW1vbiIgXAorCQkJCQkkKEFNX01BS0VGTEFHUykgXAorCQkJKSB8fCBleGl0IDE7IFwK
+IAkJZG9uZTsgXAogCWZpOyBcCiAJaWYgWyB4IiQoU1VCRElSU19DTUFLRSkiICE9IHgiIiBdOyB0
+aGVuIFwKQEAgLTE0MiwxNyArMTcxLDE2IEBAIGFsbC1sb2NhbDoKIAkJCQkkKE1LRElSX1ApIGJ1
+aWxkICYmIFwKIAkJCQljZCBidWlsZCAmJiBcCiAJCQkJQVI9IiQoQVIpIiBcCi0JCQkJQ0M9IiQo
+Q0MpIiBcCi0JCQkJQ1hYPSIkKENYWCkiIFwKLQkJCQljbWFrZSBcCi0JCQkJLURDTUFLRV9JTkNM
+VURFX1BBVEg9IiQoYWJzX3RvcF9zcmNkaXIpL2luY2x1ZGU7JChhYnNfdG9wX2J1aWxkZGlyKS9p
+bmNsdWRlIiBcCi0JCQkJLURDTUFLRV9MSUJSQVJZX1BBVEg9IiQoYWJzX3RvcF9idWlsZGRpcikv
+bGlibHR0bmctdXN0Ly5saWJzIiBcCi0JCQkJLURDTUFLRV9DX0ZMQUdTPSIkKEFNX0NGTEFHUykg
+JChBTV9DUFBGTEFHUykgJChDUFBGTEFHUykgJChDRkxBR1MpIiBcCi0JCQkJLURDTUFLRV9DWFhf
+RkxBR1M9IiQoQU1fQ1hYRkxBR1MpICQoQU1fQ1BQRkxBR1MpICQoQ1hYRkxBR1MpICQoQ1BQRkxB
+R1MpIiBcCi0JCQkJLURDTUFLRV9FWEVfTElOS0VSX0ZMQUdTPSIkKEFNX0xERkxBR1MpICQoTERG
+TEFHUykiIFwKLQkJCQkuLiAmJiBcCi0JCQkJJChNQUtFKSAmJiBcCi0JCQkJY2QgLi4gXAorCQkJ
+CQlDQz0iJChDQykiIFwKKwkJCQkJQ1hYPSIkKENYWCkiIFwKKwkJCQkJY21ha2UgXAorCQkJCQkt
+RENNQUtFX0lOQ0xVREVfUEFUSD0iJChhYnNfdG9wX3NyY2RpcikvaW5jbHVkZTskKGFic190b3Bf
+YnVpbGRkaXIpL2luY2x1ZGUiIFwKKwkJCQkJLURDTUFLRV9MSUJSQVJZX1BBVEg9IiQoYWJzX3Rv
+cF9idWlsZGRpcikvbGlibHR0bmctdXN0Ly5saWJzIiBcCisJCQkJCS1EQ01BS0VfQ19GTEFHUz0i
+JChBTV9DRkxBR1MpICQoQU1fQ1BQRkxBR1MpICQoQ1BQRkxBR1MpICQoQ0ZMQUdTKSIgXAorCQkJ
+CQktRENNQUtFX0NYWF9GTEFHUz0iJChBTV9DWFhGTEFHUykgJChBTV9DUFBGTEFHUykgJChDWFhG
+TEFHUykgJChDUFBGTEFHUykiIFwKKwkJCQkJLURDTUFLRV9FWEVfTElOS0VSX0ZMQUdTPSIkKEFN
+X0xERkxBR1MpICQoTERGTEFHUykiIFwKKwkJCQkJLi4gJiYgXAorCQkJCSQoTUFLRSkgXAogCQkJ
+KSB8fCBleGl0IDE7IFwKIAkJZG9uZTsgXAogCWZpOwotLSAKMi4yNC4wCgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
+Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
