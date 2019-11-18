@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] doc: fix build failure due to
- wrong whitespace character
-Date: Mon, 18 Nov 2019 15:06:12 -0500 (EST)
-Message-ID: <148902596.1034.1574107572291.JavaMail.zimbra__18580.7078190678$1574107592$gmane$org@efficios.com>
-References: <20191118184414.6902-1-simon.marchi@efficios.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Fix: update apps on untrack only
+ when session is active
+Date: Mon, 18 Nov 2019 15:06:10 -0500
+Message-ID: <20191118200610.24883-1-jonathan.rajotte-julien__45832.3530199536$1574107627$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 47H0MT5yQnz1R9N
- for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 15:06:13 -0500 (EST)
-In-Reply-To: <20191118184414.6902-1-simon.marchi@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 47H0MX5gdqz1R9j
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 15:06:16 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,54 +20,53 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Simon Marchi <simon.marchi@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGludG8gbHR0bmctdXN0IG1hc3RlciwgdGhhbmtzIQoKTWF0aGlldQoKLS0tLS0gT24g
-Tm92IDE4LCAyMDE5LCBhdCAxOjQ0IFBNLCBTaW1vbiBNYXJjaGkgc2ltb24ubWFyY2hpQGVmZmlj
-aW9zLmNvbSB3cm90ZToKCj4gVGhlIHByZXZpb3VzLCBjb21taXQ6Cj4gCj4gICAgNTQ0MzViNzVk
-ZjRjICgiZG9jOiByZWZvcm1hdCBsb25nIGxpbmVzIGluIGRvYy9leGFtcGxlcy9NYWtlZmlsZS5h
-bSIpCj4gCj4gaW50cm9kdWNlZCB0aGUgZm9sbG93aW5nIGJ1aWxkIGZhaWx1cmUsIHdoZW4gdGhl
-IHN1cHBvcnQgZm9yIEpVTCBpcwo+IGVuYWJsZWQ6Cj4gCj4gICAgbWFrZVsxXTogRW50ZXJpbmcg
-ZGlyZWN0b3J5Cj4gICAgJy9ob21lL3NtYXJjaGkvYnVpbGQvbHR0bmctdXN0L2RvYy9leGFtcGxl
-cy9qYXZhLWp1bCcKPiAgICBqYXZhYyAtY2xhc3NwYXRoCj4gICAgIi4uLy4uLy4uL2xpYmx0dG5n
-LXVzdC1qYXZhLWFnZW50L2phdmEvbHR0bmctdXN0LWFnZW50LWp1bC9sdHRuZy11c3QtYWdlbnQt
-anVsLmphcjouLi8uLi8uLi9saWJsdHRuZy11c3QtamF2YS1hZ2VudC9qYXZhL2x0dG5nLXVzdC1h
-Z2VudC1jb21tb24vbHR0bmctdXN0LWFnZW50LWNvbW1vbi5qYXI6LiIKPiAgICAtZyBIZWxsby5q
-YXZhCj4gICAgamF2YWMgLWNsYXNzcGF0aAo+ICAgICIuLi8uLi8uLi9saWJsdHRuZy11c3QtamF2
-YS1hZ2VudC9qYXZhL2x0dG5nLXVzdC1hZ2VudC1qdWwvbHR0bmctdXN0LWFnZW50LWp1bC5qYXI6
-Li4vLi4vLi4vbGlibHR0bmctdXN0LWphdmEtYWdlbnQvamF2YS9sdHRuZy11c3QtYWdlbnQtY29t
-bW9uL2x0dG5nLXVzdC1hZ2VudC1jb21tb24uamFyOi4iCj4gICAgLWcgRmlsdGVyQ2hhbmdlTGlz
-dGVuZXJFeGFtcGxlLmphdmEKPiAgICBqYXZhYyAtY2xhc3NwYXRoCj4gICAgIi4uLy4uLy4uL2xp
-Ymx0dG5nLXVzdC1qYXZhLWFnZW50L2phdmEvbHR0bmctdXN0LWFnZW50LWp1bC9sdHRuZy11c3Qt
-YWdlbnQtanVsLmphcjouLi8uLi8uLi9saWJsdHRuZy11c3QtamF2YS1hZ2VudC9qYXZhL2x0dG5n
-LXVzdC1hZ2VudC1jb21tb24vbHR0bmctdXN0LWFnZW50LWNvbW1vbi5qYXI6LiIKPiAgICAtZyBB
-cHBsaWNhdGlvbkNvbnRleHRFeGFtcGxlLmphdmEKPiAgICBtYWtlWzFdOiAqKiogTm8gcnVsZSB0
-byBtYWtlIHRhcmdldCAnwqAnLiAgU3RvcC4KPiAgICBtYWtlWzFdOiBMZWF2aW5nIGRpcmVjdG9y
-eSAnL2hvbWUvc21hcmNoaS9idWlsZC9sdHRuZy11c3QvZG9jL2V4YW1wbGVzL2phdmEtanVsJwo+
-ICAgIE1ha2VmaWxlOjk3OTogcmVjaXBlIGZvciB0YXJnZXQgJ2FsbC1sb2NhbCcgZmFpbGVkCj4g
-ICAgbWFrZTogKioqIFthbGwtbG9jYWxdIEVycm9yIDEKPiAKPiBJIGluYWR2ZXJ0ZW50bHkgaW5z
-ZXJ0ZWQgYSBjaGFyYWN0ZXIgdGhhdCBsb29rcyBsaWtlIGEgc3BhY2UsIGJ1dCB0aGF0Cj4gaXMg
-bm90IGEgc3BhY2UuICBtYWtlIHRyaWVzIHRvIGludGVycHJldCBpdCBhcyBhIHRhcmdldCBuYW1l
-LCB3aGljaAo+IG9idmlvdXNseSBmYWlscy4KPiAKPiBSZXBsYWNlIGl0IHdpdGggYSBwcm9wZXIg
-c3BhY2UuCj4gCj4gU2lnbmVkLW9mZi1ieTogU2ltb24gTWFyY2hpIDxzaW1vbi5tYXJjaGlAZWZm
-aWNpb3MuY29tPgo+IC0tLQo+IGRvYy9leGFtcGxlcy9NYWtlZmlsZS5hbSB8IDIgKy0KPiAxIGZp
-bGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0
-IGEvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIGIvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtCj4g
-aW5kZXggZGMzNzQ4OTY4N2UyLi4yYmE4Y2Q4OTQ2MmEgMTAwNjQ0Cj4gLS0tIGEvZG9jL2V4YW1w
-bGVzL01ha2VmaWxlLmFtCj4gKysrIGIvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtCj4gQEAgLTE0
-OSw3ICsxNDksNyBAQCBhbGwtbG9jYWw6Cj4gCQkJCSQoTUFLRSkgYWxsIFwKPiAJCQkJCUpBVkFf
-Q0xBU1NQQVRIX09WRVJSSURFX0pVTD0iLi4vLi4vLi4vbGlibHR0bmctdXN0LWphdmEtYWdlbnQv
-amF2YS9sdHRuZy11c3QtYWdlbnQtanVsIgo+IAkJCQkJXAo+IAkJCQkJSkFWQV9DTEFTU1BBVEhf
-T1ZFUlJJREVfQ09NTU9OPSIuLi8uLi8uLi9saWJsdHRuZy11c3QtamF2YS1hZ2VudC9qYXZhL2x0
-dG5nLXVzdC1hZ2VudC1jb21tb24iCj4gCQkJCQlcCj4gLQkJCQkJJChBTV9NQUtFRkxBR1MpwqBc
-Cj4gKwkJCQkJJChBTV9NQUtFRkxBR1MpIFwKPiAJCQkpIHx8IGV4aXQgMTsgXAo+IAkJZG9uZTsg
-XAo+IAlmaTsgXAo+IC0tCj4gMi4yNC4wCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMu
-Cmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2Cg==
+This mimics what is done on the track side.
+
+Fixes #1209
+
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ src/bin/lttng-sessiond/trace-ust.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/src/bin/lttng-sessiond/trace-ust.c b/src/bin/lttng-sessiond/trace-ust.c
+index 486b53d30..a6c0c04ad 100644
+--- a/src/bin/lttng-sessiond/trace-ust.c
++++ b/src/bin/lttng-sessiond/trace-ust.c
+@@ -922,6 +922,7 @@ end:
+ int trace_ust_untrack_pid(struct ltt_ust_session *session, int pid)
+ {
+ 	int retval = LTTNG_OK;
++	bool should_update_apps = false;
+ 
+ 	if (pid == -1) {
+ 		/* Create empty tracker, replace old tracker. */
+@@ -938,7 +939,7 @@ int trace_ust_untrack_pid(struct ltt_ust_session *session, int pid)
+ 		fini_pid_tracker(&tmp_tracker);
+ 
+ 		/* Remove session from all applications */
+-		ust_app_global_update_all(session);
++		should_update_apps = true;
+ 	} else {
+ 		int ret;
+ 		struct ust_app *app;
+@@ -957,9 +958,12 @@ int trace_ust_untrack_pid(struct ltt_ust_session *session, int pid)
+ 		/* Remove session from application. */
+ 		app = ust_app_find_by_pid(pid);
+ 		if (app) {
+-			ust_app_global_update(session, app);
++			should_update_apps = true;
+ 		}
+ 	}
++	if (should_update_apps && session->active) {
++		ust_app_global_update_all(session);
++	}
+ end:
+ 	return retval;
+ }
+-- 
+2.17.1
