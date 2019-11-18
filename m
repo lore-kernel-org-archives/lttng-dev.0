@@ -1,21 +1,15 @@
-From: Rolf Eike Beer <eb@emlix.com>
-Subject: Re: Wrong "ar" used when cross-building lttng
-Date: Mon, 18 Nov 2019 09:10:13 +0100
-Message-ID: <8118904.6pNFUeu9c4__39084.8499302351$1574091320$gmane$org@devpool35>
-References: <2357817.GzqeBO7jDX@devpool35> <4096513.X5kWAsihKE@devpool35>
- <50ff7646-3ca9-0fdd-f9bf-6bfa8e63bad3@simark.ca>
+From: Simon Marchi <simon.marchi@efficios.com>
+Subject: [PATCH 1/2] doc: pass AR when building examples
+Date: Mon, 18 Nov 2019 12:07:50 -0500
+Message-ID: <20191118170751.32002-1-simon.marchi__42251.095936966$1574096898$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5707936801677229298=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx1.emlix.com (mx1.emlix.com [188.40.240.192])
- by lists.lttng.org (Postfix) with ESMTPS id 47GhTY6vVlzrsV
- for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 03:10:25 -0500 (EST)
-Received: from mailer.emlix.com (unknown [81.20.119.6])
- (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mx1.emlix.com (Postfix) with ESMTPS id C9B265FB2A
- for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 09:10:17 +0100 (CET)
-In-Reply-To: <50ff7646-3ca9-0fdd-f9bf-6bfa8e63bad3@simark.ca>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 47GwPs40mCzsZQ
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 12:08:01 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,102 +20,69 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@efficios.com>, Rolf Eike Beer <eb@emlix.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============5707936801677229298==
-Content-Type: multipart/signed; boundary="nextPart1965398.yEgYi22VSo"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+As reported here [1], when cross-compiling lttng-ust, the
+"hello-static-lib" example uses the ar tool made for the --build machine
+instead of the prefixed one, for the --host machine.
 
---nextPart1965398.yEgYi22VSo
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+The Makefiles in the subdirectories of doc/examples are written by hand,
+so that they can be easily copied and modified by users.  They are
+therefore not integrated in the automake build system, and any value
+detected by configure must be passed explicitly when invoking it.
+For example, the CC value is already explicitly passed, so that the
+compiler value found by configure is passed down.  We just need to do
+the same for AR.
 
-Am Freitag, 15. November 2019, 16:34:33 CET schrieb Simon Marchi:
-> On 2019-11-15 3:18 a.m., Rolf Eike Beer wrote:
-> > Simon Marchi wrote:
-> >> On 2019-11-14 11:24 a.m., Rolf Eike Beer wrote:
-> >>> I have not checked latest git, but maybe you may want to fix this
-> >>> warning,
-> >>> too?
-> >>>=20
-> >>> With 2.11.0 release tarball:
-> >>>=20
-> >>> -./configure: line 24663: test: -eq: unary operator expected
-> >>=20
-> >> Hmm I don't remember seeing this error, and I don't see it now.
-> >>=20
-> >> Could you please try with master?  If it still happens, you can try to
-> >> find from which line of the configure.ac or an m4 file this line comes
-> >> from.  I presume it won't be too hard to fix.
-> >=20
-> > Sorry, my fault. If I had looked a little closer I could have given you
-> > the
-> >=20
-> > context:
-> >  checking for tput... /usr/bin/tput
-> >  tput: No value for $TERM and no -T specified
-> >=20
-> > ./configure: line 24663: test: -eq: unary operator expected
-> >=20
-> > When the package is built inside our automated buildsystem these variab=
-les
-> > are not set because this is no interactive shell. If I build with an
-> > interactive shell these warnings are in fact not there.
->=20
-> It still sounds like the "test" command should be improved, it should not
-> fail with an invalid syntax.  Can you give us the relevant lines of
-> configure around 24663, and if possible match them to the source lines in
-> configure.ac and/or one of the m4 files in the m4 directory?
+This patch adds AM_PROG_AR in configure.ac, so that configure finds the
+prefixed version of ar, if cross-compiling.
 
-The line in configure is this:
+It then sets the AR variable in doc/examples/Makefile.am, when invoking
+sub-Makefiles.  I don't think we really need it in the cmake case, but
+it doesn't hurt to have it there.
 
-    if test -n "$PS1" && test `"$pprint_tput" colors` -eq 256 && test -t 1;=
-=20
-then :
+[1] https://lists.lttng.org/pipermail/lttng-dev/2019-November/029388.html
 
-Which seems to be one of these 3 lines from configure.ac:
+Reported-by: Rolf Eike Beer <eb@emlix.com>
+Signed-off-by: Simon Marchi <simon.marchi@efficios.com>
+---
+ configure.ac             | 1 +
+ doc/examples/Makefile.am | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-PPRINT_INIT
-PPRINT_SET_INDENT(1)
-PPRINT_SET_TS(38)
-
-Eike
-=2D-=20
-Rolf Eike Beer, emlix GmbH, http://www.emlix.com
-=46on +49 551 30664-0, Fax +49 551 30664-11
-Gothaer Platz 3, 37083 G=C3=B6ttingen, Germany
-Sitz der Gesellschaft: G=C3=B6ttingen, Amtsgericht G=C3=B6ttingen HR B 3160
-Gesch=C3=A4ftsf=C3=BChrung: Heike Jordan, Dr. Uwe Kracke =E2=80=93 Ust-IdNr=
-=2E: DE 205 198 055
-
-emlix - smart embedded open source
---nextPart1965398.yEgYi22VSo
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iLMEAAEIAB0WIQQ/Uctzh31xzAxFCLur5FH7Xu2t/AUCXdJR5QAKCRCr5FH7Xu2t
-/MyfBACA1wc7m18R2Vsxx6rMlWl+FFKu6Am10rZXFCBruNjh3NYpuz11puhk+VaG
-l0nI3zEQwVSvUUdgMiznv7jB66KPoZjQFhCqXDI3wPxjDwt5nbD+T8kZNx2d5073
-u9/MauZjUKwc12qAEdfGsTutT0JqtBuRGE1jbB0tHIjMn6fvVQ==
-=TLAA
------END PGP SIGNATURE-----
-
---nextPart1965398.yEgYi22VSo--
-
-
-
-
---===============5707936801677229298==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5707936801677229298==--
+diff --git a/configure.ac b/configure.ac
+index 001c44289790..e07888c093fd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -66,6 +66,7 @@ AS_IF([test "x${ax_cv_sys_weak_alias}" = "xno"], [
+ ])
+ 
+ # Checks for programs.
++AM_PROG_AR
+ AC_PROG_SED
+ AC_PROG_GREP
+ AC_PROG_LN_S
+diff --git a/doc/examples/Makefile.am b/doc/examples/Makefile.am
+index d5d00b090c61..2f9811ea4f9b 100644
+--- a/doc/examples/Makefile.am
++++ b/doc/examples/Makefile.am
+@@ -123,7 +123,7 @@ all-local:
+ 		rel_build_subdir="../"; \
+ 	fi; \
+ 	for subdir in $(SUBDIRS_PROXY); do \
+-		(cd $$subdir && $(MAKE) CC="$(CC)" CPPFLAGS="$(CPPFLAGS)" AM_CPPFLAGS="$(AM_CPPFLAGS) -I$$rel_src_subdir$(top_srcdir)/include/ -I$$rel_build_subdir$(top_builddir)/include/" CFLAGS='$(CFLAGS)' AM_CFLAGS='$(AM_CFLAGS)' LDFLAGS="$(LDFLAGS)" AM_LDFLAGS='$(AM_LDFLAGS) -L../../../liblttng-ust/.libs -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/" -Wl,-rpath-link="$(PWD)/../../liblttng-ust/.libs/"' LTTNG_GEN_TP_PATH="../../../tools/" AM_V_P="$(AM_V_P)" AM_V_at="$(AM_V_at)" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
++		(cd $$subdir && $(MAKE) AR="$(AR)" CC="$(CC)" CPPFLAGS="$(CPPFLAGS)" AM_CPPFLAGS="$(AM_CPPFLAGS) -I$$rel_src_subdir$(top_srcdir)/include/ -I$$rel_build_subdir$(top_builddir)/include/" CFLAGS='$(CFLAGS)' AM_CFLAGS='$(AM_CFLAGS)' LDFLAGS="$(LDFLAGS)" AM_LDFLAGS='$(AM_LDFLAGS) -L../../../liblttng-ust/.libs -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/" -Wl,-rpath-link="$(PWD)/../../liblttng-ust/.libs/"' LTTNG_GEN_TP_PATH="../../../tools/" AM_V_P="$(AM_V_P)" AM_V_at="$(AM_V_at)" $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
+ 	done; \
+ 	if [ x"$(SUBDIRS_JUL)" != x"" ]; then \
+ 		for subdir in $(SUBDIRS_JUL); do \
+@@ -141,6 +141,7 @@ all-local:
+ 				cd $$subdir && \
+ 				$(MKDIR_P) build && \
+ 				cd build && \
++				AR="$(AR)" \
+ 				CC="$(CC)" \
+ 				CXX="$(CXX)" \
+ 				cmake \
+-- 
+2.24.0
