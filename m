@@ -1,16 +1,15 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Fix: update apps on untrack only
+Subject: [PATCH lttng-tools v2] Fix: update apps on untrack only
  when session is active
-Date: Mon, 18 Nov 2019 15:06:10 -0500
-Message-ID: <20191118200610.24883-1-jonathan.rajotte-julien__45832.3530199536$1574107627$gmane$org@efficios.com>
+Date: Mon, 18 Nov 2019 15:12:20 -0500
+Message-ID: <20191118201220.7525-1-jonathan.rajotte-julien__27629.5901903481$1574107966$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 47H0MX5gdqz1R9j
- for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 15:06:16 -0500 (EST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 47H0Vm24Zhz1RC0
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 15:12:31 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,9 +25,13 @@ List-Id: lttng-dev@lists.lttng.org
 
 This mimics what is done on the track side.
 
-Fixes #1209
+Fixes #1210
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+
+Used wrong issue number.
+
 ---
  src/bin/lttng-sessiond/trace-ust.c | 8 ++++++--
  1 file changed, 6 insertions(+), 2 deletions(-)
