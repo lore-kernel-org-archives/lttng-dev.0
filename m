@@ -1,19 +1,15 @@
 From: Simon Marchi <simon.marchi@efficios.com>
-Subject: Re: [PATCH 1/2] doc: pass AR when building examples
-Date: Mon, 18 Nov 2019 12:22:17 -0500
-Message-ID: <aa86c04c-1fee-faeb-cc65-e08b1320eb1e__7046.33207512728$1574097757$gmane$org@efficios.com>
-References: <20191118170751.32002-1-simon.marchi@efficios.com>
- <1946779199.696.1574097311078.JavaMail.zimbra@efficios.com>
+Subject: [PATCH lttng-ust] doc: fix build failure due to wrong
+ whitespace character
+Date: Mon, 18 Nov 2019 13:44:14 -0500
+Message-ID: <20191118184414.6902-1-simon.marchi__49626.5211420663$1574102680$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 47GwkL71q6zsdF
- for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 12:22:18 -0500 (EST)
-In-Reply-To: <1946779199.696.1574097311078.JavaMail.zimbra@efficios.com>
-Content-Language: tl
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 47GyY26mtdz1R4n
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 13:44:22 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,30 +19,45 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Rolf Eike Beer <eb@emlix.com>
+To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On 2019-11-18 12:15 p.m., Mathieu Desnoyers wrote:
-> Both patches merged into lttng-ust master branch (only).
-> 
-> If you need those backported, please submit separate patches for stable
-> branches, as those do not apply cleanly because the following commit is
-> in master but not in stable branches:
-> 
-> commit dc5af9e3311ab28f2728f540f06e61add9d7b5eb
-> Author: Michael Jeanson <mjeanson@efficios.com>
-> Date:   Thu Dec 20 15:22:42 2018 -0500
-> 
->     Add silent mode to examples Makefiles
-> 
-> Thanks,
-> 
-> Mathieu
-
-Thanks.
-
-I don't think this is really needed in the stable branches, as it's a really minor
-change in the examples.
-
-Simon
+VGhlIHByZXZpb3VzLCBjb21taXQ6CgogICAgNTQ0MzViNzVkZjRjICgiZG9jOiByZWZvcm1hdCBs
+b25nIGxpbmVzIGluIGRvYy9leGFtcGxlcy9NYWtlZmlsZS5hbSIpCgppbnRyb2R1Y2VkIHRoZSBm
+b2xsb3dpbmcgYnVpbGQgZmFpbHVyZSwgd2hlbiB0aGUgc3VwcG9ydCBmb3IgSlVMIGlzCmVuYWJs
+ZWQ6CgogICAgbWFrZVsxXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS9zbWFyY2hpL2J1aWxk
+L2x0dG5nLXVzdC9kb2MvZXhhbXBsZXMvamF2YS1qdWwnCiAgICBqYXZhYyAtY2xhc3NwYXRoICIu
+Li8uLi8uLi9saWJsdHRuZy11c3QtamF2YS1hZ2VudC9qYXZhL2x0dG5nLXVzdC1hZ2VudC1qdWwv
+bHR0bmctdXN0LWFnZW50LWp1bC5qYXI6Li4vLi4vLi4vbGlibHR0bmctdXN0LWphdmEtYWdlbnQv
+amF2YS9sdHRuZy11c3QtYWdlbnQtY29tbW9uL2x0dG5nLXVzdC1hZ2VudC1jb21tb24uamFyOi4i
+IC1nIEhlbGxvLmphdmEKICAgIGphdmFjIC1jbGFzc3BhdGggIi4uLy4uLy4uL2xpYmx0dG5nLXVz
+dC1qYXZhLWFnZW50L2phdmEvbHR0bmctdXN0LWFnZW50LWp1bC9sdHRuZy11c3QtYWdlbnQtanVs
+LmphcjouLi8uLi8uLi9saWJsdHRuZy11c3QtamF2YS1hZ2VudC9qYXZhL2x0dG5nLXVzdC1hZ2Vu
+dC1jb21tb24vbHR0bmctdXN0LWFnZW50LWNvbW1vbi5qYXI6LiIgLWcgRmlsdGVyQ2hhbmdlTGlz
+dGVuZXJFeGFtcGxlLmphdmEKICAgIGphdmFjIC1jbGFzc3BhdGggIi4uLy4uLy4uL2xpYmx0dG5n
+LXVzdC1qYXZhLWFnZW50L2phdmEvbHR0bmctdXN0LWFnZW50LWp1bC9sdHRuZy11c3QtYWdlbnQt
+anVsLmphcjouLi8uLi8uLi9saWJsdHRuZy11c3QtamF2YS1hZ2VudC9qYXZhL2x0dG5nLXVzdC1h
+Z2VudC1jb21tb24vbHR0bmctdXN0LWFnZW50LWNvbW1vbi5qYXI6LiIgLWcgQXBwbGljYXRpb25D
+b250ZXh0RXhhbXBsZS5qYXZhCiAgICBtYWtlWzFdOiAqKiogTm8gcnVsZSB0byBtYWtlIHRhcmdl
+dCAnwqAnLiAgU3RvcC4KICAgIG1ha2VbMV06IExlYXZpbmcgZGlyZWN0b3J5ICcvaG9tZS9zbWFy
+Y2hpL2J1aWxkL2x0dG5nLXVzdC9kb2MvZXhhbXBsZXMvamF2YS1qdWwnCiAgICBNYWtlZmlsZTo5
+Nzk6IHJlY2lwZSBmb3IgdGFyZ2V0ICdhbGwtbG9jYWwnIGZhaWxlZAogICAgbWFrZTogKioqIFth
+bGwtbG9jYWxdIEVycm9yIDEKCkkgaW5hZHZlcnRlbnRseSBpbnNlcnRlZCBhIGNoYXJhY3RlciB0
+aGF0IGxvb2tzIGxpa2UgYSBzcGFjZSwgYnV0IHRoYXQKaXMgbm90IGEgc3BhY2UuICBtYWtlIHRy
+aWVzIHRvIGludGVycHJldCBpdCBhcyBhIHRhcmdldCBuYW1lLCB3aGljaApvYnZpb3VzbHkgZmFp
+bHMuCgpSZXBsYWNlIGl0IHdpdGggYSBwcm9wZXIgc3BhY2UuCgpTaWduZWQtb2ZmLWJ5OiBTaW1v
+biBNYXJjaGkgPHNpbW9uLm1hcmNoaUBlZmZpY2lvcy5jb20+Ci0tLQogZG9jL2V4YW1wbGVzL01h
+a2VmaWxlLmFtIHwgMiArLQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0
+aW9uKC0pCgpkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIGIvZG9jL2V4YW1w
+bGVzL01ha2VmaWxlLmFtCmluZGV4IGRjMzc0ODk2ODdlMi4uMmJhOGNkODk0NjJhIDEwMDY0NAot
+LS0gYS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KKysrIGIvZG9jL2V4YW1wbGVzL01ha2VmaWxl
+LmFtCkBAIC0xNDksNyArMTQ5LDcgQEAgYWxsLWxvY2FsOgogCQkJCSQoTUFLRSkgYWxsIFwKIAkJ
+CQkJSkFWQV9DTEFTU1BBVEhfT1ZFUlJJREVfSlVMPSIuLi8uLi8uLi9saWJsdHRuZy11c3QtamF2
+YS1hZ2VudC9qYXZhL2x0dG5nLXVzdC1hZ2VudC1qdWwiIFwKIAkJCQkJSkFWQV9DTEFTU1BBVEhf
+T1ZFUlJJREVfQ09NTU9OPSIuLi8uLi8uLi9saWJsdHRuZy11c3QtamF2YS1hZ2VudC9qYXZhL2x0
+dG5nLXVzdC1hZ2VudC1jb21tb24iIFwKLQkJCQkJJChBTV9NQUtFRkxBR1MpwqBcCisJCQkJCSQo
+QU1fTUFLRUZMQUdTKSBcCiAJCQkpIHx8IGV4aXQgMTsgXAogCQlkb25lOyBcCiAJZmk7IFwKLS0g
+CjIuMjQuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
