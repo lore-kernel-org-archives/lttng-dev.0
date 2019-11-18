@@ -1,16 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Simon Marchi <simon.marchi@efficios.com>
 Subject: Re: [PATCH 1/2] doc: pass AR when building examples
-Date: Mon, 18 Nov 2019 12:15:11 -0500 (EST)
-Message-ID: <1946779199.696.1574097311078.JavaMail.zimbra__44760.9374112048$1574097338$gmane$org@efficios.com>
+Date: Mon, 18 Nov 2019 12:22:17 -0500
+Message-ID: <aa86c04c-1fee-faeb-cc65-e08b1320eb1e__7046.33207512728$1574097757$gmane$org@efficios.com>
 References: <20191118170751.32002-1-simon.marchi@efficios.com>
+ <1946779199.696.1574097311078.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 47GwZG6wCvzscS
- for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 12:15:18 -0500 (EST)
-In-Reply-To: <20191118170751.32002-1-simon.marchi@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 47GwkL71q6zsdF
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Nov 2019 12:22:18 -0500 (EST)
+In-Reply-To: <1946779199.696.1574097311078.JavaMail.zimbra@efficios.com>
+Content-Language: tl
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,112 +23,30 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Simon Marchi <simon.marchi@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, Rolf Eike Beer <eb@emlix.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Both patches merged into lttng-ust master branch (only).
-
-If you need those backported, please submit separate patches for stable
-branches, as those do not apply cleanly because the following commit is
-in master but not in stable branches:
-
-commit dc5af9e3311ab28f2728f540f06e61add9d7b5eb
-Author: Michael Jeanson <mjeanson@efficios.com>
-Date:   Thu Dec 20 15:22:42 2018 -0500
-
-    Add silent mode to examples Makefiles
-
-Thanks,
-
-Mathieu
-
------ On Nov 18, 2019, at 12:07 PM, Simon Marchi simon.marchi@efficios.com wrote:
-
-> As reported here [1], when cross-compiling lttng-ust, the
-> "hello-static-lib" example uses the ar tool made for the --build machine
-> instead of the prefixed one, for the --host machine.
+On 2019-11-18 12:15 p.m., Mathieu Desnoyers wrote:
+> Both patches merged into lttng-ust master branch (only).
 > 
-> The Makefiles in the subdirectories of doc/examples are written by hand,
-> so that they can be easily copied and modified by users.  They are
-> therefore not integrated in the automake build system, and any value
-> detected by configure must be passed explicitly when invoking it.
-> For example, the CC value is already explicitly passed, so that the
-> compiler value found by configure is passed down.  We just need to do
-> the same for AR.
+> If you need those backported, please submit separate patches for stable
+> branches, as those do not apply cleanly because the following commit is
+> in master but not in stable branches:
 > 
-> This patch adds AM_PROG_AR in configure.ac, so that configure finds the
-> prefixed version of ar, if cross-compiling.
+> commit dc5af9e3311ab28f2728f540f06e61add9d7b5eb
+> Author: Michael Jeanson <mjeanson@efficios.com>
+> Date:   Thu Dec 20 15:22:42 2018 -0500
 > 
-> It then sets the AR variable in doc/examples/Makefile.am, when invoking
-> sub-Makefiles.  I don't think we really need it in the cmake case, but
-> it doesn't hurt to have it there.
+>     Add silent mode to examples Makefiles
 > 
-> [1] https://lists.lttng.org/pipermail/lttng-dev/2019-November/029388.html
+> Thanks,
 > 
-> Reported-by: Rolf Eike Beer <eb@emlix.com>
-> Signed-off-by: Simon Marchi <simon.marchi@efficios.com>
-> ---
-> configure.ac             | 1 +
-> doc/examples/Makefile.am | 3 ++-
-> 2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/configure.ac b/configure.ac
-> index 001c44289790..e07888c093fd 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -66,6 +66,7 @@ AS_IF([test "x${ax_cv_sys_weak_alias}" = "xno"], [
-> ])
-> 
-> # Checks for programs.
-> +AM_PROG_AR
-> AC_PROG_SED
-> AC_PROG_GREP
-> AC_PROG_LN_S
-> diff --git a/doc/examples/Makefile.am b/doc/examples/Makefile.am
-> index d5d00b090c61..2f9811ea4f9b 100644
-> --- a/doc/examples/Makefile.am
-> +++ b/doc/examples/Makefile.am
-> @@ -123,7 +123,7 @@ all-local:
-> 		rel_build_subdir="../"; \
-> 	fi; \
-> 	for subdir in $(SUBDIRS_PROXY); do \
-> -		(cd $$subdir && $(MAKE) CC="$(CC)" CPPFLAGS="$(CPPFLAGS)"
-> AM_CPPFLAGS="$(AM_CPPFLAGS) -I$$rel_src_subdir$(top_srcdir)/include/
-> -I$$rel_build_subdir$(top_builddir)/include/" CFLAGS='$(CFLAGS)'
-> AM_CFLAGS='$(AM_CFLAGS)' LDFLAGS="$(LDFLAGS)" AM_LDFLAGS='$(AM_LDFLAGS)
-> -L../../../liblttng-ust/.libs -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/"
-> -Wl,-rpath-link="$(PWD)/../../liblttng-ust/.libs/"'
-> LTTNG_GEN_TP_PATH="../../../tools/" AM_V_P="$(AM_V_P)" AM_V_at="$(AM_V_at)"
-> $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
-> +		(cd $$subdir && $(MAKE) AR="$(AR)" CC="$(CC)" CPPFLAGS="$(CPPFLAGS)"
-> AM_CPPFLAGS="$(AM_CPPFLAGS) -I$$rel_src_subdir$(top_srcdir)/include/
-> -I$$rel_build_subdir$(top_builddir)/include/" CFLAGS='$(CFLAGS)'
-> AM_CFLAGS='$(AM_CFLAGS)' LDFLAGS="$(LDFLAGS)" AM_LDFLAGS='$(AM_LDFLAGS)
-> -L../../../liblttng-ust/.libs -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/"
-> -Wl,-rpath-link="$(PWD)/../../liblttng-ust/.libs/"'
-> LTTNG_GEN_TP_PATH="../../../tools/" AM_V_P="$(AM_V_P)" AM_V_at="$(AM_V_at)"
-> $(AM_MAKEFLAGS) all && cd ..) || exit 1; \
-> 	done; \
-> 	if [ x"$(SUBDIRS_JUL)" != x"" ]; then \
-> 		for subdir in $(SUBDIRS_JUL); do \
-> @@ -141,6 +141,7 @@ all-local:
-> 				cd $$subdir && \
-> 				$(MKDIR_P) build && \
-> 				cd build && \
-> +				AR="$(AR)" \
-> 				CC="$(CC)" \
-> 				CXX="$(CXX)" \
-> 				cmake \
-> --
-> 2.24.0
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> Mathieu
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thanks.
+
+I don't think this is really needed in the stable branches, as it's a really minor
+change in the examples.
+
+Simon
