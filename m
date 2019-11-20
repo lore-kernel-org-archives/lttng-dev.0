@@ -1,22 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Matthew Khouzam via lttng-dev <lttng-dev@lists.lttng.org>
 Subject: Re: documentation about CTF event payload
-Date: Wed, 20 Nov 2019 09:32:35 -0500 (EST)
-Message-ID: <1361419525.123.1574260355956.JavaMail.zimbra__30849.9120803148$1574260382$gmane$org@efficios.com>
+Date: Wed, 20 Nov 2019 15:43:31 +0000
+Message-ID: <DM6PR15MB3100A55ADA6FEA7028DD452D9E4F0__33752.7667217486$1574264632$gmane$org@DM6PR15MB3100.namprd15.prod.outlook.com>
 References: <tencent_7650B3E62F4AC4C75D42A69A@qq.com>
  <20190820160220.GA31760@joraj-alpa> <tencent_690A1E7757901F8A10D2CB64@qq.com>
  <20191104165454.GA2344@joraj-alpa> <tencent_728E005C598C6B7038AD5A41@qq.com>
  <20191106171800.GA26063@joraj-alpa> <tencent_2D749AE44D158E681A6166AC@qq.com>
- <tencent_3EE1250109255673062B819B@qq.com>
+ <tencent_3EE1250109255673062B819B@qq.com>,
+ <1361419525.123.1574260355956.JavaMail.zimbra@efficios.com>
+Reply-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6696418898515075047=="
+Content-Type: multipart/mixed; boundary="===============7719496271868306799=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 47J4sm2TMnz1S8b
- for <lttng-dev@lists.lttng.org>; Wed, 20 Nov 2019 09:32:44 -0500 (EST)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 6B33925F68F
- for <lttng-dev@lists.lttng.org>; Wed, 20 Nov 2019 09:32:37 -0500 (EST)
-In-Reply-To: <tencent_3EE1250109255673062B819B@qq.com>
+Received: from NAM04-CO1-obe.outbound.protection.outlook.com
+ (mail-eopbgr690059.outbound.protection.outlook.com [40.107.69.59])
+ by lists.lttng.org (Postfix) with ESMTPS id 47J6RV47GKz1SF2
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Nov 2019 10:43:34 -0500 (EST)
+In-Reply-To: <1361419525.123.1574260355956.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,114 +27,197 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============6696418898515075047==
+--===============7719496271868306799==
+Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="=_ac7d9904-2e23-40de-a624-d1c23ef0fcbd"
+	boundary="_000_DM6PR15MB3100A55ADA6FEA7028DD452D9E4F0DM6PR15MB3100namp_"
 
---=_ac7d9904-2e23-40de-a624-d1c23ef0fcbd
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+--_000_DM6PR15MB3100A55ADA6FEA7028DD452D9E4F0DM6PR15MB3100namp_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-For the system call payload documentation, you might want to refer to the L=
-inux system call=20
-man pages.=20
+SGksIEkgd291bGQgbGlrZSB0byBhZGQgaXQgaXMgYW4gaW5zYW5lIGFtb3VudCBvZiB3b3JrLg0K
+DQpJIGhhdmUgZG9jdW1lbnRlZCBzb21lIHRyYWNlcG9pbnRzLiBNYXliZSB0aGlzIGNhbiBoZWxw
+LiBodHRwczovL2dpdC5lY2xpcHNlLm9yZy9jL3RyYWNlY29tcGFzcy9vcmcuZWNsaXBzZS50cmFj
+ZWNvbXBhc3MuZ2l0L3RyZWUvYW5hbHlzaXMvb3JnLmVjbGlwc2UudHJhY2Vjb21wYXNzLmFuYWx5
+c2lzLm9zLmxpbnV4LmNvcmUvc3JjL29yZy9lY2xpcHNlL3RyYWNlY29tcGFzcy9hbmFseXNpcy9v
+cy9saW51eC9jb3JlL3RyYWNlL0lLZXJuZWxBbmFseXNpc0V2ZW50TGF5b3V0LmphdmE8aHR0cHM6
+Ly9naXQuZWNsaXBzZS5vcmcvYy90cmFjZWNvbXBhc3Mvb3JnLmVjbGlwc2UudHJhY2Vjb21wYXNz
+LmdpdC90cmVlL2FuYWx5c2lzL29yZy5lY2xpcHNlLnRyYWNlY29tcGFzcy5hbmFseXNpcy5vcy5s
+aW51eC5jb3JlL3NyYy9vcmcvZWNsaXBzZS90cmFjZWNvbXBhc3MvYW5hbHlzaXMvb3MvbGludXgv
+Y29yZS90cmFjZS9JS2VybmVsQW5hbHlzaXNFdmVudExheW91dC5qYXZhP2lkPTAxZjJhNTA3NGNl
+ZWJiYzFjZWFmMjY0M2MxYWZmNTE2OGE2MWVkNGI+DQoNCkZvciB0aGUgc3lzY2FsbHMsIHRha2Ug
+YSBsb29rIGF0IHRoaXMsIGl0IG1heSBoZWxwPw0KaHR0cHM6Ly9naXQuZWNsaXBzZS5vcmcvYy90
+cmFjZWNvbXBhc3Mvb3JnLmVjbGlwc2UudHJhY2Vjb21wYXNzLmdpdC90cmVlL2FuYWx5c2lzL29y
+Zy5lY2xpcHNlLnRyYWNlY29tcGFzcy5hbmFseXNpcy5vcy5saW51eC5jb3JlL3Jlcy9zeXNjYWxs
+cy50c3YNCg0KQWxzbywgaWYgeW91IGZlZWwgbGlrZSBlbmhhbmNpbmcgdGhlIGxpc3QsIHdlJ2Qg
+YmUgdGhyaWxsZWQuIPCfmIkNCg0KQXMgdGhlIGF1dGhvciBvZiB0aGVzZSBkb2MgcGF0Y2hlcywg
+SSBjYW4gY29uZmlybSwgaXQncyBhIGxvdCBvZiBub3QgcmV3YXJkaW5nIHdvcmsuDQoNCkNoZWVy
+cw0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCkZyb206IGx0dG5nLWRldiA8bHR0
+bmctZGV2LWJvdW5jZXNAbGlzdHMubHR0bmcub3JnPiBvbiBiZWhhbGYgb2YgTWF0aGlldSBEZXNu
+b3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4NClNlbnQ6IFdlZG5lc2RheSwg
+Tm92ZW1iZXIgMjAsIDIwMTkgOTozMiBBTQ0KVG86IOadqOa1tyA8aGFpLnlhbmdAbWFnaWMtc2hp
+ZWxkLmNvbT4NCkNjOiBsdHRuZy1kZXYgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+DQpTdWJq
+ZWN0OiBSZTogW2x0dG5nLWRldl0gZG9jdW1lbnRhdGlvbiBhYm91dCBDVEYgZXZlbnQgcGF5bG9h
+ZA0KDQpGb3IgdGhlIHN5c3RlbSBjYWxsIHBheWxvYWQgZG9jdW1lbnRhdGlvbiwgeW91IG1pZ2h0
+IHdhbnQgdG8gcmVmZXIgdG8gdGhlIExpbnV4IHN5c3RlbSBjYWxsDQptYW4gcGFnZXMuDQoNCkZv
+ciBpbnRlcm5hbCBrZXJuZWwgdHJhY2Vwb2ludHMgbGlrZSBzY2hlZF9zd2l0Y2gsIHRoZXJlIGlz
+IG5vIGRvY3VtZW50YXRpb24gb2YgdGhlIG1lYW5pbmcgb2YNCmVhY2ggZmllbGQgYXQgdGhlIG1v
+bWVudC4gVGhpcyBzdGF0ZSBpcyB0aGUgc2FtZSBhcyB0aGUgdXBzdHJlYW0gTGludXgga2VybmVs
+IHRyYWNlIGV2ZW50LiBZb3UnbGwNCmhhdmUgdG8gZmlndXJlIGl0IG91dCBvbiB5b3VyIG93bi4g
+RG9jdW1lbnRpbmcgZWFjaCBmaWVsZCBvZiB0aGUgfjUwMC0xMDAwIExpbnV4IGtlcm5lbCB0cmFj
+ZXBvaW50cw0KaXMgbm8gc21hbGwgdGFzay4NCg0KVGhhbmtzLA0KDQpNYXRoaWV1DQoNCi0tLS0t
+IE9uIE5vdiAxOSwgMjAxOSwgYXQgOToyNSBQTSwg5p2o5rW3IDxoYWkueWFuZ0BtYWdpYy1zaGll
+bGQuY29tPiB3cm90ZToNClRvIGJlIG1vcmUgc3BlY2lmaWMsIEkgc3VwcG9zZSB3ZSBjYW4gcmVm
+ZXIgdG8gaW5zdHJ1bWVudGF0aW9uXHN5c2NhbGxzXDMuMTAuMC1yYzdceDg2LTY0LXN5c2NhbGxz
+LTMuMTAuMC1yYzcgZm9yIHRoZSBwYXlsb2FkIGZvcm1hdCBvZiBzeXNjYWxsIGV2ZW50LiBJcyBp
+dCBleGFjdGx5IGluIHRoZSBDVEYgc3lzY2FsbCBldmVudD8NCg0KUmVnYXJkcw0KSGFpDQoNCi0t
+LS0tLS0tLS0tLS0tLS0tLSBPcmlnaW5hbCAtLS0tLS0tLS0tLS0tLS0tLS0NCkZyb206ICAi5p2o
+5rW3IjxoYWkueWFuZ0BtYWdpYy1zaGllbGQuY29tPjsNCkRhdGU6ICBNb24sIE5vdiAxOCwgMjAx
+OSAwOTo1NCBBTQ0KVG86ICAibHR0bmctZGV2IjxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPjsN
+ClN1YmplY3Q6ICBkb2N1bWVudGF0aW9uIGFib3V0IENURiBldmVudCBwYXlsb2FkDQoNCkhpDQoN
+CkFzIExUVG5nIGdlbmVyYXRlZCBDVEYgYW5kIGJhYmVsdHJhY2UgcGFyc2UgaXQsIHdlIGhhdmUg
+dGhlIG91dHB1dCBhcyBhdHRhY2hlZC4gV2Ugc2F3IGV2ZW50cyBzdWNoIGFzIHNjaGVkX3N3aXRj
+aCwgYnV0IHRoZSBwYXlsb2FkIGNhbm5vdCBiZSB1bmRlcnN0b29kIGVhc2lseS4gV2hlcmUgd2Ug
+Y2FuIGZpbmQgdGhlIGRvY3VtZW50IHRvIGV4cGxhaW4gdGhlIExUVG5nIHBheWxvYWQgYW5kIHBh
+cmFtZXRlcnM/DQoNClJlZ2FyZHMNCkhhaQ0KDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXw0KbHR0bmctZGV2IG1haWxpbmcgbGlzdA0KbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZw0KaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
+c3RpbmZvL2x0dG5nLWRldjxodHRwczovL3Byb3RlY3QyLmZpcmVleWUuY29tL3YxL3VybD9rPWI1
+N2VlNjcyLWU5ZjQzMzY0LWI1N2VhNmU5LTg2MmYxNGE5MzY1ZS00ZWRmNjRlYzI4Y2Y4YTgyJnE9
+MSZlPWY2ZmM1MjgyLTZhYTgtNDdlNi1iMWJhLWMwZjRkOGMwODc5OSZ1PWh0dHBzJTNBJTJGJTJG
+bGlzdHMubHR0bmcub3JnJTJGY2dpLWJpbiUyRm1haWxtYW4lMkZsaXN0aW5mbyUyRmx0dG5nLWRl
+dj4NCg0KLS0NCk1hdGhpZXUgRGVzbm95ZXJzDQpFZmZpY2lPUyBJbmMuDQpodHRwOi8vd3d3LmVm
+ZmljaW9zLmNvbTxodHRwczovL3Byb3RlY3QyLmZpcmVleWUuY29tL3YxL3VybD9rPTBkMWUzZWZh
+LTUxOTRlYmVjLTBkMWU3ZTYxLTg2MmYxNGE5MzY1ZS00ZDMzMGNmNTg1MzBhMjljJnE9MSZlPWY2
+ZmM1MjgyLTZhYTgtNDdlNi1iMWJhLWMwZjRkOGMwODc5OSZ1PWh0dHAlM0ElMkYlMkZ3d3cuZWZm
+aWNpb3MuY29tJTJGPg0K
 
-For internal kernel tracepoints like sched_switch, there is no documentatio=
-n of the meaning of=20
-each field at the moment. This state is the same as the upstream Linux kern=
-el trace event. You'll=20
-have to figure it out on your own. Documenting each field of the ~500-1000 =
-Linux kernel tracepoints=20
-is no small task.=20
+--_000_DM6PR15MB3100A55ADA6FEA7028DD452D9E4F0DM6PR15MB3100namp_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Thanks,=20
+PGh0bWw+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0i
+dGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyIgc3R5bGU9
+ImRpc3BsYXk6bm9uZTsiPiBQIHttYXJnaW4tdG9wOjA7bWFyZ2luLWJvdHRvbTowO30gPC9zdHls
+ZT4NCjwvaGVhZD4NCjxib2R5IGRpcj0ibHRyIj4NCjxkaXYgc3R5bGU9ImZvbnQtZmFtaWx5OiBD
+YWxpYnJpLCBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHQ7IGNv
+bG9yOiByZ2IoMCwgMCwgMCk7Ij4NCkhpLCBJIHdvdWxkIGxpa2UgdG8gYWRkIGl0IGlzIGFuIGlu
+c2FuZSBhbW91bnQgb2Ygd29yay48L2Rpdj4NCjxkaXYgc3R5bGU9ImZvbnQtZmFtaWx5OiBDYWxp
+YnJpLCBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHQ7IGNvbG9y
+OiByZ2IoMCwgMCwgMCk7Ij4NCjxicj4NCjwvZGl2Pg0KPGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6
+IENhbGlicmksIEFyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJwdDsg
+Y29sb3I6IHJnYigwLCAwLCAwKTsiPg0KSSBoYXZlIGRvY3VtZW50ZWQgc29tZSB0cmFjZXBvaW50
+cy4gTWF5YmUgdGhpcyBjYW4gaGVscC4gPGEgaHJlZj0iaHR0cHM6Ly9naXQuZWNsaXBzZS5vcmcv
+Yy90cmFjZWNvbXBhc3Mvb3JnLmVjbGlwc2UudHJhY2Vjb21wYXNzLmdpdC90cmVlL2FuYWx5c2lz
+L29yZy5lY2xpcHNlLnRyYWNlY29tcGFzcy5hbmFseXNpcy5vcy5saW51eC5jb3JlL3NyYy9vcmcv
+ZWNsaXBzZS90cmFjZWNvbXBhc3MvYW5hbHlzaXMvb3MvbGludXgvY29yZS90cmFjZS9JS2VybmVs
+QW5hbHlzaXNFdmVudExheW91dC5qYXZhP2lkPTAxZjJhNTA3NGNlZWJiYzFjZWFmMjY0M2MxYWZm
+NTE2OGE2MWVkNGIiIGlkPSJMUGxuazYwNjc0OCI+DQpodHRwczovL2dpdC5lY2xpcHNlLm9yZy9j
+L3RyYWNlY29tcGFzcy9vcmcuZWNsaXBzZS50cmFjZWNvbXBhc3MuZ2l0L3RyZWUvYW5hbHlzaXMv
+b3JnLmVjbGlwc2UudHJhY2Vjb21wYXNzLmFuYWx5c2lzLm9zLmxpbnV4LmNvcmUvc3JjL29yZy9l
+Y2xpcHNlL3RyYWNlY29tcGFzcy9hbmFseXNpcy9vcy9saW51eC9jb3JlL3RyYWNlL0lLZXJuZWxB
+bmFseXNpc0V2ZW50TGF5b3V0LmphdmE8L2E+PC9kaXY+DQo8ZGl2IHN0eWxlPSJmb250LWZhbWls
+eTogQ2FsaWJyaSwgQXJpYWwsIEhlbHZldGljYSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB0
+OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+DQo8YnI+DQo8L2Rpdj4NCjxkaXYgc3R5bGU9ImZvbnQt
+ZmFtaWx5OiBDYWxpYnJpLCBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6
+IDEycHQ7IGNvbG9yOiByZ2IoMCwgMCwgMCk7Ij4NCkZvciB0aGUgc3lzY2FsbHMsIHRha2UgYSBs
+b29rIGF0IHRoaXMsIGl0IG1heSBoZWxwPzwvZGl2Pg0KPGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6
+IENhbGlicmksIEFyaWFsLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJwdDsg
+Y29sb3I6IHJnYigwLCAwLCAwKTsiPg0KPGEgaHJlZj0iaHR0cHM6Ly9naXQuZWNsaXBzZS5vcmcv
+Yy90cmFjZWNvbXBhc3Mvb3JnLmVjbGlwc2UudHJhY2Vjb21wYXNzLmdpdC90cmVlL2FuYWx5c2lz
+L29yZy5lY2xpcHNlLnRyYWNlY29tcGFzcy5hbmFseXNpcy5vcy5saW51eC5jb3JlL3Jlcy9zeXNj
+YWxscy50c3YiIGlkPSJMUGxuazY1NjI2MSI+aHR0cHM6Ly9naXQuZWNsaXBzZS5vcmcvYy90cmFj
+ZWNvbXBhc3Mvb3JnLmVjbGlwc2UudHJhY2Vjb21wYXNzLmdpdC90cmVlL2FuYWx5c2lzL29yZy5l
+Y2xpcHNlLnRyYWNlY29tcGFzcy5hbmFseXNpcy5vcy5saW51eC5jb3JlL3Jlcy9zeXNjYWxscy50
+c3Y8L2E+PC9kaXY+DQo8ZGl2IHN0eWxlPSJmb250LWZhbWlseTogQ2FsaWJyaSwgQXJpYWwsIEhl
+bHZldGljYSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDAp
+OyI+DQo8YnI+DQo8L2Rpdj4NCjxkaXYgc3R5bGU9ImZvbnQtZmFtaWx5OiBDYWxpYnJpLCBBcmlh
+bCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiByZ2IoMCwg
+MCwgMCk7Ij4NCkFsc28sIGlmIHlvdSBmZWVsIGxpa2UgZW5oYW5jaW5nIHRoZSBsaXN0LCB3ZSdk
+IGJlIHRocmlsbGVkLiDwn5iJPC9kaXY+DQo8ZGl2IHN0eWxlPSJmb250LWZhbWlseTogQ2FsaWJy
+aSwgQXJpYWwsIEhlbHZldGljYSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjog
+cmdiKDAsIDAsIDApOyI+DQo8YnI+DQo8L2Rpdj4NCjxkaXYgc3R5bGU9ImZvbnQtZmFtaWx5OiBD
+YWxpYnJpLCBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHQ7IGNv
+bG9yOiByZ2IoMCwgMCwgMCk7Ij4NCkFzIHRoZSBhdXRob3Igb2YgdGhlc2UgZG9jIHBhdGNoZXMs
+IEkgY2FuIGNvbmZpcm0sIGl0J3MgYSBsb3Qgb2Ygbm90IHJld2FyZGluZyB3b3JrLjwvZGl2Pg0K
+PGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6IENhbGlicmksIEFyaWFsLCBIZWx2ZXRpY2EsIHNhbnMt
+c2VyaWY7IGZvbnQtc2l6ZTogMTJwdDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPg0KPGJyPg0KPC9k
+aXY+DQo8ZGl2IHN0eWxlPSJmb250LWZhbWlseTogQ2FsaWJyaSwgQXJpYWwsIEhlbHZldGljYSwg
+c2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+DQpDaGVl
+cnM8YnI+DQo8L2Rpdj4NCjxkaXYgaWQ9ImFwcGVuZG9uc2VuZCI+PC9kaXY+DQo8aHIgc3R5bGU9
+ImRpc3BsYXk6aW5saW5lLWJsb2NrO3dpZHRoOjk4JSIgdGFiaW5kZXg9Ii0xIj4NCjxkaXYgaWQ9
+ImRpdlJwbHlGd2RNc2ciIGRpcj0ibHRyIj48Zm9udCBmYWNlPSJDYWxpYnJpLCBzYW5zLXNlcmlm
+IiBzdHlsZT0iZm9udC1zaXplOjExcHQiIGNvbG9yPSIjMDAwMDAwIj48Yj5Gcm9tOjwvYj4gbHR0
+bmctZGV2ICZsdDtsdHRuZy1kZXYtYm91bmNlc0BsaXN0cy5sdHRuZy5vcmcmZ3Q7IG9uIGJlaGFs
+ZiBvZiBNYXRoaWV1IERlc25veWVycyAmbHQ7bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29t
+Jmd0Ozxicj4NCjxiPlNlbnQ6PC9iPiBXZWRuZXNkYXksIE5vdmVtYmVyIDIwLCAyMDE5IDk6MzIg
+QU08YnI+DQo8Yj5Ubzo8L2I+IOadqOa1tyAmbHQ7aGFpLnlhbmdAbWFnaWMtc2hpZWxkLmNvbSZn
+dDs8YnI+DQo8Yj5DYzo8L2I+IGx0dG5nLWRldiAmbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZyZndDs8YnI+DQo8Yj5TdWJqZWN0OjwvYj4gUmU6IFtsdHRuZy1kZXZdIGRvY3VtZW50YXRpb24g
+YWJvdXQgQ1RGIGV2ZW50IHBheWxvYWQ8L2ZvbnQ+DQo8ZGl2PiZuYnNwOzwvZGl2Pg0KPC9kaXY+
+DQo8ZGl2Pg0KPGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6YXJpYWwsaGVsdmV0aWNhLHNhbnMtc2Vy
+aWY7IGZvbnQtc2l6ZToxMnB0OyBjb2xvcjojMDAwMDAwIj4NCjxkaXY+Rm9yIHRoZSBzeXN0ZW0g
+Y2FsbCBwYXlsb2FkIGRvY3VtZW50YXRpb24sIHlvdSBtaWdodCB3YW50IHRvIHJlZmVyIHRvIHRo
+ZSBMaW51eCBzeXN0ZW0gY2FsbDxicj4NCjwvZGl2Pg0KPGRpdj5tYW4gcGFnZXMuPGJyPg0KPC9k
+aXY+DQo8ZGl2Pjxicj4NCjwvZGl2Pg0KPGRpdj5Gb3IgaW50ZXJuYWwga2VybmVsIHRyYWNlcG9p
+bnRzIGxpa2Ugc2NoZWRfc3dpdGNoLCB0aGVyZSBpcyBubyBkb2N1bWVudGF0aW9uIG9mIHRoZSBt
+ZWFuaW5nIG9mPGJyPg0KPC9kaXY+DQo8ZGl2PmVhY2ggZmllbGQgYXQgdGhlIG1vbWVudC4gVGhp
+cyBzdGF0ZSBpcyB0aGUgc2FtZSBhcyB0aGUgdXBzdHJlYW0gTGludXgga2VybmVsIHRyYWNlIGV2
+ZW50LiBZb3UnbGw8L2Rpdj4NCjxkaXY+aGF2ZSB0byBmaWd1cmUgaXQgb3V0IG9uIHlvdXIgb3du
+LiBEb2N1bWVudGluZyBlYWNoIGZpZWxkIG9mIHRoZSB+NTAwLTEwMDAgTGludXgga2VybmVsIHRy
+YWNlcG9pbnRzPC9kaXY+DQo8ZGl2PmlzIG5vIHNtYWxsIHRhc2suPGJyPg0KPC9kaXY+DQo8ZGl2
+Pjxicj4NCjwvZGl2Pg0KPGRpdj5UaGFua3MsPGJyPg0KPC9kaXY+DQo8ZGl2Pjxicj4NCjwvZGl2
+Pg0KPGRpdj5NYXRoaWV1PGJyPg0KPC9kaXY+DQo8ZGl2Pjxicj4NCjwvZGl2Pg0KPGRpdj48c3Bh
+biBpZD0ieF96d2NociI+LS0tLS0gT24gTm92IDE5LCAyMDE5LCBhdCA5OjI1IFBNLCDmnajmtbcg
+Jmx0O2hhaS55YW5nQG1hZ2ljLXNoaWVsZC5jb20mZ3Q7IHdyb3RlOjxicj4NCjwvc3Bhbj48L2Rp
+dj4NCjxkaXY+DQo8YmxvY2txdW90ZSBzdHlsZT0iYm9yZGVyLWxlZnQ6MnB4IHNvbGlkICMxMDEw
+RkY7IG1hcmdpbi1sZWZ0OjVweDsgcGFkZGluZy1sZWZ0OjVweDsgY29sb3I6IzAwMDsgZm9udC13
+ZWlnaHQ6bm9ybWFsOyBmb250LXN0eWxlOm5vcm1hbDsgdGV4dC1kZWNvcmF0aW9uOm5vbmU7IGZv
+bnQtZmFtaWx5OkhlbHZldGljYSxBcmlhbCxzYW5zLXNlcmlmOyBmb250LXNpemU6MTJwdCI+DQo8
+ZGl2PlRvIGJlIG1vcmUgc3BlY2lmaWMsIEkgc3VwcG9zZSB3ZSBjYW4gcmVmZXIgdG8gaW5zdHJ1
+bWVudGF0aW9uXHN5c2NhbGxzXDMuMTAuMC1yYzdceDg2LTY0LXN5c2NhbGxzLTMuMTAuMC1yYzcg
+Zm9yIHRoZSBwYXlsb2FkIGZvcm1hdCBvZiBzeXNjYWxsIGV2ZW50LiBJcyBpdCBleGFjdGx5IGlu
+IHRoZSBDVEYgc3lzY2FsbCBldmVudD88L2Rpdj4NCjxicj4NCjxkaXY+UmVnYXJkczwvZGl2Pg0K
+PGRpdj5IYWk8L2Rpdj4NCjxkaXY+DQo8ZGl2PiZuYnNwOzwvZGl2Pg0KPGRpdiBzdHlsZT0iZm9u
+dDondmVyZGFuYScgbm9ybWFsIDE0cHg7IGNvbG9yOiMwMDAiPg0KPGRpdiBzdHlsZT0iZm9udC1z
+aXplOjEycHg7IGZvbnQtZmFtaWx5OidhcmlhbCBuYXJyb3cnOyBwYWRkaW5nOjJweCAwIDJweCAw
+Ij4tLS0tLS0tLS0tLS0tLS0tLS0mbmJzcDtPcmlnaW5hbCZuYnNwOy0tLS0tLS0tLS0tLS0tLS0t
+LTwvZGl2Pg0KPGRpdiBzdHlsZT0iZm9udC1zaXplOjEycHg7IGJhY2tncm91bmQ6I2VmZWZlZjsg
+cGFkZGluZzo4cHgiPg0KPGRpdj48Yj5Gcm9tOiA8L2I+Jm5ic3A7JnF1b3Q75p2o5rW3JnF1b3Q7
+Jmx0O2hhaS55YW5nQG1hZ2ljLXNoaWVsZC5jb20mZ3Q7OzwvZGl2Pg0KPGRpdj48Yj5EYXRlOiA8
+L2I+Jm5ic3A7TW9uLCBOb3YgMTgsIDIwMTkgMDk6NTQgQU08L2Rpdj4NCjxkaXY+PGI+VG86IDwv
+Yj4mbmJzcDsmcXVvdDtsdHRuZy1kZXYmcXVvdDsmbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZyZndDs7IDwvZGl2Pg0KPGRpdj48Yj5TdWJqZWN0OiA8L2I+Jm5ic3A7ZG9jdW1lbnRhdGlvbiBh
+Ym91dCBDVEYgZXZlbnQgcGF5bG9hZDwvZGl2Pg0KPC9kaXY+DQo8ZGl2PiZuYnNwOzwvZGl2Pg0K
+PGRpdj4NCjxkaXY+SGk8L2Rpdj4NCjxicj4NCjxkaXY+QXMgTFRUbmcgZ2VuZXJhdGVkIENURiBh
+bmQgYmFiZWx0cmFjZSBwYXJzZSBpdCwgd2UgaGF2ZSB0aGUgb3V0cHV0IGFzIGF0dGFjaGVkLiBX
+ZSBzYXcgZXZlbnRzIHN1Y2ggYXMgc2NoZWRfc3dpdGNoLCBidXQgdGhlIHBheWxvYWQgY2Fubm90
+IGJlIHVuZGVyc3Rvb2QgZWFzaWx5LiBXaGVyZSB3ZSBjYW4gZmluZCB0aGUgZG9jdW1lbnQgdG8g
+ZXhwbGFpbiB0aGUgTFRUbmcgcGF5bG9hZCBhbmQgcGFyYW1ldGVycz88L2Rpdj4NCjxicj4NCjxk
+aXY+UmVnYXJkczwvZGl2Pg0KPGRpdj5IYWk8L2Rpdj4NCjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4N
+Cjxicj4NCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fPGJy
+Pg0KbHR0bmctZGV2IG1haWxpbmcgbGlzdDxicj4NCmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc8
+YnI+DQo8YSBocmVmPSJodHRwczovL3Byb3RlY3QyLmZpcmVleWUuY29tL3YxL3VybD9rPWI1N2Vl
+NjcyLWU5ZjQzMzY0LWI1N2VhNmU5LTg2MmYxNGE5MzY1ZS00ZWRmNjRlYzI4Y2Y4YTgyJmFtcDtx
+PTEmYW1wO2U9ZjZmYzUyODItNmFhOC00N2U2LWIxYmEtYzBmNGQ4YzA4Nzk5JmFtcDt1PWh0dHBz
+JTNBJTJGJTJGbGlzdHMubHR0bmcub3JnJTJGY2dpLWJpbiUyRm1haWxtYW4lMkZsaXN0aW5mbyUy
+Rmx0dG5nLWRldiI+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldjwvYT48YnI+DQo8L2Jsb2NrcXVvdGU+DQo8L2Rpdj4NCjxkaXY+PGJyPg0K
+PC9kaXY+DQo8ZGl2Pi0tIDxicj4NCjwvZGl2Pg0KPGRpdj5NYXRoaWV1IERlc25veWVyczxicj4N
+CkVmZmljaU9TIEluYy48YnI+DQo8YSBocmVmPSJodHRwczovL3Byb3RlY3QyLmZpcmVleWUuY29t
+L3YxL3VybD9rPTBkMWUzZWZhLTUxOTRlYmVjLTBkMWU3ZTYxLTg2MmYxNGE5MzY1ZS00ZDMzMGNm
+NTg1MzBhMjljJmFtcDtxPTEmYW1wO2U9ZjZmYzUyODItNmFhOC00N2U2LWIxYmEtYzBmNGQ4YzA4
+Nzk5JmFtcDt1PWh0dHAlM0ElMkYlMkZ3d3cuZWZmaWNpb3MuY29tJTJGIj5odHRwOi8vd3d3LmVm
+ZmljaW9zLmNvbTwvYT48L2Rpdj4NCjwvZGl2Pg0KPC9kaXY+DQo8L2JvZHk+DQo8L2h0bWw+DQo=
 
-Mathieu=20
+--_000_DM6PR15MB3100A55ADA6FEA7028DD452D9E4F0DM6PR15MB3100namp_--
 
------ On Nov 19, 2019, at 9:25 PM, =E6=9D=A8=E6=B5=B7 <hai.yang@magic-shiel=
-d.com> wrote:=20
-
-> To be more specific, I suppose we can refer to
-> instrumentation\syscalls\3.10.0-rc7\x86-64-syscalls-3.10.0-rc7 for the pa=
-yload
-> format of syscall event. Is it exactly in the CTF syscall event?
-
-> Regards
-> Hai
-> ------------------ Original ------------------
-> From: "=E6=9D=A8=E6=B5=B7"<hai.yang@magic-shield.com>;
-> Date: Mon, Nov 18, 2019 09:54 AM
-> To: "lttng-dev"<lttng-dev@lists.lttng.org>;
-> Subject: documentation about CTF event payload
-> Hi
-
-> As LTTng generated CTF and babeltrace parse it, we have the output as att=
-ached.
-> We saw events such as sched_switch, but the payload cannot be understood
-> easily. Where we can find the document to explain the LTTng payload and
-> parameters?
-
-> Regards
-> Hai
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
---=_ac7d9904-2e23-40de-a624-d1c23ef0fcbd
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>For the system call payload documentation, =
-you might want to refer to the Linux system call<br></div><div>man pages.<b=
-r data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>For i=
-nternal kernel tracepoints like sched_switch, there is no documentation of =
-the meaning of<br data-mce-bogus=3D"1"></div><div>each field at the moment.=
- This state is the same as the upstream Linux kernel trace event. You'll</d=
-iv><div>have to figure it out on your own. Documenting each field of the ~5=
-00-1000 Linux kernel tracepoints</div><div>is no small task.<br data-mce-bo=
-gus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mc=
-e-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br dat=
-a-mce-bogus=3D"1"></div><div><br></div><div><span id=3D"zwchr" data-marker=
-=3D"__DIVIDER__">----- On Nov 19, 2019, at 9:25 PM, =E6=9D=A8=E6=B5=B7 &lt;=
-hai.yang@magic-shield.com&gt; wrote:<br></span></div><div data-marker=3D"__=
-QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-le=
-ft:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;tex=
-t-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><=
-div>To be more specific, I suppose we can refer to instrumentation\syscalls=
-\3.10.0-rc7\x86-64-syscalls-3.10.0-rc7 for the payload format of syscall ev=
-ent. Is it exactly in the CTF syscall event?</div><br><div>Regards</div><di=
-v>Hai</div><div><div>&nbsp;</div><div style=3D"font:'verdana' normal 14px;c=
-olor:#000"><div style=3D"font-size:12px;font-family:'arial narrow';padding:=
-2px 0 2px 0">------------------&nbsp;Original&nbsp;------------------</div>=
-<div style=3D"font-size:12px;background:#efefef;padding:8px"><div><b>From: =
-</b>&nbsp;"=E6=9D=A8=E6=B5=B7"&lt;hai.yang@magic-shield.com&gt;;</div><div>=
-<b>Date: </b>&nbsp;Mon, Nov 18, 2019 09:54 AM</div><div><b>To: </b>&nbsp;"l=
-ttng-dev"&lt;lttng-dev@lists.lttng.org&gt;; </div><div><b>Subject: </b>&nbs=
-p;documentation about CTF event payload</div></div><div>&nbsp;</div><div><d=
-iv>Hi</div><br><div>As LTTng generated CTF and babeltrace parse it, we have=
- the output as attached. We saw events such as sched_switch, but the payloa=
-d cannot be understood easily. Where we can find the document to explain th=
-e LTTng payload and parameters?</div><br><div>Regards</div><div>Hai</div></=
-div></div></div><br>_______________________________________________<br>lttn=
-g-dev mailing list<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/=
-cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><div><br></div><di=
-v data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>Effic=
-iOS Inc.<br>http://www.efficios.com</div></div></body></html>
---=_ac7d9904-2e23-40de-a624-d1c23ef0fcbd--
-
---===============6696418898515075047==
+--===============7719496271868306799==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -144,4 +228,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============6696418898515075047==--
+--===============7719496271868306799==--
