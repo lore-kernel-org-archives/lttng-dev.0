@@ -1,21 +1,22 @@
-From: "=?utf-8?B?5p2o5rW3?=" <hai.yang@magic-shield.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: documentation about CTF event payload
-Date: Wed, 20 Nov 2019 10:25:04 +0800
-Message-ID: <tencent_3EE1250109255673062B819B__28884.7569654294$1574217217$gmane$org@qq.com>
+Date: Wed, 20 Nov 2019 09:32:35 -0500 (EST)
+Message-ID: <1361419525.123.1574260355956.JavaMail.zimbra__30849.9120803148$1574260382$gmane$org@efficios.com>
 References: <tencent_7650B3E62F4AC4C75D42A69A@qq.com>
- <20190820160220.GA31760@joraj-alpa>
- <tencent_690A1E7757901F8A10D2CB64@qq.com>
- <20191104165454.GA2344@joraj-alpa>
- <tencent_728E005C598C6B7038AD5A41@qq.com>
- <20191106171800.GA26063@joraj-alpa>
- <tencent_2D749AE44D158E681A6166AC@qq.com>
+ <20190820160220.GA31760@joraj-alpa> <tencent_690A1E7757901F8A10D2CB64@qq.com>
+ <20191104165454.GA2344@joraj-alpa> <tencent_728E005C598C6B7038AD5A41@qq.com>
+ <20191106171800.GA26063@joraj-alpa> <tencent_2D749AE44D158E681A6166AC@qq.com>
+ <tencent_3EE1250109255673062B819B@qq.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2194996602002465018=="
+Content-Type: multipart/mixed; boundary="===============6696418898515075047=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from qq.com (smtpbg467.qq.com [59.36.132.50])
- by lists.lttng.org (Postfix) with ESMTPS id 47Hmvc49Hjz1RRZ
- for <lttng-dev@lists.lttng.org>; Tue, 19 Nov 2019 21:33:15 -0500 (EST)
-In-Reply-To: <tencent_2D749AE44D158E681A6166AC@qq.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 47J4sm2TMnz1S8b
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Nov 2019 09:32:44 -0500 (EST)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 6B33925F68F
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Nov 2019 09:32:37 -0500 (EST)
+In-Reply-To: <tencent_3EE1250109255673062B819B@qq.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,75 +26,114 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?utf-8?B?bHR0bmctZGV2?= <lttng-dev@lists.lttng.org>
+To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
-
---===============2194996602002465018==
+--===============6696418898515075047==
 Content-Type: multipart/alternative;
-	boundary="----=_NextPart_5DD4A400_126461D8_52E98460"
-Content-Transfer-Encoding: 8Bit
+	boundary="=_ac7d9904-2e23-40de-a624-d1c23ef0fcbd"
 
-This is a multi-part message in MIME format.
+--=_ac7d9904-2e23-40de-a624-d1c23ef0fcbd
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-------=_NextPart_5DD4A400_126461D8_52E98460
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
+For the system call payload documentation, you might want to refer to the L=
+inux system call=20
+man pages.=20
 
-VG8gYmUgbW9yZSBzcGVjaWZpYywgSSBzdXBwb3NlIHdlIGNhbiByZWZlciB0byBpbnN0cnVt
-ZW50YXRpb25cc3lzY2FsbHNcMy4xMC4wLXJjN1x4ODYtNjQtc3lzY2FsbHMtMy4xMC4wLXJj
-NyBmb3IgdGhlIHBheWxvYWQgZm9ybWF0IG9mIHN5c2NhbGwgZXZlbnQuIElzIGl0IGV4YWN0
-bHkgaW4gdGhlIENURiBzeXNjYWxsIGV2ZW50Pw0KDQoNClJlZ2FyZHMNCkhhaQ0KJm5ic3A7
-DQotLS0tLS0tLS0tLS0tLS0tLS0mbmJzcDtPcmlnaW5hbCZuYnNwOy0tLS0tLS0tLS0tLS0t
-LS0tLQ0KRnJvbTogJm5ic3A7IuadqOa1tyI8aGFpLnlhbmdAbWFnaWMtc2hpZWxkLmNvbSZn
-dDs7DQpEYXRlOiAmbmJzcDtNb24sIE5vdiAxOCwgMjAxOSAwOTo1NCBBTQ0KVG86ICZuYnNw
-OyJsdHRuZy1kZXYiPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcmZ3Q7OyANCg0KU3ViamVj
-dDogJm5ic3A7ZG9jdW1lbnRhdGlvbiBhYm91dCBDVEYgZXZlbnQgcGF5bG9hZA0KDQombmJz
-cDsNCg0KSGkNCg0KDQpBcyBMVFRuZyBnZW5lcmF0ZWQgQ1RGIGFuZCBiYWJlbHRyYWNlIHBh
-cnNlIGl0LCB3ZSBoYXZlIHRoZSBvdXRwdXQgYXMgYXR0YWNoZWQuIFdlIHNhdyBldmVudHMg
-c3VjaCBhcyBzY2hlZF9zd2l0Y2gsIGJ1dCB0aGUgcGF5bG9hZCBjYW5ub3QgYmUgdW5kZXJz
-dG9vZCBlYXNpbHkuIFdoZXJlIHdlIGNhbiBmaW5kIHRoZSBkb2N1bWVudCB0byBleHBsYWlu
-IHRoZSBMVFRuZyBwYXlsb2FkIGFuZCBwYXJhbWV0ZXJzPw0KDQoNClJlZ2FyZHMNCkhhaQ==
+For internal kernel tracepoints like sched_switch, there is no documentatio=
+n of the meaning of=20
+each field at the moment. This state is the same as the upstream Linux kern=
+el trace event. You'll=20
+have to figure it out on your own. Documenting each field of the ~500-1000 =
+Linux kernel tracepoints=20
+is no small task.=20
 
-------=_NextPart_5DD4A400_126461D8_52E98460
-Content-Type: text/html;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
+Thanks,=20
 
-PGRpdj5UbyBiZSBtb3JlIHNwZWNpZmljLCBJIHN1cHBvc2Ugd2UgY2FuIHJlZmVyIHRvIGlu
-c3RydW1lbnRhdGlvblxzeXNjYWxsc1wzLjEwLjAtcmM3XHg4Ni02NC1zeXNjYWxscy0zLjEw
-LjAtcmM3IGZvciB0aGUgcGF5bG9hZCBmb3JtYXQgb2Ygc3lzY2FsbCBldmVudC4gSXMgaXQg
-ZXhhY3RseSBpbiB0aGUgQ1RGIHN5c2NhbGwgZXZlbnQ/PC9kaXY+PGRpdj48YnI+PC9kaXY+
-PGRpdj5SZWdhcmRzPC9kaXY+PGRpdj5IYWk8L2Rpdj48ZGl2PjxpbmNsdWRldGFpbD48ZGl2
-PiZuYnNwOzwvZGl2PjxkaXYgc3R5bGU9ImZvbnQ6VmVyZGFuYSBub3JtYWwgMTRweDtjb2xv
-cjojMDAwOyI+PGRpdiBzdHlsZT0iRk9OVC1TSVpFOiAxMnB4O0ZPTlQtRkFNSUxZOiBBcmlh
-bCBOYXJyb3c7cGFkZGluZzoycHggMCAycHggMDsiPi0tLS0tLS0tLS0tLS0tLS0tLSZuYnNw
-O09yaWdpbmFsJm5ic3A7LS0tLS0tLS0tLS0tLS0tLS0tPC9kaXY+PGRpdiBzdHlsZT0iRk9O
-VC1TSVpFOiAxMnB4O2JhY2tncm91bmQ6I2VmZWZlZjtwYWRkaW5nOjhweDsiPjxkaXYgaWQ9
-Im1lbnVfc2VuZGVyIj48Yj5Gcm9tOiA8L2I+Jm5ic3A7IuadqOa1tyImbHQ7aGFpLnlhbmdA
-bWFnaWMtc2hpZWxkLmNvbSZndDs7PC9kaXY+PGRpdj48Yj5EYXRlOiA8L2I+Jm5ic3A7TW9u
-LCBOb3YgMTgsIDIwMTkgMDk6NTQgQU08L2Rpdj48ZGl2PjxiPlRvOiA8L2I+Jm5ic3A7Imx0
-dG5nLWRldiImbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs7IDx3YnI+PC9kaXY+
-PGRpdj48L2Rpdj48ZGl2PjxiPlN1YmplY3Q6IDwvYj4mbmJzcDtkb2N1bWVudGF0aW9uIGFi
-b3V0IENURiBldmVudCBwYXlsb2FkPC9kaXY+PC9kaXY+PGRpdj4mbmJzcDs8L2Rpdj48ZGl2
-IHN0eWxlPSJwb3NpdGlvbjpyZWxhdGl2ZTsiPjxkaXYgaWQ9InRtcGNvbnRlbnRfcmVzIj48
-L2Rpdj48ZGl2PkhpPC9kaXY+PGRpdj48YnI+PC9kaXY+PGRpdj5BcyBMVFRuZyBnZW5lcmF0
-ZWQgQ1RGIGFuZCBiYWJlbHRyYWNlIHBhcnNlIGl0LCB3ZSBoYXZlIHRoZSBvdXRwdXQgYXMg
-YXR0YWNoZWQuIFdlIHNhdyBldmVudHMgc3VjaCBhcyBzY2hlZF9zd2l0Y2gsIGJ1dCB0aGUg
-cGF5bG9hZCBjYW5ub3QgYmUgdW5kZXJzdG9vZCBlYXNpbHkuIFdoZXJlIHdlIGNhbiBmaW5k
-IHRoZSBkb2N1bWVudCB0byBleHBsYWluIHRoZSBMVFRuZyBwYXlsb2FkIGFuZCBwYXJhbWV0
-ZXJzPzwvZGl2PjxkaXY+PGJyPjwvZGl2PjxkaXY+UmVnYXJkczwvZGl2PjxkaXY+SGFpPC9k
-aXY+PGRpdj48L2Rpdj48L2Rpdj48L2Rpdj48IS0tPCFbZW5kaWZdLS0+PC9pbmNsdWRldGFp
-bD48L2Rpdj4=
+Mathieu=20
 
-------=_NextPart_5DD4A400_126461D8_52E98460--
+----- On Nov 19, 2019, at 9:25 PM, =E6=9D=A8=E6=B5=B7 <hai.yang@magic-shiel=
+d.com> wrote:=20
 
+> To be more specific, I suppose we can refer to
+> instrumentation\syscalls\3.10.0-rc7\x86-64-syscalls-3.10.0-rc7 for the pa=
+yload
+> format of syscall event. Is it exactly in the CTF syscall event?
 
+> Regards
+> Hai
+> ------------------ Original ------------------
+> From: "=E6=9D=A8=E6=B5=B7"<hai.yang@magic-shield.com>;
+> Date: Mon, Nov 18, 2019 09:54 AM
+> To: "lttng-dev"<lttng-dev@lists.lttng.org>;
+> Subject: documentation about CTF event payload
+> Hi
 
+> As LTTng generated CTF and babeltrace parse it, we have the output as att=
+ached.
+> We saw events such as sched_switch, but the payload cannot be understood
+> easily. Where we can find the document to explain the LTTng payload and
+> parameters?
 
---===============2194996602002465018==
+> Regards
+> Hai
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+--=_ac7d9904-2e23-40de-a624-d1c23ef0fcbd
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div>For the system call payload documentation, =
+you might want to refer to the Linux system call<br></div><div>man pages.<b=
+r data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>For i=
+nternal kernel tracepoints like sched_switch, there is no documentation of =
+the meaning of<br data-mce-bogus=3D"1"></div><div>each field at the moment.=
+ This state is the same as the upstream Linux kernel trace event. You'll</d=
+iv><div>have to figure it out on your own. Documenting each field of the ~5=
+00-1000 Linux kernel tracepoints</div><div>is no small task.<br data-mce-bo=
+gus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mc=
+e-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br dat=
+a-mce-bogus=3D"1"></div><div><br></div><div><span id=3D"zwchr" data-marker=
+=3D"__DIVIDER__">----- On Nov 19, 2019, at 9:25 PM, =E6=9D=A8=E6=B5=B7 &lt;=
+hai.yang@magic-shield.com&gt; wrote:<br></span></div><div data-marker=3D"__=
+QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-le=
+ft:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;tex=
+t-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><=
+div>To be more specific, I suppose we can refer to instrumentation\syscalls=
+\3.10.0-rc7\x86-64-syscalls-3.10.0-rc7 for the payload format of syscall ev=
+ent. Is it exactly in the CTF syscall event?</div><br><div>Regards</div><di=
+v>Hai</div><div><div>&nbsp;</div><div style=3D"font:'verdana' normal 14px;c=
+olor:#000"><div style=3D"font-size:12px;font-family:'arial narrow';padding:=
+2px 0 2px 0">------------------&nbsp;Original&nbsp;------------------</div>=
+<div style=3D"font-size:12px;background:#efefef;padding:8px"><div><b>From: =
+</b>&nbsp;"=E6=9D=A8=E6=B5=B7"&lt;hai.yang@magic-shield.com&gt;;</div><div>=
+<b>Date: </b>&nbsp;Mon, Nov 18, 2019 09:54 AM</div><div><b>To: </b>&nbsp;"l=
+ttng-dev"&lt;lttng-dev@lists.lttng.org&gt;; </div><div><b>Subject: </b>&nbs=
+p;documentation about CTF event payload</div></div><div>&nbsp;</div><div><d=
+iv>Hi</div><br><div>As LTTng generated CTF and babeltrace parse it, we have=
+ the output as attached. We saw events such as sched_switch, but the payloa=
+d cannot be understood easily. Where we can find the document to explain th=
+e LTTng payload and parameters?</div><br><div>Regards</div><div>Hai</div></=
+div></div></div><br>_______________________________________________<br>lttn=
+g-dev mailing list<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/=
+cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><div><br></div><di=
+v data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>Effic=
+iOS Inc.<br>http://www.efficios.com</div></div></body></html>
+--=_ac7d9904-2e23-40de-a624-d1c23ef0fcbd--
+
+--===============6696418898515075047==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -104,4 +144,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2194996602002465018==--
+--===============6696418898515075047==--
