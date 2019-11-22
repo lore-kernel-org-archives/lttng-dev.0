@@ -1,20 +1,23 @@
 From: Norbert Lange <nolange79@gmail.com>
 Subject: Re: Using lttng-ust with xenomai
-Date: Fri, 22 Nov 2019 18:55:38 +0100
-Message-ID: <CADYdroNGcY6adA5cGTzwzsKqO7+iuWts9k8Haz8k3HSvzQfc=g__36699.4488447503$1574445386$gmane$org@mail.gmail.com>
+Date: Fri, 22 Nov 2019 19:01:32 +0100
+Message-ID: <CADYdroP+H3DiqCaH9o1jHxAurh_2YG_p7MK4H2kFqSoTCV0w6A__20593.6606902227$1574445728$gmane$org@mail.gmail.com>
 References: <CADYdroN-i9yrpd-wjPSW36GUptRV+kOCJT=Yv6+Z5sCVBmo_SQ@mail.gmail.com>
  <2012667816.853.1574437363737.JavaMail.zimbra@efficios.com>
+ <4aab99be-5451-4582-f75d-7637614b1d37@siemens.com>
+ <CADYdroOh+T8pOcNBW74KSMfCh--ujD8L3_G96LWR1migpsUq0g@mail.gmail.com>
+ <63a51fa5-db96-9cf9-0eb3-51954ebf98f4@siemens.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com
- [IPv6:2607:f8b0:4864:20::142])
- by lists.lttng.org (Postfix) with ESMTPS id 47KPHB09Jgz1S24
- for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 12:55:49 -0500 (EST)
-Received: by mail-il1-x142.google.com with SMTP id y16so195971iln.0
- for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 09:55:49 -0800 (PST)
-In-Reply-To: <2012667816.853.1574437363737.JavaMail.zimbra@efficios.com>
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com
+ [IPv6:2607:f8b0:4864:20::d41])
+ by lists.lttng.org (Postfix) with ESMTPS id 47KPQ10BNnz1S2p
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 13:01:44 -0500 (EST)
+Received: by mail-io1-xd41.google.com with SMTP id j20so8965997ioo.11
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 10:01:44 -0800 (PST)
+In-Reply-To: <63a51fa5-db96-9cf9-0eb3-51954ebf98f4@siemens.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,52 +27,135 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Jan Kiszka <jan.kiszka@siemens.com>, lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@kernel.org>, Xenomai <xenomai@xenomai.org>
+To: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@kernel.org>, Xenomai <xenomai@xenomai.org>
 List-Id: lttng-dev@lists.lttng.org
 
+Am Fr., 22. Nov. 2019 um 18:52 Uhr schrieb Jan Kiszka <jan.kiszka@siemens.com>:
 >
-> LTTng-UST prepares the ring buffers from lttng-ust's "listener" thread,
-> which is injected into the process by a lttng-ust constructor.
+> On 22.11.19 18:44, Norbert Lange wrote:
+> > Am Fr., 22. Nov. 2019 um 16:52 Uhr schrieb Jan Kiszka <jan.kiszka@siemens.com>:
+> >>
+> >> On 22.11.19 16:42, Mathieu Desnoyers wrote:
+> >>> ----- On Nov 22, 2019, at 4:14 AM, Norbert Lange nolange79@gmail.com wrote:
+> >>>
+> >>>> Hello,
+> >>>>
+> >>>> I already started a thread over at xenomai.org [1], but I guess its
+> >>>> more efficient to ask here aswell.
+> >>>> The basic concept is that xenomai thread run *below* Linux (threads
+> >>>> and irg handlers), which means that xenomai threads must not use any
+> >>>
+> >>> I guess you mean "irq handlers" here.
+> >>>
+> >>>> linux services like the futex syscall or socket communication.
+> >>>>
+> >>>> ## tracepoints
+> >>>>
+> >>>> expecting that tracepoints are the only thing that should be used from
+> >>>> the xenomai threads, is there anything using linux services.
+> >>>> the "bulletproof" urcu apparently does not need anything for the
+> >>>> reader lock (aslong as the thread is already registered),
+> >>>
+> >>> Indeed the first time the urcu-bp read-lock is encountered by a thread,
+> >>> the thread registration is performed, which requires locks, memory allocation,
+> >>> and so on. After that, the thread can use urcu-bp read-side lock without
+> >>> requiring any system call.
+> >>
+> >> So, we will probably want to perform such a registration unconditionally
+> >> (in case lttng usage is enabled) for our RT threads during their setup.
+> >
+> > Who is we? Do you plan to add automatic support at xenomai mainline?
+> >
+> > But yes, some setup is likely needed if one wants to use lttng
 >
-> What you will care about is how the tracepoint call-site (within a Xenomai
-> thread) interacts with the ring buffers.
->
-> The "default" setup for lttng-ust ring buffers is not suitable for Xenomai
-> threads. The lttng-ust ring buffer is split into sub-buffers, each sub-buffer
-> corresponding to a CTF trace "packet". When a sub-buffer is filled, lttng-ust
-> invokes "write(2)" to a pipe to let the consumer daemon know there is data
-> available in that ring buffer. You will want to get rid of that write(2) system
-> call from a Xenomai thread.
->
-> The proper configuration is to use lttng-enable-channel(1) "--read-timer"
-> option (see https://lttng.org/docs/v2.11/#doc-channel-read-timer). This will
-> ensure that the consumer daemon uses a polling approach to check periodically
-> whether data needs to be consumed within each buffer, thus removing the
-> use of the write(2) system call on the application-side.
+> I wouldn't refuse patches to make this happen in mainline. If patches
+> are best applied there. We could use a deterministic and fast
+> application tracing frame work people can build upon, and that they can
+> smoothly combine with system level traces.
 
-Ah thanks.
-
-But that's configuration outside of the RT app if I understand this correctly.
-So if one configures a tracer wrong, then the app will suddenly misbehave.
-Would be nice to be able to somehow tell that there is only read-timer allowed.
+Sure (good to hear), I just dont think enabling it automatic/unconditionally
+is a good thing.
 
 
 >
-> > liburcu has configure options allow forcing the usage of this syscall
-> > but not disabling it, which likely is necessary for Xenomai.
+> >
+> >>
+> >>>
+> >>>> liburcu has configure options allow forcing the usage of this syscall
+> >>>> but not disabling it, which likely is necessary for Xenomai.
+> >>>
+> >>> I suspect what you'd need there is a way to allow a process to tell
+> >>> liburcu-bp (or liburcu) to always use the fall-back mechanism which does
+> >>> not rely on sys_membarrier. This could be allowed before the first use of
+> >>> the library. I think extending the liburcu APIs to allow this should be
+> >>> straightforward enough. This approach would be more flexible than requiring
+> >>> liburcu to be specialized at configure time. This new API would return an error
+> >>> if invoked with a liburcu library compiled with --disable-sys-membarrier-fallback.
+> >>>
+> >>> If you have control over your entire system's kernel, you may want to try
+> >>> just configuring the kernel within CONFIG_MEMBARRIER=n in the meantime.
+> >>>
+> >>> Another thing to make sure is to have a glibc and Linux kernel which perform
+> >>> clock_gettime() as vDSO for the monotonic clock, because you don't want a
+> >>> system call there. If that does not work for you, you can alternatively
+> >>> implement your own lttng-ust and lttng-modules clock plugin .so/.ko to override
+> >>> the clock used by lttng, and for instance use TSC directly. See for instance
+> >>> the lttng-ust(3) LTTNG_UST_CLOCK_PLUGIN environment variable.
+> >>
+> >> clock_gettime & Co for a Xenomai application is syscall-free as well.
+> >
+> > Yes, and that gave me a deadlock already, if a library us not compiled
+> > for Xenomai,
+> > it will either use the syscall (and you detect that immediatly) or it
+> > will work most of the time,
+> > and lock up once in a while if a Linux thread took the "writer lock"
+> > of the VDSO structures
+> > and your high priority xenomai thread is busy waiting infinitely.
+> >
+> > Only sane approach would be to use either the xenomai function directly,
+> > or recreate the function (rdtsc + interpolation on x86).
 >
-> I suspect what you'd need there is a way to allow a process to tell
-> liburcu-bp (or liburcu) to always use the fall-back mechanism which does
-> not rely on sys_membarrier. This could be allowed before the first use of
-> the library. I think extending the liburcu APIs to allow this should be
-> straightforward enough. This approach would be more flexible than requiring
-> liburcu to be specialized at configure time. This new API would return an error
-> if invoked with a liburcu library compiled with --disable-sys-membarrier-fallback.
+> rdtsc is not portable, thus a no-go.
 
-I was under the impression, that you counted clock-cycles for every operation ;)
-Not sure, maybe a separate lib for realtime is the better way. Having no option
-can be considered foolproof, and sideeffects of the syscall not working would be
-a real pain.
+Its not portable, but you have equivalents on ARM, powerpc.
+ie. "Do the same think as Xenomai"
 
-regards, Norbert
+> > Either compiling/patching lttng for Cobalt (which I really would not
+> > want to do) or using a
+> > clock plugin.
+>
+> I suspect you will want to have at least a plugin that was built against
+> Xenomai libs.
+
+That will then do alot other stuff like spwaning a printf thread.
+
+>
+> > If the later is supposed to be minimal, then that would mean I would
+> > have to get the
+> > interpolation factors cobalt uses (without bringing in libcobalt).
+> >
+> > Btw. the Xenomai and Linux monotonic clocks arent synchronised at all
+> > AFAIK, so timestamps will
+> > be different to the rest of Linux.
+>
+> CLOCK_HOST_REALTIME is synchronized.
+
+Thats not monotonic?
+
+>
+> > On my last plattform I did some tracing using internal stamp and
+> > regulary wrote a
+> > block with internal and external timestamps so those could be
+> > converted "offline".
+>
+> Sounds not like something we want to promote.
+
+This was a questing to lttng and its tool environment. I suppose we
+werent the first
+ones with multiple clocks in a system.
+If anything needs to be done in Xenomai it might be a concurrent
+readout of Linux/cobalt time(s),
+the rest would be done offline, potentially on another system.
+
+ regards, Norbert
