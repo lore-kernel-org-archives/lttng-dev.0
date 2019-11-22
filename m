@@ -1,22 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Using lttng-ust with xenomai
-Date: Fri, 22 Nov 2019 14:00:05 -0500 (EST)
-Message-ID: <2088324778.1063.1574449205629.JavaMail.zimbra__28890.3751106531$1574449231$gmane$org@efficios.com>
+Date: Fri, 22 Nov 2019 14:03:30 -0500 (EST)
+Message-ID: <1007669875.1091.1574449410739.JavaMail.zimbra__26202.5670310081$1574449429$gmane$org@efficios.com>
 References: <CADYdroN-i9yrpd-wjPSW36GUptRV+kOCJT=Yv6+Z5sCVBmo_SQ@mail.gmail.com>
  <2012667816.853.1574437363737.JavaMail.zimbra@efficios.com>
- <4aab99be-5451-4582-f75d-7637614b1d37@siemens.com>
- <CADYdroOh+T8pOcNBW74KSMfCh--ujD8L3_G96LWR1migpsUq0g@mail.gmail.com>
+ <CADYdroNGcY6adA5cGTzwzsKqO7+iuWts9k8Haz8k3HSvzQfc=g@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 47KQjM1Cnyz1S95
- for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 14:00:06 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 47KQnJ0nsdz1S9r
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 14:03:31 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 58D12411C45
- for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 14:00:06 -0500 (EST)
-In-Reply-To: <CADYdroOh+T8pOcNBW74KSMfCh--ujD8L3_G96LWR1migpsUq0g@mail.gmail.com>
+ by mail.efficios.com (Postfix) with ESMTP id 852FA411DC3
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 14:03:31 -0500 (EST)
+In-Reply-To: <CADYdroNGcY6adA5cGTzwzsKqO7+iuWts9k8Haz8k3HSvzQfc=g@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -30,84 +29,71 @@ To: Norbert Lange <nolange79@gmail.com>
 Cc: Jan Kiszka <jan.kiszka@siemens.com>, lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@kernel.org>, Xenomai <xenomai@xenomai.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Nov 22, 2019, at 12:44 PM, Norbert Lange nolange79@gmail.com wrote:
+----- On Nov 22, 2019, at 12:55 PM, Norbert Lange nolange79@gmail.com wrote:
 
-> Am Fr., 22. Nov. 2019 um 16:52 Uhr schrieb Jan Kiszka <jan.kiszka@siemens.com>:
 >>
->> On 22.11.19 16:42, Mathieu Desnoyers wrote:
-
-[...]
-
-> 
-> 
->> >
->> > That's indeed a good point. I suspect membarrier may not send any IPI
->> > to Xenomai threads (that would have to be confirmed). I suspect the
->> > latency introduced by this IPI would be unwanted.
+>> LTTng-UST prepares the ring buffers from lttng-ust's "listener" thread,
+>> which is injected into the process by a lttng-ust constructor.
 >>
->> Is an "IPI" a POSIX signal here? Or are real IPI that delivers an
->> interrupt to Linux on another CPU? The latter would still be possible,
->> but it would be delayed until all Xenomai threads on that core eventual
->> took a break (which should happen a couple of times per second under
->> normal conditions - 100% RT load is an illegal application state).
-> 
-> Not POSIX, some inter-thread interrupts. point is the syscall waits
-> for the set of
-> registered *running* Linux threads.
-
-Just a small clarification: the PRIVATE membarrier command does not *wait*
-for other threads, but it rather ensures that all other running threads
-have had IPIs that issue memory barriers before it returns.
-
-This is just a building block that can be used to speed up stuff like liburcu
-and JIT memory reclaim.
-
-[...]
-
->> >
->> > Another thing to make sure is to have a glibc and Linux kernel which perform
->> > clock_gettime() as vDSO for the monotonic clock, because you don't want a
->> > system call there. If that does not work for you, you can alternatively
->> > implement your own lttng-ust and lttng-modules clock plugin .so/.ko to override
->> > the clock used by lttng, and for instance use TSC directly. See for instance
->> > the lttng-ust(3) LTTNG_UST_CLOCK_PLUGIN environment variable.
+>> What you will care about is how the tracepoint call-site (within a Xenomai
+>> thread) interacts with the ring buffers.
 >>
->> clock_gettime & Co for a Xenomai application is syscall-free as well.
+>> The "default" setup for lttng-ust ring buffers is not suitable for Xenomai
+>> threads. The lttng-ust ring buffer is split into sub-buffers, each sub-buffer
+>> corresponding to a CTF trace "packet". When a sub-buffer is filled, lttng-ust
+>> invokes "write(2)" to a pipe to let the consumer daemon know there is data
+>> available in that ring buffer. You will want to get rid of that write(2) system
+>> call from a Xenomai thread.
+>>
+>> The proper configuration is to use lttng-enable-channel(1) "--read-timer"
+>> option (see https://lttng.org/docs/v2.11/#doc-channel-read-timer). This will
+>> ensure that the consumer daemon uses a polling approach to check periodically
+>> whether data needs to be consumed within each buffer, thus removing the
+>> use of the write(2) system call on the application-side.
 > 
-> Yes, and that gave me a deadlock already, if a library us not compiled
-> for Xenomai,
-> it will either use the syscall (and you detect that immediatly) or it
-> will work most of the time,
-> and lock up once in a while if a Linux thread took the "writer lock"
-> of the VDSO structures
-> and your high priority xenomai thread is busy waiting infinitely.
+> Ah thanks.
 > 
-> Only sane approach would be to use either the xenomai function directly,
-> or recreate the function (rdtsc + interpolation on x86).
-> Either compiling/patching lttng for Cobalt (which I really would not
-> want to do) or using a
-> clock plugin.
-> If the later is supposed to be minimal, then that would mean I would
-> have to get the
-> interpolation factors cobalt uses (without bringing in libcobalt).
-> 
-> Btw. the Xenomai and Linux monotonic clocks arent synchronised at all
-> AFAIK, so timestamps will
-> be different to the rest of Linux.
-> On my last plattform I did some tracing using internal stamp and
-> regulary wrote a
-> block with internal and external timestamps so those could be
-> converted "offline".
-> Anything similar with lttng or tools handling the traces?
+> But that's configuration outside of the RT app if I understand this correctly.
+> So if one configures a tracer wrong, then the app will suddenly misbehave.
+> Would be nice to be able to somehow tell that there is only read-timer allowed.
 
-Can a Xenomai thread issue clock_gettime(CLOCK_MONOTONIC) ?
+So an RT application would prohibit tracing to non-RT ring buffers ? IOW, if a
+channel is configured without the --read-timer option, nothing would appear from
+the RT threads in those buffers.
 
-AFAIK we don't have tooling to do what you describe out of the box,
-but it could probably be implemented as a babeltrace 2 filter plugin.
+Should this be per-process or per-thread ?
+
+> 
+> 
+>>
+>> > liburcu has configure options allow forcing the usage of this syscall
+>> > but not disabling it, which likely is necessary for Xenomai.
+>>
+>> I suspect what you'd need there is a way to allow a process to tell
+>> liburcu-bp (or liburcu) to always use the fall-back mechanism which does
+>> not rely on sys_membarrier. This could be allowed before the first use of
+>> the library. I think extending the liburcu APIs to allow this should be
+>> straightforward enough. This approach would be more flexible than requiring
+>> liburcu to be specialized at configure time. This new API would return an error
+>> if invoked with a liburcu library compiled with
+>> --disable-sys-membarrier-fallback.
+> 
+> I was under the impression, that you counted clock-cycles for every operation ;)
+
+Well it's just a new API that allows tweaking the state of a boolean which controls
+branches which are already there on the fast-path. ;)
+
+> Not sure, maybe a separate lib for realtime is the better way. Having no option
+> can be considered foolproof, and sideeffects of the syscall not working would be
+> a real pain.
+
+e.g. a liburcu-bp-rt.so ? That would bring interesting integration challenges with
+lttng-ust though. Should we then build a liblttng-ust-rt.so as well ?
 
 Thanks,
 
 Mathieu
+
 
 -- 
 Mathieu Desnoyers
