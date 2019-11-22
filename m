@@ -1,21 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH liburcu] urcu-bp: introduce
- urcu_bp_disable_sys_membarrier()
-Date: Fri, 22 Nov 2019 12:02:58 -0500 (EST)
-Message-ID: <173739689.937.1574442178071.JavaMail.zimbra__18101.0000103683$1574442193$gmane$org@efficios.com>
-References: <20191122170040.23250-1-mathieu.desnoyers@efficios.com>
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Subject: Re: Using lttng-ust with xenomai
+Date: Fri, 22 Nov 2019 18:36:54 +0100
+Message-ID: <f25860cc-e5b6-ae89-1a21-b85093291398__3246.15436127118$1574444251$gmane$org@siemens.com>
+References: <CADYdroN-i9yrpd-wjPSW36GUptRV+kOCJT=Yv6+Z5sCVBmo_SQ@mail.gmail.com>
+ <2012667816.853.1574437363737.JavaMail.zimbra@efficios.com>
+ <4aab99be-5451-4582-f75d-7637614b1d37@siemens.com>
+ <480743920.929.1574442078799.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 47KN6B6Vwkz1Rtx
- for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 12:02:58 -0500 (EST)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 993F93A640E
- for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 12:02:58 -0500 (EST)
-In-Reply-To: <20191122170040.23250-1-mathieu.desnoyers@efficios.com>
+Received: from goliath.siemens.de (goliath.siemens.de [192.35.17.28])
+ by lists.lttng.org (Postfix) with ESMTPS id 47KNsc3fr8z1RxV
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 12:37:08 -0500 (EST)
+In-Reply-To: <480743920.929.1574442078799.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,135 +24,44 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: paulmck <paulmck@kernel.org>, Norbert Lange <nolange79@gmail.com>, Jan Kiszka <jan.kiszka@siemens.com>, Xenomai <xenomai@xenomai.org>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@kernel.org>, Xenomai <xenomai@xenomai.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Nov 22, 2019, at 12:00 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+On 22.11.19 18:01, Mathieu Desnoyers wrote:
+>>>>
+>>>> ## membarrier syscall
+>>>>
+>>>> I haven't got an explanation yet, but I believe this syscall does
+>>>> nothing to xenomai threads (each has a shadow linux thread, that is
+>>>> *idle* when the xenomai thread is active).
+>>>
+>>> That's indeed a good point. I suspect membarrier may not send any IPI
+>>> to Xenomai threads (that would have to be confirmed). I suspect the
+>>> latency introduced by this IPI would be unwanted.
+>>
+>> Is an "IPI" a POSIX signal here? Or are real IPI that delivers an
+>> interrupt to Linux on another CPU? The latter would still be possible,
+>> but it would be delayed until all Xenomai threads on that core eventual
+>> took a break (which should happen a couple of times per second under
+>> normal conditions - 100% RT load is an illegal application state).
+> 
+> I'm talking about a real in-kernel IPI (as in inter-processor interrupt).
+> However, the way sys_membarrier detects which CPUs should receive that IPI
+> is by iterating on all cpu runqueues, and figure out which CPU is currently
+> running a thread which uses the same mm as the sys_membarrier caller
+> (for the PRIVATE membarrier commands).
+> 
+> So I suspect that the Xenomai thread is really not within the Linux scheduler
+> runqueue when it runs.
 
-> Real-time applications with Xenomai threads wishing to use urcu-bp
-> read-side within real-time threads require to disable use of the
-> membarrier system call, relying on the fall-back based on regular
-> memory barriers on the read-side instead. Allow disabling use of
-> sys_membarrier before liburcu-bp's first use.
+True. Xenomai first suspends the RT thread's Linux shadow and then kicks 
+the Xenomai scheduler to interrupt Linux (and schedule in the RT 
+thread). So, from a remote Linux perspective, something else will be 
+running at this point.
 
-This last sentence should actually read:
-
-Allow disabling use of sys_membarrier when there are no urcu-bp reader
-threads present.
-
-Thanks,
-
-Mathieu
-
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
-> include/urcu/urcu-bp.h | 12 ++++++++++++
-> src/urcu-bp.c          | 38 +++++++++++++++++++++++++++++++++++---
-> 2 files changed, 47 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/urcu/urcu-bp.h b/include/urcu/urcu-bp.h
-> index 2ea17e6..bfab965 100644
-> --- a/include/urcu/urcu-bp.h
-> +++ b/include/urcu/urcu-bp.h
-> @@ -157,6 +157,18 @@ extern void urcu_bp_after_fork_child(void);
-> extern void urcu_bp_register_thread(void);
-> 
-> /*
-> + * Require liburcu-bp to use the fallback (based on memory barriers on
-> + * the read-side) rather than pairing the sys_membarrier system call in
-> + * synchronize_rcu() with compiler barriers on the read-side. Should
-> + * be invoked when there are no RCU reader threads present.
-> + * Return 0 on success.
-> + * Return -1, errno = EBUSY if there are RCU reader threads present.
-> + * Return -1, errno = EINVAL if the library has been configured without
-> + * the membarrier fallback support.
-> + */
-> +extern int urcu_bp_disable_sys_membarrier(void);
-> +
-> +/*
->  * In the bulletproof version, the following functions are no-ops.
->  */
-> static inline void urcu_bp_unregister_thread(void)
-> diff --git a/src/urcu-bp.c b/src/urcu-bp.c
-> index 05efd97..4aaa3d6 100644
-> --- a/src/urcu-bp.c
-> +++ b/src/urcu-bp.c
-> @@ -123,6 +123,8 @@ void __attribute__((destructor)) urcu_bp_exit(void);
-> int urcu_bp_has_sys_membarrier;
-> #endif
-> 
-> +static bool urcu_bp_sys_membarrier_is_disabled;
-> +
-> /*
->  * rcu_gp_lock ensures mutual exclusion between threads calling
->  * synchronize_rcu().
-> @@ -607,6 +609,11 @@ void urcu_bp_thread_exit_notifier(void *rcu_key)
-> 
-> #ifdef CONFIG_RCU_FORCE_SYS_MEMBARRIER
-> static
-> +bool urcu_bp_force_sys_membarrier(void)
-> +{
-> +	return true;
-> +}
-> +static
-> void urcu_bp_sys_membarrier_status(bool available)
-> {
-> 	if (!available)
-> @@ -614,20 +621,45 @@ void urcu_bp_sys_membarrier_status(bool available)
-> }
-> #else
-> static
-> +bool urcu_bp_force_sys_membarrier(void)
-> +{
-> +	return false;
-> +}
-> +static
-> void urcu_bp_sys_membarrier_status(bool available)
-> {
-> -	if (!available)
-> -		return;
-> -	urcu_bp_has_sys_membarrier = 1;
-> +	urcu_bp_has_sys_membarrier = available;
-> }
-> #endif
-> 
-> +int urcu_bp_disable_sys_membarrier(void)
-> +{
-> +	mutex_lock(&rcu_registry_lock);
-> +	if (!cds_list_empty(&registry)) {
-> +		mutex_unlock(&rcu_registry_lock);
-> +		errno = EBUSY;
-> +		return -1;
-> +	}
-> +	mutex_unlock(&rcu_registry_lock);
-> +	if (urcu_bp_force_sys_membarrier()) {
-> +		errno = EINVAL;
-> +		return -1;
-> +	}
-> +	mutex_lock(&init_lock);
-> +	urcu_bp_sys_membarrier_is_disabled = true;
-> +	urcu_bp_sys_membarrier_status(false);
-> +	mutex_unlock(&init_lock);
-> +	return 0;
-> +}
-> +
-> static
-> void urcu_bp_sys_membarrier_init(void)
-> {
-> 	bool available = false;
-> 	int mask;
-> 
-> +	if (urcu_bp_sys_membarrier_is_disabled)
-> +		return;
-> 	mask = membarrier(MEMBARRIER_CMD_QUERY, 0);
-> 	if (mask >= 0) {
-> 		if (mask & MEMBARRIER_CMD_PRIVATE_EXPEDITED) {
-> --
-> 2.11.0
+Jan
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Siemens AG, Corporate Technology, CT RDA IOT SES-DE
+Corporate Competence Center Embedded Linux
