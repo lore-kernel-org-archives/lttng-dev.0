@@ -1,25 +1,21 @@
-From: Norbert Lange <nolange79@gmail.com>
-Subject: Re: Using lttng-ust with xenomai
-Date: Fri, 22 Nov 2019 22:38:12 +0100
-Message-ID: <CADYdroOEBSeZ3Hjs0mTLx2n8+G-zREXG+Np95mJhnjWXUFbEAg__21425.8339184866$1574458719$gmane$org@mail.gmail.com>
-References: <CADYdroN-i9yrpd-wjPSW36GUptRV+kOCJT=Yv6+Z5sCVBmo_SQ@mail.gmail.com>
- <2012667816.853.1574437363737.JavaMail.zimbra@efficios.com>
- <4aab99be-5451-4582-f75d-7637614b1d37@siemens.com>
- <CADYdroOh+T8pOcNBW74KSMfCh--ujD8L3_G96LWR1migpsUq0g@mail.gmail.com>
- <63a51fa5-db96-9cf9-0eb3-51954ebf98f4@siemens.com>
- <CADYdroP+H3DiqCaH9o1jHxAurh_2YG_p7MK4H2kFqSoTCV0w6A@mail.gmail.com>
- <a2036ba8-c22a-e549-b68d-35524ee7f9a9@siemens.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools v2] Fix: update apps on untrack
+ only when session is active
+Date: Fri, 22 Nov 2019 18:00:44 -0500
+Message-ID: <20191122230044.GA51696__28237.2253642947$1574463668$gmane$org@gmail.com>
+References: <20191118201220.7525-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com
- [IPv6:2607:f8b0:4864:20::143])
- by lists.lttng.org (Postfix) with ESMTPS id 47KVD00F01z1SSq
- for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 16:38:23 -0500 (EST)
-Received: by mail-il1-x143.google.com with SMTP id v17so4479948ilg.7
- for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 13:38:23 -0800 (PST)
-In-Reply-To: <a2036ba8-c22a-e549-b68d-35524ee7f9a9@siemens.com>
+Received: from mail-qt1-f195.google.com (mail-qt1-f195.google.com
+ [209.85.160.195])
+ by lists.lttng.org (Postfix) with ESMTPS id 47KX341cKZz1R3K
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 18:00:47 -0500 (EST)
+Received: by mail-qt1-f195.google.com with SMTP id t20so9678408qtn.9
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2019 15:00:47 -0800 (PST)
+Content-Disposition: inline
+In-Reply-To: <20191118201220.7525-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,104 +25,75 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jan Kiszka <jan.kiszka@siemens.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@kernel.org>, Xenomai <xenomai@xenomai.org>
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-> >>>>>> liburcu has configure options allow forcing the usage of this syscall
-> >>>>>> but not disabling it, which likely is necessary for Xenomai.
-> >>>>>
-> >>>>> I suspect what you'd need there is a way to allow a process to tell
-> >>>>> liburcu-bp (or liburcu) to always use the fall-back mechanism which does
-> >>>>> not rely on sys_membarrier. This could be allowed before the first use of
-> >>>>> the library. I think extending the liburcu APIs to allow this should be
-> >>>>> straightforward enough. This approach would be more flexible than requiring
-> >>>>> liburcu to be specialized at configure time. This new API would return an error
-> >>>>> if invoked with a liburcu library compiled with --disable-sys-membarrier-fallback.
-> >>>>>
-> >>>>> If you have control over your entire system's kernel, you may want to try
-> >>>>> just configuring the kernel within CONFIG_MEMBARRIER=n in the meantime.
-> >>>>>
-> >>>>> Another thing to make sure is to have a glibc and Linux kernel which perform
-> >>>>> clock_gettime() as vDSO for the monotonic clock, because you don't want a
-> >>>>> system call there. If that does not work for you, you can alternatively
-> >>>>> implement your own lttng-ust and lttng-modules clock plugin .so/.ko to override
-> >>>>> the clock used by lttng, and for instance use TSC directly. See for instance
-> >>>>> the lttng-ust(3) LTTNG_UST_CLOCK_PLUGIN environment variable.
-> >>>>
-> >>>> clock_gettime & Co for a Xenomai application is syscall-free as well.
-> >>>
-> >>> Yes, and that gave me a deadlock already, if a library us not compiled
-> >>> for Xenomai,
-> >>> it will either use the syscall (and you detect that immediatly) or it
-> >>> will work most of the time,
-> >>> and lock up once in a while if a Linux thread took the "writer lock"
-> >>> of the VDSO structures
-> >>> and your high priority xenomai thread is busy waiting infinitely.
-> >>>
-> >>> Only sane approach would be to use either the xenomai function directly,
-> >>> or recreate the function (rdtsc + interpolation on x86).
-> >>
-> >> rdtsc is not portable, thus a no-go.
-> >
-> > Its not portable, but you have equivalents on ARM, powerpc.
-> > ie. "Do the same think as Xenomai"
->
-> If you use existing code, I'm fine. Just not invent something "new" here.
+Merged in master and stable-2.11.
 
-The idea it to build the lttng plugin from the same code,
-just using the things that are necessary for reading the monotonic clock
+Thanks!
+J=E9r=E9mie
 
-> >>> Either compiling/patching lttng for Cobalt (which I really would not
-> >>> want to do) or using a
-> >>> clock plugin.
-> >>
-> >> I suspect you will want to have at least a plugin that was built against
-> >> Xenomai libs.
-> >
-> > That will then do alot other stuff like spwaning a printf thread.
-> >
-> >>
-> >>> If the later is supposed to be minimal, then that would mean I would
-> >>> have to get the
-> >>> interpolation factors cobalt uses (without bringing in libcobalt).
-> >>>
-> >>> Btw. the Xenomai and Linux monotonic clocks arent synchronised at all
-> >>> AFAIK, so timestamps will
-> >>> be different to the rest of Linux.
-> >>
-> >> CLOCK_HOST_REALTIME is synchronized.
-> >
-> > Thats not monotonic?
->
-> Yeah, it's REALTIME, in synch with CLOCK_REALTIME of Linux.
-> CLOCK_MONOTONIC should have a static offset at worst. I think that could
-> be resolved if it wasn't yet.
+On Mon, Nov 18, 2019 at 03:12:20PM -0500, Jonathan Rajotte wrote:
+> This mimics what is done on the track side.
+> =
 
-Linux CLOCK_MONOTONIC is skew corrected to increment at the same rate as
-CLOCK_REALTIME.
-You might have a chance with Linux CLOCK_MONOTONIC_RAW,
-if you use the identical scaling method.
+> Fixes #1210
+> =
 
->
-> >
-> >>
-> >>> On my last plattform I did some tracing using internal stamp and
-> >>> regulary wrote a
-> >>> block with internal and external timestamps so those could be
-> >>> converted "offline".
-> >>
-> >> Sounds not like something we want to promote.
-> >
-> > This was a questing to lttng and its tool environment. I suppose we
-> > werent the first
-> > ones with multiple clocks in a system.
-> > If anything needs to be done in Xenomai it might be a concurrent
-> > readout of Linux/cobalt time(s),
-> > the rest would be done offline, potentially on another system.
->
-> Sure, doable, but I prefer not having to do that.
+> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+> ---
+> =
 
-It might offer alot flexibility you don't get otherwise (without a ton of work).
+> Used wrong issue number.
+> =
 
-Norbert
+> ---
+>  src/bin/lttng-sessiond/trace-ust.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> =
+
+> diff --git a/src/bin/lttng-sessiond/trace-ust.c b/src/bin/lttng-sessiond/=
+trace-ust.c
+> index 486b53d30..a6c0c04ad 100644
+> --- a/src/bin/lttng-sessiond/trace-ust.c
+> +++ b/src/bin/lttng-sessiond/trace-ust.c
+> @@ -922,6 +922,7 @@ end:
+>  int trace_ust_untrack_pid(struct ltt_ust_session *session, int pid)
+>  {
+>  	int retval =3D LTTNG_OK;
+> +	bool should_update_apps =3D false;
+>  =
+
+>  	if (pid =3D=3D -1) {
+>  		/* Create empty tracker, replace old tracker. */
+> @@ -938,7 +939,7 @@ int trace_ust_untrack_pid(struct ltt_ust_session *ses=
+sion, int pid)
+>  		fini_pid_tracker(&tmp_tracker);
+>  =
+
+>  		/* Remove session from all applications */
+> -		ust_app_global_update_all(session);
+> +		should_update_apps =3D true;
+>  	} else {
+>  		int ret;
+>  		struct ust_app *app;
+> @@ -957,9 +958,12 @@ int trace_ust_untrack_pid(struct ltt_ust_session *se=
+ssion, int pid)
+>  		/* Remove session from application. */
+>  		app =3D ust_app_find_by_pid(pid);
+>  		if (app) {
+> -			ust_app_global_update(session, app);
+> +			should_update_apps =3D true;
+>  		}
+>  	}
+> +	if (should_update_apps && session->active) {
+> +		ust_app_global_update_all(session);
+> +	}
+>  end:
+>  	return retval;
+>  }
+> -- =
+
+> 2.17.1
+> =
