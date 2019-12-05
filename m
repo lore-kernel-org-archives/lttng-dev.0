@@ -1,15 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH babeltrace-1.5 4/6] Fix: lib/iterator.c:
- unbalanced ctx put (leak)
-Date: Thu,  5 Dec 2019 01:58:07 -0500
-Message-ID: <20191205065809.16728-5-mathieu.desnoyers__13881.4885796577$1575529241$gmane$org@efficios.com>
+Subject: [PATCH babeltrace-1.5 5/6] Fix: lttng-live:
+ ctf_live_packet_seek stream hang up handling
+Date: Thu,  5 Dec 2019 01:58:08 -0500
+Message-ID: <20191205065809.16728-6-mathieu.desnoyers__15035.6414889515$1575529272$gmane$org@efficios.com>
 References: <20191205065809.16728-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 47T64S1Ydvz10V0
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 47T64S2lVzz10lg
  for <lttng-dev@lists.lttng.org>; Thu,  5 Dec 2019 01:58:16 -0500 (EST)
 In-Reply-To: <20191205065809.16728-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -25,33 +26,31 @@ To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Missing context put in iterator init error path.
+When get_next_index sets the index position to EOF,
+ctf_live_packet_seek() should in turn set the stream position to EOF
+to propagate the hung up state.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- lib/iterator.c | 3 +++
- 1 file changed, 3 insertions(+)
+ formats/lttng-live/lttng-live-comm.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/lib/iterator.c b/lib/iterator.c
-index 639a2d29..77093217 100644
---- a/lib/iterator.c
-+++ b/lib/iterator.c
-@@ -778,6 +778,8 @@ int bt_iter_init(struct bt_iter *iter,
- error:
- 	bt_heap_free(iter->stream_heap);
- error_heap_init:
-+	bt_context_put(ctx);
-+	iter->ctx = NULL;
- 	g_free(iter->stream_heap);
- 	iter->stream_heap = NULL;
- error_ctx:
-@@ -812,6 +814,7 @@ void bt_iter_fini(struct bt_iter *iter)
+diff --git a/formats/lttng-live/lttng-live-comm.c b/formats/lttng-live/lttng-live-comm.c
+index 96817f5e..484c025d 100644
+--- a/formats/lttng-live/lttng-live-comm.c
++++ b/formats/lttng-live/lttng-live-comm.c
+@@ -1276,7 +1276,11 @@ retry:
+ 				cur_index->packet_size, cur_index->offset,
+ 				cur_index->content_size,
+ 				cur_index->ts_cycles.timestamp_end);
+-
++		if (cur_index->offset == EOF) {
++			pos->offset = EOF;
++			ret = -BT_PACKET_SEEK_ERROR;
++			goto end;
++		}
  	}
- 	iter->ctx->current_iterator = NULL;
- 	bt_context_put(iter->ctx);
-+	iter->ctx = NULL;
- }
  
- void bt_iter_destroy(struct bt_iter *iter)
+ 	/*
 -- 
 2.17.1
