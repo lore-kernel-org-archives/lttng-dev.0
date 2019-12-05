@@ -1,18 +1,15 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH babeltrace-1.5 3/6] Fix: lttng-live:
- lttng_live_open_trace_read memory leak
-Date: Thu,  5 Dec 2019 01:58:06 -0500
-Message-ID: <20191205065809.16728-4-mathieu.desnoyers__453.024979081817$1575529110$gmane$org@efficios.com>
-References: <20191205065809.16728-1-mathieu.desnoyers@efficios.com>
+Subject: [PATCH babeltrace-1.5 0/6] Babeltrace 1.5 lttng-live
+ with per-pid ust buffers
+Date: Thu,  5 Dec 2019 01:58:03 -0500
+Message-ID: <20191205065809.16728-1-mathieu.desnoyers__47566.5017658443$1575529145$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 47T64Q5q8Bz10Y2
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 47T64Q5rTVz10G0
  for <lttng-dev@lists.lttng.org>; Thu,  5 Dec 2019 01:58:14 -0500 (EST)
-In-Reply-To: <20191205065809.16728-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,22 +23,28 @@ To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- formats/lttng-live/lttng-live-plugin.c | 1 +
- 1 file changed, 1 insertion(+)
+This series of fixes comes from testing babeltrace 1.5 lttng-live
+under valgrind with per-pid lttng buffers. This was done in the
+context of testing of the "lttng clear" feature.
 
-diff --git a/formats/lttng-live/lttng-live-plugin.c b/formats/lttng-live/lttng-live-plugin.c
-index ed52a995..0bebdd89 100644
---- a/formats/lttng-live/lttng-live-plugin.c
-+++ b/formats/lttng-live/lttng-live-plugin.c
-@@ -288,6 +288,7 @@ static int lttng_live_open_trace_read(const char *path)
- 	}
- 
- end_free:
-+	g_array_free(ctx->session_ids, TRUE);
- 	g_hash_table_destroy(ctx->session->ctf_traces);
- 	free_session_streams(ctx->session);
- 	g_free(ctx->session);
+Thanks,
+
+Mathieu
+
+Mathieu Desnoyers (6):
+  Fix: lttng-live: use-after-free in get_next_index()
+  Fix: trace-collection: trace clock use after free
+  Fix: lttng-live: lttng_live_open_trace_read memory leak
+  Fix: lib/iterator.c: unbalanced ctx put (leak)
+  Fix: lttng-live: ctf_live_packet_seek stream hang up handling
+  Fix: lttng-live format: do not error out on empty streams hang up
+
+ formats/ctf/ctf.c                      |  7 ++++++-
+ formats/lttng-live/lttng-live-comm.c   |  8 ++++++--
+ formats/lttng-live/lttng-live-plugin.c |  1 +
+ lib/iterator.c                         |  3 +++
+ lib/trace-collection.c                 | 21 ++++++++++++++++++---
+ 5 files changed, 34 insertions(+), 6 deletions(-)
+
 -- 
 2.17.1
