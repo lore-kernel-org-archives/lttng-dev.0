@@ -1,17 +1,15 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules] fix: y2038: itimer: change
- implementation to timespec64 (v5.5)
-Date: Tue, 10 Dec 2019 11:41:11 -0500
-Message-ID: <20191210164114.26954-2-mjeanson__29773.7686590821$1575996137$gmane$org@efficios.com>
-References: <20191210164114.26954-1-mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] Update .gitignore from upstream
+Date: Tue, 10 Dec 2019 11:41:10 -0500
+Message-ID: <20191210164114.26954-1-mjeanson__9128.6842756503$1575996170$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 47XQnP2wQQz15JF
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 47XQnP2xH5z156X
  for <lttng-dev@lists.lttng.org>; Tue, 10 Dec 2019 11:41:45 -0500 (EST)
-In-Reply-To: <20191210164114.26954-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,61 +22,169 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-See upstream commit:
-
-  commit bd40a175769d411b2a37e1c087082ac7ee2c15bb
-  Author: Arnd Bergmann <arnd@arndb.de>
-  Date:   Thu Nov 7 15:27:39 2019 +0100
-
-    y2038: itimer: change implementation to timespec64
-
-    There is no 64-bit version of getitimer/setitimer since that is not
-    actually needed. However, the implementation is built around the
-    deprecated 'struct timeval' type.
-
-    Change the code to use timespec64 internally to reduce the dependencies
-    on timeval and associated helper functions.
-
-    Minor adjustments in the code are needed to make the native and compat
-    version work the same way, and to keep the range check working after
-    the conversion.
-
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- instrumentation/events/lttng-module/timer.h | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
+ .gitignore | 110 +++++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 89 insertions(+), 21 deletions(-)
 
-diff --git a/instrumentation/events/lttng-module/timer.h b/instrumentation/events/lttng-module/timer.h
-index 997084f..1a45d82 100644
---- a/instrumentation/events/lttng-module/timer.h
-+++ b/instrumentation/events/lttng-module/timer.h
-@@ -294,7 +294,26 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP(timer_hrtimer_class, hrtimer_cancel,
-  *		zero, otherwise it is started
-  * @expires:	the itimers expiry time
-  */
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,5,0))
-+LTTNG_TRACEPOINT_EVENT_MAP(itimer_state,
-+
-+	timer_itimer_state,
-+
-+	TP_PROTO(int which, const struct itimerspec64 *const value,
-+		 unsigned long long expires),
-+
-+	TP_ARGS(which, value, expires),
-+
-+	TP_FIELDS(
-+		ctf_integer(int, which, which)
-+		ctf_integer(unsigned long long, expires, expires)
-+		ctf_integer(long, value_sec, value->it_value.tv_sec)
-+		ctf_integer(long, value_nsec, value->it_value.tv_nsec)
-+		ctf_integer(long, interval_sec, value->it_interval.tv_sec)
-+		ctf_integer(long, interval_nsec, value->it_interval.tv_nsec)
-+	)
-+)
-+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0))
- LTTNG_TRACEPOINT_EVENT_MAP(itimer_state,
+diff --git a/.gitignore b/.gitignore
+index 38e1684..4af69a2 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -7,30 +7,45 @@
+ # command after changing this file, to see if there are
+ # any tracked files which get ignored after the change.
+ #
+-# Normal rules
++# Normal rules (sorted alphabetically)
+ #
+ .*
++*.a
++*.asn1.[ch]
++*.bin
++*.bz2
++*.c.[012]*.*
++*.dt.yaml
++*.dtb
++*.dtb.S
++*.dwo
++*.elf
++*.gcno
++*.gz
++*.i
++*.ko
++*.lex.c
++*.ll
++*.lst
++*.lz4
++*.lzma
++*.lzo
++*.mod
++*.mod.c
+ *.o
+ *.o.*
+-*.a
++*.patch
+ *.s
+-*.ko
+ *.so
+ *.so.dbg
+-*.mod.c
+-*.i
+-*.lst
++*.su
+ *.symtypes
+-*.order
++*.tab.[ch]
++*.tar
++*.xz
++Module.symvers
+ modules.builtin
+-*.elf
+-*.bin
+-*.gz
+-*.bz2
+-*.lzma
+-*.lzo
+-*.gcno
+-cscope.*
++modules.order
  
- 	timer_itimer_state,
+ #
+ # Top-level generic files
+@@ -39,25 +54,51 @@ cscope.*
+ /TAGS
+ /linux
+ /vmlinux
++/vmlinux.32
++/vmlinux-gdb.py
+ /vmlinuz
+ /System.map
+ /Module.markers
++/modules.builtin.modinfo
++/modules.nsdeps
+ 
+-# ignore across tree
+-Module.symvers
++#
++# RPM spec file (make rpm-pkg)
++#
++/*.spec
++
++#
++# Debian directory (make deb-pkg)
++#
++/debian/
++
++#
++# Snap directory (make snap-pkg)
++#
++/snap/
++
++#
++# tar directory (make tar*-pkg)
++#
++/tar-install/
+ 
+ #
+-# git files that we don't want to ignore even it they are dot-files
++# We don't want to ignore the following even if they are dot-files
+ #
++!.clang-format
++!.cocciconfig
++!.get_maintainer.ignore
++!.gitattributes
+ !.gitignore
+ !.mailmap
+ 
+ #
+ # Generated include files
+ #
+-include/config
+-include/linux/version.h
+-include/generated
++/include/config/
++/include/generated/
++/include/ksym/
++/arch/*/include/generated/
+ 
+ # stgit generated dirs
+ patches-*
+@@ -76,8 +117,35 @@ GRTAGS
+ GSYMS
+ GTAGS
+ 
++# id-utils files
++ID
++
+ *.orig
+ *~
+ \#*#
+ 
++#
++# Leavings from module signing
++#
++extra_certificates
++signing_key.pem
++signing_key.priv
++signing_key.x509
++x509.genkey
++
++# Kconfig presets
++/all.config
++/alldef.config
++/allmod.config
++/allno.config
++/allrandom.config
++/allyes.config
++
++# Kdevelop4
++*.kdev4
++
++# Clang's compilation database file
++/compile_commands.json
++
++# lttng-modules specific
+ /extra_version
 -- 
 2.17.1
