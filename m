@@ -1,15 +1,18 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules] Update .gitignore from upstream
-Date: Tue, 10 Dec 2019 11:41:10 -0500
-Message-ID: <20191210164114.26954-1-mjeanson__9128.6842756503$1575996170$gmane$org@efficios.com>
+Subject: [PATCH lttng-modules] fix: btrfs: tracepoints: constify
+ all pointers (v5.5)
+Date: Tue, 10 Dec 2019 11:41:12 -0500
+Message-ID: <20191210164114.26954-3-mjeanson__20013.7030262098$1575996203$gmane$org@efficios.com>
+References: <20191210164114.26954-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 47XQnP2xH5z156X
- for <lttng-dev@lists.lttng.org>; Tue, 10 Dec 2019 11:41:45 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 47XQnQ0Wnlz15JT
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Dec 2019 11:41:46 -0500 (EST)
+In-Reply-To: <20191210164114.26954-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,169 +25,78 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+See upstream commit:
+
+  commit 1d2e7c7c3ed73cc510a4dc093df2a935092ff5ad
+  Author: David Sterba <dsterba@suse.com>
+  Date:   Thu Oct 17 13:28:57 2019 +0200
+
+    btrfs: tracepoints: constify all pointers
+
+    We don't modify the data passed to tracepoints, some of the declarations
+    are already const, add it to the rest.
+
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- .gitignore | 110 +++++++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 89 insertions(+), 21 deletions(-)
+ instrumentation/events/lttng-module/btrfs.h | 39 +++++++++++++++++++--
+ 1 file changed, 37 insertions(+), 2 deletions(-)
 
-diff --git a/.gitignore b/.gitignore
-index 38e1684..4af69a2 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -7,30 +7,45 @@
- # command after changing this file, to see if there are
- # any tracked files which get ignored after the change.
- #
--# Normal rules
-+# Normal rules (sorted alphabetically)
- #
- .*
-+*.a
-+*.asn1.[ch]
-+*.bin
-+*.bz2
-+*.c.[012]*.*
-+*.dt.yaml
-+*.dtb
-+*.dtb.S
-+*.dwo
-+*.elf
-+*.gcno
-+*.gz
-+*.i
-+*.ko
-+*.lex.c
-+*.ll
-+*.lst
-+*.lz4
-+*.lzma
-+*.lzo
-+*.mod
-+*.mod.c
- *.o
- *.o.*
--*.a
-+*.patch
- *.s
--*.ko
- *.so
- *.so.dbg
--*.mod.c
--*.i
--*.lst
-+*.su
- *.symtypes
--*.order
-+*.tab.[ch]
-+*.tar
-+*.xz
-+Module.symvers
- modules.builtin
--*.elf
--*.bin
--*.gz
--*.bz2
--*.lzma
--*.lzo
--*.gcno
--cscope.*
-+modules.order
+diff --git a/instrumentation/events/lttng-module/btrfs.h b/instrumentation/events/lttng-module/btrfs.h
+index c548cf2..59b668c 100644
+--- a/instrumentation/events/lttng-module/btrfs.h
++++ b/instrumentation/events/lttng-module/btrfs.h
+@@ -286,7 +286,26 @@ LTTNG_TRACEPOINT_EVENT(btrfs_get_extent,
  
- #
- # Top-level generic files
-@@ -39,25 +54,51 @@ cscope.*
- /TAGS
- /linux
- /vmlinux
-+/vmlinux.32
-+/vmlinux-gdb.py
- /vmlinuz
- /System.map
- /Module.markers
-+/modules.builtin.modinfo
-+/modules.nsdeps
+ #endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0)) */
  
--# ignore across tree
--Module.symvers
-+#
-+# RPM spec file (make rpm-pkg)
-+#
-+/*.spec
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,18,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,5,0))
++LTTNG_TRACEPOINT_EVENT(btrfs_handle_em_exist,
 +
-+#
-+# Debian directory (make deb-pkg)
-+#
-+/debian/
++	TP_PROTO(const struct btrfs_fs_info *fs_info,
++		const struct extent_map *existing, const struct extent_map *map,
++		u64 start, u64 len),
 +
-+#
-+# Snap directory (make snap-pkg)
-+#
-+/snap/
++	TP_ARGS(fs_info, existing, map, start, len),
 +
-+#
-+# tar directory (make tar*-pkg)
-+#
-+/tar-install/
++	TP_FIELDS(
++		ctf_array(u8, fsid, lttng_fs_info_fsid, BTRFS_UUID_SIZE)
++		ctf_integer(u64, e_start, existing->start)
++		ctf_integer(u64, e_len, existing->len)
++		ctf_integer(u64, map_start, map->start)
++		ctf_integer(u64, map_len, map->len)
++		ctf_integer(u64, start, start)
++		ctf_integer(u64, len, len)
++	)
++)
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,18,0))
+ LTTNG_TRACEPOINT_EVENT(btrfs_handle_em_exist,
  
- #
--# git files that we don't want to ignore even it they are dot-files
-+# We don't want to ignore the following even if they are dot-files
- #
-+!.clang-format
-+!.cocciconfig
-+!.get_maintainer.ignore
-+!.gitattributes
- !.gitignore
- !.mailmap
+ 	TP_PROTO(struct btrfs_fs_info *fs_info,
+@@ -1620,7 +1639,23 @@ LTTNG_TRACEPOINT_EVENT(btrfs_cow_block,
+ )
+ #endif
  
- #
- # Generated include files
- #
--include/config
--include/linux/version.h
--include/generated
-+/include/config/
-+/include/generated/
-+/include/ksym/
-+/arch/*/include/generated/
- 
- # stgit generated dirs
- patches-*
-@@ -76,8 +117,35 @@ GRTAGS
- GSYMS
- GTAGS
- 
-+# id-utils files
-+ID
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0) || \
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,5,0))
++LTTNG_TRACEPOINT_EVENT(btrfs_space_reservation,
 +
- *.orig
- *~
- \#*#
- 
-+#
-+# Leavings from module signing
-+#
-+extra_certificates
-+signing_key.pem
-+signing_key.priv
-+signing_key.x509
-+x509.genkey
++	TP_PROTO(const struct btrfs_fs_info *fs_info, const char *type, u64 val,
++		 u64 bytes, int reserve),
 +
-+# Kconfig presets
-+/all.config
-+/alldef.config
-+/allmod.config
-+/allno.config
-+/allrandom.config
-+/allyes.config
++	TP_ARGS(fs_info, type, val, bytes, reserve),
 +
-+# Kdevelop4
-+*.kdev4
-+
-+# Clang's compilation database file
-+/compile_commands.json
-+
-+# lttng-modules specific
- /extra_version
++	TP_FIELDS(
++		ctf_array(u8, fsid, lttng_fs_info_fsid, BTRFS_UUID_SIZE)
++		ctf_string(type, type)
++		ctf_integer(u64, val, val)
++		ctf_integer(u64, bytes, bytes)
++		ctf_integer(int, reserve, reserve)
++	)
++)
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0) || \
+ 	LTTNG_SLE_KERNEL_RANGE(4,4,73,5,0,0, 4,4,73,6,0,0) || \
+ 	LTTNG_SLE_KERNEL_RANGE(4,4,82,6,0,0, 4,4,82,7,0,0) || \
+ 	LTTNG_SLE_KERNEL_RANGE(4,4,92,6,0,0, 4,4,92,7,0,0) || \
 -- 
 2.17.1
