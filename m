@@ -1,10 +1,8 @@
-From: Yuxin Ren <ryx@gwmail.gwu.edu>
+From: "Paul E. McKenney" <paulmck@kernel.org>
 Subject: Re: RCU consistency guarantees
-Date: Sun, 15 Dec 2019 17:10:11 -0500
-Message-ID: <CAAKbDrfUGrL=Yz=mf4B1Wij3XkxgTwY-4HNB4+XJKdRGK1T2BQ__19515.0897650578$1576447860$gmane$org@mail.gmail.com>
-References: <CAAKbDrdMRrhnSzpPBZLf3nNUDW4YZLPkZkTD5gNJu+A9rATkWA@mail.gmail.com>
- <194534011.751.1575629349181.JavaMail.zimbra@efficios.com>
- <CAAKbDreZ8NerP-jsxezOmN3rktVSAk1a=RJw2YQY83UpQRrXfQ@mail.gmail.com>
+Date: Sun, 15 Dec 2019 16:57:39 -0800
+Message-ID: <20191216005739.GP2889__31933.4573506907$1576457879$gmane$org@paulmck-ThinkPad-P72>
+References: <CAAKbDreZ8NerP-jsxezOmN3rktVSAk1a=RJw2YQY83UpQRrXfQ@mail.gmail.com>
  <512711764.1078.1575647945136.JavaMail.zimbra@efficios.com>
  <20191206163052.GG2889@paulmck-ThinkPad-P72>
  <CAAKbDrfzbaPJcKQE7wsjPCgmxUMhcZshDptt=abtufbtCMp85g@mail.gmail.com>
@@ -13,16 +11,17 @@ References: <CAAKbDrdMRrhnSzpPBZLf3nNUDW4YZLPkZkTD5gNJu+A9rATkWA@mail.gmail.com>
  <20191207224232.GR2889@paulmck-ThinkPad-P72>
  <CAAKbDrd5s06mnPYU_dwO1+dtySewm80ukaaEqJiJ0RtkFe-38w@mail.gmail.com>
  <20191215203019.GN2889@paulmck-ThinkPad-P72>
+ <CAAKbDrfUGrL=Yz=mf4B1Wij3XkxgTwY-4HNB4+XJKdRGK1T2BQ@mail.gmail.com>
+Reply-To: paulmck@kernel.org
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0938664408393169190=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
- [IPv6:2a00:1450:4864:20::132])
- by lists.lttng.org (Postfix) with ESMTPS id 47bdrY0mx4z19MT
- for <lttng-dev@lists.lttng.org>; Sun, 15 Dec 2019 17:10:36 -0500 (EST)
-Received: by mail-lf1-x132.google.com with SMTP id y19so2821180lfl.9
- for <lttng-dev@lists.lttng.org>; Sun, 15 Dec 2019 14:10:36 -0800 (PST)
-In-Reply-To: <20191215203019.GN2889@paulmck-ThinkPad-P72>
+Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
+ by lists.lttng.org (Postfix) with ESMTPS id 47bjYJ6JVrz18xq
+ for <lttng-dev@lists.lttng.org>; Sun, 15 Dec 2019 19:57:40 -0500 (EST)
+Content-Disposition: inline
+In-Reply-To: <CAAKbDrfUGrL=Yz=mf4B1Wij3XkxgTwY-4HNB4+XJKdRGK1T2BQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -32,1197 +31,392 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: paulmck@kernel.org
+To: Yuxin Ren <ryx@gwmail.gwu.edu>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0938664408393169190==
-Content-Type: multipart/alternative; boundary="0000000000003b8c6b0599c55dcd"
-
---0000000000003b8c6b0599c55dcd
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Dec 15, 2019 at 3:30 PM Paul E. McKenney <paulmck@kernel.org> wrote=
-:
-
-> On Sat, Dec 14, 2019 at 01:31:31AM -0500, Yuxin Ren wrote:
-> > Hi Paul
-> >
-> > On Sat, Dec 7, 2019 at 5:42 PM Paul E. McKenney <paulmck@kernel.org>
-> wrote:
-> >
-> > > On Sat, Dec 07, 2019 at 03:04:42PM -0500, Yuxin Ren wrote:
-> > > > Thanks a lot for your help. I have some questions below.
-> > > >
-> > > > On Sat, Dec 7, 2019 at 1:37 AM Paul E. McKenney <paulmck@kernel.org=
->
-> > > wrote:
-> > > >
-> > > > > On Fri, Dec 06, 2019 at 07:00:13PM -0500, Yuxin Ren wrote:
-> > > > > > Thanks so much for your great help.
-> > > > > > I definitely will look at those resources and papers!
-> > > > > >
-> > > > > > One more thing that I am confused
-> > > > > > As I mentioned earlier, someone said One key distinction is tha=
-t
-> both
-> > > > > MVCC
-> > > > > > and RLU provide much stronger consistency guarantees to readers
-> than
-> > > does
-> > > > > > RCU ...) (https://lwn.net/Articles/777036/).
-> > > > >
-> > > > > That someone was in fact me.  ;-)
-> > > > >
-> > > > > > I am not sure if the above statement is correct or not. But in
-> > > general,
-> > > > > > How can we compare RCU consistency guarantees to other techniqu=
-es
-> > > (such
-> > > > > as
-> > > > > > RLU)?
-> > > > > > How to reason about which one has stronger or weaker guarantees=
-?
-> > > > >
-> > > > > I suggest starting from the use case.  For concreteness, let's
-> assume
-> > > > > that we are using a hash table.  At one extreme, imagine a use
-> case in
-> > > > > which each event makes exactly one hash-table operation.  No
-> > > information
-> > > > > is carried from one event to the next.  (This might well be the
-> case
-> > > > > for simple web server.)  Such a use case cannot tell the differen=
-ce
-> > > > > between RCU on the one hand and MVCC/RLU on the other.
-> > > > >
-> > > > > At the other extreme, suppose that each event either accesses or
-> > > updates
-> > > > > multiple entries in the hash table.  In this case, MVCC/RLU will
-> rule
-> > > > > out outcomes that RCU would permit.  For example, suppose we had
-> four
-> > > > > events accessing two different elements in different buckets of t=
-he
-> > > > > hash table:
-> > > > >
-> > > > >         E1: Adds 32 to the hash table.
-> > > > >         E2: Adds 1729 to the hash table.
-> > > > >         E3: Within a read-side critical section, looks up 32 then
-> 1729.
-> > > > >         E4: Within a read-side critical section, looks up 1729
-> then 32.
-> > > > >
-> > > > > Given either MVCC or RLU, it will not be possible for E3 to find
-> 32 but
-> > > > > not 1729 and at the same time for E4 to find 1729 but not 32.
-> Given
-> > > RCU,
-> > > > > this outcome is possible.
-> > > > >
-> > > > When you say "Within a read-side section", do you mean within a
-> single
-> > > same
-> > > > read section? such as
-> > > >
-> > > > > read_lock()
-> > > > > lookup(32)
-> > > > > lookup(1729)
-> > > > > read_unlock()
-> > > >
-> > > >
-> > > > How about putting two lookups into two read-side sections? Do we
-> still
-> > > have
-> > > > the problem, then?
-> > > >
-> > > > > read_lock()
-> > > > > lookup(32)
-> > > > > read_unlock()
-> > > > > read_lock()
-> > > > > lookup(1729)
-> > > > > read_unlock()
-> > >
-> > > Without in any way agreeing with your characterization of this as a
-> > > problem, because rcu_read_lock() and rcu_read_unlock() provide
-> > > absolutely no ordering guarantees in the absence of a grace period,
-> > > any non-grace-period-related reordering that can happen with a single
-> > > RCU read-side critical section can also happen when that critical
-> > > section is split in two as you have done above.
-> > >
-> > > > Could you kindly give me more clues why RCU can see such reorder,
-> while
-> > > RLU
-> > > > can prevent it?
-> > >
-> > > Here are minimal C-language implementations for RCU that can (and are=
-)
-> > > actually used:
-> > >
-> > Great. We use the same thing in our real-time work [1]
->
-> It has been a popular choice for 40 years now.  ;-)
->
-> > > #define rcu_read_lock()
-> > > #define rcu_read_unlock()
-> > >
-> > > Please compare these to the read-side markers presented in the RLU
-> paper,
-> > > and then tell me your thoughts on the answer to your question.  ;-)
-> > >
-> > I submit my homework here, but I do not think I did it well.
-> > 1. I believe in the default URCU implementation, it has memory barrier
-> > inside the read_lock / read_unlock.
->
-> It certainly was at one time.  But you would of course need to check
-> to see what any given worker actually used.
->
-> > 2. From the RLU paper, it shows the code for read-side operation.
-> > RLU_READER_LOCK(ctx)
-> >     ctx.is-writer=E2=86=90false
-> >     ctx.run-cnt=E2=86=90ctx.run-cnt+1.
-> >     memory fence
-> >    ctx.local-clock=E2=86=90global-clock
-> > RLU_READER_UNLOCK(ctx)
-> >     ctx.run-cnt=E2=86=90ctx.run-cnt+1
-> >     if (ctx.is-writer)
-> >         RLU_COMMIT_WRITE_LOG(ctx)
-> >
-> > We can ignore the writer check, as in our case, the reader never do
-> update.
-> > My understanding is that read-side operations are only used to facilita=
-te
-> > the quiescence detection.
-> > the run cnt is used to decide if a thread is active (if it is currently
-> > inside a read-side section).
-> > the local clock is used to check if the active thread goes into the
-> > read-side section very late, so it does not prevent reclaiming memory
-> > unlinked before it enters the read section.
-> > However i see no difference between RLU and RCU read-side operation
-> > regarding consistency guarantee.
-> > Could you kindly teach me more?
->
-> In order to teach you more, I do need some help from you.  I have posted
-> a number of URLs earlier in this email thread.  Could you please tell
-> me what you learned from each of them?
->
-Sure, I will definitely learn those resources you provided, and come back
-to you if I have more questions.
-Simply speaking, I failed to find a clear and formal consistency
-model/guarantee of RCU quickly.
-The difficulty for me is, for most people, at their first glance, RCU only
-has relax/weak consistency guarantee.
-So whenever I suggest to use RCU to others, they always ask like
-Does RCU provide Serializability? .. maybe not.
-Does RCU provide Linearizability? ... maybe not
-...
-OK, what does RCU provide?  .. I am not sure. I even cannot find a single
-document which has an accurate answer.
-
-Let me give more examples.
-1. When I recommend using read-write lock, people are happy to use it.
-    However, when I further suggest to replace rw lock with RCU, then they
-hesitate to do so. Because they feel RCU is weaker than rw lock, and do not
-know what precisely RCU guarantee.
-2. In contrast, in the database area, it has relative clear definition of
-consistency levels (such as https://jepsen.io/consistency), and users are
-easy to assert if they can use certain database configuration based on its
-consistency model.
-
-Again, I really appreciate your patience and communication, hope those does
-not bother you a lot.
-
-Thanks
-Best,
-Yuxin
-
->
->                                                                 Thanx, Pa=
-ul
->
-> > BTW, the RLU read-side ops are similar, but not efficient, comparing to
-> our
-> > Parsec work [1, 2]
-> > [1] Yuxin Ren, G. Liu, G. Parmer, B. Brandenburg, Scalable Memory
-> > Reclamation for Multi-Core, Real-Time Systems, in Proceedings of the 24=
-th
-> > IEEE Real-Time and Embedded Technology and Applications Symposium (RTAS=
-),
-> > 2018
-> > [2] Q. Wang, T. Stamler, and G. Parmer, Parallel Sections: Scaling
-> > System-Level Data-Structures, in Proceedings of European Conference on
-> > Computer Systems (EuroSys), 2016
-> >
-> > Thanks,
-> > Best,
-> > Yuxin
-> >
-> >
-> > > > This is because MVCC and RLU provide readers a consistent view of
-> > > > > the updates, and RCU does not.  Of course, it is often the case
-> that a
-> > > > > consistent view is not needed, in which case the MVCC and RLU
-> > > guarantees
-> > > > > are incurring read-side overhead for no reason.  But if the use
-> case
-> > > > > requires consistent readers, RCU is not an option.
-> > > > >
-> > > > > The reason a consistent view is not always needed is that
-> > > speed-of-light
-> > > > > delays make it impossible to provide a consistent view of the
-> outside
-> > > > > world.  In the common case where the use case interacts with the
-> > > > > outside world, the algorithms absolutely must be designed to
-> tolerate
-> > > > > inconsistency, which opens the door to things like RCU.
-> > > >
-> > > > I am confused here. I think speed-of-light delays happen everywhere=
-,
-> not
-> > > > only bound to RCU, but also  any other synchronization approach (su=
-ch
-> > > RLU).
-> > > > If so, how do others (RLU) provide consistent views?
-> > >
-> > > You just stated the answer.  Now it is only necessary for you to inve=
-st
-> > > the time, effort, and thought to fully understand it.  To help with
-> this,
-> > > the following paragraph provides another hint:
-> > >
-> > >         Yes, you are quite right, speed-of-light delays between the
-> > >         outside world and the computer affect RLU just as surely as
-> they
-> > >         do RCU.  This means that the additional consistency guarantee=
-s
-> > >         provided by RLU must necessarily be limited to the confines o=
-f
-> the
-> > >         computer system in question.  Taking this one step further,
-> there
-> > >         are also speed-of-light delays within the computer.  Therefor=
-e,
-> > >         in the general case, RLU can provide its consistency
-> guarantees,
-> > >         even within the confines of the computer system, only at the
-> > >         expense of incurring delays.  Because RCU does not provide
-> RLU's
-> > >         consistency guarantees, it need not incur RLU's delays.
-> > >
-> > > This is not a new line of reasoning, see for example:
-> > >
-> > > @article{Herlihy:1996:LCN:1063369.1063372
-> > > ,author =3D {Herlihy, Maurice and Shavit, Nir and Waarts, Orli}
-> > > ,title =3D {Linearizable counting networks}
-> > > ,journal =3D {Distrib. Comput.}
-> > > ,volume =3D {9}
-> > > ,issue =3D {4}
-> > > ,month =3D {February}
-> > > ,year =3D {1996}
-> > > ,issn =3D {0178-2770}
-> > > ,pages =3D {193--203}
-> > > ,numpages =3D {11}
-> > > ,url =3D {http://portal.acm.org/citation.cfm?id=3D1063369.1063372}
-> > > ,doi =3D {10.1007/s004460050019}
-> > > ,acmid =3D {1063372}
-> > > ,publisher =3D {Springer-Verlag}
-> > > ,address =3D {London, UK}
-> > > ,keywords =3D {concurrency, contention, counting networks, data
-> structures,
-> > > linearizability}
-> > > }
-> > >
-> > >                                                         Thanx, Paul
-> > >
-> > > > Thanks for your education.
-> > > > Yuxin
-> > > >
-> > > > >
-> > > > >                                                         Thanx, Pa=
-ul
-> > > > >
-> > > > > > Thanks
-> > > > > > Yuxin
-> > > > > >
-> > > > > > On Fri, Dec 6, 2019 at 11:30 AM Paul E. McKenney <
-> paulmck@kernel.org
-> > > >
-> > > > > wrote:
-> > > > > >
-> > > > > > > On Fri, Dec 06, 2019 at 10:59:05AM -0500, Mathieu Desnoyers
-> wrote:
-> > > > > > > > ----- On Dec 6, 2019, at 3:51 PM, Yuxin Ren <
-> ryx@gwmail.gwu.edu>
-> > > > > wrote:
-> > > > > > > >
-> > > > > > > > > On Fri, Dec 6, 2019 at 5:49 AM Mathieu Desnoyers < [
-> > > > > > > > > mailto:mathieu.desnoyers@efficios.com |
-> > > > > mathieu.desnoyers@efficios.com
-> > > > > > > ] >
-> > > > > > > > > wrote:
-> > > > > > > >
-> > > > > > > > >> ----- On Dec 5, 2019, at 8:17 PM, Yuxin Ren < [ mailto:
-> > > > > > > ryx@gwmail.gwu.edu |
-> > > > > > > > >> ryx@gwmail.gwu.edu ] > wrote:
-> > > > > > > >
-> > > > > > > > >>> Hi,
-> > > > > > > > >>> I am a student, and learning RCU now, but still know ve=
-ry
-> > > little
-> > > > > > > about it.
-> > > > > > > > >>> Are there any documents/papers/materials which
-> (in)formally
-> > > > > define
-> > > > > > > and explain
-> > > > > > > > >>> RCU consistency guarantees?
-> > > > > > > >
-> > > > > > > > >> You may want to have a look at
-> > > > > > > >
-> > > > > > > > >> User-Level Implementations of Read-Copy Update
-> > > > > > > > >> Article in IEEE Transactions on Parallel and Distributed
-> > > Systems
-> > > > > > > 23(2):375 - 382
-> > > > > > > > >> =C2=B7 March 2012
-> > > > > > > >
-> > > > > > > > > Thanks for your info.
-> > > > > > > > > However, I do not think URCU talks about any consistency
-> model
-> > > > > > > formally.
-> > > > > > > >
-> > > > > > > > > From previous communication with Paul, he said RCU is not
-> > > designed
-> > > > > for
-> > > > > > > > > linearizability, and it is totally acceptable that RCU is
-> not
-> > > > > > > linearizable.
-> > > > > > > > > However, I am curious how to accurately/formally
-> Characterize
-> > > RCU
-> > > > > > > consistency
-> > > > > > > > > model/guarantees
-> > > > > > > >
-> > > > > > > > Adding Paul E. McKenney in CC.
-> > > > > > > >
-> > > > > > > > I am referring to the section "Overview of RCU semantics" i=
-n
-> the
-> > > > > paper.
-> > > > > > > Not sure it has the level of
-> > > > > > > > formality you are looking for though. Paul, do you have
-> pointers
-> > > to
-> > > > > > > additional material ?
-> > > > > > >
-> > > > > > > Indeed I do!  The Linux kernel memory model (LKMM) includes
-> RCU.
-> > > It is
-> > > > > > > in tools/memory-model in recent kernel source trees, which
-> includes
-> > > > > > > documentation.  This is an executable model, which means that
-> you
-> > > > > > > can create litmus tests and have the model formally and
-> > > automatically
-> > > > > > > evaluate them.
-> > > > > > >
-> > > > > > > There are also a number of publications covering LKMM:
-> > > > > > >
-> > > > > > > o       A formal kernel memory-ordering model
-> > > > > > >         https://lwn.net/Articles/718628/
-> > > > > > >         https://lwn.net/Articles/720550/
-> > > > > > >
-> > > > > > >         These cover the release stores and dependency orderin=
-g
-> that
-> > > > > > >         provide RCU's publish-subscribe guarantees.
-> > > > > > >
-> > > > > > >         Backup material here:
-> > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > >
-> > >
-> https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/LWNLinuxM=
-M/
-> > > > > > >
-> > > > > > >         With these two likely being of particular interest:
-> > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > >
-> > >
-> https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/LWNLinuxM=
-M/RCUguarantees.html
-> > > > > > >
-> > > > > > >
-> > > > >
-> > >
-> https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/LWNLinuxM=
-M/srcu.html
-> > > > > > >
-> > > > > > > o       Frightening Small Children and Disconcerting Grown-up=
-s:
-> > > > > > > Concurrency in the Linux Kernel
-> > > > > > >         https://dl.acm.org/citation.cfm?id=3D3177156
-> > > > > > >
-> > > http://www0.cs.ucl.ac.uk/staff/j.alglave/papers/asplos18.pdf
-> > > > > > >
-> > > > > > >         Backup material:
-> > > > > > >
-> > > > > > >         http://diy.inria.fr/linux/
-> > > > > > >
-> > > > > > > o       Who's afraid of a big bad optimizing compiler?
-> > > > > > >         https://lwn.net/Articles/793253/
-> > > > > > >
-> > > > > > > o       Calibrating your fear of big bad optimizing compilers
-> > > > > > >         https://lwn.net/Articles/799218/
-> > > > > > >
-> > > > > > >         These last two justify use of normal C-language
-> assignment
-> > > > > > >         statements to initialize and access data referenced b=
-y
-> > > > > > >         RCU-protected pointers.
-> > > > > > >
-> > > > > > > There is a large body of litmus tests (thousands of them) her=
-e:
-> > > > > > >
-> > > > > > >         https://github.com/paulmckrcu/litmus
-> > > > > > >
-> > > > > > > Many of these litmus tests involve RCU, and these can be
-> located by
-> > > > > > > search for files containing rcu_read_lock(), rcu_read_unlock(=
-),
-> > > > > > > synchronize_rcu(), and so on.
-> > > > > > >
-> > > > > > > Or were you looking for something else?
-> > > > > > >
-> > > > > > >                                                         Thanx=
-,
-> Paul
-> > > > > > >
-> > > > > > > > Thanks,
-> > > > > > > >
-> > > > > > > > Mathieu
-> > > > > > > >
-> > > > > > > > >> as a starting point.
-> > > > > > > >
-> > > > > > > > >> Thanks,
-> > > > > > > >
-> > > > > > > > >> Mathieu
-> > > > > > > >
-> > > > > > > > >>> I know there are some consistency models in the databas=
-e
-> area
-> > > > > (such
-> > > > > > > as PRAM,
-> > > > > > > > >>> Read Uncommitted, etc) from [
-> https://jepsen.io/consistency
-> > > |
-> > > > > > > > >>> https://jepsen.io/consistency ] and [1].
-> > > > > > > > >>> How does RCU related to those consistency models?
-> > > > > > > >
-> > > > > > > > >>> I also found some comments online (One key distinction =
-is
-> > > that
-> > > > > both
-> > > > > > > MVCC and RLU
-> > > > > > > > >>> provide much stronger consistency guarantees to readers
-> than
-> > > does
-> > > > > > > RCU ...) ( [
-> > > > > > > > >>> https://lwn.net/Articles/777036/ |
-> > > > > https://lwn.net/Articles/777036/
-> > > > > > > ] ).
-> > > > > > > > >>> I do not understand how we reason/dresibe/compare the
-> > > consistency
-> > > > > > > guarantees. (
-> > > > > > > > >>> I even do not know what consistency guarantees provided
-> by
-> > > RCU
-> > > > > > > formally)
-> > > > > > > > >>> Could someone explain this to me?
-> > > > > > > >
-> > > > > > > > >>> [1] Bailis, P., Davidson, A., Fekete, A., Ghodsi, A.,
-> > > > > Hellerstein,
-> > > > > > > J. M., &
-> > > > > > > > >>> Stoica, I. (2013). Highly available transactions:
-> Virtues and
-> > > > > > > limitations.
-> > > > > > > > >>> Proceedings of the VLDB Endowment, 7(3), 181-192.
-> > > > > > > >
-> > > > > > > > >>> Thanks
-> > > > > > > > >>> Yuxin
-> > > > > > > >
-> > > > > > > > >>> _______________________________________________
-> > > > > > > > >>> lttng-dev mailing list
-> > > > > > > > >>> [ mailto:lttng-dev@lists.lttng.org |
-> > > lttng-dev@lists.lttng.org ]
-> > > > > > > > >>> [
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > > |
-> > > > > > > > >>>
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
-> > > > > > > >
-> > > > > > > > >> --
-> > > > > > > > >> Mathieu Desnoyers
-> > > > > > > > >> EfficiOS Inc.
-> > > > > > > > >> [ http://www.efficios.com/ | http://www.efficios.com ]
-> > > > > > > >
-> > > > > > > > --
-> > > > > > > > Mathieu Desnoyers
-> > > > > > > > EfficiOS Inc.
-> > > > > > > > http://www.efficios.com
-> > > > > > >
-> > > > >
-> > >
->
-
---0000000000003b8c6b0599c55dcd
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Sun, Dec 15, 2019 at 3:30 PM Paul =
-E. McKenney &lt;<a href=3D"mailto:paulmck@kernel.org" target=3D"_blank">pau=
-lmck@kernel.org</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" s=
-tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
-ding-left:1ex">On Sat, Dec 14, 2019 at 01:31:31AM -0500, Yuxin Ren wrote:<b=
-r>
-&gt; Hi Paul<br>
-&gt; <br>
-&gt; On Sat, Dec 7, 2019 at 5:42 PM Paul E. McKenney &lt;<a href=3D"mailto:=
-paulmck@kernel.org" target=3D"_blank">paulmck@kernel.org</a>&gt; wrote:<br>
-&gt; <br>
-&gt; &gt; On Sat, Dec 07, 2019 at 03:04:42PM -0500, Yuxin Ren wrote:<br>
-&gt; &gt; &gt; Thanks a lot for your help. I have some questions below.<br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt; On Sat, Dec 7, 2019 at 1:37 AM Paul E. McKenney &lt;<a href=
-=3D"mailto:paulmck@kernel.org" target=3D"_blank">paulmck@kernel.org</a>&gt;=
-<br>
-&gt; &gt; wrote:<br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; On Fri, Dec 06, 2019 at 07:00:13PM -0500, Yuxin Ren wro=
-te:<br>
-&gt; &gt; &gt; &gt; &gt; Thanks so much for your great help.<br>
-&gt; &gt; &gt; &gt; &gt; I definitely will look at those resources and pape=
-rs!<br>
-&gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; One more thing that I am confused<br>
-&gt; &gt; &gt; &gt; &gt; As I mentioned earlier, someone said One key disti=
-nction is that both<br>
-&gt; &gt; &gt; &gt; MVCC<br>
-&gt; &gt; &gt; &gt; &gt; and RLU provide much stronger consistency guarante=
-es to readers than<br>
-&gt; &gt; does<br>
-&gt; &gt; &gt; &gt; &gt; RCU ...) (<a href=3D"https://lwn.net/Articles/7770=
-36/" rel=3D"noreferrer" target=3D"_blank">https://lwn.net/Articles/777036/<=
-/a>).<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; That someone was in fact me.=C2=A0 ;-)<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; I am not sure if the above statement is correct or=
- not. But in<br>
-&gt; &gt; general,<br>
-&gt; &gt; &gt; &gt; &gt; How can we compare RCU consistency guarantees to o=
-ther techniques<br>
-&gt; &gt; (such<br>
-&gt; &gt; &gt; &gt; as<br>
-&gt; &gt; &gt; &gt; &gt; RLU)?<br>
-&gt; &gt; &gt; &gt; &gt; How to reason about which one has stronger or weak=
-er guarantees?<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; I suggest starting from the use case.=C2=A0 For concret=
-eness, let&#39;s assume<br>
-&gt; &gt; &gt; &gt; that we are using a hash table.=C2=A0 At one extreme, i=
-magine a use case in<br>
-&gt; &gt; &gt; &gt; which each event makes exactly one hash-table operation=
-.=C2=A0 No<br>
-&gt; &gt; information<br>
-&gt; &gt; &gt; &gt; is carried from one event to the next.=C2=A0 (This migh=
-t well be the case<br>
-&gt; &gt; &gt; &gt; for simple web server.)=C2=A0 Such a use case cannot te=
-ll the difference<br>
-&gt; &gt; &gt; &gt; between RCU on the one hand and MVCC/RLU on the other.<=
-br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; At the other extreme, suppose that each event either ac=
-cesses or<br>
-&gt; &gt; updates<br>
-&gt; &gt; &gt; &gt; multiple entries in the hash table.=C2=A0 In this case,=
- MVCC/RLU will rule<br>
-&gt; &gt; &gt; &gt; out outcomes that RCU would permit.=C2=A0 For example, =
-suppose we had four<br>
-&gt; &gt; &gt; &gt; events accessing two different elements in different bu=
-ckets of the<br>
-&gt; &gt; &gt; &gt; hash table:<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0E1: Adds 32 to the has=
-h table.<br>
-&gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0E2: Adds 1729 to the h=
-ash table.<br>
-&gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0E3: Within a read-side=
- critical section, looks up 32 then 1729.<br>
-&gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0E4: Within a read-side=
- critical section, looks up 1729 then 32.<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; Given either MVCC or RLU, it will not be possible for E=
-3 to find 32 but<br>
-&gt; &gt; &gt; &gt; not 1729 and at the same time for E4 to find 1729 but n=
-ot 32.=C2=A0 Given<br>
-&gt; &gt; RCU,<br>
-&gt; &gt; &gt; &gt; this outcome is possible.<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; When you say &quot;Within a read-side section&quot;, do you =
-mean within a single<br>
-&gt; &gt; same<br>
-&gt; &gt; &gt; read section? such as<br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; read_lock()<br>
-&gt; &gt; &gt; &gt; lookup(32)<br>
-&gt; &gt; &gt; &gt; lookup(1729)<br>
-&gt; &gt; &gt; &gt; read_unlock()<br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt; How about putting two lookups into two read-side sections? D=
-o we still<br>
-&gt; &gt; have<br>
-&gt; &gt; &gt; the problem, then?<br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; read_lock()<br>
-&gt; &gt; &gt; &gt; lookup(32)<br>
-&gt; &gt; &gt; &gt; read_unlock()<br>
-&gt; &gt; &gt; &gt; read_lock()<br>
-&gt; &gt; &gt; &gt; lookup(1729)<br>
-&gt; &gt; &gt; &gt; read_unlock()<br>
-&gt; &gt;<br>
-&gt; &gt; Without in any way agreeing with your characterization of this as=
- a<br>
-&gt; &gt; problem, because rcu_read_lock() and rcu_read_unlock() provide<br=
->
-&gt; &gt; absolutely no ordering guarantees in the absence of a grace perio=
-d,<br>
-&gt; &gt; any non-grace-period-related reordering that can happen with a si=
-ngle<br>
-&gt; &gt; RCU read-side critical section can also happen when that critical=
-<br>
-&gt; &gt; section is split in two as you have done above.<br>
-&gt; &gt;<br>
-&gt; &gt; &gt; Could you kindly give me more clues why RCU can see such reo=
-rder, while<br>
-&gt; &gt; RLU<br>
-&gt; &gt; &gt; can prevent it?<br>
-&gt; &gt;<br>
-&gt; &gt; Here are minimal C-language implementations for RCU that can (and=
- are)<br>
-&gt; &gt; actually used:<br>
-&gt; &gt;<br>
-&gt; Great. We use the same thing in our real-time work [1]<br>
-<br>
-It has been a popular choice for 40 years now.=C2=A0 ;-)<br>
-<br>
-&gt; &gt; #define rcu_read_lock()<br>
-&gt; &gt; #define rcu_read_unlock()<br>
-&gt; &gt;<br>
-&gt; &gt; Please compare these to the read-side markers presented in the RL=
-U paper,<br>
-&gt; &gt; and then tell me your thoughts on the answer to your question.=C2=
-=A0 ;-)<br>
-&gt; &gt;<br>
-&gt; I submit my homework here, but I do not think I did it well.<br>
-&gt; 1. I believe in the default URCU implementation, it has memory barrier=
-<br>
-&gt; inside the read_lock / read_unlock.<br>
-<br>
-It certainly was at one time.=C2=A0 But you would of course need to check<b=
-r>
-to see what any given worker actually used.<br>
-<br>
-&gt; 2. From the RLU paper, it shows the code for read-side operation.<br>
-&gt; RLU_READER_LOCK(ctx)<br>
-&gt;=C2=A0 =C2=A0 =C2=A0ctx.is-writer=E2=86=90false<br>
-&gt;=C2=A0 =C2=A0 =C2=A0ctx.run-cnt=E2=86=90ctx.run-cnt+1.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0memory fence<br>
-&gt;=C2=A0 =C2=A0 ctx.local-clock=E2=86=90global-clock<br>
-&gt; RLU_READER_UNLOCK(ctx)<br>
-&gt;=C2=A0 =C2=A0 =C2=A0ctx.run-cnt=E2=86=90ctx.run-cnt+1<br>
-&gt;=C2=A0 =C2=A0 =C2=A0if (ctx.is-writer)<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0RLU_COMMIT_WRITE_LOG(ctx)<br>
-&gt; <br>
-&gt; We can ignore the writer check, as in our case, the reader never do up=
-date.<br>
-&gt; My understanding is that read-side operations are only used to facilit=
-ate<br>
-&gt; the quiescence detection.<br>
-&gt; the run cnt is used to decide if a thread is active (if it is currentl=
-y<br>
-&gt; inside a read-side section).<br>
-&gt; the local clock is used to check if the active thread goes into the<br=
->
-&gt; read-side section very late, so it does not prevent reclaiming memory<=
-br>
-&gt; unlinked before it enters the read section.<br>
-&gt; However i see no difference between RLU and RCU read-side operation<br=
->
-&gt; regarding consistency guarantee.<br>
-&gt; Could you kindly teach me more?<br>
-<br>
-In order to teach you more, I do need some help from you.=C2=A0 I have post=
-ed<br>
-a number of URLs earlier in this email thread.=C2=A0 Could you please tell<=
-br>
-me what you learned from each of them?<br></blockquote><div>Sure, I will de=
-finitely learn those resources you provided, and come back to you if I have=
- more questions.</div><div>Simply speaking, I failed to find a clear and fo=
-rmal consistency model/guarantee=C2=A0of RCU quickly.<br>The difficulty=C2=
-=A0for me is, for most people, at their first glance, RCU only has relax/we=
-ak consistency=C2=A0guarantee.=C2=A0</div><div>So whenever I suggest to use=
- RCU to others, they always ask like</div><div>Does RCU provide=C2=A0Serial=
-izability? .. maybe not.</div><div>Does RCU provide=C2=A0Linearizability? .=
-.. maybe not</div><div>...</div><div>OK, what does RCU provide?=C2=A0 .. I =
-am not sure. I even cannot find a single document which has an accurate=C2=
-=A0answer.</div><div><br></div><div>Let me give more examples.</div><div>1.=
- When I recommend=C2=A0using read-write lock, people are happy=C2=A0to use =
-it.</div><div>=C2=A0 =C2=A0 However, when I further suggest to replace rw l=
-ock with RCU, then they hesitate to do so. Because they feel RCU is weaker =
-than rw lock, and do not know what precisely RCU guarantee.</div><div>2. In=
- contrast, in the database area, it has relative clear definition=C2=A0of c=
-onsistency levels (such as=C2=A0<a href=3D"https://jepsen.io/consistency">h=
-ttps://jepsen.io/consistency</a>), and users are easy to assert if they can=
- use certain database configuration based on its consistency model.</div><d=
-iv><br></div><div>Again, I really appreciate=C2=A0your patience and communi=
-cation, hope those does not bother=C2=A0you a lot.</div><div><br></div><div=
->Thanks</div><div>Best,</div><div>Yuxin</div><blockquote class=3D"gmail_quo=
-te" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204=
-);padding-left:1ex">
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 Thanx, Paul<br>
-<br>
-&gt; BTW, the RLU read-side ops are similar, but not efficient, comparing t=
-o our<br>
-&gt; Parsec work [1, 2]<br>
-&gt; [1] Yuxin Ren, G. Liu, G. Parmer, B. Brandenburg, Scalable Memory<br>
-&gt; Reclamation for Multi-Core, Real-Time Systems, in Proceedings of the 2=
-4th<br>
-&gt; IEEE Real-Time and Embedded Technology and Applications Symposium (RTA=
-S),<br>
-&gt; 2018<br>
-&gt; [2] Q. Wang, T. Stamler, and G. Parmer, Parallel Sections: Scaling<br>
-&gt; System-Level Data-Structures, in Proceedings of European Conference on=
-<br>
-&gt; Computer Systems (EuroSys), 2016<br>
-&gt; <br>
-&gt; Thanks,<br>
-&gt; Best,<br>
-&gt; Yuxin<br>
-&gt; <br>
-&gt; <br>
-&gt; &gt; &gt; This is because MVCC and RLU provide readers a consistent vi=
-ew of<br>
-&gt; &gt; &gt; &gt; the updates, and RCU does not.=C2=A0 Of course, it is o=
-ften the case that a<br>
-&gt; &gt; &gt; &gt; consistent view is not needed, in which case the MVCC a=
-nd RLU<br>
-&gt; &gt; guarantees<br>
-&gt; &gt; &gt; &gt; are incurring read-side overhead for no reason.=C2=A0 B=
-ut if the use case<br>
-&gt; &gt; &gt; &gt; requires consistent readers, RCU is not an option.<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; The reason a consistent view is not always needed is th=
-at<br>
-&gt; &gt; speed-of-light<br>
-&gt; &gt; &gt; &gt; delays make it impossible to provide a consistent view =
-of the outside<br>
-&gt; &gt; &gt; &gt; world.=C2=A0 In the common case where the use case inte=
-racts with the<br>
-&gt; &gt; &gt; &gt; outside world, the algorithms absolutely must be design=
-ed to tolerate<br>
-&gt; &gt; &gt; &gt; inconsistency, which opens the door to things like RCU.=
-<br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt; I am confused here. I think speed-of-light delays happen eve=
-rywhere, not<br>
-&gt; &gt; &gt; only bound to RCU, but also=C2=A0 any other synchronization =
-approach (such<br>
-&gt; &gt; RLU).<br>
-&gt; &gt; &gt; If so, how do others (RLU) provide consistent views?<br>
-&gt; &gt;<br>
-&gt; &gt; You just stated the answer.=C2=A0 Now it is only necessary for yo=
-u to invest<br>
-&gt; &gt; the time, effort, and thought to fully understand it.=C2=A0 To he=
-lp with this,<br>
-&gt; &gt; the following paragraph provides another hint:<br>
-&gt; &gt;<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Yes, you are quite right, speed-=
-of-light delays between the<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0outside world and the computer a=
-ffect RLU just as surely as they<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0do RCU.=C2=A0 This means that th=
-e additional consistency guarantees<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0provided by RLU must necessarily=
- be limited to the confines of the<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0computer system in question.=C2=
-=A0 Taking this one step further, there<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0are also speed-of-light delays w=
-ithin the computer.=C2=A0 Therefore,<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0in the general case, RLU can pro=
-vide its consistency guarantees,<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0even within the confines of the =
-computer system, only at the<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0expense of incurring delays.=C2=
-=A0 Because RCU does not provide RLU&#39;s<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0consistency guarantees, it need =
-not incur RLU&#39;s delays.<br>
-&gt; &gt;<br>
-&gt; &gt; This is not a new line of reasoning, see for example:<br>
-&gt; &gt;<br>
-&gt; &gt; @article{Herlihy:1996:LCN:1063369.1063372<br>
-&gt; &gt; ,author =3D {Herlihy, Maurice and Shavit, Nir and Waarts, Orli}<b=
-r>
-&gt; &gt; ,title =3D {Linearizable counting networks}<br>
-&gt; &gt; ,journal =3D {Distrib. Comput.}<br>
-&gt; &gt; ,volume =3D {9}<br>
-&gt; &gt; ,issue =3D {4}<br>
-&gt; &gt; ,month =3D {February}<br>
-&gt; &gt; ,year =3D {1996}<br>
-&gt; &gt; ,issn =3D {0178-2770}<br>
-&gt; &gt; ,pages =3D {193--203}<br>
-&gt; &gt; ,numpages =3D {11}<br>
-&gt; &gt; ,url =3D {<a href=3D"http://portal.acm.org/citation.cfm?id=3D1063=
-369.1063372" rel=3D"noreferrer" target=3D"_blank">http://portal.acm.org/cit=
-ation.cfm?id=3D1063369.1063372</a>}<br>
-&gt; &gt; ,doi =3D {10.1007/s004460050019}<br>
-&gt; &gt; ,acmid =3D {1063372}<br>
-&gt; &gt; ,publisher =3D {Springer-Verlag}<br>
-&gt; &gt; ,address =3D {London, UK}<br>
-&gt; &gt; ,keywords =3D {concurrency, contention, counting networks, data s=
-tructures,<br>
-&gt; &gt; linearizability}<br>
-&gt; &gt; }<br>
-&gt; &gt;<br>
-&gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Thanx, Paul<b=
-r>
-&gt; &gt;<br>
-&gt; &gt; &gt; Thanks for your education.<br>
-&gt; &gt; &gt; Yuxin<br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Th=
-anx, Paul<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; Thanks<br>
-&gt; &gt; &gt; &gt; &gt; Yuxin<br>
-&gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; On Fri, Dec 6, 2019 at 11:30 AM Paul E. McKenney &=
-lt;<a href=3D"mailto:paulmck@kernel.org" target=3D"_blank">paulmck@kernel.o=
-rg</a><br>
-&gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; wrote:<br>
-&gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; On Fri, Dec 06, 2019 at 10:59:05AM -0500, Mat=
-hieu Desnoyers wrote:<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; ----- On Dec 6, 2019, at 3:51 PM, Yuxin =
-Ren &lt;<a href=3D"mailto:ryx@gwmail.gwu.edu" target=3D"_blank">ryx@gwmail.=
-gwu.edu</a>&gt;<br>
-&gt; &gt; &gt; &gt; wrote:<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt; On Fri, Dec 6, 2019 at 5:49 AM Math=
-ieu Desnoyers &lt; [<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt; mailto:<a href=3D"mailto:mathieu.de=
-snoyers@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a> =
-|<br>
-&gt; &gt; &gt; &gt; <a href=3D"mailto:mathieu.desnoyers@efficios.com" targe=
-t=3D"_blank">mathieu.desnoyers@efficios.com</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt; ] &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt; wrote:<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; ----- On Dec 5, 2019, at 8:17 P=
-M, Yuxin Ren &lt; [ mailto:<br>
-&gt; &gt; &gt; &gt; &gt; &gt; <a href=3D"mailto:ryx@gwmail.gwu.edu" target=
-=3D"_blank">ryx@gwmail.gwu.edu</a> |<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; <a href=3D"mailto:ryx@gwmail.gw=
-u.edu" target=3D"_blank">ryx@gwmail.gwu.edu</a> ] &gt; wrote:<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; Hi,<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; I am a student, and learnin=
-g RCU now, but still know very<br>
-&gt; &gt; little<br>
-&gt; &gt; &gt; &gt; &gt; &gt; about it.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; Are there any documents/pap=
-ers/materials which (in)formally<br>
-&gt; &gt; &gt; &gt; define<br>
-&gt; &gt; &gt; &gt; &gt; &gt; and explain<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; RCU consistency guarantees?=
-<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; You may want to have a look at<=
-br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; User-Level Implementations of R=
-ead-Copy Update<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; Article in IEEE Transactions on=
- Parallel and Distributed<br>
-&gt; &gt; Systems<br>
-&gt; &gt; &gt; &gt; &gt; &gt; 23(2):375 - 382<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; =C2=B7 March 2012<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt; Thanks for your info.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt; However, I do not think URCU talks =
-about any consistency model<br>
-&gt; &gt; &gt; &gt; &gt; &gt; formally.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt; From previous communication with Pa=
-ul, he said RCU is not<br>
-&gt; &gt; designed<br>
-&gt; &gt; &gt; &gt; for<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt; linearizability, and it is totally =
-acceptable that RCU is not<br>
-&gt; &gt; &gt; &gt; &gt; &gt; linearizable.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt; However, I am curious how to accura=
-tely/formally Characterize<br>
-&gt; &gt; RCU<br>
-&gt; &gt; &gt; &gt; &gt; &gt; consistency<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt; model/guarantees<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; Adding Paul E. McKenney in CC.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; I am referring to the section &quot;Over=
-view of RCU semantics&quot; in the<br>
-&gt; &gt; &gt; &gt; paper.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; Not sure it has the level of<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; formality you are looking for though. Pa=
-ul, do you have pointers<br>
-&gt; &gt; to<br>
-&gt; &gt; &gt; &gt; &gt; &gt; additional material ?<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; Indeed I do!=C2=A0 The Linux kernel memory mo=
-del (LKMM) includes RCU.<br>
-&gt; &gt; It is<br>
-&gt; &gt; &gt; &gt; &gt; &gt; in tools/memory-model in recent kernel source=
- trees, which includes<br>
-&gt; &gt; &gt; &gt; &gt; &gt; documentation.=C2=A0 This is an executable mo=
-del, which means that you<br>
-&gt; &gt; &gt; &gt; &gt; &gt; can create litmus tests and have the model fo=
-rmally and<br>
-&gt; &gt; automatically<br>
-&gt; &gt; &gt; &gt; &gt; &gt; evaluate them.<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; There are also a number of publications cover=
-ing LKMM:<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; o=C2=A0 =C2=A0 =C2=A0 =C2=A0A formal kernel m=
-emory-ordering model<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"h=
-ttps://lwn.net/Articles/718628/" rel=3D"noreferrer" target=3D"_blank">https=
-://lwn.net/Articles/718628/</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"h=
-ttps://lwn.net/Articles/720550/" rel=3D"noreferrer" target=3D"_blank">https=
-://lwn.net/Articles/720550/</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0These cover =
-the release stores and dependency ordering that<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0provide RCU&=
-#39;s publish-subscribe guarantees.<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Backup mater=
-ial here:<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; <a href=3D"https://mirrors.edge.kernel.org/pub/linux/kernel/peopl=
-e/paulmck/LWNLinuxMM/" rel=3D"noreferrer" target=3D"_blank">https://mirrors=
-.edge.kernel.org/pub/linux/kernel/people/paulmck/LWNLinuxMM/</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0With these t=
-wo likely being of particular interest:<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; <a href=3D"https://mirrors.edge.kernel.org/pub/linux/kernel/peopl=
-e/paulmck/LWNLinuxMM/RCUguarantees.html" rel=3D"noreferrer" target=3D"_blan=
-k">https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/LWNLinux=
-MM/RCUguarantees.html</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt; <a href=3D"https://mirrors.edge.kernel.org/pub/linux/kernel/peopl=
-e/paulmck/LWNLinuxMM/srcu.html" rel=3D"noreferrer" target=3D"_blank">https:=
-//mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/LWNLinuxMM/srcu.h=
-tml</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; o=C2=A0 =C2=A0 =C2=A0 =C2=A0Frightening Small=
- Children and Disconcerting Grown-ups:<br>
-&gt; &gt; &gt; &gt; &gt; &gt; Concurrency in the Linux Kernel<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"h=
-ttps://dl.acm.org/citation.cfm?id=3D3177156" rel=3D"noreferrer" target=3D"_=
-blank">https://dl.acm.org/citation.cfm?id=3D3177156</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; <a href=3D"http://www0.cs.ucl.ac.uk/staff/j.alglave/papers/asplos=
-18.pdf" rel=3D"noreferrer" target=3D"_blank">http://www0.cs.ucl.ac.uk/staff=
-/j.alglave/papers/asplos18.pdf</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Backup mater=
-ial:<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"h=
-ttp://diy.inria.fr/linux/" rel=3D"noreferrer" target=3D"_blank">http://diy.=
-inria.fr/linux/</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; o=C2=A0 =C2=A0 =C2=A0 =C2=A0Who&#39;s afraid =
-of a big bad optimizing compiler?<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"h=
-ttps://lwn.net/Articles/793253/" rel=3D"noreferrer" target=3D"_blank">https=
-://lwn.net/Articles/793253/</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; o=C2=A0 =C2=A0 =C2=A0 =C2=A0Calibrating your =
-fear of big bad optimizing compilers<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"h=
-ttps://lwn.net/Articles/799218/" rel=3D"noreferrer" target=3D"_blank">https=
-://lwn.net/Articles/799218/</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0These last t=
-wo justify use of normal C-language assignment<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0statements t=
-o initialize and access data referenced by<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0RCU-protecte=
-d pointers.<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; There is a large body of litmus tests (thousa=
-nds of them) here:<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0<a href=3D"h=
-ttps://github.com/paulmckrcu/litmus" rel=3D"noreferrer" target=3D"_blank">h=
-ttps://github.com/paulmckrcu/litmus</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; Many of these litmus tests involve RCU, and t=
-hese can be located by<br>
-&gt; &gt; &gt; &gt; &gt; &gt; search for files containing rcu_read_lock(), =
-rcu_read_unlock(),<br>
-&gt; &gt; &gt; &gt; &gt; &gt; synchronize_rcu(), and so on.<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; Or were you looking for something else?<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0Thanx, Paul<br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; Thanks,<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; Mathieu<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; as a starting point.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; Thanks,<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; Mathieu<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; I know there are some consi=
-stency models in the database area<br>
-&gt; &gt; &gt; &gt; (such<br>
-&gt; &gt; &gt; &gt; &gt; &gt; as PRAM,<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; Read Uncommitted, etc) from=
- [ <a href=3D"https://jepsen.io/consistency" rel=3D"noreferrer" target=3D"_=
-blank">https://jepsen.io/consistency</a><br>
-&gt; &gt; |<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; <a href=3D"https://jepsen.i=
-o/consistency" rel=3D"noreferrer" target=3D"_blank">https://jepsen.io/consi=
-stency</a> ] and [1].<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; How does RCU related to tho=
-se consistency models?<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; I also found some comments =
-online (One key distinction is<br>
-&gt; &gt; that<br>
-&gt; &gt; &gt; &gt; both<br>
-&gt; &gt; &gt; &gt; &gt; &gt; MVCC and RLU<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; provide much stronger consi=
-stency guarantees to readers than<br>
-&gt; &gt; does<br>
-&gt; &gt; &gt; &gt; &gt; &gt; RCU ...) ( [<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; <a href=3D"https://lwn.net/=
-Articles/777036/" rel=3D"noreferrer" target=3D"_blank">https://lwn.net/Arti=
-cles/777036/</a> |<br>
-&gt; &gt; &gt; &gt; <a href=3D"https://lwn.net/Articles/777036/" rel=3D"nor=
-eferrer" target=3D"_blank">https://lwn.net/Articles/777036/</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt; ] ).<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; I do not understand how we =
-reason/dresibe/compare the<br>
-&gt; &gt; consistency<br>
-&gt; &gt; &gt; &gt; &gt; &gt; guarantees. (<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; I even do not know what con=
-sistency guarantees provided by<br>
-&gt; &gt; RCU<br>
-&gt; &gt; &gt; &gt; &gt; &gt; formally)<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; Could someone explain this =
-to me?<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; [1] Bailis, P., Davidson, A=
-., Fekete, A., Ghodsi, A.,<br>
-&gt; &gt; &gt; &gt; Hellerstein,<br>
-&gt; &gt; &gt; &gt; &gt; &gt; J. M., &amp;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; Stoica, I. (2013). Highly a=
-vailable transactions: Virtues and<br>
-&gt; &gt; &gt; &gt; &gt; &gt; limitations.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; Proceedings of the VLDB End=
-owment, 7(3), 181-192.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; Thanks<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; Yuxin<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; ___________________________=
-____________________<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; lttng-dev mailing list<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; [ mailto:<a href=3D"mailto:=
-lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a> =
-|<br>
-&gt; &gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lt=
-tng-dev@lists.lttng.org</a> ]<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; [ <a href=3D"https://lists.=
-lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"=
-_blank">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
-&gt; &gt; |<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt;&gt; <a href=3D"https://lists.lt=
-tng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_b=
-lank">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a> ]<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; --<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; Mathieu Desnoyers<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; EfficiOS Inc.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; &gt;&gt; [ <a href=3D"http://www.efficio=
-s.com/" rel=3D"noreferrer" target=3D"_blank">http://www.efficios.com/</a> |=
- <a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">h=
-ttp://www.efficios.com</a> ]<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; --<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; Mathieu Desnoyers<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; EfficiOS Inc.<br>
-&gt; &gt; &gt; &gt; &gt; &gt; &gt; <a href=3D"http://www.efficios.com" rel=
-=3D"noreferrer" target=3D"_blank">http://www.efficios.com</a><br>
-&gt; &gt; &gt; &gt; &gt; &gt;<br>
-&gt; &gt; &gt; &gt;<br>
-&gt; &gt;<br>
-</blockquote></div></div>
-
---0000000000003b8c6b0599c55dcd--
-
---===============0938664408393169190==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0938664408393169190==--
+T24gU3VuLCBEZWMgMTUsIDIwMTkgYXQgMDU6MTA6MTFQTSAtMDUwMCwgWXV4aW4gUmVuIHdyb3Rl
+Ogo+IE9uIFN1biwgRGVjIDE1LCAyMDE5IGF0IDM6MzAgUE0gUGF1bCBFLiBNY0tlbm5leSA8cGF1
+bG1ja0BrZXJuZWwub3JnPiB3cm90ZToKPiAKPiA+IE9uIFNhdCwgRGVjIDE0LCAyMDE5IGF0IDAx
+OjMxOjMxQU0gLTA1MDAsIFl1eGluIFJlbiB3cm90ZToKPiA+ID4gSGkgUGF1bAo+ID4gPgo+ID4g
+PiBPbiBTYXQsIERlYyA3LCAyMDE5IGF0IDU6NDIgUE0gUGF1bCBFLiBNY0tlbm5leSA8cGF1bG1j
+a0BrZXJuZWwub3JnPgo+ID4gd3JvdGU6Cj4gPiA+Cj4gPiA+ID4gT24gU2F0LCBEZWMgMDcsIDIw
+MTkgYXQgMDM6MDQ6NDJQTSAtMDUwMCwgWXV4aW4gUmVuIHdyb3RlOgo+ID4gPiA+ID4gVGhhbmtz
+IGEgbG90IGZvciB5b3VyIGhlbHAuIEkgaGF2ZSBzb21lIHF1ZXN0aW9ucyBiZWxvdy4KPiA+ID4g
+PiA+Cj4gPiA+ID4gPiBPbiBTYXQsIERlYyA3LCAyMDE5IGF0IDE6MzcgQU0gUGF1bCBFLiBNY0tl
+bm5leSA8cGF1bG1ja0BrZXJuZWwub3JnPgo+ID4gPiA+IHdyb3RlOgo+ID4gPiA+ID4KPiA+ID4g
+PiA+ID4gT24gRnJpLCBEZWMgMDYsIDIwMTkgYXQgMDc6MDA6MTNQTSAtMDUwMCwgWXV4aW4gUmVu
+IHdyb3RlOgo+ID4gPiA+ID4gPiA+IFRoYW5rcyBzbyBtdWNoIGZvciB5b3VyIGdyZWF0IGhlbHAu
+Cj4gPiA+ID4gPiA+ID4gSSBkZWZpbml0ZWx5IHdpbGwgbG9vayBhdCB0aG9zZSByZXNvdXJjZXMg
+YW5kIHBhcGVycyEKPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+IE9uZSBtb3JlIHRoaW5nIHRo
+YXQgSSBhbSBjb25mdXNlZAo+ID4gPiA+ID4gPiA+IEFzIEkgbWVudGlvbmVkIGVhcmxpZXIsIHNv
+bWVvbmUgc2FpZCBPbmUga2V5IGRpc3RpbmN0aW9uIGlzIHRoYXQKPiA+IGJvdGgKPiA+ID4gPiA+
+ID4gTVZDQwo+ID4gPiA+ID4gPiA+IGFuZCBSTFUgcHJvdmlkZSBtdWNoIHN0cm9uZ2VyIGNvbnNp
+c3RlbmN5IGd1YXJhbnRlZXMgdG8gcmVhZGVycwo+ID4gdGhhbgo+ID4gPiA+IGRvZXMKPiA+ID4g
+PiA+ID4gPiBSQ1UgLi4uKSAoaHR0cHM6Ly9sd24ubmV0L0FydGljbGVzLzc3NzAzNi8pLgo+ID4g
+PiA+ID4gPgo+ID4gPiA+ID4gPiBUaGF0IHNvbWVvbmUgd2FzIGluIGZhY3QgbWUuICA7LSkKPiA+
+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiBJIGFtIG5vdCBzdXJlIGlmIHRoZSBhYm92ZSBzdGF0ZW1l
+bnQgaXMgY29ycmVjdCBvciBub3QuIEJ1dCBpbgo+ID4gPiA+IGdlbmVyYWwsCj4gPiA+ID4gPiA+
+ID4gSG93IGNhbiB3ZSBjb21wYXJlIFJDVSBjb25zaXN0ZW5jeSBndWFyYW50ZWVzIHRvIG90aGVy
+IHRlY2huaXF1ZXMKPiA+ID4gPiAoc3VjaAo+ID4gPiA+ID4gPiBhcwo+ID4gPiA+ID4gPiA+IFJM
+VSk/Cj4gPiA+ID4gPiA+ID4gSG93IHRvIHJlYXNvbiBhYm91dCB3aGljaCBvbmUgaGFzIHN0cm9u
+Z2VyIG9yIHdlYWtlciBndWFyYW50ZWVzPwo+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiBJIHN1Z2dl
+c3Qgc3RhcnRpbmcgZnJvbSB0aGUgdXNlIGNhc2UuICBGb3IgY29uY3JldGVuZXNzLCBsZXQncwo+
+ID4gYXNzdW1lCj4gPiA+ID4gPiA+IHRoYXQgd2UgYXJlIHVzaW5nIGEgaGFzaCB0YWJsZS4gIEF0
+IG9uZSBleHRyZW1lLCBpbWFnaW5lIGEgdXNlCj4gPiBjYXNlIGluCj4gPiA+ID4gPiA+IHdoaWNo
+IGVhY2ggZXZlbnQgbWFrZXMgZXhhY3RseSBvbmUgaGFzaC10YWJsZSBvcGVyYXRpb24uICBObwo+
+ID4gPiA+IGluZm9ybWF0aW9uCj4gPiA+ID4gPiA+IGlzIGNhcnJpZWQgZnJvbSBvbmUgZXZlbnQg
+dG8gdGhlIG5leHQuICAoVGhpcyBtaWdodCB3ZWxsIGJlIHRoZQo+ID4gY2FzZQo+ID4gPiA+ID4g
+PiBmb3Igc2ltcGxlIHdlYiBzZXJ2ZXIuKSAgU3VjaCBhIHVzZSBjYXNlIGNhbm5vdCB0ZWxsIHRo
+ZSBkaWZmZXJlbmNlCj4gPiA+ID4gPiA+IGJldHdlZW4gUkNVIG9uIHRoZSBvbmUgaGFuZCBhbmQg
+TVZDQy9STFUgb24gdGhlIG90aGVyLgo+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiBBdCB0aGUgb3Ro
+ZXIgZXh0cmVtZSwgc3VwcG9zZSB0aGF0IGVhY2ggZXZlbnQgZWl0aGVyIGFjY2Vzc2VzIG9yCj4g
+PiA+ID4gdXBkYXRlcwo+ID4gPiA+ID4gPiBtdWx0aXBsZSBlbnRyaWVzIGluIHRoZSBoYXNoIHRh
+YmxlLiAgSW4gdGhpcyBjYXNlLCBNVkNDL1JMVSB3aWxsCj4gPiBydWxlCj4gPiA+ID4gPiA+IG91
+dCBvdXRjb21lcyB0aGF0IFJDVSB3b3VsZCBwZXJtaXQuICBGb3IgZXhhbXBsZSwgc3VwcG9zZSB3
+ZSBoYWQKPiA+IGZvdXIKPiA+ID4gPiA+ID4gZXZlbnRzIGFjY2Vzc2luZyB0d28gZGlmZmVyZW50
+IGVsZW1lbnRzIGluIGRpZmZlcmVudCBidWNrZXRzIG9mIHRoZQo+ID4gPiA+ID4gPiBoYXNoIHRh
+YmxlOgo+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiAgICAgICAgIEUxOiBBZGRzIDMyIHRvIHRoZSBo
+YXNoIHRhYmxlLgo+ID4gPiA+ID4gPiAgICAgICAgIEUyOiBBZGRzIDE3MjkgdG8gdGhlIGhhc2gg
+dGFibGUuCj4gPiA+ID4gPiA+ICAgICAgICAgRTM6IFdpdGhpbiBhIHJlYWQtc2lkZSBjcml0aWNh
+bCBzZWN0aW9uLCBsb29rcyB1cCAzMiB0aGVuCj4gPiAxNzI5Lgo+ID4gPiA+ID4gPiAgICAgICAg
+IEU0OiBXaXRoaW4gYSByZWFkLXNpZGUgY3JpdGljYWwgc2VjdGlvbiwgbG9va3MgdXAgMTcyOQo+
+ID4gdGhlbiAzMi4KPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gR2l2ZW4gZWl0aGVyIE1WQ0Mgb3Ig
+UkxVLCBpdCB3aWxsIG5vdCBiZSBwb3NzaWJsZSBmb3IgRTMgdG8gZmluZAo+ID4gMzIgYnV0Cj4g
+PiA+ID4gPiA+IG5vdCAxNzI5IGFuZCBhdCB0aGUgc2FtZSB0aW1lIGZvciBFNCB0byBmaW5kIDE3
+MjkgYnV0IG5vdCAzMi4KPiA+IEdpdmVuCj4gPiA+ID4gUkNVLAo+ID4gPiA+ID4gPiB0aGlzIG91
+dGNvbWUgaXMgcG9zc2libGUuCj4gPiA+ID4gPiA+Cj4gPiA+ID4gPiBXaGVuIHlvdSBzYXkgIldp
+dGhpbiBhIHJlYWQtc2lkZSBzZWN0aW9uIiwgZG8geW91IG1lYW4gd2l0aGluIGEKPiA+IHNpbmds
+ZQo+ID4gPiA+IHNhbWUKPiA+ID4gPiA+IHJlYWQgc2VjdGlvbj8gc3VjaCBhcwo+ID4gPiA+ID4K
+PiA+ID4gPiA+ID4gcmVhZF9sb2NrKCkKPiA+ID4gPiA+ID4gbG9va3VwKDMyKQo+ID4gPiA+ID4g
+PiBsb29rdXAoMTcyOSkKPiA+ID4gPiA+ID4gcmVhZF91bmxvY2soKQo+ID4gPiA+ID4KPiA+ID4g
+PiA+Cj4gPiA+ID4gPiBIb3cgYWJvdXQgcHV0dGluZyB0d28gbG9va3VwcyBpbnRvIHR3byByZWFk
+LXNpZGUgc2VjdGlvbnM/IERvIHdlCj4gPiBzdGlsbAo+ID4gPiA+IGhhdmUKPiA+ID4gPiA+IHRo
+ZSBwcm9ibGVtLCB0aGVuPwo+ID4gPiA+ID4KPiA+ID4gPiA+ID4gcmVhZF9sb2NrKCkKPiA+ID4g
+PiA+ID4gbG9va3VwKDMyKQo+ID4gPiA+ID4gPiByZWFkX3VubG9jaygpCj4gPiA+ID4gPiA+IHJl
+YWRfbG9jaygpCj4gPiA+ID4gPiA+IGxvb2t1cCgxNzI5KQo+ID4gPiA+ID4gPiByZWFkX3VubG9j
+aygpCj4gPiA+ID4KPiA+ID4gPiBXaXRob3V0IGluIGFueSB3YXkgYWdyZWVpbmcgd2l0aCB5b3Vy
+IGNoYXJhY3Rlcml6YXRpb24gb2YgdGhpcyBhcyBhCj4gPiA+ID4gcHJvYmxlbSwgYmVjYXVzZSBy
+Y3VfcmVhZF9sb2NrKCkgYW5kIHJjdV9yZWFkX3VubG9jaygpIHByb3ZpZGUKPiA+ID4gPiBhYnNv
+bHV0ZWx5IG5vIG9yZGVyaW5nIGd1YXJhbnRlZXMgaW4gdGhlIGFic2VuY2Ugb2YgYSBncmFjZSBw
+ZXJpb2QsCj4gPiA+ID4gYW55IG5vbi1ncmFjZS1wZXJpb2QtcmVsYXRlZCByZW9yZGVyaW5nIHRo
+YXQgY2FuIGhhcHBlbiB3aXRoIGEgc2luZ2xlCj4gPiA+ID4gUkNVIHJlYWQtc2lkZSBjcml0aWNh
+bCBzZWN0aW9uIGNhbiBhbHNvIGhhcHBlbiB3aGVuIHRoYXQgY3JpdGljYWwKPiA+ID4gPiBzZWN0
+aW9uIGlzIHNwbGl0IGluIHR3byBhcyB5b3UgaGF2ZSBkb25lIGFib3ZlLgo+ID4gPiA+Cj4gPiA+
+ID4gPiBDb3VsZCB5b3Uga2luZGx5IGdpdmUgbWUgbW9yZSBjbHVlcyB3aHkgUkNVIGNhbiBzZWUg
+c3VjaCByZW9yZGVyLAo+ID4gd2hpbGUKPiA+ID4gPiBSTFUKPiA+ID4gPiA+IGNhbiBwcmV2ZW50
+IGl0Pwo+ID4gPiA+Cj4gPiA+ID4gSGVyZSBhcmUgbWluaW1hbCBDLWxhbmd1YWdlIGltcGxlbWVu
+dGF0aW9ucyBmb3IgUkNVIHRoYXQgY2FuIChhbmQgYXJlKQo+ID4gPiA+IGFjdHVhbGx5IHVzZWQ6
+Cj4gPiA+ID4KPiA+ID4gR3JlYXQuIFdlIHVzZSB0aGUgc2FtZSB0aGluZyBpbiBvdXIgcmVhbC10
+aW1lIHdvcmsgWzFdCj4gPgo+ID4gSXQgaGFzIGJlZW4gYSBwb3B1bGFyIGNob2ljZSBmb3IgNDAg
+eWVhcnMgbm93LiAgOy0pCj4gPgo+ID4gPiA+ICNkZWZpbmUgcmN1X3JlYWRfbG9jaygpCj4gPiA+
+ID4gI2RlZmluZSByY3VfcmVhZF91bmxvY2soKQo+ID4gPiA+Cj4gPiA+ID4gUGxlYXNlIGNvbXBh
+cmUgdGhlc2UgdG8gdGhlIHJlYWQtc2lkZSBtYXJrZXJzIHByZXNlbnRlZCBpbiB0aGUgUkxVCj4g
+PiBwYXBlciwKPiA+ID4gPiBhbmQgdGhlbiB0ZWxsIG1lIHlvdXIgdGhvdWdodHMgb24gdGhlIGFu
+c3dlciB0byB5b3VyIHF1ZXN0aW9uLiAgOy0pCj4gPiA+ID4KPiA+ID4gSSBzdWJtaXQgbXkgaG9t
+ZXdvcmsgaGVyZSwgYnV0IEkgZG8gbm90IHRoaW5rIEkgZGlkIGl0IHdlbGwuCj4gPiA+IDEuIEkg
+YmVsaWV2ZSBpbiB0aGUgZGVmYXVsdCBVUkNVIGltcGxlbWVudGF0aW9uLCBpdCBoYXMgbWVtb3J5
+IGJhcnJpZXIKPiA+ID4gaW5zaWRlIHRoZSByZWFkX2xvY2sgLyByZWFkX3VubG9jay4KPiA+Cj4g
+PiBJdCBjZXJ0YWlubHkgd2FzIGF0IG9uZSB0aW1lLiAgQnV0IHlvdSB3b3VsZCBvZiBjb3Vyc2Ug
+bmVlZCB0byBjaGVjawo+ID4gdG8gc2VlIHdoYXQgYW55IGdpdmVuIHdvcmtlciBhY3R1YWxseSB1
+c2VkLgo+ID4KPiA+ID4gMi4gRnJvbSB0aGUgUkxVIHBhcGVyLCBpdCBzaG93cyB0aGUgY29kZSBm
+b3IgcmVhZC1zaWRlIG9wZXJhdGlvbi4KPiA+ID4gUkxVX1JFQURFUl9MT0NLKGN0eCkKPiA+ID4g
+ICAgIGN0eC5pcy13cml0ZXLihpBmYWxzZQo+ID4gPiAgICAgY3R4LnJ1bi1jbnTihpBjdHgucnVu
+LWNudCsxLgo+ID4gPiAgICAgbWVtb3J5IGZlbmNlCj4gPiA+ICAgIGN0eC5sb2NhbC1jbG9ja+KG
+kGdsb2JhbC1jbG9jawo+ID4gPiBSTFVfUkVBREVSX1VOTE9DSyhjdHgpCj4gPiA+ICAgICBjdHgu
+cnVuLWNudOKGkGN0eC5ydW4tY250KzEKPiA+ID4gICAgIGlmIChjdHguaXMtd3JpdGVyKQo+ID4g
+PiAgICAgICAgIFJMVV9DT01NSVRfV1JJVEVfTE9HKGN0eCkKPiA+ID4KPiA+ID4gV2UgY2FuIGln
+bm9yZSB0aGUgd3JpdGVyIGNoZWNrLCBhcyBpbiBvdXIgY2FzZSwgdGhlIHJlYWRlciBuZXZlciBk
+bwo+ID4gdXBkYXRlLgo+ID4gPiBNeSB1bmRlcnN0YW5kaW5nIGlzIHRoYXQgcmVhZC1zaWRlIG9w
+ZXJhdGlvbnMgYXJlIG9ubHkgdXNlZCB0byBmYWNpbGl0YXRlCj4gPiA+IHRoZSBxdWllc2NlbmNl
+IGRldGVjdGlvbi4KPiA+ID4gdGhlIHJ1biBjbnQgaXMgdXNlZCB0byBkZWNpZGUgaWYgYSB0aHJl
+YWQgaXMgYWN0aXZlIChpZiBpdCBpcyBjdXJyZW50bHkKPiA+ID4gaW5zaWRlIGEgcmVhZC1zaWRl
+IHNlY3Rpb24pLgo+ID4gPiB0aGUgbG9jYWwgY2xvY2sgaXMgdXNlZCB0byBjaGVjayBpZiB0aGUg
+YWN0aXZlIHRocmVhZCBnb2VzIGludG8gdGhlCj4gPiA+IHJlYWQtc2lkZSBzZWN0aW9uIHZlcnkg
+bGF0ZSwgc28gaXQgZG9lcyBub3QgcHJldmVudCByZWNsYWltaW5nIG1lbW9yeQo+ID4gPiB1bmxp
+bmtlZCBiZWZvcmUgaXQgZW50ZXJzIHRoZSByZWFkIHNlY3Rpb24uCj4gPiA+IEhvd2V2ZXIgaSBz
+ZWUgbm8gZGlmZmVyZW5jZSBiZXR3ZWVuIFJMVSBhbmQgUkNVIHJlYWQtc2lkZSBvcGVyYXRpb24K
+PiA+ID4gcmVnYXJkaW5nIGNvbnNpc3RlbmN5IGd1YXJhbnRlZS4KPiA+ID4gQ291bGQgeW91IGtp
+bmRseSB0ZWFjaCBtZSBtb3JlPwo+ID4KPiA+IEluIG9yZGVyIHRvIHRlYWNoIHlvdSBtb3JlLCBJ
+IGRvIG5lZWQgc29tZSBoZWxwIGZyb20geW91LiAgSSBoYXZlIHBvc3RlZAo+ID4gYSBudW1iZXIg
+b2YgVVJMcyBlYXJsaWVyIGluIHRoaXMgZW1haWwgdGhyZWFkLiAgQ291bGQgeW91IHBsZWFzZSB0
+ZWxsCj4gPiBtZSB3aGF0IHlvdSBsZWFybmVkIGZyb20gZWFjaCBvZiB0aGVtPwo+ID4KPiBTdXJl
+LCBJIHdpbGwgZGVmaW5pdGVseSBsZWFybiB0aG9zZSByZXNvdXJjZXMgeW91IHByb3ZpZGVkLCBh
+bmQgY29tZSBiYWNrCj4gdG8geW91IGlmIEkgaGF2ZSBtb3JlIHF1ZXN0aW9ucy4KPiBTaW1wbHkg
+c3BlYWtpbmcsIEkgZmFpbGVkIHRvIGZpbmQgYSBjbGVhciBhbmQgZm9ybWFsIGNvbnNpc3RlbmN5
+Cj4gbW9kZWwvZ3VhcmFudGVlIG9mIFJDVSBxdWlja2x5Lgo+IFRoZSBkaWZmaWN1bHR5IGZvciBt
+ZSBpcywgZm9yIG1vc3QgcGVvcGxlLCBhdCB0aGVpciBmaXJzdCBnbGFuY2UsIFJDVSBvbmx5Cj4g
+aGFzIHJlbGF4L3dlYWsgY29uc2lzdGVuY3kgZ3VhcmFudGVlLgo+IFNvIHdoZW5ldmVyIEkgc3Vn
+Z2VzdCB0byB1c2UgUkNVIHRvIG90aGVycywgdGhleSBhbHdheXMgYXNrIGxpa2UKPiBEb2VzIFJD
+VSBwcm92aWRlIFNlcmlhbGl6YWJpbGl0eT8gLi4gbWF5YmUgbm90Lgo+IERvZXMgUkNVIHByb3Zp
+ZGUgTGluZWFyaXphYmlsaXR5PyAuLi4gbWF5YmUgbm90Cj4gLi4uCgpBcmUgc2VyaWFsaXphYmls
+aXR5IGFuZCBsaW5lYXJpemFiaWxpdHkgYWx3YXlzIHVzZWZ1bD8gIERlZmluaXRlbHkgbm90LgpB
+cmUgc2VyaWFsaXphYmlsaXR5IGFuZCBsaW5lYXJpemFiaWxpdHkgZXhwZW5zaXZlPyAgWW91IGJl
+dCEhIQoKQnV0IGlmIHlvdXIgdXNlIGNhc2UgYWJzb2x1dGVseSByZXF1aXJlcyBlaXRoZXIgc2Vy
+aWFsaXphYmlsaXR5IG9yCmxpbmVhcml6YWJpbGl0eSwgeW91IHByb2JhYmx5IHNob3VsZCB0cnkg
+c29tZXRoaW5nIG90aGVyIHRoYW4gUkNVLgpCdXQgeW91IHNob3VsZCBhbHNvIHN0cm9uZ2x5IHF1
+ZXN0aW9uIHNlcmlhbGl6YWJpbGl0eSBhbmQgbGluZWFyaWFiaWxpdHkKcmVxdWlyZW1lbnRzLCBn
+aXZlbiB0aGF0IHRoZXkgYXJlIG9mdGVuIGltcG9zZWQgb3V0IG9mIGZlYXIgYW5kIGZvcmNlCm9m
+IGhhYml0IHJhdGhlciB0aGFuIHJlYWwgbmVlZC4KCk5ldmVydGhlbGVzcywgdGhlcmUgYXJlIHVz
+ZSBjYXNlcyB3aGVyZSBSQ1UgaXMgcGFydCBvZiBhIGNvbmN1cnJlbmN5CmRlc2lnbiB0aGF0IHBy
+b3ZpZGVzIHNlcmlhbGl6YWJpbGl0eSBhbmQvb3IgbGluZWFyaXphYmlsaXR5LiAgRm9yIGJ1dApv
+bmUgZXhhbXBsZToKCkBDb25mZXJlbmNle0FyY2FuZ2VsaTAzLAogQXV0aG9yPSJBbmRyZWEgQXJj
+YW5nZWxpIGFuZCBNaW5nbWluZyBDYW8gYW5kIFBhdWwgRS4gTWNLZW5uZXkgYW5kCkRpcGFua2Fy
+IFNhcm1hIiwKIFRpdGxlPSJVc2luZyBSZWFkLUNvcHkgVXBkYXRlIFRlY2huaXF1ZXMgZm9yIHtT
+eXN0ZW0gViBJUEN9IGluIHRoZQp7TGludXh9IDIuNSBLZXJuZWwiLAogQm9va3RpdGxlPSJQcm9j
+ZWVkaW5ncyBvZiB0aGUgMjAwMyBVU0VOSVggQW5udWFsIFRlY2huaWNhbCBDb25mZXJlbmNlCihG
+UkVFTklYIFRyYWNrKSIsCiBQdWJsaXNoZXI9IlVTRU5JWCBBc3NvY2lhdGlvbiIsCiBsb2NhdGlv
+bj0iU2FuIEFudG9uaW8sIFRleGFzLCBVU0EiLAogeWVhcj0iMjAwMyIsCiBtb250aD0iSnVuZSIs
+CiBwYWdlcz0iMjk3LTMxMCIsCiB1cmw9Imh0dHBzOi8vd3d3LnVzZW5peC5vcmcvbGVnYWN5L3B1
+YmxpY2F0aW9ucy9saWJyYXJ5L3Byb2NlZWRpbmdzL3VzZW5peDAzL3RlY2gvZnJlZW5peDAzL2Z1
+bGxfcGFwZXJzL2FyY2FuZ2VsaS9hcmNhbmdlbGkucGRmIiwKIGxhc3RjaGVja2VkPSJGZWJydWFy
+eSAyNywgMjAxNyIsCn0KCj4gT0ssIHdoYXQgZG9lcyBSQ1UgcHJvdmlkZT8gIC4uIEkgYW0gbm90
+IHN1cmUuIEkgZXZlbiBjYW5ub3QgZmluZCBhIHNpbmdsZQo+IGRvY3VtZW50IHdoaWNoIGhhcyBh
+biBhY2N1cmF0ZSBhbnN3ZXIuCj4gCj4gTGV0IG1lIGdpdmUgbW9yZSBleGFtcGxlcy4KPiAxLiBX
+aGVuIEkgcmVjb21tZW5kIHVzaW5nIHJlYWQtd3JpdGUgbG9jaywgcGVvcGxlIGFyZSBoYXBweSB0
+byB1c2UgaXQuCj4gICAgIEhvd2V2ZXIsIHdoZW4gSSBmdXJ0aGVyIHN1Z2dlc3QgdG8gcmVwbGFj
+ZSBydyBsb2NrIHdpdGggUkNVLCB0aGVuIHRoZXkKPiBoZXNpdGF0ZSB0byBkbyBzby4gQmVjYXVz
+ZSB0aGV5IGZlZWwgUkNVIGlzIHdlYWtlciB0aGFuIHJ3IGxvY2ssIGFuZCBkbyBub3QKPiBrbm93
+IHdoYXQgcHJlY2lzZWx5IFJDVSBndWFyYW50ZWUuCj4gMi4gSW4gY29udHJhc3QsIGluIHRoZSBk
+YXRhYmFzZSBhcmVhLCBpdCBoYXMgcmVsYXRpdmUgY2xlYXIgZGVmaW5pdGlvbiBvZgo+IGNvbnNp
+c3RlbmN5IGxldmVscyAoc3VjaCBhcyBodHRwczovL2plcHNlbi5pby9jb25zaXN0ZW5jeSksIGFu
+ZCB1c2VycyBhcmUKPiBlYXN5IHRvIGFzc2VydCBpZiB0aGV5IGNhbiB1c2UgY2VydGFpbiBkYXRh
+YmFzZSBjb25maWd1cmF0aW9uIGJhc2VkIG9uIGl0cwo+IGNvbnNpc3RlbmN5IG1vZGVsLgoKVGhl
+IFJDVSBndWFyYW50ZWVzIGFyZSBjbGVhcmx5IHN0YXRlZCBpbiBhIG51bWJlciBvZiBwbGFjZXMu
+ICBNb3N0CnJlY2VudGx5IGFuZCBtb3N0IGZvcm1hbGx5LCB0aGUgMjAxOCBBU1BMT1MgIkZyaWdo
+dGVuaW5nIHNtYWxsIGNoaWxkcmVuIgpwYXBlciBjYWxsZWQgb3V0IGJlbG93ICh0aG91Z2ggdGhl
+IDIwMTIgcGFwZXIgeW91IHJlZmVycmVkIHRvIGhhcyBhCmdvb2QgYW5kIHN1ZmZpY2llbnQgc3Rh
+dGVtZW50IG9mIGl0cyBndWFyYW50ZWVzKS4gIFRoaXMgZm9ybWFsaXNtIGlzCmV4ZWN1dGFibGUs
+IGFuZCBoYXMgYmVlbiBhdmFpbGFibGUgd2l0aGluIHRoZSBMaW51eC1rZXJuZWwgc291cmNlIHRy
+ZWUKaW4gZXhlY3V0YWJsZSBmb3JtIGZvciBtb3JlIHRoYW4gYSB5ZWFyLiAgSSBzdHJvbmdseSBy
+ZWNvbW1lbmQgdGhhdCB5b3UKdHJ5IHBsYXlpbmcgd2l0aCB0aGlzIGV4ZWN1dGFibGUgbW9kZWwu
+CgpCdXQgc3VjY2Vzc2Z1bGx5IHVzaW5nIFJDVSByZXF1aXJlcyB0aGF0IHlvdSB0aGluayBhYm91
+dCB5b3VyIHByb2JsZW0KZGlmZmVyZW50bHkuICBUaGlzIHNob3VsZCBub3QgYmUgYSBzdXJwcmlz
+ZS4gIEFmdGVyIGFsbCwgbG9ja2luZwpwcm92aWRlcyBtdXR1YWwgZXhjbHVzaW9uIGFuZCBSQ1Ug
+ZG9lcyBub3QuICBTbyBvbmUgc2V0IG9mIHByb21pc2luZwp1c2UgY2FzZXMgZm9yIFJDVSBhcmUg
+d2hlcmUgc29tZSBxdWFudGl0eSBpcyBjYWxjdWxhdGVkIHJlYWQtaG9sZGluZyBhCnJlYWRlci13
+cml0ZXIgbG9jaywgYnV0IHdoZXJlIHRoYXQgcXVhbnRpdHkgaXMgdXNlZCBhZnRlciByZWxlYXNp
+bmcgdGhhdApyZWFkZXItd3JpdGVyIGxvY2suICBUaGlzIGlzIGEgY29tbW9uIHVzZSBjYXNlLCBh
+bmQgaXQgaXMgYSBjYXNlIHdoZXJlIHRoZQp1c2VyIGhhcyBwdXJwb3NlZnVsbHkgc2V0IGFzaWRl
+IHRoZSBzZXJpYWxpemFiaWxpdHkgYW5kIGxpbmVhcml6YWJpbGl0eQpndWFyYW50ZWVzIHRoYXQg
+cmVhZGVyLXdyaXRlciBsb2NraW5nIHByb3ZpZGVzIC0tIGJ1dCBoYXMgbmV2ZXJ0aGVsZXNzCnBh
+aWQgdGhlIGZ1bGwgcHJpY2UgZm9yIHRoZXNlIGd1YXJhbnRlZXMuCgo+IEFnYWluLCBJIHJlYWxs
+eSBhcHByZWNpYXRlIHlvdXIgcGF0aWVuY2UgYW5kIGNvbW11bmljYXRpb24sIGhvcGUgdGhvc2Ug
+ZG9lcwo+IG5vdCBib3RoZXIgeW91IGEgbG90LgoKQXQgdGhpcyBwb2ludCwgSSBtdXN0IGNvbmZl
+c3MgdG8gYmVpbmcgbXVjaCBtb3JlIGFtdXNlZCB0aGFuIGJvdGhlcmVkLgoKRm9yIGV4YW1wbGUs
+IGRvIEkgdW5kZXJzdGFuZCBjb3JyZWN0bHkgdGhhdCB5b3UgaGF2ZW4ndCB5ZXQgcmVhZCAtYW55
+LQpvZiB0aGUgcmVmZXJlbmNlcyBJIHNlbnQgeW91PyAgSXQgc3VyZSBzZWVtcyB0aGF0IHdheS4g
+IDstKQoKQWxzbywgYXJlIHlvdSBnZXR0aW5nIGFkZXF1YXRlIHNsZWVwLCBhcyBpbiBhdCBsZWFz
+dCBzZXZlbiBob3VycwpwZXIgbmlnaHQ/ICBBZnRlciBhbGwsIGF0dGVtcHRpbmcgdG8gbGVhcm4g
+UkNVIHdoaWxlIHNsZWVwLWRlcHJpdmVkCnF1aXRlIGZvb2xoYXJkeS4KCgkJCQkJCQlUaGFueCwg
+UGF1bAoKPiBUaGFua3MKPiBCZXN0LAo+IFl1eGluCj4gCj4gPgo+ID4gICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRoYW54LCBQ
+YXVsCj4gPgo+ID4gPiBCVFcsIHRoZSBSTFUgcmVhZC1zaWRlIG9wcyBhcmUgc2ltaWxhciwgYnV0
+IG5vdCBlZmZpY2llbnQsIGNvbXBhcmluZyB0bwo+ID4gb3VyCj4gPiA+IFBhcnNlYyB3b3JrIFsx
+LCAyXQo+ID4gPiBbMV0gWXV4aW4gUmVuLCBHLiBMaXUsIEcuIFBhcm1lciwgQi4gQnJhbmRlbmJ1
+cmcsIFNjYWxhYmxlIE1lbW9yeQo+ID4gPiBSZWNsYW1hdGlvbiBmb3IgTXVsdGktQ29yZSwgUmVh
+bC1UaW1lIFN5c3RlbXMsIGluIFByb2NlZWRpbmdzIG9mIHRoZSAyNHRoCj4gPiA+IElFRUUgUmVh
+bC1UaW1lIGFuZCBFbWJlZGRlZCBUZWNobm9sb2d5IGFuZCBBcHBsaWNhdGlvbnMgU3ltcG9zaXVt
+IChSVEFTKSwKPiA+ID4gMjAxOAo+ID4gPiBbMl0gUS4gV2FuZywgVC4gU3RhbWxlciwgYW5kIEcu
+IFBhcm1lciwgUGFyYWxsZWwgU2VjdGlvbnM6IFNjYWxpbmcKPiA+ID4gU3lzdGVtLUxldmVsIERh
+dGEtU3RydWN0dXJlcywgaW4gUHJvY2VlZGluZ3Mgb2YgRXVyb3BlYW4gQ29uZmVyZW5jZSBvbgo+
+ID4gPiBDb21wdXRlciBTeXN0ZW1zIChFdXJvU3lzKSwgMjAxNgo+ID4gPgo+ID4gPiBUaGFua3Ms
+Cj4gPiA+IEJlc3QsCj4gPiA+IFl1eGluCj4gPiA+Cj4gPiA+Cj4gPiA+ID4gPiBUaGlzIGlzIGJl
+Y2F1c2UgTVZDQyBhbmQgUkxVIHByb3ZpZGUgcmVhZGVycyBhIGNvbnNpc3RlbnQgdmlldyBvZgo+
+ID4gPiA+ID4gPiB0aGUgdXBkYXRlcywgYW5kIFJDVSBkb2VzIG5vdC4gIE9mIGNvdXJzZSwgaXQg
+aXMgb2Z0ZW4gdGhlIGNhc2UKPiA+IHRoYXQgYQo+ID4gPiA+ID4gPiBjb25zaXN0ZW50IHZpZXcg
+aXMgbm90IG5lZWRlZCwgaW4gd2hpY2ggY2FzZSB0aGUgTVZDQyBhbmQgUkxVCj4gPiA+ID4gZ3Vh
+cmFudGVlcwo+ID4gPiA+ID4gPiBhcmUgaW5jdXJyaW5nIHJlYWQtc2lkZSBvdmVyaGVhZCBmb3Ig
+bm8gcmVhc29uLiAgQnV0IGlmIHRoZSB1c2UKPiA+IGNhc2UKPiA+ID4gPiA+ID4gcmVxdWlyZXMg
+Y29uc2lzdGVudCByZWFkZXJzLCBSQ1UgaXMgbm90IGFuIG9wdGlvbi4KPiA+ID4gPiA+ID4KPiA+
+ID4gPiA+ID4gVGhlIHJlYXNvbiBhIGNvbnNpc3RlbnQgdmlldyBpcyBub3QgYWx3YXlzIG5lZWRl
+ZCBpcyB0aGF0Cj4gPiA+ID4gc3BlZWQtb2YtbGlnaHQKPiA+ID4gPiA+ID4gZGVsYXlzIG1ha2Ug
+aXQgaW1wb3NzaWJsZSB0byBwcm92aWRlIGEgY29uc2lzdGVudCB2aWV3IG9mIHRoZQo+ID4gb3V0
+c2lkZQo+ID4gPiA+ID4gPiB3b3JsZC4gIEluIHRoZSBjb21tb24gY2FzZSB3aGVyZSB0aGUgdXNl
+IGNhc2UgaW50ZXJhY3RzIHdpdGggdGhlCj4gPiA+ID4gPiA+IG91dHNpZGUgd29ybGQsIHRoZSBh
+bGdvcml0aG1zIGFic29sdXRlbHkgbXVzdCBiZSBkZXNpZ25lZCB0bwo+ID4gdG9sZXJhdGUKPiA+
+ID4gPiA+ID4gaW5jb25zaXN0ZW5jeSwgd2hpY2ggb3BlbnMgdGhlIGRvb3IgdG8gdGhpbmdzIGxp
+a2UgUkNVLgo+ID4gPiA+ID4KPiA+ID4gPiA+IEkgYW0gY29uZnVzZWQgaGVyZS4gSSB0aGluayBz
+cGVlZC1vZi1saWdodCBkZWxheXMgaGFwcGVuIGV2ZXJ5d2hlcmUsCj4gPiBub3QKPiA+ID4gPiA+
+IG9ubHkgYm91bmQgdG8gUkNVLCBidXQgYWxzbyAgYW55IG90aGVyIHN5bmNocm9uaXphdGlvbiBh
+cHByb2FjaCAoc3VjaAo+ID4gPiA+IFJMVSkuCj4gPiA+ID4gPiBJZiBzbywgaG93IGRvIG90aGVy
+cyAoUkxVKSBwcm92aWRlIGNvbnNpc3RlbnQgdmlld3M/Cj4gPiA+ID4KPiA+ID4gPiBZb3UganVz
+dCBzdGF0ZWQgdGhlIGFuc3dlci4gIE5vdyBpdCBpcyBvbmx5IG5lY2Vzc2FyeSBmb3IgeW91IHRv
+IGludmVzdAo+ID4gPiA+IHRoZSB0aW1lLCBlZmZvcnQsIGFuZCB0aG91Z2h0IHRvIGZ1bGx5IHVu
+ZGVyc3RhbmQgaXQuICBUbyBoZWxwIHdpdGgKPiA+IHRoaXMsCj4gPiA+ID4gdGhlIGZvbGxvd2lu
+ZyBwYXJhZ3JhcGggcHJvdmlkZXMgYW5vdGhlciBoaW50Ogo+ID4gPiA+Cj4gPiA+ID4gICAgICAg
+ICBZZXMsIHlvdSBhcmUgcXVpdGUgcmlnaHQsIHNwZWVkLW9mLWxpZ2h0IGRlbGF5cyBiZXR3ZWVu
+IHRoZQo+ID4gPiA+ICAgICAgICAgb3V0c2lkZSB3b3JsZCBhbmQgdGhlIGNvbXB1dGVyIGFmZmVj
+dCBSTFUganVzdCBhcyBzdXJlbHkgYXMKPiA+IHRoZXkKPiA+ID4gPiAgICAgICAgIGRvIFJDVS4g
+IFRoaXMgbWVhbnMgdGhhdCB0aGUgYWRkaXRpb25hbCBjb25zaXN0ZW5jeSBndWFyYW50ZWVzCj4g
+PiA+ID4gICAgICAgICBwcm92aWRlZCBieSBSTFUgbXVzdCBuZWNlc3NhcmlseSBiZSBsaW1pdGVk
+IHRvIHRoZSBjb25maW5lcyBvZgo+ID4gdGhlCj4gPiA+ID4gICAgICAgICBjb21wdXRlciBzeXN0
+ZW0gaW4gcXVlc3Rpb24uICBUYWtpbmcgdGhpcyBvbmUgc3RlcCBmdXJ0aGVyLAo+ID4gdGhlcmUK
+PiA+ID4gPiAgICAgICAgIGFyZSBhbHNvIHNwZWVkLW9mLWxpZ2h0IGRlbGF5cyB3aXRoaW4gdGhl
+IGNvbXB1dGVyLiAgVGhlcmVmb3JlLAo+ID4gPiA+ICAgICAgICAgaW4gdGhlIGdlbmVyYWwgY2Fz
+ZSwgUkxVIGNhbiBwcm92aWRlIGl0cyBjb25zaXN0ZW5jeQo+ID4gZ3VhcmFudGVlcywKPiA+ID4g
+PiAgICAgICAgIGV2ZW4gd2l0aGluIHRoZSBjb25maW5lcyBvZiB0aGUgY29tcHV0ZXIgc3lzdGVt
+LCBvbmx5IGF0IHRoZQo+ID4gPiA+ICAgICAgICAgZXhwZW5zZSBvZiBpbmN1cnJpbmcgZGVsYXlz
+LiAgQmVjYXVzZSBSQ1UgZG9lcyBub3QgcHJvdmlkZQo+ID4gUkxVJ3MKPiA+ID4gPiAgICAgICAg
+IGNvbnNpc3RlbmN5IGd1YXJhbnRlZXMsIGl0IG5lZWQgbm90IGluY3VyIFJMVSdzIGRlbGF5cy4K
+PiA+ID4gPgo+ID4gPiA+IFRoaXMgaXMgbm90IGEgbmV3IGxpbmUgb2YgcmVhc29uaW5nLCBzZWUg
+Zm9yIGV4YW1wbGU6Cj4gPiA+ID4KPiA+ID4gPiBAYXJ0aWNsZXtIZXJsaWh5OjE5OTY6TENOOjEw
+NjMzNjkuMTA2MzM3Mgo+ID4gPiA+ICxhdXRob3IgPSB7SGVybGloeSwgTWF1cmljZSBhbmQgU2hh
+dml0LCBOaXIgYW5kIFdhYXJ0cywgT3JsaX0KPiA+ID4gPiAsdGl0bGUgPSB7TGluZWFyaXphYmxl
+IGNvdW50aW5nIG5ldHdvcmtzfQo+ID4gPiA+ICxqb3VybmFsID0ge0Rpc3RyaWIuIENvbXB1dC59
+Cj4gPiA+ID4gLHZvbHVtZSA9IHs5fQo+ID4gPiA+ICxpc3N1ZSA9IHs0fQo+ID4gPiA+ICxtb250
+aCA9IHtGZWJydWFyeX0KPiA+ID4gPiAseWVhciA9IHsxOTk2fQo+ID4gPiA+ICxpc3NuID0gezAx
+NzgtMjc3MH0KPiA+ID4gPiAscGFnZXMgPSB7MTkzLS0yMDN9Cj4gPiA+ID4gLG51bXBhZ2VzID0g
+ezExfQo+ID4gPiA+ICx1cmwgPSB7aHR0cDovL3BvcnRhbC5hY20ub3JnL2NpdGF0aW9uLmNmbT9p
+ZD0xMDYzMzY5LjEwNjMzNzJ9Cj4gPiA+ID4gLGRvaSA9IHsxMC4xMDA3L3MwMDQ0NjAwNTAwMTl9
+Cj4gPiA+ID4gLGFjbWlkID0gezEwNjMzNzJ9Cj4gPiA+ID4gLHB1Ymxpc2hlciA9IHtTcHJpbmdl
+ci1WZXJsYWd9Cj4gPiA+ID4gLGFkZHJlc3MgPSB7TG9uZG9uLCBVS30KPiA+ID4gPiAsa2V5d29y
+ZHMgPSB7Y29uY3VycmVuY3ksIGNvbnRlbnRpb24sIGNvdW50aW5nIG5ldHdvcmtzLCBkYXRhCj4g
+PiBzdHJ1Y3R1cmVzLAo+ID4gPiA+IGxpbmVhcml6YWJpbGl0eX0KPiA+ID4gPiB9Cj4gPiA+ID4K
+PiA+ID4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIFRoYW54LCBQYXVsCj4gPiA+ID4KPiA+ID4gPiA+IFRoYW5rcyBmb3IgeW91ciBlZHVj
+YXRpb24uCj4gPiA+ID4gPiBZdXhpbgo+ID4gPiA+ID4KPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4g
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBU
+aGFueCwgUGF1bAo+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+IFRoYW5rcwo+ID4gPiA+ID4gPiA+
+IFl1eGluCj4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiBPbiBGcmksIERlYyA2LCAyMDE5IGF0
+IDExOjMwIEFNIFBhdWwgRS4gTWNLZW5uZXkgPAo+ID4gcGF1bG1ja0BrZXJuZWwub3JnCj4gPiA+
+ID4gPgo+ID4gPiA+ID4gPiB3cm90ZToKPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+ID4gT24g
+RnJpLCBEZWMgMDYsIDIwMTkgYXQgMTA6NTk6MDVBTSAtMDUwMCwgTWF0aGlldSBEZXNub3llcnMK
+PiA+IHdyb3RlOgo+ID4gPiA+ID4gPiA+ID4gPiAtLS0tLSBPbiBEZWMgNiwgMjAxOSwgYXQgMzo1
+MSBQTSwgWXV4aW4gUmVuIDwKPiA+IHJ5eEBnd21haWwuZ3d1LmVkdT4KPiA+ID4gPiA+ID4gd3Jv
+dGU6Cj4gPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiA+ID4gT24gRnJpLCBEZWMgNiwg
+MjAxOSBhdCA1OjQ5IEFNIE1hdGhpZXUgRGVzbm95ZXJzIDwgWwo+ID4gPiA+ID4gPiA+ID4gPiA+
+IG1haWx0bzptYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20gfAo+ID4gPiA+ID4gPiBtYXRo
+aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20KPiA+ID4gPiA+ID4gPiA+IF0gPgo+ID4gPiA+ID4g
+PiA+ID4gPiA+IHdyb3RlOgo+ID4gPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+ID4gPiA+PiAt
+LS0tLSBPbiBEZWMgNSwgMjAxOSwgYXQgODoxNyBQTSwgWXV4aW4gUmVuIDwgWyBtYWlsdG86Cj4g
+PiA+ID4gPiA+ID4gPiByeXhAZ3dtYWlsLmd3dS5lZHUgfAo+ID4gPiA+ID4gPiA+ID4gPiA+PiBy
+eXhAZ3dtYWlsLmd3dS5lZHUgXSA+IHdyb3RlOgo+ID4gPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4g
+PiA+ID4gPiA+Pj4gSGksCj4gPiA+ID4gPiA+ID4gPiA+ID4+PiBJIGFtIGEgc3R1ZGVudCwgYW5k
+IGxlYXJuaW5nIFJDVSBub3csIGJ1dCBzdGlsbCBrbm93IHZlcnkKPiA+ID4gPiBsaXR0bGUKPiA+
+ID4gPiA+ID4gPiA+IGFib3V0IGl0Lgo+ID4gPiA+ID4gPiA+ID4gPiA+Pj4gQXJlIHRoZXJlIGFu
+eSBkb2N1bWVudHMvcGFwZXJzL21hdGVyaWFscyB3aGljaAo+ID4gKGluKWZvcm1hbGx5Cj4gPiA+
+ID4gPiA+IGRlZmluZQo+ID4gPiA+ID4gPiA+ID4gYW5kIGV4cGxhaW4KPiA+ID4gPiA+ID4gPiA+
+ID4gPj4+IFJDVSBjb25zaXN0ZW5jeSBndWFyYW50ZWVzPwo+ID4gPiA+ID4gPiA+ID4gPgo+ID4g
+PiA+ID4gPiA+ID4gPiA+PiBZb3UgbWF5IHdhbnQgdG8gaGF2ZSBhIGxvb2sgYXQKPiA+ID4gPiA+
+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+ID4gPj4gVXNlci1MZXZlbCBJbXBsZW1lbnRhdGlvbnMg
+b2YgUmVhZC1Db3B5IFVwZGF0ZQo+ID4gPiA+ID4gPiA+ID4gPiA+PiBBcnRpY2xlIGluIElFRUUg
+VHJhbnNhY3Rpb25zIG9uIFBhcmFsbGVsIGFuZCBEaXN0cmlidXRlZAo+ID4gPiA+IFN5c3RlbXMK
+PiA+ID4gPiA+ID4gPiA+IDIzKDIpOjM3NSAtIDM4Mgo+ID4gPiA+ID4gPiA+ID4gPiA+PiDCtyBN
+YXJjaCAyMDEyCj4gPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiA+ID4gVGhhbmtzIGZv
+ciB5b3VyIGluZm8uCj4gPiA+ID4gPiA+ID4gPiA+ID4gSG93ZXZlciwgSSBkbyBub3QgdGhpbmsg
+VVJDVSB0YWxrcyBhYm91dCBhbnkgY29uc2lzdGVuY3kKPiA+IG1vZGVsCj4gPiA+ID4gPiA+ID4g
+PiBmb3JtYWxseS4KPiA+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+ID4gPiBGcm9tIHBy
+ZXZpb3VzIGNvbW11bmljYXRpb24gd2l0aCBQYXVsLCBoZSBzYWlkIFJDVSBpcyBub3QKPiA+ID4g
+PiBkZXNpZ25lZAo+ID4gPiA+ID4gPiBmb3IKPiA+ID4gPiA+ID4gPiA+ID4gPiBsaW5lYXJpemFi
+aWxpdHksIGFuZCBpdCBpcyB0b3RhbGx5IGFjY2VwdGFibGUgdGhhdCBSQ1UgaXMKPiA+IG5vdAo+
+ID4gPiA+ID4gPiA+ID4gbGluZWFyaXphYmxlLgo+ID4gPiA+ID4gPiA+ID4gPiA+IEhvd2V2ZXIs
+IEkgYW0gY3VyaW91cyBob3cgdG8gYWNjdXJhdGVseS9mb3JtYWxseQo+ID4gQ2hhcmFjdGVyaXpl
+Cj4gPiA+ID4gUkNVCj4gPiA+ID4gPiA+ID4gPiBjb25zaXN0ZW5jeQo+ID4gPiA+ID4gPiA+ID4g
+PiA+IG1vZGVsL2d1YXJhbnRlZXMKPiA+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+ID4g
+QWRkaW5nIFBhdWwgRS4gTWNLZW5uZXkgaW4gQ0MuCj4gPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4g
+PiA+ID4gPiA+IEkgYW0gcmVmZXJyaW5nIHRvIHRoZSBzZWN0aW9uICJPdmVydmlldyBvZiBSQ1Ug
+c2VtYW50aWNzIiBpbgo+ID4gdGhlCj4gPiA+ID4gPiA+IHBhcGVyLgo+ID4gPiA+ID4gPiA+ID4g
+Tm90IHN1cmUgaXQgaGFzIHRoZSBsZXZlbCBvZgo+ID4gPiA+ID4gPiA+ID4gPiBmb3JtYWxpdHkg
+eW91IGFyZSBsb29raW5nIGZvciB0aG91Z2guIFBhdWwsIGRvIHlvdSBoYXZlCj4gPiBwb2ludGVy
+cwo+ID4gPiA+IHRvCj4gPiA+ID4gPiA+ID4gPiBhZGRpdGlvbmFsIG1hdGVyaWFsID8KPiA+ID4g
+PiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiBJbmRlZWQgSSBkbyEgIFRoZSBMaW51eCBrZXJuZWwg
+bWVtb3J5IG1vZGVsIChMS01NKSBpbmNsdWRlcwo+ID4gUkNVLgo+ID4gPiA+IEl0IGlzCj4gPiA+
+ID4gPiA+ID4gPiBpbiB0b29scy9tZW1vcnktbW9kZWwgaW4gcmVjZW50IGtlcm5lbCBzb3VyY2Ug
+dHJlZXMsIHdoaWNoCj4gPiBpbmNsdWRlcwo+ID4gPiA+ID4gPiA+ID4gZG9jdW1lbnRhdGlvbi4g
+IFRoaXMgaXMgYW4gZXhlY3V0YWJsZSBtb2RlbCwgd2hpY2ggbWVhbnMgdGhhdAo+ID4geW91Cj4g
+PiA+ID4gPiA+ID4gPiBjYW4gY3JlYXRlIGxpdG11cyB0ZXN0cyBhbmQgaGF2ZSB0aGUgbW9kZWwg
+Zm9ybWFsbHkgYW5kCj4gPiA+ID4gYXV0b21hdGljYWxseQo+ID4gPiA+ID4gPiA+ID4gZXZhbHVh
+dGUgdGhlbS4KPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiBUaGVyZSBhcmUgYWxzbyBh
+IG51bWJlciBvZiBwdWJsaWNhdGlvbnMgY292ZXJpbmcgTEtNTToKPiA+ID4gPiA+ID4gPiA+Cj4g
+PiA+ID4gPiA+ID4gPiBvICAgICAgIEEgZm9ybWFsIGtlcm5lbCBtZW1vcnktb3JkZXJpbmcgbW9k
+ZWwKPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgaHR0cHM6Ly9sd24ubmV0L0FydGljbGVzLzcxODYy
+OC8KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgaHR0cHM6Ly9sd24ubmV0L0FydGljbGVzLzcyMDU1
+MC8KPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIFRoZXNlIGNvdmVyIHRo
+ZSByZWxlYXNlIHN0b3JlcyBhbmQgZGVwZW5kZW5jeSBvcmRlcmluZwo+ID4gdGhhdAo+ID4gPiA+
+ID4gPiA+ID4gICAgICAgICBwcm92aWRlIFJDVSdzIHB1Ymxpc2gtc3Vic2NyaWJlIGd1YXJhbnRl
+ZXMuCj4gPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+ID4gICAgICAgICBCYWNrdXAgbWF0ZXJp
+YWwgaGVyZToKPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+ID4K
+PiA+ID4gPiA+ID4KPiA+ID4gPgo+ID4gaHR0cHM6Ly9taXJyb3JzLmVkZ2Uua2VybmVsLm9yZy9w
+dWIvbGludXgva2VybmVsL3Blb3BsZS9wYXVsbWNrL0xXTkxpbnV4TU0vCj4gPiA+ID4gPiA+ID4g
+Pgo+ID4gPiA+ID4gPiA+ID4gICAgICAgICBXaXRoIHRoZXNlIHR3byBsaWtlbHkgYmVpbmcgb2Yg
+cGFydGljdWxhciBpbnRlcmVzdDoKPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPgo+ID4g
+PiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4KPiA+ID4gPgo+ID4gaHR0cHM6Ly9taXJyb3JzLmVkZ2Uu
+a2VybmVsLm9yZy9wdWIvbGludXgva2VybmVsL3Blb3BsZS9wYXVsbWNrL0xXTkxpbnV4TU0vUkNV
+Z3VhcmFudGVlcy5odG1sCj4gPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+
+ID4KPiA+ID4gPgo+ID4gaHR0cHM6Ly9taXJyb3JzLmVkZ2Uua2VybmVsLm9yZy9wdWIvbGludXgv
+a2VybmVsL3Blb3BsZS9wYXVsbWNrL0xXTkxpbnV4TU0vc3JjdS5odG1sCj4gPiA+ID4gPiA+ID4g
+Pgo+ID4gPiA+ID4gPiA+ID4gbyAgICAgICBGcmlnaHRlbmluZyBTbWFsbCBDaGlsZHJlbiBhbmQg
+RGlzY29uY2VydGluZyBHcm93bi11cHM6Cj4gPiA+ID4gPiA+ID4gPiBDb25jdXJyZW5jeSBpbiB0
+aGUgTGludXggS2VybmVsCj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIGh0dHBzOi8vZGwuYWNtLm9y
+Zy9jaXRhdGlvbi5jZm0/aWQ9MzE3NzE1Ngo+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiBodHRwOi8v
+d3d3MC5jcy51Y2wuYWMudWsvc3RhZmYvai5hbGdsYXZlL3BhcGVycy9hc3Bsb3MxOC5wZGYKPiA+
+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIEJhY2t1cCBtYXRlcmlhbDoKPiA+
+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIGh0dHA6Ly9kaXkuaW5yaWEuZnIv
+bGludXgvCj4gPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+ID4gbyAgICAgICBXaG8ncyBhZnJh
+aWQgb2YgYSBiaWcgYmFkIG9wdGltaXppbmcgY29tcGlsZXI/Cj4gPiA+ID4gPiA+ID4gPiAgICAg
+ICAgIGh0dHBzOi8vbHduLm5ldC9BcnRpY2xlcy83OTMyNTMvCj4gPiA+ID4gPiA+ID4gPgo+ID4g
+PiA+ID4gPiA+ID4gbyAgICAgICBDYWxpYnJhdGluZyB5b3VyIGZlYXIgb2YgYmlnIGJhZCBvcHRp
+bWl6aW5nIGNvbXBpbGVycwo+ID4gPiA+ID4gPiA+ID4gICAgICAgICBodHRwczovL2x3bi5uZXQv
+QXJ0aWNsZXMvNzk5MjE4Lwo+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+ICAgICAgICAg
+VGhlc2UgbGFzdCB0d28ganVzdGlmeSB1c2Ugb2Ygbm9ybWFsIEMtbGFuZ3VhZ2UKPiA+IGFzc2ln
+bm1lbnQKPiA+ID4gPiA+ID4gPiA+ICAgICAgICAgc3RhdGVtZW50cyB0byBpbml0aWFsaXplIGFu
+ZCBhY2Nlc3MgZGF0YSByZWZlcmVuY2VkIGJ5Cj4gPiA+ID4gPiA+ID4gPiAgICAgICAgIFJDVS1w
+cm90ZWN0ZWQgcG9pbnRlcnMuCj4gPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+ID4gVGhlcmUg
+aXMgYSBsYXJnZSBib2R5IG9mIGxpdG11cyB0ZXN0cyAodGhvdXNhbmRzIG9mIHRoZW0pIGhlcmU6
+Cj4gPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+ID4gICAgICAgICBodHRwczovL2dpdGh1Yi5j
+b20vcGF1bG1ja3JjdS9saXRtdXMKPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiBNYW55
+IG9mIHRoZXNlIGxpdG11cyB0ZXN0cyBpbnZvbHZlIFJDVSwgYW5kIHRoZXNlIGNhbiBiZQo+ID4g
+bG9jYXRlZCBieQo+ID4gPiA+ID4gPiA+ID4gc2VhcmNoIGZvciBmaWxlcyBjb250YWluaW5nIHJj
+dV9yZWFkX2xvY2soKSwgcmN1X3JlYWRfdW5sb2NrKCksCj4gPiA+ID4gPiA+ID4gPiBzeW5jaHJv
+bml6ZV9yY3UoKSwgYW5kIHNvIG9uLgo+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+IE9y
+IHdlcmUgeW91IGxvb2tpbmcgZm9yIHNvbWV0aGluZyBlbHNlPwo+ID4gPiA+ID4gPiA+ID4KPiA+
+ID4gPiA+ID4gPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgVGhhbngsCj4gPiBQYXVsCj4gPiA+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+
+ID4gPiBUaGFua3MsCj4gPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiA+IE1hdGhpZXUK
+PiA+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+ID4gPj4gYXMgYSBzdGFydGluZyBwb2lu
+dC4KPiA+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+ID4gPj4gVGhhbmtzLAo+ID4gPiA+
+ID4gPiA+ID4gPgo+ID4gPiA+ID4gPiA+ID4gPiA+PiBNYXRoaWV1Cj4gPiA+ID4gPiA+ID4gPiA+
+Cj4gPiA+ID4gPiA+ID4gPiA+ID4+PiBJIGtub3cgdGhlcmUgYXJlIHNvbWUgY29uc2lzdGVuY3kg
+bW9kZWxzIGluIHRoZSBkYXRhYmFzZQo+ID4gYXJlYQo+ID4gPiA+ID4gPiAoc3VjaAo+ID4gPiA+
+ID4gPiA+ID4gYXMgUFJBTSwKPiA+ID4gPiA+ID4gPiA+ID4gPj4+IFJlYWQgVW5jb21taXR0ZWQs
+IGV0YykgZnJvbSBbCj4gPiBodHRwczovL2plcHNlbi5pby9jb25zaXN0ZW5jeQo+ID4gPiA+IHwK
+PiA+ID4gPiA+ID4gPiA+ID4gPj4+IGh0dHBzOi8vamVwc2VuLmlvL2NvbnNpc3RlbmN5IF0gYW5k
+IFsxXS4KPiA+ID4gPiA+ID4gPiA+ID4gPj4+IEhvdyBkb2VzIFJDVSByZWxhdGVkIHRvIHRob3Nl
+IGNvbnNpc3RlbmN5IG1vZGVscz8KPiA+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+ID4g
+Pj4+IEkgYWxzbyBmb3VuZCBzb21lIGNvbW1lbnRzIG9ubGluZSAoT25lIGtleSBkaXN0aW5jdGlv
+biBpcwo+ID4gPiA+IHRoYXQKPiA+ID4gPiA+ID4gYm90aAo+ID4gPiA+ID4gPiA+ID4gTVZDQyBh
+bmQgUkxVCj4gPiA+ID4gPiA+ID4gPiA+ID4+PiBwcm92aWRlIG11Y2ggc3Ryb25nZXIgY29uc2lz
+dGVuY3kgZ3VhcmFudGVlcyB0byByZWFkZXJzCj4gPiB0aGFuCj4gPiA+ID4gZG9lcwo+ID4gPiA+
+ID4gPiA+ID4gUkNVIC4uLikgKCBbCj4gPiA+ID4gPiA+ID4gPiA+ID4+PiBodHRwczovL2x3bi5u
+ZXQvQXJ0aWNsZXMvNzc3MDM2LyB8Cj4gPiA+ID4gPiA+IGh0dHBzOi8vbHduLm5ldC9BcnRpY2xl
+cy83NzcwMzYvCj4gPiA+ID4gPiA+ID4gPiBdICkuCj4gPiA+ID4gPiA+ID4gPiA+ID4+PiBJIGRv
+IG5vdCB1bmRlcnN0YW5kIGhvdyB3ZSByZWFzb24vZHJlc2liZS9jb21wYXJlIHRoZQo+ID4gPiA+
+IGNvbnNpc3RlbmN5Cj4gPiA+ID4gPiA+ID4gPiBndWFyYW50ZWVzLiAoCj4gPiA+ID4gPiA+ID4g
+PiA+ID4+PiBJIGV2ZW4gZG8gbm90IGtub3cgd2hhdCBjb25zaXN0ZW5jeSBndWFyYW50ZWVzIHBy
+b3ZpZGVkCj4gPiBieQo+ID4gPiA+IFJDVQo+ID4gPiA+ID4gPiA+ID4gZm9ybWFsbHkpCj4gPiA+
+ID4gPiA+ID4gPiA+ID4+PiBDb3VsZCBzb21lb25lIGV4cGxhaW4gdGhpcyB0byBtZT8KPiA+ID4g
+PiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+ID4gPj4+IFsxXSBCYWlsaXMsIFAuLCBEYXZpZHNv
+biwgQS4sIEZla2V0ZSwgQS4sIEdob2RzaSwgQS4sCj4gPiA+ID4gPiA+IEhlbGxlcnN0ZWluLAo+
+ID4gPiA+ID4gPiA+ID4gSi4gTS4sICYKPiA+ID4gPiA+ID4gPiA+ID4gPj4+IFN0b2ljYSwgSS4g
+KDIwMTMpLiBIaWdobHkgYXZhaWxhYmxlIHRyYW5zYWN0aW9uczoKPiA+IFZpcnR1ZXMgYW5kCj4g
+PiA+ID4gPiA+ID4gPiBsaW1pdGF0aW9ucy4KPiA+ID4gPiA+ID4gPiA+ID4gPj4+IFByb2NlZWRp
+bmdzIG9mIHRoZSBWTERCIEVuZG93bWVudCwgNygzKSwgMTgxLTE5Mi4KPiA+ID4gPiA+ID4gPiA+
+ID4KPiA+ID4gPiA+ID4gPiA+ID4gPj4+IFRoYW5rcwo+ID4gPiA+ID4gPiA+ID4gPiA+Pj4gWXV4
+aW4KPiA+ID4gPiA+ID4gPiA+ID4KPiA+ID4gPiA+ID4gPiA+ID4gPj4+IF9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiA+ID4gPiA+ID4gPiA+ID4+PiBs
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gPiA+ID4gPiA+ID4gPiA+ID4+PiBbIG1haWx0bzpsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnIHwKPiA+ID4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+IF0KPiA+ID4gPiA+ID4gPiA+ID4gPj4+IFsKPiA+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiA+ID4gPiB8Cj4gPiA+ID4gPiA+ID4g
+PiA+ID4+Pgo+ID4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldiBdCj4gPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+ID4gPiA+ID4+IC0t
+Cj4gPiA+ID4gPiA+ID4gPiA+ID4+IE1hdGhpZXUgRGVzbm95ZXJzCj4gPiA+ID4gPiA+ID4gPiA+
+ID4+IEVmZmljaU9TIEluYy4KPiA+ID4gPiA+ID4gPiA+ID4gPj4gWyBodHRwOi8vd3d3LmVmZmlj
+aW9zLmNvbS8gfCBodHRwOi8vd3d3LmVmZmljaW9zLmNvbSBdCj4gPiA+ID4gPiA+ID4gPiA+Cj4g
+PiA+ID4gPiA+ID4gPiA+IC0tCj4gPiA+ID4gPiA+ID4gPiA+IE1hdGhpZXUgRGVzbm95ZXJzCj4g
+PiA+ID4gPiA+ID4gPiA+IEVmZmljaU9TIEluYy4KPiA+ID4gPiA+ID4gPiA+ID4gaHR0cDovL3d3
+dy5lZmZpY2lvcy5jb20KPiA+ID4gPiA+ID4gPiA+Cj4gPiA+ID4gPiA+Cj4gPiA+ID4KPiA+Cl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
+YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
