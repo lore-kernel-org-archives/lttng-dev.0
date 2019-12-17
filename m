@@ -1,21 +1,17 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: Re: Fwd: [PATCH lttng-modules] Add UDP and ICMP packet
- header information to the tracepoint:
-Date: Tue, 17 Dec 2019 12:20:46 -0500
-Message-ID: <88c1b057-e920-433e-77b0-03dd04cd14de__35412.5898958714$1576603271$gmane$org@efficios.com>
-References: <20191113163814.31606-1-walbroel@silexica.com>
- <7b697030-2d01-90bf-0225-fe52b42e9cd0@silexica.com>
- <1666401048.8323.1576593591017.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules] fix: function prototype in
+ wrapper/mm.h
+Date: Tue, 17 Dec 2019 12:23:24 -0500 (EST)
+Message-ID: <1699019764.8836.1576603404679.JavaMail.zimbra__31959.259305016$1576603423$gmane$org@efficios.com>
+References: <20191217171111.6782-1-mjeanson@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 47clKC5m6Sz1BYm
- for <lttng-dev@lists.lttng.org>; Tue, 17 Dec 2019 12:20:47 -0500 (EST)
-In-Reply-To: <1666401048.8323.1576593591017.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 47clNF5f9Jz1BYn
+ for <lttng-dev@lists.lttng.org>; Tue, 17 Dec 2019 12:23:25 -0500 (EST)
+In-Reply-To: <20191217171111.6782-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,18 +21,38 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Florian Walbroel <walbroel@silexica.com>
-Cc: Julien Desfossez <ju@klipix.org>, lttng-dev <lttng-dev@lists.lttng.org>
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAxOS0xMi0xNyA5OjM5IGEubS4sIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOgo+IEkgd2Fz
-IGV4cGVjdGluZyByZXZpZXcgZnJvbSBHZW5ldmnDqHZlIGFuZCBKdWxpZW4gb24gdGhpcyBwYXRj
-aCwgYnV0Cj4gbmV2ZXIgaGVhcmQgYmFjayBmcm9tCj4gdGhlbS4KPiAKPiBHZW5ldmnDqHZlLCBK
-dWxpZW4sIE1pY2hhZWwsIGNhbiB5b3UgcmV2aWV3IHRoaXMgcGF0Y2ggcGxlYXNlID8KPiAKPiBU
-aGFua3MsCj4gCj4gTWF0aGlldQoKSXQgYnVpbGRzIG9uIGFsbCB0aGUgbGF0ZXN0IHRhZ3Mgb2Yg
-dGhlIHN0YWJsZSBrZXJuZWwgYnJhbmNoZXMgd2UKc3VwcG9ydCBhbmQgdGhlIHBhdGNoIGl0c2Vs
-ZiBsb29rcyBnb29kIHRvIG1lIGJ1dCBHZW5ldmnDqHZlJ3Mgb3IKSnVsaWVuJ3MgZmVlZGJhY2sg
-d291bGQgYmUgYXBwcmVjaWF0ZWQuCgpNaWNoYWVsCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
-dGluZm8vbHR0bmctZGV2Cg==
+Merged into master, 2.11, 2.10, thanks!
+
+Mathieu
+
+----- On Dec 17, 2019, at 12:11 PM, Michael Jeanson mjeanson@efficios.com wrote:
+
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+> wrapper/mm.h | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/wrapper/mm.h b/wrapper/mm.h
+> index 672855b..405248a 100644
+> --- a/wrapper/mm.h
+> +++ b/wrapper/mm.h
+> @@ -62,7 +62,7 @@ void wrapper_set_current_oom_origin(void)
+> }
+> 
+> static inline
+> -void wrapper_clear_current_oom_origin()
+> +void wrapper_clear_current_oom_origin(void)
+> {
+> 	return;
+> }
+> --
+> 2.17.1
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
