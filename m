@@ -1,19 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] fix: use user ns wrapper code
- in new id trackers
-Date: Tue, 17 Dec 2019 12:23:33 -0500 (EST)
-Message-ID: <1879153712.8837.1576603413126.JavaMail.zimbra__23148.9095532865$1576603457$gmane$org@efficios.com>
-References: <20191217171111.6782-1-mjeanson@efficios.com>
- <20191217171111.6782-2-mjeanson@efficios.com>
+From: Yogesh Chandolia via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: Regarding LTTNG support for Containers
+Date: Thu, 19 Dec 2019 12:11:38 +0530
+Message-ID: <4753e17ff492cb712eb9f7e14f950e9d__17161.3271160581$1576737776$gmane$org@mail.gmail.com>
+References: <fe80d2475543b3ab4fa449f4d06ee047@mail.gmail.com>
+ <20191216154013.GB29567@joraj-alpa>
+Reply-To: Yogesh Chandolia <yogesh.chandolia@globallogic.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 47clNQ03ZWz1BRT
- for <lttng-dev@lists.lttng.org>; Tue, 17 Dec 2019 12:23:33 -0500 (EST)
-In-Reply-To: <20191217171111.6782-2-mjeanson@efficios.com>
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
+ [IPv6:2607:f8b0:4864:20::12c])
+ by lists.lttng.org (Postfix) with ESMTPS id 47dj2v1GWHz1FhQ
+ for <lttng-dev@lists.lttng.org>; Thu, 19 Dec 2019 01:41:42 -0500 (EST)
+Received: by mail-il1-x12c.google.com with SMTP id f5so3935809ilq.5
+ for <lttng-dev@lists.lttng.org>; Wed, 18 Dec 2019 22:41:42 -0800 (PST)
+In-Reply-To: <20191216154013.GB29567@joraj-alpa>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,98 +25,69 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev@lists.lttng.org, Ankur Dauneria <ankur.dauneria@ericsson.com>, pratham.p.kumar@ericsson.com
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into master, thanks!
+Hi Jonathan,
 
-Mathieu
+We are planning to run the session daemon and consumer daemon from the
+host machine to fetch the trace points of application run inside
+container.
 
------ On Dec 17, 2019, at 12:11 PM, Michael Jeanson mjeanson@efficios.com wrote:
+Thanks & Regards,
+Yogesh
+Mobile: +91 9910094311
+Email: yogesh.chandolia@globallogic.com
+Skype ID: yogesh.chandolia@globalogicindia.onmicrosoft.com
 
-> These wrappers are required to translate kuid on kernels prior to v3.5.
-> 
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
-> probes/lttng-tracepoint-event-impl.h | 18 +++++++++---------
-> 1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/probes/lttng-tracepoint-event-impl.h
-> b/probes/lttng-tracepoint-event-impl.h
-> index 39454fb..321cdfa 100644
-> --- a/probes/lttng-tracepoint-event-impl.h
-> +++ b/probes/lttng-tracepoint-event-impl.h
-> @@ -11,7 +11,6 @@
-> #include <linux/rculist.h>
-> #include <asm/byteorder.h>
-> #include <linux/swab.h>
-> -#include <linux/uidgid.h>
-> 
-> #include <probes/lttng.h>
-> #include <probes/lttng-types.h>
-> @@ -20,6 +19,7 @@
-> #include <wrapper/ringbuffer/frontend_types.h>
-> #include <wrapper/ringbuffer/backend.h>
-> #include <wrapper/rcu.h>
-> +#include <wrapper/user_namespace.h>
-> #include <lttng-events.h>
-> #include <lttng-tracer-core.h>
-> #include <lttng-tp-mempool.h>
-> @@ -1146,19 +1146,19 @@ static void __event_probe__##_name(void *__data, _proto)
-> 		      \
-> 		return;							      \
-> 	__lf = lttng_rcu_dereference(__session->uid_tracker.p);		      \
-> 	if (__lf && likely(!lttng_id_tracker_lookup(__lf,		      \
-> -			from_kuid(&init_user_ns, current_uid()))))	      \
-> +			lttng_current_uid())))				      \
-> 		return;							      \
-> 	__lf = lttng_rcu_dereference(__session->vuid_tracker.p);	      \
-> 	if (__lf && likely(!lttng_id_tracker_lookup(__lf,		      \
-> -			from_kuid(current_user_ns(), current_uid()))))	      \
-> +			lttng_current_vuid())))				      \
-> 		return;							      \
-> 	__lf = lttng_rcu_dereference(__session->gid_tracker.p);		      \
-> 	if (__lf && likely(!lttng_id_tracker_lookup(__lf,		      \
-> -			from_kgid(&init_user_ns, current_gid()))))	      \
-> +			lttng_current_gid())))				      \
-> 		return;							      \
-> 	__lf = lttng_rcu_dereference(__session->vgid_tracker.p);	      \
-> 	if (__lf && likely(!lttng_id_tracker_lookup(__lf,		      \
-> -			from_kgid(current_user_ns(), current_gid()))))	      \
-> +			lttng_current_vgid())))				      \
-> 		return;							      \
-> 	__orig_dynamic_len_offset = this_cpu_ptr(&lttng_dynamic_len_stack)->offset; \
-> 	__dynamic_len_idx = __orig_dynamic_len_offset;			      \
-> @@ -1239,19 +1239,19 @@ static void __event_probe__##_name(void *__data)
-> 			      \
-> 		return;							      \
-> 	__lf = lttng_rcu_dereference(__session->uid_tracker.p);		      \
-> 	if (__lf && likely(!lttng_id_tracker_lookup(__lf,		      \
-> -			from_kuid(&init_user_ns, current_uid()))))	      \
-> +			lttng_current_uid())))				      \
-> 		return;							      \
-> 	__lf = lttng_rcu_dereference(__session->vuid_tracker.p);	      \
-> 	if (__lf && likely(!lttng_id_tracker_lookup(__lf,		      \
-> -			from_kuid(current_user_ns(), current_uid()))))	      \
-> +			lttng_current_vuid())))				      \
-> 		return;							      \
-> 	__lf = lttng_rcu_dereference(__session->gid_tracker.p);		      \
-> 	if (__lf && likely(!lttng_id_tracker_lookup(__lf,		      \
-> -			from_kgid(&init_user_ns, current_gid()))))	      \
-> +			lttng_current_gid())))				      \
-> 		return;							      \
-> 	__lf = lttng_rcu_dereference(__session->vgid_tracker.p);	      \
-> 	if (__lf && likely(!lttng_id_tracker_lookup(__lf,		      \
-> -			from_kgid(current_user_ns(), current_gid()))))	      \
-> +			lttng_current_vgid())))				      \
-> 		return;							      \
-> 	__orig_dynamic_len_offset = this_cpu_ptr(&lttng_dynamic_len_stack)->offset; \
-> 	__dynamic_len_idx = __orig_dynamic_len_offset;			      \
-> --
-> 2.17.1
+-----Original Message-----
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Sent: Monday, December 16, 2019 9:10 PM
+To: Yogesh Chandolia <yogesh.chandolia@globallogic.com>
+Cc: lttng-dev@lists.lttng.org; pratham.p.kumar@ericsson.com; Ankur
+Dauneria <ankur.dauneria@ericsson.com>
+Subject: Re: [lttng-dev] Regarding LTTNG support for Containers
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Hi,
+
+On Mon, Dec 16, 2019 at 12:39:33PM +0530, Yogesh Chandolia via lttng-dev
+wrote:
+> Hi Team,
+>
+>
+>
+> We are planning to use LTTng2.11 for tracing the application in
+> user-space using the LTTng-UST library only. Our application will run
+> in the container.
+
+Where do you plan on running the session daemon and consumer daemon?
+
+>
+> We have query regarding the support of LTTng-UST for the containerize
+> environment.
+>
+> Please let us know whether LTTng support the tracing for containerize
+> application. If yes, please share the documentation of LTTng-UST
+> support for container environment.
+>
+>
+> Thanks & Regards,
+>
+> Yogesh
+>
+> Mobile: +91 9910094311
+>
+> Email: yogesh.chandolia@globallogic.com
+>
+> Skype ID: yogesh.chandolia@globalogicindia.onmicrosoft.com
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+--
+Jonathan Rajotte-Julien
+EfficiOS
