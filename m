@@ -1,22 +1,22 @@
-From: Benjamin Poirier <benjamin.poirier@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [PATCH] doc: Fix bind address example for
  lttng-relayd
-Date: Tue, 7 Jan 2020 10:58:43 +0900
-Message-ID: <20200107015843.GA159599__38023.3379358955$1578362357$gmane$org@f3>
+Date: Tue, 7 Jan 2020 11:14:50 -0500 (EST)
+Message-ID: <502418586.3446.1578413690699.JavaMail.zimbra__36740.6927327224$1578413718$gmane$org@efficios.com>
 References: <20200106051954.138370-1-benjamin.poirier@gmail.com>
  <2006658589.17563.1578321593973.JavaMail.zimbra@efficios.com>
+ <20200107015843.GA159599@f3>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com
- [IPv6:2607:f8b0:4864:20::643])
- by lists.lttng.org (Postfix) with ESMTPS id 47sFsl59Qdz1ZkY
- for <lttng-dev@lists.lttng.org>; Mon,  6 Jan 2020 20:58:51 -0500 (EST)
-Received: by mail-pl1-x643.google.com with SMTP id c13so22556574pls.0
- for <lttng-dev@lists.lttng.org>; Mon, 06 Jan 2020 17:58:51 -0800 (PST)
-Content-Disposition: inline
-In-Reply-To: <2006658589.17563.1578321593973.JavaMail.zimbra@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 47scsY5jG5z1bKM
+ for <lttng-dev@lists.lttng.org>; Tue,  7 Jan 2020 11:14:57 -0500 (EST)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 2ED876945FF
+ for <lttng-dev@lists.lttng.org>; Tue,  7 Jan 2020 11:14:51 -0500 (EST)
+In-Reply-To: <20200107015843.GA159599@f3>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,40 +26,43 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Benjamin Poirier <benjamin.poirier@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On 2020/01/06 09:39, Mathieu Desnoyers wrote:
-> ----- On Jan 6, 2020, at 12:19 AM, Benjamin Poirier benjamin.poirier@gmail.com wrote:
-> 
-> > INADDR_ANY is 0.0.0.0
-> 
-> Hi Benjamin,
-> 
-> Double-checking this seems to confirm what the man page states:
-> 
-> % lttng-relayd -b
-> % netstat -lnp | grep lttng-relayd
-> tcp        0      0 0.0.0.0:5342            0.0.0.0:*               LISTEN      4445/lttng-relayd   
-> tcp        0      0 0.0.0.0:5343            0.0.0.0:*               LISTEN      4445/lttng-relayd   
-> tcp        0      0 127.0.0.1:5344          0.0.0.0:*               LISTEN      4445/lttng-relayd   
-> unix  2      [ ACC ]     STREAM     LISTENING     56508    4445/lttng-relayd    /home/compudj/.lttng/relayd/health-4445
-> 
-> Based on this output, the "live" port of the relayd daemon appears to be listening
-> only on 127.0.0.1 by default.
-
-That's right but not relevant to this patch. The part of the man page
-changed by this patch is not stating the defaults.
-
-> 
-> What makes you think the man page needs to be updated ?
-
-The part of the man page changed by this patch is:
-	If a user is within a secured network and/or has proper firewall
-	settings, lttng-relayd can listen to LTTng live connections from
-	all network interfaces by specifying
-	--live-port=tcp://localhost:5344.
-
-That is incorrect. To listen for connections to all addresses on the host,
-the socket has to be bound to INADDR_ANY, 0.0.0.0.
+LS0tLS0gT24gSmFuIDYsIDIwMjAsIGF0IDg6NTggUE0sIEJlbmphbWluIFBvaXJpZXIgYmVuamFt
+aW4ucG9pcmllckBnbWFpbC5jb20gd3JvdGU6Cgo+IE9uIDIwMjAvMDEvMDYgMDk6MzksIE1hdGhp
+ZXUgRGVzbm95ZXJzIHdyb3RlOgo+PiAtLS0tLSBPbiBKYW4gNiwgMjAyMCwgYXQgMTI6MTkgQU0s
+IEJlbmphbWluIFBvaXJpZXIgYmVuamFtaW4ucG9pcmllckBnbWFpbC5jb20KPj4gd3JvdGU6Cj4+
+IAo+PiA+IElOQUREUl9BTlkgaXMgMC4wLjAuMAo+PiAKPj4gSGkgQmVuamFtaW4sCj4+IAo+PiBE
+b3VibGUtY2hlY2tpbmcgdGhpcyBzZWVtcyB0byBjb25maXJtIHdoYXQgdGhlIG1hbiBwYWdlIHN0
+YXRlczoKPj4gCj4+ICUgbHR0bmctcmVsYXlkIC1iCj4+ICUgbmV0c3RhdCAtbG5wIHwgZ3JlcCBs
+dHRuZy1yZWxheWQKPj4gdGNwICAgICAgICAwICAgICAgMCAwLjAuMC4wOjUzNDIgICAgICAgICAg
+ICAwLjAuMC4wOiogICAgICAgICAgICAgICBMSVNURU4KPj4gNDQ0NS9sdHRuZy1yZWxheWQKPj4g
+dGNwICAgICAgICAwICAgICAgMCAwLjAuMC4wOjUzNDMgICAgICAgICAgICAwLjAuMC4wOiogICAg
+ICAgICAgICAgICBMSVNURU4KPj4gNDQ0NS9sdHRuZy1yZWxheWQKPj4gdGNwICAgICAgICAwICAg
+ICAgMCAxMjcuMC4wLjE6NTM0NCAgICAgICAgICAwLjAuMC4wOiogICAgICAgICAgICAgICBMSVNU
+RU4KPj4gNDQ0NS9sdHRuZy1yZWxheWQKPj4gdW5peCAgMiAgICAgIFsgQUNDIF0gICAgIFNUUkVB
+TSAgICAgTElTVEVOSU5HICAgICA1NjUwOCAgICA0NDQ1L2x0dG5nLXJlbGF5ZAo+PiAvaG9tZS9j
+b21wdWRqLy5sdHRuZy9yZWxheWQvaGVhbHRoLTQ0NDUKPj4gCj4+IEJhc2VkIG9uIHRoaXMgb3V0
+cHV0LCB0aGUgImxpdmUiIHBvcnQgb2YgdGhlIHJlbGF5ZCBkYWVtb24gYXBwZWFycyB0byBiZQo+
+PiBsaXN0ZW5pbmcKPj4gb25seSBvbiAxMjcuMC4wLjEgYnkgZGVmYXVsdC4KPiAKPiBUaGF0J3Mg
+cmlnaHQgYnV0IG5vdCByZWxldmFudCB0byB0aGlzIHBhdGNoLiBUaGUgcGFydCBvZiB0aGUgbWFu
+IHBhZ2UKPiBjaGFuZ2VkIGJ5IHRoaXMgcGF0Y2ggaXMgbm90IHN0YXRpbmcgdGhlIGRlZmF1bHRz
+Lgo+IAo+PiAKPj4gV2hhdCBtYWtlcyB5b3UgdGhpbmsgdGhlIG1hbiBwYWdlIG5lZWRzIHRvIGJl
+IHVwZGF0ZWQgPwo+IAo+IFRoZSBwYXJ0IG9mIHRoZSBtYW4gcGFnZSBjaGFuZ2VkIGJ5IHRoaXMg
+cGF0Y2ggaXM6Cj4JSWYgYSB1c2VyIGlzIHdpdGhpbiBhIHNlY3VyZWQgbmV0d29yayBhbmQvb3Ig
+aGFzIHByb3BlciBmaXJld2FsbAo+CXNldHRpbmdzLCBsdHRuZy1yZWxheWQgY2FuIGxpc3RlbiB0
+byBMVFRuZyBsaXZlIGNvbm5lY3Rpb25zIGZyb20KPglhbGwgbmV0d29yayBpbnRlcmZhY2VzIGJ5
+IHNwZWNpZnlpbmcKPgktLWxpdmUtcG9ydD10Y3A6Ly9sb2NhbGhvc3Q6NTM0NC4KPiAKPiBUaGF0
+IGlzIGluY29ycmVjdC4gVG8gbGlzdGVuIGZvciBjb25uZWN0aW9ucyB0byBhbGwgYWRkcmVzc2Vz
+IG9uIHRoZSBob3N0LAo+IHRoZSBzb2NrZXQgaGFzIHRvIGJlIGJvdW5kIHRvIElOQUREUl9BTlks
+IDAuMC4wLjAuCgpPaCEgR29vZCBwb2ludC4gSSB3YXMgbWlzc2luZyB0aGUgY29udGV4dC4gWWVz
+IHRoaXMgY2hhbmdlIG1ha2VzIHNlbnNlLgoKQWNrZWQtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxt
+YXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CgpKw6lyw6ltaWUgaXMgb24gdmFjYXRpb24g
+dGhpcyB3ZWVrLCBzbyB3ZSBjYW4gZXhwZWN0IGl0IHRvIGJlIG1lcmdlZApzb21ld2hlcmUgbmV4
+dCB3ZWVrLgoKVGhhbmtzLAoKTWF0aGlldQoKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lP
+UyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
