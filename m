@@ -1,19 +1,21 @@
-From: Simon Marchi <simark@simark.ca>
-Subject: Re: lttng-tools - 2.11 failed: checking for
- _cds_lfht_new in -lurcu-cds... no configure: error: Userspace RCU (liburcu)
- >= 0.9.0 is needed
-Date: Mon, 13 Jan 2020 18:17:04 -0500
-Message-ID: <7854cb68-3c96-df75-748e-d1ad67b5c161__21499.0998197877$1578957960$gmane$org@simark.ca>
-References: <CAJYn_wgCq43GDRmiaZHrT5vvax6-nD=aWpuxiKXLSZEA4H_TZw@mail.gmail.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH] doc: Fix bind address example for
+ lttng-relayd
+Date: Tue, 14 Jan 2020 19:45:13 -0500
+Message-ID: <20200115004513.GA61030@gmail.com>
+References: <20200106051954.138370-1-benjamin.poirier@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 47xV4z0dlMz1hVV
- for <lttng-dev@lists.lttng.org>; Mon, 13 Jan 2020 18:23:14 -0500 (EST)
-In-Reply-To: <CAJYn_wgCq43GDRmiaZHrT5vvax6-nD=aWpuxiKXLSZEA4H_TZw@mail.gmail.com>
-Content-Language: tl
+Received: from mail-qv1-f68.google.com (mail-qv1-f68.google.com
+ [209.85.219.68])
+ by lists.lttng.org (Postfix) with ESMTPS id 47y7s91h1mz1jCg
+ for <lttng-dev@lists.lttng.org>; Tue, 14 Jan 2020 19:45:17 -0500 (EST)
+Received: by mail-qv1-f68.google.com with SMTP id x1so6629195qvr.8
+ for <lttng-dev@lists.lttng.org>; Tue, 14 Jan 2020 16:45:17 -0800 (PST)
+Content-Disposition: inline
+In-Reply-To: <20200106051954.138370-1-benjamin.poirier@gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,49 +25,49 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: bhanu kiran chaluvadi <nthdimensionalreality@gmail.com>, lttng-dev@lists.lttng.org
+To: Benjamin Poirier <benjamin.poirier@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAyMC0wMS0xMyA1OjQ3IHAubS4sIGJoYW51IGtpcmFuIGNoYWx1dmFkaSB3cm90ZToKPiBI
-aSwKPiAKPiBJIGFtIHRyeWluZyB0byBjcm9zcyBjb21waWxlIGx0dG5nLXRvb2xzIHRvIGhvc3Q6
-IGk2ODYtcGMtbGludXgtZ251KGRlZGlhbiA4IC0gamVzc2llICnCoCBmcm9tIGJ1aWxkOsKgeDg2
-XzY0LXBjLWxpbnV4LWdudSAodWJ1bnR1IC0gMTguMDQpLgo+IAo+IAo+IGV4cG9ydCBQQVRIPS9v
-cHQveC10b29scy9iaW46JFBBVEgKPiBleHBvcnQgU1lTUk9PVD0vb3B0L3gtdG9vbHMvaTY4Ni1w
-Yy1saW51eC1nbnUvc3lzcm9vdAo+IAo+IGV4cG9ydCBQS0dfQ09ORklHX1BBVEg9JHtTWVNST09U
-fS91c3IvbG9jYWwvbGliL3BrZ2NvbmZpZwo+IGV4cG9ydCBhY19jdl9mdW5jX21hbGxvY18wX25v
-bm51bGw9eWVzIGFjX2N2X2Z1bmNfcmVhbGxvY18wX25vbm51bGw9eWVzCj4gZXhwb3J0IEhPU1Q9
-aTY4Ni1wYy1saW51eC1nbnUKPiAKPiBleHBvcnRDUFBGTEFHUz0iLUkkU1lTUk9PVC91c3IvbG9j
-YWwvaW5jbHVkZSIKPiBleHBvcnRMREZMQUdTPSItTCRTWVNST09UL3Vzci9sb2NhbC9saWIgLVds
-LC1ycGF0aC1saW5rPSRTWVNST09UL3Vzci9sb2NhbC9saWIiCj4gCj4gJCB3Z2V0IGh0dHA6Ly9s
-dHRuZy5vcmcvZmlsZXMvbHR0bmctdG9vbHMvbHR0bmctdG9vbHMtbGF0ZXN0LTIuMTEudGFyLmJ6
-MiAmJgo+IHRhciAteGYgbHR0bmctdG9vbHMtbGF0ZXN0LTIuMTEudGFyLmJ6MiAmJgo+IGNkIGx0
-dG5nLXRvb2xzLTIuMTEuKiAmJgo+IC4vY29uZmlndXJlIC0tcHJlZml4PS9vcHQveC10b29scy9p
-Njg2LXBjLWxpbnV4LWdudS9zeXNyb290L3Vzci9sb2NhbCAtLWhvc3Q9IGk2ODYtcGMtbGludXgt
-Z251Cj4gCj4gVGVybWluYWwgUHJpbnQ6Cj4gY2hlY2tpbmcgd2hldGhlciBjZHNfbGlzdF9hZGQg
-aXMgZGVjbGFyZWQuLi4geWVzCj4gY2hlY2tpbmcgd2hldGhlciBjZHNfd2ZjcV9pbml0IGlzIGRl
-Y2xhcmVkLi4uIHllcwo+IGNoZWNraW5nIHdoZXRoZXIgY2RzX3dmY3FfZGVxdWV1ZV9ibG9ja2lu
-ZyBpcyBkZWNsYXJlZC4uLiB5ZXMKPiBjaGVja2luZyB3aGV0aGVyIGZ1dGV4X2FzeW5jIGlzIGRl
-Y2xhcmVkLi4uIHllcwo+IGNoZWNraW5nIHdoZXRoZXIgcmN1X3RocmVhZF9vZmZsaW5lIGlzIGRl
-Y2xhcmVkLi4uIHllcwo+IGNoZWNraW5nIHdoZXRoZXIgcmN1X3RocmVhZF9vbmxpbmUgaXMgZGVj
-bGFyZWQuLi4geWVzCj4gY2hlY2tpbmcgd2hldGhlciBjYWFfbGlrZWx5IGlzIGRlY2xhcmVkLi4u
-IHllcwo+IGNoZWNraW5nIGZvciBfY2RzX2xmaHRfbmV3IGluIC1sdXJjdS1jZHMuLi4gbm8KPiBj
-b25maWd1cmU6IGVycm9yOiBVc2Vyc3BhY2UgUkNVIChsaWJ1cmN1KSA+PSAwLjkuMCBpcyBuZWVk
-ZWQKPiBtYWtlOiAqKiogTm8gdGFyZ2V0cyBzcGVjaWZpZWQgYW5kIG5vIG1ha2VmaWxlIGZvdW5k
-LsKgIFN0b3AuCj4gbWFrZTogKioqIE5vIHJ1bGUgdG8gbWFrZSB0YXJnZXQgJ2luc3RhbGwnLsKg
-IFN0b3AuCj4gCj4gJCBjZCAkU1lTUk9PVC91c3IvbG9jYWwvbGliCj4gJCBsbCB8IGdyZXAgdXJj
-dS1jZHMKPiAtcnctci0tci0tIDEgYWNoIGFjaCDCoDE3ODc0OCBKYW4gMTMgMjI6MzEgbGlidXJj
-dS1jZHMuYQo+IC1yd3hyLXhyLXggMSBhY2ggYWNoIMKgIMKgMTM4MCBKYW4gMTMgMjI6MzEgbGli
-dXJjdS1jZHMubGEgPGh0dHA6Ly9saWJ1cmN1LWNkcy5sYT4qCj4gbHJ3eHJ3eHJ3eCAxIGFjaCBh
-Y2ggwqAgwqAgwqAyMCBKYW4gMTMgMjI6MzEgbGlidXJjdS1jZHMuc28gLT4gbGlidXJjdS1jZHMu
-c28uNi4xLjAqCj4gbHJ3eHJ3eHJ3eCAxIGFjaCBhY2ggwqAgwqAgwqAyMCBKYW4gMTMgMjI6MzEg
-bGlidXJjdS1jZHMuc28uNiAtPiBsaWJ1cmN1LWNkcy5zby42LjEuMCoKPiAtcnd4ci14ci14IDEg
-YWNoIGFjaCDCoDE2MjI0MCBKYW4gMTMgMjI6MzEgbGlidXJjdS1jZHMuc28uNi4xLjAqCj4gCj4g
-JCBvYmpkdW1wIC1UQyBsaWJ1cmN1LWNkcy5zbyB8IGdyZXAgX2Nkc19sZmh0X25ldwo+IDAwMDA0
-NmYwIGcgwqAgwqBERiAudGV4dCAwMDAwMDRjNyDCoEJhc2UgwqAgwqAgwqAgwqBfY2RzX2xmaHRf
-bmV3Cj4gCj4gCj4gbGlidXJjdSBpcyBwcmVzZW50IGluICIkU1lTUk9PVC91c3IvbG9jYWwvbGli
-IiBhbmQgdGhlIGxpYnVyY3UtY2RzLnNvIGhhcyAiX2Nkc19sZmh0X25ldyIgbm90IHN1cmUgd2h5
-IHRoaXMgaXMgZmFpbGluZy4KCldoYXQgZG9lcyBjb25maWcubG9nIGhhcyB0byBzYXkgYWJvdXQg
-dGhpcz8gIEl0IHdvdWxkIGJlIGdvb2QgdG8ga25vdwpob3cgdGhlIHRlc3QgZmFpbGVkLgoKU2lt
-b24KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Merged in master, stable-2.11, and stable-2.10.
+
+Thanks!
+J=E9r=E9mie
+
+On Mon, Jan 06, 2020 at 02:19:54PM +0900, Benjamin Poirier wrote:
+> INADDR_ANY is 0.0.0.0
+> =
+
+> Fixes: c93eadade277 ("doc/man: use propagated default values in man pages=
+")
+> Signed-off-by: Benjamin Poirier <benjamin.poirier@gmail.com>
+> ---
+>  doc/man/lttng-relayd.8.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> =
+
+> diff --git a/doc/man/lttng-relayd.8.txt b/doc/man/lttng-relayd.8.txt
+> index be59675d..bf88a535 100644
+> --- a/doc/man/lttng-relayd.8.txt
+> +++ b/doc/man/lttng-relayd.8.txt
+> @@ -40,7 +40,7 @@ it can write to the output directory and listen on the =
+configured ports.
+>  If a user is within a secured network and/or has proper firewall
+>  settings, `lttng-relayd` can listen to LTTng live connections from _all_
+>  network interfaces by specifying
+> -+--live-port=3Dtcp://{default_network_viewer_bind_address}:{default_netw=
+ork_viewer_port}+.
+> ++--live-port=3Dtcp://0.0.0.0:{default_network_viewer_port}+.
+>  =
+
+>  Once a trace has been streamed completely, the trace can be processed by
+>  any tool that can process an LTTng trace located on the local
+> -- =
+
+> 2.25.0.rc0
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
