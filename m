@@ -1,37 +1,20 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: update context types for
- Python bindings
-Date: Thu, 23 Jan 2020 14:26:18 -0500
-Message-ID: <CA+jJMxuHnX+L2X4C-QiM0vDshE5-FpC404XwsHjvA9i=zmUq=g@mail.gmail.com>
-References: <20200118192949.29902-1-bedard.christophe@gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: Measure loop rate
+Date: Thu, 23 Jan 2020 14:53:01 -0500
+Message-ID: <20200123195301.GA8988@joraj-alpa>
+References: <CAJYn_wgBrfB+nY8nSajyDUnj81sOr6Q9wb5MFhiW5ShC5n8Kvw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 483XMq6MMnz1sVx
- for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 14:27:03 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 483Xxv2d4cz1sZH
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 14:53:07 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 37200242DE7
- for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 14:26:57 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id Bm8NwzlBDUL5 for <lttng-dev@lists.lttng.org>;
- Thu, 23 Jan 2020 14:26:56 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C6C50242EE0
- for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 14:26:56 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id CSB3x0TrZKo6 for <lttng-dev@lists.lttng.org>;
- Thu, 23 Jan 2020 14:26:56 -0500 (EST)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com
- [209.85.208.175])
- by mail.efficios.com (Postfix) with ESMTPSA id 709DC24319B
- for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 14:26:56 -0500 (EST)
-Received: by mail-lj1-f175.google.com with SMTP id j26so4896926ljc.12
- for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 11:26:56 -0800 (PST)
-In-Reply-To: <20200118192949.29902-1-bedard.christophe@gmail.com>
+ by mail.efficios.com (Postfix) with ESMTP id B1D90243726
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 14:53:06 -0500 (EST)
+Content-Disposition: inline
+In-Reply-To: <CAJYn_wgBrfB+nY8nSajyDUnj81sOr6Q9wb5MFhiW5ShC5n8Kvw@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -41,91 +24,40 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Christophe Bedard <bedard.christophe@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: bhanu kiran chaluvadi <nthdimensionalreality@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3Rlciwgc3RhYmxlLTIuMTEsIGFuZCBzdGFibGUtMi4xMC4KClRoYW5rcyEK
-SsOpcsOpbWllCgpPbiBTYXQsIDE4IEphbiAyMDIwIGF0IDE0OjMwLCBDaHJpc3RvcGhlIEJlZGFy
-ZAo8YmVkYXJkLmNocmlzdG9waGVAZ21haWwuY29tPiB3cm90ZToKPgo+IEZpeGVzOiAjMTIxNAo+
-Cj4gU2lnbmVkLW9mZi1ieTogQ2hyaXN0b3BoZSBCZWRhcmQgPGJlZGFyZC5jaHJpc3RvcGhlQGdt
-YWlsLmNvbT4KPiAtLS0KPiAgZXh0cmFzL2JpbmRpbmdzL3N3aWcvcHl0aG9uL2x0dG5nLmkuaW4g
-fCA0NSArKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICAxIGZpbGUgY2hhbmdlZCwgNDUgaW5z
-ZXJ0aW9ucygrKQo+Cj4gZGlmZiAtLWdpdCBhL2V4dHJhcy9iaW5kaW5ncy9zd2lnL3B5dGhvbi9s
-dHRuZy5pLmluIGIvZXh0cmFzL2JpbmRpbmdzL3N3aWcvcHl0aG9uL2x0dG5nLmkuaW4KPiBpbmRl
-eCBmOThmZGE2YS4uNjM2ZjM5ZjUgMTAwNjQ0Cj4gLS0tIGEvZXh0cmFzL2JpbmRpbmdzL3N3aWcv
-cHl0aG9uL2x0dG5nLmkuaW4KPiArKysgYi9leHRyYXMvYmluZGluZ3Mvc3dpZy9weXRob24vbHR0
-bmcuaS5pbgo+IEBAIC0xMzAsNiArMTMwLDE1IEBAIGVudW0gbHR0bmdfZXZlbnRfb3V0cHV0IHsK
-PiAgJXJlbmFtZSgiRVZFTlRfQ09OVEVYVF9QUElEIikgTFRUTkdfRVZFTlRfQ09OVEVYVF9QUElE
-Owo+ICAlcmVuYW1lKCJFVkVOVF9DT05URVhUX1ZQUElEIikgTFRUTkdfRVZFTlRfQ09OVEVYVF9W
-UFBJRDsKPiAgJXJlbmFtZSgiRVZFTlRfQ09OVEVYVF9QVEhSRUFEX0lEIikgTFRUTkdfRVZFTlRf
-Q09OVEVYVF9QVEhSRUFEX0lEOwo+ICslcmVuYW1lKCJFVkVOVF9DT05URVhUX0hPU1ROQU1FIikg
-TFRUTkdfRVZFTlRfQ09OVEVYVF9IT1NUTkFNRTsKPiArJXJlbmFtZSgiRVZFTlRfQ09OVEVYVF9J
-UCIpIExUVE5HX0VWRU5UX0NPTlRFWFRfSVA7Cj4gKyVyZW5hbWUoIkVWRU5UX0NPTlRFWFRfUEVS
-Rl9DUFVfQ09VTlRFUiIpIExUVE5HX0VWRU5UX0NPTlRFWFRfUEVSRl9DUFVfQ09VTlRFUjsKPiAr
-JXJlbmFtZSgiRVZFTlRfQ09OVEVYVF9QRVJGX1RIUkVBRF9DT1VOVEVSIikgTFRUTkdfRVZFTlRf
-Q09OVEVYVF9QRVJGX1RIUkVBRF9DT1VOVEVSOwo+ICslcmVuYW1lKCJFVkVOVF9DT05URVhUX0FQ
-UF9DT05URVhUIikgTFRUTkdfRVZFTlRfQ09OVEVYVF9BUFBfQ09OVEVYVDsKPiArJXJlbmFtZSgi
-RVZFTlRfQ09OVEVYVF9JTlRFUlJVUFRJQkxFIikgTFRUTkdfRVZFTlRfQ09OVEVYVF9JTlRFUlJV
-UFRJQkxFOwo+ICslcmVuYW1lKCJFVkVOVF9DT05URVhUX1BSRUVNUFRJQkxFIikgTFRUTkdfRVZF
-TlRfQ09OVEVYVF9QUkVFTVBUSUJMRTsKPiArJXJlbmFtZSgiRVZFTlRfQ09OVEVYVF9ORUVEX1JF
-U0NIRURVTEUiKSBMVFROR19FVkVOVF9DT05URVhUX05FRURfUkVTQ0hFRFVMRTsKPiArJXJlbmFt
-ZSgiRVZFTlRfQ09OVEVYVF9NSUdSQVRBQkxFIikgTFRUTkdfRVZFTlRfQ09OVEVYVF9NSUdSQVRB
-QkxFOwo+ICBlbnVtIGx0dG5nX2V2ZW50X2NvbnRleHRfdHlwZSB7Cj4gICAgICAgICBMVFROR19F
-VkVOVF9DT05URVhUX1BJRCAgICAgICAgICAgICAgID0gMCwKPiAgICAgICAgIExUVE5HX0VWRU5U
-X0NPTlRFWFRfUEVSRl9DT1VOVEVSICAgICAgPSAxLAo+IEBAIC0xNDIsNiArMTUxLDE1IEBAIGVu
-dW0gbHR0bmdfZXZlbnRfY29udGV4dF90eXBlIHsKPiAgICAgICAgIExUVE5HX0VWRU5UX0NPTlRF
-WFRfUFBJRCAgICAgICAgICAgICAgPSA4LAo+ICAgICAgICAgTFRUTkdfRVZFTlRfQ09OVEVYVF9W
-UFBJRCAgICAgICAgICAgICA9IDksCj4gICAgICAgICBMVFROR19FVkVOVF9DT05URVhUX1BUSFJF
-QURfSUQgICAgICAgID0gMTAsCj4gKyAgICAgICBMVFROR19FVkVOVF9DT05URVhUX0hPU1ROQU1F
-ICAgICAgICAgID0gMTEsCj4gKyAgICAgICBMVFROR19FVkVOVF9DT05URVhUX0lQICAgICAgICAg
-ICAgICAgID0gMTIsCj4gKyAgICAgICBMVFROR19FVkVOVF9DT05URVhUX1BFUkZfQ1BVX0NPVU5U
-RVIgID0gMTMsCj4gKyAgICAgICBMVFROR19FVkVOVF9DT05URVhUX1BFUkZfVEhSRUFEX0NPVU5U
-RVIgPSAxNCwKPiArICAgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfQVBQX0NPTlRFWFQgICAgICAg
-PSAxNSwKPiArICAgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfSU5URVJSVVBUSUJMRSAgICAgPSAx
-NiwKPiArICAgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfUFJFRU1QVElCTEUgICAgICAgPSAxNywK
-PiArICAgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfTkVFRF9SRVNDSEVEVUxFICAgPSAxOCwKPiAr
-ICAgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfTUlHUkFUQUJMRSAgICAgICAgPSAxOSwKPiAgfTsK
-Pgo+Cj4gQEAgLTg3MCw2ICs4ODgsMzMgQEAgc3RydWN0IGx0dG5nX2V2ZW50X2NvbnRleHQgewo+
-ICAgICAgICAgICAgICAgICAgICAgICAgIGNhc2UgMTA6Cj4gICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBzcHJpbnRmKHRlbXAsICJsdHRuZy5FdmVudENvbnRleHQ7IGN0eChFVkVOVF9D
-T05URVhUX1BUSFJFQURfSUQpIik7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBi
-cmVhazsKPiArICAgICAgICAgICAgICAgICAgICAgICBjYXNlIDExOgo+ICsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgc3ByaW50Zih0ZW1wLCAibHR0bmcuRXZlbnRDb250ZXh0OyBjdHgo
-RVZFTlRfQ09OVEVYVF9IT1NUTkFNRSkiKTsKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgIGJyZWFrOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGNhc2UgMTI6Cj4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBzcHJpbnRmKHRlbXAsICJsdHRuZy5FdmVudENvbnRleHQ7
-IGN0eChFVkVOVF9DT05URVhUX0lQKSIpOwo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgYnJlYWs7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgY2FzZSAxMzoKPiArICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHNwcmludGYodGVtcCwgImx0dG5nLkV2ZW50Q29udGV4dDsg
-Y3R4KEVWRU5UX0NPTlRFWFRfUEVSRl9DUFVfQ09VTlRFUikiKTsKPiArICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIGJyZWFrOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGNhc2UgMTQ6
-Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzcHJpbnRmKHRlbXAsICJsdHRuZy5F
-dmVudENvbnRleHQ7IGN0eChFVkVOVF9DT05URVhUX1BFUkZfVEhSRUFEX0NPVU5URVIpIik7Cj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBicmVhazsKPiArICAgICAgICAgICAgICAg
-ICAgICAgICBjYXNlIDE1Ogo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3ByaW50
-Zih0ZW1wLCAibHR0bmcuRXZlbnRDb250ZXh0OyBjdHgoRVZFTlRfQ09OVEVYVF9BUFBfQ09OVEVY
-VCkiKTsKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJyZWFrOwo+ICsgICAgICAg
-ICAgICAgICAgICAgICAgIGNhc2UgMTY6Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBzcHJpbnRmKHRlbXAsICJsdHRuZy5FdmVudENvbnRleHQ7IGN0eChFVkVOVF9DT05URVhUX0lO
-VEVSUlVQVElCTEUpIik7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBicmVhazsK
-PiArICAgICAgICAgICAgICAgICAgICAgICBjYXNlIDE3Ogo+ICsgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgc3ByaW50Zih0ZW1wLCAibHR0bmcuRXZlbnRDb250ZXh0OyBjdHgoRVZFTlRf
-Q09OVEVYVF9QUkVFTVBUSUJMRSkiKTsKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IGJyZWFrOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGNhc2UgMTg6Cj4gKyAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBzcHJpbnRmKHRlbXAsICJsdHRuZy5FdmVudENvbnRleHQ7IGN0
-eChFVkVOVF9DT05URVhUX05FRURfUkVTQ0hFRFVMRSkiKTsKPiArICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIGJyZWFrOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGNhc2UgMTk6Cj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzcHJpbnRmKHRlbXAsICJsdHRuZy5FdmVu
-dENvbnRleHQ7IGN0eChFVkVOVF9DT05URVhUX01JR1JBVEFCTEUpIik7Cj4gKyAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBicmVhazsKPiAgICAgICAgICAgICAgICAgICAgICAgICBkZWZh
-dWx0Ogo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3ByaW50Zih0ZW1wLCAibHR0
-bmcuRXZlbnRDb250ZXh0OyB0eXBlKCVpKSIsICRzZWxmLT5jdHgpOwo+ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgYnJlYWs7Cj4gLS0KPiAyLjE3LjEKPgo+IF9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlz
-dAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
-Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJu
-ZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
-bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hi,
+
+On Wed, Jan 22, 2020 at 06:28:14PM +0100, bhanu kiran chaluvadi wrote:
+> Hi ,
+> 
+> I am trying to observer loop rate of a while loop.  Ideally it should take
+> maximum of 2 ms to finish the cycle (500 Hz at least). And i would like to
+> trace the loop rate using LTTng user space. whats the better way of doing
+> it ..Just place one trace point at the start and one at the end ? or is
+> there any library that i can take advantage of?
+
+I'm not completely sure what you mean by "loop rate" but if you are looking for
+the duration of a single iteration of your while loop then yes, one at the start
+and one at the end. Keep in mind that tracing is *not* free and that you will
+need to account for the tracing overhead here. I would suggest having no payload
+at all if you can.
+
+There is other ways of deducing the time taken by one iteration (time_for_n/n)
+to reduce impact of tracing if you can have an upper bound (or know the number
+of iterations that took place) for the number of iterations but it will only
+give you the mean time for the loop execution. In that case, the tracepoints
+would be outside the while loop.
+
+You could also hit an event only each X loop iterations and deduce the
+rate from there. Keep in mind that this will require accounting and
+will add to the workload etc.
+
+It all depends on the granularity you are looking for.
+
+Cheers
+-- 
+Jonathan Rajotte-Julien
+EfficiOS
