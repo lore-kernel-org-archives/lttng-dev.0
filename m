@@ -1,20 +1,17 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: Measure loop rate
-Date: Thu, 23 Jan 2020 14:53:01 -0500
-Message-ID: <20200123195301.GA8988@joraj-alpa>
-References: <CAJYn_wgBrfB+nY8nSajyDUnj81sOr6Q9wb5MFhiW5ShC5n8Kvw@mail.gmail.com>
+From: Alex Xu via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: call_rcu seems inefficient without futex
+Date: Fri, 24 Jan 2020 00:19:03 +0000
+Message-ID: <157982514329.691.6168767011604689030@pink>
+References: <157982514329.691.6168767011604689030.ref@pink>
+Reply-To: Alex Xu <alex_y_xu@yahoo.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 483Xxv2d4cz1sZH
- for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 14:53:07 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id B1D90243726
- for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 14:53:06 -0500 (EST)
-Content-Disposition: inline
-In-Reply-To: <CAJYn_wgBrfB+nY8nSajyDUnj81sOr6Q9wb5MFhiW5ShC5n8Kvw@mail.gmail.com>
+Received: from sonic317-21.consmr.mail.gq1.yahoo.com
+ (sonic317-21.consmr.mail.gq1.yahoo.com [98.137.66.147])
+ by lists.lttng.org (Postfix) with ESMTPS id 483frw0KNLz1sTd
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2020 19:19:10 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,40 +21,37 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: bhanu kiran chaluvadi <nthdimensionalreality@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 Hi,
 
-On Wed, Jan 22, 2020 at 06:28:14PM +0100, bhanu kiran chaluvadi wrote:
-> Hi ,
-> 
-> I am trying to observer loop rate of a while loop.  Ideally it should take
-> maximum of 2 ms to finish the cycle (500 Hz at least). And i would like to
-> trace the loop rate using LTTng user space. whats the better way of doing
-> it ..Just place one trace point at the start and one at the end ? or is
-> there any library that i can take advantage of?
+I recently installed knot dns for a very small FreeBSD server. I noticed
+that it uses a surprising amount of CPU, even when there is no load:
+about 0.25%. That's not huge, but it seems unnecessarily high when my
+QPS is less than 0.01.
 
-I'm not completely sure what you mean by "loop rate" but if you are looking for
-the duration of a single iteration of your while loop then yes, one at the start
-and one at the end. Keep in mind that tracing is *not* free and that you will
-need to account for the tracing overhead here. I would suggest having no payload
-at all if you can.
+After some profiling, I came to the conclusion that this is caused by
+call_rcu_wait using futex_async to repeatedly wait. Since there is no
+futex on FreeBSD (without the Linux compatibility layer), this
+effectively turns into a permanent busy waiting loop.
 
-There is other ways of deducing the time taken by one iteration (time_for_n/n)
-to reduce impact of tracing if you can have an upper bound (or know the number
-of iterations that took place) for the number of iterations but it will only
-give you the mean time for the loop execution. In that case, the tracepoints
-would be outside the while loop.
+I think futex_noasync can be used here instead. call_rcu_wait is only
+supposed to be called from call_rcu_thread, never from a signal context.
+call_rcu calls get_call_rcu_data, which may call
+get_default_call_rcu_data, which calls pthread_mutex_lock through
+call_rcu_lock. Therefore, call_rcu is not async-signal-safe already.
+Also, I think it only makes sense to use call_rcu around a RCU write,
+which contradicts the README saying that only RCU reads are allowed in
+signal handlers.
 
-You could also hit an event only each X loop iterations and deduce the
-rate from there. Keep in mind that this will require accounting and
-will add to the workload etc.
+I applied "sed -i -e 's/futex_async/futex_noasync/'
+src/urcu-call-rcu-impl.h" and knot seems to work correctly with only
+0.01% CPU now. I also ran tests/unit and tests/regression with default
+and signal backends and all completed successfully.
 
-It all depends on the granularity you are looking for.
+I think that the other two usages of futex_async are also a little
+suspicious, but I didn't look too closely.
 
-Cheers
--- 
-Jonathan Rajotte-Julien
-EfficiOS
+Thanks,
+Alex.
