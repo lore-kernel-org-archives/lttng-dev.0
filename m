@@ -1,18 +1,17 @@
 From: "Alex Xu \(Hello71\) via lttng-dev" <lttng-dev@lists.lttng.org>
-Subject: [PATCH v2 2/2] Use _umtx_op for futex on FreeBSD
-Date: Mon, 27 Jan 2020 15:08:30 -0500
-Message-ID: <20200127200830.29347-2-alex_y_xu@yahoo.ca>
-References: <20200127200830.29347-1-alex_y_xu@yahoo.ca>
+Subject: [PATCH v3] Use _umtx_op for futex on FreeBSD
+Date: Mon, 27 Jan 2020 15:21:55 -0500
+Message-ID: <20200127202155.30305-1-alex_y_xu@yahoo.ca>
+References: <20200127202155.30305-1-alex_y_xu.ref@yahoo.ca>
 Reply-To: "Alex Xu \(Hello71\)" <alex_y_xu@yahoo.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic309-48.consmr.mail.gq1.yahoo.com
- (sonic309-48.consmr.mail.gq1.yahoo.com [98.137.65.174])
- by lists.lttng.org (Postfix) with ESMTPS id 48618M6dlsz1xYS
- for <lttng-dev@lists.lttng.org>; Mon, 27 Jan 2020 15:10:43 -0500 (EST)
-In-Reply-To: <20200127200830.29347-1-alex_y_xu@yahoo.ca>
+Received: from sonic310-48.consmr.mail.gq1.yahoo.com
+ (sonic310-48.consmr.mail.gq1.yahoo.com [98.137.69.174])
+ by lists.lttng.org (Postfix) with ESMTPS id 4861Rp6Wp5z1xfC
+ for <lttng-dev@lists.lttng.org>; Mon, 27 Jan 2020 15:24:06 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,11 +25,11 @@ To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 ---
- include/urcu/futex.h | 44 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ include/urcu/futex.h | 45 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
 diff --git a/include/urcu/futex.h b/include/urcu/futex.h
-index c206c6f..5a95d00 100644
+index c206c6f..9235024 100644
 --- a/include/urcu/futex.h
 +++ b/include/urcu/futex.h
 @@ -24,6 +24,7 @@
@@ -41,12 +40,13 @@ index c206c6f..5a95d00 100644
  #include <stdint.h>
  #include <time.h>
  
-@@ -103,6 +104,49 @@ static inline int futex_async(int32_t *uaddr, int op, int32_t val,
+@@ -103,6 +104,50 @@ static inline int futex_async(int32_t *uaddr, int op, int32_t val,
  	return ret;
  }
  
 +#elif defined(__FreeBSD__)
 +
++#include <sys/types.h>
 +#include <sys/umtx.h>
 +
 +static inline int futex_async(int32_t *uaddr, int op, int32_t val,
