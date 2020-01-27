@@ -1,20 +1,17 @@
-From: Alex Xu via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: call_rcu seems inefficient without futex
-Date: Mon, 27 Jan 2020 18:25:04 +0000
-Message-ID: <158014950427.63624.9193392146451473928@pink>
-References: <157982514329.691.6168767011604689030.ref@pink>
- <157982514329.691.6168767011604689030@pink>
- <77660372.600081.1580139485777.JavaMail.zimbra@efficios.com>
-Reply-To: Alex Xu <alex_y_xu@yahoo.ca>
+From: "Alex Xu \(Hello71\) via lttng-dev" <lttng-dev@lists.lttng.org>
+Subject: [PATCH 1/2] Add FreeBSD, DragonFly to syscall-compat.h
+Date: Mon, 27 Jan 2020 13:25:25 -0500
+Message-ID: <20200127182526.22881-1-alex_y_xu@yahoo.ca>
+References: <20200127182526.22881-1-alex_y_xu.ref@yahoo.ca>
+Reply-To: "Alex Xu \(Hello71\)" <alex_y_xu@yahoo.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic312-24.consmr.mail.gq1.yahoo.com
- (sonic312-24.consmr.mail.gq1.yahoo.com [98.137.69.205])
- by lists.lttng.org (Postfix) with ESMTPS id 485ypX4Bvwz1xLy
- for <lttng-dev@lists.lttng.org>; Mon, 27 Jan 2020 13:25:08 -0500 (EST)
-In-Reply-To: <77660372.600081.1580139485777.JavaMail.zimbra@efficios.com>
+Received: from sonic310-48.consmr.mail.gq1.yahoo.com
+ (sonic310-48.consmr.mail.gq1.yahoo.com [98.137.69.174])
+ by lists.lttng.org (Postfix) with ESMTPS id 485ysH5gSbz1xZr
+ for <lttng-dev@lists.lttng.org>; Mon, 27 Jan 2020 13:27:31 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,40 +24,25 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Quoting Mathieu Desnoyers (2020-01-27 15:38:05)
-> ----- On Jan 23, 2020, at 7:19 PM, lttng-dev lttng-dev@lists.lttng.org wrote:
-> call_rcu() is meant to be async-signal-safe and lock-free after that
-> initialization has been performed on first use. Paul, do you know where
-> we have documented this in liburcu ?
+---
+ include/urcu/syscall-compat.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Hm... reading it a little more carefully, it does seem that as long as
-you manually initialize it, then it is async-signal-safe afterwards.
-
-> > Also, I think it only makes sense to use call_rcu around a RCU write,
-> > which contradicts the README saying that only RCU reads are allowed in
-> > signal handlers.
-> 
-> Not sure what you mean by "use call_rcu around a RCU write" ?
-
-I mean that in general, the pattern is usually to do an RCU write (to
-remove an item from a list, for example), then do call_rcu to
-aynchronously clean up the item.
-
-> Is there anything similar to sys_futex on FreeBSD ?
-
-Doing some more research, it seems that _umtx_op is allowed to be used
-by userspace applications, see
-https://patchwork.freedesktop.org/patch/200456/.
-
-So we can probably just use that. I'll send a patch shortly.
-
-> It would be good to look into alternative ways to fix this that do not
-> involve changing the guarantees provided by call_rcu() for that fallback
-> scenario (no futex available). Perhaps in your use-case you may want to
-> tweak the retry delay for compat_futex_async(). Currently
-> src/compat_futex.c:compat_futex_async() has a 10ms delay. Would 100ms
-> be more acceptable ?
-
-I don't completely understand what poll does here. Does it just mean
-that call_rcu callbacks would be delayed up to 100 ms? That's probably
-OK for cleanup uses, but I guess other uses may need faster reactions.
+diff --git a/include/urcu/syscall-compat.h b/include/urcu/syscall-compat.h
+index fa63a7b..23b266e 100644
+--- a/include/urcu/syscall-compat.h
++++ b/include/urcu/syscall-compat.h
+@@ -32,8 +32,9 @@
+ #elif defined(__linux__) || defined(__GLIBC__)
+ #include <syscall.h>
+ 
+-#elif defined(__CYGWIN__) || defined(__APPLE__)
+-/* Don't include anything on Cygwin or MacOSX. */
++#elif defined(__CYGWIN__) || defined(__APPLE__) || \
++	defined(__FreeBSD__) || defined(__DragonFly__)
++/* Don't include anything on these platforms. */
+ 
+ #else
+ #error "Add platform support to urcu/syscall-compat.h"
+-- 
+2.25.0
