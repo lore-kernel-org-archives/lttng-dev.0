@@ -1,17 +1,17 @@
 From: "Alex Xu \(Hello71\) via lttng-dev" <lttng-dev@lists.lttng.org>
-Subject: [PATCH v3] Use _umtx_op for futex on FreeBSD
-Date: Mon, 27 Jan 2020 15:21:55 -0500
-Message-ID: <20200127202155.30305-1-alex_y_xu@yahoo.ca>
-References: <20200127202155.30305-1-alex_y_xu.ref@yahoo.ca>
+Subject: [PATCH v4] Use _umtx_op for futex on FreeBSD
+Date: Mon, 27 Jan 2020 20:17:22 -0500
+Message-ID: <20200128011722.36025-1-alex_y_xu@yahoo.ca>
+References: <20200128011722.36025-1-alex_y_xu.ref@yahoo.ca>
 Reply-To: "Alex Xu \(Hello71\)" <alex_y_xu@yahoo.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic310-48.consmr.mail.gq1.yahoo.com
- (sonic310-48.consmr.mail.gq1.yahoo.com [98.137.69.174])
- by lists.lttng.org (Postfix) with ESMTPS id 4861Rp6Wp5z1xfC
- for <lttng-dev@lists.lttng.org>; Mon, 27 Jan 2020 15:24:06 -0500 (EST)
+Received: from sonic309-22.consmr.mail.gq1.yahoo.com
+ (sonic309-22.consmr.mail.gq1.yahoo.com [98.137.65.148])
+ by lists.lttng.org (Postfix) with ESMTPS id 4867yJ5X46z1y6x
+ for <lttng-dev@lists.lttng.org>; Mon, 27 Jan 2020 20:17:28 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,12 +24,13 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+Tested with "make check", "make regtest" and a knotd slave.
 ---
  include/urcu/futex.h | 45 ++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 45 insertions(+)
 
 diff --git a/include/urcu/futex.h b/include/urcu/futex.h
-index c206c6f..9235024 100644
+index c206c6f..0777d95 100644
 --- a/include/urcu/futex.h
 +++ b/include/urcu/futex.h
 @@ -24,6 +24,7 @@
@@ -79,7 +80,7 @@ index c206c6f..9235024 100644
 +			return -1;
 +	}
 +
-+	return _umtx_op(uaddr, umtx_op, val, umtx_uaddr, umtx_uaddr2);
++	return _umtx_op(uaddr, umtx_op, (uint32_t)val, umtx_uaddr, umtx_uaddr2);
 +}
 +
 +static inline int futex_noasync(int32_t *uaddr, int op, int32_t val,
