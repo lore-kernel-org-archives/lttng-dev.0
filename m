@@ -1,18 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-modules 2.10.13 and 2.11.1 (Linux
- kernel tracer)
-Date: Wed, 29 Jan 2020 10:31:19 -0500 (EST)
-Message-ID: <2032449194.602824.1580311879379.JavaMail.zimbra@efficios.com>
+Subject: Re: [PATCH v2 1/2] Add FreeBSD,
+ DragonFly to syscall-compat.h
+Date: Thu, 30 Jan 2020 13:33:33 -0500 (EST)
+Message-ID: <2101491926.603875.1580409213914.JavaMail.zimbra@efficios.com>
+References: <20200127200830.29347-1-alex_y_xu.ref@yahoo.ca>
+ <20200127200830.29347-1-alex_y_xu@yahoo.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4876sB2gfmz20yp
- for <lttng-dev@lists.lttng.org>; Wed, 29 Jan 2020 10:31:26 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 487prv0F73z22jx
+ for <lttng-dev@lists.lttng.org>; Thu, 30 Jan 2020 13:33:34 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id E8A4524873E
- for <lttng-dev@lists.lttng.org>; Wed, 29 Jan 2020 10:31:19 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 4B64E251DF6
+ for <lttng-dev@lists.lttng.org>; Thu, 30 Jan 2020 13:33:34 -0500 (EST)
+In-Reply-To: <20200127200830.29347-1-alex_y_xu@yahoo.ca>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,26 +25,43 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Cc: lwn@lwn.net, linux-trace-users@vger.kernel.org, diamon-discuss@lists.linuxfoundation.org
+To: Alex Xu <alex_y_xu@yahoo.ca>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-This announcement covers both actively supported stable branches of lttng-modules
-(2.10 and 2.11). Updates introduced in these releases enable building lttng-modules
-against the Linux kernel v5.5.
-
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-tracer toolset.
-
-Thanks,
+Merged into liburcu master, thanks!
 
 Mathieu
 
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
+----- On Jan 27, 2020, at 3:08 PM, lttng-dev lttng-dev@lists.lttng.org wrote:
+
+> ---
+> include/urcu/syscall-compat.h | 5 +++--
+> 1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/urcu/syscall-compat.h b/include/urcu/syscall-compat.h
+> index fa63a7b..23b266e 100644
+> --- a/include/urcu/syscall-compat.h
+> +++ b/include/urcu/syscall-compat.h
+> @@ -32,8 +32,9 @@
+> #elif defined(__linux__) || defined(__GLIBC__)
+> #include <syscall.h>
+> 
+> -#elif defined(__CYGWIN__) || defined(__APPLE__)
+> -/* Don't include anything on Cygwin or MacOSX. */
+> +#elif defined(__CYGWIN__) || defined(__APPLE__) || \
+> +	defined(__FreeBSD__) || defined(__DragonFly__)
+> +/* Don't include anything on these platforms. */
+> 
+> #else
+> #error "Add platform support to urcu/syscall-compat.h"
+> --
+> 2.25.0
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
 Mathieu Desnoyers
