@@ -1,16 +1,17 @@
-From: "s.v.l.srinivasa raghavan" <svlsr2000@gmail.com>
-Subject: logs from 32bit binary in live session
-Date: Fri, 31 Jan 2020 10:23:08 +0530
-Message-ID: <CAGjfqVnrvd1X-yqNawneidaRhGV8gAh8cd-nFkF2XWa_JF030Q@mail.gmail.com>
+From: Maxime Roussin-Belanger <maxime.roussinbelanger@gmail.com>
+Subject: [PATCH] Introduce vtracef
+Date: Fri, 31 Jan 2020 16:55:01 -0500
+Message-ID: <20200131215501.19536-1-maxime.roussinbelanger@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0275783757553348343=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
- [IPv6:2607:f8b0:4864:20::631])
- by lists.lttng.org (Postfix) with ESMTPS id 4884c10KZSz22xB
- for <lttng-dev@lists.lttng.org>; Thu, 30 Jan 2020 23:53:20 -0500 (EST)
-Received: by mail-pl1-x631.google.com with SMTP id t6so2233524plj.5
- for <lttng-dev@lists.lttng.org>; Thu, 30 Jan 2020 20:53:20 -0800 (PST)
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com
+ [IPv6:2607:f8b0:4864:20::f43])
+ by lists.lttng.org (Postfix) with ESMTPS id 488WH00CHMz24HZ
+ for <lttng-dev@lists.lttng.org>; Fri, 31 Jan 2020 16:55:07 -0500 (EST)
+Received: by mail-qv1-xf43.google.com with SMTP id s7so3992845qvn.8
+ for <lttng-dev@lists.lttng.org>; Fri, 31 Jan 2020 13:55:07 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,113 +22,103 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
+Cc: champagne.guillaume.c@gmail.com
 List-Id: lttng-dev@lists.lttng.org
 
---===============0275783757553348343==
-Content-Type: multipart/alternative; boundary="000000000000384c35059d685a31"
+vtracef accepts a va_list argument to simplify tracing
+functions which use a va_list
 
---000000000000384c35059d685a31
-Content-Type: text/plain; charset="UTF-8"
+Here's an example from wpa_supplicant that I wanted to
+trace:
 
-Hello,
+void wpa_debug(int level, const char* fmt, ...) {
 
-I am trying to setup a live debugging session in environment with both 32
-bit and 64 bit binaries. I am currenlty using Debian buster. After setting
-up, i am observing that i am not able to see 32 bit logs. I tried with the
-examples given in document. Did few modifications to setup live session.
-Initial compilation and installation is done as per
+    va_list ap;
+    va_start(ap, fmt);
 
+    ...
+    // The call I want to easily trace with vtracef
+    vprintf(fmt, ap);
 
-https://lttng.org/docs/v2.11/#doc-instrumenting-32-bit-app-on-64-bit-system
+    ...
+    va_end(ap);
+}
 
-After this i am starting sessiond using
+wpa_debug is used a fair amount and it would be annoying to
+replace all the wpa_debug calls with tracef.
 
-lttng-sessiond
---consumerd32-path=/usr/local/lib32/lttng/libexec/lttng-consumerd
---consumerd64-path=/usr/local/lib/lttng/libexec/lttng-consumerd \
---ustconsumerd32-err-sock=/home/user/.lttng/ustconsumerd32/error \
---ustconsumerd64-err-sock=/home/user/.lttng/ustconsumerd64/error \
---ustconsumerd32-cmd-sock=/home/user/.lttng/ustconsumerd32/command \
---ustconsumerd64-cmd-sock=/home/user/.lttng/ustconsumerd64/command \
---daemonize
+With vtracef, it simplifies the find and replace effort by
+only changing it at one place.
 
-Starting relayd using
+Signed-off-by: Maxime Roussin-Belanger <maxime.roussinbelanger@gmail.com>
+---
+ include/lttng/tracef.h | 10 ++++++++++
+ liblttng-ust/tracef.c  | 18 +++++++++++-------
+ 2 files changed, 21 insertions(+), 7 deletions(-)
 
-lttng-relayd -o /tmp/lttng
-
-
-Starting live session (In the same machine) using
-
-  lttng create my-session3 --live
-  lttng enable-event -u hello:*
-  lttng start
-  babeltrace --input-format=lttng-live
-net://localhost/host/debianServer/my-session3
-
-
-
-Now executing 64 bit binary is producing logs in live session where as
-executing 32 bit version is not producing any log. I am also observing that
-both the logs (ie logs from 32bit and 64 bit binaries) are getting captured
-in non live sessions, ie when i write to file.
-
-
-Do i need to pass some additional parameters to relayd / babeltrace to get
-both the logs?
+diff --git a/include/lttng/tracef.h b/include/lttng/tracef.h
+index 0c59c9ae..e3a7587d 100644
+--- a/include/lttng/tracef.h
++++ b/include/lttng/tracef.h
+@@ -32,13 +32,23 @@ extern "C" {
+ extern
+ void _lttng_ust_tracef(const char *fmt, ...);
+ 
++extern
++void _lttng_ust_vtracef(const char *fmt, va_list ap);
++
+ #define tracef(fmt, ...)						\
+ 	do {								\
+ 		LTTNG_STAP_PROBEV(tracepoint_lttng_ust_tracef, event, ## __VA_ARGS__); \
+ 		if (caa_unlikely(__tracepoint_lttng_ust_tracef___event.state)) \
+ 			_lttng_ust_tracef(fmt, ## __VA_ARGS__);		\
+ 	} while (0)
+ 
++#ifndef LTTNG_UST_HAVE_SDT_INTEGRATION
++#define vtracef(fmt, ap)						\
++	do {								\
++		if (caa_unlikely(__tracepoint_lttng_ust_tracef___event.state)) \
++			_lttng_ust_vtracef(fmt, ap);		\
++	} while (0)
++#endif
+ #ifdef __cplusplus
+ }
+ #endif
+diff --git a/liblttng-ust/tracef.c b/liblttng-ust/tracef.c
+index ea98e43e..2a809eed 100644
+--- a/liblttng-ust/tracef.c
++++ b/liblttng-ust/tracef.c
+@@ -29,20 +29,24 @@
+ #define TRACEPOINT_DEFINE
+ #include "lttng-ust-tracef-provider.h"
+ 
+-void _lttng_ust_tracef(const char *fmt, ...)
++void _lttng_ust_vtracef(const char *fmt, va_list ap)
+ {
+-	va_list ap;
+ 	char *msg;
+-	int len;
+-
+-	va_start(ap, fmt);
+-	len = vasprintf(&msg, fmt, ap);
++	const int len = vasprintf(&msg, fmt, ap);
+ 	/* len does not include the final \0 */
+ 	if (len < 0)
+-		goto end;
++		return;
+ 	__tracepoint_cb_lttng_ust_tracef___event(msg, len,
+ 		LTTNG_UST_CALLER_IP());
+ 	free(msg);
++}
++
++void _lttng_ust_tracef(const char *fmt, ...)
++{
++	va_list ap;
++
++	va_start(ap, fmt);
++	_lttng_ust_vtracef(fmt, ap);
+ end:
+ 	va_end(ap);
+ }
 -- 
-Cheers
-Srinivas
-
---000000000000384c35059d685a31
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello,<div>=C2=A0<br></div><div><div>I am trying to setup =
-a live debugging session in environment=C2=A0with both 32 bit and 64 bit bi=
-naries. I am currenlty using Debian buster. After setting up, i am observin=
-g that i am not able to see 32 bit logs. I tried with the examples given in=
- document. Did few modifications to setup live session.=C2=A0</div><div>Ini=
-tial=C2=A0compilation and installation is done as per</div><div><br></div><=
-div></div><div><br></div><div><a href=3D"https://lttng.org/docs/v2.11/#doc-=
-instrumenting-32-bit-app-on-64-bit-system">https://lttng.org/docs/v2.11/#do=
-c-instrumenting-32-bit-app-on-64-bit-system</a>=C2=A0</div><div><br></div><=
-div>After this i am starting sessiond using=C2=A0</div><blockquote style=3D=
-"margin:0 0 0 40px;border:none;padding:0px">lttng-sessiond --consumerd32-pa=
-th=3D/usr/local/lib32/lttng/libexec/lttng-consumerd --consumerd64-path=3D/u=
-sr/local/lib/lttng/libexec/lttng-consumerd \<br>--ustconsumerd32-err-sock=
-=3D/home/user/.lttng/ustconsumerd32/error \<br>--ustconsumerd64-err-sock=3D=
-/home/user/.lttng/ustconsumerd64/error \<br> --ustconsumerd32-cmd-sock=3D/h=
-ome/user/.lttng/ustconsumerd32/command \<br>--ustconsumerd64-cmd-sock=3D/ho=
-me/user/.lttng/ustconsumerd64/command \<div>--daemonize=C2=A0</div></blockq=
-uote><div><div>Starting relayd using</div><div><br></div></div></div><block=
-quote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div><div><div>lt=
-tng-relayd -o /tmp/lttng</div></div></div></blockquote><div><div><br></div>=
-<div>Starting live session (In the same machine) using=C2=A0</div></div><bl=
-ockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div><div>=C2=
-=A0 lttng create my-session3 --live</div></div><div><div>=C2=A0 lttng enabl=
-e-event -u hello:*</div></div><div><div>=C2=A0 lttng start</div></div><div>=
-<div>=C2=A0 babeltrace --input-format=3Dlttng-live net://localhost/host/deb=
-ianServer/my-session3</div></div></blockquote><div><br></div><div><br></div=
-><div>Now executing 64 bit binary is producing logs in live session where a=
-s executing 32 bit version is not producing any log. I am also observing th=
-at both the logs (ie logs from 32bit and 64 bit binaries) are getting captu=
-red in non live sessions, ie when i write to file.=C2=A0</div><div><br></di=
-v><div><br></div><div>Do i need to pass some additional parameters to relay=
-d / babeltrace to get both the logs?=C2=A0</div><div>-- <br><div dir=3D"ltr=
-" class=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=3D"=
-ltr">Cheers <br>Srinivas</div></div></div></div>
-
---000000000000384c35059d685a31--
-
---===============0275783757553348343==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0275783757553348343==--
+2.20.1
