@@ -1,19 +1,18 @@
-From: Simon Marchi <simark@simark.ca>
-Subject: Re: [PATCH] Introduce vtracef
-Date: Fri, 31 Jan 2020 18:30:07 -0500
-Message-ID: <de4170a5-9775-2a29-9e7d-7cce6a46cab8@simark.ca>
-References: <20200131215501.19536-1-maxime.roussinbelanger@gmail.com>
- <569392e8-be60-26e1-a2d4-72112e6acbac@simark.ca>
- <CAE=T-s4CT=YkGRV_5QDLnvVqZcGCqz2x-LeDcUKdVAA+goKcyA@mail.gmail.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] Babeltrace 2.0.1 - Amqui
+Date: Tue, 4 Feb 2020 16:48:05 -0500
+Message-ID: <20200204214805.GA106763@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 488YNc6t1jz24Hx
- for <lttng-dev@lists.lttng.org>; Fri, 31 Jan 2020 18:30:08 -0500 (EST)
-In-Reply-To: <CAE=T-s4CT=YkGRV_5QDLnvVqZcGCqz2x-LeDcUKdVAA+goKcyA@mail.gmail.com>
-Content-Language: tl
+Received: from mail-qk1-f195.google.com (mail-qk1-f195.google.com
+ [209.85.222.195])
+ by lists.lttng.org (Postfix) with ESMTPS id 48Byx56d27z2BHh
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Feb 2020 16:48:09 -0500 (EST)
+Received: by mail-qk1-f195.google.com with SMTP id j20so19604944qka.10
+ for <lttng-dev@lists.lttng.org>; Tue, 04 Feb 2020 13:48:09 -0800 (PST)
+Content-Disposition: inline
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,59 +22,67 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?UTF-8?Q?Maxime_Roussin-B=c3=a9langer?= <maxime.roussinbelanger@GMAIL.COM>
-Cc: lttng-dev@lists.lttng.org, champagne.guillaume.c@GMAIL.COM
+To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAyMC0wMS0zMSA2OjE3IHAubS4sIE1heGltZSBSb3Vzc2luLULDqWxhbmdlciB3cm90ZToK
-Pj4gT24gMjAyMC0wMS0zMSA0OjU1IHAubS4sIE1heGltZSBSb3Vzc2luLUJlbGFuZ2VyIHdyb3Rl
-Ogo+PiA+IHZ0cmFjZWYgYWNjZXB0cyBhIHZhX2xpc3QgYXJndW1lbnQgdG8gc2ltcGxpZnkgdHJh
-Y2luZwo+PiA+IGZ1bmN0aW9ucyB3aGljaCB1c2UgYSB2YV9saXN0Cj4+ID4KPj4gPiBIZXJlJ3Mg
-YW4gZXhhbXBsZSBmcm9tIHdwYV9zdXBwbGljYW50IHRoYXQgSSB3YW50ZWQgdG8KPj4gPiB0cmFj
-ZToKPj4gPgo+PiA+IHZvaWQgd3BhX2RlYnVnKGludCBsZXZlbCwgY29uc3QgY2hhciogZm10LCAu
-Li4pIHsKPj4gPgo+PiA+IMKgIMKgIHZhX2xpc3QgYXA7Cj4+ID4gwqAgwqAgdmFfc3RhcnQoYXAs
-IGZtdCk7Cj4+ID4KPj4gPiDCoCDCoCAuLi4KPj4gPiDCoCDCoCAvLyBUaGUgY2FsbCBJIHdhbnQg
-dG8gZWFzaWx5IHRyYWNlIHdpdGggdnRyYWNlZgo+PiA+IMKgIMKgIHZwcmludGYoZm10LCBhcCk7
-Cj4+ID4KPj4gPiDCoCDCoCAuLi4KPj4gPiDCoCDCoCB2YV9lbmQoYXApOwo+PiA+IH0KPj4gPgo+
-PiA+IHdwYV9kZWJ1ZyBpcyB1c2VkIGEgZmFpciBhbW91bnQgYW5kIGl0IHdvdWxkIGJlIGFubm95
-aW5nIHRvCj4+ID4gcmVwbGFjZSBhbGwgdGhlIHdwYV9kZWJ1ZyBjYWxscyB3aXRoIHRyYWNlZi4K
-Pj4gPgo+PiA+IFdpdGggdnRyYWNlZiwgaXQgc2ltcGxpZmllcyB0aGUgZmluZCBhbmQgcmVwbGFj
-ZSBlZmZvcnQgYnkKPj4gPiBvbmx5IGNoYW5naW5nIGl0IGF0IG9uZSBwbGFjZS4KPj4KPj4gVGhl
-IHNob3J0Y29taW5nLCBhcyB5b3UgbWVudGlvbmQgb24gSVJDLCBpcyB0aGF0IGl0IGRvZXNuJ3Qg
-c3VwcG9ydCBTRFQgaW50ZWdyYXRpb24uwqAgVGhlIHRyYWNlZgo+PiBtYWNybyBjYWxsIGhhcyBh
-IGBTVEFQX1BST0JFVmAgY2FsbCwgYnV0IGl0IGRvZXNuJ3Qgc2VlbSBwb3NzaWJsZSB0byB1c2Ug
-dGhhdCBoZXJlLsKgIFRoZSBudW1iZXIKPj4gb2YgYXJndW1lbnRzIGluIGEgdmFfbGlzdCBpcyBr
-bm93biBhdCBydW50aW1lIChpbiBmYWN0IGl0J3Mgbm90IHJlYWxseSBrbm93biBieSB0aGUgdmFf
-bGlzdCBpdHNlbGYpLAo+PiB3aGVyZWFzIFNUQVBfUFJPQkVWIHdhbnRzIHRvIGtub3cgdGhlIG51
-bWJlciBvZiBhcmd1bWVudHMgYXQgY29tcGlsZSB0aW1lLgo+Pgo+PiBJIHRoaW5rIGl0IHdvdWxk
-IHN0aWxsIGJlIHVzZWZ1bCB0byBoYXZlIHZ0cmFjZWYsIGZvciB0aGUgdXNlIGNhc2UgZXhwbGFp
-bmVkIGFib3ZlLCBidXQgaGF2ZSBpdAo+PiBkb2N1bWVudGVkIHRoYXQgaXQgaXMgbm90IGludGVn
-cmF0ZWQgd2l0aCB0aGUgc3RhcCBwcm9iZXMgKHVubGVzcyBzb21lYm9keSBoYXMgYSBtYWdpYyBp
-ZGVhIHRoYXQKPj4gd291bGQgbWFrZSBpdCB3b3JrKS7CoCBCdXQgdGhhdCB3aWxsIGJlIGZvciB0
-aGUgbWFpbnRhaW5lciB0byBkZWNpZGUuCj4gCj4gV2hlcmUgd291bGQgdGhhdCBiZT8gSW4gdGhl
-IG1hbiBwYWdlPyBJZiBzbyBpdCB3b3VsZCBiZSB0aGUgZmlyc3QgdGltZSBlZGl0aW5nL2NyZWF0
-aW5nIGEgbWFuIHBhZ2UuCj4gSXQgc2VlbXMgZmFpcmx5IHNpbXBsZSwgYnV0IEkgcHJvYmFibHkg
-bmVlZCBzb21lIGd1aWRhbmNlIG9uIHdoZXJlIHRvIHN0YXJ0LgoKSSB0aGluayBpdCB3b3VsZCBt
-YWtlIHNlbnNlIGZvciB0cmFjZWYgYW5kIHZ0cmFjZWYgdG8gYmUgZG9jdW1lbnRlZCBpbiB0aGUg
-c2FtZSBtYW4gcGFnZSwgYSBiaXQgbGlrZQpwcmludGYgYW5kIHZwcmludGYgYXJlIGRvY3VtZW50
-ZWQgaW4gdGhlIHNhbWUgbWFuIHBhZ2UuICBMb29raW5nIGF0IGhvdyBpdCdzIGRvbmUgZm9yIHBy
-aW50Zi92cHJpbnRmLAp0aGUgdnByaW50ZiBtYW4gcGFnZSBpcyBhIHN5bWxpbmsgdG8gcHJpbnRm
-J3MgbWFuIHBhZ2U6CgokIGxzIC1sIC91c3Ivc2hhcmUvbWFuL21hbjMvcHJpbnRmLjMuZ3oKLXJ3
-LXItLXItLSAxIHJvb3Qgcm9vdCA5LjNLIEZlYiAgMiAgMjAxOCAvdXNyL3NoYXJlL21hbi9tYW4z
-L3ByaW50Zi4zLmd6CiQgbHMgLWwgL3Vzci9zaGFyZS9tYW4vbWFuMy92ZnByaW50Zi4zLmd6Cmxy
-d3hyd3hyd3ggMSByb290IHJvb3QgMTEgRmViICAyICAyMDE4IC91c3Ivc2hhcmUvbWFuL21hbjMv
-dmZwcmludGYuMy5neiAtPiBwcmludGYuMy5negoKU28gSSBzdXBwb3NlIHdlIGNvdWxkIGRvIHRo
-ZSBzYW1lLiAgSXQgd2lsbCBqdXN0ZSByZXF1aXJlIGEgYml0IG9mIGF1dG9tYWtlL01ha2VmaWxl
-IG1hZ2ljLgoKVGhlIHRyYWNlZiBtYW4gcGFnZSBkb2Vzbid0IG1lbnRpb24gaXRzIHN0YXAgcHJv
-YmUgaW50ZWdyYXRpb24sIGJ1dCBpdCBwcm9iYWJseSBzaG91bGQuICBBbmQgdGhlbgppdCB3b3Vs
-ZCBiZSB0aGUgcGxhY2UgKG1heWJlIGluIHRoZSBMSU1JVEFUSU9OUyBzZWN0aW9uKSB0byBzYXkg
-dGhhdCB2dHJhY2VmIGRvZXNuJ3QgaW50ZWdyYXRlIGEKc3RhcCBwcm9iZS4KCj4+Cj4+IE5vdGUg
-dGhhdCBpZiB0aGUgZmVhdHVyZSBpcyBhY2NlcHRlZCwgaXQgd2lsbCByZXF1aXJlIGF0IGxlYXN0
-IGEgbWFuIHBhZ2UgdXBkYXRlLiBBbiB1cGRhdGUgaW4KPj4gZG9jL2V4YW1wbGVzL2RlbW8tdHJh
-Y2VmL2RlbW8tdHJhY2VmLmMgd291bGQgYWxzbyBiZSBuaWNlLCB0byBoYXZlIGFuIGV4YW1wbGUg
-b2YgaG93IGl0IGNhbiBiZSB1c2VkLgo+IAo+IExvb2tpbmcgYXQgdGhlIGV4YW1wbGUsIG1heWJl
-IEkgc2hvdWxkIGNyZWF0ZSBhbm90aGVyIGZpbGUgZGVtby12dHJhY2VmLmM/CgpBcyB5b3Ugd2lz
-aCwgSSB0aGluayBlaXRoZXIgd291bGQgYmUgZmluZS4KClNpbW9uCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
-bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
-aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi everyone!
+
+Today we're releasing the first patch-level release of Babeltrace 2.0
+"Amqui".
+
+What's new since Babeltrace 2.0.0?
+==================================
+This release contains minor bug fixes which are mainly
+related to packaging and documentation issues.
+
+Of note for packagers, we have changed the autoconf package name to
+`babeltrace2`. This fixes co-installation problems with Babeltrace
+1.x, but also changes the naming scheme of the official tarball.
+
+The official tarballs of Babeltrace 2 are now named
+`babeltrace2-$VERSION.tar.bz2`. We have added a symlink to reflect
+this naming scheme to the prior Babeltrace 2.0.0 release.
+
+The full change log follows.
+
+2020-02-04 Babeltrace 2.0.1
+	* fix: Remove empty python bindings documentation
+	* README: Babeltrace 2 was released in 2020
+	* fix: set autoconf package name to babeltrace2
+	* Typo: occured -> occurred
+	* .gitignore: Add missing bt2/native_bt.d
+	* fix: build failure on ppc64el with '-Werror=format-overflow='
+	* Silence -Wnull-dereference warning in generated CTF parser code
+	* plugin-so.c: add comment about why we're not using a GLib linked list
+	* doc: graph.h: do not link to `man7.org` for `babeltrace(1)`
+	* fix: common/list.h is LGPL-2.1
+	* fix: build Python bindings with GCC10
+	* fix: use correct function to print 'enum bt_ctf_scope'
+	* Update working version to Babeltrace 2.0.1
+
+
+Important links
+===============
+Babeltrace 2.0.1 tarball:
+    https://www.efficios.com/files/babeltrace/babeltrace2-2.0.1.tar.bz2
+
+Babeltrace website:
+    https://babeltrace.org
+
+Mailing list (for support and development):
+    `lttng-dev at lists.lttng.org`
+
+IRC channel:
+    `#lttng` on `irc.oftc.net`
+
+Git repository:
+    https://bugs.lttng.org/projects/babeltrace
+
+GitHub project:
+    https://github.com/efficios/babeltrace
+
+Continuous integration:
+    https://ci.lttng.org/view/Babeltrace/
+
+Code review:
+    https://review.lttng.org/q/project:babeltrace
