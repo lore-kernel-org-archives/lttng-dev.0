@@ -1,19 +1,23 @@
-From: Simon Marchi <simark@simark.ca>
-Subject: Re: [PATCH v2 lttng-ust] Introduce vtracef
-Date: Thu, 6 Feb 2020 10:09:36 -0500
-Message-ID: <c2fc4237-5353-6e76-bdda-e06c8d58e5b8@simark.ca>
-References: <20200205233640.21765-1-maxime.roussinbelanger@gmail.com>
- <266d72f8-cf50-151d-4960-b443bbf2e2f6@simark.ca>
- <ab61c9c5-679b-4b4a-ddc9-b3559b633a1a@simark.ca>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: LTTng-tools 2.10.10 - KeKriek
+Date: Thu, 6 Feb 2020 16:07:51 -0500
+Message-ID: <20200206210751.GA11112@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 48D20S6lqbz10Gg
- for <lttng-dev@lists.lttng.org>; Thu,  6 Feb 2020 10:09:43 -0500 (EST)
-In-Reply-To: <ab61c9c5-679b-4b4a-ddc9-b3559b633a1a@simark.ca>
-Content-Language: tl
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com
+ [209.85.222.178])
+ by lists.lttng.org (Postfix) with ESMTPS id 48D9xl673Cz10Yb
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Feb 2020 16:07:55 -0500 (EST)
+Received: by mail-qk1-f178.google.com with SMTP id j20so58661qka.10
+ for <lttng-dev@lists.lttng.org>; Thu, 06 Feb 2020 13:07:55 -0800 (PST)
+Received: from gmail.com (192-222-181-218.qc.cable.ebox.net. [192.222.181.218])
+ by smtp.gmail.com with ESMTPSA id p26sm257999qkp.34.2020.02.06.13.07.53
+ for <lttng-dev@lists.lttng.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 06 Feb 2020 13:07:53 -0800 (PST)
+Content-Disposition: inline
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,18 +27,33 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Maxime Roussin-Belanger <maxime.roussinbelanger@gmail.com>, lttng-dev@lists.lttng.org, champagne.guillaume.c@gmail.com
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2020-02-05 9:55 p.m., Simon Marchi wrote:
-> Ok, so I poked Phil the doc guy about this, and he spotted that the problem is actually in the
-> asciidoc -> docbook conversion.  He provided the patch provided below.  I'll try to clean up
-> that patch and send it formally to the list tomorrow, but I thought I'd send it to you now so
-> you won't lose time trying to figure this out.
+Hi all,
 
-I forgot to put you in CC and I don't know if you are subscribed to the list, so here's the
-link to the proposed patch.
+The tenth bug-fix release of LTTng-tools 2.10 - KeKriek has just been
+released. This release addresses a number of issues listed below.
 
-https://lists.lttng.org/pipermail/lttng-dev/2020-February/029528.html
+2020-02-05 lttng-tools 2.10.10 (National Chocolate Fondue Day)
+	* Fix: include stdlib.h in compat/string.h
+	* Fix: lttng: sanity check of `--probe` description
+	* Fix: lttng: placing probe on symbol starting with `_`
+	* Fix: update context types for Python bindings
+	* doc: Fix bind address example for lttng-relayd
+	* Require automake >= 1.12
+	* Fix: sessiond: ust: deadlock with per-pid buffers
+	* Fix: lttng: initialize sessions pointer to NULL
+	* Fix: sessiond: use system LTTng-UST headers when available
+	* doc/man: use specific revision date for each manual page
 
-Simon
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
+
+Project website: https://lttng.org
+
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.10.10.tar.bz2
+
+GPG signature:
+https://lttng.org/files/lttng-tools/lttng-tools-2.10.10.tar.bz2.asc
