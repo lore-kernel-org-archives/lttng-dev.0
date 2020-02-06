@@ -1,15 +1,19 @@
-From: Simon Marchi <simon.marchi@efficios.com>
-Subject: [PATCH lttng-ust] Fix: generation of man pages with
- multiple refnames
-Date: Thu,  6 Feb 2020 10:06:45 -0500
-Message-ID: <20200206150645.6654-1-simon.marchi@efficios.com>
+From: Simon Marchi <simark@simark.ca>
+Subject: Re: [PATCH v2 lttng-ust] Introduce vtracef
+Date: Thu, 6 Feb 2020 10:09:36 -0500
+Message-ID: <c2fc4237-5353-6e76-bdda-e06c8d58e5b8@simark.ca>
+References: <20200205233640.21765-1-maxime.roussinbelanger@gmail.com>
+ <266d72f8-cf50-151d-4960-b443bbf2e2f6@simark.ca>
+ <ab61c9c5-679b-4b4a-ddc9-b3559b633a1a@simark.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 48D1xV0Dv6z10MJ
- for <lttng-dev@lists.lttng.org>; Thu,  6 Feb 2020 10:07:10 -0500 (EST)
+Received: from simark.ca (simark.ca [158.69.221.121])
+ by lists.lttng.org (Postfix) with ESMTPS id 48D20S6lqbz10Gg
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Feb 2020 10:09:43 -0500 (EST)
+In-Reply-To: <ab61c9c5-679b-4b4a-ddc9-b3559b633a1a@simark.ca>
+Content-Language: tl
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,99 +23,18 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: Simon Marchi <simon.marchi@efficios.com>
+To: Maxime Roussin-Belanger <maxime.roussinbelanger@gmail.com>, lttng-dev@lists.lttng.org, champagne.guillaume.c@gmail.com
 List-Id: lttng-dev@lists.lttng.org
 
-In this proposed patch [1], we're trying to make a man page with two
-command names in the NAME section, like this:
+On 2020-02-05 9:55 p.m., Simon Marchi wrote:
+> Ok, so I poked Phil the doc guy about this, and he spotted that the problem is actually in the
+> asciidoc -> docbook conversion.  He provided the patch provided below.  I'll try to clean up
+> that patch and send it formally to the list tomorrow, but I thought I'd send it to you now so
+> you won't lose time trying to figure this out.
 
-  tracef, vtracef - LTTng-UST printf(3)-like interface
+I forgot to put you in CC and I don't know if you are subscribed to the list, so here's the
+link to the proposed patch.
 
-Doing so causes the intermediary XML (what asciidoc outputs) to contain
-this:
+https://lists.lttng.org/pipermail/lttng-dev/2020-February/029528.html
 
-    <refnamediv>
-      <refname>tracef, vtracef</refname>
-      <refpurpose>LTTng-UST printf(3)-like interface</refpurpose>
-    </refnamediv>
-
-The refname is used by the docbook XSL to determine the output
-filename.  This therefore results in an output file named
-`tracef,_vtracef.3`, which is not desirable.
-
-The problem is in the asciidoc pass, more specifically the part of
-asciidoc.conf removed by this patch.  Is is there to override the
-`source`, `version` and `manual` fields, but it also inadvertently
-affects the refname generation.
-
-Instead of playing with the asciidoc output template, this patch sets
-the same `source`, `version` and `manual` attributes on the asciidoc
-command line.  With the present patch applied, the XML output contains:
-
-    <refnamediv>
-        <refname>tracef</refname>
-        <refname>vtracef</refname>
-        <refpurpose>LTTng-UST printf(3)-like interface</refpurpose>
-    </refnamediv>
-
-The xmlto pass (docbook XML -> man page) then generates two files,
-`tracef.3` and `vtracef.3`, where `vtracef.3` simply sources `tracef.3`
-(which is what we want).
-
-[1] https://lists.lttng.org/pipermail/lttng-dev/2020-February/029524.html
-
-Signed-off-by: Simon Marchi <simon.marchi@efficios.com>
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
----
- doc/man/Makefile.am   |  6 ++++--
- doc/man/asciidoc.conf | 20 --------------------
- 2 files changed, 4 insertions(+), 22 deletions(-)
-
-diff --git a/doc/man/Makefile.am b/doc/man/Makefile.am
-index f562bfd13a66..14aa4be7c82d 100644
---- a/doc/man/Makefile.am
-+++ b/doc/man/Makefile.am
-@@ -58,8 +58,10 @@ xmlto_verbose_0 = @echo "  XMLTO     " $@;
- 
- # Tools to execute:
- ADOC = $(asciidoc_verbose)$(ASCIIDOC) -f $(ASCIIDOC_CONF) -d manpage \
--	-a lttng_version="$(PACKAGE_VERSION)" \
--	-a lttng_ust_register_timeout="@LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@"
-+	-a lttng_ust_register_timeout="@LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@" \
-+	-a mansource="LTTng" \
-+	-a manmanual="LTTng Manual" \
-+	-a manversion="$(PACKAGE_VERSION)"
- 
- ADOC_DOCBOOK = $(ADOC) -b docbook
- XTO = $(xmlto_verbose)$(XMLTO) -m $(XSL_FILE) man
-diff --git a/doc/man/asciidoc.conf b/doc/man/asciidoc.conf
-index e3c8016dc3ff..b3c8709d5ead 100644
---- a/doc/man/asciidoc.conf
-+++ b/doc/man/asciidoc.conf
-@@ -57,23 +57,3 @@ ifdef::backend-docbook[]
- NOT
- endif::backend-docbook[]
- endif::doctype-manpage[]
--
--# configure XML man page header
--ifdef::doctype-manpage[]
--ifdef::backend-docbook[]
--[header]
--template::[header-declarations]
--<refentry>
--<refmeta>
--<refentrytitle>{mantitle}</refentrytitle>
--<manvolnum>{manvolnum}</manvolnum>
--<refmiscinfo class="source">LTTng</refmiscinfo>
--<refmiscinfo class="version">{lttng_version}</refmiscinfo>
--<refmiscinfo class="manual">LTTng Manual</refmiscinfo>
--</refmeta>
--<refnamediv>
--  <refname>{manname}</refname>
--  <refpurpose>{manpurpose}</refpurpose>
--</refnamediv>
--endif::backend-docbook[]
--endif::doctype-manpage[]
--- 
-2.25.0
+Simon
