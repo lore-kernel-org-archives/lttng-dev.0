@@ -1,334 +1,55 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v4 lttng-ust 1/2] Introduce vtracef
-Date: Wed, 4 Mar 2020 10:27:22 -0500 (EST)
-Message-ID: <1473825300.17663.1583335642841.JavaMail.zimbra@efficios.com>
-References: <20200303231031.23708-1-maxime.roussinbelanger@gmail.com>
+Subject: [RELEASE] LTTng-UST 2.10.7, 2.11.1, 2.12.0-rc2 (Linux user-space
+ tracer)
+Date: Wed, 4 Mar 2020 16:27:08 -0500 (EST)
+Message-ID: <1372342050.18535.1583357228871.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 48Xd6V0809z13w3
- for <lttng-dev@lists.lttng.org>; Wed,  4 Mar 2020 10:27:29 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8655626CFA5
- for <lttng-dev@lists.lttng.org>; Wed,  4 Mar 2020 10:27:23 -0500 (EST)
-In-Reply-To: <20200303231031.23708-1-maxime.roussinbelanger@gmail.com>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Maxime Roussin-Belanger <maxime.roussinbelanger@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Return-path: <linux-trace-users-owner@vger.kernel.org>
+Sender: linux-trace-users-owner@vger.kernel.org
+To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
------ On Mar 3, 2020, at 6:10 PM, Maxime Roussin-Belanger maxime.roussinbelanger@gmail.com wrote:
+Hi,
 
-> vtracef accepts a va_list argument to simplify
-> tracing functions which use a va_list
+This announcement covers new releases in the two actively maintained
+stable branches of the LTTng-UST project (2.10.7 and 2.11.1), as well as
+the second release candidate for the 2.12 branch (2.12.0-rc2).
 
-Both patches merged into lttng-ust master branch, thanks for
-your contribution!
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer,
+is a low-overhead application tracer. The library "liblttng-ust" enables
+tracing of applications and libraries.
 
-I noticed that demo-vtracelog.c was missing from the patch. I implemented
-one myself.
+* Noteworthy fixes:
 
-I also added the missing demo files to the .gitignore listing in the
-top-level directory.
+All of these releases contain a fix which ensures the FD_CLOEXEC flag
+is set for _all_ file descriptors received by lttng-ust over unix
+socket. This fixes an issue where more file descriptors than expected
+stay open over exec.
+
+Fixes were introduced to please the address sanitizer (ASan) part of
+clang-9. One documented out-of-bound access was done by jhash as an
+"optimization" which was rightfully tripping ASan. Since this is
+not a fast-path, the optimization was removed and we always use the
+slower "valgrind-safe" code path. We also annotated the variables
+emitted in the __tracepoints_ptrs to ensure ASan does not emit
+redzones around those variables, which are means to be contiguous
+within the section.
+
+For the 2.10 and 2.11 branches, building with -fno-common is
+enforced to prepare for the upcoming default behavior change
+in gcc 10.
+
+Please try it out, and as usual, feedback is welcome!
+
+Thanks,
 
 Mathieu
 
-> 
-> Here's an example from wpa_supplicant that I wanted to
-> trace:
-> 
-> void wpa_debug(int level, const char* fmt, ...)
-> {
->	va_list ap;
->	va_start(ap, fmt);
-> 
->	...
->	// The call I want to easily trace with vtracef
->	vprintf(fmt, ap);
-> 
->	...
->	va_end(ap);
-> }
-> 
-> wpa_debug is used a fair amount and it would be annoying to
-> replace all the wpa_debug calls with tracef.
-> 
-> With vtracef, it simplifies the find and replace effort by
-> only changing it at one place.
-> 
-> Signed-off-by: Maxime Roussin-Belanger <maxime.roussinbelanger@gmail.com>
-> ---
-> Changes in v4:
->	* Use a static inline function to force compiler to inline
->	the vtracef function call.
->	* Fix styling issue
-> 
-> doc/examples/demo-tracef/Makefile       | 14 +++++-
-> doc/examples/demo-tracef/demo-vtracef.c | 58 +++++++++++++++++++++++++
-> doc/man/tracef-tracelog-limitations.txt |  3 ++
-> doc/man/tracef.3.txt                    | 11 ++---
-> include/lttng/tracef.h                  |  8 ++++
-> liblttng-ust/tracef.c                   | 24 +++++++---
-> 6 files changed, 105 insertions(+), 13 deletions(-)
-> create mode 100644 doc/examples/demo-tracef/demo-vtracef.c
-> 
-> diff --git a/doc/examples/demo-tracef/Makefile
-> b/doc/examples/demo-tracef/Makefile
-> index ee207843..809aac19 100644
-> --- a/doc/examples/demo-tracef/Makefile
-> +++ b/doc/examples/demo-tracef/Makefile
-> @@ -20,18 +20,28 @@ LIBS = -ldl -llttng-ust	# On Linux
-> LOCAL_CPPFLAGS += -I.
-> AM_V_P := :
-> 
-> -all: demo-tracef
-> +all: demo-tracef demo-vtracef
-> 
-> demo-tracef.o: demo-tracef.c
-> 	@if $(AM_V_P); then set -x; else echo "  CC       $@"; fi; \
-> 		$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(AM_CFLAGS) $(AM_CPPFLAGS) \
-> 		$(CFLAGS) -c -o $@ $<
-> 
-> demo-tracef: demo-tracef.o
-> 	@if $(AM_V_P); then set -x; else echo "  CCLD     $@"; fi; \
-> 		$(CC) $(LDFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) $(CFLAGS) \
-> 		-o $@ $< $(LIBS)
-> 
-> +demo-vtracef.o: demo-vtracef.c
-> +	@if $(AM_V_P); then set -x; else echo "  CC       $@"; fi; \
-> +		$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(AM_CFLAGS) $(AM_CPPFLAGS) \
-> +		$(CFLAGS) -c -o $@ $<
-> +
-> +demo-vtracef: demo-vtracef.o
-> +	@if $(AM_V_P); then set -x; else echo "  CCLD     $@"; fi; \
-> +		$(CC) $(LDFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) $(CFLAGS) \
-> +		-o $@ $< $(LIBS)
-> +
-> .PHONY: clean
-> clean:
-> -	rm -f *.o *.a demo-tracef
-> +	rm -f *.o *.a demo-tracef demo-vtracef
-> diff --git a/doc/examples/demo-tracef/demo-vtracef.c
-> b/doc/examples/demo-tracef/demo-vtracef.c
-> new file mode 100644
-> index 00000000..5ade85a6
-> --- /dev/null
-> +++ b/doc/examples/demo-tracef/demo-vtracef.c
-> @@ -0,0 +1,58 @@
-> +/*
-> + * Copyright (C) 2020  Maxime Roussin-Belanger
-> <maxime.roussinbelanger@gmail.com>
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; version 2.1 of
-> + * the License.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
-> USA
-> + */
-> +
-> +#include <stdarg.h>
-> +#include <stdlib.h>
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +
-> +#include <lttng/tracef.h>
-> +
-> +void print_debug(const char* msg, ...)
-> +{
-> +	va_list ap;
-> +	va_start(ap, msg);
-> +
-> +	vtracef(msg, ap);
-> +
-> +	va_end(ap);
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	int i;
-> +	int delay = 0;
-> +	const char *str = "mystring test";
-> +	long l = 0x42;
-> +
-> +	if (argc > 2)
-> +		delay = atoi(argv[1]);
-> +
-> +	fprintf(stderr, "Demo program starting.\n");
-> +
-> +	sleep(delay);
-> +
-> +	fprintf(stderr, "Tracing... ");
-> +
-> +	for (i = 0; i < 5; i++) {
-> +		print_debug("This is a \"%s\" formatted %d event %lx", str, i, l);
-> +	}
-> +
-> +	fprintf(stderr, " done.\n");
-> +	return 0;
-> +}
-> diff --git a/doc/man/tracef-tracelog-limitations.txt
-> b/doc/man/tracef-tracelog-limitations.txt
-> index a9491903..ad4130dd 100644
-> --- a/doc/man/tracef-tracelog-limitations.txt
-> +++ b/doc/man/tracef-tracelog-limitations.txt
-> @@ -21,4 +21,7 @@ Thus, +{macro-name}()+ is useful for quick prototyping and
-> debugging, but
-> should not be considered for any permanent/serious application
-> instrumentation.
-> 
-> ++v{macro-name}()+ does not have a `STAP_PROBEV()` call, because `STAP_PROBEV()`
-> +does not support `va_list`. If you need it, you should emit this call yourself.
-> +
-> See man:lttng-ust(3) to learn more about custom tracepoint providers.
-> diff --git a/doc/man/tracef.3.txt b/doc/man/tracef.3.txt
-> index 1068afad..2894ca45 100644
-> --- a/doc/man/tracef.3.txt
-> +++ b/doc/man/tracef.3.txt
-> @@ -5,43 +5,44 @@ tracef(3)
-> 
-> NAME
-> ----
-> -tracef - LTTng-UST printf(3)-like interface
-> +tracef, vtracef - LTTng-UST printf(3)-like interface
-> 
-> 
-> SYNOPSIS
-> --------
-> [verse]
-> *#include <lttng/tracef.h>*
-> 
-> [verse]
-> #define *tracef*('fmt', ...)
-> +#define *vtracef*('fmt', 'va_list' ap)
-> 
-> Link with `-llttng-ust`.
-> 
-> 
-> DESCRIPTION
-> -----------
-> The LTTng-UST `tracef()` API allows you to trace your application with
-> the help of a simple man:printf(3)-like macro. The 'fmt' argument is
-> passed directly to the 'fmt' parameter of man:vasprintf(3), as well as
-> the optional parameters following 'fmt'.
-> 
-> -To use `tracef()`, include `<lttng/tracef.h>` where you need it, and
-> -link your application with `liblttng-ust`. See the <<example,EXAMPLE>>
-> +To use `tracef()` or `vtracef()`, include `<lttng/tracef.h>` where you need it,
-> +and link your application with `liblttng-ust`. See the <<example,EXAMPLE>>
-> section below for a complete usage example.
-> 
-> -Once your application is instrumented with `tracef()` calls and
-> +Once your application is instrumented with `tracef()` or `vtracef()` calls and
-> ready to run, use man:lttng-enable-event(1) to enable the
-> `lttng_ust_tracef:*` event.
-> 
-> The `tracef()` events contain a single field, named `msg`, which is the
-> formatted string output.
-> 
-> If you need to attach a specific log level to a `tracef()` call, use
-> man:tracelog(3) instead.
-> 
-> See also the <<limitations,LIMITATIONS>> section below for important
-> -limitations to consider when using `tracef()`.
-> +limitations to consider when using `tracef()` or `vtracef()`.
-> 
-> 
-> [[example]]
-> diff --git a/include/lttng/tracef.h b/include/lttng/tracef.h
-> index 0c59c9ae..854ccdce 100644
-> --- a/include/lttng/tracef.h
-> +++ b/include/lttng/tracef.h
-> @@ -32,13 +32,21 @@ extern "C" {
-> extern
-> void _lttng_ust_tracef(const char *fmt, ...);
-> 
-> +extern
-> +void _lttng_ust_vtracef(const char *fmt, va_list ap);
-> +
-> #define tracef(fmt, ...)						\
-> 	do {								\
-> 		LTTNG_STAP_PROBEV(tracepoint_lttng_ust_tracef, event, ## __VA_ARGS__); \
-> 		if (caa_unlikely(__tracepoint_lttng_ust_tracef___event.state)) \
-> 			_lttng_ust_tracef(fmt, ## __VA_ARGS__);		\
-> 	} while (0)
-> 
-> +#define vtracef(fmt, ap)						\
-> +	do {								\
-> +		if (caa_unlikely(__tracepoint_lttng_ust_tracef___event.state)) \
-> +			_lttng_ust_vtracef(fmt, ap);		\
-> +	} while (0)
-> #ifdef __cplusplus
-> }
-> #endif
-> diff --git a/liblttng-ust/tracef.c b/liblttng-ust/tracef.c
-> index ea98e43e..28a5e05b 100644
-> --- a/liblttng-ust/tracef.c
-> +++ b/liblttng-ust/tracef.c
-> @@ -29,20 +29,32 @@
-> #define TRACEPOINT_DEFINE
-> #include "lttng-ust-tracef-provider.h"
-> 
-> -void _lttng_ust_tracef(const char *fmt, ...)
-> +static inline __attribute__((always_inline))
-> +void __lttng_ust_vtracef(const char *fmt, va_list ap)
-> {
-> -	va_list ap;
-> 	char *msg;
-> -	int len;
-> -
-> -	va_start(ap, fmt);
-> -	len = vasprintf(&msg, fmt, ap);
-> +	const int len = vasprintf(&msg, fmt, ap);
-> 	/* len does not include the final \0 */
-> 	if (len < 0)
-> 		goto end;
-> 	__tracepoint_cb_lttng_ust_tracef___event(msg, len,
-> 		LTTNG_UST_CALLER_IP());
-> 	free(msg);
-> end:
-> +	return;
-> +}
-> +
-> +void _lttng_ust_vtracef(const char *fmt, va_list ap)
-> +{
-> +	__lttng_ust_vtracef(fmt, ap);
-> +}
-> +
-> +void _lttng_ust_tracef(const char *fmt, ...)
-> +{
-> +	va_list ap;
-> +
-> +	va_start(ap, fmt);
-> +	__lttng_ust_vtracef(fmt, ap);
-> +
-> 	va_end(ap);
-> }
-> --
-> 2.20.1
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
 
 -- 
 Mathieu Desnoyers
