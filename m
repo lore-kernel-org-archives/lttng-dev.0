@@ -1,29 +1,17 @@
-From: Florian Walbroel <walbroel@silexica.com>
-Subject: Re: Fwd: [PATCH lttng-modules] Add UDP and ICMP packet
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules] Add UDP and ICMP packet
  header information to the tracepoint:
-Date: Mon, 9 Mar 2020 11:55:45 +0100
-Message-ID: <2d41f7c4-9ed7-c652-8bbd-18da822c216e@silexica.com>
+Date: Mon, 9 Mar 2020 11:28:01 -0400 (EDT)
+Message-ID: <1568442012.21567.1583767681155.JavaMail.zimbra@efficios.com>
 References: <20191113163814.31606-1-walbroel@silexica.com>
- <7b697030-2d01-90bf-0225-fe52b42e9cd0@silexica.com>
- <1666401048.8323.1576593591017.JavaMail.zimbra@efficios.com>
- <88c1b057-e920-433e-77b0-03dd04cd14de@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com
- [IPv6:2a00:1450:4864:20::444])
- by lists.lttng.org (Postfix) with ESMTPS id 48bZrh5sskz1DR9
- for <lttng-dev@lists.lttng.org>; Mon,  9 Mar 2020 06:55:48 -0400 (EDT)
-Received: by mail-wr1-x444.google.com with SMTP id r15so5398428wrx.6
- for <lttng-dev@lists.lttng.org>; Mon, 09 Mar 2020 03:55:48 -0700 (PDT)
-Received: from [10.251.251.128] ([213.168.66.154])
- by smtp.gmail.com with ESMTPSA id b203sm12635473wme.32.2020.03.09.03.55.46
- for <lttng-dev@lists.lttng.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 09 Mar 2020 03:55:46 -0700 (PDT)
-In-Reply-To: <88c1b057-e920-433e-77b0-03dd04cd14de@efficios.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 48bhtv2fb6z1DRm
+ for <lttng-dev@lists.lttng.org>; Mon,  9 Mar 2020 11:28:07 -0400 (EDT)
+In-Reply-To: <20191113163814.31606-1-walbroel@silexica.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -33,19 +21,120 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Florian Walbroel <walbroel@silexica.com>
+Cc: Julien Desfossez <ju@klipix.org>, lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgppcyB0aGVyZSBhbnkgdXBkYXRlIHJlZ2FyZGluZyB0aGUgcGF0Y2hlcz8KCkJSLAoKRmxv
-cmlhbgoKT24gMTcuMTIuMTkgMTg6MjAsIE1pY2hhZWwgSmVhbnNvbiB3cm90ZToKPiBPbiAyMDE5
-LTEyLTE3IDk6MzkgYS5tLiwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4+IEkgd2FzIGV4cGVj
-dGluZyByZXZpZXcgZnJvbSBHZW5ldmnDqHZlIGFuZCBKdWxpZW4gb24gdGhpcyBwYXRjaCwgYnV0
-Cj4+IG5ldmVyIGhlYXJkIGJhY2sgZnJvbQo+PiB0aGVtLgo+Pgo+PiBHZW5ldmnDqHZlLCBKdWxp
-ZW4sIE1pY2hhZWwsIGNhbiB5b3UgcmV2aWV3IHRoaXMgcGF0Y2ggcGxlYXNlID8KPj4KPj4gVGhh
-bmtzLAo+Pgo+PiBNYXRoaWV1Cj4gSXQgYnVpbGRzIG9uIGFsbCB0aGUgbGF0ZXN0IHRhZ3Mgb2Yg
-dGhlIHN0YWJsZSBrZXJuZWwgYnJhbmNoZXMgd2UKPiBzdXBwb3J0IGFuZCB0aGUgcGF0Y2ggaXRz
-ZWxmIGxvb2tzIGdvb2QgdG8gbWUgYnV0IEdlbmV2acOodmUncyBvcgo+IEp1bGllbidzIGZlZWRi
-YWNrIHdvdWxkIGJlIGFwcHJlY2lhdGVkLgo+Cj4gTWljaGFlbApfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+----- On Nov 13, 2019, at 11:38 AM, Florian Walbroel walbroel@silexica.com wrote:
+
+> * UDP transport header
+> * ICMP transport header
+> 
+> (Correct indentation for switch/case)
+
+Hi Florian,
+
+Please address the additional comments below,
+
+[...]
+> 
+> +static inline enum transport_header_types __get_transport_header_type_ip(struct
+> sk_buff *skb)
+> +{
+> +	switch(ip_hdr(skb)->protocol) {
+
+this should be:
+
+  switch (ip_hdr(skb)->protocol) {
+
+> +	case IPPROTO_TCP:
+> +		return TH_TCP;
+> +	case IPPROTO_UDP:
+> +		return TH_UDP;
+> +	case IPPROTO_ICMP:
+> +		return TH_ICMP;
+> +	}
+> +	return TH_NONE;
+> +}
+> +
+> +static inline enum transport_header_types
+> __get_transport_header_type_ipv6(struct sk_buff *skb)
+> +{
+> +	switch(ipv6_hdr(skb)->nexthdr) {
+
+And this:
+
+  switch (ipv6_hdr(skb)->nexthdr) {
+
+> +	case IPPROTO_TCP:
+> +		return TH_TCP;
+> +	case IPPROTO_UDP:
+> +		return TH_UDP;
+> +	case IPPROTO_ICMP:
+> +		return TH_ICMP;
+> +	}
+> +	return TH_NONE;
+> +}
+> +
+
+[...]
+
+
+> 
+> static const struct lttng_enum_desc transport_header_type = {
+> @@ -510,15 +633,32 @@ LTTNG_TRACEPOINT_EVENT_CLASS(net_dev_template,
+> 					ctf_integer_type(unsigned char, th_type)
+> 
+> 					/* Copy the transport header. */
+> -					if (th_type == TH_TCP) {
+> +					switch (th_type) {
+> +					case TH_TCP: {
+> 						ctf_align(uint32_t)
+> 						ctf_array_type(uint8_t, tcp_hdr(skb),
+> 								sizeof(struct tcphdr))
+> +						break;
+> +					}
+> +					case TH_UDP: {
+> +						ctf_align(uint32_t)
+> +						ctf_array_type(uint8_t, udp_hdr(skb),
+> +								sizeof(struct udphdr))
+> +						break;
+> +					}
+> +					case TH_ICMP: {
+> +						ctf_align(uint32_t)
+> +						ctf_array_type(uint8_t, icmp_hdr(skb),
+> +								sizeof(struct udphdr))
+> +						break;
+
+Shouldn't this be "sizeof(struct icmphdr)" ?
+
+By looking at their definitions they appear to be the same size by chance,
+but it's good to have the right type here.
+
+After a last respin of the patch, we should be good to merge.
+
+Thanks,
+
+Mathieu
+
+
+> +					}
+> +					default:
+> +						/*
+> +						* For any other transport header type,
+> +						* there is nothing to do.
+> +						*/
+> +						break;
+> 					}
+> -					/*
+> -					 * For any other transport header type,
+> -					 * there is nothing to do.
+> -					 */
+> 				}
+> 			)
+> 		)
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
