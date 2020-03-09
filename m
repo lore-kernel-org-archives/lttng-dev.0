@@ -1,57 +1,51 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.10.7, 2.11.1, 2.12.0-rc2 (Linux user-space
- tracer)
-Date: Wed, 4 Mar 2020 16:27:08 -0500 (EST)
-Message-ID: <1372342050.18535.1583357228871.JavaMail.zimbra@efficios.com>
+From: Florian Walbroel <walbroel@silexica.com>
+Subject: Re: Fwd: [PATCH lttng-modules] Add UDP and ICMP packet
+ header information to the tracepoint:
+Date: Mon, 9 Mar 2020 11:55:45 +0100
+Message-ID: <2d41f7c4-9ed7-c652-8bbd-18da822c216e@silexica.com>
+References: <20191113163814.31606-1-walbroel@silexica.com>
+ <7b697030-2d01-90bf-0225-fe52b42e9cd0@silexica.com>
+ <1666401048.8323.1576593591017.JavaMail.zimbra@efficios.com>
+ <88c1b057-e920-433e-77b0-03dd04cd14de@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-trace-users-owner@vger.kernel.org>
-Sender: linux-trace-users-owner@vger.kernel.org
-To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com
+ [IPv6:2a00:1450:4864:20::444])
+ by lists.lttng.org (Postfix) with ESMTPS id 48bZrh5sskz1DR9
+ for <lttng-dev@lists.lttng.org>; Mon,  9 Mar 2020 06:55:48 -0400 (EDT)
+Received: by mail-wr1-x444.google.com with SMTP id r15so5398428wrx.6
+ for <lttng-dev@lists.lttng.org>; Mon, 09 Mar 2020 03:55:48 -0700 (PDT)
+Received: from [10.251.251.128] ([213.168.66.154])
+ by smtp.gmail.com with ESMTPSA id b203sm12635473wme.32.2020.03.09.03.55.46
+ for <lttng-dev@lists.lttng.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 09 Mar 2020 03:55:46 -0700 (PDT)
+In-Reply-To: <88c1b057-e920-433e-77b0-03dd04cd14de@efficios.com>
+Content-Language: en-US
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-This announcement covers new releases in the two actively maintained
-stable branches of the LTTng-UST project (2.10.7 and 2.11.1), as well as
-the second release candidate for the 2.12 branch (2.12.0-rc2).
-
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer,
-is a low-overhead application tracer. The library "liblttng-ust" enables
-tracing of applications and libraries.
-
-* Noteworthy fixes:
-
-All of these releases contain a fix which ensures the FD_CLOEXEC flag
-is set for _all_ file descriptors received by lttng-ust over unix
-socket. This fixes an issue where more file descriptors than expected
-stay open over exec.
-
-Fixes were introduced to please the address sanitizer (ASan) part of
-clang-9. One documented out-of-bound access was done by jhash as an
-"optimization" which was rightfully tripping ASan. Since this is
-not a fast-path, the optimization was removed and we always use the
-slower "valgrind-safe" code path. We also annotated the variables
-emitted in the __tracepoints_ptrs to ensure ASan does not emit
-redzones around those variables, which are means to be contiguous
-within the section.
-
-For the 2.10 and 2.11 branches, building with -fno-common is
-enforced to prepare for the upcoming default behavior change
-in gcc 10.
-
-Please try it out, and as usual, feedback is welcome!
-
-Thanks,
-
-Mathieu
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGksCgppcyB0aGVyZSBhbnkgdXBkYXRlIHJlZ2FyZGluZyB0aGUgcGF0Y2hlcz8KCkJSLAoKRmxv
+cmlhbgoKT24gMTcuMTIuMTkgMTg6MjAsIE1pY2hhZWwgSmVhbnNvbiB3cm90ZToKPiBPbiAyMDE5
+LTEyLTE3IDk6MzkgYS5tLiwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4+IEkgd2FzIGV4cGVj
+dGluZyByZXZpZXcgZnJvbSBHZW5ldmnDqHZlIGFuZCBKdWxpZW4gb24gdGhpcyBwYXRjaCwgYnV0
+Cj4+IG5ldmVyIGhlYXJkIGJhY2sgZnJvbQo+PiB0aGVtLgo+Pgo+PiBHZW5ldmnDqHZlLCBKdWxp
+ZW4sIE1pY2hhZWwsIGNhbiB5b3UgcmV2aWV3IHRoaXMgcGF0Y2ggcGxlYXNlID8KPj4KPj4gVGhh
+bmtzLAo+Pgo+PiBNYXRoaWV1Cj4gSXQgYnVpbGRzIG9uIGFsbCB0aGUgbGF0ZXN0IHRhZ3Mgb2Yg
+dGhlIHN0YWJsZSBrZXJuZWwgYnJhbmNoZXMgd2UKPiBzdXBwb3J0IGFuZCB0aGUgcGF0Y2ggaXRz
+ZWxmIGxvb2tzIGdvb2QgdG8gbWUgYnV0IEdlbmV2acOodmUncyBvcgo+IEp1bGllbidzIGZlZWRi
+YWNrIHdvdWxkIGJlIGFwcHJlY2lhdGVkLgo+Cj4gTWljaGFlbApfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
