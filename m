@@ -1,18 +1,20 @@
-From: Simon Marchi <simark@simark.ca>
-Subject: Re: [babeltrace][PATCH] fs.c: initialize the
- other_entry variable
-Date: Wed, 11 Mar 2020 09:52:27 -0400
-Message-ID: <a2a63a78-f39b-b64a-f09a-08e096dc6563@simark.ca>
-References: <1583933970-68840-1-git-send-email-mingli.yu@windriver.com>
+From: <mingli.yu@windriver.com>
+Subject: [babeltrace][PATCH] fs.c: initialize the other_entry
+ variable
+Date: Wed, 11 Mar 2020 21:25:26 +0800
+Message-ID: <1583933126-67509-1-git-send-email-mingli.yu@windriver.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 48ctsq3Yx2z1G64
- for <lttng-dev@lists.lttng.org>; Wed, 11 Mar 2020 10:01:18 -0400 (EDT)
-In-Reply-To: <1583933970-68840-1-git-send-email-mingli.yu@windriver.com>
-Content-Language: en-US-large
+Received: from mail.windriver.com (mail.windriver.com [147.11.1.11])
+ by lists.lttng.org (Postfix) with ESMTPS id 48cw9g1fHSz1FkS
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Mar 2020 11:00:06 -0400 (EDT)
+Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com
+ [147.11.189.40])
+ by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 02BDPRUN020451
+ (version=TLSv1 cipher=AES256-SHA bits=256 verify=FAIL)
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Mar 2020 06:25:27 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,25 +24,33 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: mingli.yu@windriver.com, lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2020-03-11 9:39 a.m., mingli.yu@windriver.com wrote:
-> From: Mingli Yu <mingli.yu@windriver.com>
-> 
-> Initialize the pointer other_entry to fix the below error:
-> | ../../../../../git/src/plugins/ctf/fs-src/fs.c: In function 'ds_index_insert_ds_index_entry_sorted':
-> | ../../../../../git/src/plugins/ctf/fs-src/fs.c:702:5: error: 'other_entry' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-> |  702 |    !ds_index_entries_equal(entry, other_entry)) {
-> 
-> Signed-off-by: Mingli Yu <mingli.yu@windriver.com>
+From: Mingli Yu <mingli.yu@windriver.com>
 
-Hi Mingli,
+Initialize the pointer other_entry to fix the below error:
+| ../../../../../git/src/plugins/ctf/fs-src/fs.c: In function 'ds_index_insert_ds_index_entry_sorted':
+| ../../../../../git/src/plugins/ctf/fs-src/fs.c:702:5: error: 'other_entry' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+|  702 |    !ds_index_entries_equal(entry, other_entry)) {
 
-Thanks for the patch.  Could you please mention the compiler you are using
-(which architecture and which version), as well as the full command line
-used to compile that file (shown with "make V=1"?
+Signed-off-by: Mingli Yu <mingli.yu@windriver.com>
+---
+ src/plugins/ctf/fs-src/fs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you,
-
-Simon
+diff --git a/src/plugins/ctf/fs-src/fs.c b/src/plugins/ctf/fs-src/fs.c
+index e87523a..a6b5315 100644
+--- a/src/plugins/ctf/fs-src/fs.c
++++ b/src/plugins/ctf/fs-src/fs.c
+@@ -680,7 +680,7 @@ void ds_index_insert_ds_index_entry_sorted(
+ 	struct ctf_fs_ds_index_entry *entry)
+ {
+ 	guint i;
+-	struct ctf_fs_ds_index_entry *other_entry;
++	struct ctf_fs_ds_index_entry *other_entry = NULL;
+ 
+ 	/* Find the spot where to insert this index entry. */
+ 	for (i = 0; i < index->entries->len; i++) {
+-- 
+2.7.4
