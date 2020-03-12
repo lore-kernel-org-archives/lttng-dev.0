@@ -1,20 +1,21 @@
-From: "Yu, Mingli via lttng-dev" <lttng-dev@lists.lttng.org>
-Subject: Re: [babeltrace][PATCH] fs.c: initialize the
- other_entry variable
-Date: Thu, 12 Mar 2020 03:37:18 +0000
-Message-ID: <E6F6D39CB834524199A3A6D928AB146553A0A5EC@ALA-MBD.corp.ad.wrs.com>
-References: <1583933970-68840-1-git-send-email-mingli.yu@windriver.com>,
- <a2a63a78-f39b-b64a-f09a-08e096dc6563@simark.ca>
-Reply-To: "Yu, Mingli" <Mingli.Yu@windriver.com>
+From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: bt2 Python quick start/examples?
+Date: Thu, 12 Mar 2020 10:18:41 -0400
+Message-ID: <20200312141841.GB16241@joraj-alpa>
+References: <CADtyBo5-2Dos_qAL=J3GjQReQ=e52U8sbUaN6-wx7kefaDZycA@mail.gmail.com>
+Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail5.wrs.com (mail5.windriver.com [192.103.53.11])
- by lists.lttng.org (Postfix) with ESMTPS id 48dGCL5pJwz1GjY
- for <lttng-dev@lists.lttng.org>; Thu, 12 Mar 2020 00:32:46 -0400 (EDT)
-In-Reply-To: <a2a63a78-f39b-b64a-f09a-08e096dc6563@simark.ca>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 48dWCX6FCZz1H80
+ for <lttng-dev@lists.lttng.org>; Thu, 12 Mar 2020 10:18:48 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id CCFBA28130A
+ for <lttng-dev@lists.lttng.org>; Thu, 12 Mar 2020 10:18:42 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CADtyBo5-2Dos_qAL=J3GjQReQ=e52U8sbUaN6-wx7kefaDZycA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,38 +25,32 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Simon Marchi <simark@simark.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Rocky Dunlap <dunlap@ucar.edu>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Simon,
+Hi,
 
-The compiler: GCC 9.2.0
-The error can occur when additionally add " -Og".
+On Wed, Mar 11, 2020 at 10:56:24PM -0400, Rocky Dunlap via lttng-dev wrote:
+> I see that the bt2 Python documentation is not yet ready:
+> https://babeltrace.org/docs/v2.0/python/bt2/
 
-Thanks,
-Mingli
-________________________________________
-From: Simon Marchi [simark@simark.ca]
-Sent: Wednesday, March 11, 2020 9:52 PM
-To: Yu, Mingli; lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] [babeltrace][PATCH] fs.c: initialize the other_entry variable
+Slowly getting there.
 
-On 2020-03-11 9:39 a.m., mingli.yu@windriver.com wrote:
-> From: Mingli Yu <mingli.yu@windriver.com>
->
-> Initialize the pointer other_entry to fix the below error:
-> | ../../../../../git/src/plugins/ctf/fs-src/fs.c: In function 'ds_index_insert_ds_index_entry_sorted':
-> | ../../../../../git/src/plugins/ctf/fs-src/fs.c:702:5: error: 'other_entry' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-> |  702 |    !ds_index_entries_equal(entry, other_entry)) {
->
-> Signed-off-by: Mingli Yu <mingli.yu@windriver.com>
+> 
+> In lieu of that, where is the best place to find at least a few examples of
+> using the bt2 Python API for basic trace processing tasks?
 
-Hi Mingli,
+Simon Marchi have some examples [1] that have been used in his talk [2][3].
 
-Thanks for the patch.  Could you please mention the compiler you are using
-(which architecture and which version), as well as the full command line
-used to compile that file (shown with "make V=1"?
+Hope this helps a bit.
 
-Thank you,
 
-Simon
+[1] https://github.com/simark/babeltrace-fun-plugins
+[2] https://www.youtube.com/watch?v=P3cPISvW444&feature=youtu.be
+[3] https://tracingsummit.org/ts/2019/files/Tracingsummit2019-babeltrace2-marchi.pdf
+
+
+-- 
+Jonathan Rajotte-Julien
+EfficiOS
