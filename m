@@ -1,19 +1,25 @@
-From: Simon Marchi via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: bt2 Python quick start/examples?
-Date: Thu, 12 Mar 2020 11:58:02 -0400
-Message-ID: <aef675ff-10d2-9928-9e32-77e78b7a9603@simark.ca>
-References: <CADtyBo5-2Dos_qAL=J3GjQReQ=e52U8sbUaN6-wx7kefaDZycA@mail.gmail.com>
- <20200312141841.GB16241@joraj-alpa>
-Reply-To: Simon Marchi <simark@simark.ca>
+From: Florian Walbroel via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: [PATCH lttng-modules] Add UDP and ICMP packet header
+ information to the tracepoint:
+Date: Fri, 13 Mar 2020 12:32:47 +0100
+Message-ID: <a7d8d1aa-7f7b-371e-ceda-2f7243e21077@silexica.com>
+Reply-To: Florian Walbroel <walbroel@silexica.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 48dYQ942Ppz1HHY
- for <lttng-dev@lists.lttng.org>; Thu, 12 Mar 2020 11:58:09 -0400 (EDT)
-In-Reply-To: <20200312141841.GB16241@joraj-alpa>
-Content-Language: tl
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com
+ [IPv6:2a00:1450:4864:20::343])
+ by lists.lttng.org (Postfix) with ESMTPS id 48f3Tb3BC2z1J3w
+ for <lttng-dev@lists.lttng.org>; Fri, 13 Mar 2020 07:32:51 -0400 (EDT)
+Received: by mail-wm1-x343.google.com with SMTP id 25so9541779wmk.3
+ for <lttng-dev@lists.lttng.org>; Fri, 13 Mar 2020 04:32:51 -0700 (PDT)
+Received: from [10.251.251.128] ([213.168.66.154])
+ by smtp.gmail.com with ESMTPSA id k126sm16580334wme.4.2020.03.13.04.32.48
+ for <lttng-dev@lists.lttng.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 13 Mar 2020 04:32:48 -0700 (PDT)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,98 +29,265 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>, Rocky Dunlap <dunlap@ucar.edu>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2020-03-12 10:18 a.m., Jonathan Rajotte-Julien via lttng-dev wrote:
-> Hi,
-> 
-> On Wed, Mar 11, 2020 at 10:56:24PM -0400, Rocky Dunlap via lttng-dev wrote:
->> I see that the bt2 Python documentation is not yet ready:
->> https://babeltrace.org/docs/v2.0/python/bt2/
-> 
-> Slowly getting there.
-> 
->>
->> In lieu of that, where is the best place to find at least a few examples of
->> using the bt2 Python API for basic trace processing tasks?
-> 
-> Simon Marchi have some examples [1] that have been used in his talk [2][3].
-> 
-> Hope this helps a bit.
-> 
-> 
-> [1] https://github.com/simark/babeltrace-fun-plugins
-> [2] https://www.youtube.com/watch?v=P3cPISvW444&feature=youtu.be
-> [3] https://tracingsummit.org/ts/2019/files/Tracingsummit2019-babeltrace2-marchi.pdf
+* UDP transport header
+* ICMP transport header
 
-In my presentation, I only touched the subject of writing component classes in
-Python.
+(Correct indentation for switch/case)
+(Fix white space for switch and correct struct type (icmphdr))
 
-I think that what many people are looking for is how to read a trace from
-Python, perhaps using existing component classes, to quickly
-prototype/implement some analysis.  So let me provide some small examples here
-to get people started, until the formal documentation is completed.
+Signed-off-by: Florian Walbroel <walbroel@silexica.com>
+---
+  instrumentation/events/lttng-module/net.h | 166 ++++++++++++++++++++--
+  1 file changed, 153 insertions(+), 13 deletions(-)
 
-If all you want to do is iterate on all the events of a trace or trace
-collection, then the most convenient/high-level entry point is the
-bt2.TraceCollectionMessageIterator class.  It works similarly to the Babeltrace
-2 CLI's convert command, in that you can just pass it an input string (a file
-path, a directory path or an arbitrary string recognized by some source
-component class) and it will use the auto-discovery mechanism to figure out
-which source components to instantiate.  You can also pass it more precise
-configurations of components to instantiate if needed, as well as various flags
-similar to what the CLI's convert command accepts (begin, end,
-stream-intersection).
+diff --git a/instrumentation/events/lttng-module/net.h 
+b/instrumentation/events/lttng-module/net.h
+index bfa14fc..8e6ee29 100644
+--- a/instrumentation/events/lttng-module/net.h
++++ b/instrumentation/events/lttng-module/net.h
+@@ -11,6 +11,8 @@
+  #include <linux/ip.h>
+  #include <linux/ipv6.h>
+  #include <linux/tcp.h>
++#include <linux/udp.h>
++#include <linux/icmp.h>
+  #include <linux/version.h>
+  #include <lttng-endian.h>
+  #include <net/sock.h>
+@@ -85,6 +87,53 @@ static struct lttng_event_field tcpfields[] = {
+  	},
+  };
 
-Here's a simple example that iterates on an LTTng kernel trace:
++static struct lttng_event_field udpfields[] = {
++	[0] = {
++		.name = "source_port",
++		.type = __type_integer(uint16_t, 0, 0, 0,
++				__BIG_ENDIAN, 10, none),
++	},
++	[1] = {
++		.name = "dest_port",
++		.type = __type_integer(uint16_t, 0, 0, 0,
++				__BIG_ENDIAN, 10, none),
++	},
++	[2] = {
++		.name = "len",
++		.type = __type_integer(uint16_t, 0, 0, 0,
++				__BIG_ENDIAN, 10, none),
++	},
++	[3] = {
++		.name = "check",
++		.type = __type_integer(uint16_t, 0, 0, 0,
++				__BIG_ENDIAN, 10, none),
++	},
++};
++
++static struct lttng_event_field icmpfields[] = {
++	[0] = {
++		.name = "type",
++		.type = __type_integer(uint8_t, 0, 0, 0,
++				__BIG_ENDIAN, 10, none),
++	},
++	[1] = {
++		.name = "code",
++		.type = __type_integer(uint8_t, 0, 0, 0,
++				__BIG_ENDIAN, 10, none),
++	},
++	[2] = {
++		.name = "checksum",
++		.type = __type_integer(uint16_t, 0, 0, 0,
++				__BIG_ENDIAN, 10, none),
++	},
++	[3] = {
++		.name = "gateway",
++		.type = __type_integer(uint32_t, 0, 0, 0,
++				__BIG_ENDIAN, 10, none),
++	},
++};
++
++
+  static struct lttng_event_field transport_fields[] = {
+  	[0] = {
+  		.name = "unknown",
+@@ -102,13 +151,57 @@ static struct lttng_event_field transport_fields[] = {
+  			.u._struct.fields = tcpfields,
+  		},
+  	},
++	[2] = {
++		.name = "udp",
++		.type = {
++			.atype = atype_struct,
++			.u._struct.nr_fields = ARRAY_SIZE(udpfields),
++			.u._struct.fields = udpfields,
++		},
++	},
++	[3] = {
++		.name = "icmp",
++		.type = {
++			.atype = atype_struct,
++			.u._struct.nr_fields = ARRAY_SIZE(icmpfields),
++			.u._struct.fields = icmpfields,
++		},
++	},
+  };
 
-    import bt2
+  enum transport_header_types {
+  	TH_NONE = 0,
+  	TH_TCP = 1,
++	TH_UDP = 2,
++	TH_ICMP = 3,
+  };
 
-    it = bt2.TraceCollectionMessageIterator(
-        "/home/smarchi/lttng-traces/auto-20191016-165642"
-    )
-    for msg in it:
-        if type(msg) == bt2._EventMessageConst:
-            ev = msg.event
-            if ev.cls.name == "sched_switch":
-                cpu = ev.packet.context_field["cpu_id"]
-                prev_tid = ev.payload_field["prev_tid"]
-                next_tid = ev.payload_field["next_tid"]
-                print(
-                    "cpu {}: switching from tid {} to tid {}".format(
-                        cpu, prev_tid, next_tid
-                    )
-                )
++static inline enum transport_header_types 
+__get_transport_header_type_ip(struct sk_buff *skb)
++{
++	switch (ip_hdr(skb)->protocol) {
++	case IPPROTO_TCP:
++		return TH_TCP;
++	case IPPROTO_UDP:
++		return TH_UDP;
++	case IPPROTO_ICMP:
++		return TH_ICMP;
++	}
++	return TH_NONE;
++}
++
++static inline enum transport_header_types 
+__get_transport_header_type_ipv6(struct sk_buff *skb)
++{
++	switch (ipv6_hdr(skb)->nexthdr) {
++	case IPPROTO_TCP:
++		return TH_TCP;
++	case IPPROTO_UDP:
++		return TH_UDP;
++	case IPPROTO_ICMP:
++		return TH_ICMP;
++	}
++	return TH_NONE;
++}
++
+  static inline enum transport_header_types 
+__get_transport_header_type(struct sk_buff *skb)
+  {
+  	if (__has_network_hdr(skb)) {
+@@ -123,13 +216,13 @@ static inline enum transport_header_types 
+__get_transport_header_type(struct sk_
+  			 * header's data. This method works both for
+  			 * sent and received packets.
+  			 */
+-			if ((skb->protocol == htons(ETH_P_IP) &&
+-					ip_hdr(skb)->protocol == IPPROTO_TCP) ||
+-				(skb->protocol == htons(ETH_P_IPV6) &&
+-					ipv6_hdr(skb)->nexthdr == IPPROTO_TCP))
+-				return TH_TCP;
++			if (skb->protocol == htons(ETH_P_IP)) {
++				return __get_transport_header_type_ip(skb);
++			} else if(skb->protocol == htons(ETH_P_IPV6)) {
++				return __get_transport_header_type_ipv6(skb);
++			}
+  		}
+-		/* Fallthrough for other cases where header is not TCP. */
++		/* Fallthrough for other cases where header is not recognized. */
+  	}
+  	return TH_NONE;
+  }
+@@ -137,16 +230,36 @@ static inline enum transport_header_types 
+__get_transport_header_type(struct sk_
+  static struct lttng_enum_entry proto_transport_enum_entries[] = {
+  	[0] = {
+  		.start = { .value = 0, .signedness = 0, },
+-		.end = { .value = IPPROTO_TCP - 1, .signedness = 0, },
++		.end = { .value = IPPROTO_ICMP - 1, .signedness = 0, },
+  		.string = "_unknown",
+  	},
+  	[1] = {
++		.start = { .value = IPPROTO_ICMP, .signedness = 0, },
++		.end = { .value = IPPROTO_ICMP, .signedness = 0, },
++		.string = "_icmp",
++	},
++	[2] = {
++		.start = { .value = IPPROTO_ICMP + 1, .signedness = 0, },
++		.end = { .value = IPPROTO_TCP - 1, .signedness = 0, },
++		.string = "_unknown",
++	},
++	[3] = {
+  		.start = { .value = IPPROTO_TCP, .signedness = 0, },
+  		.end = { .value = IPPROTO_TCP, .signedness = 0, },
+  		.string = "_tcp",
+  	},
+-	[2] = {
++	[4] = {
+  		.start = { .value = IPPROTO_TCP + 1, .signedness = 0, },
++		.end = { .value = IPPROTO_UDP - 1, .signedness = 0, },
++		.string = "_unknown",
++	},
++	[5] = {
++		.start = { .value = IPPROTO_UDP, .signedness = 0, },
++		.end = { .value = IPPROTO_UDP, .signedness = 0, },
++		.string = "_udp",
++	},
++	[6] = {
++		.start = { .value = IPPROTO_UDP + 1, .signedness = 0, },
+  		.end = { .value = 255, .signedness = 0, },
+  		.string = "_unknown",
+  	},
+@@ -169,6 +282,16 @@ static struct lttng_enum_entry 
+transport_enum_entries[] = {
+  		.end = { .value = TH_TCP, .signedness = 0, },
+  		.string = "_tcp",
+  	},
++	[2] = {
++		.start = { .value = TH_UDP, .signedness = 0, },
++		.end = { .value = TH_UDP, .signedness = 0, },
++		.string = "_udp",
++	},
++	[3] = {
++		.start = { .value = TH_ICMP, .signedness = 0, },
++		.end = { .value = TH_ICMP, .signedness = 0, },
++		.string = "_icmp",
++	},
+  };
 
-Here's another example that shows how to instantiate a graph manually, add and
-connects ports to it and run it.  It connects a "source.text.dmesg" source with
-a "sink.text.details" sink and runs the graph until completion.
+  static const struct lttng_enum_desc transport_header_type = {
+@@ -510,15 +633,32 @@ LTTNG_TRACEPOINT_EVENT_CLASS(net_dev_template,
+  					ctf_integer_type(unsigned char, th_type)
 
-    import bt2
-
-    g = bt2.Graph()
-    source = g.add_component(
-        bt2.find_plugin("text").source_component_classes["dmesg"], "source"
-    )
-    sink = g.add_component(
-        bt2.find_plugin("text").sink_component_classes["details"], "sink"
-    )
-    g.connect_ports(source.output_ports["out"], sink.input_ports["in"])
-    g.run()
-
-
-Without any parameters, the source.text.dmesg component reads on standard
-input, so you can execute this example with:
-
-    $ dmesg | python3 example.py
-
-For more examples of what these types can do, you can always look at the test
-cases:
-
-    https://github.com/efficios/babeltrace/tree/master/tests/bindings/python/bt2
-
-Hope this helps for the moment,
-
-Simon
+  					/* Copy the transport header. */
+-					if (th_type == TH_TCP) {
++					switch (th_type) {
++					case TH_TCP: {
+  						ctf_align(uint32_t)
+  						ctf_array_type(uint8_t, tcp_hdr(skb),
+  								sizeof(struct tcphdr))
++						break;
++					}
++					case TH_UDP: {
++						ctf_align(uint32_t)
++						ctf_array_type(uint8_t, udp_hdr(skb),
++								sizeof(struct udphdr))
++						break;
++					}
++					case TH_ICMP: {
++						ctf_align(uint32_t)
++						ctf_array_type(uint8_t, icmp_hdr(skb),
++								sizeof(struct icmphdr))
++						break;
++					}
++					default:
++						/*
++						* For any other transport header type,
++						* there is nothing to do.
++						*/
++						break;
+  					}
+-					/*
+-					 * For any other transport header type,
+-					 * there is nothing to do.
+-					 */
+  				}
+  			)
+  		)
+-- 
+2.17.1
