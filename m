@@ -1,21 +1,21 @@
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: [PATCH lttng-modules] Add UDP and ICMP packet
- header information to the tracepoint:
-Date: Mon, 16 Mar 2020 11:15:01 -0400 (EDT)
-Message-ID: <982387221.29433.1584371701973.JavaMail.zimbra@efficios.com>
-References: <a7d8d1aa-7f7b-371e-ceda-2f7243e21077@silexica.com>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Rocky Dunlap via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: Large number of stream files in CTF trace -- too
+ many file handles
+Date: Mon, 16 Mar 2020 21:38:11 -0600
+Message-ID: <CADtyBo7J-E0C_Ap-7tztdd-PpHZwDUXBVqkT_mp_O3x9h=Qy5g@mail.gmail.com>
+References: <CADtyBo77-N3SscU7K_HCTwVq7+5f_d9yb19buve66p+SrHxVHQ@mail.gmail.com>
+ <20200316145125.GC14185@joraj-alpa>
+Reply-To: Rocky Dunlap <dunlap@ucar.edu>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6018047994102122938=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 48h0Gh2mTXz1LDY
- for <lttng-dev@lists.lttng.org>; Mon, 16 Mar 2020 11:15:08 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 98BFB26BAF0
- for <lttng-dev@lists.lttng.org>; Mon, 16 Mar 2020 11:15:02 -0400 (EDT)
-In-Reply-To: <a7d8d1aa-7f7b-371e-ceda-2f7243e21077@silexica.com>
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com
+ [IPv6:2607:f8b0:4864:20::32e])
+ by lists.lttng.org (Postfix) with ESMTPS id 48hJmN1wTsz1LLS
+ for <lttng-dev@lists.lttng.org>; Mon, 16 Mar 2020 23:38:27 -0400 (EDT)
+Received: by mail-ot1-x32e.google.com with SMTP id i12so14967646otp.4
+ for <lttng-dev@lists.lttng.org>; Mon, 16 Mar 2020 20:38:27 -0700 (PDT)
+In-Reply-To: <20200316145125.GC14185@joraj-alpa>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,287 +25,146 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Florian Walbroel <walbroel@silexica.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Florian,
+--===============6018047994102122938==
+Content-Type: multipart/alternative; boundary="0000000000002718b805a104abd0"
 
-Sorry, I could not apply this patch due to line-wrapping performed
-by your email client. Please use git send-email.
+--0000000000002718b805a104abd0
+Content-Type: text/plain; charset="UTF-8"
 
-Thanks,
+Jonathan,
 
-Mathieu
+Increasing the soft FD limit worked great, both for the command line and
+the Python script.  Thanks for the help!
 
------ On Mar 13, 2020, at 7:32 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
+Rocky
 
-> * UDP transport header
-> * ICMP transport header
-> 
-> (Correct indentation for switch/case)
-> (Fix white space for switch and correct struct type (icmphdr))
-> 
-> Signed-off-by: Florian Walbroel <walbroel@silexica.com>
-> ---
->  instrumentation/events/lttng-module/net.h | 166 ++++++++++++++++++++--
->  1 file changed, 153 insertions(+), 13 deletions(-)
-> 
-> diff --git a/instrumentation/events/lttng-module/net.h
-> b/instrumentation/events/lttng-module/net.h
-> index bfa14fc..8e6ee29 100644
-> --- a/instrumentation/events/lttng-module/net.h
-> +++ b/instrumentation/events/lttng-module/net.h
-> @@ -11,6 +11,8 @@
->  #include <linux/ip.h>
->  #include <linux/ipv6.h>
->  #include <linux/tcp.h>
-> +#include <linux/udp.h>
-> +#include <linux/icmp.h>
->  #include <linux/version.h>
->  #include <lttng-endian.h>
->  #include <net/sock.h>
-> @@ -85,6 +87,53 @@ static struct lttng_event_field tcpfields[] = {
->  	},
->  };
-> 
-> +static struct lttng_event_field udpfields[] = {
-> +	[0] = {
-> +		.name = "source_port",
-> +		.type = __type_integer(uint16_t, 0, 0, 0,
-> +				__BIG_ENDIAN, 10, none),
-> +	},
-> +	[1] = {
-> +		.name = "dest_port",
-> +		.type = __type_integer(uint16_t, 0, 0, 0,
-> +				__BIG_ENDIAN, 10, none),
-> +	},
-> +	[2] = {
-> +		.name = "len",
-> +		.type = __type_integer(uint16_t, 0, 0, 0,
-> +				__BIG_ENDIAN, 10, none),
-> +	},
-> +	[3] = {
-> +		.name = "check",
-> +		.type = __type_integer(uint16_t, 0, 0, 0,
-> +				__BIG_ENDIAN, 10, none),
-> +	},
-> +};
-> +
-> +static struct lttng_event_field icmpfields[] = {
-> +	[0] = {
-> +		.name = "type",
-> +		.type = __type_integer(uint8_t, 0, 0, 0,
-> +				__BIG_ENDIAN, 10, none),
-> +	},
-> +	[1] = {
-> +		.name = "code",
-> +		.type = __type_integer(uint8_t, 0, 0, 0,
-> +				__BIG_ENDIAN, 10, none),
-> +	},
-> +	[2] = {
-> +		.name = "checksum",
-> +		.type = __type_integer(uint16_t, 0, 0, 0,
-> +				__BIG_ENDIAN, 10, none),
-> +	},
-> +	[3] = {
-> +		.name = "gateway",
-> +		.type = __type_integer(uint32_t, 0, 0, 0,
-> +				__BIG_ENDIAN, 10, none),
-> +	},
-> +};
-> +
-> +
->  static struct lttng_event_field transport_fields[] = {
->  	[0] = {
->  		.name = "unknown",
-> @@ -102,13 +151,57 @@ static struct lttng_event_field transport_fields[] = {
->  			.u._struct.fields = tcpfields,
->  		},
->  	},
-> +	[2] = {
-> +		.name = "udp",
-> +		.type = {
-> +			.atype = atype_struct,
-> +			.u._struct.nr_fields = ARRAY_SIZE(udpfields),
-> +			.u._struct.fields = udpfields,
-> +		},
-> +	},
-> +	[3] = {
-> +		.name = "icmp",
-> +		.type = {
-> +			.atype = atype_struct,
-> +			.u._struct.nr_fields = ARRAY_SIZE(icmpfields),
-> +			.u._struct.fields = icmpfields,
-> +		},
-> +	},
->  };
-> 
->  enum transport_header_types {
->  	TH_NONE = 0,
->  	TH_TCP = 1,
-> +	TH_UDP = 2,
-> +	TH_ICMP = 3,
->  };
-> 
-> +static inline enum transport_header_types
-> __get_transport_header_type_ip(struct sk_buff *skb)
-> +{
-> +	switch (ip_hdr(skb)->protocol) {
-> +	case IPPROTO_TCP:
-> +		return TH_TCP;
-> +	case IPPROTO_UDP:
-> +		return TH_UDP;
-> +	case IPPROTO_ICMP:
-> +		return TH_ICMP;
-> +	}
-> +	return TH_NONE;
-> +}
-> +
-> +static inline enum transport_header_types
-> __get_transport_header_type_ipv6(struct sk_buff *skb)
-> +{
-> +	switch (ipv6_hdr(skb)->nexthdr) {
-> +	case IPPROTO_TCP:
-> +		return TH_TCP;
-> +	case IPPROTO_UDP:
-> +		return TH_UDP;
-> +	case IPPROTO_ICMP:
-> +		return TH_ICMP;
-> +	}
-> +	return TH_NONE;
-> +}
-> +
->  static inline enum transport_header_types
-> __get_transport_header_type(struct sk_buff *skb)
->  {
->  	if (__has_network_hdr(skb)) {
-> @@ -123,13 +216,13 @@ static inline enum transport_header_types
-> __get_transport_header_type(struct sk_
->  			 * header's data. This method works both for
->  			 * sent and received packets.
->  			 */
-> -			if ((skb->protocol == htons(ETH_P_IP) &&
-> -					ip_hdr(skb)->protocol == IPPROTO_TCP) ||
-> -				(skb->protocol == htons(ETH_P_IPV6) &&
-> -					ipv6_hdr(skb)->nexthdr == IPPROTO_TCP))
-> -				return TH_TCP;
-> +			if (skb->protocol == htons(ETH_P_IP)) {
-> +				return __get_transport_header_type_ip(skb);
-> +			} else if(skb->protocol == htons(ETH_P_IPV6)) {
-> +				return __get_transport_header_type_ipv6(skb);
-> +			}
->  		}
-> -		/* Fallthrough for other cases where header is not TCP. */
-> +		/* Fallthrough for other cases where header is not recognized. */
->  	}
->  	return TH_NONE;
->  }
-> @@ -137,16 +230,36 @@ static inline enum transport_header_types
-> __get_transport_header_type(struct sk_
->  static struct lttng_enum_entry proto_transport_enum_entries[] = {
->  	[0] = {
->  		.start = { .value = 0, .signedness = 0, },
-> -		.end = { .value = IPPROTO_TCP - 1, .signedness = 0, },
-> +		.end = { .value = IPPROTO_ICMP - 1, .signedness = 0, },
->  		.string = "_unknown",
->  	},
->  	[1] = {
-> +		.start = { .value = IPPROTO_ICMP, .signedness = 0, },
-> +		.end = { .value = IPPROTO_ICMP, .signedness = 0, },
-> +		.string = "_icmp",
-> +	},
-> +	[2] = {
-> +		.start = { .value = IPPROTO_ICMP + 1, .signedness = 0, },
-> +		.end = { .value = IPPROTO_TCP - 1, .signedness = 0, },
-> +		.string = "_unknown",
-> +	},
-> +	[3] = {
->  		.start = { .value = IPPROTO_TCP, .signedness = 0, },
->  		.end = { .value = IPPROTO_TCP, .signedness = 0, },
->  		.string = "_tcp",
->  	},
-> -	[2] = {
-> +	[4] = {
->  		.start = { .value = IPPROTO_TCP + 1, .signedness = 0, },
-> +		.end = { .value = IPPROTO_UDP - 1, .signedness = 0, },
-> +		.string = "_unknown",
-> +	},
-> +	[5] = {
-> +		.start = { .value = IPPROTO_UDP, .signedness = 0, },
-> +		.end = { .value = IPPROTO_UDP, .signedness = 0, },
-> +		.string = "_udp",
-> +	},
-> +	[6] = {
-> +		.start = { .value = IPPROTO_UDP + 1, .signedness = 0, },
->  		.end = { .value = 255, .signedness = 0, },
->  		.string = "_unknown",
->  	},
-> @@ -169,6 +282,16 @@ static struct lttng_enum_entry
-> transport_enum_entries[] = {
->  		.end = { .value = TH_TCP, .signedness = 0, },
->  		.string = "_tcp",
->  	},
-> +	[2] = {
-> +		.start = { .value = TH_UDP, .signedness = 0, },
-> +		.end = { .value = TH_UDP, .signedness = 0, },
-> +		.string = "_udp",
-> +	},
-> +	[3] = {
-> +		.start = { .value = TH_ICMP, .signedness = 0, },
-> +		.end = { .value = TH_ICMP, .signedness = 0, },
-> +		.string = "_icmp",
-> +	},
->  };
-> 
->  static const struct lttng_enum_desc transport_header_type = {
-> @@ -510,15 +633,32 @@ LTTNG_TRACEPOINT_EVENT_CLASS(net_dev_template,
->  					ctf_integer_type(unsigned char, th_type)
-> 
->  					/* Copy the transport header. */
-> -					if (th_type == TH_TCP) {
-> +					switch (th_type) {
-> +					case TH_TCP: {
->  						ctf_align(uint32_t)
->  						ctf_array_type(uint8_t, tcp_hdr(skb),
->  								sizeof(struct tcphdr))
-> +						break;
-> +					}
-> +					case TH_UDP: {
-> +						ctf_align(uint32_t)
-> +						ctf_array_type(uint8_t, udp_hdr(skb),
-> +								sizeof(struct udphdr))
-> +						break;
-> +					}
-> +					case TH_ICMP: {
-> +						ctf_align(uint32_t)
-> +						ctf_array_type(uint8_t, icmp_hdr(skb),
-> +								sizeof(struct icmphdr))
-> +						break;
-> +					}
-> +					default:
-> +						/*
-> +						* For any other transport header type,
-> +						* there is nothing to do.
-> +						*/
-> +						break;
->  					}
-> -					/*
-> -					 * For any other transport header type,
-> -					 * there is nothing to do.
-> -					 */
->  				}
->  			)
->  		)
+On Mon, Mar 16, 2020 at 8:51 AM Jonathan Rajotte-Julien <
+jonathan.rajotte-julien@efficios.com> wrote:
+
+> Hi,
+>
+> > If this is not the right approach, how should I proceed?  E.g., should
+> the
+> > source-ctf-fs manage a limited pool of file handles?  I would think this
+> > would be pretty inefficient as you would need to constantly open/close
+> > files--expensive.
+>
+> I would probably start looking at the soft and hardlimit for the
+> babeltrace2
+> process in terms of open file:
+>
+> On my machine:
+>
+> joraj@~[]$ ulimit -Sn
+> 1024
+>
+> joraj@~[]$ ulimit -Hn
+> 1048576
+>
+> That is a lot of headspace.
+>
+> I might have a setting somewhere increasing the base hardlimit but
+> in any case you will see how much room you have.
+>
+> Based on the number of streams you have, I would say that you will
+> need more than 2000 as a base soft limit for this trace.
+>
+> We do have a FD pooling system in place in another project we maintain
+> (lttng-tools[1] GPL-2.0) that might be pertinent for babeltrace2 at some
+> point
+> in time. As for the overhead that would occur in a scenario with not
+> enough FD
+> available, I think it is a good compromise between either reading a trace
+> or
+> not reading it at all. A warning informing the user that we reached
+> the limit of the pool might be a good start in such case.
+>
+> [1] https://github.com/lttng/lttng-tools/tree/master/src/common/fd-tracker
+>
+> Cheers
+>
 > --
-> 2.17.1
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> Jonathan Rajotte-Julien
+> EfficiOS
+>
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--0000000000002718b805a104abd0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Jonathan,<div><br></div><div>Increasing=C2=A0the soft FD l=
+imit worked great, both for the command line and the Python script.=C2=A0 T=
+hanks for the help!</div><div><br></div><div>Rocky</div></div><br><div clas=
+s=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Mar 16, 202=
+0 at 8:51 AM Jonathan Rajotte-Julien &lt;<a href=3D"mailto:jonathan.rajotte=
+-julien@efficios.com">jonathan.rajotte-julien@efficios.com</a>&gt; wrote:<b=
+r></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex=
+;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi,<br>
+<br>
+&gt; If this is not the right approach, how should I proceed?=C2=A0 E.g., s=
+hould the<br>
+&gt; source-ctf-fs manage a limited pool of file handles?=C2=A0 I would thi=
+nk this<br>
+&gt; would be pretty inefficient as you would need to constantly open/close=
+<br>
+&gt; files--expensive.<br>
+<br>
+I would probably start looking at the soft and hardlimit for the babeltrace=
+2<br>
+process in terms of open file:<br>
+<br>
+On my machine:<br>
+<br>
+joraj@~[]$ ulimit -Sn<br>
+1024<br>
+<br>
+joraj@~[]$ ulimit -Hn<br>
+1048576<br>
+<br>
+That is a lot of headspace.<br>
+<br>
+I might have a setting somewhere increasing the base hardlimit but<br>
+in any case you will see how much room you have.<br>
+<br>
+Based on the number of streams you have, I would say that you will<br>
+need more than 2000 as a base soft limit for this trace.<br>
+<br>
+We do have a FD pooling system in place in another project we maintain<br>
+(lttng-tools[1] GPL-2.0) that might be pertinent for babeltrace2 at some po=
+int<br>
+in time. As for the overhead that would occur in a scenario with not enough=
+ FD<br>
+available, I think it is a good compromise between either reading a trace o=
+r<br>
+not reading it at all. A warning informing the user that we reached<br>
+the limit of the pool might be a good start in such case.<br>
+<br>
+[1] <a href=3D"https://github.com/lttng/lttng-tools/tree/master/src/common/=
+fd-tracker" rel=3D"noreferrer" target=3D"_blank">https://github.com/lttng/l=
+ttng-tools/tree/master/src/common/fd-tracker</a><br>
+<br>
+Cheers<br>
+<br>
+-- <br>
+Jonathan Rajotte-Julien<br>
+EfficiOS<br>
+</blockquote></div>
+
+--0000000000002718b805a104abd0--
+
+--===============6018047994102122938==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============6018047994102122938==--
