@@ -1,22 +1,23 @@
 From: Simon Marchi via lttng-dev <lttng-dev@lists.lttng.org>
 Subject: Re: Babeltrace2 - compilation error with intel18
-Date: Fri, 20 Mar 2020 23:12:33 -0400
-Message-ID: <4bc0ec69-7587-fe58-691f-5cb23a11cd43@simark.ca>
+Date: Mon, 23 Mar 2020 11:44:35 -0400
+Message-ID: <1c4447ea-b67a-eaf0-c9dd-d2c10106b5a7@simark.ca>
 References: <CADtyBo7jFiv-E-DCp4kYfY7WRSLsN3Oos6iRr35Sy9o=iNZKOg@mail.gmail.com>
  <b2e4fcfb-eb65-5205-1de3-0e0dbfb7fb48@simark.ca>
  <CADtyBo7Qjjb_f=45oTaSw4d=dQd5YVt6A2r7z7R5WYrxZ4eVTg@mail.gmail.com>
  <60fcd0f0-e89c-5e04-8185-8cf34a92fe04@simark.ca>
  <CADtyBo44MW0=jBnrhh-aqfnrS8RtLAk9zbBZp3ktEhKACWPXdg@mail.gmail.com>
+ <4bc0ec69-7587-fe58-691f-5cb23a11cd43@simark.ca>
 Reply-To: Simon Marchi <simark@simark.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 48km0j03X2z1P45
- for <lttng-dev@lists.lttng.org>; Fri, 20 Mar 2020 23:12:36 -0400 (EDT)
-In-Reply-To: <CADtyBo44MW0=jBnrhh-aqfnrS8RtLAk9zbBZp3ktEhKACWPXdg@mail.gmail.com>
-Content-Language: en-US-large
+ by lists.lttng.org (Postfix) with ESMTPS id 48mJbZ5Nhxz1Qyh
+ for <lttng-dev@lists.lttng.org>; Mon, 23 Mar 2020 11:44:42 -0400 (EDT)
+In-Reply-To: <4bc0ec69-7587-fe58-691f-5cb23a11cd43@simark.ca>
+Content-Language: tl
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -30,61 +31,23 @@ To: Rocky Dunlap <dunlap@ucar.edu>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAyMC0wMy0yMCA2OjMyIHAubS4sIFJvY2t5IER1bmxhcCB2aWEgbHR0bmctZGV2IHdyb3Rl
-Ogo+IFNpbW9uLAo+IAo+IFRoYW5rcyBmb3IgdGhpcyAtIHNvIGFmdGVyIEkgdXBkYXRlZCB0byBn
-Y2MgOS4yLCB0aGUgc2hhcmVkIGxpYnJhcmllcyBjb21tYW5kIHJhbiBjb3JyZWN0bHkgYW5kIHRo
-ZSBidWlsZCBmaW5pc2hlZC4gQWxsIHRoZSB0ZXN0cyBwYXNzIGFuZCBJIHdhcyBhYmxlIHRvIHJl
-YWQgaW4gYSBDVEYgdHJhY2UgZnJvbSBhIHB5dGhvbiBzY3JpcHQuwqDCoAo+IAo+IFRoZSBpc3N1
-ZSB3YXMgdGhhdCB0aGUgc3lzdGVtIGdjYyB3YXMgZ2NjIDQuWC5YLCBzbyB0b28gb2xkLsKgIFNv
-LCBJIGhhZCB0byBtYW51YWxseSBhZGQgdGhlIG5ld2VyIGdjYyB0byB0aGUgcGF0aCBhbG9uZ3Np
-ZGUgdGhlIGludGVsIGNvbXBpbGVyLsKgIEkgY2FuIHRyeSB0byBvcHRpb24gb2Ygc2V0dGluZyBM
-RFNIQVJFRCwgYnV0IGF0IHRoaXMgcG9pbnQgdGhhdCBzZWVtcyBldmVuIG1vcmUgY29uZnVzaW5n
-wqB0aGFuIGp1c3QgdXNpbmcgdGhlIHN5c3RlbSBnY2MsIHdoaWNoIGFwcGFyZW50bHkgaGFzIG5v
-IHRyb3VibGUgbGlua2luZyBpbnRlbCBvYmplY3QgZmlsZXMgaW50byBhIHNoYXJlZCBsaWJyYXJ5
-LsKgIE1heWJlIHRoZXJlIGFyZSBnb29kIHJlYXNvbnMgd2h5IHRoaXMgaXMgdGhlIGNhc2UgYW5k
-IHRoaXMgaXMgd2h5IGRpc3R1dGlscyBkb2VzIG5vdCB1c2UgdGhlIHJpZ2h0IGNvbXBpbGVyPwoK
-R2xhZCB5b3UgZ290IGl0IHdvcmtpbmcuCgo+IElkZWFsbHkgdGhlIGJ1aWxkIHdvdWxkIGp1c3Qg
-IndvcmsiIHdpdGggLi9jb25maWd1cmUsIG1ha2UsIG1ha2UgaW5zdGFsbCBzaW5jZSB0aGVzZSBr
-aW5kcyBvZiBjb21waWxhdGlvbiBpc3N1ZXMgY2FuIHF1aWNrbHkgZ2V0IG92ZXIgcGVvcGxlJ3Mg
-aGVhZHMgYW5kIGNhdXNlIHRoZW0gdG8gYWJhbmRvbiB0aGUgbGlicmFyeSBhbHRvZ2V0aGVyLsKg
-IEkgd29uZGVyIGlmIHRoZXJlIGlzIGEgd2F5IGZvciB0aGUgY29uZmlndXJlL21ha2UgdG8gc2V0
-IHRoZSBMRFNIQVJFRCBhdXRvbWF0aWNhbGx5wqBzbyB0aGF0IGlzIGlzIHRyYW5zcGFyZW50IHRv
-IHRoZSB1c2VyLsKgIENlcnRhaW5seSB3ZSBhcmUgbm90IHRoZSBmaXJzdCB0byBydW4gaW50byB0
-aGlzIGlzc3VlIHdpdGggZGlzdHV0aWxzLgoKSSBkb24ndCBrbm93IGlmIHRoZXJlJ3MgYSBnb29k
-IHJlYXNvbiBmb3IgdGhlbSBub3QgdG8gdXNlICRDQwpmb3IgbGlua2luZy4gIFdoYXQncyBmdW5u
-eSBpcyB0aGF0IG9uIERhcndpbi9tYWNPUyB0aGV5IGRvIGl0OgoKaHR0cHM6Ly9naXRodWIuY29t
-L3B5dGhvbi9jcHl0aG9uL2Jsb2IvNjcyM2U5MzNjNGQ5MGE0MDhjZjM4MTgzNjJhMGU0ZGU2ZDg0
-YzkzMi9MaWIvZGlzdHV0aWxzL3N5c2NvbmZpZy5weSNMMjAxLUwyMDkKCk5vdGUgdGhhdCBJIGRv
-bid0IGtub3cgaWYgSW50ZWwncyBQeXRob24gZGlzdHJpYnV0aW9uIGlzIHVzaW5nIHRoZQpzYW1l
-IGRpc3R1dGlscyBwYWNrYWdlIGFzIENQeXRob24uICBCdXQgc2luY2UgeW91IGhpdCB0aGUgc2Ft
-ZSBidWcsCml0IG11c3QgYmUgcXVpdGUgY2xvc2UsIGlmIG5vdCB0aGUgc2FtZS4KClRoZXJlJ3Mg
-YSBidWcgaGVyZSBhYm91dCByZS11c2luZyBDQyBmb3IgTERTSEFSRUQgb24gTGludXg6CgogIGh0
-dHBzOi8vYnVncy5weXRob24ub3JnL2lzc3VlMjQ5MzUKClRoZXJlIGFyZSBwYXRjaGVzIGhlcmUK
-CiAgaHR0cHM6Ly9naXRodWIuY29tL3B5dGhvbi9jcHl0aG9uL3B1bGwvMTQ5NTAKICBodHRwczov
-L2dpdGh1Yi5jb20vcHl0aG9uL2NweXRob24vcHVsbC83OTE0CgpUaGVyZSB3YXNuJ3QgbXVjaCBw
-cm9ncmVzcywgYnV0IGF0IGxlYXN0IG5vYm9keSBzcG9rZSBhZ2FpbnN0IHRoZW0uCgpCdXQgZXZl
-biB3aXRoIHRoYXQgZml4ZWQgdGhlcmUgYXJlIG90aGVyIHByb2JsZW1zLiAgQXMgSSBtZW50aW9u
-ZWQgaW4gbXkKcHJldmlvdXMgbWVzc2FnZSwgaW4gc29tZSBjYXNlcywgdGhlIENGTEFHUyB2YWx1
-ZSBidWlsdCBpbnRvIFB5dGhvbiAod2hpY2gKbWVhbnMgdGhlcmUncyBubyBlYXN5IHdheSBmb3Ig
-dXMgdG8gb3ZlcnJpZGUgaXQpIGNvbnRhaW5zIHNvbWUgZmxhZ3MKaW5jb21wYXRpYmxlIHdpdGgg
-Y2xhbmcgKHRoaXMgY291bGQgaGFwcGVuIHdpdGggaWNjIHRvbykuICBXaGVuIHRyeWluZyB0bwpi
-dWlsZCB3aXRoIENDPWNsYW5nLTkgb24gQXJjaCBMaW51eCwgSSBnZXQ6CgpjY2FjaGUgY2xhbmcg
-Li4uIC1mbm8tc2VtYW50aWMtaW50ZXJwb3NpdGlvbiAuLi4gLWMgYnQyL25hdGl2ZV9idC5jIC1v
-IGJ1aWxkL3RlbXAubGludXgteDg2XzY0LTMuOC9idDIvbmF0aXZlX2J0Lm8KY2xhbmctOTogZXJy
-b3I6IHVua25vd24gYXJndW1lbnQ6ICctZm5vLXNlbWFudGljLWludGVycG9zaXRpb24nCgpBcmNo
-IExpbnV4IGdvdCB0aGlzIGlkZWEgb2YgYnVpbGRpbmcgd2l0aCBgLWZuby1zZW1hbnRpYy1pbnRl
-cnBvc2l0aW9uYCBmcm9tIEZlZG9yYToKCiAgaHR0cHM6Ly9mZWRvcmFwcm9qZWN0Lm9yZy93aWtp
-L0NoYW5nZXMvUHl0aG9uTm9TZW1hbnRpY0ludGVycG9zaXRpb25TcGVlZHVwCgpTbyBJIGd1ZXNz
-IHdlIHdpbGwgZmFjZSB0aGUgc2FtZSBpc3N1ZSBvbiBSZWQgSGF0IGJ5IHRoZSBlbmQgb2YgdGhl
-IGRlY2FkZS4KClNvIHNpbmNlIGRpc3R1dGlscyByZWFsbHkgd2FudHMgdG8gY29tcGlsZSB0aGUg
-UHl0aG9uIG5hdGl2ZSBtb2R1bGVzIHVzaW5nIGFsbCB0aGUgc2FtZQpmbGFncyBhcyB0aGUgUHl0
-aG9uIGludGVycHJldGVyIHdhcyBidWlsdCB3aXRoLCBJIHByZXN1bWUgdGhhdCB0aGV5IHJlYWxs
-eSBhc3N1bWUgdGhhdAp5b3UnbGwgYmUgdXNpbmcgdGhlIGV4YWN0IHNhbWUgdG9vbGNoYWluIHRv
-IGJ1aWxkIHlvdXIgbW9kdWxlIGFzIHdhcyB1c2VkIHRvIGJ1aWxkIHRoZQppbnRlcnByZXRlci4g
-IE1heWJlIHdlIGNvdWxkIGp1c3Qgbm90IHBhc3MgQ0MvQ0ZMQUdTIHdoZW4gYnVpbGRpbmcgdGhl
-IFB5dGhvbiBtb2R1bGUsCnNvIGl0IHdpbGwgc2ltcGx5IGJlIGJ1aWx0IHdpdGggdGhlIHNhbWUg
-Y29tcGlsZXIvbGlua2VyIGFzIFB5dGhvbiB3YXMgYnVpbHQgd2l0aCwgYW5kCndlJ2xsIGF2b2lk
-IGFsbCB0aGVzZSBwcm9ibGVtcy4uLgoKU2ltb24KX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+On 2020-03-20 11:12 p.m., Simon Marchi via lttng-dev wrote:
+> So since distutils really wants to compile the Python native modules using all the same
+> flags as the Python interpreter was built with, I presume that they really assume that
+> you'll be using the exact same toolchain to build your module as was used to build the
+> interpreter.  Maybe we could just not pass CC/CFLAGS when building the Python module,
+> so it will simply be built with the same compiler/linker as Python was built with, and
+> we'll avoid all these problems...
+
+If we want to go this route, here's a patch that implements it.
+
+  https://review.lttng.org/c/babeltrace/+/3257
+
+This makes it so we don't override the compiler or flags (other than necessary includes
+flags) when building the native module.  So when configuring with CC=clang, the Python
+native module gets built with the Python distribution's default compiler, with just the
+flags it wants.
+
+Could you check if that works with CC=icc as well?
+
+Simon
