@@ -1,18 +1,18 @@
-From: Rocky Dunlap via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: bt2 python - accessing component instances added to
- graph
-Date: Sun, 29 Mar 2020 23:24:37 -0600
-Message-ID: <CADtyBo4tQxYBFZnk6dqTSkU4OjW2Fxmx0xJrP=ADaCz_YUXf1g@mail.gmail.com>
-Reply-To: Rocky Dunlap <dunlap@ucar.edu>
+From: Simon Marchi via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: babletrace2 graph performance considerations
+Date: Mon, 30 Mar 2020 09:32:49 -0400
+Message-ID: <9b2fe91b-4f44-3b89-eaf9-98f945384a33@simark.ca>
+References: <CADtyBo6B4YQ++VPhM4-cAfKYq0otJMg4zMXvQYqyNw3JsSX6Nw@mail.gmail.com>
+Reply-To: Simon Marchi <simark@simark.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4665777414816953045=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com
- [IPv6:2607:f8b0:4864:20::22f])
- by lists.lttng.org (Postfix) with ESMTPS id 48rLWB3yJkz1YPf
- for <lttng-dev@lists.lttng.org>; Mon, 30 Mar 2020 01:24:54 -0400 (EDT)
-Received: by mail-oi1-x22f.google.com with SMTP id u20so9935011oic.4
- for <lttng-dev@lists.lttng.org>; Sun, 29 Mar 2020 22:24:54 -0700 (PDT)
+Received: from simark.ca (simark.ca [158.69.221.121])
+ by lists.lttng.org (Postfix) with ESMTPS id 48rYLK0cSfz1Yks
+ for <lttng-dev@lists.lttng.org>; Mon, 30 Mar 2020 09:32:56 -0400 (EDT)
+In-Reply-To: <CADtyBo6B4YQ++VPhM4-cAfKYq0otJMg4zMXvQYqyNw3JsSX6Nw@mail.gmail.com>
+Content-Language: en-US-large
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,47 +22,42 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Rocky Dunlap <dunlap@ucar.edu>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============4665777414816953045==
-Content-Type: multipart/alternative; boundary="000000000000bd4c9305a20bab7f"
-
---000000000000bd4c9305a20bab7f
-Content-Type: text/plain; charset="UTF-8"
-
-I noticed that when I add a component to a bt2 graph, e.g.:
-
-sink = g.add_component(SinglePETSink, "sink"+str(idx))
-
-The return value "sink" is not actually an instance of SinglePETSink (which
-has been defined as a local Python class).  How do I get to the instance of
-SinglePETSink that was created?
-
-Rocky
-
---000000000000bd4c9305a20bab7f
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">I noticed that when I add a component to a bt2 graph, e.g.=
-:<div><br></div><div>sink =3D g.add_component(SinglePETSink, &quot;sink&quo=
-t;+str(idx))</div><div><br></div><div>The return value &quot;sink&quot; is =
-not actually an instance of SinglePETSink (which has been defined as a loca=
-l Python class).=C2=A0 How do I get to the instance of SinglePETSink that w=
-as created?</div><div><br></div><div>Rocky</div></div>
-
---000000000000bd4c9305a20bab7f--
-
---===============4665777414816953045==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============4665777414816953045==--
+T24gMjAyMC0wMy0zMCAxMjoxMCBhLm0uLCBSb2NreSBEdW5sYXAgdmlhIGx0dG5nLWRldiB3cm90
+ZToKPiBBIGNvdXBsZSBvZiBxdWVzdGlvbnMgb24gcGVyZm9ybWFuY2UgY29uc2lkZXJhdGlvbnMg
+d2hlbiBzZXR0aW5nIHVwIGJ0MiBwcm9jZXNzaW5nIGdyYXBocy4KPiAKPiAxLsKgIERvIHBhcnRz
+IG9mIHRoZSBwcm9jZXNzaW5nIGdyYXBoIHRoYXQgY2FuIGV4ZWN1dGUgY29uY3VycmVudGx5IGRv
+IHNvP8KgIERvZXMgdGhlIHVzZXIgaGF2ZSBhbnkgY29udHJvbCBvdmVyIHRoaXMsIGUuZy4sIGJ5
+IGNyZWF0aW5nIHRocmVhZHMgaW4gc2luayBjb21wb25lbnRzPwoKVGhlIGdyYXBoIGV4ZWN1dGlv
+biBpbiBpdHNlbGYgaXMgc2luZ2xlLXRocmVhZGVkIGF0IHRoZSBtb21lbnQuICBXZSBjb3VsZCBp
+bWFnaW5nCmEgZGVzaWduIHdoZXJlIGRpZmZlcmVudCBwYXJ0cyBvZiB0aGUgZ3JhcGggZXhlY3V0
+ZSBjb25jdXJyZW50bHksIGluIGRpZmZlcmVudAp0aHJlYWRzLCBidXQgaXQncyB0aGUgdGhlIGNh
+c2UgcmlnaHQgbm93LgoKWW91IGNvdWxkIG1ha2UgeW91ciBjb21wb25lbnRzIHNwYXduIHRocmVh
+ZHMgdG8gZG8gc29tZSBwcm9jZXNzaW5nIG9uIHRoZSBzaWRlLAppZiB0aGF0IGhlbHBzLCBidXQg
+dGhlc2Ugb3RoZXIgdGhyZWFkcyBzaG91bGQgbm90IGludGVyYWN0IGRpcmVjdGx5IHdpdGggdGhl
+CmdyYXBoLgoKPiAyLsKgIEl0IGxvb2tzIGxpa2UgeW91IGNhbm5vdCBjb25uZWN0IG9uZSBvdXRw
+dXQgcG9ydCB0byBtdWx0aXBsZSBpbnB1dHMuwqAgSXMgdGhlcmUgYSB3YXkgdG8gY3JlYXRlIGEg
+dGVlIGNvbXBvbmVudD8KClllcywgd2UgaGF2ZSBkaXNjdXNzZWQgbWFraW5nIGEgdGVlIGNvbXBv
+bmVudCwgaXQgaXMgb24gdGhlIHJvYWRtYXAgYnV0IG5vdCByZWFsbHkKcGxhbm5lZCB5ZXQuICBJ
+dCBzaG91bGQgYmUgcG9zc2libGUsIGl0J3MganVzdCBub3QgYXMgdHJpdmlhbCBhcyBpdCBtYXkg
+c291bmQuCgpPbmUgZWFzeSB3YXkgdG8gYWNoaWV2ZSBpdCBpcyB0byBtYWtlIGVhY2ggaXRlcmF0
+b3IgdGhhdCBpcyBjcmVhdGVkIG9uIHRoZSB0ZWUKY29tcG9uZW50IGNyZWF0ZSBhbmQgbWFpbnRh
+aW4gaXRzIG93biB1cHN0cmVhbSBpdGVyYXRvci4gIElmIHlvdSBoYXZlIGEgdGVlIHdpdGgKdHdv
+IG91dHB1dHMsIHRoaXMgd2lsbCBlZmZlY3RpdmVseSBtYWtlIGl0IHNvIHlvdSBoYXZlIHR3byBn
+cmFwaHMgZXhlY3V0aW5nIGluCnBhcmFsbGVsLiAgSWYgeW91IGhhdmUgYSBzcmMuY3RmLmZzIHNv
+dXJjZSB1cHN0cmVhbSBvZiB0aGUgdGVlLCB0aGVuIHRoZXJlIHdpbGwKYmUgdHdvIGl0ZXJhdG9y
+cyBjcmVhdGVkIG9uIHRoYXQgc291cmNlLCBzbyB0aGUgQ1RGIHRyYWNlIHdpbGwgYmUgb3BlbiBh
+bmQgZGVjb2RlZAp0d2ljZS4gIFdlJ2QgbGlrZSB0byBhdm9pZCB0aGF0LgoKVGhlIG90aGVyIHdh
+eSBvZiBkb2luZyBpdCBpcyB0byBtYWtlIHRoZSB0ZWUgYnVmZmVyIG1lc3NhZ2VzLCBhbmQgZGlz
+Y2FyZCBhCm1lc3NhZ2Ugb25jZSBhbGwgZG93bnN0cmVhbSBpdGVyYXRvcnMgaGF2ZSBjb25zdW1l
+ZCBpdC4gIFRoaXMgaGFzIHNvbWUgbW9yZQpkaWZmaWN1bHQgdGVjaG5pY2FsIGNoYWxsZW5nZXMs
+IGxpa2Ugd2hhdCB0byBkbyB3aGVuIG9uZSBkb3duc3RyZWFtIGl0ZXJhdG9yCmNvbnN1bWVzLCBi
+dXQgdGhlIG90aGVyIGRvZXMgbm90ICh3ZSBkb24ndCB3YW50IHRvIGJ1ZmZlciBhbiBpbmZpbml0
+ZSBhbW91bnQKb2YgZGF0YSkuICBJdCBhbHNvIG1ha2VzIHNlZWtpbmcgYSBiaXQgdHJpY2t5LgoK
+V2UgY291bGQgZ28gaW4gbW9yZSBkZXRhaWxzLCBpZiB5b3UgYXJlIGludGVyZXN0ZWQgaW4gc3Rh
+cnRpbmcgaW1wbGVtZW50aW5nIGl0CnlvdXJzZWxmLgoKU2ltb24KX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
+bG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
