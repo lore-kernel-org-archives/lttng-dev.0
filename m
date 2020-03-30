@@ -1,20 +1,23 @@
 From: Rocky Dunlap via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: babletrace2 graph performance considerations
-Date: Mon, 30 Mar 2020 11:30:58 -0600
-Message-ID: <CADtyBo7EBkHsDv-=-94oFnuviFvHnYQW_R6vHv08QCfo8QTyqg@mail.gmail.com>
-References: <CADtyBo6B4YQ++VPhM4-cAfKYq0otJMg4zMXvQYqyNw3JsSX6Nw@mail.gmail.com>
- <9b2fe91b-4f44-3b89-eaf9-98f945384a33@simark.ca>
+Subject: Re: bt2 python - accessing component instances added to
+ graph
+Date: Mon, 30 Mar 2020 14:41:00 -0600
+Message-ID: <CADtyBo7c1-Ge+BbRGPG669woGZPiCfy5pfqrMHDF=aPfUWmU2g@mail.gmail.com>
+References: <CADtyBo4tQxYBFZnk6dqTSkU4OjW2Fxmx0xJrP=ADaCz_YUXf1g@mail.gmail.com>
+ <f07941b7-51ae-0f42-2a9b-abcf82e299de@simark.ca>
+ <CADtyBo6mzBQ3sVUpc4gbxEf7LVsfV+m8oWNMjMdG1gDPsnRR6A@mail.gmail.com>
+ <32146698-0314-1eaf-e422-2c9e088056e7@simark.ca>
 Reply-To: Rocky Dunlap <dunlap@ucar.edu>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7597661519201398626=="
+Content-Type: multipart/mixed; boundary="===============6544851028592930151=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com
- [IPv6:2607:f8b0:4864:20::32d])
- by lists.lttng.org (Postfix) with ESMTPS id 48rfdH6Q3xz1Z2l
- for <lttng-dev@lists.lttng.org>; Mon, 30 Mar 2020 13:31:15 -0400 (EDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 111so18935855oth.13
- for <lttng-dev@lists.lttng.org>; Mon, 30 Mar 2020 10:31:15 -0700 (PDT)
-In-Reply-To: <9b2fe91b-4f44-3b89-eaf9-98f945384a33@simark.ca>
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
+ [IPv6:2607:f8b0:4864:20::230])
+ by lists.lttng.org (Postfix) with ESMTPS id 48rkrY5Rkrz1Ygf
+ for <lttng-dev@lists.lttng.org>; Mon, 30 Mar 2020 16:41:17 -0400 (EDT)
+Received: by mail-oi1-x230.google.com with SMTP id k18so16977677oib.3
+ for <lttng-dev@lists.lttng.org>; Mon, 30 Mar 2020 13:41:17 -0700 (PDT)
+In-Reply-To: <32146698-0314-1eaf-e422-2c9e088056e7@simark.ca>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,178 +31,143 @@ To: Simon Marchi <simark@simark.ca>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============7597661519201398626==
-Content-Type: multipart/alternative; boundary="0000000000005aeb7605a215d18d"
+--===============6544851028592930151==
+Content-Type: multipart/alternative; boundary="000000000000005cb705a21879db"
 
---0000000000005aeb7605a215d18d
+--000000000000005cb705a21879db
 Content-Type: text/plain; charset="UTF-8"
+
+(Adding the list back in - I meant to reply-all before...)
 
 Simon,
 
-Thanks - see below,
+Yes, the obj solution should work just fine - I was wondering about that
+parameter and the approach makes sense to me.  Thanks!
 
-On Mon, Mar 30, 2020 at 7:32 AM Simon Marchi <simark@simark.ca> wrote:
+Rocky
 
-> On 2020-03-30 12:10 a.m., Rocky Dunlap via lttng-dev wrote:
-> > A couple of questions on performance considerations when setting up bt2
-> processing graphs.
+On Mon, Mar 30, 2020 at 2:38 PM Simon Marchi <simark@simark.ca> wrote:
+
+> On 2020-03-30 4:24 p.m., Rocky Dunlap wrote:
+> > Simon,
 > >
-> > 1.  Do parts of the processing graph that can execute concurrently do
-> so?  Does the user have any control over this, e.g., by creating threads in
-> sink components?
+> > In my case, after the graph completes, I was trying to access the sink
+> instances in order to collect some statistics collected inside the instance
+> during the graph run.  I guess then the question is how are the graph
+> components supposed to communicate with the outside world in general, such
+> as filling in some Python data structures with info from a trace for
+> post-processing or further analysis in Python?  Or is the expectation that
+> sink components will retain no state at all after the graph completes?
+> >
+> > Rocky
 >
-> The graph execution in itself is single-threaded at the moment.  We could
-> imaging
-> a design where different parts of the graph execute concurrently, in
-> different
-> threads, but it's the the case right now.
+> Hi Rocky,
 >
-> You could make your components spawn threads to do some processing on the
-> side,
-> if that helps, but these other threads should not interact directly with
-> the
-> graph.
+> Was it your intention to not do a reply-all?  I think this would be good
+> info for all to read.  If not,
+> please do a reply-all and I'll replay again what I wrote below on the list.
 >
-
-In my case I have CTF trace where some analyses can be performed on a
-per-stream basis (no need to mux the streams together).  In this case, I
-was thinking that it would make sense to thread over the streams.  However,
-I think can easily do this at a level above the graph simply by creating
-multiple graphs where each one is handling a single stream.  In my case I
-am thinking this will be mostly I/O bound, so I'm not sure what kind of
-payoff the threads will give.  Overall, I just want to make sure that I am
-not doing anything that would, in the long run, preclude
-threading/concurrency if it is added to the graph model itself.
-
-
+> Of course the sinks are expected to produce some result outside of their
+> own little internal state.  For
+> sinks that produce some trace files, they'll typically write on the
+> filsystem (like sink.ctf.fs).
 >
-> > 2.  It looks like you cannot connect one output port to multiple
-> inputs.  Is there a way to create a tee component?
+> But if you want to send some results to another Python object/data
+> structure, the `obj` parameter of
+> `add_component` is pretty much meant for that.  You can pass in a
+> reference to a Python object, and
+> the component receives it in its `__init__`.  We thought that this could
+> be useful, for example, if
+> the sink needs to receive a connection handle to a database, for example.
+> That handle can be created
+> outside of the sink and passed it when instantiating the component.  Think
+> of it like some void* user
+> data in C.
 >
-> Yes, we have discussed making a tee component, it is on the roadmap but
-> not really
-> planned yet.  It should be possible, it's just not as trivial as it may
-> sound.
+> In your case, you could create whatever object you need to collect your
+> statistics/results, and pass
+> a reference to it.
 >
-> One easy way to achieve it is to make each iterator that is created on the
-> tee
-> component create and maintain its own upstream iterator.  If you have a
-> tee with
-> two outputs, this will effectively make it so you have two graphs
-> executing in
-> parallel.  If you have a src.ctf.fs source upstream of the tee, then there
-> will
-> be two iterators created on that source, so the CTF trace will be open and
-> decoded
-> twice.  We'd like to avoid that.
+> Here's an example in the tests:
 >
-> The other way of doing it is to make the tee buffer messages, and discard a
-> message once all downstream iterators have consumed it.  This has some more
-> difficult technical challenges, like what to do when one downstream
-> iterator
-> consumes, but the other does not (we don't want to buffer an infinite
-> amount
-> of data).  It also makes seeking a bit tricky.
 >
-> We could go in more details, if you are interested in starting
-> implementing it
-> yourself.
+> https://github.com/efficios/babeltrace/blob/8b305066676fc7aa433e8eb668f9de8802008025/tests/bindings/python/bt2/test_graph.py#L106-L120
 >
-
-Yea, I can see how this can get tricky.  This is not critical at this very
-moment, but I just wondered if there was a precedent for how to do this
-kind of thing.
-
-
+> Does that help?
 >
 > Simon
 >
 
---0000000000005aeb7605a215d18d
+--000000000000005cb705a21879db
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div dir=3D"ltr">Simon,<div><br></div><div>Thanks - see be=
-low,</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gm=
-ail_attr">On Mon, Mar 30, 2020 at 7:32 AM Simon Marchi &lt;<a href=3D"mailt=
-o:simark@simark.ca">simark@simark.ca</a>&gt; wrote:<br></div><blockquote cl=
-ass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid=
- rgb(204,204,204);padding-left:1ex">On 2020-03-30 12:10 a.m., Rocky Dunlap =
-via lttng-dev wrote:<br>
-&gt; A couple of questions on performance considerations when setting up bt=
-2 processing graphs.<br>
+<div dir=3D"ltr"><div>(Adding the list back in - I meant to reply-all befor=
+e...)</div><div><br></div><div>Simon,</div><div><br>Yes, the obj solution s=
+hould work just fine - I was wondering about that parameter and the approac=
+h makes sense to me.=C2=A0 Thanks!</div><div><br></div><div>Rocky</div><br>=
+<div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Ma=
+r 30, 2020 at 2:38 PM Simon Marchi &lt;<a href=3D"mailto:simark@simark.ca">=
+simark@simark.ca</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" =
+style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
+dding-left:1ex">On 2020-03-30 4:24 p.m., Rocky Dunlap wrote:<br>
+&gt; Simon,<br>
 &gt; <br>
-&gt; 1.=C2=A0 Do parts of the processing graph that can execute concurrentl=
-y do so?=C2=A0 Does the user have any control over this, e.g., by creating =
-threads in sink components?<br>
+&gt; In my case, after the graph completes, I was trying to access the sink=
+ instances in order to collect some statistics collected inside the instanc=
+e during the graph run.=C2=A0 I guess then the question is how are the grap=
+h components supposed to communicate with the outside world in general, suc=
+h as filling in some Python data structures with info from a trace for post=
+-processing or further analysis in Python?=C2=A0 Or is the expectation=C2=
+=A0that sink components will retain no state at all after the graph complet=
+es?<br>
+&gt; <br>
+&gt; Rocky<br>
 <br>
-The graph execution in itself is single-threaded at the moment.=C2=A0 We co=
-uld imaging<br>
-a design where different parts of the graph execute concurrently, in differ=
-ent<br>
-threads, but it&#39;s the the case right now.<br>
+Hi Rocky,<br>
 <br>
-You could make your components spawn threads to do some processing on the s=
-ide,<br>
-if that helps, but these other threads should not interact directly with th=
-e<br>
-graph.<br></blockquote><div><br></div><div>In my case I have CTF trace wher=
-e some analyses can be performed on a per-stream basis (no need to mux the =
-streams together).=C2=A0 In this case, I was thinking that it would make se=
-nse to thread over the streams.=C2=A0 However, I think can easily do this a=
-t a level above the graph simply by creating multiple graphs where each one=
- is handling a single stream.=C2=A0 In my case I am thinking this will be m=
-ostly I/O bound, so I&#39;m not sure what kind of payoff the threads will g=
-ive.=C2=A0 Overall, I just want to make sure that I am not doing anything t=
-hat would, in the long run, preclude threading/concurrency if it is added t=
-o the graph model itself.</div><div>=C2=A0</div><blockquote class=3D"gmail_=
-quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,=
-204);padding-left:1ex">
+Was it your intention to not do a reply-all?=C2=A0 I think this would be go=
+od info for all to read.=C2=A0 If not,<br>
+please do a reply-all and I&#39;ll replay again what I wrote below on the l=
+ist.<br>
 <br>
-&gt; 2.=C2=A0 It looks like you cannot connect one output port to multiple =
-inputs.=C2=A0 Is there a way to create a tee component?<br>
+Of course the sinks are expected to produce some result outside of their ow=
+n little internal state.=C2=A0 For<br>
+sinks that produce some trace files, they&#39;ll typically write on the fil=
+system (like sink.ctf.fs).<br>
 <br>
-Yes, we have discussed making a tee component, it is on the roadmap but not=
- really<br>
-planned yet.=C2=A0 It should be possible, it&#39;s just not as trivial as i=
-t may sound.<br>
+But if you want to send some results to another Python object/data structur=
+e, the `obj` parameter of<br>
+`add_component` is pretty much meant for that.=C2=A0 You can pass in a refe=
+rence to a Python object, and<br>
+the component receives it in its `__init__`.=C2=A0 We thought that this cou=
+ld be useful, for example, if<br>
+the sink needs to receive a connection handle to a database, for example.=
+=C2=A0 That handle can be created<br>
+outside of the sink and passed it when instantiating the component.=C2=A0 T=
+hink of it like some void* user<br>
+data in C.<br>
 <br>
-One easy way to achieve it is to make each iterator that is created on the =
-tee<br>
-component create and maintain its own upstream iterator.=C2=A0 If you have =
-a tee with<br>
-two outputs, this will effectively make it so you have two graphs executing=
- in<br>
-parallel.=C2=A0 If you have a src.ctf.fs source upstream of the tee, then t=
-here will<br>
-be two iterators created on that source, so the CTF trace will be open and =
-decoded<br>
-twice.=C2=A0 We&#39;d like to avoid that.<br>
+In your case, you could create whatever object you need to collect your sta=
+tistics/results, and pass<br>
+a reference to it.<br>
 <br>
-The other way of doing it is to make the tee buffer messages, and discard a=
+Here&#39;s an example in the tests:<br>
 <br>
-message once all downstream iterators have consumed it.=C2=A0 This has some=
- more<br>
-difficult technical challenges, like what to do when one downstream iterato=
-r<br>
-consumes, but the other does not (we don&#39;t want to buffer an infinite a=
-mount<br>
-of data).=C2=A0 It also makes seeking a bit tricky.<br>
+<a href=3D"https://github.com/efficios/babeltrace/blob/8b305066676fc7aa433e=
+8eb668f9de8802008025/tests/bindings/python/bt2/test_graph.py#L106-L120" rel=
+=3D"noreferrer" target=3D"_blank">https://github.com/efficios/babeltrace/bl=
+ob/8b305066676fc7aa433e8eb668f9de8802008025/tests/bindings/python/bt2/test_=
+graph.py#L106-L120</a><br>
 <br>
-We could go in more details, if you are interested in starting implementing=
- it<br>
-yourself.<br></blockquote><div><br></div><div>Yea, I can see how this can g=
-et tricky.=C2=A0 This is not critical at this very moment, but I just wonde=
-red if there was a precedent for how to do this kind of thing.</div><div>=
-=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
-.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+Does that help?<br>
 <br>
 Simon<br>
 </blockquote></div></div>
 
---0000000000005aeb7605a215d18d--
+--000000000000005cb705a21879db--
 
---===============7597661519201398626==
+--===============6544851028592930151==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -210,4 +178,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============7597661519201398626==--
+--===============6544851028592930151==--
