@@ -1,65 +1,41 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.12.0
-Date: Thu, 9 Apr 2020 14:59:55 -0400 (EDT)
-Message-ID: <605758779.29080.1586458795931.JavaMail.zimbra@efficios.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau
+        <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] LTTng-tools 2.11.3 - Lafontaine
+Date: Thu, 16 Apr 2020 17:58:59 -0400
+Message-ID: <20200416215859.GA61343@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Stephen Hemminger <stephen@networkplumber.org>, Alan Stern <stern@rowland.harvard.edu>, Lai Jiangshan <jiangshanlai@gmail.com>, lwn@lwn.net, Alex Xu <alex_y_xu@yahoo.ca>
+Content-Type: text/plain; charset=us-ascii
+Return-path: <linux-trace-users-owner@vger.kernel.org>
+Content-Disposition: inline
+Sender: linux-trace-users-owner@vger.kernel.org
+To: lttng-dev@lists.lttng.org
+Cc: diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+Hi all,
 
-This announcement introduces the 0.12 version of liburcu.
+The third bug-fix release of LTTng-tools 2.11 - Lafontaine has just
+been released. This release addresses a number of issues listed below.
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiple
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
+2020-04-16 lttng-tools 2.11.3 (National Eggs Benedict Day)
+	* Fix: lttng-destroy: missing newline on session destruction message
+	* Fix: common: add `void` parameter to log_add_time declaration
+	* Fix: lttng-list: don't warn when the kernel domain has no channels
+	* Fix: sessiond: occasional badfd error on repeated SIGTERM
+	* Fix: lttng: incorrect domain list printed when no domain is provided
+	* directory-handle: print `errno` reason on `unlinkat()` error
+	* Fix: lttng-ctl: _handle can be NULL
+	* Silence `POSIX Yacc` warnings
+	* Fix: relayd: use of relay_session ref count before initialization
+	* Fix: lttng: uninitialized pointer free'd when no sessiond is present
 
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
 
-* New in this release:
+Project website: https://lttng.org
 
-This 0.12 liburcu release is mainly done to add a DEFINE_URCU_TLS_INIT
-macro to the urcu/tls-compat.h API. There is a very recent unfortunate
-situation where a major user of liburcu (lttng-ust 2.12) added a use
-of DEFINE_URCU_TLS such as:
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.11.3.tar.bz2
 
-  DEFINE_URCU_TLS(ino_t, cached_net_ns) = NS_INO_UNINITIALIZED;
-
-Which builds and runs fine for CONFIG_RCU_TLS, but fails to build for
-!CONFIG_RCU_TLS. Fixing this required to extend the API and add a new
-DEFINE_URCU_TLS_INIT() which could then be used in this way:
-
-  DEFINE_URCU_TLS_INIT(ino_t, cached_net_ns, NS_INO_UNINITIALIZED);
-
-Support for FreeBSD and DragonFlyBSD is also added in this release,
-contributed by Alex Xu. It uses _mutx_op() to implement the liburcu
-futex APIs on FreeBSD.
-
-Finally, a noteworthy change has been done to the urcu-bp flavor:
-urcu_bp_register_thread() now performs the underlying lazy registration
-of the caller thread rather than being a pure no-op. This is useful
-for some real-time use-cases (e.g. Xenomai) which require to perform
-urcu-bp thread registration early in the thread life-time before it
-starts performing real-time tasks.
-
-Thanks,
-
-Mathieu
-
-Project website: http://liburcu.org
-Git repository: git://git.liburcu.org/urcu.git
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+GPG signature:
+https://lttng.org/files/lttng-tools/lttng-tools-2.11.3.tar.bz2.asc
