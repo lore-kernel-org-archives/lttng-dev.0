@@ -7,66 +7,66 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B062C83000
-	for <lttng-dev@archiver.kernel.org>; Tue, 28 Apr 2020 18:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0E1EC83007
+	for <lttng-dev@archiver.kernel.org>; Tue, 28 Apr 2020 18:42:11 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 96EFC2076A
-	for <lttng-dev@archiver.kernel.org>; Tue, 28 Apr 2020 18:40:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 7EB132076A
+	for <lttng-dev@archiver.kernel.org>; Tue, 28 Apr 2020 18:42:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="qWbJa39a"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 96EFC2076A
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="tlNnw5Si"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7EB132076A
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 49BVnl752Dz1mwg;
-	Tue, 28 Apr 2020 14:40:27 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 49BVqk1Dgwz1mwk;
+	Tue, 28 Apr 2020 14:42:10 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1588099228;
-	bh=MmJNHs+xI0dhv7sWSDZ9ptxXBnwwCwTa5MwIMoteYIc=;
+	s=default; t=1588099330;
+	bh=L0H4tPu8Zv3AJJdvPMmeofmx/kCf+AZBQCmKhPWgNAU=;
 	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=qWbJa39aVtNqMJoi9Nx9Ro3+1HIgtVe3ebKK8g//GnqG0IFZYG8AmT/uZ7gcd+FOx
-	 3G3rUUktSBcuRPjO6Cr9fk+CUw699Ks43rWXT2xb5MEoa5Ee7EVO4ghhO/kxS+xDvE
-	 LZl28E3743P5kQmxXV09Whxe7HnQqD7QdqHfkIhQpNivmV+pKN0WBC+mtz7O7j4j0+
-	 cSFvkliS5/q/K9LTRsdtLCWY4c7bg1kg7AW4NbyhvmSLenPuPkdjgH+we9uGy6Dn9G
-	 02ADR/8RtZn2eWa31HJ7N4O+JWPJ/TCkwZ9NqYap1tTu0/+2L8HwW9YVVyMfEGR7rl
-	 hmHYR7jzFaUlg==
+	b=tlNnw5SizJdIGsGXsrn8rskAjyaR3SfgAd7K6CPhYLUJ82yKiYDo9KUchw8eWOPiK
+	 7I4IsfvBYNb6oqlk9N0UxMhS+SQo+Q4xHwdewlxdD3CrQRHhZrfU5U3OSRY6JvfV8T
+	 eS5932z2PwfzzFo5oLRvIlhHxl7BFEpdC1TB36VBLuJl9QTUjP1g+OnQQz2I2IG6uF
+	 a1x1V0XJ6PGsuKmQ7lv7t+KuFjfIMFTzKpsSbYb7SYk9pjIVWRDoI8Enx3xyMP75el
+	 Sc0ztAPIobfXOInH8N6RXtaI92n6J1wexap8DrOKthI0oHY7QchIb+rE21SDXcOEgN
+	 SnHqa0M3l28yg==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49BVnk6xfnz1mp6
- for <lttng-dev@lists.lttng.org>; Tue, 28 Apr 2020 14:40:25 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 49BVqh4tVTz1mtV
+ for <lttng-dev@lists.lttng.org>; Tue, 28 Apr 2020 14:42:08 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 0118127F0CD;
- Tue, 28 Apr 2020 14:40:19 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 23AA627F44D;
+ Tue, 28 Apr 2020 14:42:02 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id D6cRUdOwpOek; Tue, 28 Apr 2020 14:40:18 -0400 (EDT)
+ with ESMTP id RxnK749gI3x9; Tue, 28 Apr 2020 14:42:01 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id AF68D27F0CC;
- Tue, 28 Apr 2020 14:40:18 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com AF68D27F0CC
+ by mail.efficios.com (Postfix) with ESMTP id D12AB27F52B;
+ Tue, 28 Apr 2020 14:42:01 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com D12AB27F52B
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id tKaKwbzkgqDS; Tue, 28 Apr 2020 14:40:18 -0400 (EDT)
+ with ESMTP id KaAR2JvPJue5; Tue, 28 Apr 2020 14:42:01 -0400 (EDT)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id A184E27F0CA;
- Tue, 28 Apr 2020 14:40:18 -0400 (EDT)
-Date: Tue, 28 Apr 2020 14:40:18 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id C5F5627F3B7;
+ Tue, 28 Apr 2020 14:42:01 -0400 (EDT)
+Date: Tue, 28 Apr 2020 14:42:01 -0400 (EDT)
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Message-ID: <1031751564.72894.1588099218629.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20200423205226.496-2-mathieu.desnoyers@efficios.com>
+Message-ID: <1480394831.72907.1588099321783.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20200423205226.496-3-mathieu.desnoyers@efficios.com>
 References: <20200423205226.496-1-mathieu.desnoyers@efficios.com>
- <20200423205226.496-2-mathieu.desnoyers@efficios.com>
+ <20200423205226.496-3-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_3918 (ZimbraWebClient - GC79 (Linux)/8.8.15_GA_3895)
-Thread-Topic: Clarify that unlisted enum values are implementation-defined
-Thread-Index: 5rnZzbaQIIrW8uKoGz/PvuDKOpUtDQ==
-Subject: Re: [lttng-dev] [RFC PATCH CTF 1/3] Clarify that unlisted enum
- values are implementation-defined
+Thread-Topic: Clarify monotonicity requirement on timestamp begin
+Thread-Index: N6AKTdmIChPLgLNAHcYNiDvUTQN2wA==
+Subject: Re: [lttng-dev] [RFC PATCH CTF 2/3] Clarify monotonicity
+ requirement on timestamp begin
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,37 +84,58 @@ Cc: lttng-dev <lttng-dev@lists.lttng.org>,
  Jeremie Galarneau <jgalar@efficios.com>,
  gbastien+lttng <gbastien+lttng@versatic.net>,
  diamon-discuss@linuxfoundation.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-Message-ID: <20200428184018.tHOKo3SzA2vJarxqFmXlVFdForsJcSMxqCb4N7gZrtQ@z>
+Message-ID: <20200428184201.G6wKZ8TuMEljDlcPOLNqAhYX8hXIDzrnAaW5AT6H74w@z>
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJNYXRoaWV1IERlc25veWVycyIg
-PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBUbzogImdiYXN0aWVuK2x0dG5nIiA8
-Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0PiwgIk1hdHRoZXcgS2hvdXphbSIgPG1hdHRoZXcu
-a2hvdXphbUBlcmljc3Nvbi5jb20+LAo+IGRpYW1vbi1kaXNjdXNzQGxpbnV4Zm91bmRhdGlvbi5v
-cmcsIHBwcm91bHhAZWZmaWNpb3MuY29tLCAiSmVyZW1pZSBHYWxhcm5lYXUiIDxqZ2FsYXJAZWZm
-aWNpb3MuY29tPgo+IENjOiAibHR0bmctZGV2IiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4s
-ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBT
-ZW50OiBUaHVyc2RheSwgMjMgQXByaWwsIDIwMjAgMTY6NTI6MjQKPiBTdWJqZWN0OiBbUkZDIFBB
-VENIIENURiAxLzNdIENsYXJpZnkgdGhhdCB1bmxpc3RlZCBlbnVtIHZhbHVlcyBhcmUgaW1wbGVt
-ZW50YXRpb24tZGVmaW5lZAoKPiBGcm9tOiBHZW5ldmnDqHZlIEJhc3RpZW4gPGdiYXN0aWVuK2x0
-dG5nQHZlcnNhdGljLm5ldD4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBHZW5ldmnDqHZlIEJhc3RpZW4g
-PGdiYXN0aWVuK2x0dG5nQHZlcnNhdGljLm5ldD4KPiBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERl
-c25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+IC0tLQo+IGNvbW1vbi10
-cmFjZS1mb3JtYXQtc3BlY2lmaWNhdGlvbi5tZCB8IDMgKysrCj4gMSBmaWxlIGNoYW5nZWQsIDMg
-aW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQgYS9jb21tb24tdHJhY2UtZm9ybWF0LXNwZWNp
-ZmljYXRpb24ubWQKPiBiL2NvbW1vbi10cmFjZS1mb3JtYXQtc3BlY2lmaWNhdGlvbi5tZAo+IGlu
-ZGV4IGZkNDllNTkuLmY1ZmVhNTEgMTAwNjQ0Cj4gLS0tIGEvY29tbW9uLXRyYWNlLWZvcm1hdC1z
-cGVjaWZpY2F0aW9uLm1kCj4gKysrIGIvY29tbW9uLXRyYWNlLWZvcm1hdC1zcGVjaWZpY2F0aW9u
-Lm1kCj4gQEAgLTQ2NCw2ICs0NjQsOSBAQCBlbnVtIHsKPiB9Cj4gfn5+Cj4gCj4gK1RoZSBtYXBw
-aW5ncyBpbiB0aGUgZW51bWVyYXRpb24gdHlwZSBkbyBub3QgaGF2ZSB0byBiZSBleGhhdXN0aXZl
-Lgo+ICtVbmxpc3RlZCB2YWx1ZXMgYXJlIGltcGxlbWVudGF0aW9uIGRlZmluZWQuCj4gKwoKV2h5
-IG5vdCBqdXN0OgoKICAgIEFuIGVudW1lcmF0aW9uIGZpZWxkIGNhbiBoYXZlIGFuIGludGVncmFs
-IHZhbHVlIHdoaWNoIGl0cyB0eXBlIGRvZXMgbm90CiAgICBtYXAgdG8gYSBzdHJpbmcuCgo/CgpQ
-aGlsCgo+ICMjIyA0LjIgQ29tcG91bmQgdHlwZXMKPiAKPiBDb21wb3VuZCBhcmUgYWdncmVnYXRp
-b24gb2YgdHlwZSBkZWNsYXJhdGlvbnMuIENvbXBvdW5kIHR5cGVzIGluY2x1ZGUKPiAtLQo+IDIu
-MTEuMApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+----- Original Message -----
+> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> To: "gbastien+lttng" <gbastien+lttng@versatic.net>, "Matthew Khouzam" <matthew.khouzam@ericsson.com>,
+> diamon-discuss@linuxfoundation.org, pproulx@efficios.com, "Jeremie Galarneau" <jgalar@efficios.com>
+> Cc: "lttng-dev" <lttng-dev@lists.lttng.org>, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Sent: Thursday, 23 April, 2020 16:52:25
+> Subject: [RFC PATCH CTF 2/3] Clarify monotonicity requirement on timestamp begin
+
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+> common-trace-format-specification.md | 10 ++++++----
+> 1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/common-trace-format-specification.md
+> b/common-trace-format-specification.md
+> index f5fea51..53b70f4 100644
+> --- a/common-trace-format-specification.md
+> +++ b/common-trace-format-specification.md
+> @@ -836,10 +836,12 @@ TSDL metadata):
+>     range between these timestamps should include all event timestamps
+>     assigned to events contained within the packet. The timestamp at the
+>     beginning of an event packet is guaranteed to be below or equal the
+> -    timestamp at the end of that event packet. The timestamp at the end
+> -    of an event packet is guaranteed to be below or equal the
+> -    timestamps at the end of any following packet within the same stream.
+> -    See [Clocks](#spec8) for more detail.
+> +    timestamp at the end of that event packet. The timestamp at the
+> +    beginning of an event packet is guaranteed to be above or equal the
+
+"greater than or equal to"
+
+> +    timestamps at the beginning of any prior packet within the same
+> +    stream. The timestamp at the end of an event packet is guaranteed to
+> +    be below or equal the timestamps at the end of any following packet
+
+"less than or equal to"
+
+Phil
+
+> +    within the same stream. See [Clocks](#spec8) for more detail.
+>   * **Events discarded count**. Snapshot of a per-stream
+>     free-running counter, counting the number of events discarded that
+>     were supposed to be written in the stream after the last event in
+> --
+> 2.11.0
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
