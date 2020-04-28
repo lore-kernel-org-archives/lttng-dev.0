@@ -1,18 +1,16 @@
 From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [RFC PATCH CTF 2/4] Clarify monotonicity requirement on
- timestamp begin
-Date: Tue, 28 Apr 2020 15:12:25 -0400
-Message-ID: <20200428191227.16560-2-mathieu.desnoyers@efficios.com>
-References: <20200428191227.16560-1-mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH CTF 1/4] Clarify that unlisted enumeration
+ values are allowed
+Date: Tue, 28 Apr 2020 15:12:24 -0400
+Message-ID: <20200428191227.16560-1-mathieu.desnoyers@efficios.com>
 Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49BWW03T7kz1nM0
+ by lists.lttng.org (Postfix) with ESMTPS id 49BWW03Wjqz1n2V
  for <lttng-dev@lists.lttng.org>; Tue, 28 Apr 2020 15:12:44 -0400 (EDT)
-In-Reply-To: <20200428191227.16560-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,29 +26,22 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- common-trace-format-specification.md | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ common-trace-format-specification.md | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/common-trace-format-specification.md b/common-trace-format-specification.md
-index d6d196c..55d0601 100644
+index fd49e59..d6d196c 100644
 --- a/common-trace-format-specification.md
 +++ b/common-trace-format-specification.md
-@@ -836,10 +836,12 @@ TSDL metadata):
-     range between these timestamps should include all event timestamps
-     assigned to events contained within the packet. The timestamp at the
-     beginning of an event packet is guaranteed to be below or equal the
--    timestamp at the end of that event packet. The timestamp at the end
--    of an event packet is guaranteed to be below or equal the
--    timestamps at the end of any following packet within the same stream.
--    See [Clocks](#spec8) for more detail.
-+    timestamp at the end of that event packet. The timestamp at the
-+    beginning of an event packet is guaranteed to be above or equal the
-+    timestamps at the beginning of any prior packet within the same
-+    stream. The timestamp at the end of an event packet is guaranteed to
-+    be below or equal the timestamps at the end of any following packet
-+    within the same stream. See [Clocks](#spec8) for more detail.
-   * **Events discarded count**. Snapshot of a per-stream
-     free-running counter, counting the number of events discarded that
-     were supposed to be written in the stream after the last event in
+@@ -464,6 +464,9 @@ enum {
+ }
+ ~~~
+ 
++An enumeration field can have an integral value which its type does not
++map to a string.
++
+ ### 4.2 Compound types
+ 
+ Compound are aggregation of type declarations. Compound types include
 -- 
 2.11.0
