@@ -1,19 +1,19 @@
 From: Philippe Proulx via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: [RFC PATCH CTF 1/3] Clarify that unlisted enum
- values are implementation-defined
-Date: Tue, 28 Apr 2020 14:40:18 -0400 (EDT)
-Message-ID: <1031751564.72894.1588099218629.JavaMail.zimbra@efficios.com>
+Subject: Re: [RFC PATCH CTF 2/3] Clarify monotonicity
+ requirement on timestamp begin
+Date: Tue, 28 Apr 2020 14:42:01 -0400 (EDT)
+Message-ID: <1480394831.72907.1588099321783.JavaMail.zimbra@efficios.com>
 References: <20200423205226.496-1-mathieu.desnoyers@efficios.com>
- <20200423205226.496-2-mathieu.desnoyers@efficios.com>
+ <20200423205226.496-3-mathieu.desnoyers@efficios.com>
 Reply-To: Philippe Proulx <pproulx@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49BVnk6xfnz1mp6
- for <lttng-dev@lists.lttng.org>; Tue, 28 Apr 2020 14:40:25 -0400 (EDT)
-In-Reply-To: <20200423205226.496-2-mathieu.desnoyers@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 49BVqh4tVTz1mtV
+ for <lttng-dev@lists.lttng.org>; Tue, 28 Apr 2020 14:42:08 -0400 (EDT)
+In-Reply-To: <20200423205226.496-3-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,31 +27,48 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, gbastien+lttng <gbastien+lttng@versatic.net>, diamon-discuss@linuxfoundation.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJNYXRoaWV1IERlc25veWVycyIg
-PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBUbzogImdiYXN0aWVuK2x0dG5nIiA8
-Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0PiwgIk1hdHRoZXcgS2hvdXphbSIgPG1hdHRoZXcu
-a2hvdXphbUBlcmljc3Nvbi5jb20+LAo+IGRpYW1vbi1kaXNjdXNzQGxpbnV4Zm91bmRhdGlvbi5v
-cmcsIHBwcm91bHhAZWZmaWNpb3MuY29tLCAiSmVyZW1pZSBHYWxhcm5lYXUiIDxqZ2FsYXJAZWZm
-aWNpb3MuY29tPgo+IENjOiAibHR0bmctZGV2IiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4s
-ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBT
-ZW50OiBUaHVyc2RheSwgMjMgQXByaWwsIDIwMjAgMTY6NTI6MjQKPiBTdWJqZWN0OiBbUkZDIFBB
-VENIIENURiAxLzNdIENsYXJpZnkgdGhhdCB1bmxpc3RlZCBlbnVtIHZhbHVlcyBhcmUgaW1wbGVt
-ZW50YXRpb24tZGVmaW5lZAoKPiBGcm9tOiBHZW5ldmnDqHZlIEJhc3RpZW4gPGdiYXN0aWVuK2x0
-dG5nQHZlcnNhdGljLm5ldD4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBHZW5ldmnDqHZlIEJhc3RpZW4g
-PGdiYXN0aWVuK2x0dG5nQHZlcnNhdGljLm5ldD4KPiBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERl
-c25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+IC0tLQo+IGNvbW1vbi10
-cmFjZS1mb3JtYXQtc3BlY2lmaWNhdGlvbi5tZCB8IDMgKysrCj4gMSBmaWxlIGNoYW5nZWQsIDMg
-aW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQgYS9jb21tb24tdHJhY2UtZm9ybWF0LXNwZWNp
-ZmljYXRpb24ubWQKPiBiL2NvbW1vbi10cmFjZS1mb3JtYXQtc3BlY2lmaWNhdGlvbi5tZAo+IGlu
-ZGV4IGZkNDllNTkuLmY1ZmVhNTEgMTAwNjQ0Cj4gLS0tIGEvY29tbW9uLXRyYWNlLWZvcm1hdC1z
-cGVjaWZpY2F0aW9uLm1kCj4gKysrIGIvY29tbW9uLXRyYWNlLWZvcm1hdC1zcGVjaWZpY2F0aW9u
-Lm1kCj4gQEAgLTQ2NCw2ICs0NjQsOSBAQCBlbnVtIHsKPiB9Cj4gfn5+Cj4gCj4gK1RoZSBtYXBw
-aW5ncyBpbiB0aGUgZW51bWVyYXRpb24gdHlwZSBkbyBub3QgaGF2ZSB0byBiZSBleGhhdXN0aXZl
-Lgo+ICtVbmxpc3RlZCB2YWx1ZXMgYXJlIGltcGxlbWVudGF0aW9uIGRlZmluZWQuCj4gKwoKV2h5
-IG5vdCBqdXN0OgoKICAgIEFuIGVudW1lcmF0aW9uIGZpZWxkIGNhbiBoYXZlIGFuIGludGVncmFs
-IHZhbHVlIHdoaWNoIGl0cyB0eXBlIGRvZXMgbm90CiAgICBtYXAgdG8gYSBzdHJpbmcuCgo/CgpQ
-aGlsCgo+ICMjIyA0LjIgQ29tcG91bmQgdHlwZXMKPiAKPiBDb21wb3VuZCBhcmUgYWdncmVnYXRp
-b24gb2YgdHlwZSBkZWNsYXJhdGlvbnMuIENvbXBvdW5kIHR5cGVzIGluY2x1ZGUKPiAtLQo+IDIu
-MTEuMApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+----- Original Message -----
+> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> To: "gbastien+lttng" <gbastien+lttng@versatic.net>, "Matthew Khouzam" <matthew.khouzam@ericsson.com>,
+> diamon-discuss@linuxfoundation.org, pproulx@efficios.com, "Jeremie Galarneau" <jgalar@efficios.com>
+> Cc: "lttng-dev" <lttng-dev@lists.lttng.org>, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Sent: Thursday, 23 April, 2020 16:52:25
+> Subject: [RFC PATCH CTF 2/3] Clarify monotonicity requirement on timestamp begin
+
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+> common-trace-format-specification.md | 10 ++++++----
+> 1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/common-trace-format-specification.md
+> b/common-trace-format-specification.md
+> index f5fea51..53b70f4 100644
+> --- a/common-trace-format-specification.md
+> +++ b/common-trace-format-specification.md
+> @@ -836,10 +836,12 @@ TSDL metadata):
+>     range between these timestamps should include all event timestamps
+>     assigned to events contained within the packet. The timestamp at the
+>     beginning of an event packet is guaranteed to be below or equal the
+> -    timestamp at the end of that event packet. The timestamp at the end
+> -    of an event packet is guaranteed to be below or equal the
+> -    timestamps at the end of any following packet within the same stream.
+> -    See [Clocks](#spec8) for more detail.
+> +    timestamp at the end of that event packet. The timestamp at the
+> +    beginning of an event packet is guaranteed to be above or equal the
+
+"greater than or equal to"
+
+> +    timestamps at the beginning of any prior packet within the same
+> +    stream. The timestamp at the end of an event packet is guaranteed to
+> +    be below or equal the timestamps at the end of any following packet
+
+"less than or equal to"
+
+Phil
+
+> +    within the same stream. See [Clocks](#spec8) for more detail.
+>   * **Events discarded count**. Snapshot of a per-stream
+>     free-running counter, counting the number of events discarded that
+>     were supposed to be written in the stream after the last event in
+> --
+> 2.11.0
