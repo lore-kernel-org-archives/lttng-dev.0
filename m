@@ -1,18 +1,21 @@
 From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [RFC PATCH CTF 4/4] Use the formulation "less than or
- equal to" rather than "below or equal"
-Date: Tue, 28 Apr 2020 15:12:27 -0400
-Message-ID: <20200428191227.16560-4-mathieu.desnoyers@efficios.com>
-References: <20200428191227.16560-1-mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC PATCH CTF 1/3] Clarify that unlisted enum
+ values are implementation-defined
+Date: Wed, 29 Apr 2020 08:08:04 -0400 (EDT)
+Message-ID: <104691146.75724.1588162084473.JavaMail.zimbra@efficios.com>
+References: <20200423205226.496-1-mathieu.desnoyers@efficios.com>
+ <20200423205226.496-2-mathieu.desnoyers@efficios.com>
+ <1031751564.72894.1588099218629.JavaMail.zimbra@efficios.com>
+ <1859708486.72922.1588099890391.JavaMail.zimbra@efficios.com>
 Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49BWW20wg1z1mrF
- for <lttng-dev@lists.lttng.org>; Tue, 28 Apr 2020 15:12:46 -0400 (EDT)
-In-Reply-To: <20200428191227.16560-1-mathieu.desnoyers@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 49By2Y5PqXz1ntV
+ for <lttng-dev@lists.lttng.org>; Wed, 29 Apr 2020 08:08:05 -0400 (EDT)
+In-Reply-To: <1859708486.72922.1588099890391.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,31 +25,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: diamon-discuss@lists.linuxfoundation.org
-Cc: Jeremie Galarneau <jgalar@efficios.com>, lttng-dev@lists.lttng.org, Philippe Proulx <pproulx@efficios.com>, Genevieve Bastien <gbastien+lttng@versatic.net>
+To: Philippe Proulx <pproulx@efficios.com>
+Cc: Diamon discuss <diamon-discuss@lists.linuxfoundation.org>, lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, Genevieve Bastien <gbastien+lttng@versatic.net>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- common-trace-format-specification.md | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/common-trace-format-specification.md b/common-trace-format-specification.md
-index 5732e92..8a3a745 100644
---- a/common-trace-format-specification.md
-+++ b/common-trace-format-specification.md
-@@ -835,9 +835,9 @@ TSDL metadata):
-     while (or after) writing the last event in the packet. The inclusive
-     range between these timestamps should include all event timestamps
-     assigned to events contained within the packet. The timestamp at the
--    beginning of an event packet is guaranteed to be below or equal the
--    timestamp at the end of that event packet. The timestamp at the
--    beginning of an event packet is guaranteed to be grater than or
-+    beginning of an event packet is guaranteed to be less than or equal
-+    to the timestamp at the end of that event packet. The timestamp at
-+    the beginning of an event packet is guaranteed to be grater than or
-     equal to timestamps at the beginning of any prior packet within the
-     same stream. The timestamp at the end of an event packet is
-     guaranteed to be less than or equal to the timestamps at the end of
--- 
-2.11.0
+LS0tLS0gT24gQXByIDI4LCAyMDIwLCBhdCAyOjUxIFBNLCBNYXRoaWV1IERlc25veWVycyBtYXRo
+aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20gd3JvdGU6Cgo+IC0tLS0tIE9uIEFwciAyOCwgMjAy
+MCwgYXQgMjo0MCBQTSwgUGhpbGlwcGUgUHJvdWx4IHBwcm91bHhAZWZmaWNpb3MuY29tIHdyb3Rl
+Ogo+IAo+PiAtLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4+PiBGcm9tOiAiTWF0aGlldSBE
+ZXNub3llcnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4+PiBUbzogImdiYXN0
+aWVuK2x0dG5nIiA8Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0PiwgIk1hdHRoZXcgS2hvdXph
+bSIKPj4+IDxtYXR0aGV3Lmtob3V6YW1AZXJpY3Nzb24uY29tPiwKPj4+IGRpYW1vbi1kaXNjdXNz
+QGxpbnV4Zm91bmRhdGlvbi5vcmcsIHBwcm91bHhAZWZmaWNpb3MuY29tLCAiSmVyZW1pZSBHYWxh
+cm5lYXUiCj4+PiA8amdhbGFyQGVmZmljaW9zLmNvbT4KPj4+IENjOiAibHR0bmctZGV2IiA8bHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4sICJNYXRoaWV1IERlc25veWVycyIKPj4+IDxtYXRoaWV1
+LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4+PiBTZW50OiBUaHVyc2RheSwgMjMgQXByaWwsIDIw
+MjAgMTY6NTI6MjQKPj4+IFN1YmplY3Q6IFtSRkMgUEFUQ0ggQ1RGIDEvM10gQ2xhcmlmeSB0aGF0
+IHVubGlzdGVkIGVudW0gdmFsdWVzIGFyZQo+Pj4gaW1wbGVtZW50YXRpb24tZGVmaW5lZAo+PiAK
+Pj4+IEZyb206IEdlbmV2acOodmUgQmFzdGllbiA8Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0
+Pgo+Pj4gCj4+PiBTaWduZWQtb2ZmLWJ5OiBHZW5ldmnDqHZlIEJhc3RpZW4gPGdiYXN0aWVuK2x0
+dG5nQHZlcnNhdGljLm5ldD4KPj4+IFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxt
+YXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4+PiAtLS0KPj4+IGNvbW1vbi10cmFjZS1m
+b3JtYXQtc3BlY2lmaWNhdGlvbi5tZCB8IDMgKysrCj4+PiAxIGZpbGUgY2hhbmdlZCwgMyBpbnNl
+cnRpb25zKCspCj4+PiAKPj4+IGRpZmYgLS1naXQgYS9jb21tb24tdHJhY2UtZm9ybWF0LXNwZWNp
+ZmljYXRpb24ubWQKPj4+IGIvY29tbW9uLXRyYWNlLWZvcm1hdC1zcGVjaWZpY2F0aW9uLm1kCj4+
+PiBpbmRleCBmZDQ5ZTU5Li5mNWZlYTUxIDEwMDY0NAo+Pj4gLS0tIGEvY29tbW9uLXRyYWNlLWZv
+cm1hdC1zcGVjaWZpY2F0aW9uLm1kCj4+PiArKysgYi9jb21tb24tdHJhY2UtZm9ybWF0LXNwZWNp
+ZmljYXRpb24ubWQKPj4+IEBAIC00NjQsNiArNDY0LDkgQEAgZW51bSB7Cj4+PiB9Cj4+PiB+fn4K
+Pj4+IAo+Pj4gK1RoZSBtYXBwaW5ncyBpbiB0aGUgZW51bWVyYXRpb24gdHlwZSBkbyBub3QgaGF2
+ZSB0byBiZSBleGhhdXN0aXZlLgo+Pj4gK1VubGlzdGVkIHZhbHVlcyBhcmUgaW1wbGVtZW50YXRp
+b24gZGVmaW5lZC4KPj4+ICsKPj4gCj4+IFdoeSBub3QganVzdDoKPj4gCj4+ICAgIEFuIGVudW1l
+cmF0aW9uIGZpZWxkIGNhbiBoYXZlIGFuIGludGVncmFsIHZhbHVlIHdoaWNoIGl0cyB0eXBlIGRv
+ZXMgbm90Cj4+ICAgIG1hcCB0byBhIHN0cmluZy4KPj4gCj4+ID8KPiAKPiBHb29kIHBvaW50LCBJ
+IHdpbGwgdXNlIHRoYXQgd29yZGluZy4KCkdlbmV2acOodmUgcG9pbnRlZCBvdXQgb24gSVJDIHRo
+YXQgdGhlIHNlbnRlbmNlIGFib3ZlIGlzIHdlaXJkLiBXb3VsZCB0aGUKZm9sbG93aW5nIGNvbnZl
+eSB0aGUgcmlnaHQgbWVhbmluZyA/CgoiQW4gZW51bWVyYXRpb24gZmllbGQgY2FuIGhhdmUgYW4g
+aW50ZWdyYWwgdmFsdWUgZm9yIHdoaWNoIHRoZSBhc3NvY2lhdGVkIGVudW1lcmF0aW9uCnR5cGUg
+ZG9lcyBub3QgbWFwIHRvIGEgc3RyaW5nLiIKClRoYW5rcywKCk1hdGhpZXUKCj4gCj4gVGhhbmtz
+LAo+IAo+IE1hdGhpZXUKPiAKPj4gCj4+IFBoaWwKPj4gCj4+PiAjIyMgNC4yIENvbXBvdW5kIHR5
+cGVzCj4+PiAKPj4+IENvbXBvdW5kIGFyZSBhZ2dyZWdhdGlvbiBvZiB0eXBlIGRlY2xhcmF0aW9u
+cy4gQ29tcG91bmQgdHlwZXMgaW5jbHVkZQo+Pj4gLS0KPj4gPiAyLjExLjAKPiAKPiAtLQo+IE1h
+dGhpZXUgRGVzbm95ZXJzCj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29t
+CgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9z
+LmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
+Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0
+cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
