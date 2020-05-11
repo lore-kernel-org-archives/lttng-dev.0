@@ -1,18 +1,18 @@
-From: =?utf-8?b?54aK5q+T5Y2OIHZpYSBsdHRuZy1kZXY=?= <lttng-dev@lists.lttng.org>
-Subject: Re: questions about mapping from file names to
- corresponding inode
-Date: Tue, 12 May 2020 00:18:51 +0800 (GMT+08:00)
-Message-ID: <62403592.9e382.1720488260e.Coremail.xiongyuhua@zju.edu.cn>
-References: <1bb0377a.88648.171ed966cd8.Coremail.xiongyuhua@zju.edu.cn>
- <6e246dec-525a-ef1b-8599-aa5904004ff0@versatic.net>
-Reply-To: =?UTF-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
+From: =?utf-8?q?Christophe_B=C3=A9dard_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Subject: Correctly using callstack-user context
+Date: Mon, 11 May 2020 17:09:40 -0400
+Message-ID: <CAAS9doY1Ez7N=_H6e-w9eWg0LBJp+MMasuOEmzbO0DGyLSzViA@mail.gmail.com>
+Reply-To: =?UTF-8?Q?Christophe_B=C3=A9dard?= <bedard.christophe@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6610244442822945405=="
+Content-Type: multipart/mixed; boundary="===============4328271482442741472=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
- by lists.lttng.org (Postfix) with ESMTP id 49LR2Z6S5yz20Yg
- for <lttng-dev@lists.lttng.org>; Mon, 11 May 2020 12:19:02 -0400 (EDT)
-In-Reply-To: <6e246dec-525a-ef1b-8599-aa5904004ff0@versatic.net>
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by lists.lttng.org (Postfix) with ESMTPS id 49LYVd6llXz20cb
+ for <lttng-dev@lists.lttng.org>; Mon, 11 May 2020 17:10:17 -0400 (EDT)
+Received: by mail-ej1-x635.google.com with SMTP id se13so2491897ejb.9
+ for <lttng-dev@lists.lttng.org>; Mon, 11 May 2020 14:10:17 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,168 +22,76 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Genevieve Bastien <gbastien@versatic.net>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "ychen@northwestern.edu" <ychen@northwestern.edu>, "245038403@qq.com" <245038403@qq.com>, "rlq1969612634@gmail.com" <rlq1969612634@gmail.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============6610244442822945405==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_2083117_1260401304.1589213931022"
+--===============4328271482442741472==
+Content-Type: multipart/alternative; boundary="000000000000077bb905a565c63c"
 
-------=_Part_2083117_1260401304.1589213931022
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+--000000000000077bb905a565c63c
+Content-Type: text/plain; charset="UTF-8"
 
-SGkgR2VuZXZpw6h2ZSwKClNvcnJ5IGZvciBib3RoZXJpbmcgeW91IGFnYWluIGZvciB0aGlzIHBy
-b2JsZW0uCgpIZXJlIGlzIGEgYnJpZWYgZGVzY3JpcHRpb24gb2YgdGhlIHByb2JsZW0gd2UgZW5j
-b3VudGVyZWQuCldlIGFyZSBnb2luZyB0byBidWlsZCBhIExpbnV4IGRhdGEgY29sbGVjdG9yIGJh
-c2VkIG9uIGx0dG5nLiBJbiBzb21lIHNjZW5hcmlvcywgdGhlIExpbnV4IHNlcnZlciB3aWxsIHBl
-cmZvcm0gYSBsb3Qgb2YgZmlsZSBjcmVhdGlvbiBhbmQgZGVsZXRpb24gb3BlcmF0aW9ucy4gQXQg
-dGhpcyB0aW1lLCBhIGhhc2htYXAgdGhhdCBzdG9yZXMgZmlsZSBub2RlcyBpbiBvdXIgY29sbGVj
-b3RvciB3aWxsIGV4cGxvZGUgYXMgdGhlIG51bWJlciBvZiBmaWxlcyBpbmNyZWFzZXMuIFRoZXJl
-Zm9yZSwgd2UgbmVlZCB0byByZW1vdmUgdGhvc2UgZmlsZSBub2RlcyB0aGF0IGhhdmUgYmVlbiBk
-ZWxldGVkIGluIHRoZSBoYXNobWFwIGluIHRpbWUuCkF0IGZpcnN0LCB3ZSB3YW50ZWQgdG8ga25v
-dyB3aGV0aGVyIGEgZmlsZSBub2RlIHN0aWxsIGV4aXN0cyBieSBmaW5kaW5nIHRoZSBjb3JyZXNw
-b25kZW5jZSBiZXR3ZWVuIGZpbGUgbmFtZSBhbmQgaW5vZGUgaW4gbHR0bmcgIHRyYWNlIGRhdGEu
-ICBJZiB0aGUgZmlsZSBoYXMgYmVlbiBkZWxldGVkLCBpdHMgY29ycmVzcG9uZGluZyBpbm9kZSBu
-dW1iZXIgY2Fubm90IGJlIG9idGFpbmVkIHRocm91Z2ggaXRzIGZpbGVuYW1lLlRoZW4sIHdlIHdh
-bnQgdG8gZmluZCB0aGUgbWFwcGluZyBmcm9tIGZpbGUgbmFtZXMgdG8gY29ycmVzcG9uZGluZyBp
-bm9kZSBpbiBsdHRuZyB0cmFjZSBkYXRhLlNvIEkgc2VudCB5b3UgdGhpcyBlbWFpbC4KCgpCdXQg
-aXQgc2VlbXMgdGhhdCB0aGlzIGNvcnJlc3BvbmRlbmNlIGNhbm5vdCBiZSBvYnRhaW5lZCBmcm9t
-IHRoZSBsdHRuZyB0cmFjZSBkYXRhLCBzbyB3ZSBhcmUgbm93IHRha2luZyBhbm90aGVyIG1ldGhv
-ZCB0byBrbm93IHdoZXRoZXIgYSBmaWxlIG5vZGUgaGFzIGJlZW4gZGVsZXRlZCB0aHJvdWdoIHRo
-ZSB0cmFjZSBkYXRhIG9mIHVubGluayBvciB1bmxpbmthdCBzeXMuCgpEbyB5b3UgaGF2ZSBhbnkg
-c3VnZ2VzdGlvbnMgb24gdGhpcyBxdWVzdGlvbu+8nwoKdGhhbmtz77yMCgp5dWh1YS4KCgoKLS0t
-LS3ljp/lp4vpgq7ku7YtLS0tLQrlj5Hku7bkuro6IkdlbmV2aWV2ZSBCYXN0aWVuIiA8Z2Jhc3Rp
-ZW5AdmVyc2F0aWMubmV0Pgrlj5HpgIHml7bpl7Q6MjAyMC0wNS0xMSAyMTo1Mzo0MyAo5pif5pyf
-5LiAKQrmlLbku7bkuro6ICLnhormr5PljY4iIDx4aW9uZ3l1aHVhQHpqdS5lZHUuY24+CuaKhOmA
-gToK5Li76aKYOiBSZTogW2x0dG5nLWRldl0gcXVlc3Rpb25zIGFib3V0IG1hcHBpbmcgZnJvbSBm
-aWxlIG5hbWVzIHRvIGNvcnJlc3BvbmRpbmcgaW5vZGUKCgoKSGkgWXVodWEsCgpXaGF0IGFyZSB5
-b3UgdHJ5aW5nIHRvIGFjaGlldmUgZXhhY3RseSB3aXRoIHRoaXMgZGF0YT8gSSd2ZSBiZWVuIGxv
-b2tpbmcgYXJvdW5kIHRoaXMgYXJlYSByZWNlbnRseS4KCldlIHdhbnRlZCB0byBiZSBhYmxlIHRv
-IG1hdGNoIHJlcXVlc3RzIHRvIGRpc2sgKGJsb2NrX3JxL2Jpbykgd2l0aCB0aGUgd3JpdGVzIHRv
-IGZpbGUgZnJvbSB0aGUgdmFyaW91cyB0aHJlYWRzLiBJIGxvb2tlZCBhdCB0aGUgYmxvY2tfZGly
-dHlfYnVmZmVyIGV2ZW50LCBhcyB3ZWxsIGFzIHdyaXRlYmFja19kaXJ0eV9wYWdlLiBGb3IgdGhl
-IGJsb2NrLCB0aGUgZGlydHkgYnVmZmVycyBhcmUgYnkgcGFydGl0aW9uLCB3aGlsZSB0aGUgcmVx
-dWVzdHMgYXJlIGZvciB0aGUgZGV2aWNlLiBUaGVyZSBpcyBhbiBldmVudCAoYmxvY2tfYmlvX3Jl
-bWFwKSB0aGF0IHNob3VsZCBtYXAgdGhlIHNlY3RvciBmcm9tIHRoZSBwYXJ0aXRpb24gdG8gdGhl
-IHNlY3RvciBmcm9tIHRoZSBkZXZpY2UsIGJ1dCBJIGZvdW5kIG5vIGxhdGVyIGJsb2NrIHJlcXVl
-c3RzIHRoYXQgaW5jbHVkZWQgdGhvc2Ugc2VjdG9ycy4gSSd2ZSB0aHVzIHB1dCB0aGlzIGludmVz
-dGlnYXRpb24gb24gcGF1c2UgZm9yIG5vdy4KClRoYXQgbWF5IG5vdCBiZSByZWxhdGVkIHRvIHdo
-YXQgeW91J3JlIGRvaW5nLCBidXQganVzdCBpbiBjYXNlLCBJJ20gc2hhcmluZyBteSBleHBlcmll
-bmNlIHdpdGggd3JpdGVzIHRvIGJsb2NrIHJlcXVlc3RzIG1hcHBpbmdzLgoKQ2hlZXJzLAoKR2Vu
-ZXZpw6h2ZQoKCgoKT24gNS83LzIwIDE6MjMgQU0sIOeGiuavk+WNjiB2aWEgbHR0bmctZGV2IHdy
-b3RlOgoKSGnvvIwKCkkgd2FudCB0byBrbm93IHdoZXRoZXIgbHR0bmcgdHJhY2UgZGF0YSB3aWxs
-IHByb3ZpZGUgbWFwcGluZyBmcm9tIGZpbGUgbmFtZXMgdG8gY29ycmVzcG9uZGluZyBpbm9kZS4K
-CkkgcmVmZXJlZCBzb21lIGRhdGEgcGFyc2VkIGJ5IGJhYmVsdHJhY2XvvIxhbmQgZm91bmQgdGhh
-dCBpbnRlcm5hbCBrZXJuZWwgdHJhY2Vwb2ludHMgbGlrZSB3cml0ZWJhY2tfZGlydHlfaW5vZGVf
-c3RhcnTjgIFqYmQyX3N1Ym1pdF9pbm9kZV9kYXRhIGFuZCBsdHRuZ19zdGF0ZWR1bXBfdm1fbWFw
-IGNhbiBwcm92aWRlIGlub2RlIHBhcmFtZXRlci5CdXQgSSBkb27igJl0IGtub3cgdGhlIG1lYW5p
-bmcgb2YgdGhlc2UgdHJhY2Vwb2ludHMgbWVudGlvbmVkIGFib3ZlLCBhbmQgaXQgc2VlbXMgdG8g
-aGF2ZSBsaXR0bGUgdG8gZG8gd2l0aCB0aGUgbWFwcGluZyB3ZSBuZWVkLkkgd2FudCB0byBrbm93
-IHdoaWNoIHRyYWNlcG9pbnQgd2lsbCByZWNvcmQgdGhlIG1hcHBpbmcuCgpJbiBhZGRpdGlvbiwg
-SSBmb3VuZCB0aGUgZ2V0X2lub2RlX2Zyb21fZmQoKSBmdW5jdGlvbiBhdCBsdHRuZy11cHJvYmVz
-LmMuSXQgc2VlbXMgdG8gcHJvdmlkZSBzb21lIGhpbnRzLCBjYW4gdGhpcyBmdW5jdGlvbiBwcm92
-aWRlIHRoZSBtYXBwaW5nIGluZm9ybWF0aW9uIHdlIHdhbnQ/SWYgc28sIGhvdyBzaG91bGQgSSB1
-c2UgaXQgdG8gZ2V0IHRoZSBkYXRhLgoKCgpMb29raW5nIGZvcndhcmQgdG8geW91ciByZXBseS4K
-CgoKCnRoYW5rcywKCnl1aHVhCgoKCgoKLS0tLS0tLS0tLS0tLS0tLS0tCll1aHVhIFhpb25nCkxh
-YiBmb3IgSW50ZXJuZXQgYW5kIFNlY3VyaXR5IFRlY2hub2xvZ3kKU2Nob29sIG9mIENvbXB1dGVy
-IFNjaWVuY2UgYW5kIFRlY2hub2xvZ3kKWmhlamlhbmcgVW5pdmVyc2l0eQpIYW5nemhvdSwgMzEw
-MDA3LCBQLlIuIENoaW5hCgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QgbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Z2h0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
-ZXY=
-------=_Part_2083117_1260401304.1589213931022
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: base64
+Hi,
 
-PHA+CglIaSZuYnNwOzxzcGFuIHN0eWxlPSJ3aGl0ZS1zcGFjZTpub3JtYWw7Ij5HZW5ldmnDqHZl
-LDwvc3Bhbj4gCjwvcD4KPHA+CglTb3JyeSBmb3IgYm90aGVyaW5nIHlvdSBhZ2FpbiBmb3IgdGhp
-cyBwcm9ibGVtLgo8L3A+CkhlcmUgaXMgYSBicmllZiBkZXNjcmlwdGlvbiBvZiB0aGUgcHJvYmxl
-bSB3ZSBlbmNvdW50ZXJlZC48YnI+CldlIGFyZSBnb2luZyB0byBidWlsZCBhIExpbnV4IGRhdGEg
-Y29sbGVjdG9yIGJhc2VkIG9uIGx0dG5nLiBJbiBzb21lIHNjZW5hcmlvcywgdGhlIExpbnV4IHNl
-cnZlciB3aWxsIHBlcmZvcm0gYSBsb3Qgb2YgZmlsZSBjcmVhdGlvbiBhbmQgZGVsZXRpb24gb3Bl
-cmF0aW9ucy4gQXQgdGhpcyB0aW1lLCBhIGhhc2htYXAgdGhhdCBzdG9yZXMgZmlsZSBub2RlcyBp
-biBvdXIgY29sbGVjb3RvciB3aWxsIGV4cGxvZGUgYXMgdGhlIG51bWJlciBvZiBmaWxlcyBpbmNy
-ZWFzZXMuIFRoZXJlZm9yZSwgd2UgbmVlZCB0byByZW1vdmUgdGhvc2UgZmlsZSBub2RlcyB0aGF0
-IGhhdmUgYmVlbiBkZWxldGVkIGluIHRoZSBoYXNobWFwIGluIHRpbWUuPGJyPgpBdCBmaXJzdCwg
-d2Ugd2FudGVkIHRvIGtub3cgd2hldGhlciBhIGZpbGUgbm9kZSBzdGlsbCBleGlzdHMgYnkgZmlu
-ZGluZyB0aGUgY29ycmVzcG9uZGVuY2UgYmV0d2VlbiBmaWxlIG5hbWUgYW5kIGlub2RlIGluIGx0
-dG5nJm5ic3A7IHRyYWNlIGRhdGEuJm5ic3A7IElmIHRoZSBmaWxlIGhhcyBiZWVuIGRlbGV0ZWQs
-IGl0cyBjb3JyZXNwb25kaW5nIGlub2RlIG51bWJlciBjYW5ub3QgYmUgb2J0YWluZWQgdGhyb3Vn
-aCBpdHMgZmlsZW5hbWUuVGhlbiwgd2Ugd2FudCB0byBmaW5kIHRoZSBtYXBwaW5nIGZyb20gZmls
-ZSBuYW1lcyB0byBjb3JyZXNwb25kaW5nIGlub2RlIGluIGx0dG5nIHRyYWNlIGRhdGEuU28gSSBz
-ZW50IHlvdSB0aGlzIGVtYWlsLjxicj4KPHA+CglCdXQgaXQgc2VlbXMgdGhhdCB0aGlzIGNvcnJl
-c3BvbmRlbmNlIGNhbm5vdCBiZSBvYnRhaW5lZCBmcm9tIHRoZSBsdHRuZyB0cmFjZSBkYXRhLCBz
-byB3ZSBhcmUgbm93IHRha2luZyBhbm90aGVyIG1ldGhvZCB0byBrbm93IHdoZXRoZXIgYSBmaWxl
-IG5vZGUgaGFzIGJlZW4gZGVsZXRlZCB0aHJvdWdoIHRoZSB0cmFjZSBkYXRhIG9mIHVubGluayBv
-ciB1bmxpbmthdCBzeXMuCjwvcD4KPHA+CglEbyB5b3UgaGF2ZSBhbnkgc3VnZ2VzdGlvbnMgb24g
-dGhpcyBxdWVzdGlvbu+8nwo8L3A+CjxwPgoJdGhhbmtz77yMCjwvcD4KPHA+Cgl5dWh1YS4KPC9w
-Pgo8YnI+Cjxicj4KPGJsb2NrcXVvdGUgbmFtZT0icmVwbHlDb250ZW50IiBjbGFzcz0iUmVmZXJl
-bmNlUXVvdGUiIHN0eWxlPSJwYWRkaW5nLWxlZnQ6NXB4O21hcmdpbi1sZWZ0OjVweDtib3JkZXIt
-bGVmdDojYjZiNmI2IDJweCBzb2xpZDttYXJnaW4tcmlnaHQ6MDsiPgoJLS0tLS3ljp/lp4vpgq7k
-u7YtLS0tLTxicj4KPGI+5Y+R5Lu25Lq6OjwvYj48c3BhbiBpZD0icmNfZnJvbSI+IkdlbmV2aWV2
-ZSBCYXN0aWVuIiAmbHQ7Z2Jhc3RpZW5AdmVyc2F0aWMubmV0Jmd0Ozwvc3Bhbj48YnI+CjxiPuWP
-kemAgeaXtumXtDo8L2I+PHNwYW4gaWQ9InJjX3NlbnR0aW1lIj4yMDIwLTA1LTExIDIxOjUzOjQz
-ICjmmJ/mnJ/kuIApPC9zcGFuPjxicj4KPGI+5pS25Lu25Lq6OjwvYj4gIueGiuavk+WNjiIgJmx0
-O3hpb25neXVodWFAemp1LmVkdS5jbiZndDs8YnI+CjxiPuaKhOmAgTo8L2I+IDxicj4KPGI+5Li7
-6aKYOjwvYj4gUmU6IFtsdHRuZy1kZXZdIHF1ZXN0aW9ucyBhYm91dCBtYXBwaW5nIGZyb20gZmls
-ZSBuYW1lcyB0byBjb3JyZXNwb25kaW5nIGlub2RlPGJyPgo8YnI+Cgk8cD4KCQlIaSBZdWh1YSwK
-CTwvcD4KCTxwPgoJCVdoYXQgYXJlIHlvdSB0cnlpbmcgdG8gYWNoaWV2ZSBleGFjdGx5IHdpdGgg
-dGhpcyBkYXRhPyBJJ3ZlIGJlZW4KICAgICAgbG9va2luZyBhcm91bmQgdGhpcyBhcmVhIHJlY2Vu
-dGx5LgoJPC9wPgoJPHA+CgkJV2Ugd2FudGVkIHRvIGJlIGFibGUgdG8gbWF0Y2ggcmVxdWVzdHMg
-dG8gZGlzayAoYmxvY2tfcnEvYmlvKQogICAgICB3aXRoIHRoZSB3cml0ZXMgdG8gZmlsZSBmcm9t
-IHRoZSB2YXJpb3VzIHRocmVhZHMuIEkgbG9va2VkIGF0IHRoZQogICAgICBibG9ja19kaXJ0eV9i
-dWZmZXIgZXZlbnQsIGFzIHdlbGwgYXMgd3JpdGViYWNrX2RpcnR5X3BhZ2UuIEZvciB0aGUKICAg
-ICAgYmxvY2ssIHRoZSBkaXJ0eSBidWZmZXJzIGFyZSBieSBwYXJ0aXRpb24sIHdoaWxlIHRoZSBy
-ZXF1ZXN0cyBhcmUKICAgICAgZm9yIHRoZSBkZXZpY2UuIFRoZXJlIGlzIGFuIGV2ZW50IChibG9j
-a19iaW9fcmVtYXApIHRoYXQgc2hvdWxkCiAgICAgIG1hcCB0aGUgc2VjdG9yIGZyb20gdGhlIHBh
-cnRpdGlvbiB0byB0aGUgc2VjdG9yIGZyb20gdGhlIGRldmljZSwKICAgICAgYnV0IEkgZm91bmQg
-bm8gbGF0ZXIgYmxvY2sgcmVxdWVzdHMgdGhhdCBpbmNsdWRlZCB0aG9zZSBzZWN0b3JzLgogICAg
-ICBJJ3ZlIHRodXMgcHV0IHRoaXMgaW52ZXN0aWdhdGlvbiBvbiBwYXVzZSBmb3Igbm93LgoJPC9w
-PgoJPHA+CgkJVGhhdCBtYXkgbm90IGJlIHJlbGF0ZWQgdG8gd2hhdCB5b3UncmUgZG9pbmcsIGJ1
-dCBqdXN0IGluIGNhc2UsCiAgICAgIEknbSBzaGFyaW5nIG15IGV4cGVyaWVuY2Ugd2l0aCB3cml0
-ZXMgdG8gYmxvY2sgcmVxdWVzdHMgbWFwcGluZ3MuCgk8L3A+Cgk8cD4KCQlDaGVlcnMsCgk8L3A+
-Cgk8cD4KCQlHZW5ldmnDqHZlCgk8L3A+Cgk8cD4KCQk8YnI+Cgk8L3A+Cgk8ZGl2IGNsYXNzPSJt
-b3otY2l0ZS1wcmVmaXgiPgoJCU9uIDUvNy8yMCAxOjIzIEFNLCDnhormr5PljY4gdmlhIGx0dG5n
-LWRldgogICAgICB3cm90ZTo8YnI+Cgk8L2Rpdj4KCTxibG9ja3F1b3RlIHR5cGU9ImNpdGUiIGNp
-dGU9Im1pZDoxYmIwMzc3YS44ODY0OC4xNzFlZDk2NmNkOC5Db3JlbWFpbC54aW9uZ3l1aHVhQHpq
-dS5lZHUuY24iPgoJCUhp77yMPGJyPgo8YnI+Ckkgd2FudCB0byBrbm93IHdoZXRoZXIgbHR0bmcg
-dHJhY2UgZGF0YSB3aWxsIHByb3ZpZGUgbWFwcGluZyBmcm9tCiAgICAgIGZpbGUgbmFtZXMgdG8g
-Y29ycmVzcG9uZGluZyBpbm9kZS48YnI+Cjxicj4KSSByZWZlcmVkIHNvbWUgZGF0YSBwYXJzZWQg
-YnkgYmFiZWx0cmFjZe+8jGFuZCBmb3VuZCB0aGF0IGludGVybmFsCiAgICAgIGtlcm5lbCB0cmFj
-ZXBvaW50cyBsaWtlCiAgICAgIHdyaXRlYmFja19kaXJ0eV9pbm9kZV9zdGFydOOAgWpiZDJfc3Vi
-bWl0X2lub2RlX2RhdGEgYW5kCiAgICAgIGx0dG5nX3N0YXRlZHVtcF92bV9tYXAgY2FuIHByb3Zp
-ZGUgaW5vZGUgcGFyYW1ldGVyLkJ1dCBJIGRvbuKAmXQKICAgICAga25vdyB0aGUgbWVhbmluZyBv
-ZiB0aGVzZSB0cmFjZXBvaW50cyBtZW50aW9uZWQgYWJvdmUsIGFuZCBpdAogICAgICBzZWVtcyB0
-byBoYXZlIGxpdHRsZSB0byBkbyB3aXRoIHRoZSBtYXBwaW5nIHdlIG5lZWQuSSB3YW50IHRvIGtu
-b3cKICAgICAgd2hpY2ggdHJhY2Vwb2ludCB3aWxsIHJlY29yZCB0aGUgbWFwcGluZy48YnI+Cjxi
-cj4KSW4gYWRkaXRpb24sIEkgZm91bmQgdGhlIGdldF9pbm9kZV9mcm9tX2ZkKCkgZnVuY3Rpb24g
-YXQgPGEgaHJlZj0iaHR0cHM6Ly9naXRodWIuY29tL2x0dG5nL2x0dG5nLW1vZHVsZXMvYmxvYi9t
-YXN0ZXIvc3JjL3Byb2Jlcy9sdHRuZy11cHJvYmVzLmMiIHRhcmdldD0iX2JsYW5rIiBtb3otZG8t
-bm90LXNlbmQ9InRydWUiPmx0dG5nLXVwcm9iZXMuYzwvYT4uSXQKICAgICAgc2VlbXMgdG8gcHJv
-dmlkZSBzb21lIGhpbnRzLCBjYW4gdGhpcyBmdW5jdGlvbiBwcm92aWRlIHRoZSBtYXBwaW5nCiAg
-ICAgIGluZm9ybWF0aW9uIHdlIHdhbnQ/SWYgc28sIGhvdyBzaG91bGQgSSB1c2UgaXQgdG8gZ2V0
-IHRoZSBkYXRhLjxicj4KPGJyPgoJCTxwPgoJCQlMb29raW5nIGZvcndhcmQgdG8geW91ciByZXBs
-eS4KCQk8L3A+CgkJPHA+CgkJCTxicj4KCQk8L3A+CgkJPHA+CgkJCXRoYW5rcywKCQk8L3A+CgkJ
-PHA+CgkJCXl1aHVhCgkJPC9wPgoJCTxwPgoJCQk8YnI+CgkJPC9wPgoJCTxkaXYgc3R5bGU9ImZv
-bnQtc2l6ZToxNHB4O3doaXRlLXNwYWNlOm5vcm1hbDsiPgoJCQk8YnI+Ci0tLS0tLS0tLS0tLS0t
-LS0tLTxicj4KWXVodWEgWGlvbmc8YnI+CkxhYiBmb3IgSW50ZXJuZXQgYW5kIFNlY3VyaXR5IFRl
-Y2hub2xvZ3k8YnI+ClNjaG9vbCBvZiBDb21wdXRlciBTY2llbmNlIGFuZCBUZWNobm9sb2d5PGJy
-PgpaaGVqaWFuZyBVbml2ZXJzaXR5PGJyPgpIYW5nemhvdSwgMzEwMDA3LCBQLlIuIENoaW5hPGJy
-PgoJCTwvZGl2Pgo8YnI+CgkJPGZpZWxkc2V0IGNsYXNzPSJtaW1lQXR0YWNobWVudEhlYWRlciI+
-CgkJPC9maWVsZHNldD4KPHByZSBjbGFzcz0ibW96LXF1b3RlLXByZSIgd3JhcD0iIj5fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0IDxhIGNsYXNzPSJtb3otdHh0LWxpbmstYWJicmV2aWF0ZWQiIGhyZWY9Im1haWx0bzps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIj5sdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPC9hPiA8
-YSBjbGFzcz0ibW96LXR4dC1saW5rLWZyZWV0ZXh0IiBocmVmPSJodHRwczovL2xpc3RzLmx0dG5n
-Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Ij5odHRwczovL2xpc3RzLmx0
-dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2PC9hPiA8L3ByZT4KCTwv
-YmxvY2txdW90ZT4KPC9ibG9ja3F1b3RlPg==
-------=_Part_2083117_1260401304.1589213931022--
+As part of a big software safety certification effort, we are looking into
+making sure that some functions of our API do not allocate memory and do
+not use any blocking syscalls.
+
+This part is done and is working (using kmem_mm_page_{alloc,free} for
+memory allocations for now). However, if we do get memory allocations, we
+want to know where they're from. To do this, I've been looking at using the
+callstack-user context. However, I have a hard time getting more than 1
+callstack-user address.
+
+I'm on 5.3.0-46-generic, i.e. CONFIG_ARCH_STACKWALK-compatible, from what I
+could find. I tried creating a minimal version using
+-fno-omit-frame-pointer & without any optimization, but I still get only
+one address in the callstack_user context when I know there should be at
+least a few.
+
+Note that this is running inside a Docker container, but lttng-modules is
+installed on the host, and a root session-daemon is running inside the
+Docker container. Also, I installed LTTng using the stable-2.11 Ubuntu PPA.
+
+Is there something I might be doing wrong? Am I supposed to compile
+lttng-modules from source in order to use the callstack-* contexts? I
+couldn't find much documentation about this, other than the brief mention
+in the 2.11 docs.
+
+Regards,
 
 
---===============6610244442822945405==
+Christophe
+
+--000000000000077bb905a565c63c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div>As part of a big software safety ce=
+rtification effort, we are looking into making sure that some functions of =
+our API do not allocate memory and do not use any blocking syscalls.</div><=
+div><br></div><div>This part is done and is working (using kmem_mm_page_{al=
+loc,free} for memory allocations for now). However, if we do get memory all=
+ocations, we want to know where they&#39;re from. To do this, I&#39;ve been=
+ looking at using the callstack-user=C2=A0context. However, I have a hard t=
+ime getting more than 1 callstack-user=C2=A0address.</div><div><br></div><d=
+iv>I&#39;m on 5.3.0-46-generic, i.e. CONFIG_ARCH_STACKWALK-compatible, from=
+ what I could find. I tried creating a minimal version using -fno-omit-fram=
+e-pointer &amp; without any optimization, but I still get only one address =
+in the callstack_user context when I know there should be at least a few.</=
+div><div><br></div><div>Note that this is running inside a Docker container=
+, but lttng-modules is installed on the host, and a root session-daemon is =
+running inside the Docker container. Also, I installed LTTng using the stab=
+le-2.11 Ubuntu PPA.</div><div><br></div><div>Is there something I might be =
+doing wrong? Am I supposed to compile lttng-modules from source in order to=
+ use the callstack-* contexts? I couldn&#39;t find much=C2=A0documentation =
+about this,=C2=A0other than the brief mention in the 2.11 docs.</div><div><=
+br></div><div>Regards,</div><div><br></div><div><br></div><div>Christophe</=
+div></div>
+
+--000000000000077bb905a565c63c--
+
+--===============4328271482442741472==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -194,4 +102,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============6610244442822945405==--
+--===============4328271482442741472==--
