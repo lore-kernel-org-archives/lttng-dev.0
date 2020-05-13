@@ -1,23 +1,25 @@
-From: =?utf-8?q?Christophe_B=C3=A9dard_via_lttng-dev?=
- <lttng-dev@lists.lttng.org>
-Subject: Re: Correctly using callstack-user context
-Date: Wed, 13 May 2020 11:34:55 -0400
-Message-ID: <CAAS9dobBZRWw3WkZQrn2UGkHC1+tuS0BLmZCJxpxSQvDjG7oxg@mail.gmail.com>
-References: <CAAS9doY1Ez7N=_H6e-w9eWg0LBJp+MMasuOEmzbO0DGyLSzViA@mail.gmail.com>
- <1486835767.11198.1589286441675.JavaMail.zimbra@efficios.com>
- <CAAS9dobxi52FyWn=9zVDkMMpmZztc1Q1msdiErMKhkDEYCtqCA@mail.gmail.com>
- <bdeb584b-7c42-9e26-ce10-a1b008212541@versatic.net>
-Reply-To: =?UTF-8?Q?Christophe_B=C3=A9dard?= <bedard.christophe@gmail.com>
+From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: Need Help In trace generation for malloc(),
+ free() calls etc
+Date: Wed, 13 May 2020 14:04:04 -0400
+Message-ID: <20200513180404.GB2381108@joraj-alpa>
+References: <CAPC3ern8bkAJDnOwoYh2Om44Q2GWAPsh140FW_aPGVkdUmCwkw@mail.gmail.com>
+ <CAPC3erkxTh9dSgahym7xsCjJXOV3D+kto-=UB-ApjSUOWYZVeA@mail.gmail.com>
+ <20200513153312.GA2381108@joraj-alpa>
+ <CAPC3erkfapoZu_WM=znEyj0ch1YiKeX7-JBiauoLh+Seee0TZA@mail.gmail.com>
+Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3767090567196571696=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by lists.lttng.org (Postfix) with ESMTPS id 49MdzT1XkDz223T
- for <lttng-dev@lists.lttng.org>; Wed, 13 May 2020 11:35:32 -0400 (EDT)
-Received: by mail-ej1-x62c.google.com with SMTP id n17so14574590ejh.7
- for <lttng-dev@lists.lttng.org>; Wed, 13 May 2020 08:35:32 -0700 (PDT)
-In-Reply-To: <bdeb584b-7c42-9e26-ce10-a1b008212541@versatic.net>
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 49MjH117Gfz21s3
+ for <lttng-dev@lists.lttng.org>; Wed, 13 May 2020 14:04:12 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 5DBAF2BBE64
+ for <lttng-dev@lists.lttng.org>; Wed, 13 May 2020 14:04:06 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CAPC3erkfapoZu_WM=znEyj0ch1YiKeX7-JBiauoLh+Seee0TZA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,69 +29,29 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Genevieve Bastien <gbastien@versatic.net>
+To: Abhinav Ranjan <abhi.abhinav240@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3767090567196571696==
-Content-Type: multipart/alternative; boundary="000000000000973f0b05a58954e7"
+Hi Abhinav,
 
---000000000000973f0b05a58954e7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Please keep the mailing list in CC for all communication: lttng-dev@lists.lttng.org
 
-On Wed, 13 May 2020 at 10:18, Genevieve Bastien via lttng-dev <
-lttng-dev@lists.lttng.org> wrote:
+If not, I am not interested in helping you further.
 
-> We had a very very experimental branch with it, using backtrace first,
-> then unwind. But it is not suggested, not performant. It's far from the
-> correct desired implementation, for which Mathieu could give more details=
-.
->
-> It works, but not to be used in production. Students have used it in the
-> lab for some specific use case prototyping. I won't share the branch here=
-,
-> but if you wish to try, let me know.
->
-> Genevi=C3=A8ve
->
-Sure, I'd be interested!
+On Wed, May 13, 2020 at 09:26:52PM +0530, Abhinav Ranjan wrote:
+> Hi! Jonathan thank you so much for your help and reply! Sure I'll not use
+> snapshot from next time and follow your advice.
+> In fact I figured out the issue, but Jonathan I have one specific doubt I
+> wanted to trace malloc , free call from my app only  but after using lttng
+> enable-event --userspace lttng_ust_libc:malloc I am seeing several malloc (
+> in Trace Compass)   probably from different tracepoints from lttng_ust_libc.
 
---000000000000973f0b05a58954e7
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+You will see all malloc that the app does for its lifetime since you LD_PRELOAD
+the wrapper including any allocation lttng-ust does. Keep in mind that lttng-ust
+is not magic, lttng-ust spun threads and do some allocations to do its job.
 
-<div dir=3D"ltr"><div><br></div><div class=3D"gmail_quote"><div dir=3D"ltr"=
- class=3D"gmail_attr">On Wed, 13 May 2020 at 10:18, Genevieve Bastien via l=
-ttng-dev &lt;<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank"=
->lttng-dev@lists.lttng.org</a>&gt; wrote:</div><blockquote class=3D"gmail_q=
-uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
-04);padding-left:1ex"><div><blockquote type=3D"cite"><div dir=3D"ltr"><div =
-class=3D"gmail_quote">
-        </div>
-      </div>
-    </blockquote>
-    <p>We had a very very experimental branch with it, using backtrace
-      first, then unwind. But it is not suggested, not performant. It&#39;s
-      far from the correct desired implementation, for which Mathieu
-      could give more details.</p>
-    <p> It works, but not to be used in production. Students have used
-      it in the lab for some specific use case prototyping. I won&#39;t
-      share the branch here, but if you wish to try, let me know.</p>
-    <p>Genevi=C3=A8ve</p></div></blockquote><div>Sure, I&#39;d be intereste=
-d!<br></div></div></div>
+What outcome do you expect? We might be able to at least get you on the right
+path. In other word, what is your end goal?
 
---000000000000973f0b05a58954e7--
-
---===============3767090567196571696==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============3767090567196571696==--
+Cheers
