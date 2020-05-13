@@ -1,26 +1,23 @@
-From: Genevieve Bastien via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: Correctly using callstack-user context
-Date: Wed, 13 May 2020 10:02:04 -0400
-Message-ID: <bdeb584b-7c42-9e26-ce10-a1b008212541@versatic.net>
-References: <CAAS9doY1Ez7N=_H6e-w9eWg0LBJp+MMasuOEmzbO0DGyLSzViA@mail.gmail.com>
- <1486835767.11198.1589286441675.JavaMail.zimbra@efficios.com>
- <CAAS9dobxi52FyWn=9zVDkMMpmZztc1Q1msdiErMKhkDEYCtqCA@mail.gmail.com>
-Reply-To: Genevieve Bastien <gbastien@versatic.net>
+From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: Need Help In trace generation for malloc(),
+ free() calls etc
+Date: Wed, 13 May 2020 11:33:12 -0400
+Message-ID: <20200513153312.GA2381108@joraj-alpa>
+References: <CAPC3ern8bkAJDnOwoYh2Om44Q2GWAPsh140FW_aPGVkdUmCwkw@mail.gmail.com>
+ <CAPC3erkxTh9dSgahym7xsCjJXOV3D+kto-=UB-ApjSUOWYZVeA@mail.gmail.com>
+Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2221153782573968286=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from barracuda.ebox.ca (barracuda.ebox.ca [96.127.255.19])
- by lists.lttng.org (Postfix) with ESMTPS id 49McGP7295z21tc
- for <lttng-dev@lists.lttng.org>; Wed, 13 May 2020 10:18:21 -0400 (EDT)
-Received: from smtp.ebox.ca (smtp.ebox.ca [96.127.255.82]) by
- barracuda.ebox.ca with ESMTP id MCO6rLzHtrvLPmE4 (version=TLSv1
- cipher=DHE-RSA-AES256-SHA bits=256 verify=NO) for <lttng-dev@lists.lttng.org>;
- Wed, 13 May 2020 10:02:04 -0400 (EDT)
-Received: from [192.168.47.170] (unknown [104.163.172.174])
- by smtp.ebox.ca (Postfix) with ESMTPS id 46AEB441B21
- for <lttng-dev@lists.lttng.org>; Wed, 13 May 2020 10:02:04 -0400 (EDT)
-In-Reply-To: <CAAS9dobxi52FyWn=9zVDkMMpmZztc1Q1msdiErMKhkDEYCtqCA@mail.gmail.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 49Mdww62x1z21tq
+ for <lttng-dev@lists.lttng.org>; Wed, 13 May 2020 11:33:20 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 38C672BA064
+ for <lttng-dev@lists.lttng.org>; Wed, 13 May 2020 11:33:14 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CAPC3erkxTh9dSgahym7xsCjJXOV3D+kto-=UB-ApjSUOWYZVeA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -30,160 +27,52 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Abhinav Ranjan <abhi.abhinav240@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---===============2221153782573968286==
-Content-Type: multipart/alternative;
- boundary="------------030E079F2CB96675849F32D4"
-Content-Language: en-US
+Hi Abhinav,
 
-This is a multi-part message in MIME format.
---------------030E079F2CB96675849F32D4
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Please refrain from using screenshots when pastebin could be used (code,
+commands, etc).
 
-Hi Christophe,
+On Wed, May 13, 2020 at 10:29:22AM +0530, Abhinav Ranjan via lttng-dev wrote:
+>   Hello Sir,
+> I am Abhinav from India.
+> *Kindly Ignore the previous email.*
+> Actually I am very new to the Embedded System Engineering profession. In
+> fact I have been asked to do an independent project to instrumenting a c
+> application using  LLTng concept to find/trace calls to malloc(), free()
+> calls. In fact i tried capturing the same as below steps but didn't
+> understand why after using LD_PRELOAD also malloc() and free() calls were
+> not traced. I am not sure whether my app was correct!!
+> 
+>  I followed the steps provided to create executable using -lltng-ust -ldl
+> 2.I executed it as: LD_PRELOAD=liblttng-ust-libc-wrapper.so ./executable
+> (initially as ./exe arg))
+> 3. Then I followed commands to create , capture the events. and destroyed
+> it.
 
-On 5/13/20 9:42 AM, Christophe B=C3=A9dard via lttng-dev wrote:
->
-> On Tue, 12 May 2020 at 08:27, Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com
-> <mailto:mathieu.desnoyers@efficios.com>> wrote:
->
->     How does your test program issue the system call ? Is it directly
->     with syscall() (see syscall(2) man page), or
->     does it call into libc ? Is your entire libc compiled with
->     -fno-omit-frame-pointer ?
->
->
-> Indirectly, through libc/libstdc++. We use the default system libs
-> (which I assume use -O, which in turn implies -fomit-frame-pointer).
-> =C2=A0
->
->     As soon as one library in the chain to the system call is compiled
->     without frame pointers, this is where the
->     stack walk stops. This is usually libc.
->
->
-> I see. Thanks for the information. Not sure we want to ship a custom
-> libc unfortunately.
->
-> Related question: how feasible would adding the callstack-user context
-> to userspace=C2=A0events be? If it is feasible, is such a feature plann=
-ed?
+Based on the screenshot "creation_trace.PNG", it seems that you enable only the
+event you defined (malloc_trace_investigation). Keep in mind that the libc
+wrapper defines its own tracepoints and tracepoint providers.
 
-We had a very very experimental branch with it, using backtrace first,
-then unwind. But it is not suggested, not performant. It's far from the
-correct desired implementation, for which Mathieu could give more details=
-=2E
+It the case of the libc wrapper the tracepoint providers available are:
+lttng_ust_libc and lttng_ust_pthread
 
-It works, but not to be used in production. Students have used it in the
-lab for some specific use case prototyping. I won't share the branch
-here, but if you wish to try, let me know.
+Both have multiple tracepoints defined under them.
 
-Genevi=C3=A8ve
+Hence what you want for you experiment is something like this:
+
+    lttng enable-event -u malloc_trace:investigation
+    lttng enable-event -u 'lttng_ust_libc:*'
+
+Keep in mind that you can list the events available for a currently running app
+using:
+
+   lttng list -u
 
 
+The app must be running for the listing work.
 
---------------030E079F2CB96675849F32D4
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: 8bit
-
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    <p>Hi Christophe,<br>
-    </p>
-    <div class="moz-cite-prefix">On 5/13/20 9:42 AM, Christophe Bédard
-      via lttng-dev wrote:<br>
-    </div>
-    <blockquote type="cite"
-cite="mid:CAAS9dobxi52FyWn=9zVDkMMpmZztc1Q1msdiErMKhkDEYCtqCA@mail.gmail.com">
-      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-      <div dir="ltr">
-        <div dir="ltr"><br>
-        </div>
-        <div class="gmail_quote">
-          <div dir="ltr" class="gmail_attr">On Tue, 12 May 2020 at
-            08:27, Mathieu Desnoyers &lt;<a
-              href="mailto:mathieu.desnoyers@efficios.com"
-              target="_blank" moz-do-not-send="true">mathieu.desnoyers@efficios.com</a>&gt;
-            wrote:</div>
-          <blockquote class="gmail_quote" style="margin:0px 0px 0px
-            0.8ex;border-left:1px solid
-            rgb(204,204,204);padding-left:1ex">
-            <div>
-              <div
-style="font-family:arial,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,0)">
-                <div>
-                  <div>How does your test program issue the system call
-                    ? Is it directly with syscall() (see syscall(2) man
-                    page), or<br>
-                  </div>
-                  <div>does it call into libc ? Is your entire libc
-                    compiled with -fno-omit-frame-pointer ?</div>
-                </div>
-              </div>
-            </div>
-          </blockquote>
-          <div><br>
-          </div>
-          <div>Indirectly, through libc/libstdc++. We use the default
-            system libs (which I assume use -O, which in turn implies
-            -fomit-frame-pointer).</div>
-          <div> </div>
-          <blockquote class="gmail_quote" style="margin:0px 0px 0px
-            0.8ex;border-left:1px solid
-            rgb(204,204,204);padding-left:1ex">
-            <div
-style="font-family:arial,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,0)">
-              <div>As soon as one library in the chain to the system
-                call is compiled without frame pointers, this is where
-                the<br>
-              </div>
-              <div>stack walk stops. This is usually libc.</div>
-            </div>
-          </blockquote>
-          <div><br>
-          </div>
-          <div>I see. Thanks for the information. Not sure we want to
-            ship a custom libc unfortunately.</div>
-          <div><br>
-          </div>
-          <div>Related question: how feasible would adding the
-            callstack-user context to userspace events be? If it is
-            feasible, is such a feature planned?</div>
-        </div>
-      </div>
-    </blockquote>
-    <p>We had a very very experimental branch with it, using backtrace
-      first, then unwind. But it is not suggested, not performant. It's
-      far from the correct desired implementation, for which Mathieu
-      could give more details.</p>
-    <p> It works, but not to be used in production. Students have used
-      it in the lab for some specific use case prototyping. I won't
-      share the branch here, but if you wish to try, let me know.</p>
-    <p>Geneviève</p>
-    <p><br>
-    </p>
-  </body>
-</html>
-
---------------030E079F2CB96675849F32D4--
-
---===============2221153782573968286==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2221153782573968286==--
+Cheers.
