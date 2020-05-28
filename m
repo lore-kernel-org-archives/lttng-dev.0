@@ -1,20 +1,21 @@
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
 Subject: Re: lttng_lib_ring_buffer: section 24 reloc 0 sym '':
  relocation 42 out of range
-Date: Thu, 28 May 2020 09:31:34 -0400 (EDT)
-Message-ID: <1946784173.38418.1590672694129.JavaMail.zimbra@efficios.com>
+Date: Thu, 28 May 2020 09:31:32 -0400
+Message-ID: <20200528133132.GB6269@joraj-alpa>
 References: <CAGK+5gW_7Lo3O4oYW8jVJqDiUby6xoRyL3-JJQDQ8VYLG7WPAg@mail.gmail.com>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49XpWb24q7z1Fx8
+ by lists.lttng.org (Postfix) with ESMTPS id 49XpWb25bKz1G0T
  for <lttng-dev@lists.lttng.org>; Thu, 28 May 2020 09:31:39 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 7E0412821C0
- for <lttng-dev@lists.lttng.org>; Thu, 28 May 2020 09:31:34 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 8F56A28238C
+ for <lttng-dev@lists.lttng.org>; Thu, 28 May 2020 09:31:33 -0400 (EDT)
+Content-Disposition: inline
 In-Reply-To: <CAGK+5gW_7Lo3O4oYW8jVJqDiUby6xoRyL3-JJQDQ8VYLG7WPAg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,11 +27,14 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: Lukasz Domowy <lukasz.odw39@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ On May 28, 2020, at 7:51 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
+Hi Lukasz,
 
+Is the problem reproducible on the qemu arm target (yocto) ?
+
+On Thu, May 28, 2020 at 01:51:12PM +0200, Lukasz Domowy via lttng-dev wrote:
 > Hello,
 > 
 > First - of all: thank you very much for efforts to develop and
@@ -47,21 +51,6 @@ List-Id: lttng-dev@lists.lttng.org
 > Error: Command error
 > 
 > Do you have any hints how to fix it?
-
-Hrm, there is very little handcrafted assembly within the lttng_lib_ring_buffer.ko
-module. Especially not large chunks of handcrafted assembly. I suspect a compiler
-issue.
-
-From a freshly booted system, if you issue "modprobe lttng_lib_ring_buffer",
-so you get the same error ?
-
-Also, what is your exact compiler version ?
-
-Thanks,
-
-Mathieu
-
-
 > 
 > I found https://bugs.lttng.org/issues/1173 but enabling
 > CONFIG_ARM_MODULE_PLTS did not help.
@@ -99,6 +88,5 @@ Mathieu
 > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Jonathan Rajotte-Julien
+EfficiOS
