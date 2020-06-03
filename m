@@ -1,16 +1,19 @@
 From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [PATCH lttng-tools] tests: introduce
- --with-babeltrace-test-bin
-Date: Fri, 29 May 2020 12:56:36 -0400
-Message-ID: <20200529165636.4962-1-mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.12.1 and 2.11.4 (Linux kernel
+ tracer)
+Date: Wed, 3 Jun 2020 08:02:29 -0400 (EDT)
+Message-ID: <683437825.51033.1591185749972.JavaMail.zimbra@efficios.com>
 Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49YW1p5vkFz1Jqp
- for <lttng-dev@lists.lttng.org>; Fri, 29 May 2020 12:56:46 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 49cSFz3RQFz1M61
+ for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 08:02:31 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 8A1972BAFE6
+ for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,395 +23,71 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org, lwn@lwn.net, linux-kernel@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
-Introduce --with-babeltrace-test-bin to allow specifying which
-babeltrace binary should be used in tests.
+Hi,
 
-If this option is not specified, use the babeltrace2 binary if found,
-else fall back on babeltrace.
+This is a release announcement of the LTTng kernel tracer for both
+maintained LTTng stable branches. The main change integrated within
+the new versions 2.12.1 and 2.11.4 is support for the newly released
+5.7 Linux kernel.
 
-When looking for babeltrace2 and babeltrace, abide by
---with-babeltrace2-bin and --with-babeltrace-bin. If any of those are
-not set, respectively use "babeltrace2" and "babeltrace".
+If you followed the news lately [1], you will notice that LTTng had to
+work-around a change which un-exports kallsyms symbols, making those
+inaccessible to GPL modules, which was integrated within Linux 5.7. As a
+matter of fact, LTTng happens to use kallsyms in some cases to access
+symbols otherwise not visible to GPL kernel modules.
 
-Ensure all shell scripts and python tests use the BABELTRACE_BIN
-environment variable.
+Just to underline the amount of effort that was put into trying to do
+the right thing, here is an explanation of the alternative approaches
+that were attempted before going for a work-around using kprobes
+(taken from commit message of lttng-modules
+commit a65765406b0 "Unbreak LTTng for kernel 5.7"):
 
-Fixes #1270
+    Linux commit 0bd476e6c67190b5eb7b6e105c8db8ff61103281 ("kallsyms:
+    unexport kallsyms_lookup_name() and kallsyms_on_each_symbol()") breaks
+    LTTng-modules by removing symbols used by the LTTng-modules out-of-tree
+    tracer.
+    
+    I pointed this out when the change was originally considered before the
+    5.7 merge window. This generated some discussion but it did not lead to
+    any concrete proposal to fix the issue. [2]
+    
+    The commit has been merged in the 5.7 merge window. At that point, as
+    maintainer of LTTng, I immediately raised a flag about this issue,
+    proposing an alternative approach to solve this: expose the few symbols
+    needed by LTTng to GPL modules. This was NACKed on the ground that the
+    Linux kernel cannot export GPL symbols when there are no in-tree
+    users. [3]
+    
+    Steven Rostedt has shown interest in merging LTTng-modules upstream.
+    LTTng-modules being LGPL, this is very much doable. I have prepared a
+    tree of LTTng-modules "for upstreaming" and sent it to him privately so
+    he can review it. Even if in an ideal scenario LTTng-modules is merged
+    for the following merge window, it leaves LTTng-modules broken on the
+    5.7 kernel.
+    
+    In order to ensure that the LTTng-modules kernel tracer continues working
+    for my end users on kernels 5.7 onwards, as a very last resort, this is
+    with great reluctance that I created this fix for LTTng modules. It
+    basically uses kprobes to lookup the kallsyms_lookup_name symbol, and
+    continues using kallsyms_lookup_name as before.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Co-developed-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Change-Id: I09006c4863df66f2f73980dce02ddc46e8f384ab
----
- .gitignore                                         |  1 +
- configure.ac                                       | 11 +++++++++
- tests/regression/tools/exclusion/test_exclusion    |  2 +-
- tests/regression/tools/filtering/test_valid_filter |  2 +-
- .../tools/streaming/test_high_throughput_limits    |  2 +-
- .../tools/tracefile-limits/test_tracefile_count    |  2 +-
- .../ust/baddr-statedump/test_baddr-statedump.py    |  2 +-
- tests/regression/ust/blocking/test_blocking        |  2 +-
- tests/regression/ust/buffers-pid/test_buffers_pid  |  4 ++--
- tests/regression/ust/daemon/test_daemon.py         |  2 +-
- tests/regression/ust/exit-fast/test_exit-fast.py   |  2 +-
- tests/regression/ust/fork/test_fork.py             |  2 +-
- .../ust/high-throughput/test_high_throughput       |  2 +-
- .../ust/libc-wrapper/test_libc-wrapper.py          |  2 +-
- tests/regression/ust/linking/test_linking.py       |  2 +-
- .../ust/low-throughput/test_low_throughput         |  2 +-
- .../ust/multi-session/test_multi_session           |  2 +-
- .../test_periodical_metadata_flush                 |  2 +-
- .../type-declarations/test_type_declarations.py    |  2 +-
- tests/regression/ust/ust-dl/test_ust-dl.py         |  2 +-
- tests/utils/babeltrace.sh.in                       | 28 ++++++++++++++++++++++
- tests/utils/utils.sh                               |  3 ++-
- 22 files changed, 61 insertions(+), 20 deletions(-)
- create mode 100644 tests/utils/babeltrace.sh.in
+Steven Rostedt has started looking into lttng-modules, but currently lacks time
+to look into it further. Understandably, this 15 years old project is larger than
+he initially expected. Let's hope we receive concrete feedback on how we can
+improve LTTng to make it acceptable for integration into Linux.
 
-diff --git a/.gitignore b/.gitignore
-index 8f29a8623..1651cdf28 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -146,6 +146,7 @@ health_check
- /tests/utils/testapp/userspace-probe-sdt-binary/foobar_provider.h
- /tests/utils/testapp/userspace-probe-sdt-binary/userspace-probe-sdt-binary
- /tests/utils/testapp/gen-ns-events/gen-ns-events
-+/tests/utils/babeltrace.sh
- 
- # man pages
- /doc/man/*.1
-diff --git a/configure.ac b/configure.ac
-index 4e186d471..86307f81a 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -283,6 +283,13 @@ AC_ARG_WITH([babeltrace2-bin],
- 	[BABELTRACE2_BIN=''])
- AC_SUBST([BABELTRACE2_BIN])
- 
-+AC_ARG_WITH([babeltrace-test-bin],
-+	AS_HELP_STRING([--with-babeltrace-test-bin],
-+	[Location of the babeltrace2 viewer executable (including the filename) to use for tests]),
-+	[BABELTRACE_TEST_BIN="$withval"],
-+	[BABELTRACE_TEST_BIN=''])
-+AC_SUBST([BABELTRACE_TEST_BIN])
-+
- AC_ARG_WITH([consumerd32-bin],
- 	AS_HELP_STRING([--with-consumerd32-bin],
- 	[Location of the 32-bit consumerd executable (including the filename)]),
-@@ -350,6 +357,7 @@ AC_DEFINE_UNQUOTED([CONFIG_CONSUMERD32_LIBDIR], "$CONSUMERD32_LIBDIR", [Search f
- AC_DEFINE_UNQUOTED([CONFIG_CONSUMERD64_LIBDIR], "$CONSUMERD64_LIBDIR", [Search for consumerd 64-bit libraries in this location.])
- AC_DEFINE_UNQUOTED([CONFIG_BABELTRACE_BIN], "$BABELTRACE_BIN", [Location of the babeltrace viewer executable.])
- AC_DEFINE_UNQUOTED([CONFIG_BABELTRACE2_BIN], "$BABELTRACE2_BIN", [Location of the babeltrace2 viewer executable.])
-+AC_DEFINE_UNQUOTED([CONFIG_BABELTRACE_TEST_BIN], "$BABELTRACE_TEST_BIN", [Location of the babeltrace2 viewer executable to use for tests.])
- AC_DEFINE_UNQUOTED([CONFIG_SESSIOND_BIN], "$SESSIOND_BIN", [Location of the sessiond executable.])
- AC_DEFINE_UNQUOTED([CONFIG_LTTNG_SYSTEM_RUNDIR], ["$LTTNG_SYSTEM_RUNDIR"], [LTTng system runtime directory])
- 
-@@ -1220,6 +1228,9 @@ AC_CONFIG_FILES([tests/regression/ust/python-logging/test_python_logging],[chmod
- AC_CONFIG_FILES([tests/perf/test_perf_raw],[chmod +x tests/perf/test_perf_raw])
- AC_CONFIG_FILES([tests/regression/ust/ust-dl/test_ust-dl],[chmod +x tests/regression/ust/ust-dl/test_ust-dl])
- 
-+# Inject BABELTRACE_BIN and test env script.
-+AC_CONFIG_FILES([tests/utils/babeltrace.sh])
-+
- AC_OUTPUT
- 
- #
-diff --git a/tests/regression/tools/exclusion/test_exclusion b/tests/regression/tools/exclusion/test_exclusion
-index ce5e988e5..e5905f628 100755
---- a/tests/regression/tools/exclusion/test_exclusion
-+++ b/tests/regression/tools/exclusion/test_exclusion
-@@ -53,7 +53,7 @@ function dry_run
- 	run_apps
- 	stop_lttng_tracing_ok $SESSION_NAME
- 
--	nb_events=$(babeltrace $trace_path | wc -l)
-+	nb_events=$($BABELTRACE_BIN $trace_path | wc -l)
- 	if [ "$nb_events" -ne "0" ]; then
- 		ok 0 "Events were found during the dry run without exclusion"
- 	else
-diff --git a/tests/regression/tools/filtering/test_valid_filter b/tests/regression/tools/filtering/test_valid_filter
-index 6d1009a48..f9c39d4bd 100755
---- a/tests/regression/tools/filtering/test_valid_filter
-+++ b/tests/regression/tools/filtering/test_valid_filter
-@@ -113,7 +113,7 @@ function test_valid_filter
- 	# Destroy session
- 	destroy_lttng_session_ok $SESSION_NAME
- 
--	stats=`babeltrace $trace_path | $STATS_BIN --tracepoint $event_name`
-+	stats=`$BABELTRACE_BIN $trace_path | $STATS_BIN --tracepoint $event_name`
- 
- 	rm -rf $trace_path
- 
-diff --git a/tests/regression/tools/streaming/test_high_throughput_limits b/tests/regression/tools/streaming/test_high_throughput_limits
-index 352cf9aa6..23f67a8e6 100755
---- a/tests/regression/tools/streaming/test_high_throughput_limits
-+++ b/tests/regression/tools/streaming/test_high_throughput_limits
-@@ -130,7 +130,7 @@ function validate_event_count
- 	TEMP_FILE=$(mktemp)
- 	TEMP_FILE_2=$(mktemp)
- 
--	traced=$(babeltrace $TRACE_PATH 2>/dev/null | wc -l)
-+	traced=$($BABELTRACE_BIN $TRACE_PATH 2>/dev/null | wc -l)
- 	babeltrace $TRACE_PATH >/dev/null 2>$TEMP_FILE_2
- 
- 	cat $TEMP_FILE_2 | cut -f4 -d " " >$TEMP_FILE
-diff --git a/tests/regression/tools/tracefile-limits/test_tracefile_count b/tests/regression/tools/tracefile-limits/test_tracefile_count
-index b44de63c0..af80f8605 100755
---- a/tests/regression/tools/tracefile-limits/test_tracefile_count
-+++ b/tests/regression/tools/tracefile-limits/test_tracefile_count
-@@ -124,7 +124,7 @@ function test_tracefile_count_limit ()
- 
- 	# Validate tracing data
- 
--	stats=`babeltrace $trace_path | $STATS_BIN --tracepoint $event_name`
-+	stats=`$BABELTRACE_BIN $trace_path | $STATS_BIN --tracepoint $event_name`
- 
- 	validate_min_max "$stats" "intfield" "[0-9]+" "$expected_max"
- 	ok $? "Trace validation - intfield"
-diff --git a/tests/regression/ust/baddr-statedump/test_baddr-statedump.py b/tests/regression/ust/baddr-statedump/test_baddr-statedump.py
-index 026f08444..f255d3e2a 100644
---- a/tests/regression/ust/baddr-statedump/test_baddr-statedump.py
-+++ b/tests/regression/ust/baddr-statedump/test_baddr-statedump.py
-@@ -44,7 +44,7 @@ stop_session(session_info)
- 
- # Check for statedump events in the resulting trace
- try:
--    babeltrace_process = subprocess.Popen(["babeltrace", session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+    babeltrace_process = subprocess.Popen([os.environ['BABELTRACE_BIN'], session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
- except FileNotFoundError:
-     bail("Could not open babeltrace. Please make sure it is installed.", session_info)
- 
-diff --git a/tests/regression/ust/blocking/test_blocking b/tests/regression/ust/blocking/test_blocking
-index abd50d459..ea6ed07cf 100755
---- a/tests/regression/ust/blocking/test_blocking
-+++ b/tests/regression/ust/blocking/test_blocking
-@@ -123,7 +123,7 @@ function test_ust_blocking_no_discard()
- 	destroy_lttng_session_ok $SESSION_NAME
- 	stop_lttng_sessiond
- 
--	nr_events=$(babeltrace $TRACE_PATH 2>/dev/null | wc -l)
-+	nr_events=$($BABELTRACE_BIN $TRACE_PATH 2>/dev/null | wc -l)
- 
- 	test $nr_events -eq $NUM_EVENT
- 	ok $? "No event lost with UST blocking mode: found $nr_events expect $NUM_EVENT"
-diff --git a/tests/regression/ust/buffers-pid/test_buffers_pid b/tests/regression/ust/buffers-pid/test_buffers_pid
-index 59f218c85..17cc783f9 100755
---- a/tests/regression/ust/buffers-pid/test_buffers_pid
-+++ b/tests/regression/ust/buffers-pid/test_buffers_pid
-@@ -98,7 +98,7 @@ test_before_multiple_apps() {
- 		rm -f ${file_sync_before_last}_${i}
- 	done
- 
--	out=$(babeltrace $TRACE_PATH | grep $EVENT_NAME | wc -l)
-+	out=$($BABELTRACE_BIN $TRACE_PATH | grep $EVENT_NAME | wc -l)
- 	if [ $out -eq 0 ]; then
- 		fail "Trace validation"
- 		diag "No event(s) found. We are supposed to have at least one."
-@@ -165,7 +165,7 @@ test_before_app() {
- 	rm -f ${file_sync_after_first}
- 	rm -f ${file_sync_before_last}
- 
--	out=$(babeltrace $TRACE_PATH | grep $EVENT_NAME | wc -l)
-+	out=$($BABELTRACE_BIN $TRACE_PATH | grep $EVENT_NAME | wc -l)
- 	if [ $out -eq 0 ]; then
- 		fail "Trace validation"
- 		diag "No event(s) found. We are supposed to have at least one."
-diff --git a/tests/regression/ust/daemon/test_daemon.py b/tests/regression/ust/daemon/test_daemon.py
-index 0351f1d21..03adb6c80 100644
---- a/tests/regression/ust/daemon/test_daemon.py
-+++ b/tests/regression/ust/daemon/test_daemon.py
-@@ -57,7 +57,7 @@ if daemon_process_return_code != 0:
- stop_session(session_info)
- 
- try:
--    babeltrace_process = subprocess.Popen(["babeltrace", session_info.trace_path], stdout=subprocess.PIPE)
-+    babeltrace_process = subprocess.Popen([os.environ['BABELTRACE_BIN'], session_info.trace_path], stdout=subprocess.PIPE)
- except FileNotFoundError:
-     bail("Could not open babeltrace. Please make sure it is installed.")
- 
-diff --git a/tests/regression/ust/exit-fast/test_exit-fast.py b/tests/regression/ust/exit-fast/test_exit-fast.py
-index f61d540b3..1a4702b34 100644
---- a/tests/regression/ust/exit-fast/test_exit-fast.py
-+++ b/tests/regression/ust/exit-fast/test_exit-fast.py
-@@ -49,7 +49,7 @@ stop_session(session_info)
- 
- # Check both events (normal exit and suicide messages) are present in the resulting trace
- try:
--    babeltrace_process = subprocess.Popen(["babeltrace", session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+    babeltrace_process = subprocess.Popen([os.environ['BABELTRACE_BIN'], session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
- except FileNotFoundError:
-     bail("Could not open babeltrace. Please make sure it is installed.")
- 
-diff --git a/tests/regression/ust/fork/test_fork.py b/tests/regression/ust/fork/test_fork.py
-index 4cb721f38..e08f2c106 100644
---- a/tests/regression/ust/fork/test_fork.py
-+++ b/tests/regression/ust/fork/test_fork.py
-@@ -52,7 +52,7 @@ stop_session(session_info)
- 
- # Check both events (normal exit and suicide messages) are present in the resulting trace
- try:
--    babeltrace_process = subprocess.Popen(["babeltrace", session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+    babeltrace_process = subprocess.Popen([os.environ['BABELTRACE_BIN'], session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
- except FileNotFoundError:
-     bail("Could not open babeltrace. Please make sure it is installed.", session_info)
- 
-diff --git a/tests/regression/ust/high-throughput/test_high_throughput b/tests/regression/ust/high-throughput/test_high_throughput
-index a6dbdc758..57504656d 100755
---- a/tests/regression/ust/high-throughput/test_high_throughput
-+++ b/tests/regression/ust/high-throughput/test_high_throughput
-@@ -53,7 +53,7 @@ stop_lttng_sessiond
- TEMP_FILE=$(mktemp)
- TEMP_FILE_2=$(mktemp)
- 
--traced=$(babeltrace $TRACE_PATH 2>/dev/null | wc -l)
-+traced=$($BABELTRACE_BIN $TRACE_PATH 2>/dev/null | wc -l)
- babeltrace $TRACE_PATH >/dev/null 2>$TEMP_FILE_2
- 
- cat $TEMP_FILE_2 | cut -f4 -d " " >$TEMP_FILE
-diff --git a/tests/regression/ust/libc-wrapper/test_libc-wrapper.py b/tests/regression/ust/libc-wrapper/test_libc-wrapper.py
-index f56fa50de..95e5db781 100644
---- a/tests/regression/ust/libc-wrapper/test_libc-wrapper.py
-+++ b/tests/regression/ust/libc-wrapper/test_libc-wrapper.py
-@@ -41,7 +41,7 @@ stop_session(session_info)
- 
- # Check for malloc events in the resulting trace
- try:
--    babeltrace_process = subprocess.Popen(["babeltrace", session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+    babeltrace_process = subprocess.Popen([os.environ['BABELTRACE_BIN'], session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
- except FileNotFoundError:
-     bail("Could not open babeltrace. Please make sure it is installed.", session_info)
- 
-diff --git a/tests/regression/ust/linking/test_linking.py b/tests/regression/ust/linking/test_linking.py
-index 21941f0d2..28d4f52ce 100644
---- a/tests/regression/ust/linking/test_linking.py
-+++ b/tests/regression/ust/linking/test_linking.py
-@@ -133,7 +133,7 @@ for executable in test_executables:
-         continue
- 
-     try:
--        babeltrace_process = subprocess.Popen(["babeltrace", session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+        babeltrace_process = subprocess.Popen([os.environ['BABELTRACE_BIN'], session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-     except FileNotFoundError:
-         bail("Could not open babeltrace. Please make sure it is installed.")
- 
-diff --git a/tests/regression/ust/low-throughput/test_low_throughput b/tests/regression/ust/low-throughput/test_low_throughput
-index 16ef27347..33e6ba280 100755
---- a/tests/regression/ust/low-throughput/test_low_throughput
-+++ b/tests/regression/ust/low-throughput/test_low_throughput
-@@ -47,7 +47,7 @@ stop_lttng_sessiond
- last_val=0
- out=0
- 
--babeltrace $TRACE_PATH | while read event;
-+$BABELTRACE_BIN $TRACE_PATH | while read event;
- do
- 	val=$(echo $event | cut -f10 -d" ")
- 	val=${val%?}
-diff --git a/tests/regression/ust/multi-session/test_multi_session b/tests/regression/ust/multi-session/test_multi_session
-index ba73b7d20..013937285 100755
---- a/tests/regression/ust/multi-session/test_multi_session
-+++ b/tests/regression/ust/multi-session/test_multi_session
-@@ -40,7 +40,7 @@ test_multi_session() {
- 	for i in `seq 0 3`; do
- 		stop_lttng_tracing_ok "$SESSION_NAME-$i"
- 		destroy_lttng_session_ok "$SESSION_NAME-$i"
--		out=$(babeltrace "$TRACE_PATH/$i" | grep "$EVENT_NAMEi$i" | wc -l)
-+		out=$($BABELTRACE_BIN "$TRACE_PATH/$i" | grep "$EVENT_NAMEi$i" | wc -l)
- 		if [ $out -ne $NR_ITER ]; then
- 			fail "Trace validation of $SESSION_NAME-$i"
- 			diag "No events found."
-diff --git a/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush b/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
-index 848fc2f3e..2aa086837 100755
---- a/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
-+++ b/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
-@@ -68,7 +68,7 @@ function validate_trace()
- {
- 	local out
- 
--	out=$(babeltrace $TRACE_PATH | grep $EVENT_NAME | wc -l)
-+	out=$($BABELTRACE_BIN $TRACE_PATH | grep $EVENT_NAME | wc -l)
- 	if [ $out -eq 0 ]; then
- 		fail "Trace validation"
- 		diag "No event(s) found. We are supposed to have at least one."
-diff --git a/tests/regression/ust/type-declarations/test_type_declarations.py b/tests/regression/ust/type-declarations/test_type_declarations.py
-index 62eda73a3..a92545064 100644
---- a/tests/regression/ust/type-declarations/test_type_declarations.py
-+++ b/tests/regression/ust/type-declarations/test_type_declarations.py
-@@ -43,7 +43,7 @@ stop_session(session_info)
- 
- # Check event fields using type declarations are present
- try:
--    babeltrace_process = subprocess.Popen(["babeltrace", session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+    babeltrace_process = subprocess.Popen([os.environ['BABELTRACE_BIN'], session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
- except FileNotFoundError:
-     bail("Could not open babeltrace. Please make sure it is installed.")
- 
-diff --git a/tests/regression/ust/ust-dl/test_ust-dl.py b/tests/regression/ust/ust-dl/test_ust-dl.py
-index 96509c7cf..3fc999111 100644
---- a/tests/regression/ust/ust-dl/test_ust-dl.py
-+++ b/tests/regression/ust/ust-dl/test_ust-dl.py
-@@ -52,7 +52,7 @@ stop_session(session_info)
- 
- # Check for dl events in the resulting trace
- try:
--    babeltrace_process = subprocess.Popen(["babeltrace", session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+    babeltrace_process = subprocess.Popen([os.environ['BABELTRACE_BIN'], session_info.trace_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
- except FileNotFoundError:
-     bail("Could not open babeltrace. Please make sure it is installed.", session_info)
- 
-diff --git a/tests/utils/babeltrace.sh.in b/tests/utils/babeltrace.sh.in
-new file mode 100644
-index 000000000..380559029
---- /dev/null
-+++ b/tests/utils/babeltrace.sh.in
-@@ -0,0 +1,28 @@
-+user_defined_bt_test="@BABELTRACE_TEST_BIN@"
-+user_defined_bt1="@BABELTRACE_BIN@"
-+user_defined_bt2="@BABELTRACE2_BIN@"
-+
-+if [ -n "${user_defined_bt2}" ]; then
-+	bt2_bin="${user_defined_bt2}"
-+else
-+	bt2_bin="babeltrace2"
-+fi
-+
-+if [ -n "${user_defined_bt1}" ]; then
-+	bt1_bin="${user_defined_bt1}"
-+else
-+	bt1_bin="babeltrace"
-+fi
-+
-+# Use user-defined babeltrace test binary if specified. Else fallback
-+# on using babeltrace2 if found, else fallback on babeltrace if found.
-+
-+if [ -n "${user_defined_bt_test}" ]; then
-+	BABELTRACE_BIN="${user_defined_bt_test}"
-+elif command -v "${bt2_bin}"; then
-+	BABELTRACE_BIN="${bt2_bin}"
-+elif command -v "${bt1_bin}"; then
-+	BABELTRACE_BIN="${bt1_bin}"
-+else
-+	echo "Failed to find Babeltrace binaries: ${bt2_bin} ${bt1_bin}"
-+fi
-diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
-index 0583b5c19..1a5f7fc5c 100644
---- a/tests/utils/utils.sh
-+++ b/tests/utils/utils.sh
-@@ -12,10 +12,11 @@ CONSUMERD_MATCH=".*lttng-consumerd.*"
- RELAYD_BIN="lttng-relayd"
- RELAYD_MATCH=".*lttng-relayd.*"
- LTTNG_BIN="lttng"
--BABELTRACE_BIN="babeltrace"
- OUTPUT_DEST=/dev/null
- ERROR_OUTPUT_DEST=/dev/null
- 
-+source $TESTDIR/utils/babeltrace.sh
-+
- # Minimal kernel version supported for session daemon tests
- KERNEL_MAJOR_VERSION=2
- KERNEL_MINOR_VERSION=6
+Thanks,
+
+Mathieu
+
+[1] https://lwn.net/Articles/817988/
+[2] https://lore.kernel.org/r/20200302192811.n6o5645rsib44vco@localhost
+[3] https://lore.kernel.org/r/20200409193543.18115-1-mathieu.desnoyers@efficios.com
+
 -- 
-2.11.0
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
