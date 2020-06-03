@@ -1,19 +1,20 @@
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [RELEASE] LTTng-modules 2.12.1 and 2.11.4 (Linux kernel
- tracer)
-Date: Wed, 3 Jun 2020 08:02:29 -0400 (EDT)
-Message-ID: <683437825.51033.1591185749972.JavaMail.zimbra@efficios.com>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Dmitry Antipov via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Userspace RCU data alignment
+Date: Wed, 3 Jun 2020 15:36:13 +0300
+Message-ID: <5352eebd-dbb7-70f9-a354-91522170efdf@yandex.ru>
+Reply-To: Dmitry Antipov <dmantipov@yandex.ru>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="------------E91DBDDFA8A509741168F3D8"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49cSFz3RQFz1M61
- for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 08:02:31 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8A1972BAFE6
- for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
+Received: from forward106p.mail.yandex.net (forward106p.mail.yandex.net
+ [IPv6:2a02:6b8:0:1472:2741:0:8b7:109])
+ by lists.lttng.org (Postfix) with ESMTPS id 49cT142dMDz1MP7
+ for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 08:36:24 -0400 (EDT)
+Received: from mxback15g.mail.yandex.net (mxback15g.mail.yandex.net
+ [IPv6:2a02:6b8:0:1472:2741:0:8b7:94])
+ by forward106p.mail.yandex.net (Yandex) with ESMTP id C42621C831EC
+ for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 15:36:13 +0300 (MSK)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,71 +24,114 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org, lwn@lwn.net, linux-kernel@vger.kernel.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+This is a multi-part message in MIME format.
+--------------E91DBDDFA8A509741168F3D8
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This is a release announcement of the LTTng kernel tracer for both
-maintained LTTng stable branches. The main change integrated within
-the new versions 2.12.1 and 2.11.4 is support for the newly released
-5.7 Linux kernel.
+I've compiled userspace-rcu with:
 
-If you followed the news lately [1], you will notice that LTTng had to
-work-around a change which un-exports kallsyms symbols, making those
-inaccessible to GPL modules, which was integrated within Linux 5.7. As a
-matter of fact, LTTng happens to use kallsyms in some cases to access
-symbols otherwise not visible to GPL kernel modules.
+CC=gcc CFLAGS='-O0 -g3 -fsanitize=undefined' LIBS='-lubsan' ./configure [xxx]
 
-Just to underline the amount of effort that was put into trying to do
-the right thing, here is an explanation of the alternative approaches
-that were attempted before going for a work-around using kprobes
-(taken from commit message of lttng-modules
-commit a65765406b0 "Unbreak LTTng for kernel 5.7"):
+and see a lot of 'misaligned address' runtime errors like:
 
-    Linux commit 0bd476e6c67190b5eb7b6e105c8db8ff61103281 ("kallsyms:
-    unexport kallsyms_lookup_name() and kallsyms_on_each_symbol()") breaks
-    LTTng-modules by removing symbols used by the LTTng-modules out-of-tree
-    tracer.
-    
-    I pointed this out when the change was originally considered before the
-    5.7 merge window. This generated some discussion but it did not lead to
-    any concrete proposal to fix the issue. [2]
-    
-    The commit has been merged in the 5.7 merge window. At that point, as
-    maintainer of LTTng, I immediately raised a flag about this issue,
-    proposing an alternative approach to solve this: expose the few symbols
-    needed by LTTng to GPL modules. This was NACKed on the ground that the
-    Linux kernel cannot export GPL symbols when there are no in-tree
-    users. [3]
-    
-    Steven Rostedt has shown interest in merging LTTng-modules upstream.
-    LTTng-modules being LGPL, this is very much doable. I have prepared a
-    tree of LTTng-modules "for upstreaming" and sent it to him privately so
-    he can review it. Even if in an ideal scenario LTTng-modules is merged
-    for the following merge window, it leaves LTTng-modules broken on the
-    5.7 kernel.
-    
-    In order to ensure that the LTTng-modules kernel tracer continues working
-    for my end users on kernels 5.7 onwards, as a very last resort, this is
-    with great reluctance that I created this fix for LTTng modules. It
-    basically uses kprobes to lookup the kallsyms_lookup_name symbol, and
-    continues using kallsyms_lookup_name as before.
+  ./doc/examples/urcu-flavors/bp ==>
 
-Steven Rostedt has started looking into lttng-modules, but currently lacks time
-to look into it further. Understandably, this 15 years old project is larger than
-he initially expected. Let's hope we receive concrete feedback on how we can
-improve LTTng to make it acceptable for integration into Linux.
+../include/urcu/static/urcu-bp.h:185:6: runtime error: member access within misaligned address 0x7fcac376a020 for type 'struct urcu_bp_reader', which requires 128 byte alignment
+0x7fcac376a020: note: pointer points here
+  ca 7f 00 00  01 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00
+               ^
+     #0 0x7fcac372a880 in _urcu_bp_read_unlock ../include/urcu/static/urcu-bp.h:185
+     #1 0x7fcac372b0d9 in urcu_bp_read_unlock /home/antipov/userspace-rcu/src/urcu-bp.c:363
+     #2 0x4017d5 in main /home/antipov/userspace-rcu/doc/examples/urcu-flavors/bp.c:92
+     #3 0x7fcac2bc2041 in __libc_start_main ../csu/libc-start.c:308
+     #4 0x40111d in _start (/home/antipov/userspace-rcu/doc/examples/urcu-flavors/bp+0x40111d)
 
-Thanks,
+../include/urcu/static/urcu-bp.h:189:2: runtime error: member access within misaligned address 0x7fcac376a020 for type 'struct urcu_bp_reader', which requires 128 byte alignment
+0x7fcac376a020: note: pointer points here
+  ca 7f 00 00  01 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00
+               ^
+     #0 0x7fcac372a8c1 in _urcu_bp_read_unlock ../include/urcu/static/urcu-bp.h:189
+     #1 0x7fcac372b0d9 in urcu_bp_read_unlock /home/antipov/userspace-rcu/src/urcu-bp.c:363
+     #2 0x4017d5 in main /home/antipov/userspace-rcu/doc/examples/urcu-flavors/bp.c:92
+     #3 0x7fcac2bc2041 in __libc_start_main ../csu/libc-start.c:308
+     #4 0x40111d in _start (/home/antipov/userspace-rcu/doc/examples/urcu-flavors/bp+0x40111d)
 
-Mathieu
+Is it critical for correctness, or speed, or whatever else?
 
-[1] https://lwn.net/Articles/817988/
-[2] https://lore.kernel.org/r/20200302192811.n6o5645rsib44vco@localhost
-[3] https://lore.kernel.org/r/20200409193543.18115-1-mathieu.desnoyers@efficios.com
+To whom it may be interesting, some of (probably not all) alignment issues may be fixed
+with attached patch.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Dmitry
+
+--------------E91DBDDFA8A509741168F3D8
+Content-Type: text/x-patch; charset=UTF-8;
+ name="urcu_bp_reader_alignment.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="urcu_bp_reader_alignment.patch"
+
+diff --git a/include/urcu/list.h b/include/urcu/list.h
+index 4aaf869..d5f28fe 100644
+--- a/include/urcu/list.h
++++ b/include/urcu/list.h
+@@ -40,6 +40,11 @@ struct cds_list_head {
+ #define CDS_LIST_HEAD(name) \
+ 	struct cds_list_head name = { &(name), &(name) }
+ 
++/* Likewise but aligned to ALIGN bytes. */
++#define CDS_LIST_HEAD_ALIGNED(name, align) \
++	struct cds_list_head name __attribute__((aligned (align))) \
++	= { &(name), &(name) }
++
+ /* Initialize a new list head. */
+ #define CDS_INIT_LIST_HEAD(ptr) \
+ 	(ptr)->next = (ptr)->prev = (ptr)
+diff --git a/src/urcu-bp.c b/src/urcu-bp.c
+index 05efd97..4e31147 100644
+--- a/src/urcu-bp.c
++++ b/src/urcu-bp.c
+@@ -154,12 +154,15 @@ URCU_ATTR_ALIAS("urcu_bp_gp") extern struct urcu_bp_gp rcu_gp_bp;
+ DEFINE_URCU_TLS(struct urcu_bp_reader *, urcu_bp_reader);
+ DEFINE_URCU_TLS_ALIAS(struct urcu_bp_reader *, urcu_bp_reader, rcu_reader_bp);
+ 
+-static CDS_LIST_HEAD(registry);
++static CDS_LIST_HEAD_ALIGNED(registry, CAA_CACHE_LINE_SIZE);
+ 
+ struct registry_chunk {
+ 	size_t data_len;		/* data length */
+ 	size_t used;			/* amount of data used */
+ 	struct cds_list_head node;	/* chunk_list node */
++	char pad[CAA_CACHE_LINE_SIZE -  /* pad to ensure expected alignment */
++		 sizeof(size_t) * 2 -
++		 sizeof(struct cds_list_head)];
+ 	char data[];
+ };
+ 
+@@ -270,8 +273,8 @@ static void wait_for_readers(struct cds_list_head *input_readers,
+ 
+ void urcu_bp_synchronize_rcu(void)
+ {
+-	CDS_LIST_HEAD(cur_snap_readers);
+-	CDS_LIST_HEAD(qsreaders);
++	CDS_LIST_HEAD_ALIGNED(cur_snap_readers, CAA_CACHE_LINE_SIZE);
++	CDS_LIST_HEAD_ALIGNED(qsreaders, CAA_CACHE_LINE_SIZE);
+ 	sigset_t newmask, oldmask;
+ 	int ret;
+ 
+
+--------------E91DBDDFA8A509741168F3D8
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--------------E91DBDDFA8A509741168F3D8--
