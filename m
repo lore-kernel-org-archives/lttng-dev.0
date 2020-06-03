@@ -2,68 +2,63 @@ Return-Path: <SRS0=Vgf5=7Q=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 217DAC433E1
-	for <lttng-dev@archiver.kernel.org>; Wed,  3 Jun 2020 12:02:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4671C433E0
+	for <lttng-dev@archiver.kernel.org>; Wed,  3 Jun 2020 14:30:13 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9CE7420738
-	for <lttng-dev@archiver.kernel.org>; Wed,  3 Jun 2020 12:02:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 49CE520679
+	for <lttng-dev@archiver.kernel.org>; Wed,  3 Jun 2020 14:30:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="Nxplq5RQ"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9CE7420738
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="VHlf6V76"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 49CE520679
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 49cSG15c21z1MRD;
-	Wed,  3 Jun 2020 08:02:33 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 49cWXM3T5Nz1M6G;
+	Wed,  3 Jun 2020 10:30:11 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1591185754;
-	bh=IWxCEiNI6sKevny9gL4wuiSaKVCcYmza6CnWJdSDHUE=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	s=default; t=1591194612;
+	bh=AQnB+2+YGSwANrCiptnQ4ohv+oHkKx9DG5PO7A/zE98=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Nxplq5RQlat/gZevDWNm9qEr7/2FjlFXbCeuQXNu2tU3qRki37hS90awekRcjYZvd
-	 QYQ8qfOFvG5NBj4aHywK1xlP/HzHGBHA9sYAE1qv9SmLoJFGpoxxWeLewc36HrMoaY
-	 WMyV9Zo4zlWDrA7jWxcLLZOmIxqwwHyEQls/+t4KVBfIKSrp/aH46BI83apP94kJUf
-	 kBlvqifSXkmybRWntuokEXV7vnCokhdoXEMbVfoZufI1CmQkJTCLlGlb3XFfw2gboa
-	 zWS3iM1YB8ncr/JhMVJ+B3Nkow/HaqULRc3CLK+3aKRlY42kSjewbderisnSULsPXa
-	 JIrIg0mm6WRNg==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49cSFz3RQFz1M61
- for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 08:02:31 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8A1972BAFE6
- for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id r4H48SY884UJ; Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 1E87D2BAFE5;
- Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1E87D2BAFE5
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id 4_rRzo5zUasU; Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 0E7732BADF5;
- Wed,  3 Jun 2020 08:02:30 -0400 (EDT)
-Date: Wed, 3 Jun 2020 08:02:29 -0400 (EDT)
-To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, 
- linux-trace-users@vger.kernel.org, lwn@lwn.net, 
- linux-kernel@vger.kernel.org
-Message-ID: <683437825.51033.1591185749972.JavaMail.zimbra@efficios.com>
+	b=VHlf6V76ccfSjoKEjE7oF2m1B3Oh9XbSUDBP7+OMNRFYHO/yrHXxT6WXzmEd5wOof
+	 ZzrBLwTVY3V1mmAgjndI5L4zwFtbR5gvvDVI9+rRDJn4C3KdMBfY0tz+VoREF0zk+T
+	 e7NQ41PSenNyYbRJKJ8fvNWR/h0N1KhGyaBfnsN84AmUt5wBne2u506LisMSF5ZWOh
+	 AWjEh+dcvXVCiAwNMjom3klLs8mAsR0uKZ0w5B3FXBqnnbDGgFgMkfzVO4zJJgAPv2
+	 +HhQeNCDP0ElxSyUH1F+FZm81GiUu34nTM5CnjHcAVMDVnKYSCZGjYCvfL2WjNv0Ry
+	 H52vtdFlvZAFQ==
+Received: from forward106p.mail.yandex.net (forward106p.mail.yandex.net
+ [IPv6:2a02:6b8:0:1472:2741:0:8b7:109])
+ by lists.lttng.org (Postfix) with ESMTPS id 49cT142dMDz1MP7
+ for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 08:36:24 -0400 (EDT)
+Received: from mxback15g.mail.yandex.net (mxback15g.mail.yandex.net
+ [IPv6:2a02:6b8:0:1472:2741:0:8b7:94])
+ by forward106p.mail.yandex.net (Yandex) with ESMTP id C42621C831EC
+ for <lttng-dev@lists.lttng.org>; Wed,  3 Jun 2020 15:36:13 +0300 (MSK)
+Received: from myt4-ee976ce519ac.qloud-c.yandex.net
+ (myt4-ee976ce519ac.qloud-c.yandex.net [2a02:6b8:c00:1da4:0:640:ee97:6ce5])
+ by mxback15g.mail.yandex.net (mxback/Yandex) with ESMTP id G6aHI8fudZ-aDgG2Q1e;
+ Wed, 03 Jun 2020 15:36:13 +0300
+Received: by myt4-ee976ce519ac.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA
+ id Zncrba71bW-aDjavXrg; Wed, 03 Jun 2020 15:36:13 +0300
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (Client certificate not present)
+To: lttng-dev@lists.lttng.org
+Message-ID: <5352eebd-dbb7-70f9-a354-91522170efdf@yandex.ru>
+Date: Wed, 3 Jun 2020 15:36:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3928 (ZimbraWebClient - FF76 (Linux)/8.8.15_GA_3928)
-Thread-Index: z3mfQAh1bM5mt5rP3eYWZhqbj4/DQA==
-Thread-Topic: LTTng-modules 2.12.1 and 2.11.4 (Linux kernel tracer)
-Subject: [lttng-dev] [RELEASE] LTTng-modules 2.12.1 and 2.11.4 (Linux kernel
- tracer)
+Content-Type: multipart/mixed; boundary="------------E91DBDDFA8A509741168F3D8"
+Content-Language: en-US
+X-Mailman-Approved-At: Wed, 03 Jun 2020 10:30:09 -0400
+Subject: [lttng-dev] Userspace RCU data alignment
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
 Precedence: list
@@ -75,80 +70,117 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Dmitry Antipov via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Dmitry Antipov <dmantipov@yandex.ru>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-Message-ID: <20200603120229.vaQiEdHoUle0d_oU4miAnWL200mcYIHEbfXExzYRyag@z>
+Message-ID: <20200603123613.FlY9tFF_kOaE6vtl8bmzZbjEJYJ4b5hesxrqMrdxwO0@z>
 
-Hi,
+This is a multi-part message in MIME format.
+--------------E91DBDDFA8A509741168F3D8
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This is a release announcement of the LTTng kernel tracer for both
-maintained LTTng stable branches. The main change integrated within
-the new versions 2.12.1 and 2.11.4 is support for the newly released
-5.7 Linux kernel.
+I've compiled userspace-rcu with:
 
-If you followed the news lately [1], you will notice that LTTng had to
-work-around a change which un-exports kallsyms symbols, making those
-inaccessible to GPL modules, which was integrated within Linux 5.7. As a
-matter of fact, LTTng happens to use kallsyms in some cases to access
-symbols otherwise not visible to GPL kernel modules.
+CC=gcc CFLAGS='-O0 -g3 -fsanitize=undefined' LIBS='-lubsan' ./configure [xxx]
 
-Just to underline the amount of effort that was put into trying to do
-the right thing, here is an explanation of the alternative approaches
-that were attempted before going for a work-around using kprobes
-(taken from commit message of lttng-modules
-commit a65765406b0 "Unbreak LTTng for kernel 5.7"):
+and see a lot of 'misaligned address' runtime errors like:
 
-    Linux commit 0bd476e6c67190b5eb7b6e105c8db8ff61103281 ("kallsyms:
-    unexport kallsyms_lookup_name() and kallsyms_on_each_symbol()") breaks
-    LTTng-modules by removing symbols used by the LTTng-modules out-of-tree
-    tracer.
-    
-    I pointed this out when the change was originally considered before the
-    5.7 merge window. This generated some discussion but it did not lead to
-    any concrete proposal to fix the issue. [2]
-    
-    The commit has been merged in the 5.7 merge window. At that point, as
-    maintainer of LTTng, I immediately raised a flag about this issue,
-    proposing an alternative approach to solve this: expose the few symbols
-    needed by LTTng to GPL modules. This was NACKed on the ground that the
-    Linux kernel cannot export GPL symbols when there are no in-tree
-    users. [3]
-    
-    Steven Rostedt has shown interest in merging LTTng-modules upstream.
-    LTTng-modules being LGPL, this is very much doable. I have prepared a
-    tree of LTTng-modules "for upstreaming" and sent it to him privately so
-    he can review it. Even if in an ideal scenario LTTng-modules is merged
-    for the following merge window, it leaves LTTng-modules broken on the
-    5.7 kernel.
-    
-    In order to ensure that the LTTng-modules kernel tracer continues working
-    for my end users on kernels 5.7 onwards, as a very last resort, this is
-    with great reluctance that I created this fix for LTTng modules. It
-    basically uses kprobes to lookup the kallsyms_lookup_name symbol, and
-    continues using kallsyms_lookup_name as before.
+  ./doc/examples/urcu-flavors/bp ==>
 
-Steven Rostedt has started looking into lttng-modules, but currently lacks time
-to look into it further. Understandably, this 15 years old project is larger than
-he initially expected. Let's hope we receive concrete feedback on how we can
-improve LTTng to make it acceptable for integration into Linux.
+../include/urcu/static/urcu-bp.h:185:6: runtime error: member access within misaligned address 0x7fcac376a020 for type 'struct urcu_bp_reader', which requires 128 byte alignment
+0x7fcac376a020: note: pointer points here
+  ca 7f 00 00  01 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00
+               ^
+     #0 0x7fcac372a880 in _urcu_bp_read_unlock ../include/urcu/static/urcu-bp.h:185
+     #1 0x7fcac372b0d9 in urcu_bp_read_unlock /home/antipov/userspace-rcu/src/urcu-bp.c:363
+     #2 0x4017d5 in main /home/antipov/userspace-rcu/doc/examples/urcu-flavors/bp.c:92
+     #3 0x7fcac2bc2041 in __libc_start_main ../csu/libc-start.c:308
+     #4 0x40111d in _start (/home/antipov/userspace-rcu/doc/examples/urcu-flavors/bp+0x40111d)
 
-Thanks,
+../include/urcu/static/urcu-bp.h:189:2: runtime error: member access within misaligned address 0x7fcac376a020 for type 'struct urcu_bp_reader', which requires 128 byte alignment
+0x7fcac376a020: note: pointer points here
+  ca 7f 00 00  01 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  00 00 00 00
+               ^
+     #0 0x7fcac372a8c1 in _urcu_bp_read_unlock ../include/urcu/static/urcu-bp.h:189
+     #1 0x7fcac372b0d9 in urcu_bp_read_unlock /home/antipov/userspace-rcu/src/urcu-bp.c:363
+     #2 0x4017d5 in main /home/antipov/userspace-rcu/doc/examples/urcu-flavors/bp.c:92
+     #3 0x7fcac2bc2041 in __libc_start_main ../csu/libc-start.c:308
+     #4 0x40111d in _start (/home/antipov/userspace-rcu/doc/examples/urcu-flavors/bp+0x40111d)
 
-Mathieu
+Is it critical for correctness, or speed, or whatever else?
 
-[1] https://lwn.net/Articles/817988/
-[2] https://lore.kernel.org/r/20200302192811.n6o5645rsib44vco@localhost
-[3] https://lore.kernel.org/r/20200409193543.18115-1-mathieu.desnoyers@efficios.com
+To whom it may be interesting, some of (probably not all) alignment issues may be fixed
+with attached patch.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Dmitry
+
+--------------E91DBDDFA8A509741168F3D8
+Content-Type: text/x-patch; charset=UTF-8;
+ name="urcu_bp_reader_alignment.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="urcu_bp_reader_alignment.patch"
+
+diff --git a/include/urcu/list.h b/include/urcu/list.h
+index 4aaf869..d5f28fe 100644
+--- a/include/urcu/list.h
++++ b/include/urcu/list.h
+@@ -40,6 +40,11 @@ struct cds_list_head {
+ #define CDS_LIST_HEAD(name) \
+ 	struct cds_list_head name = { &(name), &(name) }
+ 
++/* Likewise but aligned to ALIGN bytes. */
++#define CDS_LIST_HEAD_ALIGNED(name, align) \
++	struct cds_list_head name __attribute__((aligned (align))) \
++	= { &(name), &(name) }
++
+ /* Initialize a new list head. */
+ #define CDS_INIT_LIST_HEAD(ptr) \
+ 	(ptr)->next = (ptr)->prev = (ptr)
+diff --git a/src/urcu-bp.c b/src/urcu-bp.c
+index 05efd97..4e31147 100644
+--- a/src/urcu-bp.c
++++ b/src/urcu-bp.c
+@@ -154,12 +154,15 @@ URCU_ATTR_ALIAS("urcu_bp_gp") extern struct urcu_bp_gp rcu_gp_bp;
+ DEFINE_URCU_TLS(struct urcu_bp_reader *, urcu_bp_reader);
+ DEFINE_URCU_TLS_ALIAS(struct urcu_bp_reader *, urcu_bp_reader, rcu_reader_bp);
+ 
+-static CDS_LIST_HEAD(registry);
++static CDS_LIST_HEAD_ALIGNED(registry, CAA_CACHE_LINE_SIZE);
+ 
+ struct registry_chunk {
+ 	size_t data_len;		/* data length */
+ 	size_t used;			/* amount of data used */
+ 	struct cds_list_head node;	/* chunk_list node */
++	char pad[CAA_CACHE_LINE_SIZE -  /* pad to ensure expected alignment */
++		 sizeof(size_t) * 2 -
++		 sizeof(struct cds_list_head)];
+ 	char data[];
+ };
+ 
+@@ -270,8 +273,8 @@ static void wait_for_readers(struct cds_list_head *input_readers,
+ 
+ void urcu_bp_synchronize_rcu(void)
+ {
+-	CDS_LIST_HEAD(cur_snap_readers);
+-	CDS_LIST_HEAD(qsreaders);
++	CDS_LIST_HEAD_ALIGNED(cur_snap_readers, CAA_CACHE_LINE_SIZE);
++	CDS_LIST_HEAD_ALIGNED(qsreaders, CAA_CACHE_LINE_SIZE);
+ 	sigset_t newmask, oldmask;
+ 	int ret;
+ 
+
+--------------E91DBDDFA8A509741168F3D8
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--------------E91DBDDFA8A509741168F3D8--
