@@ -1,71 +1,69 @@
-Return-Path: <SRS0=nP6W=AE=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=H5el=AF=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADC4DC433E0
-	for <lttng-dev@archiver.kernel.org>; Tue, 23 Jun 2020 16:53:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DC02C433DF
+	for <lttng-dev@archiver.kernel.org>; Wed, 24 Jun 2020 01:15:41 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 409E62076E
-	for <lttng-dev@archiver.kernel.org>; Tue, 23 Jun 2020 16:53:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 915922137B
+	for <lttng-dev@archiver.kernel.org>; Wed, 24 Jun 2020 01:15:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="cqPiZ1Sd"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 409E62076E
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="0kxzVnii"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 915922137B
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 49rsmG5GnBz13Vx;
-	Tue, 23 Jun 2020 12:53:18 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 49s4vt61Znz13TB;
+	Tue, 23 Jun 2020 21:15:38 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1592931199;
-	bh=L0B4bMgOm0pObY1sfmfr9LdUIqCsXCQwp0arHFqiU3c=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	s=default; t=1592961339;
+	bh=7sqIWtABs/EwClDnxgqdydYK/2UMZ74aGyOZUvJwoZY=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=cqPiZ1SdVbf8ssi5ghdWGS6A0XTpZ41+0/BG0xv+7O2Qmh1gP+u5h+1OeowCOSu1c
-	 k6gogiOICWOKjDhX9ahU/sYiOZ7sJvOOTWNUVR5qkNNW6/7FEZmKt0UOAKduM2mb+y
-	 gFStL9pm5bO6pysX9eo8iLO1rXZLzQcy+bNY15EhBUeGhA+YC4D3BTtsNTdzWBMHnN
-	 D5Jakxe1hX9x5w9A6z/Uno5Oj4Mxhw80P0s6QudamY6LpmoeyGNW2FVSH5PL3e0EU0
-	 bTxpJdUXr6qzgUEJ3KxEAqjQ9LWiEWvXXi4AlY/1bHoysgMgAsOjhSRtZc6GAfI7gG
-	 J7RRRvRnbiknA==
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by lists.lttng.org (Postfix) with ESMTPS id 49rsmC63V5z13Vv
- for <lttng-dev@lists.lttng.org>; Tue, 23 Jun 2020 12:53:15 -0400 (EDT)
-Received: by mail-ej1-x629.google.com with SMTP id l12so22323520ejn.10
- for <lttng-dev@lists.lttng.org>; Tue, 23 Jun 2020 09:53:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=uwLyujqhGhGM2pwImWMFuDpK5LYckBMUv8ux6nxf8sU=;
- b=B2/hmdhhrUB9UJXF5pmU1lSGYR22kxFv1JOyHDbkDLhmwedt4spw6wgd81iMBGHXRl
- Z/zBSYxLPCSEbc85+NFyPvXPyjQ6/pCBeu9vdUu09NBUxtaTQucwhRaiE1K+u/QyKpJd
- tEXCxsdXCyv+WIyY5INTILN6PEzN3eYPQMa/nrXV/+ckJU3wNFeRFcu11l/WnAbrkAqy
- V5axfiMigOkg2iguVHikMQj8uVWoCcMhYuIMOy/m/y0jwc2XoS6+6vU48RkDeYqr1uIO
- T2wD6yAHkEVUADNFrP0LQoBjifUNsuA96XrG6C6q75b7lQvaxSmjH7Uj2hFliOgFDczu
- GHPg==
-X-Gm-Message-State: AOAM5329KyOxK4rc2eC+Q8ng93FNpwTbAKUB6xO0bQtXcNOw2pxpsuP4
- jpOOoiuKQf5xpNxO0zzkXG47jf5nC1cHWLMW+ic=
-X-Google-Smtp-Source: ABdhPJyigNB0euUj0tkHJXxd0PpWEXOm+d1YSh8TWPmuDEaolBg8KH3V4Q8r0DUQrILI4lN7BCnydrr3kp7fSQDFp2k=
-X-Received: by 2002:a17:906:4ada:: with SMTP id
- u26mr22180395ejt.368.1592931194443; 
- Tue, 23 Jun 2020 09:53:14 -0700 (PDT)
-MIME-Version: 1.0
+	b=0kxzVnii4c8piKMj6kBJ50H9B4UxXOVo92/bQN2GZyU2erwMnDX+/kt/h6OIU15PP
+	 x/yhXuhB8gEeiiBx5Wq/BjvSkCogJp63M2yftbRsojA6ovh4EdMV0JxiHVXKKhi+Zh
+	 OGqaW8ekqagQgmVz4Ca/6FDLnaUVyXN6KEQqMIYaroVWcy6FIOOts9L+UqVSlPTw4N
+	 L7ZwkZWqGIThAocKQ3XIoKzYIk2x3fanhD+qMW4e6DRJLdpGDc57U+5FyBiU4DBeJc
+	 a2hUCBfyqv8axy5ZZY5oXfdadd83STRxrtDV8StNcEYTEm6yFwaCDKH1xlSQAO2Cug
+	 v6sdHTyC7J/hA==
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+ by lists.lttng.org (Postfix) with ESMTPS id 49s4vr5c62z131S
+ for <lttng-dev@lists.lttng.org>; Tue, 23 Jun 2020 21:15:36 -0400 (EDT)
+IronPort-SDR: U3CoPEM4yJ/yxaXtDXyrIi6mWI9M/18Etv1A/VCsLOmEDvQLJZ++v1lq8zGTgv/pYw2kvisX7r
+ 5YjD8XZ6rKiA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="145784111"
+X-IronPort-AV: E=Sophos;i="5.75,273,1589266800"; d="scan'208";a="145784111"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+ by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 23 Jun 2020 18:14:19 -0700
+IronPort-SDR: Ekh/G/Ws2w6EcoGY86Y69mZmF+T+gUqGsakY+cD8JxKTDVy3zIbFkkTdqmfdJlnikk3Ft5DDgS
+ +kowvUGwKIJw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,273,1589266800"; d="scan'208";a="288898698"
+Received: from jerryopenix.sh.intel.com (HELO jerryopenix) ([10.239.158.121])
+ by orsmga007.jf.intel.com with ESMTP; 23 Jun 2020 18:14:18 -0700
+Date: Wed, 24 Jun 2020 09:10:30 +0800
+To: Christophe =?utf-8?Q?B=C3=A9dard?= <bedard.christophe@gmail.com>,
+ matthew.khouzam@ericsson.com
+Cc: lttng-dev@lists.lttng.org
+Message-ID: <20200624011030.GA4166363@jerryopenix>
 References: <20200623143758.GB4160129@jerryopenix>
  <SA0PR15MB38396A864018025F971F2A239E940@SA0PR15MB3839.namprd15.prod.outlook.com>
-In-Reply-To: <SA0PR15MB38396A864018025F971F2A239E940@SA0PR15MB3839.namprd15.prod.outlook.com>
-Date: Tue, 23 Jun 2020 12:52:38 -0400
-Message-ID: <CAAS9doZNif9Cw=kmo0hvKuF_qVBiqX_233JWFr4fTc5A72eLvw@mail.gmail.com>
-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Liu,
- Changcheng" <changcheng.liu@intel.com>
+ <CAAS9doZNif9Cw=kmo0hvKuF_qVBiqX_233JWFr4fTc5A72eLvw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CAAS9doZNif9Cw=kmo0hvKuF_qVBiqX_233JWFr4fTc5A72eLvw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Subject: Re: [lttng-dev] get function names with lttng-ust-cyg-profile
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
@@ -78,358 +76,100 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?q?Christophe_B=C3=A9dard_via_lttng-dev?=
- <lttng-dev@lists.lttng.org>
-Reply-To: =?UTF-8?Q?Christophe_B=C3=A9dard?= <bedard.christophe@gmail.com>
-Content-Type: multipart/mixed; boundary="===============5959687904060015415=="
+From: "Liu, Changcheng via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: "Liu, Changcheng" <changcheng.liu@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-Message-ID: <20200623165238.15BGGt6m_u-DHxCnQ_4AV5xlnQA5e3X5ECzoojyrOz0@z>
+Message-ID: <20200624011030.AgpGSBtn5JoC_l3_TOzdeszL1pIMbf_yXUFKKzPElBI@z>
 
---===============5959687904060015415==
-Content-Type: multipart/alternative; boundary="000000000000ff213c05a8c331a9"
-
---000000000000ff213c05a8c331a9
-Content-Type: text/plain; charset="UTF-8"
-
-Hi,
-
-Babeltrace is doing exactly what it should as far as I know.
->
-
-yes, but babeltrace *can* provide the information if:
-
-* ip and vpid contexts are enabled (for userspace), e.g.
-
-$ lttng add-context --userspace --type=ip --type=vpid
-
-* LTTng state dump events are enabled, e.g.
-
-$ lttng enable-event --userspace 'lttng_ust_statedump:*'
-
-
-see this (from bt2 but it also applies to bt1):
-https://babeltrace.org/docs/v2.0/man7/babeltrace2-filter.lttng-utils.debug-info.7/#doc-lttng-prereq
-
-Note that the Python bindings for babeltrace don't provide/expose this
-debug info.
-
-
-Christophe
-
-On Tue, 23 Jun 2020 at 11:12, Matthew Khouzam via lttng-dev <
-lttng-dev@lists.lttng.org> wrote:
-
-> Hi,
->
-> You have the pointers that are traced. Babeltrace is doing exactly what it
-> should as far as I know.
->
-> You could use the command 'nm' to get your symbols and look them up. I am
-> sure Babeltrace can do this from a python level. You could also use a GUI
-> based trace viewer to get the information.
->
-> Hope that helps.
-> Matthew
-> ------------------------------
-> *From:* lttng-dev <lttng-dev-bounces@lists.lttng.org> on behalf of Liu,
-> Changcheng via lttng-dev <lttng-dev@lists.lttng.org>
-> *Sent:* Tuesday, June 23, 2020 10:37 AM
-> *To:* lttng-dev@lists.lttng.org <lttng-dev@lists.lttng.org>
-> *Cc:* changcheng.liu@intel.com <changcheng.liu@intel.com>
-> *Subject:* [lttng-dev] get function names with lttng-ust-cyg-profile
->
-> Hi all,
->    I'm trying to use lttng-ust-cyg-profile to trace program.
->    Does anyone know how to get function names and offset through
-> lttng-ust-cyg-profile?
->
->    In below example, the babeltrace could only get the function entry/exit
-> value.
->    1. Source program: instrument.c
->          1 #include <stdio.h>
->          2
->          3 int add3(int val) {
->          4         return val + 3;
->          5 }
->          6
->          7 int main(int argc, char **argv) {
->          8     int x = 4;
->          9
->         10     puts("Press Enter to continue...");
->         11     getchar();
->         12
->         13     x = add3(x);
->         14
->         15     return 0;
->         16 }
->
->    2. build source code:
->         $ gcc -g -finstrument-functions instrument.c -o instrument
->
->    3. run program:
->        $ LD_PRELOAD=/usr/lib/x86_64-linux-gnu/liblttng-ust-cyg-profile.so
-> ./instrument
->
->    4. start trace process:
->        trace@trace:~/cc$ sudo lttng create instrument
->        Session instrument created.
->        Traces will be output to
-> /root/lttng-traces/instrument-20200623-222917
->
->        trace@trace:~/cc$ sudo lttng enable-channel user_func_trace
-> --userspace
->        UST channel user_func_trace enabled for session instrument
->
->        trace@trace:~/cc$ sudo lttng enable-event --userspace
-> lttng_ust_cyg_profile:func_entry --channel user_func_trace
->        UST event lttng_ust_cyg_profile:func_entry created in channel
-> user_func_trace
->        trace@trace:~/cc$ sudo lttng enable-event --userspace
-> lttng_ust_cyg_profile:func_exit --channel user_func_trace
->        UST event lttng_ust_cyg_profile:func_exit created in channel
-> user_func_trace
->
->        trace@trace:~/cc$ sudo lttng start
->        Tracing started for session instrument
->
->        trace@trace:~/cc$ sudo lttng destroy
->        Destroying session instrument..
->        Session instrument destroyed
->
->        trace@trace:~/cc$ sudo babeltrace
-> /root/lttng-traces/instrument-20200623-222917
->        [22:29:55.388607059] (+?.?????????) trace
-> lttng_ust_cyg_profile:func_entry: { cpu_id = 2 }, { addr = 0x5625C88B01A9,
-> call_site = 0x5625C88B0237 }
->        [22:29:55.388612293] (+0.000005234) trace
-> lttng_ust_cyg_profile:func_exit: { cpu_id = 2 }, { addr = 0x5625C88B01A9,
-> call_site = 0x5625C88B0237 }
->        [22:29:55.388613215] (+0.000000922) trace
-> lttng_ust_cyg_profile:func_exit: { cpu_id = 2 }, { addr = 0x5625C88B01EE,
-> call_site = 0x7FE40BD5C0B3 }
->
-> B.R.
-> Changcheng
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
->
-> https://protect2.fireeye.com/v1/url?k=98478753-c6e73d3d-9847c7c8-869a14f4b08c-41638b2508ab85dd&q=1&e=703483a0-63a9-4269-ac8e-c1fc5a57edad&u=https%3A%2F%2Flists.lttng.org%2Fcgi-bin%2Fmailman%2Flistinfo%2Flttng-dev
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
---000000000000ff213c05a8c331a9
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi,<div><br></div><blockquote class=3D"gm=
-ail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,=
-204,204);padding-left:1ex"><span style=3D"color:rgb(0,0,0);font-family:Cali=
-bri,Arial,Helvetica,sans-serif;font-size:16px">Babeltrace is doing exactly =
-what it should as far as I know.</span><br></blockquote><div><br></div><div=
->yes, but babeltrace <i>can</i> provide the information if:</div><div><br><=
-/div><div>* ip and vpid contexts are enabled (for userspace), e.g.</div></d=
-iv><blockquote style=3D"margin:0 0 0 40px;border:none;padding:0px"><div dir=
-=3D"ltr"><div>$ lttng add-context --userspace --type=3Dip --type=3Dvpid</di=
-v></div></blockquote><div dir=3D"ltr"><div>* LTTng state dump events are en=
-abled, e.g.</div></div><blockquote style=3D"margin:0 0 0 40px;border:none;p=
-adding:0px"><div dir=3D"ltr"><div>$ lttng enable-event --userspace &#39;ltt=
-ng_ust_statedump:*&#39;</div></div></blockquote><div dir=3D"ltr"><div><br><=
-/div><div>see this (from bt2 but it also applies to bt1):=C2=A0<a href=3D"h=
-ttps://babeltrace.org/docs/v2.0/man7/babeltrace2-filter.lttng-utils.debug-i=
-nfo.7/#doc-lttng-prereq">https://babeltrace.org/docs/v2.0/man7/babeltrace2-=
-filter.lttng-utils.debug-info.7/#doc-lttng-prereq</a></div><div><br></div><=
-div>Note that the Python bindings for babeltrace don&#39;t provide/expose t=
-his debug info.</div><div><br></div><div><br></div><div>Christophe</div></d=
-iv><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On =
-Tue, 23 Jun 2020 at 11:12, Matthew Khouzam via lttng-dev &lt;<a href=3D"mai=
-lto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>&gt; wrote:<br>=
-</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;b=
-order-left:1px solid rgb(204,204,204);padding-left:1ex">
-
-
-
-
-<div dir=3D"ltr">
-<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-size:12pt=
-;color:rgb(0,0,0)">
-Hi,</div>
-<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-size:12pt=
-;color:rgb(0,0,0)">
-<br>
-</div>
-<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-size:12pt=
-;color:rgb(0,0,0)">
-You have the pointers that are traced. Babeltrace is doing exactly what it =
-should as far as I know.</div>
-<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-size:12pt=
-;color:rgb(0,0,0)">
-<br>
-</div>
-<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-size:12pt=
-;color:rgb(0,0,0)">
-You could use the command &#39;nm&#39; to get your symbols and look them up=
-. I am sure Babeltrace can do this from a python level. You could also use =
-a GUI based trace viewer to get the information.=C2=A0</div>
-<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-size:12pt=
-;color:rgb(0,0,0)">
-<br>
-</div>
-<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-size:12pt=
-;color:rgb(0,0,0)">
-Hope that helps.</div>
-<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-size:12pt=
-;color:rgb(0,0,0)">
-Matthew<br>
-</div>
-<div id=3D"gmail-m_-3967757338877835848appendonsend"></div>
-<hr style=3D"display:inline-block;width:98%">
-<div id=3D"gmail-m_-3967757338877835848divRplyFwdMsg" dir=3D"ltr"><font fac=
-e=3D"Calibri, sans-serif" style=3D"font-size:11pt" color=3D"#000000"><b>Fro=
-m:</b> lttng-dev &lt;<a href=3D"mailto:lttng-dev-bounces@lists.lttng.org" t=
-arget=3D"_blank">lttng-dev-bounces@lists.lttng.org</a>&gt; on behalf of Liu=
-, Changcheng via lttng-dev &lt;<a href=3D"mailto:lttng-dev@lists.lttng.org"=
- target=3D"_blank">lttng-dev@lists.lttng.org</a>&gt;<br>
-<b>Sent:</b> Tuesday, June 23, 2020 10:37 AM<br>
-<b>To:</b> <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">l=
-ttng-dev@lists.lttng.org</a> &lt;<a href=3D"mailto:lttng-dev@lists.lttng.or=
-g" target=3D"_blank">lttng-dev@lists.lttng.org</a>&gt;<br>
-<b>Cc:</b> <a href=3D"mailto:changcheng.liu@intel.com" target=3D"_blank">ch=
-angcheng.liu@intel.com</a> &lt;<a href=3D"mailto:changcheng.liu@intel.com" =
-target=3D"_blank">changcheng.liu@intel.com</a>&gt;<br>
-<b>Subject:</b> [lttng-dev] get function names with lttng-ust-cyg-profile</=
-font>
-<div>=C2=A0</div>
-</div>
-<div><font size=3D"2"><span style=3D"font-size:11pt">
-<div>Hi all,<br>
-=C2=A0=C2=A0 I&#39;m trying to use lttng-ust-cyg-profile to trace program.<=
-br>
-=C2=A0=C2=A0 Does anyone know how to get function names and offset through =
-lttng-ust-cyg-profile?<br>
-<br>
-=C2=A0=C2=A0 In below example, the babeltrace could only get the function e=
-ntry/exit value.<br>
-=C2=A0=C2=A0 1. Source program: instrument.c<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1 #include &lt;stdio.h&gt;=
-<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 2 <br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 3 int add3(int val) {<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 4=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 return val + 3;<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 5 }<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 6 <br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 7 int main(int argc, char =
-**argv) {<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 8=C2=A0=C2=A0=C2=A0=C2=A0 =
-int x =3D 4;<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 9=C2=A0=C2=A0=C2=A0=C2=A0 =
-<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 10=C2=A0=C2=A0=C2=A0=C2=A0 puts(=
-&quot;Press Enter to continue...&quot;);<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 11=C2=A0=C2=A0=C2=A0=C2=A0 getch=
-ar();<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 12=C2=A0=C2=A0=C2=A0=C2=A0 <br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 13=C2=A0=C2=A0=C2=A0=C2=A0 x =3D=
- add3(x);<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 14=C2=A0=C2=A0=C2=A0=C2=A0 <br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 15=C2=A0=C2=A0=C2=A0=C2=A0 retur=
-n 0;<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 16 }<br>
-<br>
-=C2=A0=C2=A0 2. build source code:<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $ gcc -g -finstrument-functions =
-instrument.c -o instrument<br>
-<br>
-=C2=A0=C2=A0 3. run program:<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $ LD_PRELOAD=3D/usr/lib/x86_64-linux-g=
-nu/liblttng-ust-cyg-profile.so ./instrument<br>
-<br>
-=C2=A0=C2=A0 4. start trace process:<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trace@trace:~/cc$ sudo lttng create in=
-strument<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Session instrument created.<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Traces will be output to /root/lttng-t=
-races/instrument-20200623-222917<br>
-<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trace@trace:~/cc$ sudo lttng enable-ch=
-annel user_func_trace --userspace<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 UST channel user_func_trace enabled fo=
-r session instrument<br>
-<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trace@trace:~/cc$ sudo lttng enable-ev=
-ent --userspace lttng_ust_cyg_profile:func_entry --channel user_func_trace<=
-br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 UST event lttng_ust_cyg_profile:func_e=
-ntry created in channel user_func_trace<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trace@trace:~/cc$ sudo lttng enable-ev=
-ent --userspace lttng_ust_cyg_profile:func_exit --channel user_func_trace<b=
-r>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 UST event lttng_ust_cyg_profile:func_e=
-xit created in channel user_func_trace<br>
-<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trace@trace:~/cc$ sudo lttng start<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Tracing started for session instrument=
-<br>
-<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trace@trace:~/cc$ sudo lttng destroy<b=
-r>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Destroying session instrument..<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Session instrument destroyed<br>
-<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trace@trace:~/cc$ sudo babeltrace /roo=
-t/lttng-traces/instrument-20200623-222917<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [22:29:55.388607059] (+?.?????????) tr=
-ace lttng_ust_cyg_profile:func_entry: { cpu_id =3D 2 }, { addr =3D 0x5625C8=
-8B01A9, call_site =3D 0x5625C88B0237 }<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [22:29:55.388612293] (+0.000005234) tr=
-ace lttng_ust_cyg_profile:func_exit: { cpu_id =3D 2 }, { addr =3D 0x5625C88=
-B01A9, call_site =3D 0x5625C88B0237 }<br>
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 [22:29:55.388613215] (+0.000000922) tr=
-ace lttng_ust_cyg_profile:func_exit: { cpu_id =3D 2 }, { addr =3D 0x5625C88=
-B01EE, call_site =3D 0x7FE40BD5C0B3 }<br>
-<br>
-B.R.<br>
-Changcheng<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"https://protect2.fireeye.com/v1/url?k=3D98478753-c6e73d3d-9847c7=
-c8-869a14f4b08c-41638b2508ab85dd&amp;q=3D1&amp;e=3D703483a0-63a9-4269-ac8e-=
-c1fc5a57edad&amp;u=3Dhttps%3A%2F%2Flists.lttng.org%2Fcgi-bin%2Fmailman%2Fli=
-stinfo%2Flttng-dev" target=3D"_blank">https://protect2.fireeye.com/v1/url?k=
-=3D98478753-c6e73d3d-9847c7c8-869a14f4b08c-41638b2508ab85dd&amp;q=3D1&amp;e=
-=3D703483a0-63a9-4269-ac8e-c1fc5a57edad&amp;u=3Dhttps%3A%2F%2Flists.lttng.o=
-rg%2Fcgi-bin%2Fmailman%2Flistinfo%2Flttng-dev</a><br>
-</div>
-</span></font></div>
-</div>
-
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailman/l=
-istinfo/lttng-dev</a><br>
-</blockquote></div></div>
-
---000000000000ff213c05a8c331a9--
-
---===============5959687904060015415==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5959687904060015415==--
+PiAgICBZb3UgY291bGQgdXNlIHRoZSBjb21tYW5kICdubScgdG8gZ2V0IHlvdXIgc3ltYm9scyBh
+bmQgbG9vayB0aGVtIHVwLiBJCj4gICAgYW0gc3VyZSBCYWJlbHRyYWNlIGNhbiBkbyB0aGlzIGZy
+b20gYSBweXRob24gbGV2ZWwuIFlvdSBjb3VsZCBhbHNvIHVzZQo+ICAgIGEgR1VJIGJhc2VkIHRy
+YWNlIHZpZXdlciB0byBnZXQgdGhlIGluZm9ybWF0aW9uLgogICAgICBubSBvbmx5IHNob3dzIHRo
+ZSBsaW5rZWQgYWRkcmVzcywgYnV0IHRoZSB0cmFjZWQgYWRkcmVzcyBhcmUgdGhlCiAgICAgIGxv
+YWRlZCBhZGRyZXNzIGluIG1lbW9yeS4gU28sIHRoZXkncmUgZGlmZmVyZW50LgogICAgICBGb3Ig
+ZXhhbXBsZToKICAgICAgdHJhY2VAdHJhY2U6fi9jYyQgbm0gaW5zdHJ1bWVudCB8IGdyZXAgJ2Fk
+ZDNcfG1haW4nCiAgICAgIDAwMDAwMDAwMDAwMDExYTkgVCBhZGQzCiAgICAgIDAwMDAwMDAwMDAw
+MDExZWUgVCBtYWluCgpAQ2hyaXN0b3BoZToKICAgIERvIHlvdSBtZWFuIHRoYXQgYmFiZWx0cmFj
+ZTIgY2FuIGhlbHAgZ2V0IHRoZSBmdW5jdGlvbiBuYW1lIGFuZCBjYWxsIHNpdGUgb2Zmc2V0PwoK
+Qi5SLgpDaGFuZ2NoZW5nCgpPbiAxMjo1MiBUdWUgMjMgSnVuLCBDaHJpc3RvcGhlIELDqWRhcmQg
+d3JvdGU6Cj4gICAgSGksCj4gCj4gICAgICBCYWJlbHRyYWNlIGlzIGRvaW5nIGV4YWN0bHkgd2hh
+dCBpdCBzaG91bGQgYXMgZmFyIGFzIEkga25vdy4KPiAKPiAgICB5ZXMsIGJ1dCBiYWJlbHRyYWNl
+IGNhbiBwcm92aWRlIHRoZSBpbmZvcm1hdGlvbiBpZjoKPiAgICAqIGlwIGFuZCB2cGlkIGNvbnRl
+eHRzIGFyZSBlbmFibGVkIChmb3IgdXNlcnNwYWNlKSwgZS5nLgo+IAo+ICAgICQgbHR0bmcgYWRk
+LWNvbnRleHQgLS11c2Vyc3BhY2UgLS10eXBlPWlwIC0tdHlwZT12cGlkCj4gCj4gICAgKiBMVFRu
+ZyBzdGF0ZSBkdW1wIGV2ZW50cyBhcmUgZW5hYmxlZCwgZS5nLgo+IAo+ICAgICQgbHR0bmcgZW5h
+YmxlLWV2ZW50IC0tdXNlcnNwYWNlICdsdHRuZ191c3Rfc3RhdGVkdW1wOionCj4gCj4gICAgc2Vl
+IHRoaXMgKGZyb20gYnQyIGJ1dCBpdCBhbHNvIGFwcGxpZXMgdG8KPiAgICBidDEpOiBbMV1odHRw
+czovL2JhYmVsdHJhY2Uub3JnL2RvY3MvdjIuMC9tYW43L2JhYmVsdHJhY2UyLWZpbHRlci5sdHRu
+Zwo+ICAgIC11dGlscy5kZWJ1Zy1pbmZvLjcvI2RvYy1sdHRuZy1wcmVyZXEKPiAgICBOb3RlIHRo
+YXQgdGhlIFB5dGhvbiBiaW5kaW5ncyBmb3IgYmFiZWx0cmFjZSBkb24ndCBwcm92aWRlL2V4cG9z
+ZSB0aGlzCj4gICAgZGVidWcgaW5mby4KPiAgICBDaHJpc3RvcGhlCj4gICAgT24gVHVlLCAyMyBK
+dW4gMjAyMCBhdCAxMToxMiwgTWF0dGhldyBLaG91emFtIHZpYSBsdHRuZy1kZXYKPiAgICA8WzJd
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4gd3JvdGU6Cj4gCj4gICAgSGksCj4gICAgWW91IGhh
+dmUgdGhlIHBvaW50ZXJzIHRoYXQgYXJlIHRyYWNlZC4gQmFiZWx0cmFjZSBpcyBkb2luZyBleGFj
+dGx5IHdoYXQKPiAgICBpdCBzaG91bGQgYXMgZmFyIGFzIEkga25vdy4KPiAgICBZb3UgY291bGQg
+dXNlIHRoZSBjb21tYW5kICdubScgdG8gZ2V0IHlvdXIgc3ltYm9scyBhbmQgbG9vayB0aGVtIHVw
+LiBJCj4gICAgYW0gc3VyZSBCYWJlbHRyYWNlIGNhbiBkbyB0aGlzIGZyb20gYSBweXRob24gbGV2
+ZWwuIFlvdSBjb3VsZCBhbHNvIHVzZQo+ICAgIGEgR1VJIGJhc2VkIHRyYWNlIHZpZXdlciB0byBn
+ZXQgdGhlIGluZm9ybWF0aW9uLgo+ICAgIEhvcGUgdGhhdCBoZWxwcy4KPiAgICBNYXR0aGV3Cj4g
+ICAgICBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KPiAKPiAgICBGcm9tOiBsdHRuZy1kZXYgPFszXWx0dG5nLWRldi1ib3Vu
+Y2VzQGxpc3RzLmx0dG5nLm9yZz4gb24gYmVoYWxmIG9mCj4gICAgTGl1LCBDaGFuZ2NoZW5nIHZp
+YSBsdHRuZy1kZXYgPFs0XWx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4gICAgU2VudDogVHVl
+c2RheSwgSnVuZSAyMywgMjAyMCAxMDozNyBBTQo+ICAgIFRvOiBbNV1sdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnIDxbNl1sdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+ICAgIENjOiBbN11jaGFu
+Z2NoZW5nLmxpdUBpbnRlbC5jb20gPFs4XWNoYW5nY2hlbmcubGl1QGludGVsLmNvbT4KPiAgICBT
+dWJqZWN0OiBbbHR0bmctZGV2XSBnZXQgZnVuY3Rpb24gbmFtZXMgd2l0aCBsdHRuZy11c3QtY3ln
+LXByb2ZpbGUKPiAKPiAgICBIaSBhbGwsCj4gICAgICAgSSdtIHRyeWluZyB0byB1c2UgbHR0bmct
+dXN0LWN5Zy1wcm9maWxlIHRvIHRyYWNlIHByb2dyYW0uCj4gICAgICAgRG9lcyBhbnlvbmUga25v
+dyBob3cgdG8gZ2V0IGZ1bmN0aW9uIG5hbWVzIGFuZCBvZmZzZXQgdGhyb3VnaAo+ICAgIGx0dG5n
+LXVzdC1jeWctcHJvZmlsZT8KPiAgICAgICBJbiBiZWxvdyBleGFtcGxlLCB0aGUgYmFiZWx0cmFj
+ZSBjb3VsZCBvbmx5IGdldCB0aGUgZnVuY3Rpb24KPiAgICBlbnRyeS9leGl0IHZhbHVlLgo+ICAg
+ICAgIDEuIFNvdXJjZSBwcm9ncmFtOiBpbnN0cnVtZW50LmMKPiAgICAgICAgICAgICAxICNpbmNs
+dWRlIDxzdGRpby5oPgo+ICAgICAgICAgICAgIDIKPiAgICAgICAgICAgICAzIGludCBhZGQzKGlu
+dCB2YWwpIHsKPiAgICAgICAgICAgICA0ICAgICAgICAgcmV0dXJuIHZhbCArIDM7Cj4gICAgICAg
+ICAgICAgNSB9Cj4gICAgICAgICAgICAgNgo+ICAgICAgICAgICAgIDcgaW50IG1haW4oaW50IGFy
+Z2MsIGNoYXIgKiphcmd2KSB7Cj4gICAgICAgICAgICAgOCAgICAgaW50IHggPSA0Owo+ICAgICAg
+ICAgICAgIDkKPiAgICAgICAgICAgIDEwICAgICBwdXRzKCJQcmVzcyBFbnRlciB0byBjb250aW51
+ZS4uLiIpOwo+ICAgICAgICAgICAgMTEgICAgIGdldGNoYXIoKTsKPiAgICAgICAgICAgIDEyCj4g
+ICAgICAgICAgICAxMyAgICAgeCA9IGFkZDMoeCk7Cj4gICAgICAgICAgICAxNAo+ICAgICAgICAg
+ICAgMTUgICAgIHJldHVybiAwOwo+ICAgICAgICAgICAgMTYgfQo+ICAgICAgIDIuIGJ1aWxkIHNv
+dXJjZSBjb2RlOgo+ICAgICAgICAgICAgJCBnY2MgLWcgLWZpbnN0cnVtZW50LWZ1bmN0aW9ucyBp
+bnN0cnVtZW50LmMgLW8gaW5zdHJ1bWVudAo+ICAgICAgIDMuIHJ1biBwcm9ncmFtOgo+ICAgICAg
+ICAgICAkCj4gICAgTERfUFJFTE9BRD0vdXNyL2xpYi94ODZfNjQtbGludXgtZ251L2xpYmx0dG5n
+LXVzdC1jeWctcHJvZmlsZS5zbwo+ICAgIC4vaW5zdHJ1bWVudAo+ICAgICAgIDQuIHN0YXJ0IHRy
+YWNlIHByb2Nlc3M6Cj4gICAgICAgICAgIHRyYWNlQHRyYWNlOn4vY2MkIHN1ZG8gbHR0bmcgY3Jl
+YXRlIGluc3RydW1lbnQKPiAgICAgICAgICAgU2Vzc2lvbiBpbnN0cnVtZW50IGNyZWF0ZWQuCj4g
+ICAgICAgICAgIFRyYWNlcyB3aWxsIGJlIG91dHB1dCB0bwo+ICAgIC9yb290L2x0dG5nLXRyYWNl
+cy9pbnN0cnVtZW50LTIwMjAwNjIzLTIyMjkxNwo+ICAgICAgICAgICB0cmFjZUB0cmFjZTp+L2Nj
+JCBzdWRvIGx0dG5nIGVuYWJsZS1jaGFubmVsIHVzZXJfZnVuY190cmFjZQo+ICAgIC0tdXNlcnNw
+YWNlCj4gICAgICAgICAgIFVTVCBjaGFubmVsIHVzZXJfZnVuY190cmFjZSBlbmFibGVkIGZvciBz
+ZXNzaW9uIGluc3RydW1lbnQKPiAgICAgICAgICAgdHJhY2VAdHJhY2U6fi9jYyQgc3VkbyBsdHRu
+ZyBlbmFibGUtZXZlbnQgLS11c2Vyc3BhY2UKPiAgICBsdHRuZ191c3RfY3lnX3Byb2ZpbGU6ZnVu
+Y19lbnRyeSAtLWNoYW5uZWwgdXNlcl9mdW5jX3RyYWNlCj4gICAgICAgICAgIFVTVCBldmVudCBs
+dHRuZ191c3RfY3lnX3Byb2ZpbGU6ZnVuY19lbnRyeSBjcmVhdGVkIGluIGNoYW5uZWwKPiAgICB1
+c2VyX2Z1bmNfdHJhY2UKPiAgICAgICAgICAgdHJhY2VAdHJhY2U6fi9jYyQgc3VkbyBsdHRuZyBl
+bmFibGUtZXZlbnQgLS11c2Vyc3BhY2UKPiAgICBsdHRuZ191c3RfY3lnX3Byb2ZpbGU6ZnVuY19l
+eGl0IC0tY2hhbm5lbCB1c2VyX2Z1bmNfdHJhY2UKPiAgICAgICAgICAgVVNUIGV2ZW50IGx0dG5n
+X3VzdF9jeWdfcHJvZmlsZTpmdW5jX2V4aXQgY3JlYXRlZCBpbiBjaGFubmVsCj4gICAgdXNlcl9m
+dW5jX3RyYWNlCj4gICAgICAgICAgIHRyYWNlQHRyYWNlOn4vY2MkIHN1ZG8gbHR0bmcgc3RhcnQK
+PiAgICAgICAgICAgVHJhY2luZyBzdGFydGVkIGZvciBzZXNzaW9uIGluc3RydW1lbnQKPiAgICAg
+ICAgICAgdHJhY2VAdHJhY2U6fi9jYyQgc3VkbyBsdHRuZyBkZXN0cm95Cj4gICAgICAgICAgIERl
+c3Ryb3lpbmcgc2Vzc2lvbiBpbnN0cnVtZW50Li4KPiAgICAgICAgICAgU2Vzc2lvbiBpbnN0cnVt
+ZW50IGRlc3Ryb3llZAo+ICAgICAgICAgICB0cmFjZUB0cmFjZTp+L2NjJCBzdWRvIGJhYmVsdHJh
+Y2UKPiAgICAvcm9vdC9sdHRuZy10cmFjZXMvaW5zdHJ1bWVudC0yMDIwMDYyMy0yMjI5MTcKPiAg
+ICAgICAgICAgWzIyOjI5OjU1LjM4ODYwNzA1OV0gKCs/Lj8/Pz8/Pz8/PykgdHJhY2UKPiAgICBs
+dHRuZ191c3RfY3lnX3Byb2ZpbGU6ZnVuY19lbnRyeTogeyBjcHVfaWQgPSAyIH0sIHsgYWRkciA9
+Cj4gICAgMHg1NjI1Qzg4QjAxQTksIGNhbGxfc2l0ZSA9IDB4NTYyNUM4OEIwMjM3IH0KPiAgICAg
+ICAgICAgWzIyOjI5OjU1LjM4ODYxMjI5M10gKCswLjAwMDAwNTIzNCkgdHJhY2UKPiAgICBsdHRu
+Z191c3RfY3lnX3Byb2ZpbGU6ZnVuY19leGl0OiB7IGNwdV9pZCA9IDIgfSwgeyBhZGRyID0KPiAg
+ICAweDU2MjVDODhCMDFBOSwgY2FsbF9zaXRlID0gMHg1NjI1Qzg4QjAyMzcgfQo+ICAgICAgICAg
+ICBbMjI6Mjk6NTUuMzg4NjEzMjE1XSAoKzAuMDAwMDAwOTIyKSB0cmFjZQo+ICAgIGx0dG5nX3Vz
+dF9jeWdfcHJvZmlsZTpmdW5jX2V4aXQ6IHsgY3B1X2lkID0gMiB9LCB7IGFkZHIgPQo+ICAgIDB4
+NTYyNUM4OEIwMUVFLCBjYWxsX3NpdGUgPSAweDdGRTQwQkQ1QzBCMyB9Cj4gICAgQi5SLgo+ICAg
+IENoYW5nY2hlbmcKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBz
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
