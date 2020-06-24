@@ -1,20 +1,23 @@
-From: "Liu, Changcheng via lttng-dev" <lttng-dev@lists.lttng.org>
-Subject: Re: get function names with lttng-ust-cyg-profile
-Date: Wed, 24 Jun 2020 09:41:41 +0800
-Message-ID: <20200624014141.GA4166707@jerryopenix>
-References: <20200623143758.GB4160129@jerryopenix>
- <SA0PR15MB38396A864018025F971F2A239E940@SA0PR15MB3839.namprd15.prod.outlook.com>
- <CAAS9doZNif9Cw=kmo0hvKuF_qVBiqX_233JWFr4fTc5A72eLvw@mail.gmail.com>
-Reply-To: "Liu, Changcheng" <changcheng.liu@intel.com>
+From: Stefan Hajnoczi via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: [PATCH] Fix: tracepoint.h: define SDT_USE_VARIADIC in
+ pkg-config CFLAGS
+Date: Wed, 24 Jun 2020 17:09:34 +0100
+Message-ID: <20200624160934.205881-1-stefanha@redhat.com>
+Reply-To: Stefan Hajnoczi <stefanha@redhat.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
- by lists.lttng.org (Postfix) with ESMTPS id 49s5ZP26hnz1395
- for <lttng-dev@lists.lttng.org>; Tue, 23 Jun 2020 21:45:32 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <CAAS9doZNif9Cw=kmo0hvKuF_qVBiqX_233JWFr4fTc5A72eLvw@mail.gmail.com>
+Received: from us-smtp-delivery-1.mimecast.com (us-smtp-1.mimecast.com
+ [207.211.31.81])
+ by lists.lttng.org (Postfix) with ESMTPS id 49sSlw5PsJz13S0
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Jun 2020 12:10:04 -0400 (EDT)
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com
+ [10.5.11.14])
+ (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+ (No client certificate requested)
+ by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8FC38804001
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Jun 2020 16:09:39 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,44 +27,89 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Christophe =?utf-8?Q?B=C3=A9dard?= <bedard.christophe@gmail.com>
-Cc: lttng-dev@lists.lttng.org, changcheng.liu@intel.com
+To: lttng-dev@lists.lttng.org
+Cc: Stefan Hajnoczi <stefanha@redhat.com>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMTI6NTIgVHVlIDIzIEp1biwgQ2hyaXN0b3BoZSBCw6lkYXJkIHdyb3RlOgo+ICAgIEhpLAo+
-IAo+ICAgICAgQmFiZWx0cmFjZSBpcyBkb2luZyBleGFjdGx5IHdoYXQgaXQgc2hvdWxkIGFzIGZh
-ciBhcyBJIGtub3cuCj4gCj4gICAgeWVzLCBidXQgYmFiZWx0cmFjZSBjYW4gcHJvdmlkZSB0aGUg
-aW5mb3JtYXRpb24gaWY6Cj4gICAgKiBpcCBhbmQgdnBpZCBjb250ZXh0cyBhcmUgZW5hYmxlZCAo
-Zm9yIHVzZXJzcGFjZSksIGUuZy4KPiAKPiAgICAkIGx0dG5nIGFkZC1jb250ZXh0IC0tdXNlcnNw
-YWNlIC0tdHlwZT1pcCAtLXR5cGU9dnBpZAo+IAo+ICAgICogTFRUbmcgc3RhdGUgZHVtcCBldmVu
-dHMgYXJlIGVuYWJsZWQsIGUuZy4KPiAKPiAgICAkIGx0dG5nIGVuYWJsZS1ldmVudCAtLXVzZXJz
-cGFjZSAnbHR0bmdfdXN0X3N0YXRlZHVtcDoqJwpUaGFua3MgQ2hyaXN0b3BoZS4gSSB3b3JrcyBu
-b3cgdGhhdCB0aGUgZnVuY3Rpb24gZW50cnkgbmFtZSBjb3VsZCBiZSBnb3QKYWZ0ZXIgMSkgYWRk
-IGlwJnZwaWQgY29udGV4dCAyKSBlbmFibGUgc3RhdGUgZHVtcAoKRG8geW91IGtub3cgaG93IHRv
-IHByaW50IHRoZSBjYWxsIHNpdGUgZnVuY3Rpb25fbmFtZS9vZmZzZXQ/CkZvciBleGFtcGxlOgog
-ICAgICAgICAgICAxMSAgICAgZ2V0Y2hhcigpOwogICAgICAgICAgICAxMgogICAgICAgICAgICAx
-MyAgICAgeCA9IGFkZDMoeCk7CkN1cnJlbnRseSwgaXQgb25seSBzaG93cyBjYWxsX3NpdGUgYWRk
-cmVzcyBpbnN0ZWFkIG9mIGZ1bmN0aW9uIG5hbWUgd2l0aCBvZmZzZXQuCgpmdW5jX2VudHJ5OiB7
-IGNwdV9pZCA9IDIgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUVFLCBkZWJ1Z19pbmZvID0geyBiaW4g
-PSAiaW5zdHJ1bWVudCsweDExZWUiLCBmdW5jID0gIm1haW4rMCIsIHNyYyA9ICJpbnN0cnVtZW50
-LmM6NyIgfSwgdnBpZCA9IDg1MjMgfSwgeyBhZGRyID0gMHg1NUNGQTRGNUMxRUUsIGNhbGxfc2l0
-ZSA9IDB4N0YyN0M0QjFFMEIzIH0KZnVuY19lbnRyeTogeyBjcHVfaWQgPSAxIH0sIHsgaXAgPSAw
-eDU1Q0ZBNEY1QzFBOSwgZGVidWdfaW5mbyA9IHsgYmluID0gImluc3RydW1lbnQrMHgxMWE5Iiwg
-ZnVuYyA9ICJhZGQzKzAiLCBzcmMgPSAiaW5zdHJ1bWVudC5jOjMiIH0sIHZwaWQgPSA4NTIzIH0s
-IHsgYWRkciA9IDB4NTVDRkE0RjVDMUE5LCBjYWxsX3NpdGUgPSAweDU1Q0ZBNEY1QzIzNyB9CmZ1
-bmNfZXhpdDogeyBjcHVfaWQgPSAxIH0sIHsgaXAgPSAweDU1Q0ZBNEY1QzFBOSwgZGVidWdfaW5m
-byA9IHsgYmluID0gImluc3RydW1lbnQrMHgxMWE5IiwgZnVuYyA9ICJhZGQzKzAiLCBzcmMgPSAi
-aW5zdHJ1bWVudC5jOjMiIH0sIHZwaWQgPSA4NTIzIH0sIHsgYWRkciA9IDB4NTVDRkE0RjVDMUE5
-LCBjYWxsX3NpdGUgPSAweDU1Q0ZBNEY1QzIzNyB9CmZ1bmNfZXhpdDogeyBjcHVfaWQgPSAxIH0s
-IHsgaXAgPSAweDU1Q0ZBNEY1QzFFRSwgZGVidWdfaW5mbyA9IHsgYmluID0gImluc3RydW1lbnQr
-MHgxMWVlIiwgZnVuYyA9ICJtYWluKzAiLCBzcmMgPSAiaW5zdHJ1bWVudC5jOjciIH0sIHZwaWQg
-PSA4NTIzIH0sIHsgYWRkciA9IDB4NTVDRkE0RjVDMUVFLCBjYWxsX3NpdGUgPSAweDdGMjdDNEIx
-RTBCMyB9CgpCLlIuCkNoYW5nY2hlbmcKPiAKPiAgICBzZWUgdGhpcyAoZnJvbSBidDIgYnV0IGl0
-IGFsc28gYXBwbGllcyB0bwo+ICAgIGJ0MSk6IFsxXWh0dHBzOi8vYmFiZWx0cmFjZS5vcmcvZG9j
-cy92Mi4wL21hbjcvYmFiZWx0cmFjZTItZmlsdGVyLmx0dG5nCj4gICAgLXV0aWxzLmRlYnVnLWlu
-Zm8uNy8jZG9jLWx0dG5nLXByZXJlcQo+ICAgIE5vdGUgdGhhdCB0aGUgUHl0aG9uIGJpbmRpbmdz
-IGZvciBiYWJlbHRyYWNlIGRvbid0IHByb3ZpZGUvZXhwb3NlIHRoaXMKPiAgICBkZWJ1ZyBpbmZv
-Lgo+ICAgIENocmlzdG9waGUKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Cmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
-ZXYK
+LTTng Userspace Tracer 2.11 with sdt enabled can break builds of
+applications that include <sys/sdt.h> themselves. QEMU
+(https://qemu.org/) is one example.
+
+When applications include <sys/sdt.h> themselves before LTTng Userspace
+Tracer header files and the SDT_USE_VARIADIC macro is not defined,
+compilation fails due to the absense of STAP_PROBEV() macro that LTTng
+Userspace Tracer requires.
+
+Define SDT_USE_VARIADIC in the pkg-config file so that all compilation
+units that use LTTng Userspace Tracer are guaranteed to have the macro
+defined even if <sys/sdt.h> is included elsewhere before LTTng Userspace
+Tracer header files.
+
+In other words, define SDT_USE_VARIADIC on the compiler command-line
+instead of in <lttng/tracepoint.h>. This way it will always been defined
+when <sys/sdt.h> is included.
+
+Make sure to define SDT_USE_VARIADIC when <lttng/tracepoint.h> is
+included without it. This happens when applications do not use
+pkg-config.
+
+Fixes: b2f60c7986bb69f81b79b68f1bfe83aafa3278a7 ("Add sdt.h integration")
+Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
+---
+Warning: this patch doesn't work yet. SDT_CFLAGS also needs to be passed
+into LTTng Userspace Tracer's own CFLAGS so that compilation can
+succeed. I don't know the autoconf/automake syntax to do this and wanted
+to see what you think of this solution before investing more time.
+---
+ include/lttng/tracepoint.h | 2 ++
+ configure.ac               | 2 ++
+ lttng-ust.pc.in            | 2 +-
+ 3 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/include/lttng/tracepoint.h b/include/lttng/tracepoint.h
+index 7cfae3e4..6b699373 100644
+--- a/include/lttng/tracepoint.h
++++ b/include/lttng/tracepoint.h
+@@ -35,7 +35,9 @@
+ #include <lttng/ust-compiler.h>
+ 
+ #ifdef LTTNG_UST_HAVE_SDT_INTEGRATION
++#ifndef SDT_USE_VARIADIC
+ #define SDT_USE_VARIADIC
++#endif
+ #include <sys/sdt.h>
+ #define LTTNG_STAP_PROBEV STAP_PROBEV
+ #else
+diff --git a/configure.ac b/configure.ac
+index eb1bb3e6..bb3eeb60 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -427,6 +427,7 @@ AS_IF([test "x$with_sdt" = "xyes"], [
+ 	]])], [
+ 		AC_MSG_RESULT([yes])
+ 		AC_DEFINE([LTTNG_UST_HAVE_SDT_INTEGRATION], [1])
++		SDT_CFLAGS="-DSDT_USE_VARIADIC"
+ 	], [
+ 		AC_MSG_RESULT([no])
+ 		AC_MSG_ERROR([The sdt.h integration was requested but the STAP_PROBEV define cannot be used. Make sure it is installed, and up to date, or use CPPFLAGS=-I/path/ to specify a non-standard path to sys/sdt.h])
+@@ -522,6 +523,7 @@ _AC_DEFINE_AND_SUBST([LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS], [3000])
+ AM_CFLAGS="-Wall"
+ AC_SUBST(AM_CFLAGS)
+ AC_SUBST(JNI_CPPFLAGS)
++AC_SUBST(SDT_CFLAGS)
+ 
+ AC_CONFIG_FILES([
+ 	Makefile
+diff --git a/lttng-ust.pc.in b/lttng-ust.pc.in
+index f9adde87..1b96db06 100644
+--- a/lttng-ust.pc.in
++++ b/lttng-ust.pc.in
+@@ -9,5 +9,5 @@ Version: @PACKAGE_VERSION@
+ Requires:
+ Requires.private: liburcu-bp
+ Libs: -L${libdir} -llttng-ust -ldl
+-Cflags: -I${includedir} 
++Cflags: -I${includedir} @SDT_CFLAGS@
+ 
+-- 
+2.26.2
