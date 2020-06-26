@@ -2,70 +2,68 @@ Return-Path: <SRS0=HL3W=AH=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 912B5C433E0
-	for <lttng-dev@archiver.kernel.org>; Fri, 26 Jun 2020 14:20:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF28BC433E0
+	for <lttng-dev@archiver.kernel.org>; Fri, 26 Jun 2020 14:27:35 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 082392067D
-	for <lttng-dev@archiver.kernel.org>; Fri, 26 Jun 2020 14:20:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 857C12067D
+	for <lttng-dev@archiver.kernel.org>; Fri, 26 Jun 2020 14:27:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="hOF9bdUw"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 082392067D
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="Ld5UpKSj"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 857C12067D
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 49tfDK6QQQz14pJ;
-	Fri, 26 Jun 2020 10:20:17 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 49tfNk1N4Bz1514;
+	Fri, 26 Jun 2020 10:27:34 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1593181218;
-	bh=b9UmeNY9o0g7STnGv34LyCe2fhqh0U4WsIxuvw2H37U=;
-	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1593181654;
+	bh=6aiiGfzI7WO21S7/WylnW1wMB+e+u2fp1znVDX7ozIM=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=hOF9bdUwpVwI+grmcruQb1RUh4KRN/gEL7BH5vrwNqBxWKdJnhKTjuk5X/iZVD5ZP
-	 PvoONU3t470H9QidEEFjcxnb149Sdemi+OAVLHxyK6cwIqe1rJJRedJK3bwLllBWEt
-	 NDViYPcXY4FLfTWgKvVNEjHX2En58Ql9jg6pLZZ+DxgP1M4sN/hOBnJ46BHBkovYhU
-	 quShSnUWX6rfKBRipotWhbUa5D/xJptv+L1Pk3Qu561uSzzERKWL5f4bPaRlyEpBvZ
-	 eJlajixynZWsw/iAyY+zRbHVTlkjD2DN2s9awWU9oRbQQ0P8LvZW9wmSe0Tj0kvg1X
-	 hLYfTVRblgFXg==
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by lists.lttng.org (Postfix) with ESMTPS id 49tfDJ42gCz14rw
- for <lttng-dev@lists.lttng.org>; Fri, 26 Jun 2020 10:20:16 -0400 (EDT)
-Received: by mail-ej1-x632.google.com with SMTP id l12so9513307ejn.10
- for <lttng-dev@lists.lttng.org>; Fri, 26 Jun 2020 07:20:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=OKlS1bt8bkRk8OmQvCi8W1atZIZNYm4b4WY0FAqNlpc=;
- b=qmBuvMVQ45/dFIB+dIxjM0/O5LNTpwq1pojRLzXIIdfseVVGuy78CT4rF6NFFU5pNV
- WuexCpMX6zcATZDHR/c2nczW7NSNPveFuJw9ARYrrnEVWaogOoBPJcWyLBZlHylOmSRe
- j95VPZLJJkJSy/SGfQHwffQnSrPZefVn9aVjmrYV3OKnUYz1jGSAVdcrvAAJk3asuC/c
- sy+8eqN9VpfmTwmOniDrSl6lVqYW3VO9brbduP21TYDwFsMEhQPoRg/12mBy4zDwY6aB
- Jn5JD53KMdCUoJuOzQVrve/MjsXpqdczpEmXWIFp+NRJG1JiIvxrnF228Jb72IWSWgDo
- rd5w==
-X-Gm-Message-State: AOAM530Xx0JZZkOv6y6oxUMfaGwz77y0+SPraMgLFXakhfdnMF3GD1jQ
- uqlLGpAPSiUFpERGFs9PnjrK8QJ8s3jaKuHShhI=
-X-Google-Smtp-Source: ABdhPJwrCo6zLUGVbqilSfrvT2XP6a2D/Zh4AdDimZ9sP4MpTRckadD3BwJEV48ISUQGZANXrt5ot+aYQnw+SR2e2QI=
-X-Received: by 2002:a17:907:a92:: with SMTP id
- by18mr2965065ejc.116.1593181215128; 
- Fri, 26 Jun 2020 07:20:15 -0700 (PDT)
-MIME-Version: 1.0
+	b=Ld5UpKSjx7D0NKS6hPS2fqRGZ4sUBi50N7xCFPSH9XR/msF2Q6Uaz1Us4NnJJ+1Lj
+	 9OEatHRAgswW9+Wcc/NJRuidarHR+gqRt738m5t/6prC+gXtZOznt3w9RfnrPGBWvu
+	 7566gHLnUjhhAAeRPdprtMY3/Gamy+N8zrfhMGczPuFWH0R/ynw93EbKVCgEdWk7JO
+	 cqVxsqqZ8y4CiMsalQwKTv1Im1sFd5RwwgRws34zr/8dQiyvnf3DW3uukd1GpgouHb
+	 2mcPqfn4CwDiFj035PtnoBRL2zBwH57hIkjdbs5kviQwuH4S0SALSbe5El2CLV5x59
+	 jCct4GXwdiwCA==
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+ by lists.lttng.org (Postfix) with ESMTPS id 49tfNh1805z1513
+ for <lttng-dev@lists.lttng.org>; Fri, 26 Jun 2020 10:27:31 -0400 (EDT)
+IronPort-SDR: g6U+GCdsDXrPfVVKtwyZE4k/gBf0GbB4mXZB/0xGYCoxpaXQuEa/SwizgGrqSkCEDCR5gcFh1w
+ DuhYGc0vmZAA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="210413021"
+X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; d="scan'208";a="210413021"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+ by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 26 Jun 2020 07:26:17 -0700
+IronPort-SDR: 5jDDVZxjS6xGQFbmxM/jqZ39LynbLwig2vueoIeQ0zsSSFVh91zzHB4DUp1cagzTkOm4cg0WHm
+ BxnPzvU1Nl7Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,283,1589266800"; d="scan'208";a="280162501"
+Received: from jerryopenix.sh.intel.com (HELO jerryopenix) ([10.239.158.121])
+ by orsmga006.jf.intel.com with ESMTP; 26 Jun 2020 07:26:15 -0700
+Date: Fri, 26 Jun 2020 22:22:27 +0800
+To: Christophe =?utf-8?Q?B=C3=A9dard?= <bedard.christophe@gmail.com>
+Message-ID: <20200626142227.GA12325@jerryopenix>
 References: <20200623143758.GB4160129@jerryopenix>
  <SA0PR15MB38396A864018025F971F2A239E940@SA0PR15MB3839.namprd15.prod.outlook.com>
  <CAAS9doZNif9Cw=kmo0hvKuF_qVBiqX_233JWFr4fTc5A72eLvw@mail.gmail.com>
  <20200624014141.GA4166707@jerryopenix>
-In-Reply-To: <20200624014141.GA4166707@jerryopenix>
-Date: Fri, 26 Jun 2020 10:19:38 -0400
-Message-ID: <CAAS9dob7WzAXX+bqca24ELTbAHkMwQvmgmk_r5ci9FVpO4BQYw@mail.gmail.com>
-To: "Liu, Changcheng" <changcheng.liu@intel.com>
+ <CAAS9dob7WzAXX+bqca24ELTbAHkMwQvmgmk_r5ci9FVpO4BQYw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CAAS9dob7WzAXX+bqca24ELTbAHkMwQvmgmk_r5ci9FVpO4BQYw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Subject: Re: [lttng-dev] get function names with lttng-ust-cyg-profile
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
@@ -78,113 +76,50 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?q?Christophe_B=C3=A9dard_via_lttng-dev?=
- <lttng-dev@lists.lttng.org>
-Reply-To: =?UTF-8?Q?Christophe_B=C3=A9dard?= <bedard.christophe@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Content-Type: multipart/mixed; boundary="===============5347483182144625207=="
+From: "Liu, Changcheng via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: "Liu, Changcheng" <changcheng.liu@intel.com>
+Cc: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-Message-ID: <20200626141938.Mx6oiMncRdEmhqJgzPMwl-1hYmUpv5l39cqiX2-2HGg@z>
+Message-ID: <20200626142227.DDJ7pk1mLJKg0SN73GnXN9BUoXEQlbMTuB0H-J5jQ0I@z>
 
---===============5347483182144625207==
-Content-Type: multipart/alternative; boundary="00000000000063ff0405a8fd6838"
-
---00000000000063ff0405a8fd6838
-Content-Type: text/plain; charset="UTF-8"
-
-Hi,
-
-On Tue, 23 Jun 2020 at 21:45, Liu, Changcheng <changcheng.liu@intel.com>
-wrote:
-
-> Do you know how to print the call site function_name/offset?
-> For example:
->             11     getchar();
->             12
->             13     x = add3(x);
-> Currently, it only shows call_site address instead of function name with
-> offset.
->
-> func_entry: { cpu_id = 2 }, { ip = 0x55CFA4F5C1EE, debug_info = { bin =
-> "instrument+0x11ee", func = "main+0", src = "instrument.c:7" }, vpid = 8523
-> }, { addr = 0x55CFA4F5C1EE, call_site = 0x7F27C4B1E0B3 }
-> func_entry: { cpu_id = 1 }, { ip = 0x55CFA4F5C1A9, debug_info = { bin =
-> "instrument+0x11a9", func = "add3+0", src = "instrument.c:3" }, vpid = 8523
-> }, { addr = 0x55CFA4F5C1A9, call_site = 0x55CFA4F5C237 }
-> func_exit: { cpu_id = 1 }, { ip = 0x55CFA4F5C1A9, debug_info = { bin =
-> "instrument+0x11a9", func = "add3+0", src = "instrument.c:3" }, vpid = 8523
-> }, { addr = 0x55CFA4F5C1A9, call_site = 0x55CFA4F5C237 }
-> func_exit: { cpu_id = 1 }, { ip = 0x55CFA4F5C1EE, debug_info = { bin =
-> "instrument+0x11ee", func = "main+0", src = "instrument.c:7" }, vpid = 8523
-> }, { addr = 0x55CFA4F5C1EE, call_site = 0x7F27C4B1E0B3 }
->
-
- Maybe I'm missing something, but isn't it right here? E.g.
-
-debug_info = { bin = "instrument+0x11ee", func = "main+0", src =
-> "instrument.c:7" }
->
-
-Otherwise, I don't think babeltrace can provide any more information.
-
-
-Christophe
-
---00000000000063ff0405a8fd6838
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi,</div><div><br></div><div class=3D"gmail_quote"><d=
-iv dir=3D"ltr" class=3D"gmail_attr">On Tue, 23 Jun 2020 at 21:45, Liu, Chan=
-gcheng &lt;<a href=3D"mailto:changcheng.liu@intel.com">changcheng.liu@intel=
-.com</a>&gt; wrote:</div><blockquote class=3D"gmail_quote" style=3D"margin:=
-0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-Do you know how to print the call site function_name/offset?<br>
-For example:<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 11=C2=A0 =C2=A0 =C2=A0getchar();<=
-br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 12<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 13=C2=A0 =C2=A0 =C2=A0x =3D add3(=
-x);<br>
-Currently, it only shows call_site address instead of function name with of=
-fset.<br>
-<br>
-func_entry: { cpu_id =3D 2 }, { ip =3D 0x55CFA4F5C1EE, debug_info =3D { bin=
- =3D &quot;instrument+0x11ee&quot;, func =3D &quot;main+0&quot;, src =3D &q=
-uot;instrument.c:7&quot; }, vpid =3D 8523 }, { addr =3D 0x55CFA4F5C1EE, cal=
-l_site =3D 0x7F27C4B1E0B3 }<br>
-func_entry: { cpu_id =3D 1 }, { ip =3D 0x55CFA4F5C1A9, debug_info =3D { bin=
- =3D &quot;instrument+0x11a9&quot;, func =3D &quot;add3+0&quot;, src =3D &q=
-uot;instrument.c:3&quot; }, vpid =3D 8523 }, { addr =3D 0x55CFA4F5C1A9, cal=
-l_site =3D 0x55CFA4F5C237 }<br>
-func_exit: { cpu_id =3D 1 }, { ip =3D 0x55CFA4F5C1A9, debug_info =3D { bin =
-=3D &quot;instrument+0x11a9&quot;, func =3D &quot;add3+0&quot;, src =3D &qu=
-ot;instrument.c:3&quot; }, vpid =3D 8523 }, { addr =3D 0x55CFA4F5C1A9, call=
-_site =3D 0x55CFA4F5C237 }<br>
-func_exit: { cpu_id =3D 1 }, { ip =3D 0x55CFA4F5C1EE, debug_info =3D { bin =
-=3D &quot;instrument+0x11ee&quot;, func =3D &quot;main+0&quot;, src =3D &qu=
-ot;instrument.c:7&quot; }, vpid =3D 8523 }, { addr =3D 0x55CFA4F5C1EE, call=
-_site =3D 0x7F27C4B1E0B3 }<br></blockquote><div><br></div><div>=C2=A0Maybe =
-I&#39;m missing something, but isn&#39;t it right here? E.g.</div><div><br>=
-</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;b=
-order-left:1px solid rgb(204,204,204);padding-left:1ex">debug_info =3D { bi=
-n =3D &quot;instrument+0x11ee&quot;, func =3D &quot;main+0&quot;, src =3D &=
-quot;instrument.c:7&quot; }<br></blockquote><div><br></div><div>Otherwise, =
-I don&#39;t think babeltrace can provide any more information.</div><div><b=
-r></div><div><br></div><div>Christophe</div><div><br></div></div></div>
-
---00000000000063ff0405a8fd6838--
-
---===============5347483182144625207==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5347483182144625207==--
+T24gMTA6MTkgRnJpIDI2IEp1biwgQ2hyaXN0b3BoZSBCw6lkYXJkIHdyb3RlOgo+ICAgIEhpLAo+
+ICAgIE9uIFR1ZSwgMjMgSnVuIDIwMjAgYXQgMjE6NDUsIExpdSwgQ2hhbmdjaGVuZwo+ICAgIDxb
+MV1jaGFuZ2NoZW5nLmxpdUBpbnRlbC5jb20+IHdyb3RlOgo+IAo+ICAgICAgRG8geW91IGtub3cg
+aG93IHRvIHByaW50IHRoZSBjYWxsIHNpdGUgZnVuY3Rpb25fbmFtZS9vZmZzZXQ/Cj4gICAgICBG
+b3IgZXhhbXBsZToKPiAgICAgICAgICAgICAgICAgIDExICAgICBnZXRjaGFyKCk7Cj4gICAgICAg
+ICAgICAgICAgICAxMgo+ICAgICAgICAgICAgICAgICAgMTMgICAgIHggPSBhZGQzKHgpOwo+ICAg
+ICAgQ3VycmVudGx5LCBpdCBvbmx5IHNob3dzIGNhbGxfc2l0ZSBhZGRyZXNzIGluc3RlYWQgb2Yg
+ZnVuY3Rpb24gbmFtZQo+ICAgICAgd2l0aCBvZmZzZXQuCj4gICAgICBmdW5jX2VudHJ5OiB7IGNw
+dV9pZCA9IDIgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUVFLCBkZWJ1Z19pbmZvID0gewo+ICAgICAg
+YmluID0gImluc3RydW1lbnQrMHgxMWVlIiwgZnVuYyA9ICJtYWluKzAiLCBzcmMgPSAiaW5zdHJ1
+bWVudC5jOjciCj4gICAgICB9LCB2cGlkID0gODUyMyB9LCB7IGFkZHIgPSAweDU1Q0ZBNEY1QzFF
+RSwgY2FsbF9zaXRlID0KPiAgICAgIDB4N0YyN0M0QjFFMEIzIH0KPiAgICAgIGZ1bmNfZW50cnk6
+IHsgY3B1X2lkID0gMSB9LCB7IGlwID0gMHg1NUNGQTRGNUMxQTksIGRlYnVnX2luZm8gPSB7Cj4g
+ICAgICBiaW4gPSAiaW5zdHJ1bWVudCsweDExYTkiLCBmdW5jID0gImFkZDMrMCIsIHNyYyA9ICJp
+bnN0cnVtZW50LmM6MyIKPiAgICAgIH0sIHZwaWQgPSA4NTIzIH0sIHsgYWRkciA9IDB4NTVDRkE0
+RjVDMUE5LCBjYWxsX3NpdGUgPQo+ICAgICAgMHg1NUNGQTRGNUMyMzcgfQo+ICAgICAgZnVuY19l
+eGl0OiB7IGNwdV9pZCA9IDEgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUE5LCBkZWJ1Z19pbmZvID0g
+eyBiaW4KPiAgICAgID0gImluc3RydW1lbnQrMHgxMWE5IiwgZnVuYyA9ICJhZGQzKzAiLCBzcmMg
+PSAiaW5zdHJ1bWVudC5jOjMiIH0sCj4gICAgICB2cGlkID0gODUyMyB9LCB7IGFkZHIgPSAweDU1
+Q0ZBNEY1QzFBOSwgY2FsbF9zaXRlID0gMHg1NUNGQTRGNUMyMzcgfQo+ICAgICAgZnVuY19leGl0
+OiB7IGNwdV9pZCA9IDEgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUVFLCBkZWJ1Z19pbmZvID0geyBi
+aW4KPiAgICAgID0gImluc3RydW1lbnQrMHgxMWVlIiwgZnVuYyA9ICJtYWluKzAiLCBzcmMgPSAi
+aW5zdHJ1bWVudC5jOjciIH0sCj4gICAgICB2cGlkID0gODUyMyB9LCB7IGFkZHIgPSAweDU1Q0ZB
+NEY1QzFFRSwgY2FsbF9zaXRlID0gMHg3RjI3QzRCMUUwQjMgfQo+IAo+ICAgICBNYXliZSBJJ20g
+bWlzc2luZyBzb21ldGhpbmcsIGJ1dCBpc24ndCBpdCByaWdodCBoZXJlPyBFLmcuCiAgICAgIEkn
+bSBhbHNvIGN1cmlvdXMgYWJvdXQgdGhlIG91dHB1dCBoZXJlLiAibWFpbiswIiB0aGUgZnVuY3Rp
+b24gbmFtZQogICAgICAibWFpbiIgaXMgcmlnaHQsIGJ1dCB0aGUgb2Zmc2V0ICIrMCIgaXNuJ3Qg
+cmlnaHQuCiAgICAgIEkndmUgcnVuIGl0IGZvciBzZXZlcmFsIHRpbWVzLCBpdCBhbHdheXMgc2hv
+d3MgbGlrZSB0aGUgYWJvdmUKICAgICAgb3V0cHV0LgogICAgICBTbywgdHdvIHF1ZXN0aW9ucyBo
+ZXJlOgogICAgICAxLiBIb3cgdG8gc2hvdyB0aGUgcmlndGggb2Zmc2V0PwogICAgICAyLiBIb3cg
+dG8gc2hvdyBjYWxsX3NpdGUgaW4gImZ1bmMvb2Zmc2V0IiBmb3JtYXQ/Cj4gCj4gICAgICBkZWJ1
+Z19pbmZvID0geyBiaW4gPSAiaW5zdHJ1bWVudCsweDExZWUiLCBmdW5jID0gIm1haW4rMCIsIHNy
+YyA9Cj4gICAgICAiaW5zdHJ1bWVudC5jOjciIH0KPiAKPiAgICBPdGhlcndpc2UsIEkgZG9uJ3Qg
+dGhpbmsgYmFiZWx0cmFjZSBjYW4gcHJvdmlkZSBhbnkgbW9yZSBpbmZvcm1hdGlvbi4KPiAgICBD
+aHJpc3RvcGhlCj4gCj4gUmVmZXJlbmNlcwo+IAo+ICAgIDEuIG1haWx0bzpjaGFuZ2NoZW5nLmxp
+dUBpbnRlbC5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBz
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
