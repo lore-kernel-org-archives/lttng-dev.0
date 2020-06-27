@@ -1,21 +1,23 @@
-From: Michael Jeanson via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: [PATCH] Fix: tracepoint.h: define SDT_USE_VARIADIC
- in pkg-config CFLAGS
-Date: Fri, 26 Jun 2020 17:02:00 -0400 (EDT)
-Message-ID: <1673641132.14590.1593205320791.JavaMail.zimbra@efficios.com>
-References: <20200624160934.205881-1-stefanha@redhat.com>
-Reply-To: Michael Jeanson <mjeanson@efficios.com>
+From: "Liu, Changcheng via lttng-dev" <lttng-dev@lists.lttng.org>
+Subject: Re: get function names with lttng-ust-cyg-profile
+Date: Sat, 27 Jun 2020 10:38:30 +0800
+Message-ID: <20200627023830.GA19765@jerryopenix>
+References: <20200623143758.GB4160129@jerryopenix>
+ <SA0PR15MB38396A864018025F971F2A239E940@SA0PR15MB3839.namprd15.prod.outlook.com>
+ <CAAS9doZNif9Cw=kmo0hvKuF_qVBiqX_233JWFr4fTc5A72eLvw@mail.gmail.com>
+ <20200624014141.GA4166707@jerryopenix>
+ <CAAS9dob7WzAXX+bqca24ELTbAHkMwQvmgmk_r5ci9FVpO4BQYw@mail.gmail.com>
+ <20200626142227.GA12325@jerryopenix>
+Reply-To: "Liu, Changcheng" <changcheng.liu@intel.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49tq7t2PxTz15Hm
- for <lttng-dev@lists.lttng.org>; Fri, 26 Jun 2020 17:02:01 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 5545A2D637D
- for <lttng-dev@lists.lttng.org>; Fri, 26 Jun 2020 17:02:01 -0400 (EDT)
-In-Reply-To: <20200624160934.205881-1-stefanha@redhat.com>
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+ by lists.lttng.org (Postfix) with ESMTPS id 49tyhY1xNGz15D7
+ for <lttng-dev@lists.lttng.org>; Fri, 26 Jun 2020 22:42:21 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <20200626142227.GA12325@jerryopenix>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,54 +27,52 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Stefan Hajnoczi <stefanha@redhat.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Christophe =?utf-8?Q?B=C3=A9dard?= <bedard.christophe@gmail.com>, mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Stefan,
-
-I proposed a patch here[1] that addresses this problem in a generic way by
-duplicating the macro and namespacing it under LTTNG_. Honestly this is more
-of an sdt bug, the STAP_PROBEV should be in it's own include guard outside
-of _SYS_SDT_H or in it's own header file but we have to work with what's there.
-
-Can you have a look at the patch and confirm that it fixes your problem?
-
-Cheers,
-
-Michael
-
-[1] https://review.lttng.org/c/lttng-ust/+/3685 
-
-
------ On 24 Jun, 2020, at 12:09, lttng-dev lttng-dev@lists.lttng.org wrote:
-
-> LTTng Userspace Tracer 2.11 with sdt enabled can break builds of
-> applications that include <sys/sdt.h> themselves. QEMU
-> (https://qemu.org/) is one example.
-> 
-> When applications include <sys/sdt.h> themselves before LTTng Userspace
-> Tracer header files and the SDT_USE_VARIADIC macro is not defined,
-> compilation fails due to the absense of STAP_PROBEV() macro that LTTng
-> Userspace Tracer requires.
-> 
-> Define SDT_USE_VARIADIC in the pkg-config file so that all compilation
-> units that use LTTng Userspace Tracer are guaranteed to have the macro
-> defined even if <sys/sdt.h> is included elsewhere before LTTng Userspace
-> Tracer header files.
-> 
-> In other words, define SDT_USE_VARIADIC on the compiler command-line
-> instead of in <lttng/tracepoint.h>. This way it will always been defined
-> when <sys/sdt.h> is included.
-> 
-> Make sure to define SDT_USE_VARIADIC when <lttng/tracepoint.h> is
-> included without it. This happens when applications do not use
-> pkg-config.
-> 
-> Fixes: b2f60c7986bb69f81b79b68f1bfe83aafa3278a7 ("Add sdt.h integration")
-> Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
-> ---
-> Warning: this patch doesn't work yet. SDT_CFLAGS also needs to be passed
-> into LTTng Userspace Tracer's own CFLAGS so that compilation can
-> succeed. I don't know the autoconf/automake syntax to do this and wanted
-> to see what you think of this solution before investing more time.
+SGkgQ2hyaXN0b3BoZSwKICAgIEkndmUgY2hlY2tlZCBsb3RzIG9mIGV4YW1wbGVzIGFib3V0IGZ1
+bmNfZW50cnkvZXhpdC4gSXQgc2VlbXMgYWxsCiAgICB0aGUgYWRkcmVzcyBhcmUgdGhlIGxpbmtl
+ZCBhZGRyZXNzLiBIb3dldmVyLCBteSByZXN1bHQgc2hvd3MgdGhhdAogICAgdGhleSdyZSB0aGUg
+bG9hZGVkIHJ1bm5pbmcgYWRkcmVzcy4KCiAgICBEbyB5b3UgaGF2ZSBzb21lIHN1Z2dlc3Rpb25z
+IHRvIGNoZWNrIGl0IGZ1cnRoZXI/CgpCLlIuCkNoYW5nY2hlbmcKCk9uIDIyOjIyIEZyaSAyNiBK
+dW4sIExpdSwgQ2hhbmdjaGVuZyB3cm90ZToKPiBPbiAxMDoxOSBGcmkgMjYgSnVuLCBDaHJpc3Rv
+cGhlIELDqWRhcmQgd3JvdGU6Cj4gPiAgICBIaSwKPiA+ICAgIE9uIFR1ZSwgMjMgSnVuIDIwMjAg
+YXQgMjE6NDUsIExpdSwgQ2hhbmdjaGVuZwo+ID4gICAgPFsxXWNoYW5nY2hlbmcubGl1QGludGVs
+LmNvbT4gd3JvdGU6Cj4gPiAKPiA+ICAgICAgRG8geW91IGtub3cgaG93IHRvIHByaW50IHRoZSBj
+YWxsIHNpdGUgZnVuY3Rpb25fbmFtZS9vZmZzZXQ/Cj4gPiAgICAgIEZvciBleGFtcGxlOgo+ID4g
+ICAgICAgICAgICAgICAgICAxMSAgICAgZ2V0Y2hhcigpOwo+ID4gICAgICAgICAgICAgICAgICAx
+Mgo+ID4gICAgICAgICAgICAgICAgICAxMyAgICAgeCA9IGFkZDMoeCk7Cj4gPiAgICAgIEN1cnJl
+bnRseSwgaXQgb25seSBzaG93cyBjYWxsX3NpdGUgYWRkcmVzcyBpbnN0ZWFkIG9mIGZ1bmN0aW9u
+IG5hbWUKPiA+ICAgICAgd2l0aCBvZmZzZXQuCj4gPiAgICAgIGZ1bmNfZW50cnk6IHsgY3B1X2lk
+ID0gMiB9LCB7IGlwID0gMHg1NUNGQTRGNUMxRUUsIGRlYnVnX2luZm8gPSB7Cj4gPiAgICAgIGJp
+biA9ICJpbnN0cnVtZW50KzB4MTFlZSIsIGZ1bmMgPSAibWFpbiswIiwgc3JjID0gImluc3RydW1l
+bnQuYzo3Igo+ID4gICAgICB9LCB2cGlkID0gODUyMyB9LCB7IGFkZHIgPSAweDU1Q0ZBNEY1QzFF
+RSwgY2FsbF9zaXRlID0KPiA+ICAgICAgMHg3RjI3QzRCMUUwQjMgfQo+ID4gICAgICBmdW5jX2Vu
+dHJ5OiB7IGNwdV9pZCA9IDEgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUE5LCBkZWJ1Z19pbmZvID0g
+ewo+ID4gICAgICBiaW4gPSAiaW5zdHJ1bWVudCsweDExYTkiLCBmdW5jID0gImFkZDMrMCIsIHNy
+YyA9ICJpbnN0cnVtZW50LmM6MyIKPiA+ICAgICAgfSwgdnBpZCA9IDg1MjMgfSwgeyBhZGRyID0g
+MHg1NUNGQTRGNUMxQTksIGNhbGxfc2l0ZSA9Cj4gPiAgICAgIDB4NTVDRkE0RjVDMjM3IH0KPiA+
+ICAgICAgZnVuY19leGl0OiB7IGNwdV9pZCA9IDEgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUE5LCBk
+ZWJ1Z19pbmZvID0geyBiaW4KPiA+ICAgICAgPSAiaW5zdHJ1bWVudCsweDExYTkiLCBmdW5jID0g
+ImFkZDMrMCIsIHNyYyA9ICJpbnN0cnVtZW50LmM6MyIgfSwKPiA+ICAgICAgdnBpZCA9IDg1MjMg
+fSwgeyBhZGRyID0gMHg1NUNGQTRGNUMxQTksIGNhbGxfc2l0ZSA9IDB4NTVDRkE0RjVDMjM3IH0K
+PiA+ICAgICAgZnVuY19leGl0OiB7IGNwdV9pZCA9IDEgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUVF
+LCBkZWJ1Z19pbmZvID0geyBiaW4KPiA+ICAgICAgPSAiaW5zdHJ1bWVudCsweDExZWUiLCBmdW5j
+ID0gIm1haW4rMCIsIHNyYyA9ICJpbnN0cnVtZW50LmM6NyIgfSwKPiA+ICAgICAgdnBpZCA9IDg1
+MjMgfSwgeyBhZGRyID0gMHg1NUNGQTRGNUMxRUUsIGNhbGxfc2l0ZSA9IDB4N0YyN0M0QjFFMEIz
+IH0KPiA+IAo+ID4gICAgIE1heWJlIEknbSBtaXNzaW5nIHNvbWV0aGluZywgYnV0IGlzbid0IGl0
+IHJpZ2h0IGhlcmU/IEUuZy4KPiAgICAgICBJJ20gYWxzbyBjdXJpb3VzIGFib3V0IHRoZSBvdXRw
+dXQgaGVyZS4gIm1haW4rMCIgdGhlIGZ1bmN0aW9uIG5hbWUKPiAgICAgICAibWFpbiIgaXMgcmln
+aHQsIGJ1dCB0aGUgb2Zmc2V0ICIrMCIgaXNuJ3QgcmlnaHQuCj4gICAgICAgSSd2ZSBydW4gaXQg
+Zm9yIHNldmVyYWwgdGltZXMsIGl0IGFsd2F5cyBzaG93cyBsaWtlIHRoZSBhYm92ZQo+ICAgICAg
+IG91dHB1dC4KPiAgICAgICBTbywgdHdvIHF1ZXN0aW9ucyBoZXJlOgo+ICAgICAgIDEuIEhvdyB0
+byBzaG93IHRoZSByaWd0aCBvZmZzZXQ/Cj4gICAgICAgMi4gSG93IHRvIHNob3cgY2FsbF9zaXRl
+IGluICJmdW5jL29mZnNldCIgZm9ybWF0Pwo+ID4gCj4gPiAgICAgIGRlYnVnX2luZm8gPSB7IGJp
+biA9ICJpbnN0cnVtZW50KzB4MTFlZSIsIGZ1bmMgPSAibWFpbiswIiwgc3JjID0KPiA+ICAgICAg
+Imluc3RydW1lbnQuYzo3IiB9Cj4gPiAKPiA+ICAgIE90aGVyd2lzZSwgSSBkb24ndCB0aGluayBi
+YWJlbHRyYWNlIGNhbiBwcm92aWRlIGFueSBtb3JlIGluZm9ybWF0aW9uLgo+ID4gICAgQ2hyaXN0
+b3BoZQo+ID4gCj4gPiBSZWZlcmVuY2VzCj4gPiAKPiA+ICAgIDEuIG1haWx0bzpjaGFuZ2NoZW5n
+LmxpdUBpbnRlbC5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
+dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
