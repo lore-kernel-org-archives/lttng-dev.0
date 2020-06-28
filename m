@@ -1,23 +1,16 @@
-From: "Liu, Changcheng via lttng-dev" <lttng-dev@lists.lttng.org>
-Subject: Re: get function names with lttng-ust-cyg-profile
-Date: Sat, 27 Jun 2020 10:38:30 +0800
-Message-ID: <20200627023830.GA19765@jerryopenix>
-References: <20200623143758.GB4160129@jerryopenix>
- <SA0PR15MB38396A864018025F971F2A239E940@SA0PR15MB3839.namprd15.prod.outlook.com>
- <CAAS9doZNif9Cw=kmo0hvKuF_qVBiqX_233JWFr4fTc5A72eLvw@mail.gmail.com>
- <20200624014141.GA4166707@jerryopenix>
- <CAAS9dob7WzAXX+bqca24ELTbAHkMwQvmgmk_r5ci9FVpO4BQYw@mail.gmail.com>
- <20200626142227.GA12325@jerryopenix>
-Reply-To: "Liu, Changcheng" <changcheng.liu@intel.com>
+From: "changcheng.liu--- via lttng-dev" <lttng-dev@lists.lttng.org>
+Subject: babeltrace convert call_site addr to func/offset
+Date: Sun, 28 Jun 2020 12:05:02 +0800
+Message-ID: <20200628040502.GA36830@jerryopenix>
+Reply-To: changcheng.liu@aliyun.com
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
- by lists.lttng.org (Postfix) with ESMTPS id 49tyhY1xNGz15D7
- for <lttng-dev@lists.lttng.org>; Fri, 26 Jun 2020 22:42:21 -0400 (EDT)
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+ by lists.lttng.org (Postfix) with ESMTPS id 49vcbG6tlxz16Gm
+ for <lttng-dev@lists.lttng.org>; Sun, 28 Jun 2020 00:10:02 -0400 (EDT)
 Content-Disposition: inline
-In-Reply-To: <20200626142227.GA12325@jerryopenix>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,52 +20,28 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Christophe =?utf-8?Q?B=C3=A9dard?= <bedard.christophe@gmail.com>, mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: changcheng.liu@aliyun.com
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgQ2hyaXN0b3BoZSwKICAgIEkndmUgY2hlY2tlZCBsb3RzIG9mIGV4YW1wbGVzIGFib3V0IGZ1
-bmNfZW50cnkvZXhpdC4gSXQgc2VlbXMgYWxsCiAgICB0aGUgYWRkcmVzcyBhcmUgdGhlIGxpbmtl
-ZCBhZGRyZXNzLiBIb3dldmVyLCBteSByZXN1bHQgc2hvd3MgdGhhdAogICAgdGhleSdyZSB0aGUg
-bG9hZGVkIHJ1bm5pbmcgYWRkcmVzcy4KCiAgICBEbyB5b3UgaGF2ZSBzb21lIHN1Z2dlc3Rpb25z
-IHRvIGNoZWNrIGl0IGZ1cnRoZXI/CgpCLlIuCkNoYW5nY2hlbmcKCk9uIDIyOjIyIEZyaSAyNiBK
-dW4sIExpdSwgQ2hhbmdjaGVuZyB3cm90ZToKPiBPbiAxMDoxOSBGcmkgMjYgSnVuLCBDaHJpc3Rv
-cGhlIELDqWRhcmQgd3JvdGU6Cj4gPiAgICBIaSwKPiA+ICAgIE9uIFR1ZSwgMjMgSnVuIDIwMjAg
-YXQgMjE6NDUsIExpdSwgQ2hhbmdjaGVuZwo+ID4gICAgPFsxXWNoYW5nY2hlbmcubGl1QGludGVs
-LmNvbT4gd3JvdGU6Cj4gPiAKPiA+ICAgICAgRG8geW91IGtub3cgaG93IHRvIHByaW50IHRoZSBj
-YWxsIHNpdGUgZnVuY3Rpb25fbmFtZS9vZmZzZXQ/Cj4gPiAgICAgIEZvciBleGFtcGxlOgo+ID4g
-ICAgICAgICAgICAgICAgICAxMSAgICAgZ2V0Y2hhcigpOwo+ID4gICAgICAgICAgICAgICAgICAx
-Mgo+ID4gICAgICAgICAgICAgICAgICAxMyAgICAgeCA9IGFkZDMoeCk7Cj4gPiAgICAgIEN1cnJl
-bnRseSwgaXQgb25seSBzaG93cyBjYWxsX3NpdGUgYWRkcmVzcyBpbnN0ZWFkIG9mIGZ1bmN0aW9u
-IG5hbWUKPiA+ICAgICAgd2l0aCBvZmZzZXQuCj4gPiAgICAgIGZ1bmNfZW50cnk6IHsgY3B1X2lk
-ID0gMiB9LCB7IGlwID0gMHg1NUNGQTRGNUMxRUUsIGRlYnVnX2luZm8gPSB7Cj4gPiAgICAgIGJp
-biA9ICJpbnN0cnVtZW50KzB4MTFlZSIsIGZ1bmMgPSAibWFpbiswIiwgc3JjID0gImluc3RydW1l
-bnQuYzo3Igo+ID4gICAgICB9LCB2cGlkID0gODUyMyB9LCB7IGFkZHIgPSAweDU1Q0ZBNEY1QzFF
-RSwgY2FsbF9zaXRlID0KPiA+ICAgICAgMHg3RjI3QzRCMUUwQjMgfQo+ID4gICAgICBmdW5jX2Vu
-dHJ5OiB7IGNwdV9pZCA9IDEgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUE5LCBkZWJ1Z19pbmZvID0g
-ewo+ID4gICAgICBiaW4gPSAiaW5zdHJ1bWVudCsweDExYTkiLCBmdW5jID0gImFkZDMrMCIsIHNy
-YyA9ICJpbnN0cnVtZW50LmM6MyIKPiA+ICAgICAgfSwgdnBpZCA9IDg1MjMgfSwgeyBhZGRyID0g
-MHg1NUNGQTRGNUMxQTksIGNhbGxfc2l0ZSA9Cj4gPiAgICAgIDB4NTVDRkE0RjVDMjM3IH0KPiA+
-ICAgICAgZnVuY19leGl0OiB7IGNwdV9pZCA9IDEgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUE5LCBk
-ZWJ1Z19pbmZvID0geyBiaW4KPiA+ICAgICAgPSAiaW5zdHJ1bWVudCsweDExYTkiLCBmdW5jID0g
-ImFkZDMrMCIsIHNyYyA9ICJpbnN0cnVtZW50LmM6MyIgfSwKPiA+ICAgICAgdnBpZCA9IDg1MjMg
-fSwgeyBhZGRyID0gMHg1NUNGQTRGNUMxQTksIGNhbGxfc2l0ZSA9IDB4NTVDRkE0RjVDMjM3IH0K
-PiA+ICAgICAgZnVuY19leGl0OiB7IGNwdV9pZCA9IDEgfSwgeyBpcCA9IDB4NTVDRkE0RjVDMUVF
-LCBkZWJ1Z19pbmZvID0geyBiaW4KPiA+ICAgICAgPSAiaW5zdHJ1bWVudCsweDExZWUiLCBmdW5j
-ID0gIm1haW4rMCIsIHNyYyA9ICJpbnN0cnVtZW50LmM6NyIgfSwKPiA+ICAgICAgdnBpZCA9IDg1
-MjMgfSwgeyBhZGRyID0gMHg1NUNGQTRGNUMxRUUsIGNhbGxfc2l0ZSA9IDB4N0YyN0M0QjFFMEIz
-IH0KPiA+IAo+ID4gICAgIE1heWJlIEknbSBtaXNzaW5nIHNvbWV0aGluZywgYnV0IGlzbid0IGl0
-IHJpZ2h0IGhlcmU/IEUuZy4KPiAgICAgICBJJ20gYWxzbyBjdXJpb3VzIGFib3V0IHRoZSBvdXRw
-dXQgaGVyZS4gIm1haW4rMCIgdGhlIGZ1bmN0aW9uIG5hbWUKPiAgICAgICAibWFpbiIgaXMgcmln
-aHQsIGJ1dCB0aGUgb2Zmc2V0ICIrMCIgaXNuJ3QgcmlnaHQuCj4gICAgICAgSSd2ZSBydW4gaXQg
-Zm9yIHNldmVyYWwgdGltZXMsIGl0IGFsd2F5cyBzaG93cyBsaWtlIHRoZSBhYm92ZQo+ICAgICAg
-IG91dHB1dC4KPiAgICAgICBTbywgdHdvIHF1ZXN0aW9ucyBoZXJlOgo+ICAgICAgIDEuIEhvdyB0
-byBzaG93IHRoZSByaWd0aCBvZmZzZXQ/Cj4gICAgICAgMi4gSG93IHRvIHNob3cgY2FsbF9zaXRl
-IGluICJmdW5jL29mZnNldCIgZm9ybWF0Pwo+ID4gCj4gPiAgICAgIGRlYnVnX2luZm8gPSB7IGJp
-biA9ICJpbnN0cnVtZW50KzB4MTFlZSIsIGZ1bmMgPSAibWFpbiswIiwgc3JjID0KPiA+ICAgICAg
-Imluc3RydW1lbnQuYzo3IiB9Cj4gPiAKPiA+ICAgIE90aGVyd2lzZSwgSSBkb24ndCB0aGluayBi
-YWJlbHRyYWNlIGNhbiBwcm92aWRlIGFueSBtb3JlIGluZm9ybWF0aW9uLgo+ID4gICAgQ2hyaXN0
-b3BoZQo+ID4gCj4gPiBSZWZlcmVuY2VzCj4gPiAKPiA+ICAgIDEuIG1haWx0bzpjaGFuZ2NoZW5n
-LmxpdUBpbnRlbC5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hi all,
+   I checked lttng-ust-cry-profile source code:
+   https://github.com/lttng/lttng-ust/blob/master/liblttng-ust-cyg-profile/lttng-ust-cyg-profile.c
+
+   It traced the runtime virtual-address(VA) of the
+   1) called function address
+   2) caller address
+
+   The value of VA is different from the linked address.
+   Due to ASLR, the VA could be different when running the program every
+   time.
+   The babeltrace could covert the "ip" in the traced context into
+   func/offset. However, there's no context to trace the call_site and
+   babeltrace also support convert the "call_site" into func/offset.
+
+   Does lttng community has plan to supply the function to support
+   "call_site" context and make babeltrace could convert the "call_site"
+   into func/offset format?
+
+B.R.
+Changcheng
