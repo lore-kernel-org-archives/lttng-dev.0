@@ -4,59 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92AF9C433E0
-	for <lttng-dev@archiver.kernel.org>; Wed,  1 Jul 2020 03:56:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CFCBC433E2
+	for <lttng-dev@archiver.kernel.org>; Wed,  1 Jul 2020 12:07:34 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1B5DA2073E
-	for <lttng-dev@archiver.kernel.org>; Wed,  1 Jul 2020 03:56:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id A9F4820780
+	for <lttng-dev@archiver.kernel.org>; Wed,  1 Jul 2020 12:07:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="afiKtFi8"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1B5DA2073E
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="iZCRx033"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A9F4820780
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 49xS8h2hRLz18VC;
-	Tue, 30 Jun 2020 23:56:52 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 49xg2p297yz18w0;
+	Wed,  1 Jul 2020 08:07:30 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1593575813;
-	bh=6N15lml9e/BblQqPvms4icwszSRlsrIVThBaSW6Dfi8=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=afiKtFi8nobZ9w20fJVyzLdxIDoFHQlsTquBoUVgZV7vsub007Rv0Vaa2Phc8JyFu
-	 SzJyz5BfS2IUupIiy7rayQ08yocbt/eJewYf5rLVHOJoIA/rgMqD3qqDJdJuqDF+Ox
-	 uf8MbrEAplvrrTS8AKXG4uTU/bb5oF3Xhanh+yscxfpDruEe+kE7PiWK65Ar0TSt1B
-	 FtAEXyF7PuRgJNv9ROXRW9ozEpf6kd+1sKixtAHCNrvb2zA1Uz8F0sn6jFNfltr1yK
-	 XlK0zJ7X9OwNm7JJ5PXVZvH+HUJmE3lHNRzMxwIld5TG/rAOngZ+B/B4kawyLJDsm6
-	 HfM6sfqyva/5g==
-Received: from out30-40.freemail.mail.aliyun.com
- (out30-40.freemail.mail.aliyun.com [115.124.30.40])
- by lists.lttng.org (Postfix) with ESMTPS id 49xS8c6ssrz18V9
- for <lttng-dev@lists.lttng.org>; Tue, 30 Jun 2020 23:56:48 -0400 (EDT)
-X-Alimail-AntiSpam: AC=CONTINUE; BC=0.07786194|-1; CH=green;
- DM=|CONTINUE|false|;
- DS=CONTINUE|ham_news_journal|0.00680619-0.00199007-0.991204;
- FP=0|0|0|0|0|-1|-1|-1; HT=e01e04394; MF=zhenyu.ren@aliyun.com; NM=1; PH=DW;
- RN=2; RT=2; SR=0; TI=W4_5899425_DEFAULT_0AC264D5_1593575798488_o7001c70t; 
-Received: from WS-web
- (zhenyu.ren@aliyun.com[W4_5899425_DEFAULT_0AC264D5_1593575798488_o7001c70t])
- by e01e07461.eu6 at Wed, 01 Jul 2020 11:56:38 +0800
-Date: Wed, 01 Jul 2020 11:56:38 +0800
-To: "lttng-dev" <lttng-dev@lists.lttng.org>,
- "mathieu.desnoyers" <mathieu.desnoyers@efficios.com>
-Message-ID: <65af8a29-4fd7-454c-a060-8f06cb7bc931.zhenyu.ren@aliyun.com>
-X-Mailer: [Alimail-Mailagent][W4_5899425][DEFAULT][Chrome]
-MIME-Version: 1.0
-References: <5efd3314-04ed-4868-a0c9-408434d330f4.zhenyu.ren@aliyun.com>,
+	s=default; t=1593605250;
+	bh=2yMDFxbM5mJXhjV6ZZglSXINH551Nit/aUdGYo498Fg=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=iZCRx033hP0BJ1Vf+g9u1KIk/xclcOv2O0QFxv/UwlYlSYs5b122O4/CQqWUjfUqc
+	 +PuBg/uQ5SxkmUGSCnUylfbA433H+8Q5ahjGcQWADtzIQRtnCtyaopuFP3AvnfVvrh
+	 2+5z3OxgYRyg2ZwHeNAf4h+61of44/7zYlm1ivQ+iliwajrtIYb57TNvn88xHg5Sji
+	 HRdr/UZlP17UOH/uQyh03ne/R/mS7YHOqbphW+gkqoPzMKmEkSqx0SJnM/uY5Fj+BD
+	 HaS9Jd9fIV6wezzDpNQ4nt7wACLcRyX5R/dWavnDZ0xltyNRszsMKvBrQ3FEya6Vn0
+	 gwmABEBSyLHhw==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 49xg2l4KSXz18bK
+ for <lttng-dev@lists.lttng.org>; Wed,  1 Jul 2020 08:07:27 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 231722CD433
+ for <lttng-dev@lists.lttng.org>; Wed,  1 Jul 2020 08:07:21 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id RPnkVjyea688; Wed,  1 Jul 2020 08:07:20 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id B3AFF2CD6A4;
+ Wed,  1 Jul 2020 08:07:20 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com B3AFF2CD6A4
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id 57NF7BOXFC2H; Wed,  1 Jul 2020 08:07:20 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id A1AD32CD178;
+ Wed,  1 Jul 2020 08:07:20 -0400 (EDT)
+Date: Wed, 1 Jul 2020 08:07:20 -0400 (EDT)
+To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Message-ID: <1653271969.18771.1593605240536.JavaMail.zimbra@efficios.com>
+In-Reply-To: <65af8a29-4fd7-454c-a060-8f06cb7bc931.zhenyu.ren@aliyun.com>
+References: <5efd3314-04ed-4868-a0c9-408434d330f4.zhenyu.ren@aliyun.com>
  <49dab706-ab7e-4156-9163-b8d9105b173d.zhenyu.ren@aliyun.com>
-x-aliyun-mail-creator: W4_5899425_DEFAULT_M3LTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTRfNCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzgzLjAuNDEwMy4xMTYgU2FmYXJpLzUzNy4zNg==vN
-In-Reply-To: <49dab706-ab7e-4156-9163-b8d9105b173d.zhenyu.ren@aliyun.com>
-Subject: [lttng-dev] =?utf-8?b?5Zue5aSN77yaIOWbnuWkje+8miBzb21lIHRyYWNl?=
+ <65af8a29-4fd7-454c-a060-8f06cb7bc931.zhenyu.ren@aliyun.com>
+MIME-Version: 1.0
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3945 (ZimbraWebClient - FF77 (Linux)/8.8.15_GA_3928)
+Thread-Topic: =?utf-8?B?5Zue5aSN77yaW2x0dG5nLWRldl0g5Zue5aSN77ya?= some
+ tracepoints not exist in metadata?
+Thread-Index: sjYQzRo0R2AaKx62pMbnYpllMcun4A==
+Subject: Re: [lttng-dev] 
+ =?utf-8?b?5Zue5aSN77yaIOWbnuWkje+8miBzb21lIHRyYWNl?=
  =?utf-8?q?points_not_exist_in_metadata=3F?=
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
@@ -69,139 +82,185 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "zhenyu.ren via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Content-Type: multipart/mixed; boundary="===============9149019747127550182=="
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: multipart/mixed; boundary="===============2207948523515276267=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-Message-ID: <20200701035638.UxZIPL2SrqokVfq2XqPUFeZSFAeUy74AjywWAC1IayE@z>
+Message-ID: <20200701120720.k9LcyqShVlCOVNI_pMS3DkQLsdB5Qwt5dpp1kt-zcr0@z>
 
---===============9149019747127550182==
-Content-Type: multipart/alternative;
-  boundary="----=ALIBOUNDARY_85099_7ff9335fe940_5efc0976_6fdf6"
+--===============2207948523515276267==
+Content-Type: multipart/alternative; 
+	boundary="=_9aee5e4e-09e3-4c71-b579-6a3595c149fb"
 
-------=ALIBOUNDARY_85099_7ff9335fe940_5efc0976_6fdf6
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+--=_9aee5e4e-09e3-4c71-b579-6a3595c149fb
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-QWgsIEkgaGF2ZSB0byBzYXkgdGhhdCBJIHVzZSB0aGUgd2lsZGNhcmQgaW4gdHJhY2Vwb2ludCBu
-YW1lIHdoZW4gZW5hYmxlLWV2ZW50IHRvIHRoZSBjaGFubmVsLCBpLmUuIC4vbHR0bmcgZW5hYmxl
-LWV2ZW50IC11IHN5c3RlbV9ldmVudCogLWMgY2hhbm5lbDAgLXMgbWlzY19kYXRhLiBPZiBjb3Vy
-c2UsIHRoZXJlIGFyZSB0aGUgb3RoZXIgdHJhY2Vwb2ludHMgd2l0aCB3aWxkY2FyZCBzdWNjZWVk
-IGluIHJlZ2lzdHJpbmcuCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQrlj5Hku7bkurrvvJp6aGVueXUucmVuIHZpYSBsdHRu
-Zy1kZXYgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+CuWPkemAgeaXtumXtO+8mjIwMjDlubQ3
-5pyIMeaXpSjmmJ/mnJ/kuIkpIDExOjQ0CuaUtuS7tuS6uu+8mmx0dG5nLWRldiA8bHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZz47IG1hdGhpZXUuZGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0Bl
-ZmZpY2lvcy5jb20+CuS4u+OAgOmimO+8mltsdHRuZy1kZXZdIOWbnuWkje+8miBzb21lIHRyYWNl
-cG9pbnRzIG5vdCBleGlzdCBpbiBtZXRhZGF0YT8KCkknZCBsaWtlIHRvIGFkZCB0aGF0IGJvdGgg
-Imx0dG5nIGxpc3QgLXUiIGFuZCAibHR0bmcgbGlzdCAkc2Vzc2lvbl9uYW1lIiBjYW4gZ2V0IHRo
-b3NlIHRyYWNlcG9pbnRzJyBuYW1lcy4uLiAKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCuWPkeS7tuS6uu+8mnpoZW55dS5y
-ZW4gdmlhIGx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4K5Y+R6YCB5pe26Ze0
-77yaMjAyMOW5tDfmnIgx5pelKOaYn+acn+S4iSkgMTE6MDUK5pS25Lu25Lq677yabHR0bmctZGV2
-IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPjsgbWF0aGlldS5kZXNub3llcnMgPG1hdGhpZXUu
-ZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4K5Li744CA6aKY77yaW2x0dG5nLWRldl0gc29tZSB0cmFj
-ZXBvaW50cyBub3QgZXhpc3QgaW4gbWV0YWRhdGE/CgpIaSwKICAgSSBmaW5kIHNvbWV0aW1lcyB0
-aGVyZSBhcmUgc29tZSB0cmFjZXBvaW50cyBub3QgZXhpc3QgaW4gbWV0YWRhdGEgZmlsZShidXQg
-dGhleSBhcmUgaW4gdGhlIGxpc3Qgb2YgbHR0bmcgbGlzdCAtdSkgYW5kIHRoZSBlbmQgcmVzdWx0
-IGlzICB0aGV5IGNhbiBOT1QgYmUgbG9nZ2VkLiBJIGNhbiBub3QgYWx3YXlzIHJlcHJvZHVjZSBp
-dC4gSXQgYm90aGVyZWQgbWUgZm9yIDIgZGF5cy4gCiAgIFRoZSBsdHRuZyB2ZXJzaW9uIGlzIDIu
-NywgSSBrbm93IGl0IGlzIG5vdCB0aGUgbGF0ZXN0IHZlcnNpb24gYnV0IHRoZXJlIGFyZSBzb21l
-IHJlYXNvbnMgSSBjYW4ndCB1cGRhdGUgaXQuIFNvLCBpcyB0aGlzIGEga25vd24gYnVnPyAgSWYg
-eWVzLCBJdCB3aWxsIGJlIHZlcnkgYXBwcmVjaWF0ZWQgaWYgeW91IGNhbiBnaXZlIG1lIGFueSBh
-ZHZpY2UgYWJvdXQgdGhlIGJ1ZyBpbmZvKEkgY2FuIGNoZXJyeSBwaWNrIHRoZSBjb3JyZXNwb25k
-IGZpeCkuIE90aGVyd2lzZSwgbWF5YmUgSSBoYXZlIHRvIGdpdmUgdXAgbXkgZmF2b3JpYXRlIEx0
-dG5nLi4uLgoKVGhhbmsgeW91IGluIGFkdmFuY2UhCnpoZW55dS5yZW4=
-------=ALIBOUNDARY_85099_7ff9335fe940_5efc0976_6fdf6
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Hi,=20
 
-PGRpdiBjbGFzcz0iX19hbGl5dW5fZW1haWxfYm9keV9ibG9jayI+PGRpdiAgc3R5bGU9ImNsZWFy
-OmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNp
-bVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij5BaCwgSSBoYXZlIHRvIHNheSB0
-aGF0IEkgdXNlIHRoZSB3aWxkY2FyZCBpbiB0cmFjZXBvaW50IG5hbWUgd2hlbiBlbmFibGUtZXZl
-bnQgdG8gdGhlIGNoYW5uZWwsIGkuZS4gLi9sdHRuZyBlbmFibGUtZXZlbnQgLXUmbmJzcDtzeXN0
-ZW1fZXZlbnQqJm5ic3A7LWMmbmJzcDtjaGFubmVsMCZuYnNwOy1zJm5ic3A7bWlzY19kYXRhLiBP
-ZiBjb3Vyc2UsIHRoZXJlIGFyZSB0aGUgb3RoZXIgdHJhY2Vwb2ludHMgd2l0aCB3aWxkY2FyZCBz
-dWNjZWVkIGluIHJlZ2lzdHJpbmcuPC9zcGFuPjwvZGl2PjxibG9ja3F1b3RlICBzdHlsZT0ibWFy
-Z2luLXJpZ2h0OjA7bWFyZ2luLXRvcDowO21hcmdpbi1ib3R0b206MDsiPjxkaXYgIHN0eWxlPSJj
-bGVhcjpib3RoOyI+PHNwYW4gIHN0eWxlPSJmb250LWZhbWlseTpUYWhvbWEsQXJpYWwsU1RIZWl0
-aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAwMDAwOyI+LS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tPC9zcGFu
-PjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIHN0eWxlPSJmb250LWZhbWls
-eTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAw
-MDAwOyI+5Y+R5Lu25Lq677yaemhlbnl1LnJlbiB2aWEgbHR0bmctZGV2ICZsdDtsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnJmd0Ozwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsi
-PjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2Zv
-bnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPuWPkemAgeaXtumXtO+8mjIwMjDlubQ35pyI
-MeaXpSjmmJ/mnJ/kuIkpIDExOjQ0PC9zcGFuPjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3Ro
-OyI+PHNwYW4gIHN0eWxlPSJmb250LWZhbWlseTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47
-Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAwMDAwOyI+5pS25Lu25Lq677yabHR0bmctZGV2ICZs
-dDtsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnJmd0OzsgbWF0aGlldS5kZXNub3llcnMgJmx0O21h
-dGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbSZndDs8L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9
-ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhl
-aXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij7kuLvjgIDpopjvvJpb
-bHR0bmctZGV2XSDlm57lpI3vvJogc29tZSB0cmFjZXBvaW50cyBub3QgZXhpc3QgaW4gbWV0YWRh
-dGE/PC9zcGFuPjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIHN0eWxlPSJm
-b250LWZhbWlseTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtj
-b2xvcjojMDAwMDAwOyI+PGJyIC8+PC9zcGFuPjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3Ro
-OyI+PGZvbnQgIGNvbG9yPSIjMDAwMDAwIiBmYWNlPSJUYWhvbWEsIEFyaWFsLCBTVEhlaXRpLCBT
-aW1TdW4iPkknZCBsaWtlIHRvIGFkZCB0aGF0Jm5ic3A7PC9mb250PjxzcGFuICBjbGFzcz0iIF9f
-YWxpeXVuX25vZGVfaGFzX2NvbG9yIiBzdHlsZT0iY29sb3I6IzAwMDAwMDtmb250LWZhbWlseTpU
-YWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Ij5ib3RoICZxdW90O2x0dG5nIGxpc3QgLXUmcXVv
-dDsgYW5kICZxdW90O2x0dG5nIGxpc3QgJHNlc3Npb25fbmFtZSZxdW90OyBjYW4gZ2V0IHRob3Nl
-IHRyYWNlcG9pbnRzJyBuYW1lcy4uLiZuYnNwOzwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xl
-YXI6Ym90aDsiPjxzcGFuICBjbGFzcz0iIF9fYWxpeXVuX25vZGVfaGFzX2NvbG9yIiBzdHlsZT0i
-Zm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7
-Y29sb3I6IzAwMDAwMDsiPi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLTwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6
-Ym90aDsiPjxzcGFuICBjbGFzcz0iIF9fYWxpeXVuX25vZGVfaGFzX2NvbG9yIiBzdHlsZT0iZm9u
-dC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29s
-b3I6IzAwMDAwMDsiPuWPkeS7tuS6uu+8mnpoZW55dS5yZW4gdmlhIGx0dG5nLWRldiAmbHQ7bHR0
-bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs8L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFy
-OmJvdGg7Ij48c3BhbiAgY2xhc3M9IiBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciIgc3R5bGU9ImZv
-bnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2Nv
-bG9yOiMwMDAwMDA7Ij7lj5HpgIHml7bpl7TvvJoyMDIw5bm0N+aciDHml6Uo5pif5pyf5LiJKSAx
-MTowNTwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBjbGFzcz0i
-IF9fYWxpeXVuX25vZGVfaGFzX2NvbG9yIiBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFs
-LFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPuaUtuS7tuS6
-uu+8mmx0dG5nLWRldiAmbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs7IG1hdGhpZXUu
-ZGVzbm95ZXJzICZsdDttYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20mZ3Q7PC9zcGFuPjwv
-ZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIGNsYXNzPSIgX19hbGl5dW5fbm9k
-ZV9oYXNfY29sb3IiIHN0eWxlPSJmb250LWZhbWlseTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1T
-dW47Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAwMDAwOyI+5Li744CA6aKY77yaW2x0dG5nLWRl
-dl0gc29tZSB0cmFjZXBvaW50cyBub3QgZXhpc3QgaW4gbWV0YWRhdGE/PC9zcGFuPjwvZGl2Pjxk
-aXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIGNsYXNzPSIgX19hbGl5dW5fbm9kZV9oYXNf
-Y29sb3IiIHN0eWxlPSJmb250LWZhbWlseTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9u
-dC1zaXplOjE0LjBweDtjb2xvcjojMDAwMDAwOyI+PGJyIC8+PC9zcGFuPjwvZGl2PjxkaXYgIHN0
-eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIGNsYXNzPSIgX19hbGl5dW5fbm9kZV9oYXNfY29sb3Ig
-X19hbGl5dW5fbm9kZV9oYXNfY29sb3IiIHN0eWxlPSJmb250LWZhbWlseTpUYWhvbWEsQXJpYWws
-U1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAwMDAwOyI+SGksPC9zcGFu
-PjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIGNsYXNzPSIgX19hbGl5dW5f
-bm9kZV9oYXNfY29sb3IgX19hbGl5dW5fbm9kZV9oYXNfY29sb3IiIHN0eWxlPSJmb250LWZhbWls
-eTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAw
-MDAwOyI+Jm5ic3A7ICZuYnNwO0kgZmluZCBzb21ldGltZXMgdGhlcmUgYXJlIHNvbWUgdHJhY2Vw
-b2ludHMgbm90IGV4aXN0IGluIG1ldGFkYXRhIGZpbGUoYnV0IHRoZXkgYXJlIGluIHRoZSBsaXN0
-IG9mIGx0dG5nIGxpc3QgLXUpIGFuZCB0aGUgZW5kIHJlc3VsdCBpcyZuYnNwOyB0aGV5IGNhbiBO
-T1QgYmUgbG9nZ2VkLiBJIGNhbiBub3QgYWx3YXlzIHJlcHJvZHVjZSBpdC4gSXQgYm90aGVyZWQg
-bWUgZm9yIDIgZGF5cy4mbmJzcDs8L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7
-Ij48c3BhbiAgY2xhc3M9IiBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciBfX2FsaXl1bl9ub2RlX2hh
-c19jb2xvciIgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtm
-b250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij48L3NwYW4+Jm5ic3A7ICZuYnNwO1RoZSBs
-dHRuZyB2ZXJzaW9uIGlzIDIuNywgSSBrbm93IGl0IGlzIG5vdCB0aGUgbGF0ZXN0IHZlcnNpb24g
-YnV0IHRoZXJlIGFyZSBzb21lIHJlYXNvbnMgSSBjYW4ndCB1cGRhdGUgaXQuIFNvLCBpcyB0aGlz
-IGEga25vd24gYnVnPyZuYnNwOyBJZiB5ZXMsIEl0IHdpbGwgYmUgdmVyeSBhcHByZWNpYXRlZCBp
-ZiB5b3UgY2FuIGdpdmUgbWUgYW55IGFkdmljZSBhYm91dCB0aGUgYnVnIGluZm8oSSBjYW4gY2hl
-cnJ5IHBpY2sgdGhlIGNvcnJlc3BvbmQgZml4KS4gT3RoZXJ3aXNlLCBtYXliZSBJIGhhdmUgdG8g
-Z2l2ZSB1cCBteSBmYXZvcmlhdGUgTHR0bmcuLi4uPC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJv
-dGg7Ij48YnIgPjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+VGhhbmsgeW91IGluIGFk
-dmFuY2UhPC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij56aGVueXUucmVuPC9kaXY+PC9i
-bG9ja3F1b3RlPjwvZGl2Pg==
-------=ALIBOUNDARY_85099_7ff9335fe940_5efc0976_6fdf6--
+Make sure you use single quotes in your shell around wildcards, else the=20
+shell will try to expand them to files in the current directory, e.g., you =
+need to do:=20
 
+lttng enable-event -u 'system_event*' -c channel0 -s misc_data=20
 
---===============9149019747127550182==
+This could very well explain why sometimes your events don't get enabled: i=
+f the=20
+wildcard matches files in the current directory.=20
+
+Thanks,=20
+
+Mathieu=20
+
+----- On Jun 30, 2020, at 11:56 PM, zhenyu.ren <zhenyu.ren@aliyun.com> wrot=
+e:=20
+
+> Ah, I have to say that I use the wildcard in tracepoint name when enable-=
+event
+> to the channel, i.e. ./lttng enable-event -u system_event* -c channel0 -s
+> misc_data. Of course, there are the other tracepoints with wildcard succe=
+ed in
+> registring.
+
+>> ------------------------------------------------------------------
+>> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren via lttng-dev <lttng-dev@=
+lists.lttng.org>
+>> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2020=E5=B9=B47=E6=9C=881=E6=
+=97=A5(=E6=98=9F=E6=9C=9F=E4=B8=89) 11:44
+>> =E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9Alttng-dev <lttng-dev@lists.lttng.org=
+>; mathieu.desnoyers
+>> <mathieu.desnoyers@efficios.com>
+>> =E4=B8=BB =E9=A2=98=EF=BC=9A[lttng-dev] =E5=9B=9E=E5=A4=8D=EF=BC=9A some=
+ tracepoints not exist in metadata?
+
+>> I'd like to add that both "lttng list -u" and "lttng list $session_name"=
+ can get
+>> those tracepoints' names...
+>> ------------------------------------------------------------------
+>> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren via lttng-dev <lttng-dev@=
+lists.lttng.org>
+>> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2020=E5=B9=B47=E6=9C=881=E6=
+=97=A5(=E6=98=9F=E6=9C=9F=E4=B8=89) 11:05
+>> =E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9Alttng-dev <lttng-dev@lists.lttng.org=
+>; mathieu.desnoyers
+>> <mathieu.desnoyers@efficios.com>
+>> =E4=B8=BB =E9=A2=98=EF=BC=9A[lttng-dev] some tracepoints not exist in me=
+tadata?
+
+>> Hi,
+>> I find sometimes there are some tracepoints not exist in metadata file(b=
+ut they
+>> are in the list of lttng list -u) and the end result is they can NOT be =
+logged.
+>> I can not always reproduce it. It bothered me for 2 days.
+>> The lttng version is 2.7, I know it is not the latest version but there =
+are some
+>> reasons I can't update it. So, is this a known bug? If yes, It will be v=
+ery
+>> appreciated if you can give me any advice about the bug info(I can cherr=
+y pick
+>> the correspond fix). Otherwise, maybe I have to give up my favoriate Ltt=
+ng....
+
+>> Thank you in advance!
+>> zhenyu.ren
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+--=_9aee5e4e-09e3-4c71-b579-6a3595c149fb
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div>Hi,<br></div><div><br data-mce-bogus=3D"1">=
+</div><div>Make sure you use single quotes in your shell around wildcards, =
+else the<br data-mce-bogus=3D"1"></div><div>shell will try to expand them t=
+o files in the current directory, e.g., you need to do:<br data-mce-bogus=
+=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>lttng enable-event -u=
+ 'system_event*' -c channel0 -s misc_data<br data-mce-bogus=3D"1"></div><di=
+v><br data-mce-bogus=3D"1"></div><div>This could very well explain why some=
+times your events don't get enabled: if the<br data-mce-bogus=3D"1"></div><=
+div>wildcard matches files in the current directory.<br data-mce-bogus=3D"1=
+"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=
+=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu</div><div><br=
+ data-mce-bogus=3D"1"></div><div><span id=3D"zwchr" data-marker=3D"__DIVIDE=
+R__">----- On Jun 30, 2020, at 11:56 PM, zhenyu.ren &lt;zhenyu.ren@aliyun.c=
+om&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockqu=
+ote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px=
+;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-=
+family:Helvetica,Arial,sans-serif;font-size:12pt;"><div class=3D"__aliyun_e=
+mail_body_block"><div><span style=3D"font-family:'tahoma' , 'arial' , 'sthe=
+iti' , 'simsun';font-size:14px;color:#000000">Ah, I have to say that I use =
+the wildcard in tracepoint name when enable-event to the channel, i.e. ./lt=
+tng enable-event -u&nbsp;system_event*&nbsp;-c&nbsp;channel0&nbsp;-s&nbsp;m=
+isc_data. Of course, there are the other tracepoints with wildcard succeed =
+in registring.</span></div><blockquote style=3D"margin-right:0;margin-top:0=
+;margin-bottom:0"><div><span style=3D"font-family:'tahoma' , 'arial' , 'sth=
+eiti' , 'simsun';font-size:14px;color:#000000">----------------------------=
+--------------------------------------</span></div><div><span style=3D"font=
+-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000=
+000">=E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren via lttng-dev &lt;lttng=
+-dev@lists.lttng.org&gt;</span></div><div><span style=3D"font-family:'tahom=
+a' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">=E5=8F=91=
+=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2020=E5=B9=B47=E6=9C=881=E6=97=A5(=E6=
+=98=9F=E6=9C=9F=E4=B8=89) 11:44</span></div><div><span style=3D"font-family=
+:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">=
+=E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9Alttng-dev &lt;lttng-dev@lists.lttng.org=
+&gt;; mathieu.desnoyers &lt;mathieu.desnoyers@efficios.com&gt;</span></div>=
+<div><span style=3D"font-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';f=
+ont-size:14px;color:#000000">=E4=B8=BB=E3=80=80=E9=A2=98=EF=BC=9A[lttng-dev=
+] =E5=9B=9E=E5=A4=8D=EF=BC=9A some tracepoints not exist in metadata?</span=
+></div><div><span style=3D"font-family:'tahoma' , 'arial' , 'stheiti' , 'si=
+msun';font-size:14px;color:#000000"><br></span></div><div><font face=3D"Tah=
+oma, Arial, STHeiti, SimSun" color=3D"#000000">I'd like to add that&nbsp;</=
+font><span class=3D" __aliyun_node_has_color" style=3D"color:#000000;font-f=
+amily:'tahoma' , 'arial' , 'stheiti' , 'simsun'">both "lttng list -u" and "=
+lttng list $session_name" can get those tracepoints' names...&nbsp;</span><=
+/div><div><span class=3D" __aliyun_node_has_color" style=3D"font-family:'ta=
+homa' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">------=
+------------------------------------------------------------</span></div><d=
+iv><span class=3D" __aliyun_node_has_color" style=3D"font-family:'tahoma' ,=
+ 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">=E5=8F=91=E4=
+=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren via lttng-dev &lt;lttng-dev@lists.lttng.=
+org&gt;</span></div><div><span class=3D" __aliyun_node_has_color" style=3D"=
+font-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:=
+#000000">=E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2020=E5=B9=B47=E6=9C=
+=881=E6=97=A5(=E6=98=9F=E6=9C=9F=E4=B8=89) 11:05</span></div><div><span cla=
+ss=3D" __aliyun_node_has_color" style=3D"font-family:'tahoma' , 'arial' , '=
+stheiti' , 'simsun';font-size:14px;color:#000000">=E6=94=B6=E4=BB=B6=E4=BA=
+=BA=EF=BC=9Alttng-dev &lt;lttng-dev@lists.lttng.org&gt;; mathieu.desnoyers =
+&lt;mathieu.desnoyers@efficios.com&gt;</span></div><div><span class=3D" __a=
+liyun_node_has_color" style=3D"font-family:'tahoma' , 'arial' , 'stheiti' ,=
+ 'simsun';font-size:14px;color:#000000">=E4=B8=BB=E3=80=80=E9=A2=98=EF=BC=
+=9A[lttng-dev] some tracepoints not exist in metadata?</span></div><div><sp=
+an class=3D" __aliyun_node_has_color" style=3D"font-family:'tahoma' , 'aria=
+l' , 'stheiti' , 'simsun';font-size:14px;color:#000000"><br></span></div><d=
+iv><span class=3D" __aliyun_node_has_color __aliyun_node_has_color" style=
+=3D"font-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;co=
+lor:#000000">Hi,</span></div><div><span class=3D" __aliyun_node_has_color _=
+_aliyun_node_has_color" style=3D"font-family:'tahoma' , 'arial' , 'stheiti'=
+ , 'simsun';font-size:14px;color:#000000">&nbsp; &nbsp;I find sometimes the=
+re are some tracepoints not exist in metadata file(but they are in the list=
+ of lttng list -u) and the end result is&nbsp; they can NOT be logged. I ca=
+n not always reproduce it. It bothered me for 2 days.&nbsp;</span></div><di=
+v><span class=3D" __aliyun_node_has_color __aliyun_node_has_color" style=3D=
+"font-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color=
+:#000000"></span>&nbsp; &nbsp;The lttng version is 2.7, I know it is not th=
+e latest version but there are some reasons I can't update it. So, is this =
+a known bug?&nbsp; If yes, It will be very appreciated if you can give me a=
+ny advice about the bug info(I can cherry pick the correspond fix). Otherwi=
+se, maybe I have to give up my favoriate Lttng....</div><br><div>Thank you =
+in advance!</div><div>zhenyu.ren</div></blockquote></div><br></blockquote><=
+/div><div><br></div><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mat=
+hieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></bod=
+y></html>
+--=_9aee5e4e-09e3-4c71-b579-6a3595c149fb--
+
+--===============2207948523515276267==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -212,5 +271,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============9149019747127550182==--
-
+--===============2207948523515276267==--
