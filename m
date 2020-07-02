@@ -2,62 +2,71 @@ Return-Path: <SRS0=99QA=AN=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B45C433E0
-	for <lttng-dev@archiver.kernel.org>; Thu,  2 Jul 2020 00:39:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAFDCC433DF
+	for <lttng-dev@archiver.kernel.org>; Thu,  2 Jul 2020 12:45:48 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 361CB20748
-	for <lttng-dev@archiver.kernel.org>; Thu,  2 Jul 2020 00:39:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 59C5A20885
+	for <lttng-dev@archiver.kernel.org>; Thu,  2 Jul 2020 12:45:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="y191sjGE"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 361CB20748
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="Wb5xpkIB"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 59C5A20885
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 49xzk62kVdz18rh;
-	Wed,  1 Jul 2020 20:39:10 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 49yHrT6kmDz18q8;
+	Thu,  2 Jul 2020 08:45:45 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1593650351;
-	bh=y/HkR+4dCWkW497uJisZUuWR/xVFP2wyLGyC/c63jBs=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=y191sjGEcJltt53Udv51pT1bA8XIgFy8TWGrVuzbE+oSnfOzKdZGjCCOyzPbBQRcF
-	 Rd15CmRMVOFLU7JmOWEQh2cMncU/zxwPXuQjcX627h/NT6TUlm9ce/lKmM3XLV65jF
-	 H8/r5/3DYYBLYSNSzGLq7U9JyU55t9UFltqiGjXflz/TwnuhTtpzn6N9XnwwYKqka5
-	 xxOEyWRSE7boBWI4RVYFjt+xiBDP1UUW/vlRqrlldMD1jMuJfDL2dM+RJTc6NzNClX
-	 fMH2X1MNMmTTKLGfucWdsq+PMZkRgGgvr03YWZyfRfwcHwlby8guozKGRasPu289mZ
-	 nlAG0BXTR6gdw==
-Received: from out30-40.freemail.mail.aliyun.com
- (out30-40.freemail.mail.aliyun.com [115.124.30.40])
- by lists.lttng.org (Postfix) with ESMTPS id 49xzk36Q8zz18v5
- for <lttng-dev@lists.lttng.org>; Wed,  1 Jul 2020 20:39:07 -0400 (EDT)
-X-Alimail-AntiSpam: AC=CONTINUE; BC=0.07432203|-1; CH=green;
- DM=|CONTINUE|false|; DS=CONTINUE|ham_alarm|0.00771795-0.00304967-0.989232;
- FP=0|0|0|0|0|-1|-1|-1; HT=e01e07488; MF=zhenyu.ren@aliyun.com; NM=1; PH=DW;
- RN=2; RT=2; SR=0; TI=W4_5922738_DEFAULT_0AC264C7_1593650337672_o7001c12a; 
-Received: from WS-web
- (zhenyu.ren@aliyun.com[W4_5922738_DEFAULT_0AC264C7_1593650337672_o7001c12a])
- by e01f04428.eu6 at Thu, 02 Jul 2020 08:38:57 +0800
-Date: Thu, 02 Jul 2020 08:38:57 +0800
-To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
-Message-ID: <fb98f7b9-073e-4e02-86aa-03a0c4952c24.zhenyu.ren@aliyun.com>
-X-Mailer: [Alimail-Mailagent][W4_5922738][DEFAULT][Chrome]
-MIME-Version: 1.0
+	s=default; t=1593693946;
+	bh=s5sL2UYHMRFgtvW9kMObBjH3Pvt3jhu5UrDHdVhBwKc=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=Wb5xpkIB9bPKzLqs5az03CaIXs+VUGDyX2554pu+NfylZz3nr7NJTmulIHlkNl+5L
+	 9Ja8apU0NekQqEs79H65es9v8WhtxO4EKD2hoBr1KLLun9N7y2C2ixNDxcXVXrS04K
+	 sOfrBSjlQ9xesAkEpVhFUtAroKRbEU6ebRZFa2niPhYtoYniJaZOLPfNabg2M7g+8W
+	 n64Q1FMPPlngAXSpNcD2g+Q5jD+hqmmwtDsEpmt7MQGQtpGtD7SJmxRUGyWdBMut7z
+	 H7tmgrMp0HuczR2hB5L2QLXYwjexJ3Ana+2mb5jXWBbvDR81ICmqq40mW0NIFLpPia
+	 I0RSAsuIczSag==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 49yHrS1Ks0z18gK
+ for <lttng-dev@lists.lttng.org>; Thu,  2 Jul 2020 08:45:44 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C8CDE2D69A2;
+ Thu,  2 Jul 2020 08:45:43 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id a8fPtO5j0H9X; Thu,  2 Jul 2020 08:45:43 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 83CE62D6854;
+ Thu,  2 Jul 2020 08:45:43 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 83CE62D6854
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id YZbuJcEdCDR2; Thu,  2 Jul 2020 08:45:43 -0400 (EDT)
+Received: from joraj-alpa (192-222-181-218.qc.cable.ebox.net [192.222.181.218])
+ by mail.efficios.com (Postfix) with ESMTPSA id 23F832D6A1B;
+ Thu,  2 Jul 2020 08:45:43 -0400 (EDT)
+Date: Thu, 2 Jul 2020 08:45:41 -0400
+To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Message-ID: <20200702124541.GF4207@joraj-alpa>
 References: <5efd3314-04ed-4868-a0c9-408434d330f4.zhenyu.ren@aliyun.com>
  <49dab706-ab7e-4156-9163-b8d9105b173d.zhenyu.ren@aliyun.com>
- <65af8a29-4fd7-454c-a060-8f06cb7bc931.zhenyu.ren@aliyun.com>,
+ <65af8a29-4fd7-454c-a060-8f06cb7bc931.zhenyu.ren@aliyun.com>
  <1653271969.18771.1593605240536.JavaMail.zimbra@efficios.com>
-x-aliyun-mail-creator: W4_5922738_DEFAULT_M3LTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTRfNCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzgzLjAuNDEwMy4xMTYgU2FmYXJpLzUzNy4zNg==vN
-In-Reply-To: <1653271969.18771.1593605240536.JavaMail.zimbra@efficios.com>
-Subject: [lttng-dev] =?utf-8?b?5Zue5aSN77ya5Zue5aSN77yaIOWbnuWkje+8miBz?=
+ <fb98f7b9-073e-4e02-86aa-03a0c4952c24.zhenyu.ren@aliyun.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <fb98f7b9-073e-4e02-86aa-03a0c4952c24.zhenyu.ren@aliyun.com>
+Subject: Re: [lttng-dev] 
+ =?utf-8?b?5Zue5aSN77ya5Zue5aSN77yaIOWbnuWkje+8miBz?=
  =?utf-8?q?ome_tracepoints_not_exist_in_metadata=3F?=
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
@@ -70,231 +79,51 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "zhenyu.ren via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Content-Type: multipart/mixed; boundary="===============8635357321173737623=="
+From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-Message-ID: <20200702003857.kLe_7oSTv5U8EiLqUGfXthltA_qGzVgYjpYWe7xvY1g@z>
+Message-ID: <20200702124541.sGMYUwMyeL8PfOWOSLIX6X9kIP1o8ZTezPzZm0yYXVY@z>
 
---===============8635357321173737623==
-Content-Type: multipart/alternative;
-  boundary="----=ALIBOUNDARY_30223_7fa9413c1940_5efd2ca1_78701"
+On Thu, Jul 02, 2020 at 08:38:57AM +0800, zhenyu.ren via lttng-dev wrote:
+> Thanks a lot. I will try single quotes but it may take hours get the result.
+> Yesterday, I enabled the verbose option ,and found the following message "UST
+> app reply event failed. Application died (in add_event_ust_registry() at
+> ust-app.c:5405)" and "UST app notify socket unregister 34 (in
+> ust_app_notify_sock_unregister() at ust-app.c:5562)". In fact ,the socket that
+> Lttng-sessiond send reply to my app return an error with EPIPE. It seems that
+> the pipe breaked.So do you have any hint for that?
 
-------=ALIBOUNDARY_30223_7fa9413c1940_5efd2ca1_78701
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+From lttng master:
+    ret = ustctl_reply_register_event(sock, event_id, ret_code);
+    if (ret < 0) {
+    	if (ret != -EPIPE && ret != -LTTNG_UST_ERR_EXITING) {
+    		ERR("UST app reply event failed with ret %d", ret);
+    	} else {
+    		DBG3("UST app reply event failed. Application died");
+    	}
+    	/*
+    	 * No need to wipe the create event since the application socket will
+    	 * get close on error hence cleaning up everything by itself.
+    	 */
+    	goto error;
+    }
 
-VGhhbmtzIGEgbG90LiBJIHdpbGwgdHJ5IHNpbmdsZSBxdW90ZXMgYnV0IGl0IG1heSB0YWtlIGhv
-dXJzIGdldCB0aGUgcmVzdWx0LiBZZXN0ZXJkYXksIEkgZW5hYmxlZCB0aGUgdmVyYm9zZSBvcHRp
-b24gLGFuZCBmb3VuZCB0aGUgZm9sbG93aW5nIG1lc3NhZ2UgIlVTVCBhcHAgcmVwbHkgZXZlbnQg
-ZmFpbGVkLiBBcHBsaWNhdGlvbiBkaWVkIChpbiBhZGRfZXZlbnRfdXN0X3JlZ2lzdHJ5KCkgYXQg
-dXN0LWFwcC5jOjU0MDUpIiBhbmQgIlVTVCBhcHAgbm90aWZ5IHNvY2tldCB1bnJlZ2lzdGVyIDM0
-IChpbiB1c3RfYXBwX25vdGlmeV9zb2NrX3VucmVnaXN0ZXIoKSBhdCB1c3QtYXBwLmM6NTU2Miki
-LiBJbiBmYWN0ICx0aGUgc29ja2V0IHRoYXQgTHR0bmctc2Vzc2lvbmQgc2VuZCByZXBseSB0byBt
-eSBhcHAgcmV0dXJuIGFuIGVycm9yIHdpdGggRVBJUEUuIEl0IHNlZW1zIHRoYXQgdGhlIHBpcGUg
-YnJlYWtlZC5TbyBkbyB5b3UgaGF2ZSBhbnkgaGludCBmb3IgdGhhdD8KClRoYW5rIHlvdSAgCi0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLQrlj5Hku7bkurrvvJpNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNA
-ZWZmaWNpb3MuY29tPgrlj5HpgIHml7bpl7TvvJoyMDIw5bm0N+aciDHml6Uo5pif5pyf5LiJKSAy
-MDowNwrmlLbku7bkurrvvJp6aGVueXUucmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+CuaKhOOA
-gOmAge+8mmx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4K5Li744CA6aKY77ya
-UmU6IOWbnuWkje+8mltsdHRuZy1kZXZdIOWbnuWkje+8miBzb21lIHRyYWNlcG9pbnRzIG5vdCBl
-eGlzdCBpbiBtZXRhZGF0YT8KCkhpLAoKTWFrZSBzdXJlIHlvdSB1c2Ugc2luZ2xlIHF1b3RlcyBp
-biB5b3VyIHNoZWxsIGFyb3VuZCB3aWxkY2FyZHMsIGVsc2UgdGhlCnNoZWxsIHdpbGwgdHJ5IHRv
-IGV4cGFuZCB0aGVtIHRvIGZpbGVzIGluIHRoZSBjdXJyZW50IGRpcmVjdG9yeSwgZS5nLiwgeW91
-IG5lZWQgdG8gZG86CgpsdHRuZyBlbmFibGUtZXZlbnQgLXUgJ3N5c3RlbV9ldmVudConIC1jIGNo
-YW5uZWwwIC1zIG1pc2NfZGF0YQoKVGhpcyBjb3VsZCB2ZXJ5IHdlbGwgZXhwbGFpbiB3aHkgc29t
-ZXRpbWVzIHlvdXIgZXZlbnRzIGRvbid0IGdldCBlbmFibGVkOiBpZiB0aGUKd2lsZGNhcmQgbWF0
-Y2hlcyBmaWxlcyBpbiB0aGUgY3VycmVudCBkaXJlY3RvcnkuCgpUaGFua3MsCgpNYXRoaWV1Cgot
-LS0tLSBPbiBKdW4gMzAsIDIwMjAsIGF0IDExOjU2IFBNLCB6aGVueXUucmVuIDx6aGVueXUucmVu
-QGFsaXl1bi5jb20+IHdyb3RlOgoKQWgsIEkgaGF2ZSB0byBzYXkgdGhhdCBJIHVzZSB0aGUgd2ls
-ZGNhcmQgaW4gdHJhY2Vwb2ludCBuYW1lIHdoZW4gZW5hYmxlLWV2ZW50IHRvIHRoZSBjaGFubmVs
-LCBpLmUuIC4vbHR0bmcgZW5hYmxlLWV2ZW50IC11IHN5c3RlbV9ldmVudCogLWMgY2hhbm5lbDAg
-LXMgbWlzY19kYXRhLiBPZiBjb3Vyc2UsIHRoZXJlIGFyZSB0aGUgb3RoZXIgdHJhY2Vwb2ludHMg
-d2l0aCB3aWxkY2FyZCBzdWNjZWVkIGluIHJlZ2lzdHJpbmcuCi0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQrlj5Hku7bkurrv
-vJp6aGVueXUucmVuIHZpYSBsdHRuZy1kZXYgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+CuWP
-kemAgeaXtumXtO+8mjIwMjDlubQ35pyIMeaXpSjmmJ/mnJ/kuIkpIDExOjQ0CuaUtuS7tuS6uu+8
-mmx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz47IG1hdGhpZXUuZGVzbm95ZXJz
-IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CuS4u+OAgOmimO+8mltsdHRuZy1kZXZd
-IOWbnuWkje+8miBzb21lIHRyYWNlcG9pbnRzIG5vdCBleGlzdCBpbiBtZXRhZGF0YT8KCkknZCBs
-aWtlIHRvIGFkZCB0aGF0IGJvdGggImx0dG5nIGxpc3QgLXUiIGFuZCAibHR0bmcgbGlzdCAkc2Vz
-c2lvbl9uYW1lIiBjYW4gZ2V0IHRob3NlIHRyYWNlcG9pbnRzJyBuYW1lcy4uLiAKLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-CuWPkeS7tuS6uu+8mnpoZW55dS5yZW4gdmlhIGx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZz4K5Y+R6YCB5pe26Ze077yaMjAyMOW5tDfmnIgx5pelKOaYn+acn+S4iSkgMTE6MDUK
-5pS25Lu25Lq677yabHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPjsgbWF0aGll
-dS5kZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4K5Li744CA6aKY77ya
-W2x0dG5nLWRldl0gc29tZSB0cmFjZXBvaW50cyBub3QgZXhpc3QgaW4gbWV0YWRhdGE/CgpIaSwK
-ICAgSSBmaW5kIHNvbWV0aW1lcyB0aGVyZSBhcmUgc29tZSB0cmFjZXBvaW50cyBub3QgZXhpc3Qg
-aW4gbWV0YWRhdGEgZmlsZShidXQgdGhleSBhcmUgaW4gdGhlIGxpc3Qgb2YgbHR0bmcgbGlzdCAt
-dSkgYW5kIHRoZSBlbmQgcmVzdWx0IGlzICB0aGV5IGNhbiBOT1QgYmUgbG9nZ2VkLiBJIGNhbiBu
-b3QgYWx3YXlzIHJlcHJvZHVjZSBpdC4gSXQgYm90aGVyZWQgbWUgZm9yIDIgZGF5cy4gCiAgIFRo
-ZSBsdHRuZyB2ZXJzaW9uIGlzIDIuNywgSSBrbm93IGl0IGlzIG5vdCB0aGUgbGF0ZXN0IHZlcnNp
-b24gYnV0IHRoZXJlIGFyZSBzb21lIHJlYXNvbnMgSSBjYW4ndCB1cGRhdGUgaXQuIFNvLCBpcyB0
-aGlzIGEga25vd24gYnVnPyAgSWYgeWVzLCBJdCB3aWxsIGJlIHZlcnkgYXBwcmVjaWF0ZWQgaWYg
-eW91IGNhbiBnaXZlIG1lIGFueSBhZHZpY2UgYWJvdXQgdGhlIGJ1ZyBpbmZvKEkgY2FuIGNoZXJy
-eSBwaWNrIHRoZSBjb3JyZXNwb25kIGZpeCkuIE90aGVyd2lzZSwgbWF5YmUgSSBoYXZlIHRvIGdp
-dmUgdXAgbXkgZmF2b3JpYXRlIEx0dG5nLi4uLgpUaGFuayB5b3UgaW4gYWR2YW5jZSEKemhlbnl1
-LnJlbgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
-Y2lvcy5jb20=
-------=ALIBOUNDARY_30223_7fa9413c1940_5efd2ca1_78701
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+EPIPE ifor this socket is considered as an expected scenario.
 
-PGRpdiBjbGFzcz0iX19hbGl5dW5fZW1haWxfYm9keV9ibG9jayI+PGRpdiAgc3R5bGU9ImNsZWFy
-OmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNp
-bVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij5UaGFua3MgYSBsb3QuIEkgd2ls
-bCB0cnkgc2luZ2xlIHF1b3RlcyBidXQgaXQgbWF5IHRha2UgaG91cnMgZ2V0IHRoZSByZXN1bHQu
-IFllc3RlcmRheSwgSSBlbmFibGVkIHRoZSB2ZXJib3NlIG9wdGlvbiAsYW5kIGZvdW5kIHRoZSBm
-b2xsb3dpbmcgbWVzc2FnZSAiVVNUJm5ic3A7YXBwJm5ic3A7cmVwbHkmbmJzcDtldmVudCZuYnNw
-O2ZhaWxlZC4mbmJzcDtBcHBsaWNhdGlvbiZuYnNwO2RpZWQmbmJzcDsoaW4mbmJzcDthZGRfZXZl
-bnRfdXN0X3JlZ2lzdHJ5KCkmbmJzcDthdCZuYnNwO3VzdC1hcHAuYzo1NDA1KSIgYW5kICJVU1Qm
-bmJzcDthcHAmbmJzcDtub3RpZnkmbmJzcDtzb2NrZXQmbmJzcDt1bnJlZ2lzdGVyJm5ic3A7MzQm
-bmJzcDsoaW4mbmJzcDt1c3RfYXBwX25vdGlmeV9zb2NrX3VucmVnaXN0ZXIoKSZuYnNwO2F0Jm5i
-c3A7dXN0LWFwcC5jOjU1NjIpIi4gSW4gZmFjdCAsdGhlIHNvY2tldCB0aGF0IEx0dG5nLXNlc3Np
-b25kIHNlbmQgcmVwbHkgdG8gbXkgYXBwIHJldHVybiBhbiBlcnJvciB3aXRoIEVQSVBFLiBJdCBz
-ZWVtcyB0aGF0IHRoZSBwaXBlIGJyZWFrZWQuU28gZG8geW91IGhhdmUgYW55IGhpbnQgZm9yIHRo
-YXQ/PC9zcGFuPjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIHN0eWxlPSJm
-b250LWZhbWlseTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtj
-b2xvcjojMDAwMDAwOyI+PGJyID48L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7
-Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtm
-b250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij5UaGFuayB5b3UmbmJzcDsmbmJzcDs8L3Nw
-YW4+PC9kaXY+PGJsb2NrcXVvdGUgIHN0eWxlPSJtYXJnaW4tcmlnaHQ6MDttYXJnaW4tdG9wOjA7
-bWFyZ2luLWJvdHRvbTowOyI+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9
-ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4
-O2NvbG9yOiMwMDAwMDA7Ij4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS08L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFy
-OmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNp
-bVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij7lj5Hku7bkurrvvJpNYXRoaWV1
-IERlc25veWVycyAmbHQ7bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tJmd0Ozwvc3Bhbj48
-L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6
-VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAw
-MDsiPuWPkemAgeaXtumXtO+8mjIwMjDlubQ35pyIMeaXpSjmmJ/mnJ/kuIkpIDIwOjA3PC9zcGFu
-PjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIHN0eWxlPSJmb250LWZhbWls
-eTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAw
-MDAwOyI+5pS25Lu25Lq677yaemhlbnl1LnJlbiAmbHQ7emhlbnl1LnJlbkBhbGl5dW4uY29tJmd0
-Ozwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9u
-dC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29s
-b3I6IzAwMDAwMDsiPuaKhOOAgOmAge+8mmx0dG5nLWRldiAmbHQ7bHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZyZndDs8L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAg
-c3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6
-MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij7kuLvjgIDpopjvvJpSZTog5Zue5aSN77yaW2x0dG5nLWRl
-dl0g5Zue5aSN77yaIHNvbWUgdHJhY2Vwb2ludHMgbm90IGV4aXN0IGluIG1ldGFkYXRhPzwvc3Bh
-bj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1p
-bHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAw
-MDAwMDsiPjxiciAvPjwvc3Bhbj48L2Rpdj48ZGl2ICBjbGFzcz0iIF9fYWxpeXVuX25vZGVfaGFz
-X2NvbG9yIiBzdHlsZT0iZm9udC1mYW1pbHk6YXJpYWwsaGVsdmV0aWNhLHNhbnMtc2VyaWY7Zm9u
-dC1zaXplOjEyLjBwdDtjb2xvcjojMDAwMDAwOyI+PGRpdiA+SGksPGJyID48L2Rpdj48ZGl2ID48
-YnIgPjwvZGl2PjxkaXYgPk1ha2Ugc3VyZSB5b3UgdXNlIHNpbmdsZSBxdW90ZXMgaW4geW91ciBz
-aGVsbCBhcm91bmQgd2lsZGNhcmRzLCBlbHNlIHRoZTxiciA+PC9kaXY+PGRpdiA+c2hlbGwgd2ls
-bCB0cnkgdG8gZXhwYW5kIHRoZW0gdG8gZmlsZXMgaW4gdGhlIGN1cnJlbnQgZGlyZWN0b3J5LCBl
-LmcuLCB5b3UgbmVlZCB0byBkbzo8YnIgPjwvZGl2PjxkaXYgPjxiciA+PC9kaXY+PGRpdiA+bHR0
-bmcgZW5hYmxlLWV2ZW50IC11ICdzeXN0ZW1fZXZlbnQqJyAtYyBjaGFubmVsMCAtcyBtaXNjX2Rh
-dGE8YnIgPjwvZGl2PjxkaXYgPjxiciA+PC9kaXY+PGRpdiA+VGhpcyBjb3VsZCB2ZXJ5IHdlbGwg
-ZXhwbGFpbiB3aHkgc29tZXRpbWVzIHlvdXIgZXZlbnRzIGRvbid0IGdldCBlbmFibGVkOiBpZiB0
-aGU8YnIgPjwvZGl2PjxkaXYgPndpbGRjYXJkIG1hdGNoZXMgZmlsZXMgaW4gdGhlIGN1cnJlbnQg
-ZGlyZWN0b3J5LjxiciA+PC9kaXY+PGRpdiA+PGJyID48L2Rpdj48ZGl2ID5UaGFua3MsPGJyID48
-L2Rpdj48ZGl2ID48YnIgPjwvZGl2PjxkaXYgPk1hdGhpZXU8L2Rpdj48ZGl2ID48YnIgPjwvZGl2
-PjxkaXYgPjxzcGFuICBpZD0iendjaHIiPi0tLS0tIE9uIEp1biAzMCwgMjAyMCwgYXQgMTE6NTYg
-UE0sIHpoZW55dS5yZW4gJmx0O3poZW55dS5yZW5AYWxpeXVuLmNvbSZndDsgd3JvdGU6PGJyID48
-L3NwYW4+PC9kaXY+PGRpdiA+PGRpdiA+PHNwYW4gIGNsYXNzPSIgX19hbGl5dW5fbm9kZV9oYXNf
-Y29sb3IiIHN0eWxlPSJmb250LWZhbWlseTp0YWhvbWEsYXJpYWwsc3RoZWl0aSxzaW1zdW47Zm9u
-dC1zaXplOjE0LjBweDtjb2xvcjojMDAwMDAwOyI+QWgsIEkgaGF2ZSB0byBzYXkgdGhhdCBJIHVz
-ZSB0aGUgd2lsZGNhcmQgaW4gdHJhY2Vwb2ludCBuYW1lIHdoZW4gZW5hYmxlLWV2ZW50IHRvIHRo
-ZSBjaGFubmVsLCBpLmUuIC4vbHR0bmcgZW5hYmxlLWV2ZW50IC11Jm5ic3A7c3lzdGVtX2V2ZW50
-KiZuYnNwOy1jJm5ic3A7Y2hhbm5lbDAmbmJzcDstcyZuYnNwO21pc2NfZGF0YS4gT2YgY291cnNl
-LCB0aGVyZSBhcmUgdGhlIG90aGVyIHRyYWNlcG9pbnRzIHdpdGggd2lsZGNhcmQgc3VjY2VlZCBp
-biByZWdpc3RyaW5nLjwvc3Bhbj48L2Rpdj48ZGl2ID48c3BhbiAgY2xhc3M9IiBfX2FsaXl1bl9u
-b2RlX2hhc19jb2xvciIgc3R5bGU9ImZvbnQtZmFtaWx5OnRhaG9tYSxhcmlhbCxzdGhlaXRpLHNp
-bXN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij4tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS08L3NwYW4+PC9k
-aXY+PGRpdiA+PHNwYW4gIGNsYXNzPSIgX19hbGl5dW5fbm9kZV9oYXNfY29sb3IiIHN0eWxlPSJm
-b250LWZhbWlseTp0YWhvbWEsYXJpYWwsc3RoZWl0aSxzaW1zdW47Zm9udC1zaXplOjE0LjBweDtj
-b2xvcjojMDAwMDAwOyI+5Y+R5Lu25Lq677yaemhlbnl1LnJlbiB2aWEgbHR0bmctZGV2ICZsdDts
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnJmd0Ozwvc3Bhbj48L2Rpdj48ZGl2ID48c3BhbiAgY2xh
-c3M9IiBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciIgc3R5bGU9ImZvbnQtZmFtaWx5OnRhaG9tYSxh
-cmlhbCxzdGhlaXRpLHNpbXN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij7lj5Hp
-gIHml7bpl7TvvJoyMDIw5bm0N+aciDHml6Uo5pif5pyf5LiJKSAxMTo0NDwvc3Bhbj48L2Rpdj48
-ZGl2ID48c3BhbiAgY2xhc3M9IiBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciIgc3R5bGU9ImZvbnQt
-ZmFtaWx5OnRhaG9tYSxhcmlhbCxzdGhlaXRpLHNpbXN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9y
-OiMwMDAwMDA7Ij7mlLbku7bkurrvvJpsdHRuZy1kZXYgJmx0O2x0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcmZ3Q7OyBtYXRoaWV1LmRlc25veWVycyAmbHQ7bWF0aGlldS5kZXNub3llcnNAZWZmaWNp
-b3MuY29tJmd0Ozwvc3Bhbj48L2Rpdj48ZGl2ID48c3BhbiAgY2xhc3M9IiBfX2FsaXl1bl9ub2Rl
-X2hhc19jb2xvciIgc3R5bGU9ImZvbnQtZmFtaWx5OnRhaG9tYSxhcmlhbCxzdGhlaXRpLHNpbXN1
-bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij7kuLvjgIDpopjvvJpbbHR0bmctZGV2
-XSDlm57lpI3vvJogc29tZSB0cmFjZXBvaW50cyBub3QgZXhpc3QgaW4gbWV0YWRhdGE/PC9zcGFu
-PjwvZGl2PjxkaXYgPjxzcGFuICBjbGFzcz0iIF9fYWxpeXVuX25vZGVfaGFzX2NvbG9yIiBzdHls
-ZT0iZm9udC1mYW1pbHk6dGFob21hLGFyaWFsLHN0aGVpdGksc2ltc3VuO2ZvbnQtc2l6ZToxNC4w
-cHg7Y29sb3I6IzAwMDAwMDsiPjxiciA+PC9zcGFuPjwvZGl2PjxkaXYgPjxmb250ICBjb2xvcj0i
-IzAwMDAwMCIgZmFjZT0iVGFob21hLCBBcmlhbCwgU1RIZWl0aSwgU2ltU3VuIj5JJ2QgbGlrZSB0
-byBhZGQgdGhhdCZuYnNwOzwvZm9udD48c3BhbiAgY2xhc3M9IiBfX2FsaXl1bl9ub2RlX2hhc19j
-b2xvciBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciIgc3R5bGU9ImNvbG9yOiMwMDAwMDA7Zm9udC1m
-YW1pbHk6dGFob21hLGFyaWFsLHN0aGVpdGksc2ltc3VuOyI+Ym90aCAmcXVvdDtsdHRuZyBsaXN0
-IC11JnF1b3Q7IGFuZCAmcXVvdDtsdHRuZyBsaXN0ICRzZXNzaW9uX25hbWUmcXVvdDsgY2FuIGdl
-dCB0aG9zZSB0cmFjZXBvaW50cycgbmFtZXMuLi4mbmJzcDs8L3NwYW4+PC9kaXY+PGRpdiA+PHNw
-YW4gIGNsYXNzPSIgX19hbGl5dW5fbm9kZV9oYXNfY29sb3IgX19hbGl5dW5fbm9kZV9oYXNfY29s
-b3IiIHN0eWxlPSJmb250LWZhbWlseTp0YWhvbWEsYXJpYWwsc3RoZWl0aSxzaW1zdW47Zm9udC1z
-aXplOjE0LjBweDtjb2xvcjojMDAwMDAwOyI+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tPC9zcGFuPjwvZGl2PjxkaXYgPjxz
-cGFuICBjbGFzcz0iIF9fYWxpeXVuX25vZGVfaGFzX2NvbG9yIF9fYWxpeXVuX25vZGVfaGFzX2Nv
-bG9yIiBzdHlsZT0iZm9udC1mYW1pbHk6dGFob21hLGFyaWFsLHN0aGVpdGksc2ltc3VuO2ZvbnQt
-c2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPuWPkeS7tuS6uu+8mnpoZW55dS5yZW4gdmlhIGx0
-dG5nLWRldiAmbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs8L3NwYW4+PC9kaXY+PGRp
-diA+PHNwYW4gIGNsYXNzPSIgX19hbGl5dW5fbm9kZV9oYXNfY29sb3IgX19hbGl5dW5fbm9kZV9o
-YXNfY29sb3IiIHN0eWxlPSJmb250LWZhbWlseTp0YWhvbWEsYXJpYWwsc3RoZWl0aSxzaW1zdW47
-Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAwMDAwOyI+5Y+R6YCB5pe26Ze077yaMjAyMOW5tDfm
-nIgx5pelKOaYn+acn+S4iSkgMTE6MDU8L3NwYW4+PC9kaXY+PGRpdiA+PHNwYW4gIGNsYXNzPSIg
-X19hbGl5dW5fbm9kZV9oYXNfY29sb3IgX19hbGl5dW5fbm9kZV9oYXNfY29sb3IiIHN0eWxlPSJm
-b250LWZhbWlseTp0YWhvbWEsYXJpYWwsc3RoZWl0aSxzaW1zdW47Zm9udC1zaXplOjE0LjBweDtj
-b2xvcjojMDAwMDAwOyI+5pS25Lu25Lq677yabHR0bmctZGV2ICZsdDtsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnJmd0OzsgbWF0aGlldS5kZXNub3llcnMgJmx0O21hdGhpZXUuZGVzbm95ZXJzQGVm
-ZmljaW9zLmNvbSZndDs8L3NwYW4+PC9kaXY+PGRpdiA+PHNwYW4gIGNsYXNzPSIgX19hbGl5dW5f
-bm9kZV9oYXNfY29sb3IgX19hbGl5dW5fbm9kZV9oYXNfY29sb3IiIHN0eWxlPSJmb250LWZhbWls
-eTp0YWhvbWEsYXJpYWwsc3RoZWl0aSxzaW1zdW47Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAw
-MDAwOyI+5Li744CA6aKY77yaW2x0dG5nLWRldl0gc29tZSB0cmFjZXBvaW50cyBub3QgZXhpc3Qg
-aW4gbWV0YWRhdGE/PC9zcGFuPjwvZGl2PjxkaXYgPjxzcGFuICBjbGFzcz0iIF9fYWxpeXVuX25v
-ZGVfaGFzX2NvbG9yIF9fYWxpeXVuX25vZGVfaGFzX2NvbG9yIiBzdHlsZT0iZm9udC1mYW1pbHk6
-dGFob21hLGFyaWFsLHN0aGVpdGksc2ltc3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAw
-MDsiPjxiciA+PC9zcGFuPjwvZGl2PjxkaXYgPjxzcGFuICBjbGFzcz0iIF9fYWxpeXVuX25vZGVf
-aGFzX2NvbG9yIF9fYWxpeXVuX25vZGVfaGFzX2NvbG9yIF9fYWxpeXVuX25vZGVfaGFzX2NvbG9y
-IiBzdHlsZT0iZm9udC1mYW1pbHk6dGFob21hLGFyaWFsLHN0aGVpdGksc2ltc3VuO2ZvbnQtc2l6
-ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPkhpLDwvc3Bhbj48L2Rpdj48ZGl2ID48c3BhbiAgY2xh
-c3M9IiBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciBfX2Fs
-aXl1bl9ub2RlX2hhc19jb2xvciIgc3R5bGU9ImZvbnQtZmFtaWx5OnRhaG9tYSxhcmlhbCxzdGhl
-aXRpLHNpbXN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij4mbmJzcDsgJm5ic3A7
-SSBmaW5kIHNvbWV0aW1lcyB0aGVyZSBhcmUgc29tZSB0cmFjZXBvaW50cyBub3QgZXhpc3QgaW4g
-bWV0YWRhdGEgZmlsZShidXQgdGhleSBhcmUgaW4gdGhlIGxpc3Qgb2YgbHR0bmcgbGlzdCAtdSkg
-YW5kIHRoZSBlbmQgcmVzdWx0IGlzJm5ic3A7IHRoZXkgY2FuIE5PVCBiZSBsb2dnZWQuIEkgY2Fu
-IG5vdCBhbHdheXMgcmVwcm9kdWNlIGl0LiBJdCBib3RoZXJlZCBtZSBmb3IgMiBkYXlzLiZuYnNw
-Ozwvc3Bhbj48L2Rpdj48ZGl2ID48c3BhbiAgY2xhc3M9IiBfX2FsaXl1bl9ub2RlX2hhc19jb2xv
-ciBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciIgc3R5bGU9
-ImZvbnQtZmFtaWx5OnRhaG9tYSxhcmlhbCxzdGhlaXRpLHNpbXN1bjtmb250LXNpemU6MTQuMHB4
-O2NvbG9yOiMwMDAwMDA7Ij48L3NwYW4+Jm5ic3A7ICZuYnNwO1RoZSBsdHRuZyB2ZXJzaW9uIGlz
-IDIuNywgSSBrbm93IGl0IGlzIG5vdCB0aGUgbGF0ZXN0IHZlcnNpb24gYnV0IHRoZXJlIGFyZSBz
-b21lIHJlYXNvbnMgSSBjYW4ndCB1cGRhdGUgaXQuIFNvLCBpcyB0aGlzIGEga25vd24gYnVnPyZu
-YnNwOyBJZiB5ZXMsIEl0IHdpbGwgYmUgdmVyeSBhcHByZWNpYXRlZCBpZiB5b3UgY2FuIGdpdmUg
-bWUgYW55IGFkdmljZSBhYm91dCB0aGUgYnVnIGluZm8oSSBjYW4gY2hlcnJ5IHBpY2sgdGhlIGNv
-cnJlc3BvbmQgZml4KS4gT3RoZXJ3aXNlLCBtYXliZSBJIGhhdmUgdG8gZ2l2ZSB1cCBteSBmYXZv
-cmlhdGUgTHR0bmcuLi4uPC9kaXY+PGJyID48ZGl2ID5UaGFuayB5b3UgaW4gYWR2YW5jZSE8L2Rp
-dj48ZGl2ID56aGVueXUucmVuPC9kaXY+PGJyID48L2Rpdj48ZGl2ID48YnIgPjwvZGl2PjxkaXYg
-Pi0tIDxiciA+PC9kaXY+PGRpdiA+TWF0aGlldSBEZXNub3llcnM8YnIgPkVmZmljaU9TIEluYy48
-YnIgPjxhICBocmVmPSJodHRwOi8vd3d3LmVmZmljaW9zLmNvbSIgdGFyZ2V0PSJfYmxhbmsiPmh0
-dHA6Ly93d3cuZWZmaWNpb3MuY29tPC9hPjwvZGl2PjwvZGl2PjwvYmxvY2txdW90ZT48L2Rpdj4=
-------=ALIBOUNDARY_30223_7fa9413c1940_5efd2ca1_78701--
+This normally indicates a short-lived application or that your application
+crashed while lttng-ust and lttng-tools were performing an event registration.
+Considering that the path leading to the ustctl_reply_register_event call is
+preceded by a call fetching information from the same socket
+(ustctl_recv_register_event), I expect this to be a completely normal scenario
+unless you provide evidence that this application under tracing was acting
+normally and had a long lifetime.
 
-
---===============8635357321173737623==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Cheers
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============8635357321173737623==--
-
