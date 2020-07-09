@@ -1,24 +1,17 @@
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re:
- =?utf-8?b?5Zue5aSN77ya5Zue5aSN77yaIOWbnuWkje+8miBz?=
- =?utf-8?q?ome_tracepoints_not_exist_in_metadata=3F?=
-Date: Thu, 2 Jul 2020 10:03:10 -0400 (EDT)
-Message-ID: <445531696.20175.1593698590049.JavaMail.zimbra@efficios.com>
-References: <5efd3314-04ed-4868-a0c9-408434d330f4.zhenyu.ren@aliyun.com>
- <49dab706-ab7e-4156-9163-b8d9105b173d.zhenyu.ren@aliyun.com>
- <65af8a29-4fd7-454c-a060-8f06cb7bc931.zhenyu.ren@aliyun.com>
- <1653271969.18771.1593605240536.JavaMail.zimbra@efficios.com>
- <fb98f7b9-073e-4e02-86aa-03a0c4952c24.zhenyu.ren@aliyun.com>
- <20200702124541.GF4207@joraj-alpa>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Valentin Grigorev via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Payload of syscall_entry_execve
+Date: Thu, 9 Jul 2020 14:19:25 +0300
+Message-ID: <CABhb4uu6dxo_5pVUTXaz3qkGS41Ame77Bp5ePWT42cJ2PANFvA@mail.gmail.com>
+Reply-To: Valentin Grigorev <valentin.grigorev@jetbrains.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0238892498087045081=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 49yKYw5k8zz19K8
- for <lttng-dev@lists.lttng.org>; Thu,  2 Jul 2020 10:03:16 -0400 (EDT)
-In-Reply-To: <20200702124541.GF4207@joraj-alpa>
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com
+ [IPv6:2607:f8b0:4864:20::229])
+ by lists.lttng.org (Postfix) with ESMTPS id 4B2Ybz0Xr9z1CPR
+ for <lttng-dev@lists.lttng.org>; Thu,  9 Jul 2020 07:19:42 -0400 (EDT)
+Received: by mail-oi1-x229.google.com with SMTP id t198so1569698oie.7
+ for <lttng-dev@lists.lttng.org>; Thu, 09 Jul 2020 04:19:42 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,61 +21,83 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jul 2, 2020, at 8:45 AM, Jonathan Rajotte jonathan.rajotte-julien@efficios.com wrote:
+--===============0238892498087045081==
+Content-Type: multipart/alternative; boundary="0000000000009f003405aa0066a8"
 
-> On Thu, Jul 02, 2020 at 08:38:57AM +0800, zhenyu.ren via lttng-dev wrote:
->> Thanks a lot. I will try single quotes but it may take hours get the result.
->> Yesterday, I enabled the verbose option ,and found the following message "UST
->> app reply event failed. Application died (in add_event_ust_registry() at
->> ust-app.c:5405)" and "UST app notify socket unregister 34 (in
->> ust_app_notify_sock_unregister() at ust-app.c:5562)". In fact ,the socket that
->> Lttng-sessiond send reply to my app return an error with EPIPE. It seems that
->> the pipe breaked.So do you have any hint for that?
-> 
-> From lttng master:
->    ret = ustctl_reply_register_event(sock, event_id, ret_code);
->    if (ret < 0) {
->    	if (ret != -EPIPE && ret != -LTTNG_UST_ERR_EXITING) {
->    		ERR("UST app reply event failed with ret %d", ret);
->    	} else {
->    		DBG3("UST app reply event failed. Application died");
->    	}
->    	/*
->    	 * No need to wipe the create event since the application socket will
->    	 * get close on error hence cleaning up everything by itself.
->    	 */
->    	goto error;
->    }
-> 
-> EPIPE ifor this socket is considered as an expected scenario.
-> 
-> This normally indicates a short-lived application or that your application
-> crashed while lttng-ust and lttng-tools were performing an event registration.
-> Considering that the path leading to the ustctl_reply_register_event call is
-> preceded by a call fetching information from the same socket
-> (ustctl_recv_register_event), I expect this to be a completely normal scenario
-> unless you provide evidence that this application under tracing was acting
-> normally and had a long lifetime.
+--0000000000009f003405aa0066a8
+Content-Type: text/plain; charset="UTF-8"
 
-In addition, one thing to consider is that if the application is a daemon
-process closing all file descriptors, using fork, clone or daemon, then
-helper libraries need to be preloaded with the daemon following instructions
-in the man-page lttng-ust(3) under section "Using LTTng-UST with daemons".
+Hello!
 
-Failure to preload those libraries in daemons would trigger the observed
-scenario: the application hangs up the UST communication socket
-and never reconnects.
+Currently, I'm developing a process monitor on the base of LTTng, and I
+face the challenge of accessing command-line arguments passed to execve
+syscall.
+I'm using LTTng live session and Babeltrace 2 C API to analyze events in
+online mode.
 
-Thanks,
+syscall_entry_execve event has 3 payload fields: filename, argv, and envp.
+The first one is a normal C-string, the second and the third
+semantically are `char *const *`,
+but provided by LTTng as simple unsigned integers (the corresponding fields
+in Babaltrace2 event payload have type BT_FIELD_CLASS_TYPE_UNSIGNED_INTEGER,
+while I expect BT_FIELD_CLASS_TYPE_DYNAMIC_ARRAY). As far as I understand,
+these integers are argv and envp pointers casted to uint64_t. But in the
+majority of
+cases, events produced by LTTng are analyzed by another process and often
+even offline, so these pointers became completely unuseful.
 
-Mathieu
+Could you say, if there are some configuration parameters that enable to
+pass argv and envp content in syscall_entry_execve payload? Or some other
+ways to get this
+information from LTTng.
 
+P.S. I consider getting this information from /proc/pid/cmdline, but it is
+not looking like a clean solution.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Best regards.
+Valentin Grigorev
+
+--0000000000009f003405aa0066a8
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div di=
+r=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div>Hello!</div><div><br></div=
+><div>Currently, I&#39;m developing a process monitor on the base of LTTng,=
+ and I face the challenge of accessing command-line arguments passed to exe=
+cve syscall.=C2=A0</div><div>I&#39;m using LTTng live session and Babeltrac=
+e 2 C API to analyze events in online mode.</div><div><br></div><div>syscal=
+l_entry_execve=C2=A0event has 3 payload fields: filename, argv, and envp. T=
+he first one is a normal C-string, the second and the third semantically=C2=
+=A0are `char *const *`,=C2=A0</div><div>but provided by LTTng as simple uns=
+igned integers (the corresponding fields in Babaltrace2 event payload have =
+type BT_FIELD_CLASS_TYPE_UNSIGNED_INTEGER,</div><div>while I expect BT_FIEL=
+D_CLASS_TYPE_DYNAMIC_ARRAY). As far as I understand, these integers are arg=
+v and envp pointers casted to uint64_t. But in the majority of</div><div>ca=
+ses, events produced by LTTng are analyzed by another process and often eve=
+n offline, so these pointers became completely unuseful.</div><div><br></di=
+v><div>Could you say, if there are some configuration parameters=C2=A0that =
+enable to pass argv and envp content in syscall_entry_execve payload? Or so=
+me other ways to get this</div><div>information from LTTng.</div><div><br><=
+/div><div>P.S. I consider getting this information from /proc/pid/cmdline, =
+but it is not looking like a clean solution.</div><div><br></div><div>Best =
+regards.</div><div>Valentin Grigorev<br></div></div></div></div></div></div=
+></div></div>
+
+--0000000000009f003405aa0066a8--
+
+--===============0238892498087045081==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0238892498087045081==--
