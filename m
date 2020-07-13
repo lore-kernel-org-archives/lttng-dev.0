@@ -1,19 +1,23 @@
-From: Olivier Dion via lttng-dev <lttng-dev@lists.lttng.org>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
 Subject: Re: [PATCH lttng-ust] Add ctor/dtor priorities for
  tracepoints/events
-Date: Sun, 12 Jul 2020 11:49:26 -0400
-Message-ID: <87tuycybqx.fsf@clara>
+Date: Mon, 13 Jul 2020 09:24:52 -0400 (EDT)
+Message-ID: <1851244021.9798.1594646692671.JavaMail.zimbra@efficios.com>
 References: <20200711152907.676582-1-olivier.dion@polymtl.ca>
  <756801034.9565.1594561774215.JavaMail.zimbra@efficios.com>
-Reply-To: Olivier Dion <olivier.dion@polymtl.ca>
+ <87tuycybqx.fsf@clara>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
- by lists.lttng.org (Postfix) with ESMTPS id 4B4WQZ345Gz1VPk
- for <lttng-dev@lists.lttng.org>; Sun, 12 Jul 2020 11:48:22 -0400 (EDT)
-In-Reply-To: <756801034.9565.1594561774215.JavaMail.zimbra@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4B54Bg43Mvz1Vqm
+ for <lttng-dev@lists.lttng.org>; Mon, 13 Jul 2020 09:24:59 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 1A4D42A1E1A
+ for <lttng-dev@lists.lttng.org>; Mon, 13 Jul 2020 09:24:53 -0400 (EDT)
+In-Reply-To: <87tuycybqx.fsf@clara>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,46 +27,69 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Olivier Dion <olivier.dion@polymtl.ca>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Sun, 12 Jul 2020, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> ----- On Jul 11, 2020, at 11:29 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
->
->> Some library might want to generate events in their ctor/dtor.  If
->> LTTng initialize/finalize its tracepoints/events at the wrong time,
->> events are lost.
->> 
->> Order of execution of the ctor/dtor is determined by priority.  When
->> some priorities are equal, the order of execution seems to be
->> determined by:
->> 
->>	   a) Order of appearance if in the same compilation unit
->> 
->>	   b) Order of link if in different compilation units
->> 
->>	   c) Order of load by ld-linux.so or dlopen(3) for
->>	      share objects
->
-> I recall different rules about constructor priorities. Can you provide
-> links to documentation stating the priority order you describe above ?
+----- On Jul 12, 2020, at 11:49 AM, Olivier Dion olivier.dion@polymtl.ca wrote:
 
-I haven't found any documentation on that.  This is purely empirical.
-Although I'm sure that we can dig something if chatting on GCC's IRC.
+> On Sun, 12 Jul 2020, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+>> ----- On Jul 11, 2020, at 11:29 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
+>>
+>>> Some library might want to generate events in their ctor/dtor.  If
+>>> LTTng initialize/finalize its tracepoints/events at the wrong time,
+>>> events are lost.
+>>> 
+>>> Order of execution of the ctor/dtor is determined by priority.  When
+>>> some priorities are equal, the order of execution seems to be
+>>> determined by:
+>>> 
+>>>	   a) Order of appearance if in the same compilation unit
+>>> 
+>>>	   b) Order of link if in different compilation units
+>>> 
+>>>	   c) Order of load by ld-linux.so or dlopen(3) for
+>>>	      share objects
+>>
+>> I recall different rules about constructor priorities. Can you provide
+>> links to documentation stating the priority order you describe above ?
+> 
+> I haven't found any documentation on that.  This is purely empirical.
+> Although I'm sure that we can dig something if chatting on GCC's IRC.
 
-> Also, we should compare two approaches to fulfill your goal:
-> one alternative would be to have application/library constructors
-> explicitly call tracepoint constructors if they wish to use them.
+If it is not documented, then I am reluctant on depending on a behavior
+which may be what happens today, but may not be the same for past/future
+toolchains.
 
-I would prefer this way.  The former solution might not work in some
-cases (e.g. with LD_PRELOAD and priority =101) and I prefer explicit
-initialization in that case.
+> 
+>> Also, we should compare two approaches to fulfill your goal:
+>> one alternative would be to have application/library constructors
+>> explicitly call tracepoint constructors if they wish to use them.
+> 
+> I would prefer this way.  The former solution might not work in some
+> cases (e.g. with LD_PRELOAD and priority =101) and I prefer explicit
+> initialization in that case.
+> 
+> I don't see any cons for the second approach, except making the symbols
+> table a few bytes larger.  I'll post a patch soon so we can compare and
+> try to find more documentation on ctor priority.
 
-I don't see any cons for the second approach, except making the symbols
-table a few bytes larger.  I'll post a patch soon so we can compare and
-try to find more documentation on ctor priority.
+And users will have to explicitly call the constructor on which they
+depend, but I don't see it as a huge burden.
+
+Beware though that there are a few configurations which can be used for
+probe providers (see lttng-ust(3)).
+
+Thanks,
+
+Mathieu
+
+> 
+> --
+> Olivier Dion
+> PolyMtl
 
 -- 
-Olivier Dion
-PolyMtl
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
