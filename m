@@ -7,53 +7,55 @@ X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E612EC433E2
-	for <lttng-dev@archiver.kernel.org>; Thu, 16 Jul 2020 13:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E655AC433E2
+	for <lttng-dev@archiver.kernel.org>; Thu, 16 Jul 2020 13:07:09 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6A6AE20760
-	for <lttng-dev@archiver.kernel.org>; Thu, 16 Jul 2020 13:07:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id A2DA72065F
+	for <lttng-dev@archiver.kernel.org>; Thu, 16 Jul 2020 13:07:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="GiC5Lw7s"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6A6AE20760
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="TsmW4oXj"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A2DA72065F
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4B6vfb3W6kz1Y76;
-	Thu, 16 Jul 2020 09:07:03 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4B6vfh6rqkz1XfL;
+	Thu, 16 Jul 2020 09:07:08 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1594904824;
-	bh=5TtlUqZCjQW2Jp42e8LSh22skgmilNwiqADFwmRCC88=;
+	s=default; t=1594904829;
+	bh=1s8LsmFVdtV+UqEQvBRPDaYYvLiFrueigAoO7qm0eDg=;
 	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=GiC5Lw7sbqdhN7FH95EpkUEmonbu6Ctf34Y9xPBrEVUfx0OcV2e1YTKmg63VqsiLo
-	 9g4E+VdF9ZRe9nnxnBNyMVxSTQpii+vVbS3GHSNMXVNYGPlKwvpr4bW4njMkwVfrwK
-	 NRzcTAOXBK1imdIBU1YgxMmr78n2311c2j4zOs36LStjC9lq/klqBtxmOJut8LufMA
-	 ODT3sh1att0uQny5OrGV8iKQVXgqOzZ5tgHAxwbQIwuHvIxSuP+dK5mnpNP66t5YLv
-	 +NSAGBr+oSYmnii9VFHdy/rTpKlwH+sdqQcAtWulWTML/4TJ5nQ2ZZsCPV0CZoBcfb
-	 TFbwR9Rq/wK0w==
+	b=TsmW4oXjfurr9YDLDBjmR6hJyUBNI/JVr3YT0k/72ici9etZlbJd4hEoKlE+AKI35
+	 i+10LEXkh0vGt40hIvJZgysGCzMo4e/dlt09ITszkSok4tv/kTHyMjiiL4Uz4vEDP7
+	 TX5eUMfQghB2+1XL7LP759c/yJjNVtusibtjcRzjBahlYizjhso2S+LRJ9PbW7MPWP
+	 y0XZRxW8a6ZtRP9AkAZ4/WQhf8NpZwl/GR7Nb8qubfvqiGv5Aunshk2AfKsnr0jQVT
+	 MN8VXyytHnRAgvkFy5Y8uUpspQSM6ko4RhlESO7+UDmxZTfFNvhlDRNj/QfbtCQDEn
+	 v1gp3p6ebrCpg==
 Received: from mail.ut.ac.ir (mail.ut.ac.ir [80.66.177.10])
- by lists.lttng.org (Postfix) with ESMTPS id 4B6W501myBz1XX7
- for <lttng-dev@lists.lttng.org>; Wed, 15 Jul 2020 17:40:03 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4B6X6H0bYqz1XvG
+ for <lttng-dev@lists.lttng.org>; Wed, 15 Jul 2020 18:26:14 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.ut.ac.ir (Postfix) with ESMTP id 814E31DAD81;
- Thu, 16 Jul 2020 02:09:53 +0430 (+0430)
+ by mail.ut.ac.ir (Postfix) with ESMTP id 333C21DADD1;
+ Thu, 16 Jul 2020 02:56:00 +0430 (+0430)
 Received: from mail.ut.ac.ir ([127.0.0.1])
  by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
- with LMTP id MxHneGvrB7LC; Thu, 16 Jul 2020 02:09:51 +0430 (+0430)
+ with LMTP id XRKwxLQuqr2s; Thu, 16 Jul 2020 02:55:59 +0430 (+0430)
 Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
- by mail.ut.ac.ir (Postfix) with ESMTP id EEC091DADA4;
- Thu, 16 Jul 2020 02:09:50 +0430 (+0430)
+ by mail.ut.ac.ir (Postfix) with ESMTP id 2B3F31DADD0;
+ Thu, 16 Jul 2020 02:55:59 +0430 (+0430)
 MIME-Version: 1.0
-Date: Thu, 16 Jul 2020 02:09:50 +0430
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <83963025.14828.1594838718290.JavaMail.zimbra@efficios.com>
+Date: Thu, 16 Jul 2020 02:55:59 +0430
+To: Steven Rostedt <rostedt@goodmis.org>
+In-Reply-To: <20200715174858.4698803c@oasis.local.home>
 References: <e9c7400ff0075f3beba2863c4432a905@ut.ac.ir>
  <20200715142849.0bfe909a@oasis.local.home>
  <83963025.14828.1594838718290.JavaMail.zimbra@efficios.com>
-Message-ID: <98de6fe15a816d8f06ba3d5df0f10540@ut.ac.ir>
+ <98de6fe15a816d8f06ba3d5df0f10540@ut.ac.ir>
+ <20200715174858.4698803c@oasis.local.home>
+Message-ID: <46b174cf30872f07a08f97be1d7eb514@ut.ac.ir>
 X-Sender: ahmadkhorrami@ut.ac.ir
 User-Agent: Roundcube Webmail/1.3.6
 X-Mailman-Approved-At: Thu, 16 Jul 2020 09:07:01 -0400
@@ -71,62 +73,57 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: ahmadkhorrami via lttng-dev <lttng-dev@lists.lttng.org>
 Reply-To: ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
-Cc: linux-trace-users-owner@vger.kernel.org, rostedt <rostedt@goodmis.org>,
+Cc: linux-trace-users-owner@vger.kernel.org,
  linux-trace-users <linux-trace-users@vger.kernel.org>,
  lttng-dev <lttng-dev@lists.lttng.org>, Namhyung Kim <namhyung@kernel.org>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-Message-ID: <20200715213950.oi7cHdDZXgsVkxjLFi7kX7nzhPYVouV8Sdmd-mAL7fE@z>
+Message-ID: <20200715222559.BguzAr1zC-5n1Eq2uHpARdrgL2-qa8vzkFXLBLqUDA8@z>
 
-Hi Steven and Mathieu,
-Firstly, many thanks! This method seems to be the most efficient method. 
-But, IIUC, what you suggest requires source code compilation. I need an 
-efficient dynamic method that, given the function address, captures its 
-occurrence and stores some information from the execution context. Is 
-there anything better than Uprobes perhaps with no trap into the kernel? 
-Why do we need traps?
+So, the only barrier to the user-level implementation is the problem 
+with instruction sizes. That's an enlightening point. Thanks for the 
+detailed answer!
+Thanks everybody specially Steven and Mathieu.
+
 Regards.
 
-On 2020-07-15 23:15, Mathieu Desnoyers wrote:
+On 2020-07-16 02:18, Steven Rostedt wrote:
 
-> ----- On Jul 15, 2020, at 2:28 PM, rostedt rostedt@goodmis.org wrote:
-> 
-> On Wed, 15 Jul 2020 20:37:16 +0430
+> On Thu, 16 Jul 2020 02:09:50 +0430
 > ahmadkhorrami <ahmadkhorrami@ut.ac.ir> wrote:
 > 
-> Hi,
-> What is the most efficient way to capture occurrence of a function
-> call/return of a binary program in userspace?
-> It seems the answer is Uprobes. 1) Am I right?
-> But Uprobes use "int" instruction which leads to a switch into kernel
-> mode. 2) Wouldn't it be better to avoid this transition?
-> I'm looking forward to your reply and will be happy to read your
-> opinions.
-> Regards.
+>> Hi Steven and Mathieu,
+>> Firstly, many thanks! This method seems to be the most efficient 
+>> method.
+>> But, IIUC, what you suggest requires source code compilation. I need 
+>> an
+>> efficient dynamic method that, given the function address, captures 
+>> its
+>> occurrence and stores some information from the execution context. Is
+>> there anything better than Uprobes perhaps with no trap into the 
+>> kernel?
+>> Why do we need traps?
+>> Regards.
 > 
-> Hi, I believe LTTng has utilities that can help you trace user space
-> programs.
-
-Indeed, it is documented here:
-
-https://lttng.org/docs/#doc-liblttng-ust-cyg-profile
-
-If your program is generating function entry/exit at a very
-high rate (which goes beyond your available I/O throughput and
-lasts longer than the memory you have available for ring buffers),
-you will also probably want to use the "blocking-timeout" option
-documented at:
-
-https://lttng.org/docs/#doc-enabling-disabling-channels
-
-Thanks,
-
-Mathieu
-
-> I think there's also a users ftrace like utility that Namhyung was
-> working on. But I don't know where in the development that is.
+> Without recompiling, how would that be implemented?
+> 
+> You would need to insert a jump on top of code, and still be able to
+> preserve that code. What a trap does, is to insert a int3, that will
+> trap into the kernel, it would then emulate the code that the int3 was
+> on, and also call some code that can trace the current state.
+> 
+> To do it in user land, you would need to find way to replace the code
+> at the location you want to trace, with a jump to the tracing
+> infrastructure, that will also be able to emulate the code that the
+> jump was inserted on top of. As on x86, that jump will need to be 5
+> bytes long (covering 5 bytes of text to emulate), where as a int3 is a
+> single byte.
+> 
+> Thus, you either recompile and insert nops where you want to place your
+> jumps, or you trap using int3 that can do the work from within the
+> kernel.
 > 
 > -- Steve
 _______________________________________________
