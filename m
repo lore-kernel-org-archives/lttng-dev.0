@@ -1,49 +1,36 @@
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: custom field support in lttng-ust ?
-Date: Tue, 14 Jul 2020 09:11:25 -0400 (EDT)
-Message-ID: <1479242158.11449.1594732285213.JavaMail.zimbra@efficios.com>
-References: <20200714025622.Horde.hxhRrc1ehcFdgXme3a70e7W@www.imp.polymtl.ca>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: Capturing User-Level Function Calls/Returns
+Date: Wed, 15 Jul 2020 14:28:49 -0400
+Message-ID: <20200715142849.0bfe909a@oasis.local.home>
+References: <e9c7400ff0075f3beba2863c4432a905@ut.ac.ir>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4B5grh0q1Rz1WbN
- for <lttng-dev@lists.lttng.org>; Tue, 14 Jul 2020 09:11:31 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id A2F992BE40C
- for <lttng-dev@lists.lttng.org>; Tue, 14 Jul 2020 09:11:25 -0400 (EDT)
-In-Reply-To: <20200714025622.Horde.hxhRrc1ehcFdgXme3a70e7W@www.imp.polymtl.ca>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Adel Belkhiri <adel.belkhiri@polymtl.ca>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Return-path: <linux-trace-users-owner@vger.kernel.org>
+In-Reply-To: <e9c7400ff0075f3beba2863c4432a905@ut.ac.ir>
+Sender: linux-trace-users-owner@vger.kernel.org
+To: ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
+Cc: Linux-trace Users <linux-trace-users@vger.kernel.org>, lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, =?UTF-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>, Namhyung Kim <namhyung@kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jul 13, 2020, at 10:56 PM, lttng-dev lttng-dev@lists.lttng.org wrote:
+On Wed, 15 Jul 2020 20:37:16 +0430
+ahmadkhorrami <ahmadkhorrami@ut.ac.ir> wrote:
 
-> Hi all,
-> 
-> Does anybody know if there is a custom field support in lttng-ust (to
-> export atype_struct and atype_variant data fields) like in
-> lttng-modules (ctf_custom_field)?
-
-No, there is not.
-
-Thanks,
-
-Mathieu
+> Hi,
+> What is the most efficient way to capture occurrence of a function 
+> call/return of a binary program in userspace?
+> It seems the answer is Uprobes. 1) Am I right?
+> But Uprobes use "int" instruction which leads to a switch into kernel 
+> mode. 2) Wouldn't it be better to avoid this transition?
+> I'm looking forward to your reply and will be happy to read your 
+> opinions.
+> Regards.
 
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Hi, I believe LTTng has utilities that can help you trace user space
+programs.
+
+I think there's also a users ftrace like utility that Namhyung was
+working on. But I don't know where in the development that is.
+
+-- Steve
