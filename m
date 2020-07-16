@@ -7,64 +7,55 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 657EDC433E0
-	for <lttng-dev@archiver.kernel.org>; Thu, 16 Jul 2020 13:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF3B1C433E1
+	for <lttng-dev@archiver.kernel.org>; Thu, 16 Jul 2020 16:07:31 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1FF422065F
-	for <lttng-dev@archiver.kernel.org>; Thu, 16 Jul 2020 13:07:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 2F47920739
+	for <lttng-dev@archiver.kernel.org>; Thu, 16 Jul 2020 16:07:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="Bz3fmYcR"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1FF422065F
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="ePhmuOfx"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2F47920739
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4B6vfj4CZzz1YJB;
-	Thu, 16 Jul 2020 09:07:09 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4B6zfn4b0Lz1YVR;
+	Thu, 16 Jul 2020 12:07:29 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1594904829;
-	bh=3W+fkrclHH6t5mwBOQs+FMFsaaGU/yWXDlwDonxSdBU=;
-	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1594915650;
+	bh=rpLd+HeSaUAy2uuEkFT282KzBGXxrQpKEzcWCSb+To8=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=Bz3fmYcRUdfVXGoDFSx/1733foXnaBACl/W2NghUWC5ytwDXMix6wRB7xPucjzDF4
-	 fMn76wqjSUbFyvkmfQeD8lpiSkdTWs0DY50o3kVd4+rCa7xNpU20cyQ4wP/N+TQtUd
-	 nZX/knH1pGVcY1uc1E0NW2HTUKBuPEQTWaLOBSPlLkpqPKyxKFFBPLELx02Jeuif/N
-	 DYo4ExI79qdaeFuqKsuHjL8sAPre7vx+dj83K/8PSxnS4Y3RRSI3YRO4IkdFO8G/xj
-	 gt+jV7/QJgCgxEHpKO/AmAt4vWLXMCxTeJlde87rScLUrIQYB+6UFixMWaYru+MK3M
-	 eEZChWXvU+ryw==
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com
- [209.85.221.66])
- by lists.lttng.org (Postfix) with ESMTPS id 4B6bcr0gGcz1Xjx
- for <lttng-dev@lists.lttng.org>; Wed, 15 Jul 2020 21:04:27 -0400 (EDT)
-Received: by mail-wr1-f66.google.com with SMTP id z15so5033935wrl.8
- for <lttng-dev@lists.lttng.org>; Wed, 15 Jul 2020 18:04:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=R3WQKO9ff74TDp0o71oyL9/ZiJ5upum8roG9fFyqByU=;
- b=nXg7JzAWAUIvxUVdRuIYJbHT5F8QVVxMnatIwg9LRBKsFUkXg6jtL2bIV6YGz69NEm
- nuGIhFMTcMoOFWPm4wgNtEsPrrXsZsKy48NPnszfTlW6027YnwmLum6HamQgBokUY3k0
- SFWAVNBB9R56qlgD/1unqY8A5WvFE1t5VQ3UZbeVhUKa9A2PKa4e3MBNnRbNUAm+Udf6
- k9wSulU1fDALhDLrGBYtey0pjDUB26oo3pknA0RwLdNKGZsr2MzQqfyKsFYVTLBo3n4z
- XkpeO9vdgdJ2AcoCevOoH/OICVANpzyQFIHVufLLfoLVl/Dzg6q7lw6MZE3ktpxILEsx
- 1/TQ==
-X-Gm-Message-State: AOAM531JMuh/6P/+L7iIq6x8dWJlE4OvPrk8Tp9DnyDvkr/S7yvaXl+W
- 3cZQQImzPbwaOLF4r+C/vSxzEqWDg9cyqspDXi0=
-X-Google-Smtp-Source: ABdhPJwLxBC8+Wt/qiTVi6+dQvWhvYxZbP9HEPZxfahJ5EHfYrTrPUCURbhwgwMx4vAedGpU87KKtVHlELCXtr/eOjQ=
-X-Received: by 2002:a05:6000:1006:: with SMTP id
- a6mr2167022wrx.332.1594861466727; 
- Wed, 15 Jul 2020 18:04:26 -0700 (PDT)
+	b=ePhmuOfxoovK5KN4KS2kDTRcG3qm3gS3UTKbBqqGkIxKLcW4KLQnjzx3WeUcVerGW
+	 Tmm+t86/+sZVMkLk6h9We/tW5xOjKbx73apCDX+RHSzXGByJqK7cjCHEd6lYyiDJSN
+	 P8HtvhnfXczILAy3DT1SFlGiuqRQPvhK5X3dDphk/FPTimRUjOsv9EgJG+rscZvoFK
+	 MoIdHga0J17veIs8iMhkFlzG27nCZK/LmnvrmC8M7oWlGR+DIi/Y7XRssSynTwJWsx
+	 HbF+TatxbFHHrfSvOg2rJ8kvw/SKsvk2DWNC3M4UvMZBZESuD883DnmPPxXwNcdgk/
+	 mUQGvBbq0m7yQ==
+Received: from mail.ut.ac.ir (mail.ut.ac.ir [80.66.177.10])
+ by lists.lttng.org (Postfix) with ESMTPS id 4B6zfl0cgxz1YPS
+ for <lttng-dev@lists.lttng.org>; Thu, 16 Jul 2020 12:07:26 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.ut.ac.ir (Postfix) with ESMTP id A07871DAF3E;
+ Thu, 16 Jul 2020 20:37:14 +0430 (+0430)
+Received: from mail.ut.ac.ir ([127.0.0.1])
+ by localhost (mail.ut.ac.ir [127.0.0.1]) (amavisd-new, port 10024)
+ with LMTP id Pafo_kF1Sg0J; Thu, 16 Jul 2020 20:37:13 +0430 (+0430)
+Received: from mail.ut.ac.ir (mail.ut.ac.ir [194.225.0.10])
+ by mail.ut.ac.ir (Postfix) with ESMTP id 737211DAF1D;
+ Thu, 16 Jul 2020 20:37:13 +0430 (+0430)
 MIME-Version: 1.0
+Date: Thu, 16 Jul 2020 20:37:13 +0430
+To: Namhyung Kim <namhyung@kernel.org>
+In-Reply-To: <CAM9d7chE3WQm2e4EA4i09Q1hOaGt2hrPHoF2d0tjqhciPceB9g@mail.gmail.com>
 References: <e9c7400ff0075f3beba2863c4432a905@ut.ac.ir>
  <20200715142849.0bfe909a@oasis.local.home>
-In-Reply-To: <20200715142849.0bfe909a@oasis.local.home>
-Date: Thu, 16 Jul 2020 10:04:15 +0900
-Message-ID: <CAM9d7chE3WQm2e4EA4i09Q1hOaGt2hrPHoF2d0tjqhciPceB9g@mail.gmail.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-X-Mailman-Approved-At: Thu, 16 Jul 2020 09:07:01 -0400
+ <CAM9d7chE3WQm2e4EA4i09Q1hOaGt2hrPHoF2d0tjqhciPceB9g@mail.gmail.com>
+Message-ID: <42d8f4d107d2117fb246b8ff1890e301@ut.ac.ir>
+X-Sender: ahmadkhorrami@ut.ac.ir
+User-Agent: Roundcube Webmail/1.3.6
 Subject: Re: [lttng-dev] Capturing User-Level Function Calls/Returns
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
@@ -77,47 +68,59 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Namhyung Kim via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Namhyung Kim <namhyung@kernel.org>
-Cc: ahmadkhorrami <ahmadkhorrami@ut.ac.ir>,
+From: ahmadkhorrami via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
+Cc: linux-trace-users-owner@vger.kernel.org,
+ Steven Rostedt <rostedt@goodmis.org>,
  Linux-trace Users <linux-trace-users@vger.kernel.org>,
  lttng-dev@lists.lttng.org
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-Message-ID: <20200716010415.qoDJoYJ4W9OhBmQxIvdVPMtFbWMdzpaHfiRyvfFZk34@z>
+Message-ID: <20200716160713.yqLeAHNpyw1Bx3Dll5F9L3OeAKGoMQGIeJPND86RyIE@z>
 
-Hi all,
+Hi Namhyung,
+This seems really interesting and is what I am looking for. Can it 
+capture all function entries/exits? I mean does it fully handle variable 
+instruction sizes in dynamic mode?
+In any case, thanks! and I hope that it becomes stable as soon as 
+possible, so that everyone can use it.
+Regards.
 
-On Thu, Jul 16, 2020 at 3:28 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->
+On 2020-07-16 05:34, Namhyung Kim wrote:
+
+> Hi all,
+> 
+> On Thu, Jul 16, 2020 at 3:28 AM Steven Rostedt <rostedt@goodmis.org> 
+> wrote:
 > On Wed, 15 Jul 2020 20:37:16 +0430
 > ahmadkhorrami <ahmadkhorrami@ut.ac.ir> wrote:
->
-> > Hi,
-> > What is the most efficient way to capture occurrence of a function
-> > call/return of a binary program in userspace?
-> > It seems the answer is Uprobes. 1) Am I right?
-> > But Uprobes use "int" instruction which leads to a switch into kernel
-> > mode. 2) Wouldn't it be better to avoid this transition?
-> > I'm looking forward to your reply and will be happy to read your
-> > opinions.
-> > Regards.
->
->
+> 
+> Hi,
+> What is the most efficient way to capture occurrence of a function
+> call/return of a binary program in userspace?
+> It seems the answer is Uprobes. 1) Am I right?
+> But Uprobes use "int" instruction which leads to a switch into kernel
+> mode. 2) Wouldn't it be better to avoid this transition?
+> I'm looking forward to your reply and will be happy to read your
+> opinions.
+> Regards.
+> 
 > Hi, I believe LTTng has utilities that can help you trace user space
 > programs.
->
+> 
 > I think there's also a users ftrace like utility that Namhyung was
 > working on. But I don't know where in the development that is.
 
 It's in https://github.com/namhyung/uftrace
 
-Basically it also requires recompilation to add mcount calls for each function.
+Basically it also requires recompilation to add mcount calls for each 
+function.
 But it now also supports dynamic tracing without any recompilation.. :)
 It's still experimental and has some limitation, but the idea is to copy
-first 5 bytes (on x86_64) somewhere and replace it to a call instruction.
+first 5 bytes (on x86_64) somewhere and replace it to a call 
+instruction.
 
 Thanks
 Namhyung
