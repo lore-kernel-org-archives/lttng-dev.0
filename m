@@ -1,64 +1,47 @@
-From: ahmadkhorrami <ahmadkhorrami@ut.ac.ir>
+From: Namhyung Kim <namhyung@kernel.org>
 Subject: Re: Capturing User-Level Function Calls/Returns
-Date: Thu, 16 Jul 2020 02:55:59 +0430
-Message-ID: <46b174cf30872f07a08f97be1d7eb514@ut.ac.ir>
-References: <e9c7400ff0075f3beba2863c4432a905@ut.ac.ir>
- <20200715142849.0bfe909a@oasis.local.home>
- <83963025.14828.1594838718290.JavaMail.zimbra@efficios.com>
- <98de6fe15a816d8f06ba3d5df0f10540@ut.ac.ir>
- <20200715174858.4698803c@oasis.local.home>
+Date: Thu, 16 Jul 2020 10:04:15 +0900
+Message-ID: <CAM9d7chE3WQm2e4EA4i09Q1hOaGt2hrPHoF2d0tjqhciPceB9g@mail.gmail.com>
+References: <e9c7400ff0075f3beba2863c4432a905@ut.ac.ir> <20200715142849.0bfe909a@oasis.local.home>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Return-path: <linux-trace-users-owner@vger.kernel.org>
-In-Reply-To: <20200715174858.4698803c@oasis.local.home>
+In-Reply-To: <20200715142849.0bfe909a@oasis.local.home>
 Sender: linux-trace-users-owner@vger.kernel.org
 To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-trace-users <linux-trace-users@vger.kernel.org>, lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jeremie.galarneau@efficios.com>, Namhyung Kim <namhyung@kernel.org>, linux-trace-users-owner@vger.kernel.org
+Cc: ahmadkhorrami <ahmadkhorrami@ut.ac.ir>, Linux-trace Users <linux-trace-users@vger.kernel.org>, lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-So, the only barrier to the user-level implementation is the problem 
-with instruction sizes. That's an enlightening point. Thanks for the 
-detailed answer!
-Thanks everybody specially Steven and Mathieu.
+Hi all,
 
-Regards.
-
-On 2020-07-16 02:18, Steven Rostedt wrote:
-
-> On Thu, 16 Jul 2020 02:09:50 +0430
+On Thu, Jul 16, 2020 at 3:28 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Wed, 15 Jul 2020 20:37:16 +0430
 > ahmadkhorrami <ahmadkhorrami@ut.ac.ir> wrote:
-> 
->> Hi Steven and Mathieu,
->> Firstly, many thanks! This method seems to be the most efficient 
->> method.
->> But, IIUC, what you suggest requires source code compilation. I need 
->> an
->> efficient dynamic method that, given the function address, captures 
->> its
->> occurrence and stores some information from the execution context. Is
->> there anything better than Uprobes perhaps with no trap into the 
->> kernel?
->> Why do we need traps?
->> Regards.
-> 
-> Without recompiling, how would that be implemented?
-> 
-> You would need to insert a jump on top of code, and still be able to
-> preserve that code. What a trap does, is to insert a int3, that will
-> trap into the kernel, it would then emulate the code that the int3 was
-> on, and also call some code that can trace the current state.
-> 
-> To do it in user land, you would need to find way to replace the code
-> at the location you want to trace, with a jump to the tracing
-> infrastructure, that will also be able to emulate the code that the
-> jump was inserted on top of. As on x86, that jump will need to be 5
-> bytes long (covering 5 bytes of text to emulate), where as a int3 is a
-> single byte.
-> 
-> Thus, you either recompile and insert nops where you want to place your
-> jumps, or you trap using int3 that can do the work from within the
-> kernel.
-> 
-> -- Steve
+>
+> > Hi,
+> > What is the most efficient way to capture occurrence of a function
+> > call/return of a binary program in userspace?
+> > It seems the answer is Uprobes. 1) Am I right?
+> > But Uprobes use "int" instruction which leads to a switch into kernel
+> > mode. 2) Wouldn't it be better to avoid this transition?
+> > I'm looking forward to your reply and will be happy to read your
+> > opinions.
+> > Regards.
+>
+>
+> Hi, I believe LTTng has utilities that can help you trace user space
+> programs.
+>
+> I think there's also a users ftrace like utility that Namhyung was
+> working on. But I don't know where in the development that is.
+
+It's in https://github.com/namhyung/uftrace
+
+Basically it also requires recompilation to add mcount calls for each function.
+But it now also supports dynamic tracing without any recompilation.. :)
+It's still experimental and has some limitation, but the idea is to copy
+first 5 bytes (on x86_64) somewhere and replace it to a call instruction.
+
+Thanks
+Namhyung
