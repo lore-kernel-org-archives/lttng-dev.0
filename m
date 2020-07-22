@@ -1,18 +1,21 @@
-From: "Kim, Seongab via lttng-dev" <lttng-dev@lists.lttng.org>
-Subject: babeltrace cannot open the trace but Trace Compass can
- open
-Date: Wed, 22 Jul 2020 07:58:32 +0000
-Message-ID: <08013efdc19d412b8c1535498ee7b828@HIMDWSMB06.ad.harman.com>
-Reply-To: "Kim, Seongab" <Seongab.Kim@harman.com>
+From: Philippe Proulx via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: difference of timestamp between babeltrace and
+ python binding
+Date: Wed, 22 Jul 2020 10:56:57 -0400
+Message-ID: <CAB4xu_3=6yYndO-C49FQ=hXF4eC+f6WGgMQCJ9-GhbA4zQ8mCQ@mail.gmail.com>
+References: <15ed8d31ec16483db50928860aa4a4e5@HIMDWSMB06.ad.harman.com>
+Reply-To: Philippe Proulx <eeppeliteloop@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail1.bemta24.messagelabs.com (mail1.bemta24.messagelabs.com
- [67.219.250.115])
- by lists.lttng.org (Postfix) with ESMTPS id 4BBSXC0F4Nz1dZ8
- for <lttng-dev@lists.lttng.org>; Wed, 22 Jul 2020 03:58:50 -0400 (EDT)
-Content-Language: en-US
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com
+ [IPv6:2607:f8b0:4864:20::b33])
+ by lists.lttng.org (Postfix) with ESMTPS id 4BBdqF43SRz1djm
+ for <lttng-dev@lists.lttng.org>; Wed, 22 Jul 2020 10:57:29 -0400 (EDT)
+Received: by mail-yb1-xb33.google.com with SMTP id j1so1152277ybh.10
+ for <lttng-dev@lists.lttng.org>; Wed, 22 Jul 2020 07:57:29 -0700 (PDT)
+In-Reply-To: <15ed8d31ec16483db50928860aa4a4e5@HIMDWSMB06.ad.harman.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,43 +25,98 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Kim, Seongab" <Seongab.Kim@harman.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-I have a trace which cannot be opened by babeltrace as below, but I can open it with Trace Compass.
-
-skim@d54030999178:/mnt/ssd/work/skim/traces$ babeltrace2  ./kernel/
-07-22 07:49:20.099  5264  5264 E PLUGIN/CTF/META/IR-VISITOR get_unary_unsigned@visitor-generate-ir.c:800 [auto-disc-source-ctf-fs] At line 40 in metadata stream: Invalid constant unsigned integer.
-07-22 07:49:20.099  5264  5264 E PLUGIN/CTF/META/IR-VISITOR visit_clock_decl_entry@visitor-generate-ir.c:4357 [auto-disc-source-ctf-fs] At line 40 in metadata stream: Unexpected unary expression for clock class's `offset` attribute.
-07-22 07:49:20.099  5264  5264 E PLUGIN/CTF/META/IR-VISITOR visit_clock_decl@visitor-generate-ir.c:4532 [auto-disc-source-ctf-fs] At line 40 in metadata stream: Cannot visit clock class's entry: ret=-22
-07-22 07:49:20.099  5264  5264 E PLUGIN/CTF/META/IR-VISITOR ctf_visitor_generate_ir_visit_node@visitor-generate-ir.c:4775 [auto-disc-source-ctf-fs] At line 41 in metadata stream: Cannot visit clock class: ret=-22
-07-22 07:49:20.099  5264  5264 E PLUGIN/CTF/META/DECODER ctf_metadata_decoder_append_content@decoder.c:337 [auto-disc-source-ctf-fs] Failed to visit AST node to create CTF IR objects: mdec-addr=0x22a0d90, ret=-22
-07-22 07:49:20.099  5264  5264 E PLUGIN/SRC.CTF.FS/META ctf_fs_metadata_set_trace_class@metadata.c:128 [auto-disc-source-ctf-fs] Cannot update metadata decoder's content.
-07-22 07:49:20.122  5264  5264 E PLUGIN/SRC.CTF.FS ctf_fs_component_create_ctf_fs_trace_one_path@fs.c:1206 [auto-disc-source-ctf-fs] Cannot create trace for `/mnt/ssd/work/skim/traces/kernel`.
-07-22 07:49:20.123  5264  5264 W LIB/GRAPH add_component_with_init_method_data@graph.c:977 Component initialization method failed: status=ERROR, comp-addr=0x22a68d0, comp-name="auto-disc-source-ctf-fs", comp-log-level=WARNING, comp-class-type=SOURCE, comp-class-name="fs", comp-class-partial-descr="Read CTF traces from the file sy", comp-class-is-frozen=0, comp-class-so-handle-addr=0x22b0de0, comp-class-so-handle-path="/usr/lib/x86_64-linux-gnu/babeltrace2/plugins/babeltrace-plugin-ctf.so", comp-input-port-count=0, comp-output-port-count=0
-07-22 07:49:20.123  5264  5264 E CLI cmd_run_ctx_create_components_from_config_components@babeltrace2.c:2301 Cannot create component: plugin-name="ctf", comp-cls-name="fs", comp-cls-type=1, comp-name="auto-disc-source-ctf-fs"
-07-22 07:49:20.123  5264  5264 E CLI cmd_run@babeltrace2.c:2480 Cannot create components.
-
-ERROR:    [Babeltrace CLI] (babeltrace2.c:2480)
-  Cannot create components.
-CAUSED BY [Babeltrace CLI] (babeltrace2.c:2301)
-  Cannot create component: plugin-name="ctf", comp-cls-name="fs", comp-cls-type=1, comp-name="auto-disc-source-ctf-fs"
-CAUSED BY [libbabeltrace2] (graph.c:977)
-  Component initialization method failed: status=ERROR, comp-addr=0x22a68d0, comp-name="auto-disc-source-ctf-fs", comp-log-level=WARNING,
-  comp-class-type=SOURCE, comp-class-name="fs", comp-class-partial-descr="Read CTF traces from the file sy", comp-class-is-frozen=0,
-  comp-class-so-handle-addr=0x22b0de0, comp-class-so-handle-path="/usr/lib/x86_64-linux-gnu/babeltrace2/plugins/babeltrace-plugin-ctf.so",
-  comp-input-port-count=0, comp-output-port-count=0
-CAUSED BY [auto-disc-source-ctf-fs: 'source.ctf.fs'] (fs.c:1206)
-  Cannot create trace for `/mnt/ssd/work/skim/traces/kernel`.
-
-Could someone can advise me how to open the trace with babeltrace?
-I'm using below version.
-
-skim@d54030999178:~/work/tmp$ babeltrace2 -V Babeltrace 2.0.4 "Amqui"
-
-Amqui (/_mkwi_/) is a town in eastern Qu_bec, Canada, at the base of the Gasp_ peninsula in Bas-Saint-Laurent. Located at the confluence of the Humqui and Matap_dia Rivers, its proximity to woodlands makes it a great destination for outdoor activities such as camping, hiking, and mountain biking.
-
-Best regards,
-Seongab Kim
+T24gV2VkLCBKdWwgMjIsIDIwMjAgYXQgOToxNyBBTSBLaW0sIFNlb25nYWIgdmlhIGx0dG5nLWRl
+dgo8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4gd3JvdGU6Cj4KPiBIaSwKCkhlbGxvLgoKU2Vl
+IG15IGNvbW1lbnRzIGJlbG93LgoKPgo+IEkgZm91bmQgdGhhdCB0aGUgdGltZXN0YW1wcyBmcm9t
+IGJhYmVsdHJhY2UgYW5kIHB5dGhvbiBiaW5kaW5nIGFyZSBkaWZmZXJlbnQgaW4gbmFub3NlY29u
+ZHMgbGV2ZWwuCj4KPiBza2ltQGQ1NDAzMDk5OTE3ODp+L3NzZF93b3JrL3RyYWNlcyQgcHl0aG9u
+MyB0ZXN0LnB5IC4vdHJhY2UvIHwgaGVhZCAtbiAxMAo+IDIwMTktMTItMTIgMTM6NDU6NDAuMDk4
+MjEyMDk2ICgrMC4wMDAwMDAgcyk6IHN5c2NhbGxfZXhpdF9wcG9sbAo+IDIwMTktMTItMTIgMTM6
+NDU6NDAuMDk4MjEzNjA4ICgrMC4wMDAwMDEgcyk6IHJjdV91dGlsaXphdGlvbgo+IDIwMTktMTIt
+MTIgMTM6NDU6NDAuMDk4MjE0NjMyICgrMC4wMDAwMDEgcyk6IHN5c2NhbGxfZW50cnlfaW9jdGwK
+PiAyMDE5LTEyLTEyIDEzOjQ1OjQwLjA5ODIxNDg4OCAoKzAuMDAwMDAwIHMpOiBrbWVtX2tmcmVl
+Cj4gMjAxOS0xMi0xMiAxMzo0NTo0MC4wOTgyMTQxNDQgKCswLjAwMDAwMCBzKTogcmN1X3V0aWxp
+emF0aW9uCj4gMjAxOS0xMi0xMiAxMzo0NTo0MC4wOTgyMTUxNjggKCswLjAwMDAwMSBzKTogc2No
+ZWRfc3RhdF9ydW50aW1lCj4gMjAxOS0xMi0xMiAxMzo0NTo0MC4wOTgyMjA3NzYgKCswLjAwMDAw
+NCBzKTogc2NoZWRfc3dpdGNoCj4gMjAxOS0xMi0xMiAxMzo0NTo0MC4wOTgyMjEzMTIgKCswLjAw
+MDAwMiBzKTogdGltZXJfaHJ0aW1lcl9jYW5jZWwKPiAyMDE5LTEyLTEyIDEzOjQ1OjQwLjA5ODIy
+MTMxMiAoKzAuMDAwMDAwIHMpOiBrbWVtX2ttYWxsb2MKPiAyMDE5LTEyLTEyIDEzOjQ1OjQwLjA5
+ODIyMzM2MCAoKzAuMDAwMDAyIHMpOiBrbWVtX2tmcmVlCj4gVHJhY2ViYWNrIChtb3N0IHJlY2Vu
+dCBjYWxsIGxhc3QpOgo+ICAgRmlsZSAidGVzdC5weSIsIGxpbmUgMzMsIGluIDxtb2R1bGU+Cj4g
+ICAgIHByaW50KGZtdC5mb3JtYXQoZHQsIG5zX2Zyb21fb3JpZ2luICUgMWUzLCBkaWZmX3MsIG1z
+Zy5ldmVudC5uYW1lKSkKPiBCcm9rZW5QaXBlRXJyb3I6IFtFcnJubyAzMl0gQnJva2VuIHBpcGUK
+PiBza2ltQGQ1NDAzMDk5OTE3ODp+L3NzZF93b3JrL3RyYWNlcyQgYmFiZWx0cmFjZTIgLi90cmFj
+ZS8gfCBoZWFkIC1uIDEwCj4gWzEzOjQ1OjQwLjA5ODIxMTk2OV0gKCs/Lj8/Pz8/Pz8/PykgdGVz
+dC1zeXMgc3lzY2FsbF9leGl0X3Bwb2xsOiB7IGNwdV9pZCA9IDMgfSwgeyByZXQgPSAwLCBuZmRz
+ID0gMSwgZmRzX2xlbmd0aCA9IDAsIG92ZXJmbG93ID0gMCwgZmRzID1bIF0gfQo+IFsxMzo0NTo0
+MC4wOTgyMTI0ODFdICgrMC4wMDAwMDA1MTIpIHRlc3Qtc3lzIHJjdV91dGlsaXphdGlvbjogeyBj
+cHVfaWQgPSA1IH0sIHsgcyA9ICJTdGFydCBjb250ZXh0IHN3aXRjaCIgfQo+IFsxMzo0NTo0MC4w
+OTgyMTM3MjldICgrMC4wMDAwMDEyNDgpIHRlc3Qtc3lzIHN5c2NhbGxfZW50cnlfaW9jdGw6IHsg
+Y3B1X2lkID0gMiB9LCB7IGZkID0gMjQsIGNtZCA9IDEwNzUzMzE0MDgsIGFyZyA9IDU0Nzg5NDYw
+MTcxMiB9Cj4gWzEzOjQ1OjQwLjA5ODIxMzk1M10gKCswLjAwMDAwMDIyNCkgdGVzdC1zeXMga21l
+bV9rZnJlZTogeyBjcHVfaWQgPSAzIH0sIHsgY2FsbF9zaXRlID0gMHhGRkZGRkY4MDAxNTNCMjc0
+LCBwdHIgPSAweDAgfQo+IFsxMzo0NTo0MC4wOTgyMTQwMTddICgrMC4wMDAwMDAwNjQpIHRlc3Qt
+c3lzIHJjdV91dGlsaXphdGlvbjogeyBjcHVfaWQgPSA1IH0sIHsgcyA9ICJFbmQgY29udGV4dCBz
+d2l0Y2giIH0KPiBbMTM6NDU6NDAuMDk4MjE1MjAxXSAoKzAuMDAwMDAxMTg0KSB0ZXN0LXN5cyBz
+Y2hlZF9zdGF0X3J1bnRpbWU6IHsgY3B1X2lkID0gNSB9LCB7IGNvbW0gPSAiUG9zaXRpb25pbmci
+LCB0aWQgPSAxMDU2LCBydW50aW1lID0gMzgwNDgsIHZydW50aW1lID0gMjEyNTI0MTY5MiB9Cj4g
+WzEzOjQ1OjQwLjA5ODIxOTY4MV0gKCswLjAwMDAwNDQ4MCkgdGVzdC1zeXMgc2NoZWRfc3dpdGNo
+OiB7IGNwdV9pZCA9IDUgfSwgeyBwcmV2X2NvbW0gPSAiUG9zaXRpb25pbmciLCBwcmV2X3RpZCA9
+IDEwNTYsIHByZXZfcHJpbyA9IDE1LCBwcmV2X3N0YXRlID0gMSwgbmV4dF9jb21tID0gIlNlbnNv
+ciIsIG5leHRfdGlkID0gMTA2MSwgbmV4dF9wcmlvID0gMTUgfQo+IFsxMzo0NTo0MC4wOTgyMjEz
+MTNdICgrMC4wMDAwMDE2MzIpIHRlc3Qtc3lzIHRpbWVyX2hydGltZXJfY2FuY2VsOiB7IGNwdV9p
+ZCA9IDUgfSwgeyBocnRpbWVyID0gMHhGRkZGRkZDMjU3ODA3Q0Q4IH0KPiBbMTM6NDU6NDAuMDk4
+MjIxNDA5XSAoKzAuMDAwMDAwMDk2KSB0ZXN0LXN5cyBrbWVtX2ttYWxsb2M6IHsgY3B1X2lkID0g
+MCB9LCB7IGNhbGxfc2l0ZSA9IDB4RkZGRkZGODAwMTRBMjdFQywgcHRyID0gMHhGRkZGRkZDMDRF
+REZBNDAwLCBieXRlc19yZXEgPSA3MzksIGJ5dGVzX2FsbG9jID0gMTAyNCwgZ2ZwX2ZsYWdzID0g
+Mzc3NDg5MjggfQo+IFsxMzo0NTo0MC4wOTgyMjMzNjFdICgrMC4wMDAwMDE5NTIpIHRlc3Qtc3lz
+IGttZW1fa2ZyZWU6IHsgY3B1X2lkID0gNSB9LCB7IGNhbGxfc2l0ZSA9IDB4RkZGRkZGODAwODE2
+NEM1OCwgcHRyID0gMHgwIH0KPgo+IFRoZSBkaWZmZXJlbmNlIGlzIG5vdCBjb25zaXN0ZW50IGFu
+ZCBUcmFjZSBDb21wYXNzIHNob3dzIHRoZSBzYW1lIHRpbWVzdGFtcCB3aXRoIHRoZSBiYWJlbHRy
+YWNlIG91dHB1dCwgc28gSSB0aGluayBzb21ldGhpbmcgaXMgd3JvbmcgaW4gbXkgcHl0aG9uIGNv
+ZGUuCj4gSSBqdXN0IG1vZGlmaWVkIHRoZSBleGFtcGxlIHNjcmlwdCBmcm9tIGh0dHBzOi8vYmFi
+ZWx0cmFjZS5vcmcvZG9jcy92Mi4wL3B5dGhvbi9idDIvZXhhbXBsZXMuaHRtbCNnZXQtYW4tZXZl
+bnQtcy10aW1lIHRvIHNob3cgbmFub3NlY29uZHMgYXMgYmVsb3cuCj4KPiBkaWZmOgo+Cj4gMzIs
+MzNjMzIsMzMKPiA8ICAgICAgICAgZm10ID0gJ3t9ICgrezouNmZ9IHMpOiB7fScKPiA8ICAgICAg
+ICAgcHJpbnQoZm10LmZvcm1hdChkdCwgZGlmZl9zLCBtc2cuZXZlbnQubmFtZSkpCj4gLS0tCj4g
+PiAgICAgICAgIGZtdCA9ICd7fXs6MDMuMGZ9ICgrezouNmZ9IHMpOiB7fScKPiA+ICAgICAgICAg
+cHJpbnQoZm10LmZvcm1hdChkdCwgbnNfZnJvbV9vcmlnaW4gJSAxZTMsIGRpZmZfcywgbXNnLmV2
+ZW50Lm5hbWUpKQo+Cj4gRnVsbCBjb2RlOgo+Cj4gaW1wb3J0IGJ0Mgo+IGltcG9ydCBzeXMKPiBp
+bXBvcnQgZGF0ZXRpbWUKPgo+ICMgQ3JlYXRlIGEgdHJhY2UgY29sbGVjdGlvbiBtZXNzYWdlIGl0
+ZXJhdG9yIGZyb20gdGhlIGZpcnN0IGNvbW1hbmQtbGluZQo+ICMgYXJndW1lbnQuCj4gbXNnX2l0
+ID0gYnQyLlRyYWNlQ29sbGVjdGlvbk1lc3NhZ2VJdGVyYXRvcihzeXMuYXJndlsxXSkKPgo+ICMg
+TGFzdCBldmVudCdzIHRpbWUgKG5zIGZyb20gb3JpZ2luKS4KPiBsYXN0X2V2ZW50X25zX2Zyb21f
+b3JpZ2luID0gTm9uZQo+Cj4gIyBJdGVyYXRlIHRoZSB0cmFjZSBtZXNzYWdlcy4KPiBmb3IgbXNn
+IGluIG1zZ19pdDoKPiAgICAgIyBgYnQyLl9FdmVudE1lc3NhZ2VDb25zdGAgaXMgdGhlIFB5dGhv
+biB0eXBlIG9mIGFuIGV2ZW50IG1lc3NhZ2UuCj4gICAgIGlmIHR5cGUobXNnKSBpcyBidDIuX0V2
+ZW50TWVzc2FnZUNvbnN0Ogo+ICAgICAgICAgIyBHZXQgZXZlbnQgbWVzc2FnZSdzIGRlZmF1bHQg
+Y2xvY2sgc25hcHNob3QncyBucyBmcm9tIG9yaWdpbgo+ICAgICAgICAgIyB2YWx1ZS4KPiAgICAg
+ICAgIG5zX2Zyb21fb3JpZ2luID0gbXNnLmRlZmF1bHRfY2xvY2tfc25hcHNob3QubnNfZnJvbV9v
+cmlnaW4KPgo+ICAgICAgICAgIyBDb21wdXRlIHRoZSB0aW1lIGRpZmZlcmVuY2Ugc2luY2UgdGhl
+IGxhc3QgZXZlbnQgbWVzc2FnZS4KPiAgICAgICAgIGRpZmZfcyA9IDAKPgo+ICAgICAgICAgaWYg
+bGFzdF9ldmVudF9uc19mcm9tX29yaWdpbiBpcyBub3QgTm9uZToKPiAgICAgICAgICAgICBkaWZm
+X3MgPSAobnNfZnJvbV9vcmlnaW4gLSBsYXN0X2V2ZW50X25zX2Zyb21fb3JpZ2luKSAvIDFlOQo+
+Cj4gICAgICAgICAjIENyZWF0ZSBhIGBkYXRldGltZS5kYXRldGltZWAgb2JqZWN0IGZyb20gYG5z
+X2Zyb21fb3JpZ2luYCBmb3IKPiAgICAgICAgICMgcHJlc2VudGF0aW9uLiBOb3RlIHRoYXQgc3Vj
+aCBhbiBvYmplY3QgaXMgbGVzcyBhY2N1cmF0ZSB0aGFuCj4gICAgICAgICAjIGBuc19mcm9tX29y
+aWdpbmAgYXMgaXQgaG9sZHMgbWljcm9zZWNvbmRzLCBub3QgbmFub3NlY29uZHMuCj4gICAgICAg
+ICBkdCA9IGRhdGV0aW1lLmRhdGV0aW1lLmZyb210aW1lc3RhbXAobnNfZnJvbV9vcmlnaW4gLyAx
+ZTkpCgpUaGlzIHJvdW5kcyB0aGUgwrVzIHBhcnQuCgpXaXRoIDE1MDk1NTY3ODM5NjQ3OTI5MDcs
+IHRoZSDCtXMgcGFydCBiZWNvbWVzIDk2NDc5My4KClRoYXQncyBvbmUgaXNzdWUuCgo+Cj4gICAg
+ICAgICAjIFByaW50IGxpbmUuCj4gICAgICAgICBmbXQgPSAne317OjAzLjBmfSAoK3s6LjZmfSBz
+KToge30nCj4gICAgICAgICBwcmludChmbXQuZm9ybWF0KGR0LCBuc19mcm9tX29yaWdpbiAlIDFl
+MywgZGlmZl9zLCBtc2cuZXZlbnQubmFtZSkpCgpgdHlwZSgxZTMpYCBpcyBgZmxvYXRgLgoKWW91
+IGdldCBhbiBpbmFjY3VyYXRlIGZsb2F0aW5nIHBvaW50IGRpdmlzaW9uIG9wZXJhdGlvbiBoZXJl
+IGluc3RlYWQgb2YKYW4gaW50ZWdyYWwgb25lLgoKRG86CgogICAgbnNfZnJvbV9vcmlnaW4gJSAx
+MDAwCgpvcgoKICAgIG5zX2Zyb21fb3JpZ2luICUgaW50KDFlMykKCmluc3RlYWQuCgpIb3BlIHRo
+aXMgaGVscHMsCgpQaGlsCgo+Cj4gICAgICAgICAjIFVwZGF0ZSBsYXN0IGV2ZW50J3MgdGltZS4K
+PiAgICAgICAgIGxhc3RfZXZlbnRfbnNfZnJvbV9vcmlnaW4gPSBuc19mcm9tX29yaWdpbgo+Cj4g
+Q291bGQgc29tZW9uZSBoZWxwIHdoYXQgd2FzIHdyb25nIGluIHRoZSBweXRob24gY29kZT8gT3Ig
+aXMgdGhpcyBhIGJ1ZyBpbiBuc19mcm9tX29yaWdpbiBpbXBsZW1lbnRhdGlvbj8KX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
+bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
