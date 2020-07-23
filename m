@@ -1,23 +1,16 @@
-From: "Kim, Seongab via lttng-dev" <lttng-dev@lists.lttng.org>
-Subject: Re: [EXTERNAL] Re: babeltrace cannot open the trace but
- Trace Compass can open
-Date: Thu, 23 Jul 2020 14:10:42 +0000
-Message-ID: <1b1cfdcc72fb4cbb8a81a1a0b13c6c15@HIMDWSMB06.ad.harman.com>
-References: <08013efdc19d412b8c1535498ee7b828@HIMDWSMB06.ad.harman.com>
- <CAB4xu_2-vTRj-yu__CCDY-FwTYCVD5dS4TB6bAERnROotek1rA@mail.gmail.com>
- <7cb6526a78a9468e969a0fe36f42c6d7@HIMDWSMB06.ad.harman.com>
- <CAB4xu_1p0AYHhb1GASzOM9e-pdWmSkeTfZq2tQoyacso1MCUNA@mail.gmail.com>
-Reply-To: "Kim, Seongab" <Seongab.Kim@harman.com>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: [RFC PATCH CTF] Clarify signedness of clock offset_s
+ and offset fields
+Date: Thu, 23 Jul 2020 10:45:03 -0400
+Message-ID: <20200723144503.5477-1-mathieu.desnoyers@efficios.com>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail1.bemta23.messagelabs.com (mail1.bemta23.messagelabs.com
- [67.219.246.116])
- by lists.lttng.org (Postfix) with ESMTPS id 4BCDky69Qtz1g3v
- for <lttng-dev@lists.lttng.org>; Thu, 23 Jul 2020 10:10:50 -0400 (EDT)
-In-Reply-To: <CAB4xu_1p0AYHhb1GASzOM9e-pdWmSkeTfZq2tQoyacso1MCUNA@mail.gmail.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4BCFVp3XpPz1g1v
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Jul 2020 10:45:22 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,40 +20,38 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: diamon-discuss@lists.linuxfoundation.org
+Cc: Jeremie Galarneau <jgalar@efficios.com>, lttng-dev@lists.lttng.org, Philippe Proulx <pproulx@efficios.com>, Genevieve Bastien <gbastien+lttng@versatic.net>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello Phil,
+Clarify that both offset_s and offset fields of clock may have
+negative values.
 
-> -----Original Message-----
-> From: Philippe Proulx <eeppeliteloop@gmail.com>
-> Sent: Thursday, July 23, 2020 4:00 PM
-> To: Kim, Seongab <Seongab.Kim@harman.com>
-> Cc: lttng-dev@lists.lttng.org
-> Subject: Re: [EXTERNAL] Re: [lttng-dev] babeltrace cannot open the trace but
-> Trace Compass can open
-> > Here is the result.
-> >
-> > skim@d54030999178:~/ssd_work/traces$ babeltrace2 -o ctf-
-> metadata ./kernel | grep -A10 '^clock {'
-> > clock {
-> >         name = "monotonic";
-> >         uuid = "e00bcef2-1ef1-4f02-a241-8561834511fd";
-> >         description = "Monotonic Clock";
-> >         freq = 1000000000; /* Frequency, in Hz */
-> >         /* clock value offset from Epoch is: offset * (1/freq) */
-> >         offset = -48;
-> 
-> Thanks, this is enough for us.
-> 
-> When your account gets activated, could you copy this into the new issue's
-> description?
-> 
-> This way you can receive notifications when the issue gets updated.
-> 
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ common-trace-format-specification.md | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-FYI, I have created an issue, https://bugs.lttng.org/issues/1277.
-
-Best regards,
-Seongab
+diff --git a/common-trace-format-specification.md b/common-trace-format-specification.md
+index b40082c..d4c69ad 100644
+--- a/common-trace-format-specification.md
++++ b/common-trace-format-specification.md
+@@ -1545,11 +1545,11 @@ The `offset_s` and `offset` fields indicate the offset from
+ POSIX.1 Epoch, 1970-01-01 00:00:00 +0000 (UTC), to the zero of value
+ of the clock. The `offset_s` field is in seconds. The `offset` field is
+ in (1/freq) units. If any of the `offset_s` or `offset` field is not
+-present, it is assigned the 0 value. The field `absolute` is `TRUE` if
+-the clock is a global reference across different clock UUID
+-(e.g. NTP time). Otherwise, `absolute` is `FALSE`, and the clock can
+-be considered as synchronized only with other clocks that have the same
+-UUID.
++present, it is assigned the 0 value. Both `offset_s` and `offset`
++fields are signed integers. The field `absolute` is `TRUE` if the clock
++is a global reference across different clock UUID (e.g. NTP time).
++Otherwise, `absolute` is `FALSE`, and the clock can be considered as
++synchronized only with other clocks that have the same UUID.
+ 
+ Secondly, a reference to this clock should be added within an integer
+ type:
+-- 
+2.11.0
