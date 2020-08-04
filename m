@@ -2,69 +2,70 @@ Return-Path: <SRS0=h30u=BO=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F09AC433E0
-	for <lttng-dev@archiver.kernel.org>; Tue,  4 Aug 2020 13:09:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A149C433DF
+	for <lttng-dev@archiver.kernel.org>; Tue,  4 Aug 2020 13:58:15 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B8C0A207FC
-	for <lttng-dev@archiver.kernel.org>; Tue,  4 Aug 2020 13:09:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id B8AC12086A
+	for <lttng-dev@archiver.kernel.org>; Tue,  4 Aug 2020 13:58:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="NI/bYzP6"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B8C0A207FC
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="aipm6WyK"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B8AC12086A
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4BLZq92f5Mz1ntZ;
-	Tue,  4 Aug 2020 09:09:57 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4BLbts2WdQz1nTv;
+	Tue,  4 Aug 2020 09:58:13 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1596546597;
-	bh=W2plILw4yrjbLZN3MX9Cu8A0GAXw/3A+D1TlDoSau1I=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=NI/bYzP6o1ans5SXNgCiJxahZ9FEwHGgeX068oHFvhz4t1fxhmm1QF2NNiadh8htl
-	 BEEMlchx7LSxMJF4DZnY9zed1CU1p1NXjcoHz/AAYRaODSC0YCZHb18sndvL3ctw96
-	 VFMIPWg0gLwj7Tte8ojDSjUu7ti+fetdbG9H12MnW/HdYTnpx0iWGGxwKrYFziJ0pw
-	 dcrMGrK2qPWOfXTDF+fx0wCbKqLldhk6AFUs31aRG8rCBvmBHmG3ruNbBz01DaRZSO
-	 9kKJOyT8/ZgSVhEqwVVVynm9hxs2+PI9repiTkldOVKwMNBctEJACJ4oDndjlbvjJx
-	 3zZjBPOz4j/Dw==
+	s=default; t=1596549493;
+	bh=Yd4N1XCBZmwAJI9xY9CVK1de13aujFNMA9O3Cw5hNJY=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=aipm6WyKuFhwC0o+WGeGTAcsu0/IG9NT/OqC1MvNX9aY12IytKYIZ3FtVh8dyvrRG
+	 l44oKCbKkP4wgCqURzeicawMMbxFmKDAmLgHMUeTnIWVWZW0M1lKCw/dcl0LWe4ssK
+	 vw21pDaUOCX7UgP2wuSPf3MdHMnsO6YH0izPq8y1wPwIc6FKm2+zyJTbGuRa2Ntr2E
+	 RoLGQXkkpjXkZWaMJP2OiomP5MRRVGzpYPWJZoUGyzvAPJhi5sPvYgAZl8vyG7DV7e
+	 /3upU/Ywdp0DyZKTgW4tpk59pacjlKbwPe6nSHTNFSpXrviElvwQUCqAnqwCh5LSb9
+	 F9qOtP0pgqEzA==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4BLZq71ZXdz1nPB
- for <lttng-dev@lists.lttng.org>; Tue,  4 Aug 2020 09:09:55 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4BLbtq3yfVz1nxH
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Aug 2020 09:58:11 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 388C82D7188
- for <lttng-dev@lists.lttng.org>; Tue,  4 Aug 2020 09:09:49 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id F32762D769C
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Aug 2020 09:58:04 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id EW5Oxe_fnIXn; Tue,  4 Aug 2020 09:09:48 -0400 (EDT)
+ with ESMTP id tybkGbFx1mbR; Tue,  4 Aug 2020 09:58:04 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id CB6CB2D7186;
- Tue,  4 Aug 2020 09:09:48 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com CB6CB2D7186
+ by mail.efficios.com (Postfix) with ESMTP id C4D352D769A;
+ Tue,  4 Aug 2020 09:58:04 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C4D352D769A
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id vyyhcKkkXu_V; Tue,  4 Aug 2020 09:09:48 -0400 (EDT)
-Received: from joraj-alpa (unknown [107.159.43.215])
- by mail.efficios.com (Postfix) with ESMTPSA id A00A42D66FE;
- Tue,  4 Aug 2020 09:09:48 -0400 (EDT)
-Date: Tue, 4 Aug 2020 09:09:48 -0400
-To: PFLANZER Moritz <moritz.pflanzer@hexagon.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Message-ID: <20200804130948.GB207972@joraj-alpa>
-References: <AM0PR06MB40030B857FF08F8B7685563FE64D0@AM0PR06MB4003.eurprd06.prod.outlook.com>
- <20200803153155.GA207972@joraj-alpa>
- <AM0PR06MB4003488DDC4A6809047ECA02E64A0@AM0PR06MB4003.eurprd06.prod.outlook.com>
+ with ESMTP id Tb47rpLt7jds; Tue,  4 Aug 2020 09:58:04 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id B7E2C2D7698;
+ Tue,  4 Aug 2020 09:58:04 -0400 (EDT)
+Date: Tue, 4 Aug 2020 09:58:04 -0400 (EDT)
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: Diamon discuss <diamon-discuss@lists.linuxfoundation.org>, 
+ linux-trace-users <linux-trace-users@vger.kernel.org>, 
+ linux-kernel@vger.kernel.org
+Message-ID: <1934497535.39785.1596549484739.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <AM0PR06MB4003488DDC4A6809047ECA02E64A0@AM0PR06MB4003.eurprd06.prod.outlook.com>
-Subject: Re: [lttng-dev] Help needed: No UST events recorded
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3955 (ZimbraWebClient - FF79 (Linux)/8.8.15_GA_3953)
+Thread-Index: gVJiywk8vItU5cAGlFsCDw6PIbTDhQ==
+Thread-Topic: LTTng-modules 2.11.5 and 2.12.2 (Linux kernel tracer)
+Subject: [lttng-dev] [RELEASE] LTTng-modules 2.11.5 and 2.12.2 (Linux kernel
+ tracer)
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
 Precedence: list
@@ -76,106 +77,30 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGkgTW9yaXR6LAoKRnJvbSB0aGUgbHR0bmctc2Vzc2lvbmQgbG9nOgoKUEVSUk9SIC0gMDg6MDQ6
-NDUuNDY1NDc4MTQ2IFs1NzUvNTc1XTogRmFpbGVkIHRvIG9wZW4gd2FpdCBzaG0gYXQgL2x0dG5n
-LXVzdC13YWl0LTg6IEZ1bmN0aW9uIG5vdCBpbXBsZW1lbnRlZCAoaW4gZ2V0X3dhaXRfc2htKCkg
-YXQgc2htLmM6OTgpCkRFQlVHMSAtIDA4OjA0OjQ1LjQ2NTQ5NjM0NSBbNTc1LzU3NV06IEZhaWxp
-bmcgdG8gZ2V0IHRoZSB3YWl0IHNobSBmZCAoaW4gZ2V0X3dhaXRfc2htKCkgYXQgc2htLmM6MTQz
-KQpFcnJvcjogRmFpbGVkIHRvIG5vdGlmeSBhcHBsaWNhdGlvbnMgb3IgY3JlYXRlIHRoZSB3YWl0
-IHNoYXJlZCBtZW1vcnkuCkV4ZWN1dGlvbiBjb250aW51ZXMgYnV0IHRoZXJlIG1pZ2h0IGJlIHBy
-b2JsZW1zIGZvciBhbHJlYWR5CnJ1bm5pbmcgYXBwbGljYXRpb25zIHRoYXQgd2lzaGVzIHRvIHJl
-Z2lzdGVyLgoKT24gdGhlIGFwcCBzaWRlIHdlIHNlZSB0aGF0IHRoZSBhcHAgbmV2ZXIgcmVnaXN0
-ZXI6CgpsaWJ1c3RbNjk0LzY5NF06IEVycm9yOiBFcnJvciBvcGVuaW5nIHNobSAvbHR0bmctdXN0
-LXdhaXQtOC0wIChpbiBnZXRfd2FpdF9zaG0oKSBhdCBsdHRuZy11c3QtY29tbS5jOjEyNDEpCmxp
-YnVzdFs2OTQvNjk0XTogV2FybmluZzogVW5hYmxlIHRvIGdldCBtYXAgc2htIGZvciBsb2NhbCBh
-cHBzLiBEaXNhYmxpbmcgTFRUbmctVVNUIHBlci11c2VyIHRyYWNpbmcuIChpbiBzZXR1cF9sb2Nh
-bF9hcHBzKCkgYXQgbHR0bmctdXN0LWNvbW0uYzo1MjMpCgoKRG9lcyB0aGUgL2Rldi9zaG0gbW91
-bnQgcG9pbnQgZXhpc3Q/CkRvZXMgeW91ciBrZXJuZWwgc3VwcG9ydCBzaGFyZWQgbWVtb3J5L3Rt
-cGZzPwoKQ2hlZXJzCgpPbiBUdWUsIEF1ZyAwNCwgMjAyMCBhdCAwODoxNTowOEFNICswMDAwLCBQ
-RkxBTlpFUiBNb3JpdHogd3JvdGU6Cj4gSGkgSm9uYXRoYW4sCj4gCj4gQXBvbG9naWVzIHRoYXQg
-SSBmb3Jnb3QgdG8gbWVudGlvbiB3aGljaCB2ZXJzaW9uIG9mIExUVG5nIEknbSB1c2luZy4gSSBk
-aWRuJ3QgYnVpbGQgZnJvbSBtYXN0ZXIgYnV0IGRvd25sb2FkZWQgdGhlIGxhdGVzdCByZWxlYXNl
-IGFyY2hpdmVzIGZvciBMVFRuZyAyLjEyICIoVGEpIE1laWxsZXVyZSIuICJsdHRuZyAtLXZlcnNp
-b24iIHJlcG9ydHMgYSBjb3JyZXNwb25kaW5nICJsdHRuZyAoTFRUbmcgVHJhY2UgQ29udHJvbCkg
-Mi4xMi4xIC0gKFRhKSBNZWlsbGV1cmUiCj4gCj4gUGxlYXNlIGZpbmQgdGhlIGNvbnNvbGUgbG9n
-IGhlcmU6IGh0dHBzOi8vcGFzdGViaW4uY29tL1BWenFyUHZyCj4gYW5kIHRoZSBsdHRuZy1zZXNz
-aW9uZC5sb2cgaGVyZTogaHR0cHM6Ly9wYXN0ZWJpbi5jb20vZzNhWEFjUWcKPiAKPiBUaGFua3Ms
-Cj4gTW9yaXR6Cj4gCj4gCj4gCj4gTW9yaXR6IFBmbGFuemVyCj4gU29mdHdhcmUgRGV2ZWxvcG1l
-bnQgRW5naW5lZXIKPiAKPiBbY2lkOmltYWdlMDAxLnBuZ0AwMUQzQkY2RS4xODUxMTBCMF0KPiAK
-PiBSw6RmZmVsc3RyYXNzZSAyOAo+IAo+IDgwNDUgWsO8cmljaAo+IEU6IG1vcml0ei5wZmxhbnpl
-ckBoZXhhZ29uLmNvbTxtYWlsdG86bW9yaXR6LnBmbGFuemVyQGhleGFnb24uY29tPjxtYWlsdG86
-Y2Fyb2xpbi5zaWViZXJ0QGhleGFnb24uY29tPgo+IFc6IGh0dHA6Ly93d3cuaGV4YWdvbmdlb3N5
-c3RlbXMuY29tCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBGcm9tOiBK
-b25hdGhhbiBSYWpvdHRlLUp1bGllbiA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3Mu
-Y29tPgo+IFNlbnQ6IDAzIEF1Z3VzdCAyMDIwIDE3OjMxCj4gVG86IFBGTEFOWkVSIE1vcml0eiA8
-bW9yaXR6LnBmbGFuemVyQGhleGFnb24uY29tPgo+IENjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnIDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+IFN1YmplY3Q6IFJlOiBbbHR0bmctZGV2
-XSBIZWxwIG5lZWRlZDogTm8gVVNUIGV2ZW50cyByZWNvcmRlZAo+IAo+IFRoaXMgZW1haWwgaXMg
-bm90IGZyb20gSGV4YWdvbuKAmXMgT2ZmaWNlIDM2NSBpbnN0YW5jZS4gUGxlYXNlIGJlIGNhcmVm
-dWwgd2hpbGUgY2xpY2tpbmcgbGlua3MsIG9wZW5pbmcgYXR0YWNobWVudHMsIG9yIHJlcGx5aW5n
-IHRvIHRoaXMgZW1haWwuCj4gCj4gCj4gSGkgTW9yaXR6Cj4gCj4gV2hhdCBpcyB5b3VyIHZlcnNp
-b24gb2YgbHR0bmctdG9vbHM/Cj4gCj4gICBsdHRuZyAtLXZlcnNpb24KPiAKPiBQbGVhc2UgcnVu
-IHRoZSBgaGVsbG9gIGV4ZWN1dGFibGUgdXNpbmcgdGhlIExUVE5HX1VTVF9ERUJVRyBlbnYgdmFy
-aWFibGUsIHdoaWxlCj4gdHJhY2luZywgYW5kIHByb3ZpZGUgdGhlIG91dHB1dC4KPiAKPiAgIHBr
-aWxsIGx0dG5nLXNlc3Npb25kCj4gICBsdHRuZy1zZXNzaW9uZCAtYiAtdnZ2IC0tdmVyYm9zZS1j
-b25zdW1lciAyPiAvdG1wL2x0dG5nLXNlc3Npb25kLmxvZwo+ICAgbHR0bmcgY3JlYXRlCj4gICBs
-dHRuZyBlbmFibGUtZXZlbnQgLXUgLWEKPiAgIGx0dG5nIHN0YXJ0Cj4gICBMVFROR19VU1RfREVC
-VUc9eSAuL2hlbGxvCj4gICBsdHRuZyBzdG9wCj4gICBsdHRuZyBkZXN0cm95Cj4gICBwa2lsbCBs
-dHRuZy1zZXNzaW9uZAo+IAo+IFBsZWFzZSBhbHNvIHByb3ZpZGUgdGhlIC90bXAvbHR0bmctc2Vz
-c2lvbmQubG9nIGZpbGUgdmlhIHBhc3RlYmluLgo+IAo+IEkgc3VzcGVjdCB0aGF0IGlmIHlvdSBj
-cm9zcy1jb21waWxlZCBsdHRuZy11c3QgZnJvbSB0aGUgbWFzdGVyIGJyYW5jaCB0aGF0Cj4gbHR0
-bmctdG9vbHMgaXMgbm90IHVzaW5nIHRoZSBzYW1lIHZlcnNpb24sIHJlc3VsdGluZyBpbiB0aGUg
-YXBwbGljYXRpb24gbm90Cj4gYmVpbmcgYWJsZSB0byByZWdpc3RlciB0byB0aGUgbHR0bmctc2Vz
-c2lvbmQuCj4gCj4gQ2hlZXJzCj4gCj4gT24gTW9uLCBBdWcgMDMsIDIwMjAgYXQgMDk6MzU6MjVB
-TSArMDAwMCwgUEZMQU5aRVIgTW9yaXR6IHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4gPiBIaSBhbGwh
-Cj4gPgo+ID4gSSdtIHN0cnVnZ2xpbmcgdG8gZ2V0IHVzZXJzcGFjZSB0cmFjaW5nIHdvcmtpbmcg
-b24gYW4gYWFyY2g2NCBwbGF0Zm9ybSAoYnVzeWJveCBvbiB0b3Agb2YgTGludXggNS40LjI0IGtl
-cm5lbCkuIEkgZm9sbG93ZWQgdGhlIGd1aWRlbGluZXMgaW4gdGhlIGRvY3MgYW5kIGFtIGN1cnJl
-bnRseSB1c2luZyB0aGlzIGV4YW1wbGUgcHJvZ3JhbSBmb3IgdGVzdGluZzogaHR0cHM6Ly9ldXIw
-Mi5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHBzJTNBJTJGJTJGZ2l0
-aHViLmNvbSUyRmx0dG5nJTJGbHR0bmctdXN0JTJGdHJlZSUyRm1hc3RlciUyRmRvYyUyRmV4YW1w
-bGVzJTJGaGVsbG8tc3RhdGljLWxpYiZhbXA7ZGF0YT0wMiU3QzAxJTdDJTdDZTE0MWE2ZWI2OGVh
-NGQ0YzkzYzUwOGQ4MzdjMjViOTklN0MxYjE2YWIzZWI4ZjY0ZmUzOWYzZTJkYjdmZTU0OWY2YSU3
-QzAlN0MwJTdDNjM3MzIwNjU1MjEwMTYwNDE1JmFtcDtzZGF0YT1sUGJGV29iMEc0VTIybmNVbXFm
-ejEySGE0MnhPeW1jdFlXQ09KQzM0b0M4JTNEJmFtcDtyZXNlcnZlZD0wCj4gPiBJIGNyb3NzLWNv
-bXBpbGVkIGx0dG5nLXVzdCBhbmQgdGhhdCBleGFtcGxlLCBidXQgd2hlbiBJIHJ1biB0aGUgZm9s
-bG93aW5nIGNvbW1hbmRzIG9uIHRoZSBwbGF0Zm9ybSBubyB0cmFjZXMgYXJlIHJlY29yZGVkLiBJ
-ZiBJIHVzZSB0aGUgc2FtZSBleGFtcGxlIG9uIG15IHg4NiBtYWNoaW5lIGV2ZXJ5dGhpbmcgd29y
-a3MgYXMgZXhwZWN0ZWQuIChBbmQga2VybmVsc3BhY2UgdHJhY2luZyBpcyB3b3JraW5nIG9uIHRo
-YXQgYWFyY2g2NCBzeXN0ZW0uKQo+ID4KPiA+IEFueSBoaW50cyB3aGVyZSBJIGNvdWxkIHN0YXJ0
-IGludmVzdGlnYXRpbmcgdGhlIGlzc3VlIGFyZSB3ZWxjb21lLgo+ID4KPiA+IFJlZ2FyZHMsCj4g
-PiBNb3JpdHoKPiA+Cj4gPiB+ICMgcHdkCj4gPiAvcm9vdAo+ID4gfiAjIGx0dG5nIGNyZWF0ZQo+
-ID4gU3Bhd25pbmcgYSBzZXNzaW9uIGRhZW1vbgo+ID4gU2Vzc2lvbiBhdXRvLTIwMjAwNzIwLTE3
-NDUwOSBjcmVhdGVkLgo+ID4gVHJhY2VzIHdpbGwgYmUgd3JpdHRlbiBpbiAvcm9vdC9sdHRuZy10
-cmFjZXMvYXV0by0yMDIwMDcyMC0xNzQ1MDkKPiA+IH4gIyBsdHRuZyBlbmFibGUtZXZlbnQgLWF1
-Cj4gPiBBbGwgVVNUIGV2ZW50cyBhcmUgZW5hYmxlZCBpbiBjaGFubmVsIGNoYW5uZWwwCj4gPiB+
-ICMgbHR0bmcgc3RhcnQKPiA+IFRyYWNpbmcgc3RhcnRlZCBmb3Igc2Vzc2lvbiBhdXRvLTIwMjAw
-NzIwLTE3NDUwOQo+ID4gfiAjIC4vaGVsbG8KPiA+IEhlbGxvLCBXb3JsZCEKPiA+IFRyYWNpbmcu
-Li4gIGRvbmUuCj4gPiB+ICMgbHR0bmcgZGVzdHJveQo+ID4gU2Vzc2lvbiBhdXRvLTIwMjAwNzIw
-LTE3NDUwOSBkZXN0cm95ZWQKPiA+IH4gIyBsbAo+ID4gdG90YWwgNDAKPiA+IC1yd3hyLXhyLXgg
-ICAgMSByb290ICAgICByb290ICAgICAgICAgMzkyODAgSnVsIDIwIDE3OjQ0IGhlbGxvKgo+ID4K
-PiA+Cj4gPgo+ID4gTW9yaXR6IFBmbGFuemVyCj4gPiBTb2Z0d2FyZSBEZXZlbG9wbWVudCBFbmdp
-bmVlcgo+ID4KPiA+IFtjaWQ6aW1hZ2UwMDEucG5nQDAxRDNCRjZFLjE4NTExMEIwXQo+ID4KPiA+
-IFLDpGZmZWxzdHJhc3NlIDI4Cj4gPgo+ID4gODA0NSBaw7xyaWNoCj4gPiBFOiBtb3JpdHoucGZs
-YW56ZXJAaGV4YWdvbi5jb208bWFpbHRvOm1vcml0ei5wZmxhbnplckBoZXhhZ29uLmNvbT48bWFp
-bHRvOmNhcm9saW4uc2llYmVydEBoZXhhZ29uLmNvbT4KPiA+IFc6IGh0dHA6Ly93d3cuaGV4YWdv
-bmdlb3N5c3RlbXMuY29tLwo+IAo+IAo+IAo+ID4gX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KPiA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiA+IGx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKPiA+IGh0dHBzOi8vZXVyMDIuc2FmZWxpbmtzLnByb3RlY3Rp
-b24ub3V0bG9vay5jb20vP3VybD1odHRwcyUzQSUyRiUyRmxpc3RzLmx0dG5nLm9yZyUyRmNnaS1i
-aW4lMkZtYWlsbWFuJTJGbGlzdGluZm8lMkZsdHRuZy1kZXYmYW1wO2RhdGE9MDIlN0MwMSU3QyU3
-Q2UxNDFhNmViNjhlYTRkNGM5M2M1MDhkODM3YzI1Yjk5JTdDMWIxNmFiM2ViOGY2NGZlMzlmM2Uy
-ZGI3ZmU1NDlmNmElN0MwJTdDMCU3QzYzNzMyMDY1NTIxMDE2MDQxNSZhbXA7c2RhdGE9YkgwbGFx
-elQySGw1blF3MXFUeHViQzZQTXl6c3RocVlaNWdPYTRWeXhBQSUzRCZhbXA7cmVzZXJ2ZWQ9MAo+
-IAo+IAo+IC0tCj4gSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KPiBFZmZpY2lPUwoKCgotLSAKSm9u
-YXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+Hi,
+
+The releases 2.11.5 and 2.12.2 of LTTng-modules are bug fix releases, which
+also add support for the recently released Linux kernel 5.8.
+
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+tracer toolset.
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
