@@ -1,106 +1,65 @@
-Return-Path: <SRS0=sGhc=BP=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=EN62=BR=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13FB8C433DF
-	for <lttng-dev@archiver.kernel.org>; Wed,  5 Aug 2020 04:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C347C433E0
+	for <lttng-dev@archiver.kernel.org>; Fri,  7 Aug 2020 13:08:01 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 8D0EE207FC
-	for <lttng-dev@archiver.kernel.org>; Wed,  5 Aug 2020 04:50:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id E2368221E2
+	for <lttng-dev@archiver.kernel.org>; Fri,  7 Aug 2020 13:08:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="prDttb75"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 8D0EE207FC
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="eFM8nOEZ"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E2368221E2
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4BLzhw51fpz1ny6;
-	Wed,  5 Aug 2020 00:50:56 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4BNQdW0Nwrz1rGx;
+	Fri,  7 Aug 2020 09:07:59 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1596603057;
-	bh=hbsC3Gxy152Lrc4mpc5G33CECU8umf6ZKfHX2IcBCIM=;
-	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=prDttb75X+wL17br4UqkeONY0hX18jNpJXXBE74SFkm7DNINplJ7we6jl0TJcVcFt
-	 ymSCD7HcIIsUioeoQgBYjdKIYPDnLLTZZc6aURomeaFwJwfi5rLlPdCMrPbP6Tkbgs
-	 c3dzvXet6tqpJy2hdzuHMbSPFF0F3ajLi0Etqmet6CVxK4NVlwQP2H0kEehv610dAS
-	 mETX+6RgQtQf7tNUY5Spkrfk3oqJovNsFOsDeRphVQ0S4DcooAEgjzfAJrNyTxY4VR
-	 1Bpd7EjQ3Sf4GoKyfnwnOwx6bInQQXWwRl6tij+Izb6xyvimNsrpk0wLMns5fLbeeE
-	 XlGiRJKqMSoTA==
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com
- (mail-db8eur05on2100.outbound.protection.outlook.com [40.107.20.100])
- by lists.lttng.org (Postfix) with ESMTPS id 4BLzht4t4Gz1ny4
- for <lttng-dev@lists.lttng.org>; Wed,  5 Aug 2020 00:50:54 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ei4jd4GWDe5nE1AktE93x4Smx5uy14Z8xMggZkzByQxm1tts7lypeWSFyf6TXFRpfc4RCwuRlZShH9JuAZCCkBFEtfADIa4e/1MYJbtiz2uhelG7B9qMC9kXAvJyhYsJqtgtuho8gYVUvU6QFPxSj6QhFwt7NgkfbOWOxYWzsskGyqTNg9gEs7eWksnDTfSGh3SpUvDHtU9xFA/aHsPXsJ9jA2KHM2/D+YF5u8f0HkSNLTj7hKeuedg73I4Kem7+/GbUlCz3dKLEn7ImT5muPgP+q/DLJogPETL4QbVFl3vDMLxkvV5nFjKphzN2ilG2uW1TpvyxT6e5+RnTltNeQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9ZCyXr3ujnb/vbsJ/ALzLsg1UqXLYeGQ43RjmOl0kJw=;
- b=jU6QDjH8Az5MoiomyGex3/60qZ10UP/iZF5/x4aYwF7MXlX2xq48f6YHf8CsgzY7sLJknJVm+ZbNZcU8Ne5DJ3BeDJWE7EH0ICR9yjL3dAq9xzZrvuEphcLd7I6pXECydIvh5A3OgVLgHJURkQ2scNITu3q7rbO+KWITgZQZiHhTiXUBkA4WWqt0nC1CGkar070O3IUgXbs0ra5UWupSbLheM7wWzGdhtScNkRNX+HNDsx5eo186AnmKmeGspvvdGYoO1x9bsSINJ9BztHM/GrPl6IVRzwNGjpDh8g3k9ekARNO3sNzsTHRSqKvCUNFN8efufc3hUq7u544uJ1MZsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hexagon.com; dmarc=pass action=none header.from=hexagon.com;
- dkim=pass header.d=hexagon.com; arc=none
-Received: from AM0PR06MB4003.eurprd06.prod.outlook.com (2603:10a6:208:b0::15)
- by AM0PR06MB5684.eurprd06.prod.outlook.com (2603:10a6:208:114::10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.20; Wed, 5 Aug
- 2020 04:50:51 +0000
-Received: from AM0PR06MB4003.eurprd06.prod.outlook.com
- ([fe80::7406:e48e:2388:a6f4]) by AM0PR06MB4003.eurprd06.prod.outlook.com
- ([fe80::7406:e48e:2388:a6f4%6]) with mapi id 15.20.3239.021; Wed, 5 Aug 2020
- 04:50:51 +0000
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-CC: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Thread-Topic: [lttng-dev] Help needed: No UST events recorded
-Thread-Index: AQHWaXO/Sy0OYhQYf0G0q2MMQYLGA6kmg4iAgAEUcSWAAFYuAIABBnF3
-Date: Wed, 5 Aug 2020 04:50:51 +0000
-Message-ID: <AM0PR06MB4003ABBC57B6E974B89D4C65E64B0@AM0PR06MB4003.eurprd06.prod.outlook.com>
-References: <AM0PR06MB40030B857FF08F8B7685563FE64D0@AM0PR06MB4003.eurprd06.prod.outlook.com>
- <20200803153155.GA207972@joraj-alpa>
- <AM0PR06MB4003488DDC4A6809047ECA02E64A0@AM0PR06MB4003.eurprd06.prod.outlook.com>,
- <20200804130948.GB207972@joraj-alpa>
-In-Reply-To: <20200804130948.GB207972@joraj-alpa>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-originating-ip: [81.221.214.5]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 1c243273-090a-4b6c-c8a9-08d838fb2109
-x-ms-traffictypediagnostic: AM0PR06MB5684:
-x-microsoft-antispam-prvs: <AM0PR06MB5684CF3CB551D6F25E30F2A7E64B0@AM0PR06MB5684.eurprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lW06SBS0xYqShJzKe4aP1NYnDpdhQIRmjoTla85w03gYqW5sli9j4VoEbcppDK8qXwnle3eH+C9OyN3VfEG+fLIpKAU5HRlYhiQJ9gWLKsQB2xfyvEAxUGqeHWzF3kOSBLInf7dAWYuaGflTdD1DxG3QX+bBFOQL1Soug4uKUx9Bszj0E5A/gWUt4q5ezaqmXMnLbEmCS0SrSEIqQ5sDLTxYJR/3dOkBAAA8i1KahuHXo0Ua2tQjiIzJmQH2jB7+cW0uMHec9cmVG+T81IGQHNr7UujzHMXnbPUfxxZOUfe5lEuF9QMxoix0nm5sQWj+ddu02FaPBXBLorG3qjEc2ATQsL8RMB6tnwvJT9h/Duc20RBuYG8948vfinPMgcIHq5MslZXrGbARII8+MaCgPw==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:AM0PR06MB4003.eurprd06.prod.outlook.com; PTR:; CAT:NONE;
- SFTY:;
- SFS:(4636009)(376002)(39860400002)(136003)(396003)(346002)(366004)(99936003)(8676002)(316002)(83380400001)(66574015)(33656002)(6916009)(45080400002)(7696005)(4326008)(66476007)(26005)(66946007)(76116006)(66446008)(5660300002)(64756008)(186003)(9686003)(2906002)(66616009)(66556008)(6506007)(71200400001)(55016002)(8936002)(166002)(19627405001)(86362001)(966005)(53546011)(478600001)(52536014);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata: oS05b6/qQZ9z4uYsAJjuf/DsDeBxOxUgKggl49AAONGsNzrkshD+g5PhbEstAkqJCzUTOXtMHYw/rWn2b6IsGgAsUKIgStV5p64LgLFYDqH3Lmudd+/sqzBTl5o7Vnhc9tvBIgCMxOkLS6dlskBhMy7BTm45o1mwx3wpZDYIpFKIGc64ZQIB3EVDPdTBY1UtQ53BUbc96hiCMW08yE6zzE3/eQCwrDw46bXarwBG2YXXNGeMo45/h/MgCC+woq8e/ePnAOJnLqqrxpKn03JuL0r/NZilkX9OLMmYk/iacyMmxiFcJU1cRkV+ZCW+f1gT/pB82ykBnEkQ0qhBZCqhJRmnuLGsbHs/ITChotEvuwPs5N4XVGLRliPdds/Ep1pPP4soo2AsGRPsNQKQ5Tvdbxyggny4/6wu+OIFj8oTC/Ru7KIbFYVXcD162EvXct+/XqFzf+6DBbww3jgtvnbm+eOugaomKcXvtLtmv56D8jqIYkpaU5vbgjUc13phpeB+wqsyeytxbFZYl6XOPW8SYH9DAZDezfOS9+xUI4INrwVnUCzAclmF5i7oqaee9BqAWRv/YowbC2M2JtkHltye7Fpz0MH30IeLt29hfyWviJSe2OBySZvu8ewM6KIVQ4BChOKtEskzb9XkhZ+bONpIqw==
-x-ms-exchange-transport-forked: True
+	s=default; t=1596805679;
+	bh=EFMixmlz47pPmO0cXbEilYNLXFF1gc/Vf+PwIYnzwk8=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=eFM8nOEZ+IdIJGUGK0oM49UrStTJuL+95ppaYkeTz8G16oNzasyT5W3BtjvngdqY7
+	 Is5vV4T8arLZrvsHyRGn5jHbVzfuIyD+6L+6lW7JzT7c+52b+JyMMdg9Q5BKhLgx9b
+	 X7fGQhy+6BUjIr2vodz5SEVrEqDV8qD5xFTrzGOjjNP3yZxtAAZ9hO22KCilpcWgvO
+	 /zcM8+9h/eMPpuDRWKaxefasJ4tIKEKWNvHG2BhCDKUaRd6lJLdC21/iAl6UEqWL+O
+	 CgKmrw2B/uF4xu0nwMocbEXNeJW8gF0QwU15a/qdAQriYwLw90a/P4l3g2WWemdou0
+	 on9xmMyrgThaA==
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
+ [IPv6:2607:f8b0:4864:20::22e])
+ by lists.lttng.org (Postfix) with ESMTPS id 4BNH1G6Xvyz1r89
+ for <lttng-dev@lists.lttng.org>; Fri,  7 Aug 2020 03:24:34 -0400 (EDT)
+Received: by mail-oi1-x22e.google.com with SMTP id u63so1114884oie.5
+ for <lttng-dev@lists.lttng.org>; Fri, 07 Aug 2020 00:24:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=tQqQXXKCKW0MmiLZ1NRO2Uk5/h2rkiS+2+WcYDV9dEk=;
+ b=dknS1MNMk5t5jdtxeP7l1s0Sk4oVDRyM3LrvTX6bf0KO42GVeDs3C+I7zTTeQ7cT9C
+ 76Vhn92W/bi/Fsmn0Zh69uVDVXWyj03CzS9IGjqsEPHoWrTN8s9YmdUNFLS7JRFWc9TH
+ F7oxJBrAKmdc1gm9JmqFIqN8hgV/NLeuqnen4uH+k6UUc1KYZCwgXtLIAHSFB9FRTdD6
+ DjvWoXyX5DnjW1ACv/GHBRkgi+Q05PAsg6dBpFlCm6UThd6lK4KBOsAgIrsnyuHTmNfn
+ r8nO7dLy60DQBuaXj5P1t2Gexghk7Z+Y7xvlQPxZzp3qZ6KhhL+cizCf3Oib8rHS/vZ5
+ mM5Q==
+X-Gm-Message-State: AOAM5315N3PTAIwowAqdf35FBV480JY6+eUHAMKwi/tV2LYMUeef1QPm
+ 1x04cviTVzUH8SGbi9xtPypI8W/Z67Qiin7srT+rCrU0Ruk=
+X-Google-Smtp-Source: ABdhPJyJeRK1wv85zEHnZwPYloGNbYkZkQGLNz3tW7m6vtxP1UuAtf80ceKdixKQj2c3YIpdw8xbWgmk9/P42tIQ5tg=
+X-Received: by 2002:aca:ba83:: with SMTP id k125mr10189654oif.49.1596785073849; 
+ Fri, 07 Aug 2020 00:24:33 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: hexagon.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR06MB4003.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c243273-090a-4b6c-c8a9-08d838fb2109
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2020 04:50:51.3222 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VNEh7Ma0KhqFz1vQ8oQiltIzJCgogHDV27L7dZAV8qRJbyhF8DFQHCByaAapKRa4S1EnVJ5QmomJBjVv6L3Oy9bXyXPeUj5ih7x/tu8e4Mc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR06MB5684
-Subject: Re: [lttng-dev] Help needed: No UST events recorded
+Date: Fri, 7 Aug 2020 15:24:22 +0800
+Message-ID: <CALR1Az+iE_0smhqj2saNsc0+KFPVSrH+ki59gKc4NjVvYdVkQA@mail.gmail.com>
+To: lttng-dev@lists.lttng.org
+X-Mailman-Approved-At: Fri, 07 Aug 2020 09:07:58 -0400
+Subject: [lttng-dev] Using rculist for dirty tracking
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
 Precedence: list
@@ -112,672 +71,76 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: PFLANZER Moritz via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: PFLANZER Moritz <moritz.pflanzer@hexagon.com>
-Content-Type: multipart/mixed; boundary="===============2254588232837230054=="
+From: Lego Lin via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Lego Lin <lego.lin@gmail.com>
+Content-Type: multipart/mixed; boundary="===============7232797681709586358=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============2254588232837230054==
-Content-Language: en-GB
-Content-Type: multipart/related;
-	boundary="_004_AM0PR06MB4003ABBC57B6E974B89D4C65E64B0AM0PR06MB4003eurp_";
-	type="multipart/alternative"
+--===============7232797681709586358==
+Content-Type: multipart/alternative; boundary="0000000000001c0b1405ac447f48"
 
---_004_AM0PR06MB4003ABBC57B6E974B89D4C65E64B0AM0PR06MB4003eurp_
-Content-Type: multipart/alternative;
-	boundary="_000_AM0PR06MB4003ABBC57B6E974B89D4C65E64B0AM0PR06MB4003eurp_"
+--0000000000001c0b1405ac447f48
+Content-Type: text/plain; charset="UTF-8"
 
---_000_AM0PR06MB4003ABBC57B6E974B89D4C65E64B0AM0PR06MB4003eurp_
-Content-Type: text/plain; charset="Windows-1252"
+Hi,
+I am new for using rcu and I need some helps for integrating user space rcu
+into my project for solving performance issue.
+In my project, I create 2 link list - one for free pool, one for using pool.
+Free pool used to hold a segment of memory that no-one use.
+Using pool used to hold a segment of memory that someone use.
+Originally, I use a pthread_spin_lock to protect
+1. alloc memory segment from free pool, and move memory segment from free
+pool to using pool
+2. free memory segment from using pool, and move memory segment from free
+pool to using pool
+
+For RCU, I change the list_move_tail as following
+cds_list_for_each_entry_safe(cur, next, &(membk_pool->bk_free_pool),
+entry_pool) {
+    cds_list_del_rcu(&cur->entry_pool);
+    urcu_bp_synchronize_rcu();
+    cds_list_add_tail_rcu(&ret->entry_pool, &(membk_pool->bk_using_pool));
+}
+
+Is it ok to use scenario like this?
+
+Meanwhile, that are some advance list operation API:
+1. list_first_entry
+2. list_first_entry_or_null
+Is it possible to integrate these into current urcu?
+
+Thanks
+
+--0000000000001c0b1405ac447f48
+Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jonathan,
+<div dir=3D"ltr">Hi,=C2=A0<div>I am new for using rcu and I need some helps=
+ for integrating user space rcu into my project for solving performance iss=
+ue.</div><div>In my project, I create 2 link list - one for free pool, one =
+for using pool.</div><div>Free pool used to hold a segment of memory that n=
+o-one use.</div><div>Using pool used to hold a segment of memory that someo=
+ne use.</div><div>Originally, I use a pthread_spin_lock to protect</div><di=
+v>1. alloc memory segment from free pool, and move memory segment from free=
+ pool to using pool</div><div>2. free memory segment from using pool, and m=
+ove memory segment from free pool to using pool
 
-I was indeed missing the /dev/shm mountpoint. After creating it everything =
-now works as expected. Thanks!
+</div><div><br></div><div>For RCU, I change the list_move_tail as following=
+</div><div>cds_list_for_each_entry_safe(cur, next, &amp;(membk_pool-&gt;bk_=
+free_pool), entry_pool) {<br></div><div>=C2=A0 =C2=A0 cds_list_del_rcu(&amp=
+;cur-&gt;entry_pool);<br></div><div>=C2=A0 =C2=A0 urcu_bp_synchronize_rcu()=
+;<br></div><div>=C2=A0 =C2=A0=C2=A0cds_list_add_tail_rcu(&amp;ret-&gt;entry=
+_pool, &amp;(membk_pool-&gt;bk_using_pool));</div><div>}</div><div><br></di=
+v><div>Is it ok to use scenario like this?</div><div><br></div><div>Meanwhi=
+le, that are some advance list operation API:</div><div>1. list_first_entry=
+</div><div>2. list_first_entry_or_null</div><div>Is it possible to integrat=
+e these into current urcu?</div><div><br></div><div>Thanks</div><div><br></=
+div><div><br></div></div>
 
-Regards
+--0000000000001c0b1405ac447f48--
 
-
-
-Moritz Pflanzer
-Software Development Engineer
-
-[cid:image001.png@01D3BF6E.185110B0]
-
-R=E4ffelstrasse 28
-
-8045 Z=FCrich
-E: moritz.pflanzer@hexagon.com<mailto:moritz.pflanzer@hexagon.com><mailto:c=
-arolin.siebert@hexagon.com>
-W: http://www.hexagongeosystems.com
-
-________________________________
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Sent: 04 August 2020 15:09
-To: PFLANZER Moritz <moritz.pflanzer@hexagon.com>
-Cc: lttng-dev@lists.lttng.org <lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] Help needed: No UST events recorded
-
-This email is not from Hexagon=92s Office 365 instance. Please be careful w=
-hile clicking links, opening attachments, or replying to this email.
-
-
-Hi Moritz,
-
-From the lttng-sessiond log:
-
-PERROR - 08:04:45.465478146 [575/575]: Failed to open wait shm at /lttng-us=
-t-wait-8: Function not implemented (in get_wait_shm() at shm.c:98)
-DEBUG1 - 08:04:45.465496345 [575/575]: Failing to get the wait shm fd (in g=
-et_wait_shm() at shm.c:143)
-Error: Failed to notify applications or create the wait shared memory.
-Execution continues but there might be problems for already
-running applications that wishes to register.
-
-On the app side we see that the app never register:
-
-libust[694/694]: Error: Error opening shm /lttng-ust-wait-8-0 (in get_wait_=
-shm() at lttng-ust-comm.c:1241)
-libust[694/694]: Warning: Unable to get map shm for local apps. Disabling L=
-TTng-UST per-user tracing. (in setup_local_apps() at lttng-ust-comm.c:523)
-
-
-Does the /dev/shm mount point exist?
-Does your kernel support shared memory/tmpfs?
-
-Cheers
-
-On Tue, Aug 04, 2020 at 08:15:08AM +0000, PFLANZER Moritz wrote:
-> Hi Jonathan,
->
-> Apologies that I forgot to mention which version of LTTng I'm using. I di=
-dn't build from master but downloaded the latest release archives for LTTng=
- 2.12 "(Ta) Meilleure". "lttng --version" reports a corresponding "lttng (L=
-TTng Trace Control) 2.12.1 - (Ta) Meilleure"
->
-> Please find the console log here: https://eur02.safelinks.protection.outl=
-ook.com/?url=3Dhttps%3A%2F%2Fpastebin.com%2FPVzqrPvr&amp;data=3D02%7C01%7C%=
-7C9bc88da99a1646d66d4408d83877ab9f%7C1b16ab3eb8f64fe39f3e2db7fe549f6a%7C0%7=
-C0%7C637321433923510073&amp;sdata=3DkpJmnfbLdWJXCElVkR7tcdSuVy%2FLeeZw9xaLn=
-I3mHXY%3D&amp;reserved=3D0
-> and the lttng-sessiond.log here: https://eur02.safelinks.protection.outlo=
-ok.com/?url=3Dhttps%3A%2F%2Fpastebin.com%2Fg3aXAcQg&amp;data=3D02%7C01%7C%7=
-C9bc88da99a1646d66d4408d83877ab9f%7C1b16ab3eb8f64fe39f3e2db7fe549f6a%7C0%7C=
-0%7C637321433923520068&amp;sdata=3DhN4mc9XXz%2FBQQSm0NpjS94CHDanmESE6n9Jn5T=
-4TVDQ%3D&amp;reserved=3D0
->
-> Thanks,
-> Moritz
->
->
->
-> Moritz Pflanzer
-> Software Development Engineer
->
-> [cid:image001.png@01D3BF6E.185110B0]
->
-> R=E4ffelstrasse 28
->
-> 8045 Z=FCrich
-> E: moritz.pflanzer@hexagon.com<mailto:moritz.pflanzer@hexagon.com><mailto=
-:carolin.siebert@hexagon.com>
-> W: http://www.hexagongeosystems.com/
->
-> ________________________________
-> From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-> Sent: 03 August 2020 17:31
-> To: PFLANZER Moritz <moritz.pflanzer@hexagon.com>
-> Cc: lttng-dev@lists.lttng.org <lttng-dev@lists.lttng.org>
-> Subject: Re: [lttng-dev] Help needed: No UST events recorded
->
-> This email is not from Hexagon=92s Office 365 instance. Please be careful=
- while clicking links, opening attachments, or replying to this email.
->
->
-> Hi Moritz
->
-> What is your version of lttng-tools?
->
->   lttng --version
->
-> Please run the `hello` executable using the LTTNG_UST_DEBUG env variable,=
- while
-> tracing, and provide the output.
->
->   pkill lttng-sessiond
->   lttng-sessiond -b -vvv --verbose-consumer 2> /tmp/lttng-sessiond.log
->   lttng create
->   lttng enable-event -u -a
->   lttng start
->   LTTNG_UST_DEBUG=3Dy ./hello
->   lttng stop
->   lttng destroy
->   pkill lttng-sessiond
->
-> Please also provide the /tmp/lttng-sessiond.log file via pastebin.
->
-> I suspect that if you cross-compiled lttng-ust from the master branch tha=
-t
-> lttng-tools is not using the same version, resulting in the application n=
-ot
-> being able to register to the lttng-sessiond.
->
-> Cheers
->
-> On Mon, Aug 03, 2020 at 09:35:25AM +0000, PFLANZER Moritz via lttng-dev w=
-rote:
-> > Hi all!
-> >
-> > I'm struggling to get userspace tracing working on an aarch64 platform =
-(busybox on top of Linux 5.4.24 kernel). I followed the guidelines in the d=
-ocs and am currently using this example program for testing: https://eur02.=
-safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithub.com%2Flttng%2F=
-lttng-ust%2Ftree%2Fmaster%2Fdoc%2Fexamples%2Fhello-static-lib&amp;data=3D02=
-%7C01%7C%7C9bc88da99a1646d66d4408d83877ab9f%7C1b16ab3eb8f64fe39f3e2db7fe549=
-f6a%7C0%7C0%7C637321433923520068&amp;sdata=3DnbgcpqyriJ1kERRFLum2sH91yXi28h=
-hfeN9lQ3OyfOc%3D&amp;reserved=3D0
-> > I cross-compiled lttng-ust and that example, but when I run the followi=
-ng commands on the platform no traces are recorded. If I use the same examp=
-le on my x86 machine everything works as expected. (And kernelspace tracing=
- is working on that aarch64 system.)
-> >
-> > Any hints where I could start investigating the issue are welcome.
-> >
-> > Regards,
-> > Moritz
-> >
-> > ~ # pwd
-> > /root
-> > ~ # lttng create
-> > Spawning a session daemon
-> > Session auto-20200720-174509 created.
-> > Traces will be written in /root/lttng-traces/auto-20200720-174509
-> > ~ # lttng enable-event -au
-> > All UST events are enabled in channel channel0
-> > ~ # lttng start
-> > Tracing started for session auto-20200720-174509
-> > ~ # ./hello
-> > Hello, World!
-> > Tracing...  done.
-> > ~ # lttng destroy
-> > Session auto-20200720-174509 destroyed
-> > ~ # ll
-> > total 40
-> > -rwxr-xr-x    1 root     root         39280 Jul 20 17:44 hello*
-> >
-> >
-> >
-> > Moritz Pflanzer
-> > Software Development Engineer
-> >
-> > [cid:image001.png@01D3BF6E.185110B0]
-> >
-> > R=E4ffelstrasse 28
-> >
-> > 8045 Z=FCrich
-> > E: moritz.pflanzer@hexagon.com<mailto:moritz.pflanzer@hexagon.com><mail=
-to:carolin.siebert@hexagon.com>
-> > W: http://www.hexagongeosystems.com/
->
->
->
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://eur02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flis=
-ts.lttng.org%2Fcgi-bin%2Fmailman%2Flistinfo%2Flttng-dev&amp;data=3D02%7C01%=
-7C%7C9bc88da99a1646d66d4408d83877ab9f%7C1b16ab3eb8f64fe39f3e2db7fe549f6a%7C=
-0%7C0%7C637321433923520068&amp;sdata=3Dci4daouTRyY%2BWzSjqVhrmjn11lhYHKs6lc=
-R6kvqr370%3D&amp;reserved=3D0
->
->
-> --
-> Jonathan Rajotte-Julien
-> EfficiOS
-
-
-
---
-Jonathan Rajotte-Julien
-EfficiOS
-
---_000_AM0PR06MB4003ABBC57B6E974B89D4C65E64B0AM0PR06MB4003eurp_
-Content-Type: text/html; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DWindows-1=
-252">
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-Hi Jonathan,</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-I was indeed missing the /dev/shm mountpoint. After creating it everything =
-now works as expected. Thanks!</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-Regards</div>
-<div>
-<div id=3D"Signature">
-<div>
-<div id=3D"divtagdefaultwrapper" dir=3D"ltr" style=3D"font-size:12pt; color=
-:#000000; font-family:Calibri,Helvetica,sans-serif">
-<p style=3D"margin-top: 0px; margin-bottom: 0px;margin-top:0; margin-bottom=
-:0"></p>
-<p class=3D"x_MsoNormal" style=3D"margin-top: 0px; margin-bottom: 0px;"><sp=
-an style=3D"font-size:10pt; font-family:&quot;Arial&quot;,sans-serif,serif,=
-&quot;EmojiFont&quot;" lang=3D"EN-US"><br>
-</span></p>
-<p class=3D"x_MsoNormal" style=3D"margin-top: 0px; margin-bottom: 0px;"><sp=
-an style=3D"font-size:10pt; font-family:&quot;Arial&quot;,sans-serif,serif,=
-&quot;EmojiFont&quot;" lang=3D"EN-US"><br>
-</span></p>
-<p class=3D"x_MsoNormal" style=3D"margin-top: 0px; margin-bottom: 0px;"><b>=
-<span style=3D"font-size:10pt; font-family:&quot;Arial&quot;,sans-serif,ser=
-if,&quot;EmojiFont&quot;; color:gray">Moritz Pflanzer</span></b><span style=
-=3D"font-size:10pt; font-family:&quot;Arial&quot;,sans-serif,serif,&quot;Em=
-ojiFont&quot;; color:gray"><br>
-Software Development Engineer<br>
-</span><u><span style=3D"font-size:10pt; font-family:&quot;Arial&quot;,sans=
--serif,serif,&quot;EmojiFont&quot;; color:rgb(0,130,191)"><br>
-</span></u><span style=3D""><img class=3D"EmojiInsert" id=3D"OWAPstImg32830=
-3" alt=3D"cid:image001.png@01D3BF6E.185110B0" style=3D"width:2.0833in; heig=
-ht:0.6458in" width=3D"200" height=3D"62" data-outlook-trace=3D"F:1|T:1" src=
-=3D"cid:e1282fbe-17ea-4858-81f0-4c24ae9c31c7"></span><u><span style=3D"font=
--size:10pt; font-family:&quot;Arial&quot;,sans-serif,serif,&quot;EmojiFont&=
-quot;; color:rgb(0,130,191)"></span></u></p>
-<p class=3D"x_MsoNormal" style=3D"margin-top: 0px; margin-bottom: 0px;"><sp=
-an style=3D"font-size:10pt; font-family:&quot;Arial&quot;,sans-serif,serif,=
-&quot;EmojiFont&quot;; color:gray"><br>
-R=E4ffelstrasse 28</span></p>
-<p style=3D"margin-top: 0px; margin-bottom: 0px;margin-top:0; margin-bottom=
-:0"><span style=3D"font-size:10pt; font-family:&quot;Arial&quot;,sans-serif=
-,serif,&quot;EmojiFont&quot;; color:gray">8045 Z=FCrich<b><br>
-</b><b>E: </b><a href=3D"mailto:moritz.pflanzer@hexagon.com" class=3D"OWAAu=
-toLink"><span style=3D"color:rgb(0,111,201)">moritz.pflanzer@hexagon.com</s=
-pan></a><b></b></span><span style=3D""><a href=3D"mailto:carolin.siebert@he=
-xagon.com" target=3D"_blank" rel=3D"noopener noreferrer"><span style=3D"fon=
-t-size:10pt; font-family:&quot;Arial&quot;,sans-serif,serif,&quot;EmojiFont=
-&quot;; color:rgb(5,99,193)"></span></a></span><b><span style=3D"font-size:=
-10pt; font-family:&quot;Arial&quot;,sans-serif,serif,&quot;EmojiFont&quot;;=
- color:gray"><br>
-W: </span></b><span style=3D""><a href=3D"http://www.hexagongeosystems.com"=
- target=3D"_blank" rel=3D"noopener noreferrer"><span style=3D"font-size:10p=
-t; font-family:&quot;Arial&quot;,sans-serif,serif,&quot;EmojiFont&quot;; co=
-lor:rgb(5,99,193)">http://www.hexagongeosystems.com</span></a></span><br>
-</p>
-<p style=3D"margin-top: 0px; margin-bottom: 0px;"></p>
-</div>
-</div>
-</div>
-</div>
-<div id=3D"appendonsend"></div>
-<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
-yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> Jonathan Rajotte-Juli=
-en &lt;jonathan.rajotte-julien@efficios.com&gt;<br>
-<b>Sent:</b> 04 August 2020 15:09<br>
-<b>To:</b> PFLANZER Moritz &lt;moritz.pflanzer@hexagon.com&gt;<br>
-<b>Cc:</b> lttng-dev@lists.lttng.org &lt;lttng-dev@lists.lttng.org&gt;<br>
-<b>Subject:</b> Re: [lttng-dev] Help needed: No UST events recorded</font>
-<div>&nbsp;</div>
-</div>
-<div class=3D"BodyFragment"><font size=3D"2"><span style=3D"font-size:11pt;=
-">
-<div class=3D"PlainText">This email is not from Hexagon=92s Office 365 inst=
-ance. Please be careful while clicking links, opening attachments, or reply=
-ing to this email.<br>
-<br>
-<br>
-Hi Moritz,<br>
-<br>
-From the lttng-sessiond log:<br>
-<br>
-PERROR - 08:04:45.465478146 [575/575]: Failed to open wait shm at /lttng-us=
-t-wait-8: Function not implemented (in get_wait_shm() at shm.c:98)<br>
-DEBUG1 - 08:04:45.465496345 [575/575]: Failing to get the wait shm fd (in g=
-et_wait_shm() at shm.c:143)<br>
-Error: Failed to notify applications or create the wait shared memory.<br>
-Execution continues but there might be problems for already<br>
-running applications that wishes to register.<br>
-<br>
-On the app side we see that the app never register:<br>
-<br>
-libust[694/694]: Error: Error opening shm /lttng-ust-wait-8-0 (in get_wait_=
-shm() at lttng-ust-comm.c:1241)<br>
-libust[694/694]: Warning: Unable to get map shm for local apps. Disabling L=
-TTng-UST per-user tracing. (in setup_local_apps() at lttng-ust-comm.c:523)<=
-br>
-<br>
-<br>
-Does the /dev/shm mount point exist?<br>
-Does your kernel support shared memory/tmpfs?<br>
-<br>
-Cheers<br>
-<br>
-On Tue, Aug 04, 2020 at 08:15:08AM +0000, PFLANZER Moritz wrote:<br>
-&gt; Hi Jonathan,<br>
-&gt;<br>
-&gt; Apologies that I forgot to mention which version of LTTng I'm using. I=
- didn't build from master but downloaded the latest release archives for LT=
-Tng 2.12 &quot;(Ta) Meilleure&quot;. &quot;lttng --version&quot; reports a =
-corresponding &quot;lttng (LTTng Trace Control) 2.12.1 - (Ta)
- Meilleure&quot;<br>
-&gt;<br>
-&gt; Please find the console log here: <a href=3D"https://eur02.safelinks.p=
-rotection.outlook.com/?url=3Dhttps%3A%2F%2Fpastebin.com%2FPVzqrPvr&amp;amp;=
-data=3D02%7C01%7C%7C9bc88da99a1646d66d4408d83877ab9f%7C1b16ab3eb8f64fe39f3e=
-2db7fe549f6a%7C0%7C0%7C637321433923510073&amp;amp;sdata=3DkpJmnfbLdWJXCElVk=
-R7tcdSuVy%2FLeeZw9xaLnI3mHXY%3D&amp;amp;reserved=3D0">
-https://eur02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpastebi=
-n.com%2FPVzqrPvr&amp;amp;data=3D02%7C01%7C%7C9bc88da99a1646d66d4408d83877ab=
-9f%7C1b16ab3eb8f64fe39f3e2db7fe549f6a%7C0%7C0%7C637321433923510073&amp;amp;=
-sdata=3DkpJmnfbLdWJXCElVkR7tcdSuVy%2FLeeZw9xaLnI3mHXY%3D&amp;amp;reserved=
-=3D0</a><br>
-&gt; and the lttng-sessiond.log here: <a href=3D"https://eur02.safelinks.pr=
-otection.outlook.com/?url=3Dhttps%3A%2F%2Fpastebin.com%2Fg3aXAcQg&amp;amp;d=
-ata=3D02%7C01%7C%7C9bc88da99a1646d66d4408d83877ab9f%7C1b16ab3eb8f64fe39f3e2=
-db7fe549f6a%7C0%7C0%7C637321433923520068&amp;amp;sdata=3DhN4mc9XXz%2FBQQSm0=
-NpjS94CHDanmESE6n9Jn5T4TVDQ%3D&amp;amp;reserved=3D0">
-https://eur02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpastebi=
-n.com%2Fg3aXAcQg&amp;amp;data=3D02%7C01%7C%7C9bc88da99a1646d66d4408d83877ab=
-9f%7C1b16ab3eb8f64fe39f3e2db7fe549f6a%7C0%7C0%7C637321433923520068&amp;amp;=
-sdata=3DhN4mc9XXz%2FBQQSm0NpjS94CHDanmESE6n9Jn5T4TVDQ%3D&amp;amp;reserved=
-=3D0</a><br>
-&gt;<br>
-&gt; Thanks,<br>
-&gt; Moritz<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt; Moritz Pflanzer<br>
-&gt; Software Development Engineer<br>
-&gt;<br>
-&gt; [cid:image001.png@01D3BF6E.185110B0]<br>
-&gt;<br>
-&gt; R=E4ffelstrasse 28<br>
-&gt;<br>
-&gt; 8045 Z=FCrich<br>
-&gt; E: moritz.pflanzer@hexagon.com&lt;mailto:moritz.pflanzer@hexagon.com&g=
-t;&lt;mailto:carolin.siebert@hexagon.com&gt;<br>
-&gt; W: <a href=3D"http://www.hexagongeosystems.com/">http://www.hexagongeo=
-systems.com/</a><br>
-&gt;<br>
-&gt; ________________________________<br>
-&gt; From: Jonathan Rajotte-Julien &lt;jonathan.rajotte-julien@efficios.com=
-&gt;<br>
-&gt; Sent: 03 August 2020 17:31<br>
-&gt; To: PFLANZER Moritz &lt;moritz.pflanzer@hexagon.com&gt;<br>
-&gt; Cc: lttng-dev@lists.lttng.org &lt;lttng-dev@lists.lttng.org&gt;<br>
-&gt; Subject: Re: [lttng-dev] Help needed: No UST events recorded<br>
-&gt;<br>
-&gt; This email is not from Hexagon=92s Office 365 instance. Please be care=
-ful while clicking links, opening attachments, or replying to this email.<b=
-r>
-&gt;<br>
-&gt;<br>
-&gt; Hi Moritz<br>
-&gt;<br>
-&gt; What is your version of lttng-tools?<br>
-&gt;<br>
-&gt;&nbsp;&nbsp; lttng --version<br>
-&gt;<br>
-&gt; Please run the `hello` executable using the LTTNG_UST_DEBUG env variab=
-le, while<br>
-&gt; tracing, and provide the output.<br>
-&gt;<br>
-&gt;&nbsp;&nbsp; pkill lttng-sessiond<br>
-&gt;&nbsp;&nbsp; lttng-sessiond -b -vvv --verbose-consumer 2&gt; /tmp/lttng=
--sessiond.log<br>
-&gt;&nbsp;&nbsp; lttng create<br>
-&gt;&nbsp;&nbsp; lttng enable-event -u -a<br>
-&gt;&nbsp;&nbsp; lttng start<br>
-&gt;&nbsp;&nbsp; LTTNG_UST_DEBUG=3Dy ./hello<br>
-&gt;&nbsp;&nbsp; lttng stop<br>
-&gt;&nbsp;&nbsp; lttng destroy<br>
-&gt;&nbsp;&nbsp; pkill lttng-sessiond<br>
-&gt;<br>
-&gt; Please also provide the /tmp/lttng-sessiond.log file via pastebin.<br>
-&gt;<br>
-&gt; I suspect that if you cross-compiled lttng-ust from the master branch =
-that<br>
-&gt; lttng-tools is not using the same version, resulting in the applicatio=
-n not<br>
-&gt; being able to register to the lttng-sessiond.<br>
-&gt;<br>
-&gt; Cheers<br>
-&gt;<br>
-&gt; On Mon, Aug 03, 2020 at 09:35:25AM +0000, PFLANZER Moritz via lttng-de=
-v wrote:<br>
-&gt; &gt; Hi all!<br>
-&gt; &gt;<br>
-&gt; &gt; I'm struggling to get userspace tracing working on an aarch64 pla=
-tform (busybox on top of Linux 5.4.24 kernel). I followed the guidelines in=
- the docs and am currently using this example program for testing:
-<a href=3D"https://eur02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2=
-F%2Fgithub.com%2Flttng%2Flttng-ust%2Ftree%2Fmaster%2Fdoc%2Fexamples%2Fhello=
--static-lib&amp;amp;data=3D02%7C01%7C%7C9bc88da99a1646d66d4408d83877ab9f%7C=
-1b16ab3eb8f64fe39f3e2db7fe549f6a%7C0%7C0%7C637321433923520068&amp;amp;sdata=
-=3DnbgcpqyriJ1kERRFLum2sH91yXi28hhfeN9lQ3OyfOc%3D&amp;amp;reserved=3D0">
-https://eur02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithub.=
-com%2Flttng%2Flttng-ust%2Ftree%2Fmaster%2Fdoc%2Fexamples%2Fhello-static-lib=
-&amp;amp;data=3D02%7C01%7C%7C9bc88da99a1646d66d4408d83877ab9f%7C1b16ab3eb8f=
-64fe39f3e2db7fe549f6a%7C0%7C0%7C637321433923520068&amp;amp;sdata=3Dnbgcpqyr=
-iJ1kERRFLum2sH91yXi28hhfeN9lQ3OyfOc%3D&amp;amp;reserved=3D0</a><br>
-&gt; &gt; I cross-compiled lttng-ust and that example, but when I run the f=
-ollowing commands on the platform no traces are recorded. If I use the same=
- example on my x86 machine everything works as expected. (And kernelspace t=
-racing is working on that aarch64 system.)<br>
-&gt; &gt;<br>
-&gt; &gt; Any hints where I could start investigating the issue are welcome=
-.<br>
-&gt; &gt;<br>
-&gt; &gt; Regards,<br>
-&gt; &gt; Moritz<br>
-&gt; &gt;<br>
-&gt; &gt; ~ # pwd<br>
-&gt; &gt; /root<br>
-&gt; &gt; ~ # lttng create<br>
-&gt; &gt; Spawning a session daemon<br>
-&gt; &gt; Session auto-20200720-174509 created.<br>
-&gt; &gt; Traces will be written in /root/lttng-traces/auto-20200720-174509=
-<br>
-&gt; &gt; ~ # lttng enable-event -au<br>
-&gt; &gt; All UST events are enabled in channel channel0<br>
-&gt; &gt; ~ # lttng start<br>
-&gt; &gt; Tracing started for session auto-20200720-174509<br>
-&gt; &gt; ~ # ./hello<br>
-&gt; &gt; Hello, World!<br>
-&gt; &gt; Tracing...&nbsp; done.<br>
-&gt; &gt; ~ # lttng destroy<br>
-&gt; &gt; Session auto-20200720-174509 destroyed<br>
-&gt; &gt; ~ # ll<br>
-&gt; &gt; total 40<br>
-&gt; &gt; -rwxr-xr-x&nbsp;&nbsp;&nbsp; 1 root&nbsp;&nbsp;&nbsp;&nbsp; root&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 39280 Jul 20 17:44 hello*<b=
-r>
-&gt; &gt;<br>
-&gt; &gt;<br>
-&gt; &gt;<br>
-&gt; &gt; Moritz Pflanzer<br>
-&gt; &gt; Software Development Engineer<br>
-&gt; &gt;<br>
-&gt; &gt; [cid:image001.png@01D3BF6E.185110B0]<br>
-&gt; &gt;<br>
-&gt; &gt; R=E4ffelstrasse 28<br>
-&gt; &gt;<br>
-&gt; &gt; 8045 Z=FCrich<br>
-&gt; &gt; E: moritz.pflanzer@hexagon.com&lt;mailto:moritz.pflanzer@hexagon.=
-com&gt;&lt;mailto:carolin.siebert@hexagon.com&gt;<br>
-&gt; &gt; W: <a href=3D"http://www.hexagongeosystems.com/">http://www.hexag=
-ongeosystems.com/</a><br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt; &gt; _______________________________________________<br>
-&gt; &gt; lttng-dev mailing list<br>
-&gt; &gt; lttng-dev@lists.lttng.org<br>
-&gt; &gt; <a href=3D"https://eur02.safelinks.protection.outlook.com/?url=3D=
-https%3A%2F%2Flists.lttng.org%2Fcgi-bin%2Fmailman%2Flistinfo%2Flttng-dev&am=
-p;amp;data=3D02%7C01%7C%7C9bc88da99a1646d66d4408d83877ab9f%7C1b16ab3eb8f64f=
-e39f3e2db7fe549f6a%7C0%7C0%7C637321433923520068&amp;amp;sdata=3Dci4daouTRyY=
-%2BWzSjqVhrmjn11lhYHKs6lcR6kvqr370%3D&amp;amp;reserved=3D0">
-https://eur02.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flists.l=
-ttng.org%2Fcgi-bin%2Fmailman%2Flistinfo%2Flttng-dev&amp;amp;data=3D02%7C01%=
-7C%7C9bc88da99a1646d66d4408d83877ab9f%7C1b16ab3eb8f64fe39f3e2db7fe549f6a%7C=
-0%7C0%7C637321433923520068&amp;amp;sdata=3Dci4daouTRyY%2BWzSjqVhrmjn11lhYHK=
-s6lcR6kvqr370%3D&amp;amp;reserved=3D0</a><br>
-&gt;<br>
-&gt;<br>
-&gt; --<br>
-&gt; Jonathan Rajotte-Julien<br>
-&gt; EfficiOS<br>
-<br>
-<br>
-<br>
---<br>
-Jonathan Rajotte-Julien<br>
-EfficiOS<br>
-</div>
-</span></font></div>
-</body>
-</html>
-
---_000_AM0PR06MB4003ABBC57B6E974B89D4C65E64B0AM0PR06MB4003eurp_--
-
---_004_AM0PR06MB4003ABBC57B6E974B89D4C65E64B0AM0PR06MB4003eurp_
-Content-Type: image/png; name="Outlook-cid_image0.png"
-Content-Description: Outlook-cid_image0.png
-Content-Disposition: inline; filename="Outlook-cid_image0.png"; size=5901;
-	creation-date="Wed, 05 Aug 2020 04:50:51 GMT";
-	modification-date="Wed, 05 Aug 2020 04:50:51 GMT"
-Content-ID: <e1282fbe-17ea-4858-81f0-4c24ae9c31c7>
-Content-Transfer-Encoding: base64
-
-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
-
---_004_AM0PR06MB4003ABBC57B6E974B89D4C65E64B0AM0PR06MB4003eurp_--
-
---===============2254588232837230054==
+--===============7232797681709586358==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -788,4 +151,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2254588232837230054==--
+--===============7232797681709586358==--
