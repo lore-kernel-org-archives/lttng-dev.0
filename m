@@ -1,69 +1,71 @@
 Return-Path: <SRS0=sjgi=CK=lists.lttng.org=lttng-dev-bounces@kernel.org>
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31FACC433E6
-	for <lttng-dev@archiver.kernel.org>; Tue,  1 Sep 2020 13:42:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ED3AC433E6
+	for <lttng-dev@archiver.kernel.org>; Tue,  1 Sep 2020 13:43:01 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id DBEDD206EB
-	for <lttng-dev@archiver.kernel.org>; Tue,  1 Sep 2020 13:42:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 10168206EB
+	for <lttng-dev@archiver.kernel.org>; Tue,  1 Sep 2020 13:42:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="SnSD/Enr"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org DBEDD206EB
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="vqOE/aAl"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 10168206EB
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4BgpD25N78z6h8;
-	Tue,  1 Sep 2020 09:42:42 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4BgpDL56Pnz6M7;
+	Tue,  1 Sep 2020 09:42:58 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1598967763;
-	bh=oUsH0aN20bAdTYY6a1+TNn8R7pa5/BqZmd6OWY/FN2A=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=SnSD/EnrghwXaFkFAPs6oWaYYJiQvW19HTCXvwcv4SRBj3cg0C2QGjGjflv+ZdkG8
-	 wCqXuW6v3mmNPz9UAx9CX2mNUsPYYzKXu7oAFeLsKQRY6t2QPllEvoMggX4yfzO9G8
-	 1+GiIMbs//elrgW7Wv2ELqT9VtpuXoGFEOSQ1UqS+yOCywOdNJK4tcJ/ET6/EnMZOG
-	 f/yCABOc0X3DnAOFV/Z7P10B/oXPaLfDrelEv7/+AGBZNvOflcPl1FCUntu+VE1NjF
-	 IgENOcOyHVT6W2FyLOcDoSchAdFNhSeW28PTzSYKM1eaO478PBZcVC48Xj/ohXCGOU
-	 21awBm+ABQWyA==
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net
- (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
- by lists.lttng.org (Postfix) with SMTP id 4BghVg06G2z6Js
- for <lttng-dev@lists.lttng.org>; Tue,  1 Sep 2020 05:24:58 -0400 (EDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Tue, 1 Sep 2020 17:13:25
- +0800 (GMT+08:00)
-X-Originating-IP: [125.120.147.82]
-Date: Tue, 1 Sep 2020 17:13:25 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, 
- "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, 
- "gbastien@versatic.net" <gbastien@versatic.net>
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.12 build 20200616(0f5d8152)
- Copyright (c) 2002-2020 www.mailtech.cn zju.edu.cn
+	s=default; t=1598967779;
+	bh=0TmFgwyjz7U8P/TEAwewO9UyG6K5+Upd6/g628z2E8Q=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=vqOE/aAl7ED1ZGUyRE/YfsNdk4oSjXYB3L0Scsd/LLVe9cYkoJOKW9R9MJ9lqpYuN
+	 rjIZnz4fRaCDCRs+0YFNHZLuVDJfqdaxepju5NoMKG6Fy+exOzEtvQwo3cJfFSMC46
+	 Tvw1Mk7PoWbJTbroO+nFECamU5NrmfiWLvp2TtKTX/lmWjXK9rOX13yg6AXrp+f9n/
+	 v5orFp2wJpj0C3DKAHRtW7O89M6PmeQ2tJhWA7R4K5ft9+W+v49SxQsHxeUwUtTF0C
+	 NI7DyhjSksvvBseG9l4FbXIlp2Q5aLqSQu3OkrU/Q7X6tdVsYuSTkBtWi/CeCQJDUh
+	 fc1wwMQM9I6Pw==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Bgp6N47cFz6Pw
+ for <lttng-dev@lists.lttng.org>; Tue,  1 Sep 2020 09:37:48 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id EEF9E26642E
+ for <lttng-dev@lists.lttng.org>; Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
+X-Spam-Flag: NO
+X-Spam-Score: -3.097
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.097 required=6.6 tests=[ALL_TRUSTED=-1,
+ BAYES_00=-1.9, DKIM_SIGNED=0.1, DKIM_VALID=-0.1, DKIM_VALID_AU=-0.1,
+ DKIM_VALID_EF=-0.1, HTML_IMAGE_RATIO_02=0.001, HTML_MESSAGE=0.001,
+ URIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id JYp53BDI8foE; Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 6D86026642D;
+ Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6D86026642D
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id Usbfi_JWB_NM; Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 121BA26669E;
+ Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
+Date: Tue, 1 Sep 2020 09:37:40 -0400 (EDT)
+To: =?utf-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
+Message-ID: <1835947492.25584.1598967460978.JavaMail.zimbra@efficios.com>
+In-Reply-To: <6e9da9cb.16e65.17448f14499.Coremail.xiongyuhua@zju.edu.cn>
+References: <6e9da9cb.16e65.17448f14499.Coremail.xiongyuhua@zju.edu.cn>
 MIME-Version: 1.0
-Message-ID: <6e9da9cb.16e65.17448f14499.Coremail.xiongyuhua@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgAXX_+1EE5fM2iPAQ--.55489W
-X-CM-SenderInfo: qtrviiiqurjio62m3hxhgxhubq/1tbiAwMKDVNG2-6TJAAAsA
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJTRUUUbRCS07vEb7Iv0x
- C_Cr1lV2xY67kC6x804xWlV2xY67CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DMIAI
- bVAFxVCF77xC64kEw24lV2xY67C26IkvcIIF6IxKo4kEV4ylV2xY628lY4IE4IxF12IF4w
- CS07vE84x0c7CEj48ve4kI8wCS07vE84ACjcxK6xIIjxv20xvE14v26w1j6s0DMIAIbVA2
- z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wCS07vE84ACjcxK6I8E87Iv67AKxVW0oV
- Cq3wCS07vE84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DMIAIbVAS0I0E0xvYzxvE52x0
- 82IY62kv0487MIAIbVASzI0EjI02j7AqF2xKxwCS07vE5I8CrVAvF7xS0VAEw40v6ryUMI
- AIbVAqx4xG6cxCj2AI6xk0xcxE6r15MIAIbVAqx4xG64xvF2IEw4CE5I8CrVC2j2WlV2xY
- 6cIj6xIIjxv20xvE14v26r1j6r18MIAIbVAv7VC2z280aVAFwI0_Jr0_Gr1lV2xY6cvjeV
- CFs4IE7xkEbVWUJVW8JwCS07vE7I0Y64k_MIAIbVCY1Ik26cxK620vw7xCY7WlV2xY6xkI
- ecxEwVAFwVW8uwCS07vEc2IjII80xcxEwVAKI48JMIAIbVCF72vE77IF4wCS07vE4I8I3I
- 0E4IkC6x0Yz7v_Jr0_Gr1lV2xY6I8I3I0E5I8CrVAFwI0_JrI_JrWlV2xY6I8I3I0E7480
- Y4vE14v26r106r1rMIAIbVC2zVAF1VAY17CE14v26r1Y6r17MIAIbVCI42IY6xIIjxv20x
- vE14v26r1j6r1xMIAIbVCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lV2xY6IIF0xvE
- 42xK8VAvwI8IcIk0rVWrZr1j6s0DMIAIbVCI42IY6I8E87Iv67AKxVWUJVW8JwCS07vEIx
- AIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73U
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3959 (ZimbraWebClient - FF80 (Linux)/8.8.15_GA_3953)
+Thread-Topic: How to use the lttng-untrack command
+Thread-Index: NEwJjgYhacAgE7UP4X5n4Iulifx/7w==
 X-Mailman-Approved-At: Tue, 01 Sep 2020 09:42:41 -0400
-Subject: [lttng-dev] How to use the lttng-untrack command
+Subject: Re: [lttng-dev] How to use the lttng-untrack command
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
 Precedence: list
@@ -75,87 +77,201 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?b?54aK5q+T5Y2OIHZpYSBsdHRuZy1kZXY=?= <lttng-dev@lists.lttng.org>
-Reply-To: =?UTF-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
-Content-Type: multipart/mixed; boundary="===============7482833294328397900=="
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Content-Type: multipart/mixed; boundary="===============6639060559438984575=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============7482833294328397900==
-Content-Type: multipart/related; 
-	boundary="----=_Part_313441_2145206454.1598951605401"
-
-------=_Part_313441_2145206454.1598951605401
+--===============6639060559438984575==
 Content-Type: multipart/alternative; 
-	boundary="----=_Part_313442_1950568034.1598951605401"
+	boundary="=_bd12f4a4-a323-486a-b4ba-df20a3449df7"
 
-------=_Part_313442_1950568034.1598951605401
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+--=_bd12f4a4-a323-486a-b4ba-df20a3449df7
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-SGnvvIxkZWFyCgoKCgpIZWxsbywgSSBoYXZlIGVuY291bnRlcmVkIHNvbWUgcHJvYmxlbXMgaW4g
-dXNpbmcgTFRUTkcsIHdoaWNoIGlzIGJyaWVmbHkgZGVzY3JpYmVkIGFzIGZvbGxvd3MuIEkgYW0g
-ZWFnZXIgdG8gZ2V0IHlvdXIgaGVscC4KCgpBYm91dCB0aGUgdXNlIG9mIHRoZSB1bnRyYWNrIGNv
-bW1hbmQuSXQgaXMgcmVwcm9kdWNlZCBhcyBmb2xsb3dzOgoKSSB0eXBlIHRoZSBmb2xsb3dpbmcg
-Y29tbWFuZHMgaW4gdHVybiB0byBzdGFydCBMVFRORywgYW5kIHNldCB1cCBub3QgdG8gbW9uaXRv
-ciBhIHBhcnRpY3VsYXIgcHJvY2Vzcy4oRm9yIGV4YW1wbGUsIEkgaW5wdXQgdGhlICJ0b3AiIGNv
-bW1hbmQgaW4gdGhlIHRlcm1pbmFsLCB0aGUgUElEIG9mIHRoZSAidG9wIiBwcm9jZXNzIGlzIDcy
-NTk4LCBub3cgSSB3YW50IExUVE5HIG5vdCB0byBtb25pdG9yIHRoZSAidG9wIiBwcm9jZXNzKQoK
-CgoKbHR0bmcgY3JlYXRlIG15LWtlcm5lbC1zZXNzaW9uIC0tb3V0cHV0PS90bXAvbXkta2VybmVs
-LXRyYWNlCmx0dG5nIGFkZC1jb250ZXh0IC1rIC10IHBpZApsdHRuZyBhZGQtY29udGV4dCAtayAt
-dCB0aWQKbHR0bmcgZW5hYmxlLWV2ZW50IC0ta2VybmVsIC0tYWxsCmx0dG5nIHVudHJhY2sgLS1r
-ZXJuZWwgLS1waWQ9NzI1OTgKbHR0bmcgc3RhcnQKbHR0bmcgZGVzdHJveQpiYWJlbHRyYWNlMiAv
-dG1wL215LWtlcm5lbC10cmFjZSA+IGJhYmVsdHJhY2UudHh0CgoKCgpVbmZvcnR1bmF0ZWx5LCB0
-aGUgb3V0cHV0IHN0aWxsIGNvbnRhaW5zIHRoZSBkYXRhIGZvciBQSUQ3MjU5OC4KRXZlbiBhZnRl
-ciBJIGNoYW5nZWQgImx0dG5nIHVudHJhY2sgLS1rZXJuZWwgLS0gUElEID03MjU5OCIgdG8gIkxU
-VE5HIHVudHJhY2stdSAtLSBQSUQgPTcyNTk4IiwgdGhpcyBwaGVub21lbm9uIHN0aWxsIG9jY3Vy
-cmVkLgoKSG93IGRvIEkgdXNlIHRoZSBsdHRuZy11bnRyYWNrIGNvbW1hbmQgdG8gYWNoaWV2ZSBt
-eSBnb2FsPwoKCgoKTG9va2luZyBmb3J3YXJkIHRvIHlvdXIgcmVwbHkuCnRoYW5rcywKeXVodWEK
-Ci0tLS0tLS0tLS0tLS0tLS0tLQpZdWh1YSBYaW9uZwpMYWIgZm9yIEludGVybmV0IGFuZCBTZWN1
-cml0eSBUZWNobm9sb2d5ClNjaG9vbCBvZiBDb21wdXRlciBTY2llbmNlIGFuZCBUZWNobm9sb2d5
-ClpoZWppYW5nIFVuaXZlcnNpdHkKSGFuZ3pob3UsIDMxMDAwNywgUC5SLiBDaGluYQoK
-------=_Part_313442_1950568034.1598951605401
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: base64
+----- On Sep 1, 2020, at 5:13 AM, =E7=86=8A=E6=AF=93=E5=8D=8E <xiongyuhua@z=
+ju.edu.cn> wrote:=20
 
-PHA+CglIae+8jGRlYXIKPC9wPgo8cD4KCTxicj4KPC9wPgo8cD4KCUhlbGxvLCBJIGhhdmUgZW5j
-b3VudGVyZWQgc29tZSBwcm9ibGVtcyBpbiB1c2luZyBMVFRORywgd2hpY2ggaXMgYnJpZWZseSBk
-ZXNjcmliZWQgYXMgZm9sbG93cy4gSSBhbSBlYWdlciB0byBnZXQgeW91ciBoZWxwLgo8L3A+Cjxw
-PgoJPGJyPgpBYm91dCB0aGUgdXNlIG9mIHRoZSB1bnRyYWNrIGNvbW1hbmQuSXQgaXMgcmVwcm9k
-dWNlZCBhcyBmb2xsb3dzOgo8L3A+CjxwPgoJSSB0eXBlIHRoZSBmb2xsb3dpbmcgY29tbWFuZHMg
-aW4gdHVybiB0byBzdGFydCBMVFRORywgYW5kIHNldCB1cCBub3QgdG8gbW9uaXRvciBhIHBhcnRp
-Y3VsYXIgcHJvY2Vzcy4oRm9yIGV4YW1wbGUsIEkgaW5wdXQgdGhlICJ0b3AiIGNvbW1hbmQgaW4g
-dGhlIHRlcm1pbmFsLCB0aGUgUElEIG9mIHRoZSAidG9wIiBwcm9jZXNzIGlzIDcyNTk4LCBub3cg
-SSB3YW50IExUVE5HIG5vdCB0byBtb25pdG9yIHRoZSAidG9wIiBwcm9jZXNzKQo8L3A+CjxwPgoJ
-PGJyPgo8L3A+CjxvbD4KCTxsaT4KCQlsdHRuZyBjcmVhdGUgbXkta2VybmVsLXNlc3Npb24gLS1v
-dXRwdXQ9L3RtcC9teS1rZXJuZWwtdHJhY2UKCTwvbGk+Cgk8bGk+CgkJbHR0bmcgYWRkLWNvbnRl
-eHQgLWsgLXQgcGlkCgk8L2xpPgoJPGxpPgoJCTxzcGFuIHN0eWxlPSJ3aGl0ZS1zcGFjZTpub3Jt
-YWw7Ij5sdHRuZyBhZGQtY29udGV4dCAtayAtdCB0aWQ8L3NwYW4+Cgk8L2xpPgoJPGxpPgoJCWx0
-dG5nIGVuYWJsZS1ldmVudCAtLWtlcm5lbCAtLWFsbAoJPC9saT4KCTxsaT4KCQlsdHRuZyB1bnRy
-YWNrIC0ta2VybmVsIC0tcGlkPTcyNTk4Cgk8L2xpPgoJPGxpPgoJCWx0dG5nIHN0YXJ0Cgk8L2xp
-PgoJPGxpPgoJCWx0dG5nIGRlc3Ryb3kKCTwvbGk+Cgk8bGk+CgkJYmFiZWx0cmFjZTIgL3RtcC9t
-eS1rZXJuZWwtdHJhY2UgJmd0OyBiYWJlbHRyYWNlLnR4dAoJPC9saT4KPC9vbD4KPHA+Cgk8YnI+
-CjwvcD4KPHA+CglVbmZvcnR1bmF0ZWx5LCB0aGUgb3V0cHV0IHN0aWxsIGNvbnRhaW5zIHRoZSBk
-YXRhIGZvciBQSUQ3MjU5OC48YnI+CkV2ZW4gYWZ0ZXIgSSBjaGFuZ2VkICJsdHRuZyB1bnRyYWNr
-IC0ta2VybmVsIC0tIFBJRCA9NzI1OTgiIHRvICJMVFRORyB1bnRyYWNrLXUgLS0gUElEID03MjU5
-OCIsIHRoaXMgcGhlbm9tZW5vbiBzdGlsbCBvY2N1cnJlZC48YnI+Cjxicj4KSG93IGRvIEkgdXNl
-IHRoZSBsdHRuZy11bnRyYWNrIGNvbW1hbmQgdG8gYWNoaWV2ZSBteSBnb2FsPwo8L3A+CjxwPgoJ
-PGJyPgo8L3A+CjxwPgoJTG9va2luZyBmb3J3YXJkIHRvIHlvdXIgcmVwbHkuPGJyPgp0aGFua3Ms
-PGJyPgp5dWh1YQo8L3A+CjxwPgoJLS0tLS0tLS0tLS0tLS0tLS0tPGJyPgpZdWh1YSBYaW9uZzxi
-cj4KTGFiIGZvciBJbnRlcm5ldCBhbmQgU2VjdXJpdHkgVGVjaG5vbG9neTxicj4KU2Nob29sIG9m
-IENvbXB1dGVyIFNjaWVuY2UgYW5kIFRlY2hub2xvZ3k8YnI+ClpoZWppYW5nIFVuaXZlcnNpdHk8
-YnI+Ckhhbmd6aG91LCAzMTAwMDcsIFAuUi4gQ2hpbmE8YnI+Cjxicj4KPGltZyBzcmM9ImNpZDoz
-MTcwYzRmYyQzJDE3NDQ4ZWFjMzY0JENvcmVtYWlsJHhpb25neXVodWEkemp1LmVkdS5jbiIgd2lk
-dGg9IjE2MDAiIGhlaWdodD0iODI0IiB0aXRsZT0iIiBhbGlnbj0iIiBhbHQ9IiI+PGltZyBzcmM9
-ImNpZDo1ZDQ5NDkwNCQ0JDE3NDQ4ZWQ4MmI1JENvcmVtYWlsJHhpb25neXVodWEkemp1LmVkdS5j
-biIgd2lkdGg9IjE2MDAiIGhlaWdodD0iODIwIiB0aXRsZT0iIiBhbGlnbj0iIiBhbHQ9IiI+Cjwv
-cD4=
-------=_Part_313442_1950568034.1598951605401--
+> Hi=EF=BC=8Cdear
 
-------=_Part_313441_2145206454.1598951605401
+> Hello, I have encountered some problems in using LTTNG, which is briefly
+> described as follows. I am eager to get your help.
+
+> About the use of the untrack command.It is reproduced as follows:
+
+> I type the following commands in turn to start LTTNG, and set up not to m=
+onitor
+> a particular process.(For example, I input the "top" command in the termi=
+nal,
+> the PID of the "top" process is 72598, now I want LTTNG not to monitor th=
+e
+> "top" process)
+
+>     1. lttng create my-kernel-session --output=3D/tmp/my-kernel-trace
+>     2. lttng add-context -k -t pid
+>     3. lttng add-context -k -t tid
+>     4. lttng enable-event --kernel --all
+>     5. lttng untrack --kernel --pid=3D72598
+>     6. lttng start
+>     7. lttng destroy
+>     8. babeltrace2 /tmp/my-kernel-trace > babeltrace.txt
+
+> Unfortunately, the output still contains the data for PID72598.
+> Even after I changed "lttng untrack --kernel -- PID =3D72598" to "LTTNG u=
+ntrack-u
+> -- PID =3D72598", this phenomenon still occurred.
+
+> How do I use the lttng-untrack command to achieve my goal?
+Based on the lttng-track(1) man page:=20
+
+The lttng track commands adds one or more values to a process attribute=20
+tracker.=20
+
+A process attribute tracker is an inclusion set of process attributes.=20
+Tracked processes are allowed to emit events, provided those events are=20
+targeted by enabled event rules (see lttng-enable-event(1)).=20
+
+Tracker values can be removed from an inclusion set with lttng-=20
+untrack(1).=20
+
+What you are looking for is a an "exclusion set", which does not exist at t=
+his point=20
+in LTTng.=20
+
+Thanks,=20
+
+Mathieu=20
+
+> Looking forward to your reply.
+> thanks,
+> yuhua
+
+> ------------------
+> Yuhua Xiong
+> Lab for Internet and Security Technology
+> School of Computer Science and Technology
+> Zhejiang University
+> Hangzhou, 310007, P.R. China
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+--=_bd12f4a4-a323-486a-b4ba-df20a3449df7
+Content-Type: multipart/related; 
+	boundary="=_57059c2a-87e9-498b-b290-6c9bde918222"
+
+--=_57059c2a-87e9-498b-b290-6c9bde918222
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br data-mce-bogus=3D"1"></div><div><span i=
+d=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Sep 1, 2020, at 5:13 AM, =
+=E7=86=8A=E6=AF=93=E5=8D=8E &lt;xiongyuhua@zju.edu.cn&gt; wrote:<br></span>=
+</div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left=
+:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:=
+normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,s=
+ans-serif;font-size:12pt;"><p>
+=09Hi=EF=BC=8Cdear
+</p>
+<p>
+=09<br>
+</p>
+<p>
+=09Hello, I have encountered some problems in using LTTNG, which is briefly=
+ described as follows. I am eager to get your help.
+</p>
+<p>
+=09<br>
+About the use of the untrack command.It is reproduced as follows:
+</p>
+<p>
+=09I type the following commands in turn to start LTTNG, and set up not to =
+monitor a particular process.(For example, I input the "top" command in the=
+ terminal, the PID of the "top" process is 72598, now I want LTTNG not to m=
+onitor the "top" process)
+</p>
+<p>
+=09<br>
+</p>
+<ol><li>
+=09=09lttng create my-kernel-session --output=3D/tmp/my-kernel-trace
+=09</li><li>
+=09=09lttng add-context -k -t pid
+=09</li><li>
+=09=09<span style=3D"white-space:normal">lttng add-context -k -t tid</span>
+=09</li><li>
+=09=09lttng enable-event --kernel --all
+=09</li><li>
+=09=09lttng untrack --kernel --pid=3D72598
+=09</li><li>
+=09=09lttng start
+=09</li><li>
+=09=09lttng destroy
+=09</li><li>
+=09=09babeltrace2 /tmp/my-kernel-trace &gt; babeltrace.txt
+=09</li></ol>
+<p>
+=09<br>
+</p>
+<p>
+=09Unfortunately, the output still contains the data for PID72598.<br>
+Even after I changed "lttng untrack --kernel -- PID =3D72598" to "LTTNG unt=
+rack-u -- PID =3D72598", this phenomenon still occurred.<br>
+<br>
+How do I use the lttng-untrack command to achieve my goal?
+</p></blockquote><div><br></div><div>Based on the lttng-track(1) man page:<=
+br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The lttng track commands adds one or more =
+values to a process attribute<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; track=
+er.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A process attribute tracker=
+ is an inclusion set of process attributes.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp; Tracked processes are allowed to emit events, provided those event=
+s are<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; targeted by enabled event rul=
+es (see lttng-enable-event(1)).<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ Tracker values can be removed from an inclusion set with lttng-<br>&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp; untrack(1).<br><br data-mce-bogus=3D"1"></div=
+><div>What you are looking for is a an "exclusion set", which does not exis=
+t at this point<br data-mce-bogus=3D"1"></div><div>in LTTng.<br data-mce-bo=
+gus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mc=
+e-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br dat=
+a-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div><br data-m=
+ce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;mar=
+gin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:norm=
+al;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12=
+pt;">
+<p>
+=09<br>
+</p>
+<p>
+=09Looking forward to your reply.<br>
+thanks,<br>
+yuhua
+</p>
+<p>
+=09------------------<br>
+Yuhua Xiong<br>
+Lab for Internet and Security Technology<br>
+School of Computer Science and Technology<br>
+Zhejiang University<br>
+Hangzhou, 310007, P.R. China<br>
+<br>
+<img src=3D"cid:3170c4fc$3$17448eac364$Coremail$xiongyuhua$zju.edu.cn" titl=
+e=3D"" alt=3D"" width=3D"1600" height=3D"824" align=3D""><img src=3D"cid:5d=
+494904$4$17448ed82b5$Coremail$xiongyuhua$zju.edu.cn" title=3D"" alt=3D"" wi=
+dth=3D"1600" height=3D"820" align=3D"">
+</p><br></blockquote></div><div><br></div><div data-marker=3D"__SIG_POST__"=
+>-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficio=
+s.com</div></div></body></html>
+--=_57059c2a-87e9-498b-b290-6c9bde918222
 Content-Type: image/png; name=1598951079297.png
+Content-Disposition: inline; filename=1598951079297.png
 Content-Transfer-Encoding: base64
-Content-Disposition: inline; filename="1598951079297.png"
 Content-ID: <3170c4fc$3$17448eac364$Coremail$xiongyuhua$zju.edu.cn>
 
 iVBORw0KGgoAAAANSUhEUgAACS0AAAS6CAYAAAC1e973AAAgAElEQVR4Aey9z6t9y7bYtTpiGhGN
@@ -4176,10 +4292,10 @@ S96mZYABBhhggAEGGGCAAQYYYICBhgYSYcloqWZ0FJOdKwMMMMAAAwwwwAADDDDAAAMMnBlItCWj
 pYZR8gyWz10+DDDAAAMMMMAAAwwwwAADDNQ3kAhLRkv1nbgLnDEDDDDAAAMMMMAAAwwwwAADDMwM
 JNqS0ZLRkrdpGWCAAQYYYIABBhhggAEGGGCgoYFEWDJaEi1n0dIzLhhggAEGGGCAAQYYYIABBhio
 byDRlv4Ag4zD7pg9LKAAAAAASUVORK5CYII=
-------=_Part_313441_2145206454.1598951605401
+--=_57059c2a-87e9-498b-b290-6c9bde918222
 Content-Type: image/png; name=1598951286057.png
+Content-Disposition: inline; filename=1598951286057.png
 Content-Transfer-Encoding: base64
-Content-Disposition: inline; filename="1598951286057.png"
 Content-ID: <5d494904$4$17448ed82b5$Coremail$xiongyuhua$zju.edu.cn>
 
 iVBORw0KGgoAAAANSUhEUgAACTUAAAS4CAYAAADMyr7gAAAgAElEQVR4Aey9z68sy5bfVROEB0Zg
@@ -10900,10 +11016,13 @@ zRgwwAADDDDAAAMMMMAAAwwwwAADDCQYKIqibG6/Pz9LN2PAAAMMMMAAAwwwwAADDDDAAAMMMJBi
 4OPfv3+lmzFggAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYICBtRgQahLq
 EmpjgAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYGBVBv4Dzg/CfKsDsNYA
 AAAASUVORK5CYII=
-------=_Part_313441_2145206454.1598951605401--
+--=_57059c2a-87e9-498b-b290-6c9bde918222--
+
+--=_bd12f4a4-a323-486a-b4ba-df20a3449df7--
 
 
---===============7482833294328397900==
+
+--===============6639060559438984575==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -10914,5 +11033,6 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============7482833294328397900==--
+--===============6639060559438984575==--
+
 
