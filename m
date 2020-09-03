@@ -1,70 +1,70 @@
-Return-Path: <SRS0=sjgi=CK=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=QVYh=CM=lists.lttng.org=lttng-dev-bounces@kernel.org>
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ED3AC433E6
-	for <lttng-dev@archiver.kernel.org>; Tue,  1 Sep 2020 13:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91227C433E2
+	for <lttng-dev@archiver.kernel.org>; Thu,  3 Sep 2020 12:37:04 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 10168206EB
-	for <lttng-dev@archiver.kernel.org>; Tue,  1 Sep 2020 13:42:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 1BAB0206EB
+	for <lttng-dev@archiver.kernel.org>; Thu,  3 Sep 2020 12:37:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="vqOE/aAl"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 10168206EB
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="jy9g34Vj"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1BAB0206EB
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4BgpDL56Pnz6M7;
-	Tue,  1 Sep 2020 09:42:58 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Bj0gK1NPrz7CG;
+	Thu,  3 Sep 2020 08:37:01 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1598967779;
-	bh=0TmFgwyjz7U8P/TEAwewO9UyG6K5+Upd6/g628z2E8Q=;
+	s=default; t=1599136621;
+	bh=dO0HAO1y4z4ZyprsjRdmNdD/nb2QAW2SJ0uyomMa9wc=;
 	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=vqOE/aAl7ED1ZGUyRE/YfsNdk4oSjXYB3L0Scsd/LLVe9cYkoJOKW9R9MJ9lqpYuN
-	 rjIZnz4fRaCDCRs+0YFNHZLuVDJfqdaxepju5NoMKG6Fy+exOzEtvQwo3cJfFSMC46
-	 Tvw1Mk7PoWbJTbroO+nFECamU5NrmfiWLvp2TtKTX/lmWjXK9rOX13yg6AXrp+f9n/
-	 v5orFp2wJpj0C3DKAHRtW7O89M6PmeQ2tJhWA7R4K5ft9+W+v49SxQsHxeUwUtTF0C
-	 NI7DyhjSksvvBseG9l4FbXIlp2Q5aLqSQu3OkrU/Q7X6tdVsYuSTkBtWi/CeCQJDUh
-	 fc1wwMQM9I6Pw==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4Bgp6N47cFz6Pw
- for <lttng-dev@lists.lttng.org>; Tue,  1 Sep 2020 09:37:48 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id EEF9E26642E
- for <lttng-dev@lists.lttng.org>; Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
-X-Spam-Flag: NO
-X-Spam-Score: -3.097
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.097 required=6.6 tests=[ALL_TRUSTED=-1,
- BAYES_00=-1.9, DKIM_SIGNED=0.1, DKIM_VALID=-0.1, DKIM_VALID_AU=-0.1,
- DKIM_VALID_EF=-0.1, HTML_IMAGE_RATIO_02=0.001, HTML_MESSAGE=0.001,
- URIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id JYp53BDI8foE; Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 6D86026642D;
- Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6D86026642D
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id Usbfi_JWB_NM; Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 121BA26669E;
- Tue,  1 Sep 2020 09:37:41 -0400 (EDT)
-Date: Tue, 1 Sep 2020 09:37:40 -0400 (EDT)
-To: =?utf-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
-Message-ID: <1835947492.25584.1598967460978.JavaMail.zimbra@efficios.com>
-In-Reply-To: <6e9da9cb.16e65.17448f14499.Coremail.xiongyuhua@zju.edu.cn>
+	b=jy9g34VjYKRtrMF+tXpd0PVzH0Hyf9gBF5ZlLQ9831EXVVVhdpqZrlwfGJ2ohlRr5
+	 jKJEBufVSgzq0muXKLen+tmuraG0Cd3mtZmWBH1xFZAADLuYQNtjgosorrSGt5a1z7
+	 m+2pOdRuQRNmGE3EFR9YO9CvqVwvm9x7NM1Wv9LEOFRJLaSi2twWyl6Velk0TC+lIE
+	 aXiZD7ME7nCsPmywB9NIpt3nqE743EQtKGbraniFSsgJ6xFG0n2TM+sRk0tWYsahHt
+	 1DZj/dRogZqfcBKr/0kNPU6z6RQbdq8VINc6jAadQUVmqTlfWsiIkBMVQtHloQoMT2
+	 OwJHiVsao7kNw==
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net
+ (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+ by lists.lttng.org (Postfix) with SMTP id 4BhlkW2bFDz75Y
+ for <lttng-dev@lists.lttng.org>; Wed,  2 Sep 2020 22:53:54 -0400 (EDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Thu, 3 Sep 2020 10:53:32
+ +0800 (GMT+08:00)
+X-Originating-IP: [125.120.147.82]
+Date: Thu, 3 Sep 2020 10:53:32 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.12 build 20200616(0f5d8152)
+ Copyright (c) 2002-2020 www.mailtech.cn zju.edu.cn
+In-Reply-To: <1835947492.25584.1598967460978.JavaMail.zimbra@efficios.com>
 References: <6e9da9cb.16e65.17448f14499.Coremail.xiongyuhua@zju.edu.cn>
+ <1835947492.25584.1598967460978.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3959 (ZimbraWebClient - FF80 (Linux)/8.8.15_GA_3953)
-Thread-Topic: How to use the lttng-untrack command
-Thread-Index: NEwJjgYhacAgE7UP4X5n4Iulifx/7w==
-X-Mailman-Approved-At: Tue, 01 Sep 2020 09:42:41 -0400
+Message-ID: <5ceed60f.1d021.17451e23278.Coremail.xiongyuhua@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgD3__+sWlBfSAOqAQ--.64037W
+X-CM-SenderInfo: qtrviiiqurjio62m3hxhgxhubq/1tbiAwILDVNG2-60dwAHsz
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJTRUUU1bIS07vEb7Iv0x
+ C_Cr1lV2xY67kC6x804xWlV2xY67CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DMIAI
+ bVAFxVCF77xC64kEw24lV2xY67C26IkvcIIF6IxKo4kEV4ylV2xY628lY4IE4IxF12IF4w
+ CS07vE84x0c7CEj48ve4kI8wCS07vE84ACjcxK6xIIjxv20xvE14v26w1j6s0DMIAIbVA2
+ z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wCS07vE84ACjcxK6I8E87Iv67AKxVW0oV
+ Cq3wCS07vE84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DMIAIbVAS0I0E0xvYzxvE52x0
+ 82IY62kv0487MIAIbVASzI0EjI02j7AqF2xKxwCS07vE5I8CrVAvF7xS0VCYjI8vzVWUXw
+ CS07vE5I8CrVACY4xI64kE6c02F40Ex7xfMIAIbVAqx4xG6I80eVA0xI0YY7vIx2IE14AG
+ zxvEb7x7MIAIbVAv7VC0I7IYx2IY67AKxVWUJVWUGwCS07vEYx0Ex4A2jsIE14v26r1j6r
+ 4UMIAIbVAm72CE4IkC6x0Yz7v_Jr0_Gr1lV2xY6x02cVAKzwCS07vEc7Ca8VAvwVA2a4k0
+ FcxrMIAIbVCY02Avz4vE14v_Gr1lV2xY6xkI7II2jI8vz4vEwIxGrwCS07vE4x8a6x804x
+ WlV2xY6xC20s026xCaFVCjc4AY6r1j6r4UMIAIbVC20s026c02F40E14v26r106r1rMIAI
+ bVC20s026x8GjcxK67AKxVWUGVWUWwCS07vEx4CE17CEb7AF67AKxVWUXVWUAwCS07vEIx
+ AIcVC0I7IYx2IY67AKxVWUJVWUCwCS07vEIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
+ MIAIbVCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCS07vEIxAIcVC2z280aVAFwI0_Jr
+ 0_Gr1lV2xY6IIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUU==
+X-Mailman-Approved-At: Thu, 03 Sep 2020 08:36:59 -0400
 Subject: Re: [lttng-dev] How to use the lttng-untrack command
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
@@ -77,202 +77,168 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: =?utf-8?b?54aK5q+T5Y2OIHZpYSBsdHRuZy1kZXY=?= <lttng-dev@lists.lttng.org>
+Reply-To: =?UTF-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Content-Type: multipart/mixed; boundary="===============6639060559438984575=="
+Content-Type: multipart/mixed; boundary="===============5759857218778420175=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============6639060559438984575==
-Content-Type: multipart/alternative; 
-	boundary="=_bd12f4a4-a323-486a-b4ba-df20a3449df7"
-
---=_bd12f4a4-a323-486a-b4ba-df20a3449df7
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
------ On Sep 1, 2020, at 5:13 AM, =E7=86=8A=E6=AF=93=E5=8D=8E <xiongyuhua@z=
-ju.edu.cn> wrote:=20
-
-> Hi=EF=BC=8Cdear
-
-> Hello, I have encountered some problems in using LTTNG, which is briefly
-> described as follows. I am eager to get your help.
-
-> About the use of the untrack command.It is reproduced as follows:
-
-> I type the following commands in turn to start LTTNG, and set up not to m=
-onitor
-> a particular process.(For example, I input the "top" command in the termi=
-nal,
-> the PID of the "top" process is 72598, now I want LTTNG not to monitor th=
-e
-> "top" process)
-
->     1. lttng create my-kernel-session --output=3D/tmp/my-kernel-trace
->     2. lttng add-context -k -t pid
->     3. lttng add-context -k -t tid
->     4. lttng enable-event --kernel --all
->     5. lttng untrack --kernel --pid=3D72598
->     6. lttng start
->     7. lttng destroy
->     8. babeltrace2 /tmp/my-kernel-trace > babeltrace.txt
-
-> Unfortunately, the output still contains the data for PID72598.
-> Even after I changed "lttng untrack --kernel -- PID =3D72598" to "LTTNG u=
-ntrack-u
-> -- PID =3D72598", this phenomenon still occurred.
-
-> How do I use the lttng-untrack command to achieve my goal?
-Based on the lttng-track(1) man page:=20
-
-The lttng track commands adds one or more values to a process attribute=20
-tracker.=20
-
-A process attribute tracker is an inclusion set of process attributes.=20
-Tracked processes are allowed to emit events, provided those events are=20
-targeted by enabled event rules (see lttng-enable-event(1)).=20
-
-Tracker values can be removed from an inclusion set with lttng-=20
-untrack(1).=20
-
-What you are looking for is a an "exclusion set", which does not exist at t=
-his point=20
-in LTTng.=20
-
-Thanks,=20
-
-Mathieu=20
-
-> Looking forward to your reply.
-> thanks,
-> yuhua
-
-> ------------------
-> Yuhua Xiong
-> Lab for Internet and Security Technology
-> School of Computer Science and Technology
-> Zhejiang University
-> Hangzhou, 310007, P.R. China
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
---=_bd12f4a4-a323-486a-b4ba-df20a3449df7
+--===============5759857218778420175==
 Content-Type: multipart/related; 
-	boundary="=_57059c2a-87e9-498b-b290-6c9bde918222"
+	boundary="----=_Part_393435_1345806592.1599101612664"
 
---=_57059c2a-87e9-498b-b290-6c9bde918222
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+------=_Part_393435_1345806592.1599101612664
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_393436_1702536733.1599101612664"
 
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br data-mce-bogus=3D"1"></div><div><span i=
-d=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Sep 1, 2020, at 5:13 AM, =
-=E7=86=8A=E6=AF=93=E5=8D=8E &lt;xiongyuhua@zju.edu.cn&gt; wrote:<br></span>=
-</div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left=
-:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:=
-normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,s=
-ans-serif;font-size:12pt;"><p>
-=09Hi=EF=BC=8Cdear
-</p>
-<p>
-=09<br>
-</p>
-<p>
-=09Hello, I have encountered some problems in using LTTNG, which is briefly=
- described as follows. I am eager to get your help.
-</p>
-<p>
-=09<br>
-About the use of the untrack command.It is reproduced as follows:
-</p>
-<p>
-=09I type the following commands in turn to start LTTNG, and set up not to =
-monitor a particular process.(For example, I input the "top" command in the=
- terminal, the PID of the "top" process is 72598, now I want LTTNG not to m=
-onitor the "top" process)
-</p>
-<p>
-=09<br>
-</p>
-<ol><li>
-=09=09lttng create my-kernel-session --output=3D/tmp/my-kernel-trace
-=09</li><li>
-=09=09lttng add-context -k -t pid
-=09</li><li>
-=09=09<span style=3D"white-space:normal">lttng add-context -k -t tid</span>
-=09</li><li>
-=09=09lttng enable-event --kernel --all
-=09</li><li>
-=09=09lttng untrack --kernel --pid=3D72598
-=09</li><li>
-=09=09lttng start
-=09</li><li>
-=09=09lttng destroy
-=09</li><li>
-=09=09babeltrace2 /tmp/my-kernel-trace &gt; babeltrace.txt
-=09</li></ol>
-<p>
-=09<br>
-</p>
-<p>
-=09Unfortunately, the output still contains the data for PID72598.<br>
-Even after I changed "lttng untrack --kernel -- PID =3D72598" to "LTTNG unt=
-rack-u -- PID =3D72598", this phenomenon still occurred.<br>
-<br>
-How do I use the lttng-untrack command to achieve my goal?
-</p></blockquote><div><br></div><div>Based on the lttng-track(1) man page:<=
-br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The lttng track commands adds one or more =
-values to a process attribute<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; track=
-er.<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A process attribute tracker=
- is an inclusion set of process attributes.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp; Tracked processes are allowed to emit events, provided those event=
-s are<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; targeted by enabled event rul=
-es (see lttng-enable-event(1)).<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- Tracker values can be removed from an inclusion set with lttng-<br>&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp; untrack(1).<br><br data-mce-bogus=3D"1"></div=
-><div>What you are looking for is a an "exclusion set", which does not exis=
-t at this point<br data-mce-bogus=3D"1"></div><div>in LTTng.<br data-mce-bo=
-gus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mc=
-e-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br dat=
-a-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div><br data-m=
-ce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;mar=
-gin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:norm=
-al;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12=
-pt;">
-<p>
-=09<br>
-</p>
-<p>
-=09Looking forward to your reply.<br>
-thanks,<br>
-yuhua
-</p>
-<p>
-=09------------------<br>
-Yuhua Xiong<br>
-Lab for Internet and Security Technology<br>
-School of Computer Science and Technology<br>
-Zhejiang University<br>
-Hangzhou, 310007, P.R. China<br>
-<br>
-<img src=3D"cid:3170c4fc$3$17448eac364$Coremail$xiongyuhua$zju.edu.cn" titl=
-e=3D"" alt=3D"" width=3D"1600" height=3D"824" align=3D""><img src=3D"cid:5d=
-494904$4$17448ed82b5$Coremail$xiongyuhua$zju.edu.cn" title=3D"" alt=3D"" wi=
-dth=3D"1600" height=3D"820" align=3D"">
-</p><br></blockquote></div><div><br></div><div data-marker=3D"__SIG_POST__"=
->-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficio=
-s.com</div></div></body></html>
---=_57059c2a-87e9-498b-b290-6c9bde918222
-Content-Type: image/png; name=1598951079297.png
-Content-Disposition: inline; filename=1598951079297.png
+------=_Part_393436_1702536733.1599101612664
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: base64
-Content-ID: <3170c4fc$3$17448eac364$Coremail$xiongyuhua$zju.edu.cn>
+
+VGhhbmtz77yMbm93IEkgdW5kZXJzdGFuZCB0aGUgdHJhY2tpbmcgcG9saWN5IG9mIGx0dG5nLgoK
+QW5kIEkgd2FudCB0byBrbm9377yMZG8geW91IGhhdmUgYW55IHBsYW5zIGZvciAiZXhjbHVzaW9u
+IHNldCI/CgoKCi0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0K5Y+R5Lu25Lq6OiJNYXRoaWV1IERlc25v
+eWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4K5Y+R6YCB5pe26Ze0OjIwMjAt
+MDktMDEgMjE6Mzc6NDAgKOaYn+acn+S6jCkK5pS25Lu25Lq6OiAi54aK5q+T5Y2OIiA8eGlvbmd5
+dWh1YUB6anUuZWR1LmNuPgrmioTpgIE6IGx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZz4sICJHZW5ldmnDqHZlIEJhc3RpZW4iIDxnYmFzdGllbkB2ZXJzYXRpYy5uZXQ+CuS4u+mi
+mDogUmU6IEhvdyB0byB1c2UgdGhlIGx0dG5nLXVudHJhY2sgY29tbWFuZAoKCgoKLS0tLS0gT24g
+U2VwIDEsIDIwMjAsIGF0IDU6MTMgQU0sIOeGiuavk+WNjiA8eGlvbmd5dWh1YUB6anUuZWR1LmNu
+PiB3cm90ZToKCgpIae+8jGRlYXIKCgoKCkhlbGxvLCBJIGhhdmUgZW5jb3VudGVyZWQgc29tZSBw
+cm9ibGVtcyBpbiB1c2luZyBMVFRORywgd2hpY2ggaXMgYnJpZWZseSBkZXNjcmliZWQgYXMgZm9s
+bG93cy4gSSBhbSBlYWdlciB0byBnZXQgeW91ciBoZWxwLgoKCkFib3V0IHRoZSB1c2Ugb2YgdGhl
+IHVudHJhY2sgY29tbWFuZC5JdCBpcyByZXByb2R1Y2VkIGFzIGZvbGxvd3M6CgpJIHR5cGUgdGhl
+IGZvbGxvd2luZyBjb21tYW5kcyBpbiB0dXJuIHRvIHN0YXJ0IExUVE5HLCBhbmQgc2V0IHVwIG5v
+dCB0byBtb25pdG9yIGEgcGFydGljdWxhciBwcm9jZXNzLihGb3IgZXhhbXBsZSwgSSBpbnB1dCB0
+aGUgInRvcCIgY29tbWFuZCBpbiB0aGUgdGVybWluYWwsIHRoZSBQSUQgb2YgdGhlICJ0b3AiIHBy
+b2Nlc3MgaXMgNzI1OTgsIG5vdyBJIHdhbnQgTFRUTkcgbm90IHRvIG1vbml0b3IgdGhlICJ0b3Ai
+IHByb2Nlc3MpCgoKCgpsdHRuZyBjcmVhdGUgbXkta2VybmVsLXNlc3Npb24gLS1vdXRwdXQ9L3Rt
+cC9teS1rZXJuZWwtdHJhY2UKbHR0bmcgYWRkLWNvbnRleHQgLWsgLXQgcGlkCmx0dG5nIGFkZC1j
+b250ZXh0IC1rIC10IHRpZApsdHRuZyBlbmFibGUtZXZlbnQgLS1rZXJuZWwgLS1hbGwKbHR0bmcg
+dW50cmFjayAtLWtlcm5lbCAtLXBpZD03MjU5OApsdHRuZyBzdGFydApsdHRuZyBkZXN0cm95CmJh
+YmVsdHJhY2UyIC90bXAvbXkta2VybmVsLXRyYWNlID4gYmFiZWx0cmFjZS50eHQKCgoKClVuZm9y
+dHVuYXRlbHksIHRoZSBvdXRwdXQgc3RpbGwgY29udGFpbnMgdGhlIGRhdGEgZm9yIFBJRDcyNTk4
+LgpFdmVuIGFmdGVyIEkgY2hhbmdlZCAibHR0bmcgdW50cmFjayAtLWtlcm5lbCAtLSBQSUQgPTcy
+NTk4IiB0byAiTFRUTkcgdW50cmFjay11IC0tIFBJRCA9NzI1OTgiLCB0aGlzIHBoZW5vbWVub24g
+c3RpbGwgb2NjdXJyZWQuCgpIb3cgZG8gSSB1c2UgdGhlIGx0dG5nLXVudHJhY2sgY29tbWFuZCB0
+byBhY2hpZXZlIG15IGdvYWw/CgoKCkJhc2VkIG9uIHRoZSBsdHRuZy10cmFjaygxKSBtYW4gcGFn
+ZToKCgoKICAgICAgIFRoZSBsdHRuZyB0cmFjayBjb21tYW5kcyBhZGRzIG9uZSBvciBtb3JlIHZh
+bHVlcyB0byBhIHByb2Nlc3MgYXR0cmlidXRlCiAgICAgICB0cmFja2VyLgoKICAgICAgIEEgcHJv
+Y2VzcyBhdHRyaWJ1dGUgdHJhY2tlciBpcyBhbiBpbmNsdXNpb24gc2V0IG9mIHByb2Nlc3MgYXR0
+cmlidXRlcy4KICAgICAgIFRyYWNrZWQgcHJvY2Vzc2VzIGFyZSBhbGxvd2VkIHRvIGVtaXQgZXZl
+bnRzLCBwcm92aWRlZCB0aG9zZSBldmVudHMgYXJlCiAgICAgICB0YXJnZXRlZCBieSBlbmFibGVk
+IGV2ZW50IHJ1bGVzIChzZWUgbHR0bmctZW5hYmxlLWV2ZW50KDEpKS4KCiAgICAgICBUcmFja2Vy
+IHZhbHVlcyBjYW4gYmUgcmVtb3ZlZCBmcm9tIGFuIGluY2x1c2lvbiBzZXQgd2l0aCBsdHRuZy0K
+ICAgICAgIHVudHJhY2soMSkuCgoKV2hhdCB5b3UgYXJlIGxvb2tpbmcgZm9yIGlzIGEgYW4gImV4
+Y2x1c2lvbiBzZXQiLCB3aGljaCBkb2VzIG5vdCBleGlzdCBhdCB0aGlzIHBvaW50CgppbiBMVFRu
+Zy4KCgoKVGhhbmtzLAoKCgpNYXRoaWV1CgoKCgoKCgoKCkxvb2tpbmcgZm9yd2FyZCB0byB5b3Vy
+IHJlcGx5Lgp0aGFua3MsCnl1aHVhCgotLS0tLS0tLS0tLS0tLS0tLS0KWXVodWEgWGlvbmcKTGFi
+IGZvciBJbnRlcm5ldCBhbmQgU2VjdXJpdHkgVGVjaG5vbG9neQpTY2hvb2wgb2YgQ29tcHV0ZXIg
+U2NpZW5jZSBhbmQgVGVjaG5vbG9neQpaaGVqaWFuZyBVbml2ZXJzaXR5Ckhhbmd6aG91LCAzMTAw
+MDcsIFAuUi4gQ2hpbmEKCgoKCgoKCi0tCgpNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMu
+Cmh0dHA6Ly93d3cuZWZmaWNpb3MuY29t
+------=_Part_393436_1702536733.1599101612664
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: base64
+
+PHA+CglUaGFua3PvvIxub3cgSSB1bmRlcnN0YW5kIHRoZSB0cmFja2luZyBwb2xpY3kgb2YgbHR0
+bmcuCjwvcD4KPHA+CglBbmQgSSB3YW50IHRvIGtub3fvvIxkbyB5b3UgaGF2ZSBhbnkgcGxhbnMg
+Zm9yICJleGNsdXNpb24gc2V0Ij8KPC9wPgo8YnI+Cjxicj4KPGJsb2NrcXVvdGUgbmFtZT0icmVw
+bHlDb250ZW50IiBjbGFzcz0iUmVmZXJlbmNlUXVvdGUiIHN0eWxlPSJwYWRkaW5nLWxlZnQ6NXB4
+O21hcmdpbi1sZWZ0OjVweDtib3JkZXItbGVmdDojYjZiNmI2IDJweCBzb2xpZDttYXJnaW4tcmln
+aHQ6MDsiPgoJLS0tLS3ljp/lp4vpgq7ku7YtLS0tLTxicj4KPGI+5Y+R5Lu25Lq6OjwvYj48c3Bh
+biBpZD0icmNfZnJvbSI+Ik1hdGhpZXUgRGVzbm95ZXJzIiAmbHQ7bWF0aGlldS5kZXNub3llcnNA
+ZWZmaWNpb3MuY29tJmd0Ozwvc3Bhbj48YnI+CjxiPuWPkemAgeaXtumXtDo8L2I+PHNwYW4gaWQ9
+InJjX3NlbnR0aW1lIj4yMDIwLTA5LTAxIDIxOjM3OjQwICjmmJ/mnJ/kuowpPC9zcGFuPjxicj4K
+PGI+5pS25Lu25Lq6OjwvYj4gIueGiuavk+WNjiIgJmx0O3hpb25neXVodWFAemp1LmVkdS5jbiZn
+dDs8YnI+CjxiPuaKhOmAgTo8L2I+IGx0dG5nLWRldiAmbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZyZndDssICJHZW5ldmnDqHZlIEJhc3RpZW4iICZsdDtnYmFzdGllbkB2ZXJzYXRpYy5uZXQm
+Z3Q7PGJyPgo8Yj7kuLvpopg6PC9iPiBSZTogSG93IHRvIHVzZSB0aGUgbHR0bmctdW50cmFjayBj
+b21tYW5kPGJyPgo8YnI+Cgk8ZGl2IHN0eWxlPSJmb250LWZhbWlseTphcmlhbCwgaGVsdmV0aWNh
+LCBzYW5zLXNlcmlmO2ZvbnQtc2l6ZToxMnB0O2NvbG9yOiMwMDAwMDA7Ij4KCQk8ZGl2PgoJCQk8
+YnIgZGF0YS1tY2UtYm9ndXM9IjEiPgoJCTwvZGl2PgoJCTxkaXY+CgkJCTxzcGFuIGlkPSJ6d2No
+ciIgZGF0YS1tYXJrZXI9Il9fRElWSURFUl9fIj4tLS0tLSBPbiBTZXAgMSwgMjAyMCwgYXQgNTox
+MyBBTSwg54aK5q+T5Y2OICZsdDt4aW9uZ3l1aHVhQHpqdS5lZHUuY24mZ3Q7IHdyb3RlOjxicj4K
+PC9zcGFuPgoJCTwvZGl2PgoJCTxkaXYgZGF0YS1tYXJrZXI9Il9fUVVPVEVEX1RFWFRfXyI+CgkJ
+CTxibG9ja3F1b3RlIHN0eWxlPSJib3JkZXItbGVmdDoycHggc29saWQgIzEwMTBGRjttYXJnaW4t
+bGVmdDo1cHg7cGFkZGluZy1sZWZ0OjVweDtjb2xvcjojMDAwO2ZvbnQtd2VpZ2h0Om5vcm1hbDtm
+b250LXN0eWxlOm5vcm1hbDt0ZXh0LWRlY29yYXRpb246bm9uZTtmb250LWZhbWlseTpIZWx2ZXRp
+Y2EsQXJpYWwsc2Fucy1zZXJpZjtmb250LXNpemU6MTJwdDsiPgoJCQkJPHA+CgkJCQkJSGnvvIxk
+ZWFyCgkJCQk8L3A+CgkJCQk8cD4KCQkJCQk8YnI+CgkJCQk8L3A+CgkJCQk8cD4KCQkJCQlIZWxs
+bywgSSBoYXZlIGVuY291bnRlcmVkIHNvbWUgcHJvYmxlbXMgaW4gdXNpbmcgTFRUTkcsIHdoaWNo
+IGlzIGJyaWVmbHkgZGVzY3JpYmVkIGFzIGZvbGxvd3MuIEkgYW0gZWFnZXIgdG8gZ2V0IHlvdXIg
+aGVscC4KCQkJCTwvcD4KCQkJCTxwPgoJCQkJCTxicj4KQWJvdXQgdGhlIHVzZSBvZiB0aGUgdW50
+cmFjayBjb21tYW5kLkl0IGlzIHJlcHJvZHVjZWQgYXMgZm9sbG93czoKCQkJCTwvcD4KCQkJCTxw
+PgoJCQkJCUkgdHlwZSB0aGUgZm9sbG93aW5nIGNvbW1hbmRzIGluIHR1cm4gdG8gc3RhcnQgTFRU
+TkcsIGFuZCBzZXQgdXAgbm90IHRvIG1vbml0b3IgYSBwYXJ0aWN1bGFyIHByb2Nlc3MuKEZvciBl
+eGFtcGxlLCBJIGlucHV0IHRoZSAidG9wIiBjb21tYW5kIGluIHRoZSB0ZXJtaW5hbCwgdGhlIFBJ
+RCBvZiB0aGUgInRvcCIgcHJvY2VzcyBpcyA3MjU5OCwgbm93IEkgd2FudCBMVFRORyBub3QgdG8g
+bW9uaXRvciB0aGUgInRvcCIgcHJvY2VzcykKCQkJCTwvcD4KCQkJCTxwPgoJCQkJCTxicj4KCQkJ
+CTwvcD4KCQkJCTxvbD4KCQkJCQk8bGk+CgkJCQkJCWx0dG5nIGNyZWF0ZSBteS1rZXJuZWwtc2Vz
+c2lvbiAtLW91dHB1dD0vdG1wL215LWtlcm5lbC10cmFjZQoJCQkJCTwvbGk+CgkJCQkJPGxpPgoJ
+CQkJCQlsdHRuZyBhZGQtY29udGV4dCAtayAtdCBwaWQKCQkJCQk8L2xpPgoJCQkJCTxsaT4KCQkJ
+CQkJPHNwYW4gc3R5bGU9IndoaXRlLXNwYWNlOm5vcm1hbDsiPmx0dG5nIGFkZC1jb250ZXh0IC1r
+IC10IHRpZDwvc3Bhbj4gCgkJCQkJPC9saT4KCQkJCQk8bGk+CgkJCQkJCWx0dG5nIGVuYWJsZS1l
+dmVudCAtLWtlcm5lbCAtLWFsbAoJCQkJCTwvbGk+CgkJCQkJPGxpPgoJCQkJCQlsdHRuZyB1bnRy
+YWNrIC0ta2VybmVsIC0tcGlkPTcyNTk4CgkJCQkJPC9saT4KCQkJCQk8bGk+CgkJCQkJCWx0dG5n
+IHN0YXJ0CgkJCQkJPC9saT4KCQkJCQk8bGk+CgkJCQkJCWx0dG5nIGRlc3Ryb3kKCQkJCQk8L2xp
+PgoJCQkJCTxsaT4KCQkJCQkJYmFiZWx0cmFjZTIgL3RtcC9teS1rZXJuZWwtdHJhY2UgJmd0OyBi
+YWJlbHRyYWNlLnR4dAoJCQkJCTwvbGk+CgkJCQk8L29sPgoJCQkJPHA+CgkJCQkJPGJyPgoJCQkJ
+PC9wPgoJCQkJPHA+CgkJCQkJVW5mb3J0dW5hdGVseSwgdGhlIG91dHB1dCBzdGlsbCBjb250YWlu
+cyB0aGUgZGF0YSBmb3IgUElENzI1OTguPGJyPgpFdmVuIGFmdGVyIEkgY2hhbmdlZCAibHR0bmcg
+dW50cmFjayAtLWtlcm5lbCAtLSBQSUQgPTcyNTk4IiB0byAiTFRUTkcgdW50cmFjay11IC0tIFBJ
+RCA9NzI1OTgiLCB0aGlzIHBoZW5vbWVub24gc3RpbGwgb2NjdXJyZWQuPGJyPgo8YnI+CkhvdyBk
+byBJIHVzZSB0aGUgbHR0bmctdW50cmFjayBjb21tYW5kIHRvIGFjaGlldmUgbXkgZ29hbD8KCQkJ
+CTwvcD4KCQkJPC9ibG9ja3F1b3RlPgoJCQk8ZGl2PgoJCQkJPGJyPgoJCQk8L2Rpdj4KCQkJPGRp
+dj4KCQkJCUJhc2VkIG9uIHRoZSBsdHRuZy10cmFjaygxKSBtYW4gcGFnZTo8YnIgZGF0YS1tY2Ut
+Ym9ndXM9IjEiPgoJCQk8L2Rpdj4KCQkJPGRpdj4KCQkJCTxiciBkYXRhLW1jZS1ib2d1cz0iMSI+
+CgkJCTwvZGl2PgoJCQk8ZGl2PgoJCQkJJm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5i
+c3A7IFRoZSBsdHRuZyB0cmFjayBjb21tYW5kcyBhZGRzIG9uZSBvciBtb3JlIHZhbHVlcyB0byBh
+IHByb2Nlc3MgYXR0cmlidXRlPGJyPgombmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJz
+cDsgdHJhY2tlci48YnI+Cjxicj4KJm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7
+IEEgcHJvY2VzcyBhdHRyaWJ1dGUgdHJhY2tlciBpcyBhbiBpbmNsdXNpb24gc2V0IG9mIHByb2Nl
+c3MgYXR0cmlidXRlcy48YnI+CiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyBU
+cmFja2VkIHByb2Nlc3NlcyBhcmUgYWxsb3dlZCB0byBlbWl0IGV2ZW50cywgcHJvdmlkZWQgdGhv
+c2UgZXZlbnRzIGFyZTxicj4KJm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7IHRh
+cmdldGVkIGJ5IGVuYWJsZWQgZXZlbnQgcnVsZXMgKHNlZSBsdHRuZy1lbmFibGUtZXZlbnQoMSkp
+Ljxicj4KPGJyPgombmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsgVHJhY2tlciB2
+YWx1ZXMgY2FuIGJlIHJlbW92ZWQgZnJvbSBhbiBpbmNsdXNpb24gc2V0IHdpdGggbHR0bmctPGJy
+PgombmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsgdW50cmFjaygxKS48YnI+Cjxi
+ciBkYXRhLW1jZS1ib2d1cz0iMSI+CgkJCTwvZGl2PgoJCQk8ZGl2PgoJCQkJV2hhdCB5b3UgYXJl
+IGxvb2tpbmcgZm9yIGlzIGEgYW4gImV4Y2x1c2lvbiBzZXQiLCB3aGljaCBkb2VzIG5vdCBleGlz
+dCBhdCB0aGlzIHBvaW50PGJyIGRhdGEtbWNlLWJvZ3VzPSIxIj4KCQkJPC9kaXY+CgkJCTxkaXY+
+CgkJCQlpbiBMVFRuZy48YnIgZGF0YS1tY2UtYm9ndXM9IjEiPgoJCQk8L2Rpdj4KCQkJPGRpdj4K
+CQkJCTxiciBkYXRhLW1jZS1ib2d1cz0iMSI+CgkJCTwvZGl2PgoJCQk8ZGl2PgoJCQkJVGhhbmtz
+LDxiciBkYXRhLW1jZS1ib2d1cz0iMSI+CgkJCTwvZGl2PgoJCQk8ZGl2PgoJCQkJPGJyIGRhdGEt
+bWNlLWJvZ3VzPSIxIj4KCQkJPC9kaXY+CgkJCTxkaXY+CgkJCQlNYXRoaWV1PGJyIGRhdGEtbWNl
+LWJvZ3VzPSIxIj4KCQkJPC9kaXY+CgkJCTxkaXY+CgkJCQk8YnIgZGF0YS1tY2UtYm9ndXM9IjEi
+PgoJCQk8L2Rpdj4KCQkJPGRpdj4KCQkJCTxiciBkYXRhLW1jZS1ib2d1cz0iMSI+CgkJCTwvZGl2
+PgoJCQk8YmxvY2txdW90ZSBzdHlsZT0iYm9yZGVyLWxlZnQ6MnB4IHNvbGlkICMxMDEwRkY7bWFy
+Z2luLWxlZnQ6NXB4O3BhZGRpbmctbGVmdDo1cHg7Y29sb3I6IzAwMDtmb250LXdlaWdodDpub3Jt
+YWw7Zm9udC1zdHlsZTpub3JtYWw7dGV4dC1kZWNvcmF0aW9uOm5vbmU7Zm9udC1mYW1pbHk6SGVs
+dmV0aWNhLEFyaWFsLHNhbnMtc2VyaWY7Zm9udC1zaXplOjEycHQ7Ij4KCQkJCTxwPgoJCQkJCTxi
+cj4KCQkJCTwvcD4KCQkJCTxwPgoJCQkJCUxvb2tpbmcgZm9yd2FyZCB0byB5b3VyIHJlcGx5Ljxi
+cj4KdGhhbmtzLDxicj4KeXVodWEKCQkJCTwvcD4KCQkJCTxwPgoJCQkJCS0tLS0tLS0tLS0tLS0t
+LS0tLTxicj4KWXVodWEgWGlvbmc8YnI+CkxhYiBmb3IgSW50ZXJuZXQgYW5kIFNlY3VyaXR5IFRl
+Y2hub2xvZ3k8YnI+ClNjaG9vbCBvZiBDb21wdXRlciBTY2llbmNlIGFuZCBUZWNobm9sb2d5PGJy
+PgpaaGVqaWFuZyBVbml2ZXJzaXR5PGJyPgpIYW5nemhvdSwgMzEwMDA3LCBQLlIuIENoaW5hPGJy
+Pgo8YnI+CjxpbWcgc3JjPSJjaWQ6NTIzYzM1YjckMSQxNzQ1MWUxNWIwZSRDb3JlbWFpbCR4aW9u
+Z3l1aHVhJHpqdS5lZHUuY24iIHRpdGxlPSIiIGFsdD0iIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSI4
+MjQiIGFsaWduPSIiPjxpbWcgc3JjPSJjaWQ6MjY2MGRiYSQyJDE3NDUxZTE1YjBlJENvcmVtYWls
+JHhpb25neXVodWEkemp1LmVkdS5jbiIgdGl0bGU9IiIgYWx0PSIiIHdpZHRoPSIxNjAwIiBoZWln
+aHQ9IjgyMCIgYWxpZ249IiI+IAoJCQkJPC9wPgo8YnI+CgkJCTwvYmxvY2txdW90ZT4KCQk8L2Rp
+dj4KCQk8ZGl2PgoJCQk8YnI+CgkJPC9kaXY+CgkJPGRpdiBkYXRhLW1hcmtlcj0iX19TSUdfUE9T
+VF9fIj4KCQkJLS0gPGJyPgoJCTwvZGl2PgoJCTxkaXY+CgkJCU1hdGhpZXUgRGVzbm95ZXJzPGJy
+PgpFZmZpY2lPUyBJbmMuPGJyPgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoJCTwvZGl2PgoJPC9k
+aXY+CjwvYmxvY2txdW90ZT4=
+------=_Part_393436_1702536733.1599101612664--
+
+------=_Part_393435_1345806592.1599101612664
+Content-Type: image/png; name=1598951079297.png
+Content-Transfer-Encoding: base64
+Content-Disposition: inline; filename="1598951079297.png"
+Content-ID: <523c35b7$1$17451e15b0e$Coremail$xiongyuhua$zju.edu.cn>
 
 iVBORw0KGgoAAAANSUhEUgAACS0AAAS6CAYAAAC1e973AAAgAElEQVR4Aey9z6t9y7bYtTpiGhGN
 dhJseBu2BA26kHA3YtdGQC8qrxFWI0Hu/gcOF3Jux2U6gbx4sh+kIUQTdKG+kICXJ9kHSUPTWOcR
@@ -4292,11 +4258,11 @@ S96mZYABBhhggAEGGGCAAQYYYICBhgYSYcloqWZ0FJOdKwMMMMAAAwwwwAADDDDAAAMMnBlItCWj
 pYZR8gyWz10+DDDAAAMMMMAAAwwwwAADDNQ3kAhLRkv1nbgLnDEDDDDAAAMMMMAAAwwwwAADDMwM
 JNqS0ZLRkrdpGWCAAQYYYIABBhhggAEGGGCgoYFEWDJaEi1n0dIzLhhggAEGGGCAAQYYYIABBhio
 byDRlv4Ag4zD7pg9LKAAAAAASUVORK5CYII=
---=_57059c2a-87e9-498b-b290-6c9bde918222
+------=_Part_393435_1345806592.1599101612664
 Content-Type: image/png; name=1598951286057.png
-Content-Disposition: inline; filename=1598951286057.png
 Content-Transfer-Encoding: base64
-Content-ID: <5d494904$4$17448ed82b5$Coremail$xiongyuhua$zju.edu.cn>
+Content-Disposition: inline; filename="1598951286057.png"
+Content-ID: <2660dba$2$17451e15b0e$Coremail$xiongyuhua$zju.edu.cn>
 
 iVBORw0KGgoAAAANSUhEUgAACTUAAAS4CAYAAADMyr7gAAAgAElEQVR4Aey9z68sy5bfVROEB0Zg
 zsQWA56OGCFBXygh99s6YoqOkOAJOG9g1aAt9PY/8NSS75tQ9MSS21zvljxAMtiCEtCtNtA803XV
@@ -11016,13 +10982,10 @@ zRgwwAADDDDAAAMMMMAAAwwwwAADDCQYKIqibG6/Pz9LN2PAAAMMMMAAAwwwwAADDDDAAAMMMJBi
 4OPfv3+lmzFggAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYICBtRgQahLq
 EmpjgAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYIABBhhggAEGGGCAAQYYYGBVBv4Dzg/CfKsDsNYA
 AAAASUVORK5CYII=
---=_57059c2a-87e9-498b-b290-6c9bde918222--
-
---=_bd12f4a4-a323-486a-b4ba-df20a3449df7--
+------=_Part_393435_1345806592.1599101612664--
 
 
-
---===============6639060559438984575==
+--===============5759857218778420175==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -11033,6 +10996,5 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============6639060559438984575==--
-
+--===============5759857218778420175==--
 
