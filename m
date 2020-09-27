@@ -1,65 +1,64 @@
-Return-Path: <SRS0=jDl3=DC=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=mi93=DE=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-1.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56BE6C4727E
-	for <lttng-dev@archiver.kernel.org>; Fri, 25 Sep 2020 19:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1168C4346E
+	for <lttng-dev@archiver.kernel.org>; Sun, 27 Sep 2020 13:54:56 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 33C17221EC
-	for <lttng-dev@archiver.kernel.org>; Fri, 25 Sep 2020 19:17:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 77607221E5
+	for <lttng-dev@archiver.kernel.org>; Sun, 27 Sep 2020 13:54:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="JSRgOTsV"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 33C17221EC
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="A5z+fBYu"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 77607221E5
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4ByhWM13V7zLJX;
-	Fri, 25 Sep 2020 15:17:34 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4BznG541fKzMDK;
+	Sun, 27 Sep 2020 09:54:53 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1601061455;
-	bh=3FJzSnkwHEVILHf1RFQezSCh+PeaF/OBAwCrL3HFC+A=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=JSRgOTsVbhYJM91ks11Qb43ZT8ATqOjUvbivzAamZv06Z+9duZ/LgLgH7WETYufK9
-	 V7vaJ1wKzT7QQNep3Q4xPW76ToxJhx73qJRwH+NsCitNNpqlyjYqMTd/l9otlLTlhN
-	 wcZI3pgjPNIMiJpVlf1SLrW3M0ZXLPz4ttiznZB39hwfOvBrVOVwy2XvH6HsWthMHX
-	 Qk8n3ans+nn0Mwf4x5GO1nDxKjJkdC/BnCx2DlduSF72bCNaBug87Jjtj5n4EG0SRf
-	 ePFbPP7PY5jIMLuKh6Mvx0yY/ot/tK+2QoBUxvNqCFTyU0HJ8sdfb8Fe2lbfGMPK+z
-	 y7GHy+oDdUYOw==
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com
- [IPv6:2607:f8b0:4864:20::b29])
- by lists.lttng.org (Postfix) with ESMTPS id 4ByhWH5jdGzKwm
- for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2020 15:17:31 -0400 (EDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 133so2726563ybg.11
- for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2020 12:17:31 -0700 (PDT)
+	s=default; t=1601214894;
+	bh=xbB3Lak38NdNEnb5FpOpIB0rNkXdEiZcxWlUN8p6VhY=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=A5z+fBYudcZ4Q96meE+eNlsHw/nGU9hbtD6jcSuEVkh8BDcaKhZ6fCK9A5lBs3S6J
+	 Wh7e/PhyxKGS6F28tIlN64Qr/nDEKbEJjdzTO0Wcr2fwbiqaz+9stIH15lSTxQR4d8
+	 4tHqYgovZiUDdVMtY5qLA+ldkfSsVaLnwbaQzLAwbycJ/A/GSUt3XtnyUXqbi1SAYD
+	 f4+jNUPy3Z8M0hczozsAnFGHC5MCGdmwdJS+Lc4sI8DC0J/rs3JVEXnZ953W41Zgro
+	 px0t2T3oGKTNppiisr4eHBO2cL+L2bh0fvIManfxNrve60Nub0d6VRR5j10kTivvTv
+	 yY4feNSZb+OhA==
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com
+ [IPv6:2607:f8b0:4864:20::32e])
+ by lists.lttng.org (Postfix) with ESMTPS id 4BznG40SHrzLd9
+ for <lttng-dev@lists.lttng.org>; Sun, 27 Sep 2020 09:54:51 -0400 (EDT)
+Received: by mail-ot1-x32e.google.com with SMTP id n61so6969195ota.10
+ for <lttng-dev@lists.lttng.org>; Sun, 27 Sep 2020 06:54:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
- bh=AMszHZ++jBlictckd8yLVyVD/OXzWoEaB0C24EJqXE8=;
- b=gFLxlORAXNJ7GiZpXGQy/D5RXfQdmIU0/d6nX2VDmsRqej7ofNstRFMcv11cVGdUE7
- Fm+NDE+wO2QgHArvx4387JenuHIFZdHFKq9633PRMp49DuQOHz9LG9ewmUfV3t/Xml0G
- p9QOqopoAunU/cGxLCpbScrB3rO6QYCzy0X85+W7vfqKB/1cyalofXl3vSQ7U/v9XhkK
- FTU6u2nwHJ+HJ2762qBL+GEiSwQpXVEWvjfCrqY7refPU5ZhBGz9u97tcEX562Aorx/P
- YUUNoaoBZVVCS8O68bJL3MxPUZsXgsfYdtdTX6JcRbHRwtwAoSYPxOkbB4iPSfG0kQl/
- BjHQ==
-X-Gm-Message-State: AOAM5326N9TN84RfNGiKGenhgmY1jrR+prv2+4HTHM3t4S4vwhSeB4le
- WAOypCUf48Ey0gdRkay/LTeIj5Uf46uXzcM/wkrCLmXUViA=
-X-Google-Smtp-Source: ABdhPJyB6eQMYFOSdUyK8HnFIhbaC/Z16ZVdTdBnQL3H/odHWLTBJrLWmIPZzSfDrh4FfONaDrBZF1MVH1S1lZtrDe4=
-X-Received: by 2002:a25:244a:: with SMTP id k71mr1052359ybk.504.1601061450720; 
- Fri, 25 Sep 2020 12:17:30 -0700 (PDT)
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=A8iEfGohMBDf7GzYOQEsl6E90o5Vmk2F9zRKDujPpT4=;
+ b=W2YtW88kiOVj5TbL4e15IEv15tiXrfSSQNDJo3z5rOkWF/nLvWO+bSSDR6K6qSCAuW
+ X/Nk4aYy3de0Kh/jSmRzUKyM6wA2Z8x7IK7TgIxvoBUc3z2Oah3l5j4elsv6ApBPMtin
+ 1yV8JTpZj9fPyv/ai2sVSL2DpSQpJpC84YMeQATNPCl4xg8VVO8uMhRaBzsn8WaAdfJ2
+ ibFsJRHCrPlElUrnX097ifwAAqobWUQ2DsshgvO9n9vY0LHPgo72ke9WdT/ECEsRDg5M
+ tk822PYAu0VuJ40SoudAU5c5SjicLF5pPQiEzx78tRoh6VZ5yXO13uQ7sDXHbiwTq/nY
+ e1QA==
+X-Gm-Message-State: AOAM532ZBZ/o6qhKVCpbQ2BLaIcUV5fMGfx4B0EcTIgJy03DSdiOzFgM
+ 5xWQDkXfC1dkAS0UeRoN1lPGPvMfMxlZp/pKNG3JAabaLrxCqA==
+X-Google-Smtp-Source: ABdhPJwagT4TfG/FrF14UTfYO3qQ8n8el/QG2YXQXrZ6tTWbjhWye6I1RoCMrrVWslMizOFDtWlnedwFDRFm+g3glN4=
+X-Received: by 2002:a9d:4c01:: with SMTP id l1mr6188304otf.341.1601214890783; 
+ Sun, 27 Sep 2020 06:54:50 -0700 (PDT)
 MIME-Version: 1.0
-Date: Fri, 25 Sep 2020 15:17:04 -0400
-Message-ID: <CAB4xu_1t7p4LVyimbWropLcvC=k6nEVDFFpM65btCVHgr+Chtw@mail.gmail.com>
+Date: Sun, 27 Sep 2020 16:54:35 +0300
+Message-ID: <CABhb4uvWv1ewuK0Eq_UMBq2qY4kS-AUHqytYa_jMN2xvfF21dQ@mail.gmail.com>
 To: lttng-dev <lttng-dev@lists.lttng.org>
-Cc: diamon-discuss <diamon-discuss@lists.linuxfoundation.org>
-Subject: [lttng-dev] [RELEASE] barectf 3.0.0
+Subject: [lttng-dev] LTTng packages
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
 Precedence: list
@@ -71,45 +70,48 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Philippe Proulx via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Valentin Grigorev via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Valentin Grigorev <valentin.grigorev@jetbrains.com>
+Content-Type: multipart/mixed; boundary="===============4090765330173369270=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi everybody.
+--===============4090765330173369270==
+Content-Type: multipart/alternative; boundary="000000000000c6662c05b04be40b"
 
-Today EfficiOS announces the release of barectf 3.0.0.
+--000000000000c6662c05b04be40b
+Content-Type: text/plain; charset="UTF-8"
 
-barectf 3 is a major upgrade of the project which brings important
-additions and changes such as:
+Hello!
 
-* Support for static and dynamic array field types.
-* A reworked Python API.
-* A new YAML configuration schema.
-* An upgraded `barectf` CLI tool with a Git-like interface.
-* Improved generated ANSI C code.
+Is it planned to publish LTTng 2.12 packages for Linux distributives except
+Ubuntu and Debian. Packages for RedHat / CentOS, Fedora, Arch, etc are
+available for previous versions.
 
-Rest assured that the `barectf` CLI tool is backward compatible with its
-barectf 2 counterpart, and that barectf 3 can still process a barectf 2
-YAML configuration.
+Best regards,
+Valentin Grigorev
 
-Learn more about the barectf 3 changes on its new documentation
-website [1].
+--000000000000c6662c05b04be40b
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This documentation project also shows how to install barectf 3
-using pip [2].
+<div dir=3D"ltr">Hello!<div><br></div><div>Is it planned to publish=C2=A0LT=
+Tng 2.12 packages for Linux distributives except Ubuntu and Debian. Package=
+s for RedHat / CentOS, Fedora, Arch, etc are available for previous version=
+s.</div><div><br></div><div>Best regards,</div><div>Valentin Grigorev</div>=
+</div>
 
-We wish you a good day.
+--000000000000c6662c05b04be40b--
 
-Philippe Proulx
-EfficiOS Inc.
-https://www.efficios.com/
+--===============4090765330173369270==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-[1]: https://barectf.org/docs/barectf/3.0/whats-new.html
-[2]: https://barectf.org/docs/barectf/3.0/install.html
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============4090765330173369270==--
