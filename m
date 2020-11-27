@@ -7,70 +7,66 @@ X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55250C2D0E4
-	for <lttng-dev@archiver.kernel.org>; Fri, 27 Nov 2020 15:32:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36B07C63798
+	for <lttng-dev@archiver.kernel.org>; Fri, 27 Nov 2020 16:04:36 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 61C8B221FF
-	for <lttng-dev@archiver.kernel.org>; Fri, 27 Nov 2020 15:32:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTPS id 49ED4208D5
+	for <lttng-dev@archiver.kernel.org>; Fri, 27 Nov 2020 16:04:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="jjdKJdov"
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 61C8B221FF
+	dkim=pass (2048-bit key) header.d=lists.lttng.org header.i=@lists.lttng.org header.b="nR6dbhz1"
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 49ED4208D5
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4CjJXj25Tpz1Q2J;
-	Fri, 27 Nov 2020 10:32:37 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4CjKFY2nHDz1Q2T;
+	Fri, 27 Nov 2020 11:04:33 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1606491157;
-	bh=aUump+ivI5QFjJW05eFNyFMnzAW81QyQEawbda75WN8=;
-	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=jjdKJdovYiIt6YpvyDnFIYt0YlvNRuewzsQPV2ESvyOHcy33tRr0n9T1eJGC8aFRF
-	 uWNCQMZz6G60fU9G/MyPyidRkS8YX5Tq7LWt8e/nrmFBdkEj4pP3+huoTrcCXgPvru
-	 Mo9Ig+68qem3AlRAA0AOKmfkJtbq98j7Un8VFHq075xMbDrga2Alc98N9Z+82eQ2+H
-	 qHWklhfWn/Zhv4079X/xHRXdyRV5qu/qnFSjHjbvPkewf90RgECsS6uTLI1FFJ9jcR
-	 dPQY2L+wWgqdvR+gUFrZHNPKxGdpDsS+BbtWfuNJKmHRNLkJeps2voS0ILsw2VzS0n
-	 HcRTcTjam3FfQ==
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net
- (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
- by lists.lttng.org (Postfix) with SMTP id 4CjJXg0znxz1Q4l
- for <lttng-dev@lists.lttng.org>; Fri, 27 Nov 2020 10:32:34 -0500 (EST)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Fri, 27 Nov 2020 23:32:07
- +0800 (GMT+08:00)
-X-Originating-IP: [122.235.245.110]
-Date: Fri, 27 Nov 2020 23:32:07 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-To: "Jonathan Rajotte-Julien" <jonathan.rajotte-julien@efficios.com>, 
- lttng-dev@lists.lttng.org
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.12 build 20200616(0f5d8152)
- Copyright (c) 2002-2020 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20201127140548.GB3947@joraj-alpa>
+	s=default; t=1606493074;
+	bh=4vfGBh2bhbNNdbBF7Y6vOetyhWv8mjBzE6tFMfYV5XM=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=nR6dbhz1I2APciEw0eiBsIK1R4K51RIJmtDKragPaRQVnYlOeXsMI9If+tiwaDBC6
+	 4MZ52P1WVNhxGPQP0Y+1NT+whFK4bBQpTrjN3DcTJ+bAWerZN5O8WHNsm+Tkit5L69
+	 KLX6l8h0lFCikdByfJn4nHAV4p1BjThwFlougSg+fNZvuIasns3TSNR1kb88DhnO0z
+	 vJO6/dLNmsGC41oJ4lspTAMVnkey+0ytS5ziy+uStNGLNHo3GV8FNpJnBUJEZ0FRHy
+	 6yQC1vn49fvfGCO84GvJcNBewvWtq3LfPSRjYbcGtvuFhmMw5Vbo3785J0lAWSo1M9
+	 OP8wMMwJiWQZQ==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4CjKFW4GHWz1Pl3
+ for <lttng-dev@lists.lttng.org>; Fri, 27 Nov 2020 11:04:31 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 415C127C360
+ for <lttng-dev@lists.lttng.org>; Fri, 27 Nov 2020 11:04:25 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id pJB04G2_6XAx; Fri, 27 Nov 2020 11:04:24 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 1B3A827C593;
+ Fri, 27 Nov 2020 11:04:24 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1B3A827C593
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id B7_0ArZQRytn; Fri, 27 Nov 2020 11:04:24 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 099C227C0F3;
+ Fri, 27 Nov 2020 11:04:24 -0500 (EST)
+Date: Fri, 27 Nov 2020 11:04:23 -0500 (EST)
+To: =?utf-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Message-ID: <828264314.65604.1606493063962.JavaMail.zimbra@efficios.com>
+In-Reply-To: <25e54ac4.4261.1760a553e88.Coremail.xiongyuhua@zju.edu.cn>
 References: <40a80cf.2b99.176086d97b1.Coremail.xiongyuhua@zju.edu.cn>
  <20201127140548.GB3947@joraj-alpa>
+ <25e54ac4.4261.1760a553e88.Coremail.xiongyuhua@zju.edu.cn>
 MIME-Version: 1.0
-Message-ID: <25e54ac4.4261.1760a553e88.Coremail.xiongyuhua@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgC3WTj3G8Ff+Bc3AQ--.32238W
-X-CM-SenderInfo: qtrviiiqurjio62m3hxhgxhubq/1tbiAwMRDVNG3ArsWgAAsp
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJTRUUUbQCS07vEb7Iv0x
- C_Cr1lV2xY67kC6x804xWlV2xY67CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DMIAI
- bVAFxVCF77xC64kEw24lV2xY67C26IkvcIIF6IxKo4kEV4ylV2xY628lY4IE4IxF12IF4w
- CS07vE84x0c7CEj48ve4kI8wCS07vE84ACjcxK6xIIjxv20xvE14v26w1j6s0DMIAIbVA2
- z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIAIbVA2z4x0Y4vEx4A2jsIE14v26r
- xl6s0DMIAIbVA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lV2xY62AIxVAIcxkEcVAq
- 07x20xvEncxIr21lV2xY6c02F40EFcxC0VAKzVAqx4xG6I80ewCS07vEYx0E2Ix0cI8IcV
- AFwI0_Jr0_Jr4lV2xY6cIj6I8E87Iv67AKxVWUJVW8JwCS07vEOx8S6xCaFVCjc4AY6r1j
- 6r4UMIAIbVCjxxvEw4WlV2xY6xkIecxEwVAFwVW5WwCS07vEc2IjII80xcxEwVAKI48JMI
- AIbVCF72vE77IF4wCS07vE4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lV2xY6I8I3I0E5I8CrVAF
- wI0_JrI_JrWlV2xY6I8I3I0E7480Y4vE14v26r106r1rMIAIbVC2zVAF1VAY17CE14v26r
- 1Y6r17MIAIbVCI42IY6xIIjxv20xvE14v26r1j6r1xMIAIbVCI42IY6xIIjxv20xvEc7Cj
- xVAFwI0_Jr0_Gr1lV2xY6IIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIAIbVCI42IY6I
- 8E87Iv67AKxVWUJVW8JwCS07vEIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIev
- Ja73U
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3975 (ZimbraWebClient - GC86 (Linux)/8.8.15_GA_3975)
+Thread-Topic: Some confusion about cpu usage of the lttng-consumerd process
+Thread-Index: yp5QYAUpKnzdSMpykx0c2/cDegrSAg==
 Subject: Re: [lttng-dev] Some confusion about cpu usage of the
  lttng-consumerd process
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -84,232 +80,445 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?b?54aK5q+T5Y2OIHZpYSBsdHRuZy1kZXY=?= <lttng-dev@lists.lttng.org>
-Reply-To: =?UTF-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
-Content-Type: multipart/mixed; boundary="===============5291398515299642681=="
+From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Content-Type: multipart/mixed; boundary="===============1031602953658582660=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============5291398515299642681==
+--===============1031602953658582660==
 Content-Type: multipart/alternative; 
-	boundary="----=_Part_54909_591464724.1606491127432"
+	boundary="=_969e784f-864a-41e7-9b10-6df4f78292ab"
 
-------=_Part_54909_591464724.1606491127432
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+--=_969e784f-864a-41e7-9b10-6df4f78292ab
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-SGnvvIxEZWFyLgoKVGhlIHRlc3Qgc2NyaXB0IHdhcyB1c2VkIHRvIGdlbmVyYXRlIHNvbWUgY29t
-bW9uIGZpbGVJTyxuZXRJTyBldmVudHMuCgpPbiBhbGwgc2VydmVycywgdGhlIG1vbml0b3Jpbmcg
-c3RyYXRlZ3kgSSBzZXQgdXAgd2hlbiBJIHN0YXJ0IGx0dG5nIGlzIHRoZSBzYW1lLCBtb25pdG9y
-aW5nIGFsbCBmaWxlSU8sIG5ldElPIGFuZCBzb21lIHJlbGF0ZWQgc3lzdGVtIGNhbGxzLiAKVGhl
-IGZvbGxvd2luZyB0YWJsZSByZWNvcmRzIHRoZSBhbW91bnQgb2YgZXZlbnRzIGdlbmVyYXRlZCBi
-eSB0aGUgdGVzdCBzY3JpcHQgcGVyIG1pbnV0ZSwgYW5kIG9uZSBiYWJlbHRyYWNlIHJlY29yZCBy
-ZXByZXNlbnRzIG9uZSBldmVudC4KCgpUaGUgdW5pdCBvZiB0aGUgbnVtYmVyIGlzIGV2ZXJ5IHRl
-biB0aG91c2FuZCBldmVudHMgcGVyIG1pbnV0ZS4gQW5kIHRoZSBudW1iZXIgd2VyZSByZWFkIG91
-dCBhZnRlciBwYXJzaW5nIGJ5IGJhYmVsdHJhY2UuCkluIGFkZGl0aW9uLCB0aGUgc2VydmVyMSBp
-cyAxY29yZTRHLCBzZXJ2ZXIyIGlzIDJjb3JlOEcsIHNlcnZlcjMgaXMgNGNvcmUxNkcsIHNlcnZl
-cjQgYW5kIHNlcnZlcjUgYXJlIDhjb3JlMTZHLgoKSXQgY2FuIGJlIHNlZW4gdGhhdCB0aGUgYXZl
-cmFnZSBhbW91bnQgb2YgZGF0YSBnZW5lcmF0ZWQgcGVyIG1pbnV0ZSBvbiBhbGwgc2VydmVycyBp
-cyByb3VnaGx5IHRoZSBzYW1lLkhvd2V2ZXIsIHRoZSBDUFUgdXNhZ2Ugb2YgdGhlIGx0dG5nLWNv
-bnN1bWVyZCBwcm9jZXNzIGJlaGF2ZSBkaWZmZXJlbnRseSBvbiBzZXJ2ZXI0IGFuZCBzZXJ2ZXI1
-LCBhcyBJIG1lbnRpb25lZCBpbiBteSBsYXN0IGVtYWlsLgoKCkluIGFkZGl0aW9uLCB0aGUgdXNh
-Z2Ugb2YgY3B1IGlzIHJlY29yZGVkIHVzaW5nIHRoZSAidG9wIiBjb21tYW5kLgoKCgoKTXkgdGVz
-dCBjb25jbHVkZWQgdGhhdCwgd2hpbGUgdGhlIHNhbWUgbnVtYmVyIG9mIGV2ZW50cyBjb2xsZWN0
-ZWQsIGx0dG5nLWNvbnN1bWVyZCBwcm9jZXNzIG5lZWQgdG8gY29uc3VtZSBtb3JlIGNwdSBvbiB0
-aGUgOC1jb3JlIHNlcnZlci4KCkkgd2FudCB0byBrbm93IHdoeSBpcyB0aGlzIGFuZCB3aGF0IGVs
-c2UgaW5mb3JtYXRpb24gZG8geW91IG5lZWQ/CgpMb29raW5nIGZvcndhcmQgdG8geW91ciByZXBs
-eS4KdGhhbmtzLAp5dWh1YS4KCgo+IC0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0KPiDlj5Hku7bkuro6
-ICJKb25hdGhhbiBSYWpvdHRlLUp1bGllbiIgPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmlj
-aW9zLmNvbT4KPiDlj5HpgIHml7bpl7Q6IDIwMjAtMTEtMjcgMjI6MDU6NDggKOaYn+acn+S6lCkK
-PiDmlLbku7bkuro6ICLnhormr5PljY4iIDx4aW9uZ3l1aHVhQHpqdS5lZHUuY24+Cj4g5oqE6YCB
-OiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4g5Li76aKYOiBSZTogW2x0dG5nLWRldl0gU29t
-ZSBjb25mdXNpb24gYWJvdXQgY3B1IHVzYWdlIG9mIHRoZSBsdHRuZy1jb25zdW1lcmQgcHJvY2Vz
-cwo+IAo+IEhpLAo+IAo+IE9uIEZyaSwgTm92IDI3LCAyMDIwIGF0IDAyOjM5OjI4UE0gKzA4MDAs
-IOeGiuavk+WNjiB2aWEgbHR0bmctZGV2IHdyb3RlOgo+ID4gSGnvvIxkZWFyLgo+ID4gCj4gPiBJ
-IGhhdmUgYmVlbiB1c2luZyBsdHRuZyB0byBtb25pdG9yIG15IHNlcnZlciB0aGVzZSBkYXlz77yM
-YnV0IEkgZm91bmQgc29tZXRoaW5nIGludGVyZXN0aW5nLgo+ID4gCj4gPiBUaGUgY3B1IHVzYWdl
-IG9mIGx0dG5nIHZhcmllcyB3aXRoIHRoZSBudW1iZXIgb2YgY3B1IGNvcmVzIG9mIHRoZSBzZXJ2
-ZXIuCj4gCj4gV2hpY2ggaXMgYSBiaXQgZXhwZWN0ZWQgc2luY2UgbW9yZSBDUFUgbWVhbnMgbW9y
-ZSAiZGF0YSIgc291cmNlIGZyb20gdGhlIHBvaW50Cj4gb2YgdmlldyBvZiBsdHRuZyBoZW5jZSBt
-b3JlICJ3b3JrIiBvdmVyYWxsLgo+IAo+ID4gCj4gPiBPbiB0aGUgc2VydmVyLCBJIGNyZWF0ZSBh
-IHRyYWNpbmcgc2Vzc2lvbiBpbiBsaXZlIG1vZGUsIHVzaW5nICJsdHRuZyBjcmVhdGUgbXktc2Vz
-c2lvbiAtLWxpdmUiLiAKPiA+IAo+ID4gVGhlbixJIFN0YXJ0IHRoZSBiYWJlbHRyYWNlMiBhbmQg
-Y29uZmlndXJlIGl0IHRvIGNvbm5lY3QgdG8gdGhlIHJlbGF5IGRhZW1vbix1c2luZyAiLS1pbnB1
-dC1mb3JtYXQ9bHR0bmctbGl2ZSIgbW9kZS4KPiA+IAo+ID4gSSB1c2VkIDUgY2xvdWQgc2VydmVy
-c++8jDFjb3JlNEcgMmNvcmU4RyA0Y29yZTE2RyA4Y29yZTE2RyA4Y29yZTE2Ry4KPiA+IAo+ID4g
-QW5kLHRoZSBzYW1lIHRlc3Qgc2NyaXB0IHdhcyBleGVjdXRlZCBhYm92ZSB0byBwcm92aWRlIHRo
-ZSBzYW1lIHdvcmtsb2FkLgo+IAo+IFdlIHdvdWxkIG5lZWQgdGhlIHRlc3Qgc2NyaXB0IHRvIGhh
-dmUgc29tZSBjb250ZXh0IGhlcmUgb2YgdGhlIHdvcmtsb2FkLgo+IAo+ID4gCj4gPiBBcyB3ZSBh
-bGwga25vdyxsdHRuZyBoYXMgNSBwcm9jZXNzZXMsCj4gPiAKPiA+IDEubHR0bmctcnVuYXMgICAg
-LS1kYWVtb25pemUKPiA+IAo+ID4gMi5sdHRuZy1ydW5hcyAgICAgIC1rIC0tY29uc3VtZXJkLWNt
-ZC1zb2NrIC92YXIvcnVuL2x0dG5nL2tjb25zdW1lcmQvY29tbWFuZCAtLWNvbnN1bWVyZC1lcnIt
-c29jayAvdmFyL3J1bi9sdHRuZy9rY29uc3VtZXJkL2Vycm9yIC0tZ3JvdXAgdHJhY2luZwo+IAo+
-IEJhc2VkIG9uIHRoaXMgeW91IGFyZSBwZXJmb3JtaW5nIGtlcm5lbCB0cmFjaW5nLgo+IAo+ID4g
-Cj4gPiAzLmx0dG5nLXNlc3Npb25kIC0tZGFlbW9uaXplCj4gPiAKPiA+IDQubHR0bmctcmVsYXlk
-IC1MIHRjcDovL2xvY2FsaG9zdDo1MzQ0Cj4gPiAKPiA+IDUubHR0bmctY29uc3VtZXJkICAtayAt
-LWNvbnN1bWVyZC1jbWQtc29jayAvdmFyL3J1bi9sdHRuZy9rY29uc3VtZXJkL2NvbW1hbmQgLS1j
-b25zdW1lcmQtZXJyLXNvY2sgL3Zhci9ydW4vbHR0bmcva2NvbnN1bWVyZC9lcnJvciAtLWdyb3Vw
-IHRyYWNpbmcKPiA+IAo+ID4gCj4gPiBUaGUgQ1BVIHVzYWdlIG9mIHRoZSBmaXJzdCBmb3VyIHBy
-b2Nlc3NlcyBpcyBiZWxvdyAyJSBvbiB0aGUgNSBzZXJ2ZXJzLGJ1dCB0aGUgbHR0bmctY29uc3Vt
-ZXJkIHByb2Nlc3MgaXMgZGlmZmVyZW50Lgo+ID4gCj4gPiBPbiAxLWNvcmXjgIEyLWNvcmXjgIE0
-LWNvcmUgc2VydmVyc++8jHRoZSBDUFUgdXNhZ2Ugb2YgdGhlIGx0dG5nLWNvbnN1bWVyZCBwcm9j
-ZXNzIGlzIGJlbG93IDIlLgo+IAo+IEhvdyBpcyB0aGUgY3B1IHVzYWdlIG1lYXN1cmVkIGhlcmU/
-Cj4gCj4gPiAKPiA+IEJ1dCBvbiB0d28gOC1jb3JlIG1hY2hpbmVzLCB0aGUgY3B1IHVzYWdlIG9m
-IHRoZSBsdHRuZy1jb25zdW1lcmQgcHJvY2VzcyByZWFjaGVkIDEwJSBvciBtb3JlLgo+IAo+IENv
-bnN1bWVyZCBpcyByZXNwb25zaWJsZSBvZiAiZmV0Y2hpbmciIGRhdGEgZnJvbSB0aGUgcmluZyBi
-dWZmZXJzIGFuZCAic2F2aW5nIgo+IGl0IGVpdGhlciBsb2NhbGx5ICh0cmFjZSBvbiBkaXNrKSBv
-ciByZW1vdGVseSAoc3RyZWFtaW5nL2xpdmUgc2Vzc2lvbikuIENQVSB1c2FnZQo+IHNob3VsZCBi
-ZSBhIGJpdCBjb3JyZWxhdGVkIHdpdGggdGhlIGV2ZW50IHByb2R1Y3Rpb24gcmF0ZS4gRGlkIHlv
-dSBoYXZlIGEgbG9vayBhdCB0aGUKPiBudW1iZXIgb2YgZXZlbnRzIGdlbmVyYXRlZCBmb3IgYSBz
-aW1pbGFyIGludGVydmFsPwo+IAo+ID4gQW5kLHRoZSBjcHUgdXNhZ2Ugb2YgdGhlIGJhYmVsdHJh
-Y2UgcHJvY2VzcyBpcyBub3QgbXVjaCBkaWZmZXJlbnQsanVzdCB0aGUgY3B1IHVzYWdlIG9mIHRo
-ZSBsdHRuZy1jb25zdW1lcmQgcHJvY2VzcyB2YXJpZXMgd2l0aCB0aGUgbnVtYmVyIG9mIGNwdSBj
-b3JlcyBvZiB0aGUgc2VydmVyLgo+ID4gCj4gPiBXaHkgaXQgaXMgbGlrZSB0aGlz77yfSG93IHNo
-b3VsZCB0aGlzIHBoZW5vbWVub24gYmUgYW5hbHl6ZWQ/Cj4gPiAKPiA+IExvb2tpbmcgZm9yd2Fy
-ZCB0byB5b3VyIHJlcGx5Lgo+ID4gCj4gPiB0aGFua3MsCj4gPiB5dWh1YQo+ID4gCj4gPiBfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ID4gbHR0bmctZGV2
-IG1haWxpbmcgbGlzdAo+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+ID4gaHR0cHM6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAo+IAo+
-IC0tIAo+IEpvbmF0aGFuIFJham90dGUtSnVsaWVuCj4gRWZmaWNpT1MKCgo=
-------=_Part_54909_591464724.1606491127432
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: base64
+> From: "=E7=86=8A=E6=AF=93=E5=8D=8E" <xiongyuhua@zju.edu.cn>
+> To: "Jonathan Rajotte-Julien" <jonathan.rajotte-julien@efficios.com>,
+> "lttng-dev" <lttng-dev@lists.lttng.org>
+> Sent: Friday, November 27, 2020 10:32:07 AM
+> Subject: Re: Re: [lttng-dev] Some confusion about cpu usage of the
+> lttng-consumerd process
 
-SGnvvIxEZWFyLjxicj4KPGJyPgpUaGUgdGVzdCBzY3JpcHQgd2FzIHVzZWQgdG8gZ2VuZXJhdGUg
-c29tZSBjb21tb24gZmlsZUlPLG5ldElPIGV2ZW50cy48YnI+Cjxicj4KT24gYWxsIHNlcnZlcnMs
-IHRoZSBtb25pdG9yaW5nIHN0cmF0ZWd5IEkgc2V0IHVwIHdoZW4gSSBzdGFydCBsdHRuZyBpcyB0
-aGUgc2FtZSwgbW9uaXRvcmluZyBhbGwgZmlsZUlPLCBuZXRJTyBhbmQgc29tZSByZWxhdGVkIHN5
-c3RlbSBjYWxscy4mbmJzcDs8YnI+ClRoZSBmb2xsb3dpbmcgdGFibGUgcmVjb3JkcyB0aGUgYW1v
-dW50IG9mIGV2ZW50cyBnZW5lcmF0ZWQgYnkgdGhlIHRlc3Qgc2NyaXB0IHBlciBtaW51dGUsIGFu
-ZCBvbmUgYmFiZWx0cmFjZSByZWNvcmQgcmVwcmVzZW50cyBvbmUgZXZlbnQuPGJyPgo8cD4KCTxp
-bWcgc3JjPSJodHRwczovL21haWwuemp1LmVkdS5jbi9jb3JlbWFpbC9zL2pzb24/ZnVuYz1tYm94
-OmdldENvbXBvc2VEYXRhJmFtcDtzaWQ9KiZhbXA7Y29tcG9zZUlkPTE2MDY0ODcyMTQxMTEmYW1w
-O2F0dGFjaElkPTIiIHdpZHRoPSI4MDAiIGhlaWdodD0iMjU2IiB0aXRsZT0iIiBhbGlnbj0iIiBh
-bHQ9IiIgc3R5bGU9IndoaXRlLXNwYWNlOm5vcm1hbDsiPgo8L3A+CjxwPgoJVGhlIHVuaXQgb2Yg
-dGhlIG51bWJlciBpcyBldmVyeSB0ZW4gdGhvdXNhbmQgZXZlbnRzIHBlciBtaW51dGUuIEFuZCB0
-aGUgbnVtYmVyIHdlcmUgcmVhZCBvdXQgYWZ0ZXIgcGFyc2luZyBieSBiYWJlbHRyYWNlLjxicj4K
-SW4gYWRkaXRpb24sIHRoZSBzZXJ2ZXIxIGlzIDFjb3JlNEcsIHNlcnZlcjIgaXMgMmNvcmU4Rywg
-c2VydmVyMyBpcyA0Y29yZTE2Rywgc2VydmVyNCBhbmQgc2VydmVyNSBhcmUgOGNvcmUxNkcuPGJy
-Pgo8YnI+Ckl0IGNhbiBiZSBzZWVuIHRoYXQgdGhlIGF2ZXJhZ2UgYW1vdW50IG9mIGRhdGEgZ2Vu
-ZXJhdGVkIHBlciBtaW51dGUgb24gYWxsIHNlcnZlcnMgaXMgcm91Z2hseSB0aGUgc2FtZS5Ib3dl
-dmVyLCB0aGUgQ1BVIHVzYWdlIG9mIHRoZSBsdHRuZy1jb25zdW1lcmQgcHJvY2VzcyBiZWhhdmUg
-ZGlmZmVyZW50bHkgb24gc2VydmVyNCBhbmQgc2VydmVyNSwgYXMgSSBtZW50aW9uZWQgaW4gbXkg
-bGFzdCBlbWFpbC4KPC9wPgo8cD4KCTxicj4KSW4gYWRkaXRpb24sIHRoZSB1c2FnZSBvZiBjcHUg
-aXMgcmVjb3JkZWQgdXNpbmcgdGhlICJ0b3AiIGNvbW1hbmQuCjwvcD4KPHA+Cgk8YnI+CjwvcD4K
-PHA+CglNeSB0ZXN0IGNvbmNsdWRlZCB0aGF0LCB3aGlsZSB0aGUgc2FtZSBudW1iZXIgb2YgZXZl
-bnRzIGNvbGxlY3RlZCwgbHR0bmctY29uc3VtZXJkIHByb2Nlc3MgbmVlZCB0byBjb25zdW1lIG1v
-cmUgY3B1IG9uIHRoZSA4LWNvcmUgc2VydmVyLjxicj4KPGJyPgpJIHdhbnQgdG8ga25vdyB3aHkg
-aXMgdGhpcyBhbmQgd2hhdCBlbHNlIGluZm9ybWF0aW9uIGRvIHlvdSBuZWVkPzxicj4KPGJyPgpM
-b29raW5nIGZvcndhcmQgdG8geW91ciByZXBseS48YnI+CnRoYW5rcyw8YnI+Cnl1aHVhLgo8L3A+
-Cjxicj4KJmd0OyZuYnNwOy0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS08YnI+CiZndDsmbmJzcDvlj5Hk
-u7bkuro6Jm5ic3A7IkpvbmF0aGFuJm5ic3A7UmFqb3R0ZS1KdWxpZW4iJm5ic3A7Jmx0O2pvbmF0
-aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbSZndDs8YnI+CiZndDsmbmJzcDvlj5HpgIHm
-l7bpl7Q6Jm5ic3A7MjAyMC0xMS0yNyZuYnNwOzIyOjA1OjQ4Jm5ic3A7KOaYn+acn+S6lCk8YnI+
-CiZndDsmbmJzcDvmlLbku7bkuro6Jm5ic3A7IueGiuavk+WNjiImbmJzcDsmbHQ7eGlvbmd5dWh1
-YUB6anUuZWR1LmNuJmd0Ozxicj4KJmd0OyZuYnNwO+aKhOmAgTombmJzcDtsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnPGJyPgomZ3Q7Jm5ic3A75Li76aKYOiZuYnNwO1JlOiZuYnNwO1tsdHRuZy1k
-ZXZdJm5ic3A7U29tZSZuYnNwO2NvbmZ1c2lvbiZuYnNwO2Fib3V0Jm5ic3A7Y3B1Jm5ic3A7dXNh
-Z2UmbmJzcDtvZiZuYnNwO3RoZSZuYnNwO2x0dG5nLWNvbnN1bWVyZCZuYnNwO3Byb2Nlc3M8YnI+
-CiZndDsmbmJzcDs8YnI+CiZndDsmbmJzcDtIaSw8YnI+CiZndDsmbmJzcDs8YnI+CiZndDsmbmJz
-cDtPbiZuYnNwO0ZyaSwmbmJzcDtOb3YmbmJzcDsyNywmbmJzcDsyMDIwJm5ic3A7YXQmbmJzcDsw
-MjozOToyOFBNJm5ic3A7KzA4MDAsJm5ic3A754aK5q+T5Y2OJm5ic3A7dmlhJm5ic3A7bHR0bmct
-ZGV2Jm5ic3A7d3JvdGU6PGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwO0hp77yMZGVhci48YnI+CiZn
-dDsmbmJzcDsmZ3Q7Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwO0kmbmJzcDtoYXZlJm5i
-c3A7YmVlbiZuYnNwO3VzaW5nJm5ic3A7bHR0bmcmbmJzcDt0byZuYnNwO21vbml0b3ImbmJzcDtt
-eSZuYnNwO3NlcnZlciZuYnNwO3RoZXNlJm5ic3A7ZGF5c++8jGJ1dCZuYnNwO0kmbmJzcDtmb3Vu
-ZCZuYnNwO3NvbWV0aGluZyZuYnNwO2ludGVyZXN0aW5nLjxicj4KJmd0OyZuYnNwOyZndDsmbmJz
-cDs8YnI+CiZndDsmbmJzcDsmZ3Q7Jm5ic3A7VGhlJm5ic3A7Y3B1Jm5ic3A7dXNhZ2UmbmJzcDtv
-ZiZuYnNwO2x0dG5nJm5ic3A7dmFyaWVzJm5ic3A7d2l0aCZuYnNwO3RoZSZuYnNwO251bWJlciZu
-YnNwO29mJm5ic3A7Y3B1Jm5ic3A7Y29yZXMmbmJzcDtvZiZuYnNwO3RoZSZuYnNwO3NlcnZlci48
-YnI+CiZndDsmbmJzcDs8YnI+CiZndDsmbmJzcDtXaGljaCZuYnNwO2lzJm5ic3A7YSZuYnNwO2Jp
-dCZuYnNwO2V4cGVjdGVkJm5ic3A7c2luY2UmbmJzcDttb3JlJm5ic3A7Q1BVJm5ic3A7bWVhbnMm
-bmJzcDttb3JlJm5ic3A7ImRhdGEiJm5ic3A7c291cmNlJm5ic3A7ZnJvbSZuYnNwO3RoZSZuYnNw
-O3BvaW50PGJyPgomZ3Q7Jm5ic3A7b2YmbmJzcDt2aWV3Jm5ic3A7b2YmbmJzcDtsdHRuZyZuYnNw
-O2hlbmNlJm5ic3A7bW9yZSZuYnNwOyJ3b3JrIiZuYnNwO292ZXJhbGwuPGJyPgomZ3Q7Jm5ic3A7
-PGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwOzxicj4KJmd0OyZuYnNwOyZndDsmbmJzcDtPbiZuYnNw
-O3RoZSZuYnNwO3NlcnZlciwmbmJzcDtJJm5ic3A7Y3JlYXRlJm5ic3A7YSZuYnNwO3RyYWNpbmcm
-bmJzcDtzZXNzaW9uJm5ic3A7aW4mbmJzcDtsaXZlJm5ic3A7bW9kZSwmbmJzcDt1c2luZyZuYnNw
-OyJsdHRuZyZuYnNwO2NyZWF0ZSZuYnNwO215LXNlc3Npb24mbmJzcDstLWxpdmUiLiZuYnNwOzxi
-cj4KJmd0OyZuYnNwOyZndDsmbmJzcDs8YnI+CiZndDsmbmJzcDsmZ3Q7Jm5ic3A7VGhlbixJJm5i
-c3A7U3RhcnQmbmJzcDt0aGUmbmJzcDtiYWJlbHRyYWNlMiZuYnNwO2FuZCZuYnNwO2NvbmZpZ3Vy
-ZSZuYnNwO2l0Jm5ic3A7dG8mbmJzcDtjb25uZWN0Jm5ic3A7dG8mbmJzcDt0aGUmbmJzcDtyZWxh
-eSZuYnNwO2RhZW1vbix1c2luZyZuYnNwOyItLWlucHV0LWZvcm1hdD1sdHRuZy1saXZlIiZuYnNw
-O21vZGUuPGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwOzxicj4KJmd0OyZuYnNwOyZndDsmbmJzcDtJ
-Jm5ic3A7dXNlZCZuYnNwOzUmbmJzcDtjbG91ZCZuYnNwO3NlcnZlcnPvvIwxY29yZTRHJm5ic3A7
-MmNvcmU4RyZuYnNwOzRjb3JlMTZHJm5ic3A7OGNvcmUxNkcmbmJzcDs4Y29yZTE2Ry48YnI+CiZn
-dDsmbmJzcDsmZ3Q7Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwO0FuZCx0aGUmbmJzcDtz
-YW1lJm5ic3A7dGVzdCZuYnNwO3NjcmlwdCZuYnNwO3dhcyZuYnNwO2V4ZWN1dGVkJm5ic3A7YWJv
-dmUmbmJzcDt0byZuYnNwO3Byb3ZpZGUmbmJzcDt0aGUmbmJzcDtzYW1lJm5ic3A7d29ya2xvYWQu
-PGJyPgomZ3Q7Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7V2UmbmJzcDt3b3VsZCZuYnNwO25lZWQmbmJz
-cDt0aGUmbmJzcDt0ZXN0Jm5ic3A7c2NyaXB0Jm5ic3A7dG8mbmJzcDtoYXZlJm5ic3A7c29tZSZu
-YnNwO2NvbnRleHQmbmJzcDtoZXJlJm5ic3A7b2YmbmJzcDt0aGUmbmJzcDt3b3JrbG9hZC48YnI+
-CiZndDsmbmJzcDs8YnI+CiZndDsmbmJzcDsmZ3Q7Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7Jmd0OyZu
-YnNwO0FzJm5ic3A7d2UmbmJzcDthbGwmbmJzcDtrbm93LGx0dG5nJm5ic3A7aGFzJm5ic3A7NSZu
-YnNwO3Byb2Nlc3Nlcyw8YnI+CiZndDsmbmJzcDsmZ3Q7Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7Jmd0
-OyZuYnNwOzEubHR0bmctcnVuYXMmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDstLWRhZW1vbml6ZTxi
-cj4KJmd0OyZuYnNwOyZndDsmbmJzcDs8YnI+CiZndDsmbmJzcDsmZ3Q7Jm5ic3A7Mi5sdHRuZy1y
-dW5hcyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOy1rJm5ic3A7LS1jb25zdW1l
-cmQtY21kLXNvY2smbmJzcDsvdmFyL3J1bi9sdHRuZy9rY29uc3VtZXJkL2NvbW1hbmQmbmJzcDst
-LWNvbnN1bWVyZC1lcnItc29jayZuYnNwOy92YXIvcnVuL2x0dG5nL2tjb25zdW1lcmQvZXJyb3Im
-bmJzcDstLWdyb3VwJm5ic3A7dHJhY2luZzxicj4KJmd0OyZuYnNwOzxicj4KJmd0OyZuYnNwO0Jh
-c2VkJm5ic3A7b24mbmJzcDt0aGlzJm5ic3A7eW91Jm5ic3A7YXJlJm5ic3A7cGVyZm9ybWluZyZu
-YnNwO2tlcm5lbCZuYnNwO3RyYWNpbmcuPGJyPgomZ3Q7Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7Jmd0
-OyZuYnNwOzxicj4KJmd0OyZuYnNwOyZndDsmbmJzcDszLmx0dG5nLXNlc3Npb25kJm5ic3A7LS1k
-YWVtb25pemU8YnI+CiZndDsmbmJzcDsmZ3Q7Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNw
-OzQubHR0bmctcmVsYXlkJm5ic3A7LUwmbmJzcDt0Y3A6Ly9sb2NhbGhvc3Q6NTM0NDxicj4KJmd0
-OyZuYnNwOyZndDsmbmJzcDs8YnI+CiZndDsmbmJzcDsmZ3Q7Jm5ic3A7NS5sdHRuZy1jb25zdW1l
-cmQmbmJzcDsmbmJzcDstayZuYnNwOy0tY29uc3VtZXJkLWNtZC1zb2NrJm5ic3A7L3Zhci9ydW4v
-bHR0bmcva2NvbnN1bWVyZC9jb21tYW5kJm5ic3A7LS1jb25zdW1lcmQtZXJyLXNvY2smbmJzcDsv
-dmFyL3J1bi9sdHRuZy9rY29uc3VtZXJkL2Vycm9yJm5ic3A7LS1ncm91cCZuYnNwO3RyYWNpbmc8
-YnI+CiZndDsmbmJzcDsmZ3Q7Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwOzxicj4KJmd0
-OyZuYnNwOyZndDsmbmJzcDtUaGUmbmJzcDtDUFUmbmJzcDt1c2FnZSZuYnNwO29mJm5ic3A7dGhl
-Jm5ic3A7Zmlyc3QmbmJzcDtmb3VyJm5ic3A7cHJvY2Vzc2VzJm5ic3A7aXMmbmJzcDtiZWxvdyZu
-YnNwOzIlJm5ic3A7b24mbmJzcDt0aGUmbmJzcDs1Jm5ic3A7c2VydmVycyxidXQmbmJzcDt0aGUm
-bmJzcDtsdHRuZy1jb25zdW1lcmQmbmJzcDtwcm9jZXNzJm5ic3A7aXMmbmJzcDtkaWZmZXJlbnQu
-PGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwOzxicj4KJmd0OyZuYnNwOyZndDsmbmJzcDtPbiZuYnNw
-OzEtY29yZeOAgTItY29yZeOAgTQtY29yZSZuYnNwO3NlcnZlcnPvvIx0aGUmbmJzcDtDUFUmbmJz
-cDt1c2FnZSZuYnNwO29mJm5ic3A7dGhlJm5ic3A7bHR0bmctY29uc3VtZXJkJm5ic3A7cHJvY2Vz
-cyZuYnNwO2lzJm5ic3A7YmVsb3cmbmJzcDsyJS48YnI+CiZndDsmbmJzcDs8YnI+CiZndDsmbmJz
-cDtIb3cmbmJzcDtpcyZuYnNwO3RoZSZuYnNwO2NwdSZuYnNwO3VzYWdlJm5ic3A7bWVhc3VyZWQm
-bmJzcDtoZXJlPzxicj4KJmd0OyZuYnNwOzxicj4KJmd0OyZuYnNwOyZndDsmbmJzcDs8YnI+CiZn
-dDsmbmJzcDsmZ3Q7Jm5ic3A7QnV0Jm5ic3A7b24mbmJzcDt0d28mbmJzcDs4LWNvcmUmbmJzcDtt
-YWNoaW5lcywmbmJzcDt0aGUmbmJzcDtjcHUmbmJzcDt1c2FnZSZuYnNwO29mJm5ic3A7dGhlJm5i
-c3A7bHR0bmctY29uc3VtZXJkJm5ic3A7cHJvY2VzcyZuYnNwO3JlYWNoZWQmbmJzcDsxMCUmbmJz
-cDtvciZuYnNwO21vcmUuPGJyPgomZ3Q7Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7Q29uc3VtZXJkJm5i
-c3A7aXMmbmJzcDtyZXNwb25zaWJsZSZuYnNwO29mJm5ic3A7ImZldGNoaW5nIiZuYnNwO2RhdGEm
-bmJzcDtmcm9tJm5ic3A7dGhlJm5ic3A7cmluZyZuYnNwO2J1ZmZlcnMmbmJzcDthbmQmbmJzcDsi
-c2F2aW5nIjxicj4KJmd0OyZuYnNwO2l0Jm5ic3A7ZWl0aGVyJm5ic3A7bG9jYWxseSZuYnNwOyh0
-cmFjZSZuYnNwO29uJm5ic3A7ZGlzaykmbmJzcDtvciZuYnNwO3JlbW90ZWx5Jm5ic3A7KHN0cmVh
-bWluZy9saXZlJm5ic3A7c2Vzc2lvbikuJm5ic3A7Q1BVJm5ic3A7dXNhZ2U8YnI+CiZndDsmbmJz
-cDtzaG91bGQmbmJzcDtiZSZuYnNwO2EmbmJzcDtiaXQmbmJzcDtjb3JyZWxhdGVkJm5ic3A7d2l0
-aCZuYnNwO3RoZSZuYnNwO2V2ZW50Jm5ic3A7cHJvZHVjdGlvbiZuYnNwO3JhdGUuJm5ic3A7RGlk
-Jm5ic3A7eW91Jm5ic3A7aGF2ZSZuYnNwO2EmbmJzcDtsb29rJm5ic3A7YXQmbmJzcDt0aGU8YnI+
-CiZndDsmbmJzcDtudW1iZXImbmJzcDtvZiZuYnNwO2V2ZW50cyZuYnNwO2dlbmVyYXRlZCZuYnNw
-O2ZvciZuYnNwO2EmbmJzcDtzaW1pbGFyJm5ic3A7aW50ZXJ2YWw/PGJyPgomZ3Q7Jm5ic3A7PGJy
-PgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwO0FuZCx0aGUmbmJzcDtjcHUmbmJzcDt1c2FnZSZuYnNwO29m
-Jm5ic3A7dGhlJm5ic3A7YmFiZWx0cmFjZSZuYnNwO3Byb2Nlc3MmbmJzcDtpcyZuYnNwO25vdCZu
-YnNwO211Y2gmbmJzcDtkaWZmZXJlbnQsanVzdCZuYnNwO3RoZSZuYnNwO2NwdSZuYnNwO3VzYWdl
-Jm5ic3A7b2YmbmJzcDt0aGUmbmJzcDtsdHRuZy1jb25zdW1lcmQmbmJzcDtwcm9jZXNzJm5ic3A7
-dmFyaWVzJm5ic3A7d2l0aCZuYnNwO3RoZSZuYnNwO251bWJlciZuYnNwO29mJm5ic3A7Y3B1Jm5i
-c3A7Y29yZXMmbmJzcDtvZiZuYnNwO3RoZSZuYnNwO3NlcnZlci48YnI+CiZndDsmbmJzcDsmZ3Q7
-Jm5ic3A7PGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwO1doeSZuYnNwO2l0Jm5ic3A7aXMmbmJzcDts
-aWtlJm5ic3A7dGhpc++8n0hvdyZuYnNwO3Nob3VsZCZuYnNwO3RoaXMmbmJzcDtwaGVub21lbm9u
-Jm5ic3A7YmUmbmJzcDthbmFseXplZD88YnI+CiZndDsmbmJzcDsmZ3Q7Jm5ic3A7PGJyPgomZ3Q7
-Jm5ic3A7Jmd0OyZuYnNwO0xvb2tpbmcmbmJzcDtmb3J3YXJkJm5ic3A7dG8mbmJzcDt5b3VyJm5i
-c3A7cmVwbHkuPGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwOzxicj4KJmd0OyZuYnNwOyZndDsmbmJz
-cDt0aGFua3MsPGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwO3l1aHVhPGJyPgomZ3Q7Jm5ic3A7Jmd0
-OyZuYnNwOzxicj4KJmd0OyZuYnNwOyZndDsmbmJzcDtfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXzxicj4KJmd0OyZuYnNwOyZndDsmbmJzcDtsdHRuZy1kZXYm
-bmJzcDttYWlsaW5nJm5ic3A7bGlzdDxicj4KJmd0OyZuYnNwOyZndDsmbmJzcDtsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnPGJyPgomZ3Q7Jm5ic3A7Jmd0OyZuYnNwO2h0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXY8YnI+CiZndDsmbmJzcDs8
-YnI+CiZndDsmbmJzcDs8YnI+CiZndDsmbmJzcDstLSZuYnNwOzxicj4KJmd0OyZuYnNwO0pvbmF0
-aGFuJm5ic3A7UmFqb3R0ZS1KdWxpZW48YnI+CiZndDsmbmJzcDtFZmZpY2lPUzxicj4KPGJyPgo8
-YnI+
-------=_Part_54909_591464724.1606491127432--
+> Hi=EF=BC=8CDear.
+
+Side note, you can remove the "Dear" here. ;)=20
+
+> The test script was used to generate some common fileIO,netIO events.
+
+Please provide a complete code repository if possible. So that we can at le=
+ast have a baseline for reproduction.=20
+
+> On all servers, the monitoring strategy I set up when I start lttng is th=
+e same,
+> monitoring all fileIO, netIO and some related system calls.
+> The following table records the amount of events generated by the test sc=
+ript
+> per minute, and one babeltrace record represents one event.
+
+For some reason the image does not load here. Please provide a text based a=
+lternative for this figure.=20
+
+> The unit of the number is every ten thousand events per minute. And the n=
+umber
+> were read out after parsing by babeltrace.
+> In addition, the server1 is 1core4G, server2 is 2core8G, server3 is 4core=
+16G,
+> server4 and server5 are 8core16G.
+
+> It can be seen that the average amount of data generated per minute on al=
+l
+> servers is roughly the same.However, the CPU usage of the lttng-consumerd
+> process behave differently on server4 and server5, as I mentioned in my l=
+ast
+> email.
+
+> In addition, the usage of cpu is recorded using the "top" command.
+
+> My test concluded that, while the same number of events collected,
+> lttng-consumerd process need to consume more cpu on the 8-core server.
+
+> I want to know why is this and what else information do you need?
+
+Well we also want to know why! You will understand that albeit we develop l=
+ttng we do not always have a quick and easy answer to all problems. Perform=
+ance related problem are always tricky.=20
+And we also have to keep in mind that we do not necessarily optimize for lo=
+w-cpu usage on the lttng-consumerd side.=20
+
+We have to take a look at what "work" scale with the number of CPU on the l=
+ttng-consumerd side. One such thing is the live timer which is fired on an =
+interval (default is 1s (1000000us)).=20
+
+You could test this hypothesis by streaming the trace instead of using the =
+live feature.=20
+
+lttng create --set-url ....=20
+
+Cheers=20
+
+> Looking forward to your reply.
+> thanks,
+> yuhua.
+> > -----=E5=8E=9F=E5=A7=8B=E9=82=AE=E4=BB=B6-----
+> > =E5=8F=91=E4=BB=B6=E4=BA=BA: "Jonathan Rajotte-Julien" < jonathan.rajot=
+te-julien@efficios.com >
+> > =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: [ callto:2020-11-27 22 | 2020-11-=
+27=C2=A022 ] :05:48 (=E6=98=9F=E6=9C=9F=E4=BA=94)
+> > =E6=94=B6=E4=BB=B6=E4=BA=BA: "=E7=86=8A=E6=AF=93=E5=8D=8E" < xiongyuhua=
+@zju.edu.cn >
+> > =E6=8A=84=E9=80=81: lttng-dev@lists.lttng.org
+>> =E4=B8=BB=E9=A2=98: Re: [lttng-dev] Some confusion about cpu usage of th=
+e lttng-consumerd
+> > process
+
+> > Hi,
+
+> > On Fri, Nov 27 , 2020 at 02:39:28PM +0800, =E7=86=8A=E6=AF=93=E5=8D=8E =
+via lttng-dev wrote:
+> > > Hi=EF=BC=8Cdear.
+
+>> > I have been using lttng to monitor my server these days=EF=BC=8Cbut I =
+found something
+> > > interesting.
+
+> > > The cpu usage of lttng varies with the number of cpu cores of the ser=
+ver.
+
+> > Which is a bit expected since more CPU means more "data" source from th=
+e point
+> > of view of lttng hence more "work" overall.
 
 
---===============5291398515299642681==
+>> > On the server, I create a tracing session in live mode, using "lttng c=
+reate
+> > > my-session --live".
+
+>> > Then,I Start the babeltrace2 and configure it to connect to the relay
+> > > daemon,using "--input-format=3Dlttng-live" mode.
+
+> > > I used 5 cloud servers=EF=BC=8C1core4G 2core8G 4core16G 8core16G 8cor=
+e16G.
+
+> > > And,the same test script was executed above to provide the same workl=
+oad.
+
+> > We would need the test script to have some context here of the workload=
+.
+
+
+> > > As we all know,lttng has 5 processes,
+
+> > > 1.lttng-runas --daemonize
+
+>> > 2.lttng-runas -k --consumerd-cmd-sock /var/run/lttng/kconsumerd/comman=
+d
+> > > --consumerd-err-sock /var/run/lttng/kconsumerd/error --group tracing
+
+> > Based on this you are performing kernel tracing.
+
+
+> > > 3.lttng-sessiond --daemonize
+
+> > > 4.lttng-relayd -L tcp://localhost:5344
+
+>> > 5.lttng-consumerd -k --consumerd-cmd-sock /var/run/lttng/kconsumerd/co=
+mmand
+> > > --consumerd-err-sock /var/run/lttng/kconsumerd/error --group tracing
+
+
+>> > The CPU usage of the first four processes is below 2% on the 5 servers=
+,but the
+> > > lttng-consumerd process is different.
+
+>> > On 1-core=E3=80=812-core=E3=80=814-core servers=EF=BC=8Cthe CPU usage =
+of the lttng-consumerd process is
+> > > below 2%.
+
+> > How is the cpu usage measured here?
+
+
+>> > But on two 8-core machines, the cpu usage of the lttng-consumerd proce=
+ss reached
+> > > 10% or more.
+
+> > Consumerd is responsible of "fetching" data from the ring buffers and "=
+saving"
+>> it either locally (trace on disk) or remotely (streaming/live session). =
+CPU
+> > usage
+>> should be a bit correlated with the event production rate. Did you have =
+a look
+> > at the
+> > number of events generated for a similar interval?
+
+>> > And,the cpu usage of the babeltrace process is not much different,just=
+ the cpu
+>> > usage of the lttng-consumerd process varies with the number of cpu cor=
+es of the
+> > > server.
+
+> > > Why it is like this=EF=BC=9FHow should this phenomenon be analyzed?
+
+> > > Looking forward to your reply.
+
+> > > thanks,
+> > > yuhua
+
+> > > _______________________________________________
+> > > lttng-dev mailing list
+> > > lttng-dev@lists.lttng.org
+>> > [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
+> > > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+
+
+> > --
+> > Jonathan Rajotte-Julien
+> > EfficiOS
+
+--=_969e784f-864a-41e7-9b10-6df4f78292ab
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br></div><hr id=3D"zwchr" data-marker=3D"_=
+_DIVIDER__"><div data-marker=3D"__HEADERS__"><blockquote style=3D"border-le=
+ft:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weigh=
+t:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial=
+,sans-serif;font-size:12pt;"><b>From: </b>"=E7=86=8A=E6=AF=93=E5=8D=8E" &lt=
+;xiongyuhua@zju.edu.cn&gt;<br><b>To: </b>"Jonathan Rajotte-Julien" &lt;jona=
+than.rajotte-julien@efficios.com&gt;, "lttng-dev" &lt;lttng-dev@lists.lttng=
+.org&gt;<br><b>Sent: </b>Friday, November 27, 2020 10:32:07 AM<br><b>Subjec=
+t: </b>Re: Re: [lttng-dev] Some confusion about cpu usage of the lttng-cons=
+umerd process<br></blockquote></div><div data-marker=3D"__QUOTED_TEXT__"><b=
+lockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-le=
+ft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none=
+;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div>Hi=EF=BC=8CDe=
+ar.</div></blockquote><div><br></div><div>Side note, you can remove the "De=
+ar" here. ;)</div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"=
+border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;f=
+ont-weight:normal;font-style:normal;text-decoration:none;font-family:Helvet=
+ica,Arial,sans-serif;font-size:12pt;"><div><br>
+<br>
+The test script was used to generate some common fileIO,netIO events.</div>=
+</blockquote><div><br></div><div>Please provide a complete code repository =
+if possible. So that we can at least have a baseline for reproduction.</div=
+><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px s=
+olid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal=
+;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-se=
+rif;font-size:12pt;"><div><br>
+<br>
+On all servers, the monitoring strategy I set up when I start lttng is the =
+same, monitoring all fileIO, netIO and some related system calls.&nbsp;<br>
+The following table records the amount of events generated by the test scri=
+pt per minute, and one babeltrace record represents one event.<br>
+<p>
+=09<img width=3D"800" height=3D"256" title=3D"" align=3D"" alt=3D"" style=
+=3D"white-space: normal;" src=3D"https://mail.zju.edu.cn/coremail/s/json?fu=
+nc=3Dmbox:getComposeData&amp;sid=3D*&amp;composeId=3D1606487214111&amp;atta=
+chId=3D2" saveddisplaymode=3D""></p></div></blockquote><div><br></div><div>=
+For some reason the image does not load here. Please provide a text based a=
+lternative for this figure.</div><div><br data-mce-bogus=3D"1"></div><block=
+quote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5=
+px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;fon=
+t-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div><p>
+</p>
+<p>
+=09The unit of the number is every ten thousand events per minute. And the =
+number were read out after parsing by babeltrace.<br>
+In addition, the server1 is 1core4G, server2 is 2core8G, server3 is 4core16=
+G, server4 and server5 are 8core16G.<br>
+<br>
+It can be seen that the average amount of data generated per minute on all =
+servers is roughly the same.However, the CPU usage of the lttng-consumerd p=
+rocess behave differently on server4 and server5, as I mentioned in my last=
+ email.
+</p>
+<p>
+=09<br>
+In addition, the usage of cpu is recorded using the "top" command.
+</p>
+<p>
+=09<br>
+</p>
+<p>
+=09My test concluded that, while the same number of events collected, lttng=
+-consumerd process need to consume more cpu on the 8-core server.<br>
+<br>
+I want to know why is this and what else information do you need?</p></div>=
+</blockquote><div><br></div><div>Well we also want to know why! You will un=
+derstand that albeit we develop lttng we do not always have a quick and eas=
+y answer to all problems. Performance related problem are always tricky.</d=
+iv><div>And we also have to keep in mind that we do not necessarily optimiz=
+e for low-cpu usage on the lttng-consumerd side.&nbsp;</div><div><br data-m=
+ce-bogus=3D"1"></div><div>We have to take a look at what "work" scale with =
+the number of CPU on the lttng-consumerd side. One such thing is the live t=
+imer which is fired on an interval (default is 1s (1000000us)).</div><div><=
+br data-mce-bogus=3D"1"></div><div>You could test this hypothesis by stream=
+ing the trace instead of using the live feature.</div><div><br data-mce-bog=
+us=3D"1"></div><div>lttng create --set-url ....</div><div><br data-mce-bogu=
+s=3D"1"></div><div>Cheers</div><blockquote style=3D"border-left:2px solid #=
+1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-=
+style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;fo=
+nt-size:12pt;"><div><p><br>
+<br>
+Looking forward to your reply.<br>
+thanks,<br>
+yuhua.
+</p>
+<br>
+&gt;&nbsp;-----=E5=8E=9F=E5=A7=8B=E9=82=AE=E4=BB=B6-----<br>
+&gt;&nbsp;=E5=8F=91=E4=BB=B6=E4=BA=BA:&nbsp;"Jonathan&nbsp;Rajotte-Julien"&=
+nbsp;&lt;<span class=3D"Object" role=3D"link" id=3D"OBJ_PREFIX_DWT61_ZmEmai=
+lObjectHandler"><span class=3D"Object" role=3D"link" id=3D"OBJ_PREFIX_DWT68=
+_ZmEmailObjectHandler">jonathan.rajotte-julien@efficios.com</span></span>&g=
+t;<br>
+&gt;&nbsp;=E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4:&nbsp;<span class=3D"Object"=
+ role=3D"link" id=3D"OBJ_PREFIX_DWT62_com_zimbra_phone"><a href=3D"callto:2=
+020-11-27 22" onclick=3D"window.top.Com_Zimbra_Phone.unsetOnbeforeunload()"=
+>2020-11-27&nbsp;22</a></span>:05:48&nbsp;(=E6=98=9F=E6=9C=9F=E4=BA=94)<br>
+&gt;&nbsp;=E6=94=B6=E4=BB=B6=E4=BA=BA:&nbsp;"=E7=86=8A=E6=AF=93=E5=8D=8E"&n=
+bsp;&lt;<span class=3D"Object" role=3D"link" id=3D"OBJ_PREFIX_DWT63_ZmEmail=
+ObjectHandler"><span class=3D"Object" role=3D"link" id=3D"OBJ_PREFIX_DWT69_=
+ZmEmailObjectHandler">xiongyuhua@zju.edu.cn</span></span>&gt;<br>
+&gt;&nbsp;=E6=8A=84=E9=80=81:&nbsp;<span class=3D"Object" role=3D"link" id=
+=3D"OBJ_PREFIX_DWT64_ZmEmailObjectHandler"><span class=3D"Object" role=3D"l=
+ink" id=3D"OBJ_PREFIX_DWT70_ZmEmailObjectHandler">lttng-dev@lists.lttng.org=
+</span></span><br>
+&gt;&nbsp;=E4=B8=BB=E9=A2=98:&nbsp;Re:&nbsp;[lttng-dev]&nbsp;Some&nbsp;conf=
+usion&nbsp;about&nbsp;cpu&nbsp;usage&nbsp;of&nbsp;the&nbsp;lttng-consumerd&=
+nbsp;process<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;Hi,<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;On&nbsp;<span class=3D"Object" role=3D"link" id=3D"OBJ_PREFIX_DWT=
+65_com_zimbra_date"><span class=3D"Object" role=3D"link" id=3D"OBJ_PREFIX_D=
+WT71_com_zimbra_date">Fri,&nbsp;Nov&nbsp;27</span></span>,&nbsp;2020&nbsp;a=
+t&nbsp;02:39:28PM&nbsp;+0800,&nbsp;=E7=86=8A=E6=AF=93=E5=8D=8E&nbsp;via&nbs=
+p;lttng-dev&nbsp;wrote:<br>
+&gt;&nbsp;&gt;&nbsp;Hi=EF=BC=8Cdear.<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;I&nbsp;have&nbsp;been&nbsp;using&nbsp;lttng&nbsp;to&nbs=
+p;monitor&nbsp;my&nbsp;server&nbsp;these&nbsp;days=EF=BC=8Cbut&nbsp;I&nbsp;=
+found&nbsp;something&nbsp;interesting.<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;The&nbsp;cpu&nbsp;usage&nbsp;of&nbsp;lttng&nbsp;varies&=
+nbsp;with&nbsp;the&nbsp;number&nbsp;of&nbsp;cpu&nbsp;cores&nbsp;of&nbsp;the=
+&nbsp;server.<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;Which&nbsp;is&nbsp;a&nbsp;bit&nbsp;expected&nbsp;since&nbsp;more&=
+nbsp;CPU&nbsp;means&nbsp;more&nbsp;"data"&nbsp;source&nbsp;from&nbsp;the&nb=
+sp;point<br>
+&gt;&nbsp;of&nbsp;view&nbsp;of&nbsp;lttng&nbsp;hence&nbsp;more&nbsp;"work"&=
+nbsp;overall.<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;On&nbsp;the&nbsp;server,&nbsp;I&nbsp;create&nbsp;a&nbsp=
+;tracing&nbsp;session&nbsp;in&nbsp;live&nbsp;mode,&nbsp;using&nbsp;"lttng&n=
+bsp;create&nbsp;my-session&nbsp;--live".&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;Then,I&nbsp;Start&nbsp;the&nbsp;babeltrace2&nbsp;and&nb=
+sp;configure&nbsp;it&nbsp;to&nbsp;connect&nbsp;to&nbsp;the&nbsp;relay&nbsp;=
+daemon,using&nbsp;"--input-format=3Dlttng-live"&nbsp;mode.<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;I&nbsp;used&nbsp;5&nbsp;cloud&nbsp;servers=EF=BC=8C1cor=
+e4G&nbsp;2core8G&nbsp;4core16G&nbsp;8core16G&nbsp;8core16G.<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;And,the&nbsp;same&nbsp;test&nbsp;script&nbsp;was&nbsp;e=
+xecuted&nbsp;above&nbsp;to&nbsp;provide&nbsp;the&nbsp;same&nbsp;workload.<b=
+r>
+&gt;&nbsp;<br>
+&gt;&nbsp;We&nbsp;would&nbsp;need&nbsp;the&nbsp;test&nbsp;script&nbsp;to&nb=
+sp;have&nbsp;some&nbsp;context&nbsp;here&nbsp;of&nbsp;the&nbsp;workload.<br=
+>
+&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;As&nbsp;we&nbsp;all&nbsp;know,lttng&nbsp;has&nbsp;5&nbs=
+p;processes,<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;1.lttng-runas&nbsp;&nbsp;&nbsp;&nbsp;--daemonize<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;2.lttng-runas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-k&nbs=
+p;--consumerd-cmd-sock&nbsp;/var/run/lttng/kconsumerd/command&nbsp;--consum=
+erd-err-sock&nbsp;/var/run/lttng/kconsumerd/error&nbsp;--group&nbsp;tracing=
+<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;Based&nbsp;on&nbsp;this&nbsp;you&nbsp;are&nbsp;performing&nbsp;ke=
+rnel&nbsp;tracing.<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;3.lttng-sessiond&nbsp;--daemonize<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;4.lttng-relayd&nbsp;-L&nbsp;tcp://localhost:5344<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;5.lttng-consumerd&nbsp;&nbsp;-k&nbsp;--consumerd-cmd-so=
+ck&nbsp;/var/run/lttng/kconsumerd/command&nbsp;--consumerd-err-sock&nbsp;/v=
+ar/run/lttng/kconsumerd/error&nbsp;--group&nbsp;tracing<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;The&nbsp;CPU&nbsp;usage&nbsp;of&nbsp;the&nbsp;first&nbs=
+p;four&nbsp;processes&nbsp;is&nbsp;below&nbsp;2%&nbsp;on&nbsp;the&nbsp;5&nb=
+sp;servers,but&nbsp;the&nbsp;lttng-consumerd&nbsp;process&nbsp;is&nbsp;diff=
+erent.<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;On&nbsp;1-core=E3=80=812-core=E3=80=814-core&nbsp;serve=
+rs=EF=BC=8Cthe&nbsp;CPU&nbsp;usage&nbsp;of&nbsp;the&nbsp;lttng-consumerd&nb=
+sp;process&nbsp;is&nbsp;below&nbsp;2%.<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;How&nbsp;is&nbsp;the&nbsp;cpu&nbsp;usage&nbsp;measured&nbsp;here?=
+<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;But&nbsp;on&nbsp;two&nbsp;8-core&nbsp;machines,&nbsp;th=
+e&nbsp;cpu&nbsp;usage&nbsp;of&nbsp;the&nbsp;lttng-consumerd&nbsp;process&nb=
+sp;reached&nbsp;10%&nbsp;or&nbsp;more.<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;Consumerd&nbsp;is&nbsp;responsible&nbsp;of&nbsp;"fetching"&nbsp;d=
+ata&nbsp;from&nbsp;the&nbsp;ring&nbsp;buffers&nbsp;and&nbsp;"saving"<br>
+&gt;&nbsp;it&nbsp;either&nbsp;locally&nbsp;(trace&nbsp;on&nbsp;disk)&nbsp;o=
+r&nbsp;remotely&nbsp;(streaming/live&nbsp;session).&nbsp;CPU&nbsp;usage<br>
+&gt;&nbsp;should&nbsp;be&nbsp;a&nbsp;bit&nbsp;correlated&nbsp;with&nbsp;the=
+&nbsp;event&nbsp;production&nbsp;rate.&nbsp;Did&nbsp;you&nbsp;have&nbsp;a&n=
+bsp;look&nbsp;at&nbsp;the<br>
+&gt;&nbsp;number&nbsp;of&nbsp;events&nbsp;generated&nbsp;for&nbsp;a&nbsp;si=
+milar&nbsp;interval?<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;And,the&nbsp;cpu&nbsp;usage&nbsp;of&nbsp;the&nbsp;babel=
+trace&nbsp;process&nbsp;is&nbsp;not&nbsp;much&nbsp;different,just&nbsp;the&=
+nbsp;cpu&nbsp;usage&nbsp;of&nbsp;the&nbsp;lttng-consumerd&nbsp;process&nbsp=
+;varies&nbsp;with&nbsp;the&nbsp;number&nbsp;of&nbsp;cpu&nbsp;cores&nbsp;of&=
+nbsp;the&nbsp;server.<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;Why&nbsp;it&nbsp;is&nbsp;like&nbsp;this=EF=BC=9FHow&nbs=
+p;should&nbsp;this&nbsp;phenomenon&nbsp;be&nbsp;analyzed?<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;Looking&nbsp;forward&nbsp;to&nbsp;your&nbsp;reply.<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;thanks,<br>
+&gt;&nbsp;&gt;&nbsp;yuhua<br>
+&gt;&nbsp;&gt;&nbsp;<br>
+&gt;&nbsp;&gt;&nbsp;_______________________________________________<br>
+&gt;&nbsp;&gt;&nbsp;lttng-dev&nbsp;mailing&nbsp;list<br>
+&gt;&nbsp;&gt;&nbsp;<span class=3D"Object" role=3D"link" id=3D"OBJ_PREFIX_D=
+WT66_ZmEmailObjectHandler"><span class=3D"Object" role=3D"link" id=3D"OBJ_P=
+REFIX_DWT72_ZmEmailObjectHandler">lttng-dev@lists.lttng.org</span></span><b=
+r>
+&gt;&nbsp;&gt;&nbsp;<span class=3D"Object" role=3D"link" id=3D"OBJ_PREFIX_D=
+WT67_com_zimbra_url"><span class=3D"Object" role=3D"link" id=3D"OBJ_PREFIX_=
+DWT73_com_zimbra_url"><a target=3D"_blank" href=3D"https://lists.lttng.org/=
+cgi-bin/mailman/listinfo/lttng-dev">https://lists.lttng.org/cgi-bin/mailman=
+/listinfo/lttng-dev</a></span></span><br>
+&gt;&nbsp;<br>
+&gt;&nbsp;<br>
+&gt;&nbsp;--&nbsp;<br>
+&gt;&nbsp;Jonathan&nbsp;Rajotte-Julien<br>
+&gt;&nbsp;EfficiOS<br>
+<br>
+</div><br></blockquote></div></div></body></html>
+--=_969e784f-864a-41e7-9b10-6df4f78292ab--
+
+--===============1031602953658582660==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -320,5 +529,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============5291398515299642681==--
-
+--===============1031602953658582660==--
