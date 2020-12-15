@@ -7,57 +7,59 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8E6EC4361B
-	for <lttng-dev@archiver.kernel.org>; Tue, 15 Dec 2020 16:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27AD8C2BB9A
+	for <lttng-dev@archiver.kernel.org>; Tue, 15 Dec 2020 16:29:19 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 71ECE2078B
-	for <lttng-dev@archiver.kernel.org>; Tue, 15 Dec 2020 16:29:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 71ECE2078B
+	by mail.kernel.org (Postfix) with ESMTPS id 7FB6F2078B
+	for <lttng-dev@archiver.kernel.org>; Tue, 15 Dec 2020 16:29:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7FB6F2078B
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4CwNxm2ptrzF0V;
-	Tue, 15 Dec 2020 11:29:16 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4CwNxn1jSDzF0W;
+	Tue, 15 Dec 2020 11:29:17 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1608049756;
-	bh=EhlFIM/jLy5cygTa/8uQ4e7y/g+ToMIZZ6kAbmZvkMg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=tK38XvXKy7ZR+gSG0Je+xdauIciz8MIK2TABU+Kast4206Y6zNZQIO20YsB8iAVFM
-	 7kwRx04d3K3ZblD1lvhiUq31tIgVZJ02o0ape1gAOiQQqbThf757y7Gpyz+LHgDDiQ
-	 i/pGg3BHa0uxr6hI6ygvh+IUiyKqs8Wi/U/fEDLv6o56nWT+ki7WXsTgeijqrWjdFr
-	 ZQI1yp1GLkugVasX+xa2vujavF5fBaizNOZJ7v7Scwnu1UE53/ymzwM4M8W/yy31i6
-	 9omrjSsG+JMqtChyVW6aePcUKQOH+jT7kXThXb6IgIAPZbLNrs+7nJs1FcHHI5J3QN
-	 SB8u9M0lfMWcg==
+	s=default; t=1608049757;
+	bh=VX2CH/wzTjik9ilnN8NV6wIgS7e6zQ9zuSvIsVcluLE=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=ljRDI9T5YhuCWpfjFPQ4Bzzj0a/X0Ocuww2Fu0eDnGUOHi3bSjTC22XoPePSZ284h
+	 59Ua/fHsUXw3sEIQsUjTBw0RTKq0FQrGBEugL5nkxIPIz3dx2QvW38z/GCnztsvUF9
+	 d8E4io1PCtspM+qZYi7On/Xz9I7srDt+LfC/rtmwwr4pdOdMxP8vfFNKZ2mMI/y3JA
+	 e0Vlj9H9adVsoJngpX41/t6pYXBoIndlLFWJL/DrAdBQfqiPs7aGMj7FCTgd8Kgd2J
+	 YHL3ARQG2Kxlh3uwBSg+sWTGmLDymL1sP1QrZabT+3T95x1qYpk1xDJMdkkONGHrQG
+	 1EQYseZM25h7Q==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4CwNxc48H1zDxL
- for <lttng-dev@lists.lttng.org>; Tue, 15 Dec 2020 11:29:08 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 4CwNxf0r8MzDxM
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Dec 2020 11:29:10 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 4991C760C;
- Tue, 15 Dec 2020 11:29:03 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 1B12E74A0;
+ Tue, 15 Dec 2020 11:29:10 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id UZ5YvvMkvQcV; Tue, 15 Dec 2020 11:29:03 -0500 (EST)
+ with ESMTP id lZyg4sXdePUk; Tue, 15 Dec 2020 11:29:08 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id E633C760B;
- Tue, 15 Dec 2020 11:29:02 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com E633C760B
+ by mail.efficios.com (Postfix) with ESMTP id CC8A8749F;
+ Tue, 15 Dec 2020 11:29:08 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com CC8A8749F
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id U4xuGsNCzMZ3; Tue, 15 Dec 2020 11:29:02 -0500 (EST)
+ with ESMTP id QcaDfHwVXk4y; Tue, 15 Dec 2020 11:29:08 -0500 (EST)
 Received: from multivac.lan (96-127-212-112.qc.cable.ebox.net [96.127.212.112])
- by mail.efficios.com (Postfix) with ESMTPSA id C028E73C5;
- Tue, 15 Dec 2020 11:29:02 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTPSA id ADF387430;
+ Tue, 15 Dec 2020 11:29:08 -0500 (EST)
 To: lttng-dev@lists.lttng.org
-Date: Tue, 15 Dec 2020 11:28:47 -0500
-Message-Id: <20201215162850.78638-1-mjeanson@efficios.com>
+Date: Tue, 15 Dec 2020 11:28:49 -0500
+Message-Id: <20201215162850.78638-3-mjeanson@efficios.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201215162850.78638-1-mjeanson@efficios.com>
+References: <20201215162850.78638-1-mjeanson@efficios.com>
 MIME-Version: 1.0
-Subject: [lttng-dev] [PATCH urcu 1/4] Cleanup: Move ARM specific code to
- urcu/arch/arm.h
+Subject: [lttng-dev] [PATCH urcu 3/4] Use DMB only on ARMv7
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
 Precedence: list
@@ -71,70 +73,141 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: Michael Jeanson via lttng-dev <lttng-dev@lists.lttng.org>
 Reply-To: Michael Jeanson <mjeanson@efficios.com>
+Cc: Jason Wessel <jason.wessel@windriver.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Change-Id: I3e17308c5ae985789a2ac8361e9c9e958ff7d656
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- include/urcu/arch/arm.h | 13 +++++++++++++
- include/urcu/compiler.h | 13 -------------
- 2 files changed, 13 insertions(+), 13 deletions(-)
+Remove the configure time CONFIG_RCU_ARM_HAVE_DMB option and replace it
+by compile time detection based on the ARM ISA version. This makes sure
+we unconditionnaly use the DMB instruction only on ARMv7 where it's part
+of the baseline ISA.
 
+This will change the behavior on ARMv6 platform that possibly have this
+instruction but it was probably already broken since we use the 'ISH'
+option which doesn't seem to be valid on this ISA.
+
+This will also allow sharing headers in a multi-arch environment and
+reduce the build system complexity.
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+Cc: Jason Wessel <jason.wessel@windriver.com>
+Change-Id: I8e56ada55148d8e0f198c3d2e741ea414de5fef2
+---
+ configure.ac             | 19 -------------------
+ include/urcu/arch.h      |  7 +++++++
+ include/urcu/arch/arm.h  | 13 +++++++++++--
+ include/urcu/config.h.in |  3 ---
+ 4 files changed, 18 insertions(+), 24 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index d1d43e6..daa967a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -21,7 +21,6 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ AC_REQUIRE_AUX_FILE([tap-driver.sh])
+ 
+ AH_TEMPLATE([CONFIG_RCU_SMP], [Enable SMP support. With SMP support enabled, uniprocessors are also supported. With SMP support disabled, UP systems work fine, but the behavior of SMP systems is undefined.])
+-AH_TEMPLATE([CONFIG_RCU_ARM_HAVE_DMB], [Use the dmb instruction if available for use on ARM.])
+ AH_TEMPLATE([CONFIG_RCU_TLS], [TLS provided by the compiler.])
+ AH_TEMPLATE([CONFIG_RCU_HAVE_CLOCK_GETTIME], [clock_gettime() is detected.])
+ AH_TEMPLATE([CONFIG_RCU_FORCE_SYS_MEMBARRIER], [Require the operating system to support the membarrier system call for default and bulletproof flavors.])
+@@ -124,24 +123,6 @@ AS_IF([test "$host_cpu" = "armv7l"],[
+ 	AM_CFLAGS="$AM_CFLAGS -mcpu=cortex-a9 -mtune=cortex-a9 -O1"
+ ])
+ 
+-# ARM-specific checks
+-AS_CASE([$host_cpu], [arm*], [
+-	AC_MSG_CHECKING([for dmb instruction])
+-	AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+-				int main()
+-				{
+-					asm volatile("dmb":::"memory");
+-					return 0;
+-				}
+-		]])
+-	],[
+-		AC_MSG_RESULT([yes])
+-		AC_DEFINE([CONFIG_RCU_ARM_HAVE_DMB], [1])
+-	],[
+-		AC_MSG_RESULT([no])
+-	])
+-])
+-
+ # Search for clock_gettime
+ AC_SEARCH_LIBS([clock_gettime], [rt], [
+ 	AC_DEFINE([CONFIG_RCU_HAVE_CLOCK_GETTIME], [1])
+diff --git a/include/urcu/arch.h b/include/urcu/arch.h
+index c4b8bc2..620743c 100644
+--- a/include/urcu/arch.h
++++ b/include/urcu/arch.h
+@@ -41,6 +41,7 @@
+  * URCU_ARCH_ALPHA : All DEC Alpha variants
+  * URCU_ARCH_IA64 : All Intel Itanium variants
+  * URCU_ARCH_ARM : All ARM 32 bits variants
++ *   URCU_ARCH_ARMV7 : All ARMv7 ISA variants
+  * URCU_ARCH_AARCH64 : All ARM 64 bits variants
+  * URCU_ARCH_MIPS : All MIPS variants
+  * URCU_ARCH_NIOS2 : All Intel / Altera NIOS II variants
+@@ -105,6 +106,12 @@
+ #define URCU_ARCH_IA64 1
+ #include <urcu/arch/ia64.h>
+ 
++#elif (defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7__))
++
++#define URCU_ARCH_ARMV7 1
++#define URCU_ARCH_ARM 1
++#include <urcu/arch/arm.h>
++
+ #elif (defined(__arm__) || defined(__arm))
+ 
+ #define URCU_ARCH_ARM 1
 diff --git a/include/urcu/arch/arm.h b/include/urcu/arch/arm.h
-index cb8f28d..5d1c608 100644
+index e904b06..54ca4fa 100644
 --- a/include/urcu/arch/arm.h
 +++ b/include/urcu/arch/arm.h
-@@ -57,6 +57,19 @@ extern "C" {
- #define __NR_membarrier		389
+@@ -30,7 +30,15 @@
+ extern "C" {
  #endif
  
+-#ifdef CONFIG_RCU_ARM_HAVE_DMB
 +/*
-+ * Error out for compilers with known bugs.
++ * Using DMB is faster than the builtin __sync_synchronize and this instruction is
++ * part of the baseline ARMv7 ISA.
 + */
++#ifdef URCU_ARCH_ARMV7
 +
-+/*
-+ * http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
-+ */
-+#ifdef URCU_GCC_VERSION
-+# if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40802
-+#  error Your gcc version produces clobbered frame accesses
-+# endif
-+#endif
++/* For backwards compat. */
++#define CONFIG_RCU_ARM_HAVE_DMB 1
 +
- #ifdef __cplusplus
- }
- #endif
-diff --git a/include/urcu/compiler.h b/include/urcu/compiler.h
-index 511dbdf..4806ee3 100644
---- a/include/urcu/compiler.h
-+++ b/include/urcu/compiler.h
-@@ -108,23 +108,10 @@
+ /*
+  * Issues full system DMB operation.
+  */
+@@ -44,7 +52,8 @@ extern "C" {
+ #define cmm_smp_mb()	__asm__ __volatile__ ("dmb ish":::"memory")
+ #define cmm_smp_rmb()	__asm__ __volatile__ ("dmb ish":::"memory")
+ #define cmm_smp_wmb()	__asm__ __volatile__ ("dmb ish":::"memory")
+-#endif /* CONFIG_RCU_ARM_HAVE_DMB */
++
++#endif /* URCU_ARCH_ARMV7 */
  
- #define CAA_ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
+ #include <stdlib.h>
+ #include <sys/time.h>
+diff --git a/include/urcu/config.h.in b/include/urcu/config.h.in
+index faf7817..99d763a 100644
+--- a/include/urcu/config.h.in
++++ b/include/urcu/config.h.in
+@@ -5,9 +5,6 @@
+    behavior of SMP systems is undefined. */
+ #undef CONFIG_RCU_SMP
  
--/*
-- * Don't allow compiling with buggy compiler.
-- */
+-/* Use the dmb instruction is available for use on ARM. */
+-#undef CONFIG_RCU_ARM_HAVE_DMB
 -
- #ifdef __GNUC__
- # define URCU_GCC_VERSION	(__GNUC__ * 10000 \
- 				+ __GNUC_MINOR__ * 100 \
- 				+ __GNUC_PATCHLEVEL__)
--
--/*
-- * http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
-- */
--# ifdef __ARMEL__
--#  if URCU_GCC_VERSION >= 40800 && URCU_GCC_VERSION <= 40802
--#   error Your gcc version produces clobbered frame accesses
--#  endif
--# endif
- #endif
+ /* TLS provided by the compiler. */
+ #undef CONFIG_RCU_TLS
  
- #endif /* _URCU_COMPILER_H */
 -- 
 2.29.2
 
