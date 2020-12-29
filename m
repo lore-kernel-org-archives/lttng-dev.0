@@ -2,68 +2,83 @@ Return-Path: <SRS0=wPN/=GB=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=0.5 required=3.0 tests=BAYES_00,
+	CHARSET_FARAWAY_HEADER,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+	HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAEE0C433E0
-	for <lttng-dev@archiver.kernel.org>; Tue, 29 Dec 2020 03:58:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 698C1C433DB
+	for <lttng-dev@archiver.kernel.org>; Tue, 29 Dec 2020 13:19:16 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 016CD20798
-	for <lttng-dev@archiver.kernel.org>; Tue, 29 Dec 2020 03:58:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 016CD20798
+	by mail.kernel.org (Postfix) with ESMTPS id 81DB920867
+	for <lttng-dev@archiver.kernel.org>; Tue, 29 Dec 2020 13:19:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 81DB920867
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4D4gcl5tfLzKd2;
-	Mon, 28 Dec 2020 22:58:15 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4D4w413lh8zKmj;
+	Tue, 29 Dec 2020 08:19:13 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1609214296;
-	bh=UszUQscOMmG0xzoM3S8RinhHvXa0tRhH5/gc7J3ERCs=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1609247954;
+	bh=J7U1ZYk8N0IWRd+S1h2TJkXJGCy5SXmoW8SP8lgsXLA=;
+	h=In-Reply-To:References:To:Cc:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=0xGG8YulmU2XX9MUsCM3mhGMCXoD3I4kBJncGipq5ixur/Janz3SL76KOROECIwz9
-	 sAwR4BN/qsX4BcFNATZhlNUivunacyZWwABCZBzm93TRIYuLDrvbY4SGHfJd3jjhnm
-	 yY8fh5fVqejk8rOAmjgVGnkAyTmVBWcL+lVr1y7cRKWRCeInzL3xr/Xv23+LM8HxCV
-	 0sEZ1FOwK++i5e+AelWQ7M5GmenrMcFlnZJAs6pnnuB1f2OaaY7/pFRjU8WPVo2T4q
-	 czPzEttzmCiTyHjXID3KFVJWQquBMIZzS5oKREsruRgPCMpbnGw8ytVZ/JW2vh2BiO
-	 /wzhZ5A/P2sVg==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4D4gcj4FbqzKd1
- for <lttng-dev@lists.lttng.org>; Mon, 28 Dec 2020 22:58:13 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 3715A2E02F3
- for <lttng-dev@lists.lttng.org>; Mon, 28 Dec 2020 22:58:07 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id 2zW8icRI-b8P; Mon, 28 Dec 2020 22:58:06 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 258EB2E05DC;
- Mon, 28 Dec 2020 22:58:06 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 258EB2E05DC
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id wSYLaSywmfu1; Mon, 28 Dec 2020 22:58:06 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 1863D2E072A;
- Mon, 28 Dec 2020 22:58:06 -0500 (EST)
-Date: Mon, 28 Dec 2020 22:58:05 -0500 (EST)
-To: Serica <serica_law@qq.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Message-ID: <1510592650.3765.1609214285939.JavaMail.zimbra@efficios.com>
-In-Reply-To: <tencent_13C276218B5808AF7848BFEF00E8B4AB3A05@qq.com>
+	b=w3rEwRZtS6/YmtezJFvULiZmyU9UXGBwVFiiVE4rmlcAuoL7wNVWt+5Le80iBqi2F
+	 I9RKXIXjjDJgBwN+YQ9o9aOrSJ5LtXFpG4bjwzh4pD54vOx+gLU3cshnjZ1weLpt3X
+	 /JoITkvwZzl8nlaCL2TKyoUCC6imYouzIRTanUZgwIEZLROHOkKpVd67B3KGFIzs46
+	 1976tlan+nKArMTn8wbb/0qpZX9owVH9y8F3bnoJHvvjQ+xRo6shSISnZf8IxqD776
+	 4iwYwaLsI3P0Zfj2dk6V34z5F84bkQZ28Mj19hOavVDrtmgxqFr+/JByVcuoIaU/9Y
+	 VxCYHMhEIHGAA==
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+ by lists.lttng.org (Postfix) with ESMTPS id 4D4w3y5bPZzKdQ
+ for <lttng-dev@lists.lttng.org>; Tue, 29 Dec 2020 08:19:10 -0500 (EST)
+X-QQ-FEAT: xKPi75bqP9ATNlOqsSq95VwhNn2PHdIXrKFeu9/B9L/Pm3tBdhAcvi96Cud7i
+ 6uWCOHrs4PrZgbZ0MC9zdcNmyDds+O2XIW9/9OK76kY0gLAtv0mtj2EFbS5DMQHRr9ixt+P
+ trdqrRwdaozn/o5LTOdc2cjIxcQ80RTAYA9rJmquHckihDD4a2+GZ8EURIb/d4wmbt8Jmww
+ jyyYjKlOdvUN2V7k2HS5dvAjFI590yGZFSXjY1WYczx7qrCGGNwyGZPdHPD3k2TevxvFISI
+ G3U0bZ5kOAApYivAa6OSkLLk1Yk6dtF9hiHV8JPeRHizaD/xBn+iQdbg4=
+X-QQ-SSF: 00010000000000F000000000000000Z
+X-QQ-XMAILINFO: NLtYXaUo9lNnfZ4pr4v/APpmxB0lX1OaXmnCuzP8bIIvWhyMjlUEqg23S95CZU
+ QaTGXHqR3o5/rhDV9d9p6Km56I47CTjaL4cwRCwY7n96dtTITNfF9txEKPZX8E+pZpVibBmLfj0jD
+ md8S20YUs8dQoNhZwiicDeihK1oOlgzk1kqBCmDX0eM2ybDTKzdjfSgaVp4RMlqg+WsGRuD15ufs1
+ 3ydTM9BCdyIVx+AModU8Rp6QnJhsF2o68bfC1hTJaQPR69F7Omd7oDiTuzapqMt2PWFDySz/uSe+d
+ P8Ft+a9mW+WAWmWZfJjRJAylJDB1BilkVo2HvWwRUgjLKhH6dh8xvm4RyHyFFKFMaCvnQQL/MzDAg
+ S9ca05dzACpZWQa3awLCEkJjlk8OFj7NQtQ+rrugTj8vqlwRoAPxS+r3oTwVErIdpNDVawu9LfPdY
+ N3v5ZksqWckjpEdgjCNO6GJaWCMMRk7RuJMQ+KyQ2xkCZe6kdluWxSJyN3fNbO9eEw+AQMaueTGWn
+ ib2U7LYQROl/LOx0I7OGoHnt7RFcmzjcRZMfx1IK1r5Jfk4KGrx8rhTyC+knqw/hVar5qUyPvrC+1
+ 9p2yGQDvNtQHWMJkIfDka3aJWbMEHMdUe03KAfnWMcSekG22lYluWQt+U9dJ4k5T0zuQ3QNC5ifaY
+ ae7/7DVM24uSa2PbbgvoS6zgqF637YKIBCVANceA37UE13o0BwdFUgpRGsqKmhwFs6bE7XcxJW+OA
+ KxmsXEaeqzqSXsRd59rcki5gJB7Z+4tb2dsoKMVCkVXaLkI4tb9tsD6O5ITytc7UZJgxtSMpfzjVA
+ +A==
+X-HAS-ATTACH: no
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 39.174.208.78
+In-Reply-To: <1510592650.3765.1609214285939.JavaMail.zimbra@efficios.com>
 References: <tencent_13C276218B5808AF7848BFEF00E8B4AB3A05@qq.com>
-MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3991 (ZimbraWebClient - FF84 (Linux)/8.8.15_GA_3980)
-Thread-Topic: Enamebling namespace contexts
-Thread-Index: q91XTC3iMExwyM3NOkenFiF34qn11A==
-Subject: Re: [lttng-dev] Enamebling namespace contexts
+ <1510592650.3765.1609214285939.JavaMail.zimbra@efficios.com>
+X-QQ-STYLE: 
+X-QQ-mid: webmail626t1609247937t5254452
+To: "=?gb18030?B?TWF0aGlldSBEZXNub3llcnM=?=" <mathieu.desnoyers@efficios.com>
+Cc: "=?gb18030?B?bHR0bmctZGV2?=" <lttng-dev@lists.lttng.org>
+Mime-Version: 1.0
+Date: Tue, 29 Dec 2020 21:18:57 +0800
+X-Priority: 3
+Message-ID: <tencent_4C429FE980FC54AC7AC796244B4048B19805@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+X-QQ-ReplyHash: 2124313446
+X-QQ-SENDSIZE: 520
+Received: from qq.com (unknown [127.0.0.1]) by smtp.qq.com (ESMTP) with SMTP
+ id ; Tue, 29 Dec 2020 21:18:58 +0800 (CST)
+Feedback-ID: webmail:qq.com:bgforeign:bgforeign12
+X-QQ-Bgrelay: 1
+Subject: [lttng-dev] =?gb18030?b?u9i4tKO6ICBFbmFtZWJsaW5nIG5hbWVzcGFjZSBj?=
+ =?gb18030?q?ontexts?=
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
 Precedence: list
@@ -75,91 +90,267 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: multipart/mixed; boundary="===============2284540646327306558=="
+From: Serica via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: =?gb18030?B?U2VyaWNh?= <serica_law@qq.com>
+Content-Type: multipart/mixed; boundary="===============6694293113685325818=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============2284540646327306558==
-Content-Type: multipart/alternative; 
-	boundary="=_05882436-b249-4b0f-aafd-2dfb2a2c83d0"
+This is a multi-part message in MIME format.
 
---=_05882436-b249-4b0f-aafd-2dfb2a2c83d0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--===============6694293113685325818==
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_5FEB2CC1_0F4DB3E0_380A1354"
+Content-Transfer-Encoding: 8Bit
 
------ On Dec 23, 2020, at 9:55 PM, lttng-dev <lttng-dev@lists.lttng.org> wrote: 
+This is a multi-part message in MIME format.
 
-> Hi,
+------=_NextPart_5FEB2CC1_0F4DB3E0_380A1354
+Content-Type: text/plain;
+	charset="gb18030"
+Content-Transfer-Encoding: base64
 
-> ThI found that lttng is working on container awareness in this slides:
-> https://archive.fosdem.org/2019/schedule/event/containers_lttng/attachments/slides/3419/export/events/attachments/containers_lttng/slides/3419/lttng_containers_fosdem19.pdf
+SGksDQoNCg0KVGhlIHZlcnNpb24gb2YgbXkgbHR0bmcgaXM6IGx0dG5nIChMVFRuZyBUcmFj
+ZSBDb250cm9sKSAyLjEwLjcgLSBLZUtyaWVrLg0KDQoNClRoZSBvdXRwdXQgb2YgImx0dG5n
+IGFkZC1jb250ZXh0IC0tbGlzdCIgaXMgYXMgZm9sbG93czoNCnBpZA0KcHJvY25hbWUNCnBy
+aW8NCm5pY2UNCnZwaWQNCnRpZA0KcHRocmVhZF9pZA0KdnRpZA0KcHBpZA0KdnBwaWQNCmhv
+c3RuYW1lDQppcA0KaW50ZXJydXB0aWJsZQ0KcHJlZW1wdGlibGUNCm5lZWRfcmVzY2hlZHVs
+ZQ0KbWlncmF0YWJsZQ0KcGVyZjpjcHU6Y3B1LWN5Y2xlcw0KcGVyZjpjcHU6Y3ljbGVzDQpw
+ZXJmOmNwdTpzdGFsbGVkLWN5Y2xlcy1mcm9udGVuZA0KcGVyZjpjcHU6aWRsZS1jeWNsZXMt
+ZnJvbnRlbmQNCnBlcmY6Y3B1OnN0YWxsZWQtY3ljbGVzLWJhY2tlbmQNCnBlcmY6Y3B1Omlk
+bGUtY3ljbGVzLWJhY2tlbmQNCnBlcmY6Y3B1Omluc3RydWN0aW9ucw0KcGVyZjpjcHU6Y2Fj
+aGUtcmVmZXJlbmNlcw0KcGVyZjpjcHU6Y2FjaGUtbWlzc2VzDQpwZXJmOmNwdTpicmFuY2gt
+aW5zdHJ1Y3Rpb25zDQpwZXJmOmNwdTpicmFuY2hlcw0KcGVyZjpjcHU6YnJhbmNoLW1pc3Nl
+cw0KcGVyZjpjcHU6YnVzLWN5Y2xlcw0KcGVyZjpjcHU6TDEtZGNhY2hlLWxvYWRzDQpwZXJm
+OmNwdTpMMS1kY2FjaGUtbG9hZC1taXNzZXMNCnBlcmY6Y3B1OkwxLWRjYWNoZS1zdG9yZXMN
+CnBlcmY6Y3B1OkwxLWRjYWNoZS1zdG9yZS1taXNzZXMNCnBlcmY6Y3B1OkwxLWRjYWNoZS1w
+cmVmZXRjaGVzDQpwZXJmOmNwdTpMMS1kY2FjaGUtcHJlZmV0Y2gtbWlzc2VzDQpwZXJmOmNw
+dTpMMS1pY2FjaGUtbG9hZHMNCnBlcmY6Y3B1OkwxLWljYWNoZS1sb2FkLW1pc3Nlcw0KcGVy
+ZjpjcHU6TDEtaWNhY2hlLXN0b3Jlcw0KcGVyZjpjcHU6TDEtaWNhY2hlLXN0b3JlLW1pc3Nl
+cw0KcGVyZjpjcHU6TDEtaWNhY2hlLXByZWZldGNoZXMNCnBlcmY6Y3B1OkwxLWljYWNoZS1w
+cmVmZXRjaC1taXNzZXMNCnBlcmY6Y3B1OkxMQy1sb2Fkcw0KcGVyZjpjcHU6TExDLWxvYWQt
+bWlzc2VzDQpwZXJmOmNwdTpMTEMtc3RvcmVzDQpwZXJmOmNwdTpMTEMtc3RvcmUtbWlzc2Vz
+DQpwZXJmOmNwdTpMTEMtcHJlZmV0Y2hlcw0KcGVyZjpjcHU6TExDLXByZWZldGNoLW1pc3Nl
+cw0KcGVyZjpjcHU6ZFRMQi1sb2Fkcw0KcGVyZjpjcHU6ZFRMQi1sb2FkLW1pc3Nlcw0KcGVy
+ZjpjcHU6ZFRMQi1zdG9yZXMNCnBlcmY6Y3B1OmRUTEItc3RvcmUtbWlzc2VzDQpwZXJmOmNw
+dTpkVExCLXByZWZldGNoZXMNCnBlcmY6Y3B1OmRUTEItcHJlZmV0Y2gtbWlzc2VzDQpwZXJm
+OmNwdTppVExCLWxvYWRzDQpwZXJmOmNwdTppVExCLWxvYWQtbWlzc2VzDQpwZXJmOmNwdTpi
+cmFuY2gtbG9hZHMNCnBlcmY6Y3B1OmJyYW5jaC1sb2FkLW1pc3Nlcw0KcGVyZjpjcHU6Y3B1
+LWNsb2NrDQpwZXJmOmNwdTp0YXNrLWNsb2NrDQpwZXJmOmNwdTpwYWdlLWZhdWx0DQpwZXJm
+OmNwdTpmYXVsdHMNCnBlcmY6Y3B1Om1ham9yLWZhdWx0cw0KcGVyZjpjcHU6bWlub3ItZmF1
+bHRzDQpwZXJmOmNwdTpjb250ZXh0LXN3aXRjaGVzDQpwZXJmOmNwdTpjcw0KcGVyZjpjcHU6
+Y3B1LW1pZ3JhdGlvbnMNCnBlcmY6Y3B1Om1pZ3JhdGlvbnMNCnBlcmY6Y3B1OmFsaWdubWVu
+dC1mYXVsdHMNCnBlcmY6Y3B1OmVtdWxhdGlvbi1mYXVsdHMNCnBlcmY6dGhyZWFkOmNwdS1j
+eWNsZXMNCnBlcmY6dGhyZWFkOmN5Y2xlcw0KcGVyZjp0aHJlYWQ6c3RhbGxlZC1jeWNsZXMt
+ZnJvbnRlbmQNCnBlcmY6dGhyZWFkOmlkbGUtY3ljbGVzLWZyb250ZW5kDQpwZXJmOnRocmVh
+ZDpzdGFsbGVkLWN5Y2xlcy1iYWNrZW5kDQpwZXJmOnRocmVhZDppZGxlLWN5Y2xlcy1iYWNr
+ZW5kDQpwZXJmOnRocmVhZDppbnN0cnVjdGlvbnMNCnBlcmY6dGhyZWFkOmNhY2hlLXJlZmVy
+ZW5jZXMNCnBlcmY6dGhyZWFkOmNhY2hlLW1pc3Nlcw0KcGVyZjp0aHJlYWQ6YnJhbmNoLWlu
+c3RydWN0aW9ucw0KcGVyZjp0aHJlYWQ6YnJhbmNoZXMNCnBlcmY6dGhyZWFkOmJyYW5jaC1t
+aXNzZXMNCnBlcmY6dGhyZWFkOmJ1cy1jeWNsZXMNCnBlcmY6dGhyZWFkOkwxLWRjYWNoZS1s
+b2Fkcw0KcGVyZjp0aHJlYWQ6TDEtZGNhY2hlLWxvYWQtbWlzc2VzDQpwZXJmOnRocmVhZDpM
+MS1kY2FjaGUtc3RvcmVzDQpwZXJmOnRocmVhZDpMMS1kY2FjaGUtc3RvcmUtbWlzc2VzDQpw
+ZXJmOnRocmVhZDpMMS1kY2FjaGUtcHJlZmV0Y2hlcw0KcGVyZjp0aHJlYWQ6TDEtZGNhY2hl
+LXByZWZldGNoLW1pc3Nlcw0KcGVyZjp0aHJlYWQ6TDEtaWNhY2hlLWxvYWRzDQpwZXJmOnRo
+cmVhZDpMMS1pY2FjaGUtbG9hZC1taXNzZXMNCnBlcmY6dGhyZWFkOkwxLWljYWNoZS1zdG9y
+ZXMNCnBlcmY6dGhyZWFkOkwxLWljYWNoZS1zdG9yZS1taXNzZXMNCnBlcmY6dGhyZWFkOkwx
+LWljYWNoZS1wcmVmZXRjaGVzDQpwZXJmOnRocmVhZDpMMS1pY2FjaGUtcHJlZmV0Y2gtbWlz
+c2VzDQpwZXJmOnRocmVhZDpMTEMtbG9hZHMNCnBlcmY6dGhyZWFkOkxMQy1sb2FkLW1pc3Nl
+cw0KcGVyZjp0aHJlYWQ6TExDLXN0b3Jlcw0KcGVyZjp0aHJlYWQ6TExDLXN0b3JlLW1pc3Nl
+cw0KcGVyZjp0aHJlYWQ6TExDLXByZWZldGNoZXMNCnBlcmY6dGhyZWFkOkxMQy1wcmVmZXRj
+aC1taXNzZXMNCnBlcmY6dGhyZWFkOmRUTEItbG9hZHMNCnBlcmY6dGhyZWFkOmRUTEItbG9h
+ZC1taXNzZXMNCnBlcmY6dGhyZWFkOmRUTEItc3RvcmVzDQpwZXJmOnRocmVhZDpkVExCLXN0
+b3JlLW1pc3Nlcw0KcGVyZjp0aHJlYWQ6ZFRMQi1wcmVmZXRjaGVzDQpwZXJmOnRocmVhZDpk
+VExCLXByZWZldGNoLW1pc3Nlcw0KcGVyZjp0aHJlYWQ6aVRMQi1sb2Fkcw0KcGVyZjp0aHJl
+YWQ6aVRMQi1sb2FkLW1pc3Nlcw0KcGVyZjp0aHJlYWQ6YnJhbmNoLWxvYWRzDQpwZXJmOnRo
+cmVhZDpicmFuY2gtbG9hZC1taXNzZXMNCnBlcmY6dGhyZWFkOmNwdS1jbG9jaw0KcGVyZjp0
+aHJlYWQ6dGFzay1jbG9jaw0KcGVyZjp0aHJlYWQ6cGFnZS1mYXVsdA0KcGVyZjp0aHJlYWQ6
+ZmF1bHRzDQpwZXJmOnRocmVhZDptYWpvci1mYXVsdHMNCnBlcmY6dGhyZWFkOm1pbm9yLWZh
+dWx0cw0KcGVyZjp0aHJlYWQ6Y29udGV4dC1zd2l0Y2hlcw0KcGVyZjp0aHJlYWQ6Y3MNCnBl
+cmY6dGhyZWFkOmNwdS1taWdyYXRpb25zDQpwZXJmOnRocmVhZDptaWdyYXRpb25zDQpwZXJm
+OnRocmVhZDphbGlnbm1lbnQtZmF1bHRzDQpwZXJmOnRocmVhZDplbXVsYXRpb24tZmF1bHRz
+DQoNCg0KVGhhbmtzLA0KU2VyaWNhDQoNCg0KLS0tLS0tLS0tLS0tLS0tLS0tJm5ic3A71K3K
+vNPKvP4mbmJzcDstLS0tLS0tLS0tLS0tLS0tLS0NCreivP7IyzogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiTWF0
+aGlldSBEZXNub3llcnMiICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPG1hdGhpZXUu
+ZGVzbm95ZXJzQGVmZmljaW9zLmNvbSZndDs7DQq3osvNyrG85DombmJzcDsyMDIwxOoxMtTC
+MjnI1SjQx8batv4pINbQzucxMTo1OA0KytW8/sjLOiZuYnNwOyJTZXJpY2EiPHNlcmljYV9s
+YXdAcXEuY29tJmd0OzsNCrOty806Jm5ic3A7Imx0dG5nLWRldiI8bHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZyZndDs7DQrW98ziOiZuYnNwO1JlOiBbbHR0bmctZGV2XSBFbmFtZWJsaW5n
+IG5hbWVzcGFjZSBjb250ZXh0cw0KDQoNCg0KLS0tLS0gT24gRGVjIDIzLCAyMDIwLCBhdCA5
+OjU1IFBNLCBsdHRuZy1kZXYgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcmZ3Q7IHdyb3Rl
+Og0KDQpIaSwNCg0KVGhJIGZvdW5kIHRoYXQgbHR0bmcgaXMgd29ya2luZyBvbiBjb250YWlu
+ZXIgYXdhcmVuZXNzIGluIHRoaXMgc2xpZGVzOiBodHRwczovL2FyY2hpdmUuZm9zZGVtLm9y
+Zy8yMDE5L3NjaGVkdWxlL2V2ZW50L2NvbnRhaW5lcnNfbHR0bmcvYXR0YWNobWVudHMvc2xp
+ZGVzLzM0MTkvZXhwb3J0L2V2ZW50cy9hdHRhY2htZW50cy9jb250YWluZXJzX2x0dG5nL3Ns
+aWRlcy8zNDE5L2x0dG5nX2NvbnRhaW5lcnNfZm9zZGVtMTkucGRmDQoNCk9uIHBhZ2UgIzEz
+LCB0aGVyZSBpcyBhIGNvbW1hbmQ6Jm5ic3A7IGx0dG5nIGFkZC1jb250ZXh0IC1rIC10IHBy
+b2NuYW1lIC10IHBpZCAtdCB2cGlkIC10IHRpZCAtdCB2dGlkIC10IHBpZF9ucywgd2hlcmUg
+cGlkX25zIGFuZCBvdGhlciBuYW1lc3BhY2UgaWRlbnRpZmllcnMgYXJlIHZlcnkgdXNlZnVs
+IGZvciB0cmFjaW5nIGNvbnRhaW5lcnMuIEhvd2V2ZXIsIGl0IHNlZW1zIGxpa2UgdGhhdCBs
+dHRuZyBvZiBjdXJyZW50IHZlcnNpb24gZG9lc24ndCBzdXBwb3J0IGFkZGluZyBjb250ZXh0
+IHBpZF9ucyhFcnJvcjogVW5rbm93biBjb250ZXh0IHR5cGUgcGlkX25zKS4gRG8geW91IGtu
+b3cgaG93IHRvIGVuYWJsZSB0aGVzZSBmZWF0dXJlcz8NCg0KV2hhdCB2ZXJzaW9uIG9mIExU
+VG5nIGRvIHlvdSB1c2UgKG91dHB1dCBvZiAibHR0bmcgLS12ZXJzaW9uIiksIGFuZCB3aGF0
+IGlzIHRoZSBvdXRwdXQgb2YgImx0dG5nIGFkZC1jb250ZXh0IC0tbGlzdCIgPw0KDQoNCg0K
+VGhhbmtzLA0KDQoNCg0KTWF0aGlldQ0KDQoNCg0KDQoNCg0KVGhhbmtzIGEgbG90Lg0KQnR3
+LCBoYXZlIGEgbmljZSBob2xpZGF5IQ0KDQpTZXJpY2ENCg0KDQpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dA0KbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZw0KaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldg0KDQoNCg0KLS0gDQoNCk1hdGhp
+ZXUgRGVzbm95ZXJzDQpFZmZpY2lPUyBJbmMuDQpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQ==
 
-> On page #13, there is a command: lttng add-context -k -t procname -t pid -t vpid
-> -t tid -t vtid -t pid_ns, where pid_ns and other namespace identifiers are very
-> useful for tracing containers. However, it seems like that lttng of current
-> version doesn't support adding context pid_ns(Error: Unknown context type
-> pid_ns). Do you know how to enable these features?
+------=_NextPart_5FEB2CC1_0F4DB3E0_380A1354
+Content-Type: text/html;
+	charset="gb18030"
+Content-Transfer-Encoding: base64
 
-What version of LTTng do you use (output of "lttng --version"), and what is the output of "lttng add-context --list" ? 
+PG1ldGEgaHR0cC1lcXVpdj0iQ29udGVudC1UeXBlIiBjb250ZW50PSJ0ZXh0L2h0bWw7IGNo
+YXJzZXQ9R0IxODAzMCI+PGRpdj5IaSw8L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2PlRoZSB2
+ZXJzaW9uIG9mIG15IGx0dG5nIGlzOiBsdHRuZyAoTFRUbmcgVHJhY2UgQ29udHJvbCkgMi4x
+MC43IC0gS2VLcmllay48L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2PlRoZSBvdXRwdXQgb2Yg
+IjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTogYXJpYWwsIGhlbHZldGljYSwgc2Fucy1zZXJp
+ZjsgZm9udC1zaXplOiAxNnB4OyI+bHR0bmcgYWRkLWNvbnRleHQgLS1saXN0IiBpcyBhcyBm
+b2xsb3dzOjwvc3Bhbj48L2Rpdj48ZGl2PjxibG9ja3F1b3RlIGZvcm1hdGJsb2NrPSIxIiBz
+dHlsZT0ibWFyZ2luOiAwLjhlbSAwcHggMC44ZW0gMmVtOyBwYWRkaW5nOiAwcHggMHB4IDBw
+eCAwLjdlbTsgYm9yZGVyLWxlZnQ6IDJweCBzb2xpZCByZ2IoMjIxLCAyMjEsIDIyMSk7Ij5w
+aWQ8YnI+cHJvY25hbWU8YnI+cHJpbzxicj5uaWNlPGJyPnZwaWQ8YnI+dGlkPGJyPnB0aHJl
+YWRfaWQ8YnI+dnRpZDxicj5wcGlkPGJyPnZwcGlkPGJyPmhvc3RuYW1lPGJyPmlwPGJyPmlu
+dGVycnVwdGlibGU8YnI+cHJlZW1wdGlibGU8YnI+bmVlZF9yZXNjaGVkdWxlPGJyPm1pZ3Jh
+dGFibGU8YnI+cGVyZjpjcHU6Y3B1LWN5Y2xlczxicj5wZXJmOmNwdTpjeWNsZXM8YnI+cGVy
+ZjpjcHU6c3RhbGxlZC1jeWNsZXMtZnJvbnRlbmQ8YnI+cGVyZjpjcHU6aWRsZS1jeWNsZXMt
+ZnJvbnRlbmQ8YnI+cGVyZjpjcHU6c3RhbGxlZC1jeWNsZXMtYmFja2VuZDxicj5wZXJmOmNw
+dTppZGxlLWN5Y2xlcy1iYWNrZW5kPGJyPnBlcmY6Y3B1Omluc3RydWN0aW9uczxicj5wZXJm
+OmNwdTpjYWNoZS1yZWZlcmVuY2VzPGJyPnBlcmY6Y3B1OmNhY2hlLW1pc3Nlczxicj5wZXJm
+OmNwdTpicmFuY2gtaW5zdHJ1Y3Rpb25zPGJyPnBlcmY6Y3B1OmJyYW5jaGVzPGJyPnBlcmY6
+Y3B1OmJyYW5jaC1taXNzZXM8YnI+cGVyZjpjcHU6YnVzLWN5Y2xlczxicj5wZXJmOmNwdTpM
+MS1kY2FjaGUtbG9hZHM8YnI+cGVyZjpjcHU6TDEtZGNhY2hlLWxvYWQtbWlzc2VzPGJyPnBl
+cmY6Y3B1OkwxLWRjYWNoZS1zdG9yZXM8YnI+cGVyZjpjcHU6TDEtZGNhY2hlLXN0b3JlLW1p
+c3Nlczxicj5wZXJmOmNwdTpMMS1kY2FjaGUtcHJlZmV0Y2hlczxicj5wZXJmOmNwdTpMMS1k
+Y2FjaGUtcHJlZmV0Y2gtbWlzc2VzPGJyPnBlcmY6Y3B1OkwxLWljYWNoZS1sb2Fkczxicj5w
+ZXJmOmNwdTpMMS1pY2FjaGUtbG9hZC1taXNzZXM8YnI+cGVyZjpjcHU6TDEtaWNhY2hlLXN0
+b3Jlczxicj5wZXJmOmNwdTpMMS1pY2FjaGUtc3RvcmUtbWlzc2VzPGJyPnBlcmY6Y3B1Okwx
+LWljYWNoZS1wcmVmZXRjaGVzPGJyPnBlcmY6Y3B1OkwxLWljYWNoZS1wcmVmZXRjaC1taXNz
+ZXM8YnI+cGVyZjpjcHU6TExDLWxvYWRzPGJyPnBlcmY6Y3B1OkxMQy1sb2FkLW1pc3Nlczxi
+cj5wZXJmOmNwdTpMTEMtc3RvcmVzPGJyPnBlcmY6Y3B1OkxMQy1zdG9yZS1taXNzZXM8YnI+
+cGVyZjpjcHU6TExDLXByZWZldGNoZXM8YnI+cGVyZjpjcHU6TExDLXByZWZldGNoLW1pc3Nl
+czxicj5wZXJmOmNwdTpkVExCLWxvYWRzPGJyPnBlcmY6Y3B1OmRUTEItbG9hZC1taXNzZXM8
+YnI+cGVyZjpjcHU6ZFRMQi1zdG9yZXM8YnI+cGVyZjpjcHU6ZFRMQi1zdG9yZS1taXNzZXM8
+YnI+cGVyZjpjcHU6ZFRMQi1wcmVmZXRjaGVzPGJyPnBlcmY6Y3B1OmRUTEItcHJlZmV0Y2gt
+bWlzc2VzPGJyPnBlcmY6Y3B1OmlUTEItbG9hZHM8YnI+cGVyZjpjcHU6aVRMQi1sb2FkLW1p
+c3Nlczxicj5wZXJmOmNwdTpicmFuY2gtbG9hZHM8YnI+cGVyZjpjcHU6YnJhbmNoLWxvYWQt
+bWlzc2VzPGJyPnBlcmY6Y3B1OmNwdS1jbG9jazxicj5wZXJmOmNwdTp0YXNrLWNsb2NrPGJy
+PnBlcmY6Y3B1OnBhZ2UtZmF1bHQ8YnI+cGVyZjpjcHU6ZmF1bHRzPGJyPnBlcmY6Y3B1Om1h
+am9yLWZhdWx0czxicj5wZXJmOmNwdTptaW5vci1mYXVsdHM8YnI+cGVyZjpjcHU6Y29udGV4
+dC1zd2l0Y2hlczxicj5wZXJmOmNwdTpjczxicj5wZXJmOmNwdTpjcHUtbWlncmF0aW9uczxi
+cj5wZXJmOmNwdTptaWdyYXRpb25zPGJyPnBlcmY6Y3B1OmFsaWdubWVudC1mYXVsdHM8YnI+
+cGVyZjpjcHU6ZW11bGF0aW9uLWZhdWx0czxicj5wZXJmOnRocmVhZDpjcHUtY3ljbGVzPGJy
+PnBlcmY6dGhyZWFkOmN5Y2xlczxicj5wZXJmOnRocmVhZDpzdGFsbGVkLWN5Y2xlcy1mcm9u
+dGVuZDxicj5wZXJmOnRocmVhZDppZGxlLWN5Y2xlcy1mcm9udGVuZDxicj5wZXJmOnRocmVh
+ZDpzdGFsbGVkLWN5Y2xlcy1iYWNrZW5kPGJyPnBlcmY6dGhyZWFkOmlkbGUtY3ljbGVzLWJh
+Y2tlbmQ8YnI+cGVyZjp0aHJlYWQ6aW5zdHJ1Y3Rpb25zPGJyPnBlcmY6dGhyZWFkOmNhY2hl
+LXJlZmVyZW5jZXM8YnI+cGVyZjp0aHJlYWQ6Y2FjaGUtbWlzc2VzPGJyPnBlcmY6dGhyZWFk
+OmJyYW5jaC1pbnN0cnVjdGlvbnM8YnI+cGVyZjp0aHJlYWQ6YnJhbmNoZXM8YnI+cGVyZjp0
+aHJlYWQ6YnJhbmNoLW1pc3Nlczxicj5wZXJmOnRocmVhZDpidXMtY3ljbGVzPGJyPnBlcmY6
+dGhyZWFkOkwxLWRjYWNoZS1sb2Fkczxicj5wZXJmOnRocmVhZDpMMS1kY2FjaGUtbG9hZC1t
+aXNzZXM8YnI+cGVyZjp0aHJlYWQ6TDEtZGNhY2hlLXN0b3Jlczxicj5wZXJmOnRocmVhZDpM
+MS1kY2FjaGUtc3RvcmUtbWlzc2VzPGJyPnBlcmY6dGhyZWFkOkwxLWRjYWNoZS1wcmVmZXRj
+aGVzPGJyPnBlcmY6dGhyZWFkOkwxLWRjYWNoZS1wcmVmZXRjaC1taXNzZXM8YnI+cGVyZjp0
+aHJlYWQ6TDEtaWNhY2hlLWxvYWRzPGJyPnBlcmY6dGhyZWFkOkwxLWljYWNoZS1sb2FkLW1p
+c3Nlczxicj5wZXJmOnRocmVhZDpMMS1pY2FjaGUtc3RvcmVzPGJyPnBlcmY6dGhyZWFkOkwx
+LWljYWNoZS1zdG9yZS1taXNzZXM8YnI+cGVyZjp0aHJlYWQ6TDEtaWNhY2hlLXByZWZldGNo
+ZXM8YnI+cGVyZjp0aHJlYWQ6TDEtaWNhY2hlLXByZWZldGNoLW1pc3Nlczxicj5wZXJmOnRo
+cmVhZDpMTEMtbG9hZHM8YnI+cGVyZjp0aHJlYWQ6TExDLWxvYWQtbWlzc2VzPGJyPnBlcmY6
+dGhyZWFkOkxMQy1zdG9yZXM8YnI+cGVyZjp0aHJlYWQ6TExDLXN0b3JlLW1pc3Nlczxicj5w
+ZXJmOnRocmVhZDpMTEMtcHJlZmV0Y2hlczxicj5wZXJmOnRocmVhZDpMTEMtcHJlZmV0Y2gt
+bWlzc2VzPGJyPnBlcmY6dGhyZWFkOmRUTEItbG9hZHM8YnI+cGVyZjp0aHJlYWQ6ZFRMQi1s
+b2FkLW1pc3Nlczxicj5wZXJmOnRocmVhZDpkVExCLXN0b3Jlczxicj5wZXJmOnRocmVhZDpk
+VExCLXN0b3JlLW1pc3Nlczxicj5wZXJmOnRocmVhZDpkVExCLXByZWZldGNoZXM8YnI+cGVy
+Zjp0aHJlYWQ6ZFRMQi1wcmVmZXRjaC1taXNzZXM8YnI+cGVyZjp0aHJlYWQ6aVRMQi1sb2Fk
+czxicj5wZXJmOnRocmVhZDppVExCLWxvYWQtbWlzc2VzPGJyPnBlcmY6dGhyZWFkOmJyYW5j
+aC1sb2Fkczxicj5wZXJmOnRocmVhZDpicmFuY2gtbG9hZC1taXNzZXM8YnI+cGVyZjp0aHJl
+YWQ6Y3B1LWNsb2NrPGJyPnBlcmY6dGhyZWFkOnRhc2stY2xvY2s8YnI+cGVyZjp0aHJlYWQ6
+cGFnZS1mYXVsdDxicj5wZXJmOnRocmVhZDpmYXVsdHM8YnI+cGVyZjp0aHJlYWQ6bWFqb3It
+ZmF1bHRzPGJyPnBlcmY6dGhyZWFkOm1pbm9yLWZhdWx0czxicj5wZXJmOnRocmVhZDpjb250
+ZXh0LXN3aXRjaGVzPGJyPnBlcmY6dGhyZWFkOmNzPGJyPnBlcmY6dGhyZWFkOmNwdS1taWdy
+YXRpb25zPGJyPnBlcmY6dGhyZWFkOm1pZ3JhdGlvbnM8YnI+cGVyZjp0aHJlYWQ6YWxpZ25t
+ZW50LWZhdWx0czxicj5wZXJmOnRocmVhZDplbXVsYXRpb24tZmF1bHRzPC9ibG9ja3F1b3Rl
+PjwvZGl2PjxkaXY+PGRpdj48YnI+PC9kaXY+PGRpdj5UaGFua3MsPC9kaXY+PGRpdj5TZXJp
+Y2E8L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2IHN0eWxlPSJmb250LXNpemU6IDEycHg7Zm9u
+dC1mYW1pbHk6IEFyaWFsIE5hcnJvdztwYWRkaW5nOjJweCAwIDJweCAwOyI+LS0tLS0tLS0t
+LS0tLS0tLS0tJm5ic3A71K3KvNPKvP4mbmJzcDstLS0tLS0tLS0tLS0tLS0tLS08L2Rpdj48
+ZGl2IHN0eWxlPSJmb250LXNpemU6IDEycHg7IGJhY2tncm91bmQ6IHJnYigyMzksIDIzOSwg
+MjM5KTsgcGFkZGluZzogOHB4OyAtLWRhcmtyZWFkZXItaW5saW5lLWJnaW1hZ2U6IGluaXRp
+YWw7IC0tZGFya3JlYWRlci1pbmxpbmUtYmdjb2xvcjojMjgyNzIzOyIgZGF0YS1kYXJrcmVh
+ZGVyLWlubGluZS1iZ2ltYWdlPSIiIGRhdGEtZGFya3JlYWRlci1pbmxpbmUtYmdjb2xvcj0i
+Ij48ZGl2PjxiPreivP7Iyzo8L2I+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIk1hdGhpZXUgRGVzbm95ZXJzIiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICZsdDttYXRoaWV1LmRlc25veWVyc0BlZmZp
+Y2lvcy5jb20mZ3Q7OzwvZGl2PjxkaXY+PGI+t6LLzcqxvOQ6PC9iPiZuYnNwOzIwMjDE6jEy
+1MIyOcjVKNDHxtq2/ikg1tDO5zExOjU4PC9kaXY+PGRpdj48Yj7K1bz+yMs6PC9iPiZuYnNw
+OyJTZXJpY2EiJmx0O3NlcmljYV9sYXdAcXEuY29tJmd0Ozs8d2JyPjwvZGl2PjxkaXY+PGI+
+s63LzTo8L2I+Jm5ic3A7Imx0dG5nLWRldiImbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZyZndDs7PHdicj48L2Rpdj48ZGl2PjxiPtb3zOI6PC9iPiZuYnNwO1JlOiBbbHR0bmctZGV2
+XSBFbmFtZWJsaW5nIG5hbWVzcGFjZSBjb250ZXh0czwvZGl2PjwvZGl2PjxkaXY+PGJyPjwv
+ZGl2PjxkaXYgc3R5bGU9ImZvbnQtZmFtaWx5OiBhcmlhbCwgaGVsdmV0aWNhLCBzYW5zLXNl
+cmlmOyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiByZ2IoMCwgMCwgMCk7IC0tZGFya3JlYWRl
+ci1pbmxpbmUtY29sb3I6I2ZmZmRkZDsiIGRhdGEtZGFya3JlYWRlci1pbmxpbmUtY29sb3I9
+IiI+PGRpdj48c3BhbiBpZD0iendjaHIiIGRhdGEtbWFya2VyPSJfX0RJVklERVJfXyI+LS0t
+LS0gT24gRGVjIDIzLCAyMDIwLCBhdCA5OjU1IFBNLCBsdHRuZy1kZXYgJmx0O2x0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmcmZ3Q7IHdyb3RlOjxicj48L3NwYW4+PC9kaXY+PGRpdiBkYXRh
+LW1hcmtlcj0iX19RVU9URURfVEVYVF9fIj48YmxvY2txdW90ZSBzdHlsZT0iYm9yZGVyLWxl
+ZnQ6IDJweCBzb2xpZCByZ2IoMTYsIDE2LCAyNTUpOyBtYXJnaW4tbGVmdDogNXB4OyBwYWRk
+aW5nLWxlZnQ6IDVweDsgY29sb3I6IHJnYigwLCAwLCAwKTsgZm9udC13ZWlnaHQ6IG5vcm1h
+bDsgZm9udC1zdHlsZTogbm9ybWFsOyB0ZXh0LWRlY29yYXRpb246IG5vbmU7IGZvbnQtZmFt
+aWx5OiBIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHQ7IC0t
+ZGFya3JlYWRlci1pbmxpbmUtYm9yZGVyLWxlZnQ6IzEwMGY2MjsgLS1kYXJrcmVhZGVyLWlu
+bGluZS1jb2xvcjojZmZmZGRkOyIgZGF0YS1kYXJrcmVhZGVyLWlubGluZS1ib3JkZXItbGVm
+dD0iIiBkYXRhLWRhcmtyZWFkZXItaW5saW5lLWNvbG9yPSIiPjxkaXY+PGRpdj5IaSw8L2Rp
+dj48YnI+PGRpdj5UaEkgZm91bmQgdGhhdCBsdHRuZyBpcyB3b3JraW5nIG9uIGNvbnRhaW5l
+ciBhd2FyZW5lc3MgaW4gdGhpcyBzbGlkZXM6IGh0dHBzOi8vYXJjaGl2ZS5mb3NkZW0ub3Jn
+LzIwMTkvc2NoZWR1bGUvZXZlbnQvY29udGFpbmVyc19sdHRuZy9hdHRhY2htZW50cy9zbGlk
+ZXMvMzQxOS9leHBvcnQvZXZlbnRzL2F0dGFjaG1lbnRzL2NvbnRhaW5lcnNfbHR0bmcvc2xp
+ZGVzLzM0MTkvbHR0bmdfY29udGFpbmVyc19mb3NkZW0xOS5wZGY8L2Rpdj48YnI+PGRpdj5P
+biBwYWdlICMxMywgdGhlcmUgaXMgYSBjb21tYW5kOiZuYnNwOyBsdHRuZyBhZGQtY29udGV4
+dCAtayAtdCBwcm9jbmFtZSAtdCBwaWQgLXQgdnBpZCAtdCB0aWQgLXQgdnRpZCAtdCBwaWRf
+bnMsIHdoZXJlIHBpZF9ucyBhbmQgb3RoZXIgbmFtZXNwYWNlIGlkZW50aWZpZXJzIGFyZSB2
+ZXJ5IHVzZWZ1bCBmb3IgdHJhY2luZyBjb250YWluZXJzLiBIb3dldmVyLCBpdCBzZWVtcyBs
+aWtlIHRoYXQgbHR0bmcgb2YgY3VycmVudCB2ZXJzaW9uIGRvZXNuJ3Qgc3VwcG9ydCBhZGRp
+bmcgY29udGV4dCBwaWRfbnMoRXJyb3I6IFVua25vd24gY29udGV4dCB0eXBlIHBpZF9ucyku
+IERvIHlvdSBrbm93IGhvdyB0byBlbmFibGUgdGhlc2UgZmVhdHVyZXM/PC9kaXY+PC9kaXY+
+PC9ibG9ja3F1b3RlPjxkaXY+V2hhdCB2ZXJzaW9uIG9mIExUVG5nIGRvIHlvdSB1c2UgKG91
+dHB1dCBvZiAibHR0bmcgLS12ZXJzaW9uIiksIGFuZCB3aGF0IGlzIHRoZSBvdXRwdXQgb2Yg
+Imx0dG5nIGFkZC1jb250ZXh0IC0tbGlzdCIgPzxicj48L2Rpdj48ZGl2PjxiciBkYXRhLW1j
+ZS1ib2d1cz0iMSI+PC9kaXY+PGRpdj5UaGFua3MsPGJyIGRhdGEtbWNlLWJvZ3VzPSIxIj48
+L2Rpdj48ZGl2PjxiciBkYXRhLW1jZS1ib2d1cz0iMSI+PC9kaXY+PGRpdj5NYXRoaWV1PGJy
+IGRhdGEtbWNlLWJvZ3VzPSIxIj48L2Rpdj48ZGl2PjxiciBkYXRhLW1jZS1ib2d1cz0iMSI+
+PC9kaXY+PGRpdj48YnIgZGF0YS1tY2UtYm9ndXM9IjEiPjwvZGl2PjxibG9ja3F1b3RlIHN0
+eWxlPSJib3JkZXItbGVmdDogMnB4IHNvbGlkIHJnYigxNiwgMTYsIDI1NSk7IG1hcmdpbi1s
+ZWZ0OiA1cHg7IHBhZGRpbmctbGVmdDogNXB4OyBjb2xvcjogcmdiKDAsIDAsIDApOyBmb250
+LXdlaWdodDogbm9ybWFsOyBmb250LXN0eWxlOiBub3JtYWw7IHRleHQtZGVjb3JhdGlvbjog
+bm9uZTsgZm9udC1mYW1pbHk6IEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQt
+c2l6ZTogMTJwdDsgLS1kYXJrcmVhZGVyLWlubGluZS1ib3JkZXItbGVmdDojMTAwZjYyOyAt
+LWRhcmtyZWFkZXItaW5saW5lLWNvbG9yOiNmZmZkZGQ7IiBkYXRhLWRhcmtyZWFkZXItaW5s
+aW5lLWJvcmRlci1sZWZ0PSIiIGRhdGEtZGFya3JlYWRlci1pbmxpbmUtY29sb3I9IiI+PGRp
+dj48YnI+PGRpdj5UaGFua3MgYSBsb3QuPC9kaXY+PGRpdj5CdHcsIGhhdmUgYSBuaWNlIGhv
+bGlkYXkhPC9kaXY+PGJyPjxkaXY+U2VyaWNhPC9kaXY+PC9kaXY+PGJyPl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fPGJyPmx0dG5nLWRldiBtYWls
+aW5nIGxpc3Q8YnI+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZzxicj5odHRwczovL2xpc3Rz
+Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2PGJyPjwvYmxv
+Y2txdW90ZT48L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2IGRhdGEtbWFya2VyPSJfX1NJR19Q
+T1NUX18iPi0tIDxicj48L2Rpdj48ZGl2Pk1hdGhpZXUgRGVzbm95ZXJzPGJyPkVmZmljaU9T
+IEluYy48YnI+aHR0cDovL3d3dy5lZmZpY2lvcy5jb208L2Rpdj48L2Rpdj48L2Rpdj4=
 
-Thanks, 
+------=_NextPart_5FEB2CC1_0F4DB3E0_380A1354--
 
-Mathieu 
 
-> Thanks a lot.
-> Btw, have a nice holiday!
 
-> Serica
 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_05882436-b249-4b0f-aafd-2dfb2a2c83d0
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On Dec 23, 2020, at 9:55 PM, lttng-dev &lt;lttng-dev@lists.lttng.=
-org&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockq=
-uote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5p=
-x;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font=
--family:Helvetica,Arial,sans-serif;font-size:12pt;"><div><div>Hi,</div><br>=
-<div>ThI found that lttng is working on container awareness in this slides:=
- https://archive.fosdem.org/2019/schedule/event/containers_lttng/attachment=
-s/slides/3419/export/events/attachments/containers_lttng/slides/3419/lttng_=
-containers_fosdem19.pdf</div><br><div>On page #13, there is a command:&nbsp=
-; lttng add-context -k -t procname -t pid -t vpid -t tid -t vtid -t pid_ns,=
- where pid_ns and other namespace identifiers are very useful for tracing c=
-ontainers. However, it seems like that lttng of current version doesn't sup=
-port adding context pid_ns(Error: Unknown context type pid_ns). Do you know=
- how to enable these features?</div></div></blockquote><div>What version of=
- LTTng do you use (output of "lttng --version"), and what is the output of =
-"lttng add-context --list" ?<br></div><div><br data-mce-bogus=3D"1"></div><=
-div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></d=
-iv><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"=
-></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left=
-:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:=
-normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,s=
-ans-serif;font-size:12pt;"><div><br><div>Thanks a lot.</div><div>Btw, have =
-a nice holiday!</div><br><div>Serica</div></div><br>_______________________=
-________________________<br>lttng-dev mailing list<br>lttng-dev@lists.lttng=
-.org<br>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blo=
-ckquote></div><div><br></div><div data-marker=3D"__SIG_POST__">-- <br></div=
-><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></=
-div></body></html>
---=_05882436-b249-4b0f-aafd-2dfb2a2c83d0--
-
---===============2284540646327306558==
+--===============6694293113685325818==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -170,4 +361,7 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2284540646327306558==--
+--===============6694293113685325818==--
+
+
+
