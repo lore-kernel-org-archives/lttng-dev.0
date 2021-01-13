@@ -2,116 +2,126 @@ Return-Path: <SRS0=q6Pr=GQ=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=BAYES_00,
+	CHARSET_FARAWAY_HEADER,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A746C433E0
-	for <lttng-dev@archiver.kernel.org>; Wed, 13 Jan 2021 02:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D195CC433E0
+	for <lttng-dev@archiver.kernel.org>; Wed, 13 Jan 2021 06:03:45 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 48A6122EBE
-	for <lttng-dev@archiver.kernel.org>; Wed, 13 Jan 2021 02:10:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 48A6122EBE
+	by mail.kernel.org (Postfix) with ESMTPS id 07F1723102
+	for <lttng-dev@archiver.kernel.org>; Wed, 13 Jan 2021 06:03:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 07F1723102
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4DFrW26zF9zQMQ;
-	Tue, 12 Jan 2021 21:10:06 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4DFxhY4njwzQPt;
+	Wed, 13 Jan 2021 01:03:41 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1610503807;
-	bh=fFV9KVXhvdT0DdHhM5Qj0eVERcvXKqCIB3M6tdrAZP4=;
-	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=T1jBtaukQXt0dlUiEjV0KxPdjh6OyDWH3QtL5Mv0mrccBrTzKNHT+0VqVXWbw6UiP
-	 H0n3vGO+E2SYNK14/REEcrv2Pg/F7/4nRyGcRlhlGjCugUikjUs84A2Hjy0fn9zivG
-	 Qjr85kj1rbL7F6Rt0LTzhvoXMhHHrRf2PKKxJcHeRVUdMwvwnw5RkgfQ2g+IUYEp+t
-	 KhaQaVUctBrbxCbqTV9KUSFyqpFakHQuC+jeChAGcD0+ez6DxW8RCvsdaal8QH03lf
-	 ps5C5P9gKHU6svNvaIlqpfJq47gXuihLsLhT3sEXacca5blzXyYCBmBfJ/389paacY
-	 +L81+uKBILV0g==
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-eopbgr770084.outbound.protection.outlook.com [40.107.77.84])
- by lists.lttng.org (Postfix) with ESMTPS id 4DFrW05LwpzQcx
- for <lttng-dev@lists.lttng.org>; Tue, 12 Jan 2021 21:10:04 -0500 (EST)
+	s=default; t=1610517823;
+	bh=m8LyZdtOxZ62ESo62I7AOqrq4kjDtg0wsINrzaCs6+M=;
+	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=DZ9eA74c2SzoqChUAPZCtt3nznuppNVF1qFXK5cJj01EAS/t3FMuwvg4jr8wCTXuY
+	 +GYiTIp+YN9ITh4l8ZfMWm8JHwYL/dTrDAuHHqYEsRO3w5gZ2LPxA+ZYGUafL91qYN
+	 Z4NmxbvKtOS8hhfyrtykaCG8ENNticAK0Au7cQRRFhv4TfdltV77soZRJshVKojqhn
+	 61bZt2tvJAoA0izYr61Xb0JjVlnDNRY6ngT0jtnv/FRFRTZ5vjrCf9WTw4GgyaBKBG
+	 fK+Nfw6tWPGSmehPlvjhduO3YYg3RZ/CpDNoPnXzjYCjHrkaiMXQ4v1dTuVBgFh9U1
+	 spD0ALEE5yWtw==
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com
+ (mail-bn7nam10on2059.outbound.protection.outlook.com [40.107.92.59])
+ by lists.lttng.org (Postfix) with ESMTPS id 4DFxhV1vJtzQm8
+ for <lttng-dev@lists.lttng.org>; Wed, 13 Jan 2021 01:03:37 -0500 (EST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lI3V7hYcQM8kjnI8VcO+MhwItPaQhGSHt2FCydsbW8vOYcUxCI1UEk9Cd61byx0ikLTmKEL/wxbtezD6BIyncfvjf8DfxW4ESyZtgfKeU6jt3MxJMB5/W3FGOQgecf4hYzEtw6geRoGTYP2wF78Rxkju7FLWgfVZKUKX2u40aiiiAgE93NELVivUjmYOw/4gLocz2uv3X7Q4hEB5Zi87WM+Zxgeki9FdjH+w8K9Yv10HGRg7aiKllCf2xl/7m+j+wziXcjcWQVW13lGi7u7TZI3XdgFzefvfHJ1k2wHU8yk0OB5EBqWq4slycbIaMmrxbJWqDDpXlbkpTdC74/FiSw==
+ b=IRPzNo6nuVVCnLHpyHs5DyltmfuGsX568p3wHnWZTmCcpjnt3McnkdN8XkRqxlS2w2EH7AZNG4KgNLfLWHd3KLuJW83Da3dCxXI2IK6q0ecPdIwxOIIutUYbIH4qn2qytUMq4dVZkW+65xIC6t6QEb4TxcXma/67Np71UJOAdebOLA1TxR9xHqnat4neYppN7ga10WLjYLag38znAWi6gD12h57lhjj9cy7OG42DQ/w7NkTDA6w7TO8G6t+TqY6gIHBMQZ7kGPobrMZ4Awqa3ul9rwq/+0Eg2Ycp6o+gATqRM7wIvSYg5lYhwSSBHmkJDjyu9sMJSiJkrUpm671BEw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PmXbjCElLAxQSP8cmTzBFA+l3C1LYpTfDWz9uyuuIX4=;
- b=OvzHvfFrOl8z0oCTdfKmprEW6MsN6EqkNtkZPY5qSsyz0SpMRGicBlwmhvUs+7BY6RJpvjuR7nmjvvoBUF9RxXouXy6+0802A0nV7uY3KV3TCn4H1ufyRtqq40CMcucQGjJbrnYRavnnfz490uWi81EeE5WVJxTKe1tLS3JFPebwZYamO4ueB36dUO1DgVFvxoupiVy3W/S3JDRVl6qpMO1Km1mcZJ9z5NDGC0OW341egySqc35QZBYz02m/7ZEa2aGLd4ahlbRoC0QCvKW1vBzCsSKKxRkuglaMwLxalu7KLL0Xaae30qhfrJPFTTJZ2tliOVHqRA7WbyOJK33BdQ==
+ bh=DGuaK7eC4C0i9O9yCikpUF+IXVZbcrQzwDqLVc6aN2c=;
+ b=nYZlwiW5ZWBxuoVKbJpnjBg7FjGtR/N4e2ipRK4ZywB+5hO2RapnQvGLHEt/4fRq78E8wJpCI+1CI0Cwey7k1V9sy6QqXa+o6koQR0vSDBLNn+uvxZ+wzlFIvIy+WSsreAvlUBbFWimSJe3fGPwjVwjkz7l++PMCwpUcwnk3G3EqWAC+IpZLZiP9uI0RusWIe0/3PwiMbmn7osMH4xvkMBA9V4hCjqWYG++yxtAJbUGR76r+cxr685RokVJpZCDyEbQpCZbSqJu0asoyym1jYA52U1Sq4qxMaBTXld0ahxx4NgBF6tkKC+BYo5hObppkxtde3Zcv7zbGAyUTIUFfjg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ericsson.com; dmarc=pass action=none header.from=ericsson.com;
- dkim=pass header.d=ericsson.com; arc=none
-Received: from DM6PR15MB4072.namprd15.prod.outlook.com (2603:10b6:5:2bf::16)
- by DM5PR15MB1482.namprd15.prod.outlook.com (2603:10b6:3:ce::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9; Tue, 12 Jan
- 2021 23:35:48 +0000
-Received: from DM6PR15MB4072.namprd15.prod.outlook.com
- ([fe80::5d02:23ff:b955:bbde]) by DM6PR15MB4072.namprd15.prod.outlook.com
- ([fe80::5d02:23ff:b955:bbde%6]) with mapi id 15.20.3763.009; Tue, 12 Jan 2021
- 23:35:48 +0000
-To: Michael Jeanson <mjeanson@efficios.com>, "lttng-dev@lists.lttng.org"
- <lttng-dev@lists.lttng.org>
-Thread-Topic: [lttng-dev] LTTng 2.12 modules from PPA fail to install
-Thread-Index: AQHW5TWOYGq5I4uA3kK/nEkWoaMuRqoeGi0AgAYeEICAAHRveg==
-Date: Tue, 12 Jan 2021 23:35:48 +0000
-Message-ID: <DM6PR15MB40720F8BD7F349F654041E388FAA0@DM6PR15MB4072.namprd15.prod.outlook.com>
-References: <DM6PR15MB407280AC90424B9F52FE57D38FAF0@DM6PR15MB4072.namprd15.prod.outlook.com>
- <c6e9bdf7-3f1b-9ed8-bc3a-239675f69953@efficios.com>,
- <e32dbf93-c8eb-1621-c7d9-076c4bb10171@efficios.com>
-In-Reply-To: <e32dbf93-c8eb-1621-c7d9-076c4bb10171@efficios.com>
-Accept-Language: en-CA, en-US
-Content-Language: en-CA
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from BYAPR11MB2632.namprd11.prod.outlook.com (2603:10b6:a02:c4::17)
+ by BYAPR11MB3397.namprd11.prod.outlook.com (2603:10b6:a03:1b::29)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9; Wed, 13 Jan
+ 2021 06:03:34 +0000
+Received: from BYAPR11MB2632.namprd11.prod.outlook.com
+ ([fe80::94a4:4e15:ab64:5006]) by BYAPR11MB2632.namprd11.prod.outlook.com
+ ([fe80::94a4:4e15:ab64:5006%5]) with mapi id 15.20.3742.012; Wed, 13 Jan 2021
+ 06:03:34 +0000
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+CC: lttng-dev <lttng-dev@lists.lttng.org>
+Thread-Topic: =?gb2312?B?u9i4tDogaGVscCBtb2Rwb3N0OiAiX19iYWRfY21weGNoZyI=?=
+Thread-Index: AQHW4D7de02FTHE4o0SVdoHpF3AAf6oaFo1DgACjDICAAKuTD4ABBcQAgAE4wQaAB36+nA==
+Date: Wed, 13 Jan 2021 06:03:34 +0000
+Message-ID: <BYAPR11MB26323F4800A6578AFC536DF0FFA90@BYAPR11MB2632.namprd11.prod.outlook.com>
+References: <BYAPR11MB263254ABB57F458031AB33DBFFD50@BYAPR11MB2632.namprd11.prod.outlook.com>
+ <BYAPR11MB2632B3DA9B535943CEE08A73FFD00@BYAPR11MB2632.namprd11.prod.outlook.com>
+ <20210106150309.GA227614@joraj-alpa>
+ <BYAPR11MB2632B5DE22E2561F0B018909FFAF0@BYAPR11MB2632.namprd11.prod.outlook.com>,
+ <20210107165408.GC227614@joraj-alpa>,
+ <BYAPR11MB2632B7E0BD848485746A80AFFFAE0@BYAPR11MB2632.namprd11.prod.outlook.com>
+In-Reply-To: <BYAPR11MB2632B7E0BD848485746A80AFFFAE0@BYAPR11MB2632.namprd11.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [198.24.6.220]
+x-originating-ip: [60.247.85.82]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ec3816f0-5a92-4733-6afc-08d8b752ca97
-x-ms-traffictypediagnostic: DM5PR15MB1482:
-x-microsoft-antispam-prvs: <DM5PR15MB1482F57ACB0E346EB1A211238FAA0@DM5PR15MB1482.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-office365-filtering-correlation-id: 4253be44-e2bc-47fe-c02b-08d8b788f5e8
+x-ms-traffictypediagnostic: BYAPR11MB3397:
+x-microsoft-antispam-prvs: <BYAPR11MB33979195A790EDDBAE7E627AFFA90@BYAPR11MB3397.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: E7zJWh/NTpwMnc08B1jVWIGsX+py/HdloLeyuhoFpaUQeRF2MJ/w8RpBzZIsVMZEJFOBGJjqsONW/Eawmf28j/dSarKkomubxlbPGsl+E9adCyWOyOK+3QZ4P6YWCKdtuK6p6cOkO0XzG52jd8n/1HyA55bC1AE5nIESx/I0eRKjldnGSdj2aUrXsFVi85iS+Ds8j9iKdQFBgZa2+T7L0WNv5WBJhTWj+sJwr978zDEtM1BqwXwe7k0iQYKnLdIc4BokkKpaiyWExlEI3PY+oE7s8HKrA6Pc+6Qh6P2nfxM9kfBMtAyFMZyPimUvMMAxKiLgKhJfJGsg8PbMzkgjAjDOgg6XilBXnM2DPcZWpKX8cfeY6WEzMM7bGd+rruEwayb961zjgxv0gDG9Tvp2FMpaGY4FaAn90wQvCcOypseoe1PNtWpwoybp8Klhb9jb/QOIph29nC5LFAydfG9msw==
+x-microsoft-antispam-message-info: NfZYtVSyrwlIgxUmiQM8yEzXlw09eBXdjSmQe+ktxk0JaYFkejwphKE+amhn+SPvS+X1ep+j9AV1TPK+/G45OQwMryEbZZVwpyabf3iKfduDq5uwTUF8zCPYBQeNdMsxRaRV9sCNJblE/qFdE2EJ8WTYsD4GfMUwb6w8eBwi7G5NJowvVNfmqxz1twcrwTAM7IN+0nD7E7FjA2vtdQc56kDBu60gjr4SuCwtMlD7YOlLoZUO1/PFQE6mG1S7GfrS+4R/XTQU5GeJen10gW3pz758SBB5uyg2j5l9mG/uzZGrodKvYo0d+B5shIunPdr80zTs+j8JmE2BbWC3c3GiR/xF1PHhHXpi6NJi4CD6Mxc96ofRJB62PdIQRlzHUq1yTtOvNlaQ2ie6d8dexekR4Q==
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DM6PR15MB4072.namprd15.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(396003)(136003)(376002)(366004)(39860400002)(346002)(52536014)(19627405001)(8676002)(83380400001)(8936002)(33656002)(53546011)(64756008)(478600001)(166002)(26005)(6506007)(66556008)(66476007)(9686003)(7696005)(91956017)(86362001)(44832011)(71200400001)(316002)(5660300002)(966005)(76116006)(2906002)(186003)(55016002)(110136005)(66446008)(66946007);
+ IPV:NLI; SFV:NSPM; H:BYAPR11MB2632.namprd11.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(346002)(376002)(366004)(136003)(39850400004)(396003)(52536014)(86362001)(6506007)(26005)(71200400001)(33656002)(66446008)(5660300002)(66476007)(64756008)(66556008)(316002)(9686003)(83380400001)(66946007)(55016002)(76116006)(6916009)(478600001)(186003)(8936002)(224303003)(7696005)(91956017)(4326008)(2906002);
  DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?+B2FikFqoHW15+EIDWQjhuNHcKtDAYBAIqCB2w47gly5/0bEI5gv6CfRyJqV?=
- =?us-ascii?Q?qUiITo+k0P+NGT1mOm0ql4gjZ+KQJfsvWXkPm7h6hKw5cm2WKHiQAP4Pvhtw?=
- =?us-ascii?Q?tNGIK4LEY/DR6/mFiLEUBdFGRgtmqvOmreD36InbqFiUFDElGjhz9M8WJRKh?=
- =?us-ascii?Q?gzWBZO7NRX9mDpDpqGFORACgNBgHMMfKSifVuBTDvy57zip9wl8XY06YF3xL?=
- =?us-ascii?Q?1n9CE03s/DDPqOJ6xNnmgW/3dnY7t5C1UCV2imFhRUqlMcLMNbNGsD24XUax?=
- =?us-ascii?Q?l6UIM+s0nWaOT4DJ6Pp3MJUS8zIVeoxrheDGGVuEx4gJ1RoCEuerFl8PAgmv?=
- =?us-ascii?Q?jmEcpCCv5hz4dCQM0v122miKDkc7qbeTZ36IPmRwawdfJLk6SGJatBGjN0bJ?=
- =?us-ascii?Q?WVzpK+0IvibXMrTM1NyeDZZneQU4MiIGK0NymvrqSGxkoG0T/yeZ7cge7Ezc?=
- =?us-ascii?Q?g+UGv+QCGfl8lqt1udLG1e4NouDM0cqCzYBTkWiqsxTNndYbLM7uWXVghlUe?=
- =?us-ascii?Q?lbnw7l5nIu03Ov28ZXcoMbChMtRyqSu2AOB2d59T5IKBnj0cM/81KkjAhdic?=
- =?us-ascii?Q?5ktc68kVoIHU+ggJ04c234u5JvJYiipa+ZDer4Py3dL8ioAMzb513aZy6XIe?=
- =?us-ascii?Q?dcCXk9fCA5C3t9MRqNuJs3pOka24DrXkdWKChgAhi68KHS5+5WPhlg0p8S8J?=
- =?us-ascii?Q?StGbAsIYXvHGX/+P0YUttQYdd3DJZMH6E3ES5EAKNf9LP4NCIjJK82Rstgrp?=
- =?us-ascii?Q?8qlpsg4m21AiLAsOpuO6vFEwnS+CT1TnU8OE9mE+vXO324E93C0Mt4iRgigj?=
- =?us-ascii?Q?XtI/3ougYjyej8NawvoV80C7ENusJV3o+6HHlaIs5RRdDJfxLd3Fz/Bea7ft?=
- =?us-ascii?Q?17nrqi1ji3jO4jjzqo+7KSVb4tkjX+k8acKL9IrYcgh3cLqXHQVnDFPMNeko?=
- =?us-ascii?Q?NVXx9/TDA2iEx5FmVu0IyGS/0EIlXdZYuLug4zvj410=3D?=
+x-ms-exchange-antispam-messagedata: =?gb2312?B?YUJ1cVpkaVFyczRzYlc4MFBMZFZDeU5PMzJraG5FMXVNOTVwSExFc3FTTUx5?=
+ =?gb2312?B?Tkcya21hRXZhejJySmtic3M4b25SMDM3cS9KZjhXZmRaSm1tKytJYjFSbVkv?=
+ =?gb2312?B?RlZtaDU1VU5icEkvQWRINk5pcTJxcVlrMkpkMjBTaTljY1BPSEE5dTRqcVE2?=
+ =?gb2312?B?NWd5RndudHRGV05ocVZJUWl5UUFRTkV5dERLbFRIZU5hbWdmU0Vma3UvZHVx?=
+ =?gb2312?B?Rk5OZ2Q5WWxKQkQ4UTBHcmlNdkg1WEtjNGI4SDkrTVRHWDd1RVMzVDZKYUs5?=
+ =?gb2312?B?QUN5NTdQZU1IcG5HS2pjcDRIdWdPeXdMY0poQUFDejdiY0swbEsvT0N1bkow?=
+ =?gb2312?B?dVhCMmV3cDFXVWQzRHlqb1JlQk5HMEZ6OHR6Um5McHNlSkF4RTFMaHB4Y3Yz?=
+ =?gb2312?B?aFRGVWRaS0ZhZEJHWEQ2YnBDNnNSbnoyRENZSmt4eTFjZkxXZ1ZFdExoVUJU?=
+ =?gb2312?B?b3ZxQzR0SzF1MkdCQWZBU05OUVN4ZUdGUE5lZU01cy9PVlVvdnFabnlrWFBC?=
+ =?gb2312?B?MHlDYklndFkwT3ZoR2dtaWhmbHVzaytsODRWdjBoODNnYmxVdjh4aE5HcTBo?=
+ =?gb2312?B?RlN5MUJnaTV3eVhLWnRyR3BudGM2bEY5cU4wTUJSMEMxM2ZSZW1FQ0lBRk5n?=
+ =?gb2312?B?MVQzN01KTHJDRkQ1K0M1M3RzbFcwcWdzVzgwV3NLSVZVRkhwV3VEVExuS01u?=
+ =?gb2312?B?V0tLQWJsT2VnaG5CYWV4dEcwNVlvMkZUQkNtQzhDRmE1MTNEaldFZnRPRHk2?=
+ =?gb2312?B?a0lzSHlva2lPOUVBYUZEZlB5ZUpDUXpQRCtQZlJVb252OS9rZGFNVEFpNCtl?=
+ =?gb2312?B?NlBYUmV3eHVrcEcwcldjSkFsRU9kT1JuTHRTMTNyajlOSHBwWU1vWTVoM0dp?=
+ =?gb2312?B?c1lXUTd0NlIrL3Y5dmpycWJ3dFZqcUZRZ2dVWWlTSzU3bUcwOU91QzlPTkxq?=
+ =?gb2312?B?ejBxN0x6ZVA0SDh2OVBVNVZIanRJZXdwRGpDU0hTcXp2b2FiangxeitRMU9q?=
+ =?gb2312?B?OGpLMTl6Rkp2em5LaW5hSEJWcXUyNEo5WVRrQUF1ZTcxV2VVdjFZWFhCR004?=
+ =?gb2312?B?V29PeFRtRzVseDhseTlFOVNkbXdzQ0F2SmR1Smo2SjVmcjBJMmlELy85N2xC?=
+ =?gb2312?B?YTlkdGg0WXh2VTdwOGdtcm9VekZFVFR6enZZQTN6LzJrZXREd3hYSHRrYjdn?=
+ =?gb2312?B?UDVlM1pneXZtMXJyU3IvdmpYVHEvV2pUc0RNaUFORjJjd2xrbm9sWW90VVlq?=
+ =?gb2312?B?QTcrU1BxZHl5Z3BDTHhycUVkdEI1SkJ1WE1tRGJ6dkJXVThGY0lmMHpqcVVr?=
+ =?gb2312?Q?Q9VSneU1zVHZE=3D?=
 x-ms-exchange-transport-forked: True
 MIME-Version: 1.0
-X-OriginatorOrg: ericsson.com
+X-OriginatorOrg: windriver.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR15MB4072.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec3816f0-5a92-4733-6afc-08d8b752ca97
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2021 23:35:48.6121 (UTC)
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2632.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4253be44-e2bc-47fe-c02b-08d8b788f5e8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jan 2021 06:03:34.0732 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 92e84ceb-fbfd-47ab-be52-080c6b87953f
+X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UQFhFTdL8S+0seU3o7rQDtgGH3WVQCYe1HLTpm7gVlGM56AGDw41smiPFvDMZSib/LEppVtnDVlN+jhC/YIxq0ZS2pKPORDMuaThRKEDh6Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1482
-Subject: Re: [lttng-dev] LTTng 2.12 modules from PPA fail to install
+X-MS-Exchange-CrossTenant-userprincipalname: ZfoUdNQ2qr+HlrSB2RsbeUQn2244fqngsMwnQNDq378nkItFOcgp0KPsH5Je+tSosk7uXEi40N6lTm2XW+a338/TwolUNnEbQSJ2yhcheJA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3397
+Subject: [lttng-dev] =?gb2312?b?u9i4tDogu9i4tDogaGVscCBtb2Rwb3N0OiAiX19i?=
+ =?gb2312?b?YWRfY21weGNoZyI=?=
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.31
 Precedence: list
@@ -123,192 +133,65 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Bernd Hufmann via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Bernd Hufmann <bernd.hufmann@ericsson.com>
-Content-Type: multipart/mixed; boundary="===============3241076180725639664=="
+From: "Zhang, Qiang via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: "Zhang, Qiang" <Qiang.Zhang@windriver.com>
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============3241076180725639664==
-Content-Language: en-CA
-Content-Type: multipart/alternative;
-	boundary="_000_DM6PR15MB40720F8BD7F349F654041E388FAA0DM6PR15MB4072namp_"
-
---_000_DM6PR15MB40720F8BD7F349F654041E388FAA0DM6PR15MB4072namp_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Thanks Michael, for the information. I was able to make it work with the la=
-test stable PPA.
-
-BR
-Bernd
-________________________________
-From: Michael Jeanson <mjeanson@efficios.com>
-Sent: January 12, 2021 11:38 AM
-To: lttng-dev@lists.lttng.org <lttng-dev@lists.lttng.org>
-Cc: Bernd Hufmann <bernd.hufmann@ericsson.com>
-Subject: Re: [lttng-dev] LTTng 2.12 modules from PPA fail to install
-
-
-On 2021-01-08 14 h 13, Michael Jeanson via lttng-dev wrote:
-> On 2021-01-07 15 h 54, Bernd Hufmann via lttng-dev wrote:
->> Hi LTTng experts,
->>
->> On my Linux Ubuntu 18.04 machine (4.15.0-129-generic kernel) the
->> installation of the LTTng kernel modules fail using the official PPA.
->> I found a log file lttng-modules-dkms.0.crash with some details on the
->> installation failure. See pastebin [1] for the detailed error message.
->>
->> Any ideas what is going on? Please let me know what I can do to
->> resolve it.
->>
->> In advance thank you very much.
->>
->> BR
->> Bernd
->>
->> [1] https://paste.ubuntu.com/p/747H2V5q7K/
->> <https://paste.ubuntu.com/p/747H2V5q7K/>
->
-> Hi,
->
-> There is a fix for this build failure in the stable-2.12 branch but it
-> is not part of a point release yet. In the meantime, you can build
-> modules from the git branch or use the package from the "Latest Stable"
-> ppa [1].
->
-> Once the next point release (2.12.3) happens, it will be uploaded
-> straight away to the 2.12 ppa.
->
-> Regards,
->
-> Michael
->
->
-> [1] https://launchpad.net/~lttng/+archive/ubuntu/ppa
-
-The new 2.12.4 release has landed in the stable-2.12 ppa, you should now
-be able to simply update the package to fix the build failure.
-
-Cheers,
-
-Michael
-
---_000_DM6PR15MB40720F8BD7F349F654041E388FAA0DM6PR15MB4072namp_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-Thanks Michael, for the information. I was able to make it work with the la=
-test stable PPA.</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-BR</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-Bernd<br>
-</div>
-<div id=3D"appendonsend"></div>
-<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
-yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> Michael Jeanson &lt;m=
-jeanson@efficios.com&gt;<br>
-<b>Sent:</b> January 12, 2021 11:38 AM<br>
-<b>To:</b> lttng-dev@lists.lttng.org &lt;lttng-dev@lists.lttng.org&gt;<br>
-<b>Cc:</b> Bernd Hufmann &lt;bernd.hufmann@ericsson.com&gt;<br>
-<b>Subject:</b> Re: [lttng-dev] LTTng 2.12 modules from PPA fail to install=
-</font>
-<div>&nbsp;</div>
-</div>
-<div class=3D"BodyFragment"><font size=3D"2"><span style=3D"font-size:11pt;=
-">
-<div class=3D"PlainText"><br>
-On 2021-01-08 14 h 13, Michael Jeanson via lttng-dev wrote:<br>
-&gt; On 2021-01-07 15 h 54, Bernd Hufmann via lttng-dev wrote:<br>
-&gt;&gt; Hi LTTng experts,<br>
-&gt;&gt;<br>
-&gt;&gt; On my Linux Ubuntu 18.04 machine (4.15.0-129-generic kernel) the <=
-br>
-&gt;&gt; installation of the LTTng kernel modules fail using the official P=
-PA. <br>
-&gt;&gt; I found a log file lttng-modules-dkms.0.crash with some details on=
- the <br>
-&gt;&gt; installation failure. See pastebin [1] for the detailed error mess=
-age.<br>
-&gt;&gt;<br>
-&gt;&gt; Any ideas what is going on? Please let me know what I can do to <b=
-r>
-&gt;&gt; resolve it.<br>
-&gt;&gt;<br>
-&gt;&gt; In advance thank you very much.<br>
-&gt;&gt;<br>
-&gt;&gt; BR<br>
-&gt;&gt; Bernd<br>
-&gt;&gt;<br>
-&gt;&gt; [1] <a href=3D"https://paste.ubuntu.com/p/747H2V5q7K/">https://pas=
-te.ubuntu.com/p/747H2V5q7K/</a>
-<br>
-&gt;&gt; &lt;<a href=3D"https://paste.ubuntu.com/p/747H2V5q7K/">https://pas=
-te.ubuntu.com/p/747H2V5q7K/</a>&gt;<br>
-&gt; <br>
-&gt; Hi,<br>
-&gt; <br>
-&gt; There is a fix for this build failure in the stable-2.12 branch but it=
- <br>
-&gt; is not part of a point release yet. In the meantime, you can build <br=
->
-&gt; modules from the git branch or use the package from the &quot;Latest S=
-table&quot; <br>
-&gt; ppa [1].<br>
-&gt; <br>
-&gt; Once the next point release (2.12.3) happens, it will be uploaded <br>
-&gt; straight away to the 2.12 ppa.<br>
-&gt; <br>
-&gt; Regards,<br>
-&gt; <br>
-&gt; Michael<br>
-&gt; <br>
-&gt; <br>
-&gt; [1] <a href=3D"https://launchpad.net/~lttng/+archive/ubuntu/ppa">https=
-://launchpad.net/~lttng/+archive/ubuntu/ppa</a><br>
-<br>
-The new 2.12.4 release has landed in the stable-2.12 ppa, you should now <b=
-r>
-be able to simply update the package to fix the build failure.<br>
-<br>
-Cheers,<br>
-<br>
-Michael<br>
-</div>
-</span></font></div>
-</body>
-</html>
-
---_000_DM6PR15MB40720F8BD7F349F654041E388FAA0DM6PR15MB4072namp_--
-
---===============3241076180725639664==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============3241076180725639664==--
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18Kt6K8/sjLOiBKb25hdGhh
+biBSYWpvdHRlLUp1bGllbiA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPgq3
+osvNyrG85DogMjAyMcTqMdTCOMjVIDA6NTQKytW8/sjLOiBaaGFuZywgUWlhbmcKs63LzTogbHR0
+bmctZGV2Ctb3zOI6IFJlOiC72Li0OiBoZWxwIG1vZHBvc3Q6ICJfX2JhZF9jbXB4Y2hnIgoKW1Bs
+ZWFzZSBub3RlIHRoaXMgZS1tYWlsIGlzIGZyb20gYW4gRVhURVJOQUwgZS1tYWlsIGFkZHJlc3Nd
+Cgo+SGksCj4KPk5vdGUKPiAgVGhlIGluaXRpYWwgZW1haWwgd2FzIHNlbnQgdG8gdGhlICJvd25l
+ciIgb2YgdGhlIG1haWxpbmcgbGlzdC4gUGxlYXNlCj4gICphbHdheXMqIHNlbmQgZW1haWwgdG8g
+dGhlIG1haWxpbmcgbGlzdCBkaXJlY3RseTogbHR0bmctPmRldkBsaXN0cy5sdHRuZy5vcmcgLgo+
+IE90aGVyd2lzZSB3ZSB3aWxsIG5vdCBiZSBpbnRlcmVzdGVkIGluIGhlbHBpbmcgeW91IGluIHRo
+ZSBmdXR1cmUuCj4KPlNvcnJ5IGZvcmdvdCB0byBhc2sgeW91IHRoZSBmb2xsb3dpbmcuCj4KPldo
+YXQgaXMgdGhlIGFybSBDUFUgeW91IGFyZSBjb21waWxpbmcgYWdhaW5zdD8gVGhlIG1vcmUgZGV0
+YWlscyB0aGUgPm1vcmUgd2UgY2FuCj5oZWxwIGhlcmUuCj4KPlBsZWFzZSBwcm92aWRlIHRoZSAu
+Y29uZmlnIGZpbGUgZm9yIHRoZSBrZXJuZWwgKHZpYSBwYXN0ZWJpbiBwbGVhc2UpIGFuZCA+dGhl
+Cgo+IEhlbGxvCj4KPiBBdHRhY2hlZCBpcyB0aGUga2VybmVsIGNvbmZpZ3VyYXRpb24gZmlsZQo+
+IGFuZCBjb21waWxlciBjb25maWd1cmF0aW9uIGZpbGUuCj4KPiBic3AgaXMgeGlsaW54LXp5bnEg
+KGFybTMyLCBhcm12NyksICB2NS4xMCBrZXJuZWwgaGF2ZSBkZWxldGUKPiAnQ09ORklHX09QVElN
+SVpFX0lOTElOSU5HJyAgY29uZmlnIG9wdGlvbi4KPgo+IENoZWVycwoKSGkgCgpDYW4gcmVwZWF0
+IHRoaXMgcHJvYmxlbT8KSXMgdGhlIHByb2JsZW0gcmVsYXRlZCB0byBjb21waWxhdGlvbiB0b29s
+c6O/CgpDaGVlcnMKCj5jb21waWxlciB1c2VkLiBNYXRoaWV1IERlc25veWVycyAoQ29tcHVESikg
+bWlnaHQgaGF2ZSBhIGxlYWQgPnJlZ2FyZGluZyBjbXB4Y2hnCj5hbmQgX19iYWRfY21weGNoZyBs
+aW5rZXIgZXJyb3IgdHJpY2sgdXNlZCBieSB0aGUgaW1wbGVtZW50YXRpb24gYW5kID50aGUKPm9w
+dGltaXplZCBpbmxpbmluZyBjb25maWcgb3B0aW9uIChDT05GSUdfT1BUSU1JWkVfSU5MSU5JTkcp
+Lgo+Cj5UaGVzZSBzaG91bGQgaGVscCB1cyB2YWxpZGF0ZSB0aGlzIGxlYWQuCgo+Cj5DaGVlcnMK
+Pgo+T24gVGh1LCBKYW4gMDcsIDIwMjEgYXQgMDE6MjA6NTRBTSArMDAwMCwgWmhhbmcsIFFpYW5n
+IHdyb3RlOgo+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4g
+t6K8/sjLOiBKb25hdGhhbiBSYWpvdHRlLUp1bGllbiA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5A
+ZWZmaWNpb3MuY29tPgo+ILeiy83KsbzkOiAyMDIxxOox1MI2yNUgMjM6MDMKPiDK1bz+yMs6IFpo
+YW5nLCBRaWFuZwo+ILOty806IGx0dG5nLWRldi1vd25lckBsaXN0cy5sdHRuZy5vcmcKPiDW98zi
+OiBSZTogaGVscCBtb2Rwb3N0OiAiX19iYWRfY21weGNoZyIKPgo+IFtQbGVhc2Ugbm90ZSB0aGlz
+IGUtbWFpbCBpcyBmcm9tIGFuIEVYVEVSTkFMIGUtbWFpbCBhZGRyZXNzXQo+Cj4gPkhpLAo+ID4K
+PiA+V2hhdCB0aGUga2VybmVsIHZlcnNpb24gYXJlIHlvdSBjb21waWxpbmcgYWdhaW5zdD8KPgo+
+Cj4gICAga2VybmVsIHZlcnNpb24gNS4xMC4yCj4gICAgbHR0bmctbW9kdWxlcyBtYXN0ZXIgYnJh
+bmNoIGNvbW1pdCA6Cj4gICAgNjFlNjMxZTkzZTUxMmI2MzZlYTZkNTI3OTZiY2NlMWM0ODVhNTUx
+Ygo+Cj4gICAgIENoZWVycwo+Cj4gPgo+ID5DaGVlcnMKPiA+Cj4gPk9uIFdlZCwgSmFuIDA2LCAy
+MDIxIGF0IDA1OjIwOjA2QU0gKzAwMDAsIFpoYW5nLCBRaWFuZyB3cm90ZToKPiA+Cj4gPgo+ID4g
+VGhlIGZvbGxvd2luZyBlcnJvciBvY2N1cnJlZCB3aGVuIEkgY29tcGlsZWQgbHR0bmcgbW9kdWxl
+cyB1bmRlciBhcm12NyBhcmNoaXRlY3R1cmUKPiA+Cj4gPiBFUlJPUjogbW9kcG9zdDogIl9fYmFk
+X2NtcHhjaGciIFsvYnVpbGRhcmVhMS9PbkRlbWFuZF9DSV9CdWlsZF9Xb3JsZC9idWlsZF9kaXIv
+MTIyNTE3MjctYnVpbGRfd29ybGQveGlsaW54LXp5bnEtc3RhbmRhcmQtc3RkLU9FL2J1aWxkL3Rt
+cC1nbGliYy93b3JrL3hpbGlueF96eW5xLXdycy1saW51eC1nbnVlYWJpL2x0dG5nLW1vZHVsZXMv
+Mi4xMi4zK2dpdEFVVE9JTkMrNjFlNjMxZTkzZS1yMC9naXQvc3JjL2x0dG5nLWNvdW50ZXItY2xp
+ZW50LXBlcmNwdS02NC1tb2R1bGFyLmtvXSB1bmRlZmluZWQhCj4gPgo+ID4gRVJST1I6IG1vZHBv
+c3Q6ICJfX2JhZF9jbXB4Y2hnIiBbL2J1aWxkYXJlYTEvT25EZW1hbmRfQ0lfQnVpbGRfV29ybGQv
+YnVpbGRfZGlyLzEyMjUxNzI3LWJ1aWxkX3dvcmxkL3hpbGlueC16eW5xLXN0YW5kYXJkLXN0ZC1P
+RS9idWlsZC90bXAtZ2xpYmMvd29yay94aWxpbnhfenlucS13cnMtbGludXgtZ251ZWFiaS9sdHRu
+Zy1tb2R1bGVzLzIuMTIuMytnaXRBVVRPSU5DKzYxZTYzMWU5M2UtcjAvZ2l0L3NyYy9sdHRuZy1j
+b3VudGVyLWNsaWVudC1wZXJjcHUtMzItbW9kdWxhci5rb10gdW5kZWZpbmVkIQo+ID4KPiA+IEkg
+ZmluZCAgdW5kZXIgdGhlIGNvbmRpdGlvbiBvZgo+ID4KPiA+IENPVU5URVJfU0laRV8zMl9CSVQs
+ICBjbXB4Y2hnX2xvY2FsICBmdW5jdGlvbiB0cmlnZ2VyIGVycm9yIGluIGNvdW50ZXItYXBpLmgg
+ZmlsZS4KPiA+Cj4gPiBpcyBjbXB4Y2hnX2xvY2FsIGlzIHN1cHBvcnQgaW4gYW12Nz8KPgo+IC0t
+Cj4gSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KPiBFZmZpY2lPUwoKLS0KSm9uYXRoYW4gUmFqb3R0
+ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYK
