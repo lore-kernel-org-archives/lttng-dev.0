@@ -1,95 +1,68 @@
-Return-Path: <SRS0=11In=IC=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=pL6W=ID=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7079FC433DB
-	for <lttng-dev@archiver.kernel.org>; Thu,  4 Mar 2021 15:28:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 408E0C433DB
+	for <lttng-dev@archiver.kernel.org>; Fri,  5 Mar 2021 12:12:00 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 6B92364F97
-	for <lttng-dev@archiver.kernel.org>; Thu,  4 Mar 2021 15:28:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6B92364F97
+	by mail.kernel.org (Postfix) with ESMTPS id 26FA464FEB
+	for <lttng-dev@archiver.kernel.org>; Fri,  5 Mar 2021 12:11:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 26FA464FEB
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Drvs95GxxzBlv;
-	Thu,  4 Mar 2021 10:28:29 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4DsRRx1w1YzC9P;
+	Fri,  5 Mar 2021 07:11:57 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1614871710;
-	bh=dqBS00AyQb0I/StYsPfwG9bakoR/v6e1caMKWU8+v5g=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Q0cwxc+jV48+SGk/ftARDpbTurmDJxf3YhZ8zcnN+tPJO1keFwEh1TtRimIG1HBV7
-	 fl1M8aQWGZE8jW8sX55duDhHrtaPkQj8xlz2S7vPbruVEDNzW3z/EvhKTdig8oiQlZ
-	 YiwP3TbgRjN5AR0lb3OK/PyRwXoYkQF4eNQlJTL9N9DnetNDGl2gNcj9Y4eBDhdiNr
-	 B2YM/ep7JzLnM4dU5Tc0+8bDTV3UXDAp4VG3MFbDGCk935iOncsYE9hZm6O5FuMz2X
-	 ZeMzhx9h33BMLk6I2pkLh20K7oMdSg1hILHkMf2D2EokzXcVYjqT2CGl6N9tBzO7YR
-	 yuYyskbX9qFeg==
-Received: from cirse-smtp-out.extra.cea.fr (cirse-smtp-out.extra.cea.fr
- [132.167.192.148])
- by lists.lttng.org (Postfix) with ESMTPS id 4Drvs82WtwzBXl
- for <lttng-dev@lists.lttng.org>; Thu,  4 Mar 2021 10:28:27 -0500 (EST)
-Received: from pisaure.intra.cea.fr (pisaure.intra.cea.fr [132.166.88.21])
- by cirse-sys.extra.cea.fr (8.14.7/8.14.7/CEAnet-Internet-out-4.0) with ESMTP
- id 124F6DpC031764
- for <lttng-dev@lists.lttng.org>; Thu, 4 Mar 2021 16:06:13 +0100
-Received: from pisaure.intra.cea.fr (localhost [127.0.0.1])
- by localhost (Postfix) with SMTP id 805E5206384
- for <lttng-dev@lists.lttng.org>; Thu,  4 Mar 2021 16:06:13 +0100 (CET)
-Received: from muguet2-smtp-out.intra.cea.fr (muguet2-smtp-out.intra.cea.fr
- [132.166.192.13])
- by pisaure.intra.cea.fr (Postfix) with ESMTP id 78286206371
- for <lttng-dev@lists.lttng.org>; Thu,  4 Mar 2021 16:06:13 +0100 (CET)
-Received: from I-EXCH-A0.intra.cea.fr (i-exch-a0.intra.cea.fr [132.166.88.224])
- by muguet2-sys.intra.cea.fr (8.14.7/8.14.7/CEAnet-Internet-out-4.0) with ESMTP
- id 124F6Di7025246
- for <lttng-dev@lists.lttng.org>; Thu, 4 Mar 2021 16:06:13 +0100
-Received: from I-EXCH-A3.intra.cea.fr (132.166.88.227) by
- I-EXCH-A0.intra.cea.fr (132.166.88.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 4 Mar 2021 16:06:13 +0100
-Received: from EXCAH-A3.intra.cea.fr (132.166.88.77) by I-EXCH-A3.intra.cea.fr
- (132.166.88.227) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2 via Frontend
- Transport; Thu, 4 Mar 2021 16:06:13 +0100
-Received: from EXDAG0-B1.intra.cea.fr ([fe80::c18e:d8e8:9a27:5b84]) by
- EXCAH-A3.intra.cea.fr ([fe80::60de:a77e:427d:f7e6%10]) with mapi id
- 14.03.0487.000; Thu, 4 Mar 2021 16:06:12 +0100
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Thread-Topic: [barectf] How to ensure that last events before a crash get
- recorded
-Thread-Index: AQHXEQfH8OO3fMfK7k2UMsDwYOrjfg==
-Date: Thu, 4 Mar 2021 15:06:12 +0000
-Message-ID: <386C5D4D5C53C24CBC2C60CAAFD2136A5B4B2B92@EXDAG0-B1.intra.cea.fr>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [132.166.88.225]
-X-TM-AS-Product-Ver: SMEX-14.0.0.3080-8.6.1012-26010.000
-X-TM-AS-Result: No-10--2.829100-8.000000
-X-TM-AS-User-Approved-Sender: Yes
-X-TM-AS-User-Blocked-Sender: No
+	s=default; t=1614946317;
+	bh=lM++dEQ3npTdIFJvu3TyTeCbXmdgd697ZSmusFHMcWo=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=LmeN3zO8qPu2WB7bY7/CJElqo+zG5bt4+2Mhf6xkIGAKd7LsjjbiyRzQuPvADTuSm
+	 YtfRZOke64JBUMC8LI6+YT56Td92WT8lXEHLot24V4ryTnQXyFEpVG0AUfrxmOykwo
+	 kBU5XL6kGHurus9EORm+9G31jPcya8JJ7hKvLb+4S7JK4D5YR7r82U8GlQks8U3Jyp
+	 c9u7JIFrJxBZGJw0qOSGOplfjORk+VL8NV36hAaceCeDk65F5T3tYYEYBPTDj/dHBf
+	 RSRSlODW6Cml2W2JzKusuMvtey6N0GUnkFTq69VVsUT1BfghAeHPdQYOkiIsbARX8n
+	 sFcL9MfGH0q4w==
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com
+ [IPv6:2607:f8b0:4864:20::b30])
+ by lists.lttng.org (Postfix) with ESMTPS id 4DsRRv6ntKzByW
+ for <lttng-dev@lists.lttng.org>; Fri,  5 Mar 2021 07:11:55 -0500 (EST)
+Received: by mail-yb1-xb30.google.com with SMTP id f4so1664621ybk.11
+ for <lttng-dev@lists.lttng.org>; Fri, 05 Mar 2021 04:11:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=IwCNqqthPI1OdveJALabWCw5UKAsGVNjOHo3Zhm5OUc=;
+ b=ZykJepntfSzv8fhMR1o3tdsmN4LBfkMqkWBS7tt86WQfirg12DPhBREb3RlXzsQ+QW
+ kmkswSAHLRSFNj3Yufkj7U86l+VexS+oCT90auajLhWcaczIvwPByEKhZA7XbKP1GWhD
+ uq383Ka2YerJ6AHFa1lCfnLxiOOaLpUJKmgZTCAr65qrIc6Ategbi/OEs7nZxSpcov5p
+ J2oZCF+VrDW6bSUwYLA0yR1wyQX+WI4pNLRzdyRxauVIXlqnyLm4LfPgjV2WL6C8SAcZ
+ 9T9PHMFhn9Zyoby2aVPxx0b2G3NWhw8NnVYYNozhSOmrz3YsrTxRKaBMX6opbGygyJEa
+ O+zQ==
+X-Gm-Message-State: AOAM530vaIwzFapaViDITMs4OX1H0+BVhIM0N7kscmR7DfKsYhtgnYr4
+ Yw8qdfMwN0g5a/vs5MBf2RXAKbX2Z+kgw5Rk578=
+X-Google-Smtp-Source: ABdhPJzPWcnOKpX5qh0luDgebZwjgWdPbGOwgQ2AeB7MkfAdS8dtT6jBm7tPinS2iqHxf8NF8kCzHv/giaT+zaTZhbw=
+X-Received: by 2002:a25:344f:: with SMTP id b76mr13324480yba.398.1614946315320; 
+ Fri, 05 Mar 2021 04:11:55 -0800 (PST)
 MIME-Version: 1.0
-X-TMASE-MatchedRID: Nndoh8f4x+zvsNWMI3fHiKo2fOuRT7aa3V4UShoTXaeXuKyHuSLTfCcN
- /7nuYGKBinRvY0E1MLdmGc9VKv7OHEB40z3xsh6M1uDM+OtX7BwacZilk37ECCGeZKmZv/3llUc
- xGfWk0G1vu+EAUOCx06KZIk/mE2mLXOFTT+immjbfSQNpZkETVOMBxl40mBj3StFk/81wIJIoIh
- l+v+yCGcJToVJxC6y00AAj4Lcjr8WZEKhZJ6HsIWK3N9p/OFh65H0EtfKK8cVOYqdbUeMAD0CR2
- FZol5Yt4vM1YF6AJbZWVhu8IR7GcCrJhLSjJRVm3B0wkc/Tu/2lIFL+ylIMrkfskvHug9G0r2sS
- wOtaV7TpFO6FRB6NmLdHm6Rwk+fdcbg2hk2Cp7rOS3jryostVcSQHbVu2g8/7boyyFiO9ECdhxQ
- B19Z/s91qnlsc2vie9kI5cJWgCzNMpJIFK6Rp3dbtJ0JSVwQGagz0XhbT247RHT/Dxikn+d/1FN
- uycnO/Vlxr1FJij9s=
-X-TMASE-Result: 10--2.829100-8.000000
-X-TMASE-Version: SMEX-14.0.0.3080-8.6.1012-26010.000
-X-TM-SNTS-SMTP: A53CA5350294C454F25822AAC3EBD38497CB37D0A828E0C9EFA95D8DCA16EB042000:8
-Subject: [lttng-dev] [barectf] How to ensure that last events before a crash
- get recorded
+References: <386C5D4D5C53C24CBC2C60CAAFD2136A5B4B2B92@EXDAG0-B1.intra.cea.fr>
+In-Reply-To: <386C5D4D5C53C24CBC2C60CAAFD2136A5B4B2B92@EXDAG0-B1.intra.cea.fr>
+Date: Fri, 5 Mar 2021 07:11:44 -0500
+Message-ID: <CAB4xu_38oAbOD606ZQCp71oJ8qwYOt7F1Ssmpk=idhhTM7to6w@mail.gmail.com>
+To: RADERMACHER Ansgar <Ansgar.RADERMACHER@cea.fr>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Subject: Re: [lttng-dev] [barectf] How to ensure that last events before a
+ crash get recorded
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -101,83 +74,135 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: RADERMACHER Ansgar via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: RADERMACHER Ansgar <Ansgar.RADERMACHER@cea.fr>
-Content-Type: multipart/mixed; boundary="===============3012026724180627582=="
+From: Philippe Proulx via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Philippe Proulx <eeppeliteloop@gmail.com>
+Content-Type: multipart/mixed; boundary="===============2518550462175213452=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============3012026724180627582==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_386C5D4D5C53C24CBC2C60CAAFD2136A5B4B2B92EXDAG0B1intrace_"
+--===============2518550462175213452==
+Content-Type: multipart/alternative; boundary="00000000000074c02b05bcc8fd8e"
 
---_000_386C5D4D5C53C24CBC2C60CAAFD2136A5B4B2B92EXDAG0B1intrace_
-Content-Type: text/plain; charset="iso-8859-1"
+--00000000000074c02b05bcc8fd8e
+Content-Type: text/plain; charset="UTF-8"
+
+On Thu, Mar 4, 2021 at 10:28 RADERMACHER Ansgar via lttng-dev <
+lttng-dev@lists.lttng.org> wrote:
+
+> Hi,
+>
+> when doing tracing with barectf, the trace elements are written into a
+> buffer first and only written when the buffer is full - or if the function
+> barectf_platform_fs_fini gets called.
+> In case of a crash, it's therefore possible to loose some events. What is
+> the best option to prevent this issue? I've used signal handlers that call
+> the function barectf_platform_fs_fini. This seems to work well with Linux,
+> but is not portable. When using the provided sample platform, there is also
+> the option to reduce the buffer size, but this is not ideal, as trace
+> events that are too big for the buffer are not written.
+>
+
+First question: why are you using barectf on Linux vs LTTng?
+
+LTTng supports writing the sub-buffers to NVRAM and, if the system crashes,
+convert those sub-buffers to a CTF trace with the lttng-crash utility. See <
+https://lttng.org/docs/v2.12/#doc-persistent-memory-file-systems>.
+
+With NVRAM, you could do this with barectf with a corresponding platform
+using it. It's always up to the platform author to decide where buffers are
+and where complete packets go; it's not a feature of barectf as such.
+
+Hope it helps,
+
+Phil
+
+
+> Best regards
+>
+> Ansgar
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+-- 
+Philippe Proulx
+
+--00000000000074c02b05bcc8fd8e
+Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-when doing tracing with barectf, the trace elements are written into a buff=
-er first and only written when the buffer is full - or if the function bare=
-ctf_platform_fs_fini gets called.
-In case of a crash, it's therefore possible to loose some events. What is t=
-he best option to prevent this issue? I've used signal handlers that call t=
-he function barectf_platform_fs_fini. This seems to work well with Linux, b=
-ut is not portable. When using the provided sample platform, there is also =
-the option to reduce the buffer size, but this is not ideal, as trace event=
-s that are too big for the buffer are not written.
-
-Best regards
-
-Ansgar
+<div>On Thu, Mar 4, 2021 at 10:28 RADERMACHER Ansgar via lttng-dev &lt;<a h=
+ref=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>&gt; =
+wrote:<br></div><div><div class=3D"gmail_quote"><blockquote class=3D"gmail_=
+quote" style=3D"margin:0px 0px 0px 0.8ex;border-left-width:1px;border-left-=
+style:solid;padding-left:1ex;border-left-color:rgb(204,204,204)">
 
 
 
---_000_386C5D4D5C53C24CBC2C60CAAFD2136A5B4B2B92EXDAG0B1intrace_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
 
-<html dir=3D"ltr">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" id=3D"owaParaStyle"></style>
-</head>
-<body fpstyle=3D"1" ocsi=3D"0">
-<div style=3D"direction: ltr;font-family: Tahoma;color: #000000;font-size: =
-10pt;">
-<div>Hi,</div>
-<div><br>
+<div>
+<div style=3D"direction:ltr;font-family:Tahoma;font-size:10pt;color:rgb(0,0=
+,0)">
+<div style=3D"font-family:Tahoma">Hi,</div>
+<div style=3D"font-family:Tahoma"><br>
 </div>
-<div>when doing tracing with barectf, the trace elements are written into a=
- buffer first and only written when the buffer is full - or if the function=
- barectf_platform_fs_fini gets called.</div>
-<div>In case of a crash, it's therefore possible to loose some events. What=
- is the best option to prevent this issue? I've used signal handlers that c=
-all the function barectf_platform_fs_fini. This seems to work well with Lin=
-ux, but is not portable. When using
+<div style=3D"font-family:Tahoma">when doing tracing with barectf, the trac=
+e elements are written into a buffer first and only written when the buffer=
+ is full - or if the function barectf_platform_fs_fini gets called.</div>
+<div style=3D"font-family:Tahoma">In case of a crash, it&#39;s therefore po=
+ssible to loose some events. What is the best option to prevent this issue?=
+ I&#39;ve used signal handlers that call the function barectf_platform_fs_f=
+ini. This seems to work well with Linux, but is not portable. When using
  the provided sample platform, there is also the option to reduce the buffe=
 r size, but this is not ideal, as trace events that are too big for the buf=
-fer are not written.</div>
-<div><br>
+fer are not written.</div></div></div></blockquote><div dir=3D"auto"><br></=
+div><div dir=3D"auto">First question: why are you using barectf on Linux vs=
+ LTTng?</div><div dir=3D"auto"><br></div><div dir=3D"auto">LTTng supports w=
+riting the sub-buffers to NVRAM and, if the system crashes, convert those s=
+ub-buffers to a CTF trace with the lttng-crash utility. See &lt;<div dir=3D=
+"auto"><a href=3D"https://lttng.org/docs/v2.12/#doc-persistent-memory-file-=
+systems">https://lttng.org/docs/v2.12/#doc-persistent-memory-file-systems</=
+a>&gt;.</div><div dir=3D"auto"><br></div><div dir=3D"auto">With NVRAM, you =
+could do this with barectf with a corresponding platform using it. It&#39;s=
+ always up to the platform author to decide where buffers are and where com=
+plete packets go; it&#39;s not a feature of barectf as such.</div><div dir=
+=3D"auto"><br></div><div dir=3D"auto">Hope it helps,</div><div dir=3D"auto"=
+><br></div><div dir=3D"auto">Phil</div></div><div dir=3D"auto"><br></div><b=
+lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
+ft-width:1px;border-left-style:solid;padding-left:1ex;border-left-color:rgb=
+(204,204,204)"><div><div style=3D"direction:ltr;font-family:Tahoma;font-siz=
+e:10pt;color:rgb(0,0,0)"><div style=3D"font-family:Tahoma" dir=3D"auto"></d=
+iv>
+<div style=3D"font-family:Tahoma"><br>
 </div>
-<div>Best regards</div>
-<div><br>
+<div style=3D"font-family:Tahoma">Best regards</div>
+<div style=3D"font-family:Tahoma"><br>
 </div>
-<div>Ansgar<br>
+<div style=3D"font-family:Tahoma">Ansgar<br>
 </div>
-<div><br>
+<div style=3D"font-family:Tahoma"><br>
 </div>
-<div><br>
+<div style=3D"font-family:Tahoma"><br>
 </div>
 </div>
-</body>
-</html>
+</div>
 
---_000_386C5D4D5C53C24CBC2C60CAAFD2136A5B4B2B92EXDAG0B1intrace_--
+_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailman/l=
+istinfo/lttng-dev</a><br>
+</blockquote></div></div>-- <br><div dir=3D"ltr" class=3D"gmail_signature" =
+data-smartmail=3D"gmail_signature">Philippe Proulx</div>
 
---===============3012026724180627582==
+--00000000000074c02b05bcc8fd8e--
+
+--===============2518550462175213452==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -188,4 +213,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============3012026724180627582==--
+--===============2518550462175213452==--
