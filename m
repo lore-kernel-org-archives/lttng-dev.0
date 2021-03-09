@@ -2,66 +2,68 @@ Return-Path: <SRS0=0DGv=IH=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA921C433E0
-	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 14:34:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BE32C43331
+	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 14:49:23 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9E1016522D
-	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 14:34:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9E1016522D
+	by mail.kernel.org (Postfix) with ESMTPS id 4FC8364F62
+	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 14:49:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4FC8364F62
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4DvyQN3W36zDxd;
-	Tue,  9 Mar 2021 09:34:20 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4Dvylh442hzFDr;
+	Tue,  9 Mar 2021 09:49:20 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1615300461;
-	bh=D8XQ/iDT1uXL0JVQQHTnAoJESv1zk0qfRanubDjkaqE=;
-	h=To:References:Date:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=YwbS+4MkSKYaqJIgWXnahUj8mdhVoEDnTWwDzmMQk8K/6Lseo0qShxb17MSbn7DGH
-	 WKi70FKX6wdxDbVpEjLeJBXFWDy25LGLdjaF4WBNRQgtu1XU+gN6eMqx8SbGTXZjlD
-	 trNotqt9jHho+6PZiG5l855TJFIIQFyviZmIoNOTWt6wweKEOTdCl0MVx1q7W+i3uB
-	 6PwmWC1NPGlC6XvGda5ZRlqvMzgghQ5UiGLDxWYf3h2Igm2CWQRkvWWVO0irFi84/x
-	 zYdguM3DyfdUc3TlaObcipxsSMIAssJAACAitsT3Zzr8+5c+C53LT9i9dE95agOth3
-	 4LQj34Rl4P+NQ==
+	s=default; t=1615301361;
+	bh=CGvMgOJys4DPSUmeWS5IDdl9YlihwCN975rE8I5fd8k=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=lQgmzBFoaRH9dxob5MLbHxUQnprklJFEfX/BG/k2IHAwXcUykTyvR6+0oN0/thCDM
+	 KxL/z5X70I2SMdTD5iE1vCzqa3jOpZ+QyoU/NN/w3tW0MQBLYL7P2D4kJZeu45sf+6
+	 NUVqoDJPWDV2RNX91P5SHK6rHS48Gj1xUEKSZNCGXkM4ak893BtwAAAK2nI5hthH9a
+	 cCzDIiNpyBcMgCIkS1uiTf93zOWe3XNDqHN3uFRNd/hyvLIJ5tcf02trVNg9LK//fO
+	 ovaf+5MU86ZhmJEhSRx8oqZz+AXXQWSoZAcosDLZ65gZf+uENXP6+PUGmYaTikyjUr
+	 MBQoWddJq4FUQ==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4DvyQL2DWjzDVm
- for <lttng-dev@lists.lttng.org>; Tue,  9 Mar 2021 09:34:17 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 4Dvylg5FKkzFCK
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Mar 2021 09:49:19 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 934BA278952
- for <lttng-dev@lists.lttng.org>; Tue,  9 Mar 2021 09:34:11 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 1DEBE2788E4;
+ Tue,  9 Mar 2021 09:49:13 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id Ed4dDCZ18CmF; Tue,  9 Mar 2021 09:34:10 -0500 (EST)
+ with ESMTP id 5__KuO8l016C; Tue,  9 Mar 2021 09:49:12 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id B3DC227894D;
- Tue,  9 Mar 2021 09:34:10 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com B3DC227894D
+ by mail.efficios.com (Postfix) with ESMTP id 3AADF27887D;
+ Tue,  9 Mar 2021 09:49:12 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 3AADF27887D
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id W3mzNOtftmZ4; Tue,  9 Mar 2021 09:34:10 -0500 (EST)
-Received: from [192.168.0.28]
- (cpebc4dfb40f613-cmbc4dfb40f610.cpe.net.cable.rogers.com [174.118.12.38])
- by mail.efficios.com (Postfix) with ESMTPSA id 7C82327894A;
- Tue,  9 Mar 2021 09:34:10 -0500 (EST)
-To: Awais Belal <awais_belal@mentor.com>, lttng-dev@lists.lttng.org
+ with ESMTP id pYnMxIwT0_aA; Tue,  9 Mar 2021 09:49:12 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 2F7312787FD;
+ Tue,  9 Mar 2021 09:49:12 -0500 (EST)
+Date: Tue, 9 Mar 2021 09:49:12 -0500 (EST)
+To: Francis Deslauriers <francis.deslauriers@efficios.com>
+Cc: Awais Belal <awais_belal@mentor.com>, lttng-dev <lttng-dev@lists.lttng.org>
+Message-ID: <324604657.2268.1615301352176.JavaMail.zimbra@efficios.com>
+In-Reply-To: <a320badd-11ec-a937-ffdb-5ca1e0efcc38@efficios.com>
 References: <f02c9dd6-b95c-19be-a7b0-cca3efda149c@mentor.com>
-Message-ID: <a320badd-11ec-a937-ffdb-5ca1e0efcc38@efficios.com>
-Date: Tue, 9 Mar 2021 09:34:09 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+ <a320badd-11ec-a937-ffdb-5ca1e0efcc38@efficios.com>
 MIME-Version: 1.0
-In-Reply-To: <f02c9dd6-b95c-19be-a7b0-cca3efda149c@mentor.com>
-Content-Language: en-US
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3996 (ZimbraWebClient - FF86 (Linux)/8.8.15_GA_4007)
+Thread-Topic: lttng-modules: block: invalid/unknown value for rwbs field
+Thread-Index: sXx7d/jJppwG7c60TPmOKsnKwicvvA==
 Subject: Re: [lttng-dev] lttng-modules: block: invalid/unknown value for
  rwbs field
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -75,121 +77,99 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Francis Deslauriers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Francis Deslauriers <francis.deslauriers@efficios.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: =?utf-8?q?J=C3=A9r=C3=A9mie_Galarneau_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi,
-
-You see this "Unknown value 33" because there are no label with the 
-value 33 in the "block_rq_type" enumeration.
-
-More specifically, you see the value "33" because it's the result of two 
-OR-ed bitflags (RWBS_FLAG_WRITE | RWBS_FLAG_SYNC).
-
-The type of the "rwbs" field in the event was changed from integer to 
-enum in that commit [0]. That change was made to allow trace readers to 
-print OR-ed values more nicely have all they need to do it. In fact, 
-babeltrace2 implements such feature and you can try it with the 
-following command:
-
-$ babeltrace2 -c sink.text.pretty -p print-enum-flags=true <path-to-trace>
-
-And would print that field as such: ( "RWBS_FLAG_WRITE" | 
-"RWBS_FLAG_SYNC" : container = 33 )
-
-I believe this feature is turn off in Babeltrace2 by default to be 
-backward compatible with Babeltrace 1.5.
-
-It's important to note that before that change in the kernel tracer 
-Babeltrace would have simply printed "rwbs = 33" so you're not losing 
-any information here.
-
-So, try it out with Babeltrace2, it should work as you expect.
-
-
-Cheers,
-
-Francis
-
-[0] 
-https://github.com/lttng/lttng-modules/commit/23634515e7271c8c8594ad87a6685232d4eff297
-
-
-On 3/9/21 8:10 AM, Awais Belal via lttng-dev wrote:
->
-> Hi,
->
-> I am using lttng-modules 2.12.5 with a 5.4.93 kernel on an aarch64 
-> target. After creating a session I run
->
-> *lttng enable-event -k block**
->
-> to enable all the block_ kernel events but when I run babeltrace on 
-> the generated traces I get a handful of
->
-> *[warning] Unknown value 33 in enum.
-> ...
-> ...
-> *
->
-> with different values in place of 33. This does not happen with any 
-> other kernel event type
->
-> *BabelTrace Trace Viewer and Converter 1.5.8*
->
-> Also if I try to do a 'lttng view' on this session I can identify that 
-> this has something to do with the rwbs field as I get
->
-> *[14:03:42.649719750] (+0.000005750) imx8qxpmek block_bio_remap: { 
-> cpu_id = 3 }, { dev = 187695200, sector = 2460080, nr_sector = 8, rwbs 
-> = ( <unknown> : container = 33 ), old_dev = 187695203, old_sector = 
-> 2105776 }
-> [14:03:42.649722125] (+0.000002375) imx8qxpmek block_bio_queue: { 
-> cpu_id = 3 }, { dev = 187695200, sector = 2460080, nr_sector = 8, rwbs 
-> = ( <unknown> : container = 33 ), tid = 428, comm = "jbd2/mmcblk1p3-" }
-> [14:03:42.649725000] (+0.000002875) imx8qxpmek block_bio_backmerge: { 
-> cpu_id = 3 }, { dev = 187695200, sector = 2460080, nr_sector = 8, rwbs 
-> = ( <unknown> : container = 33 ), tid = 428, comm = "jbd2/mmcblk1p3-" }
-> ...
-> ...*
->
-> I believe <unknown> in the log points to a symptom? While for the 
-> events/container id that do not generate this warning I have in the 
-> same trace
->
-> *[14:03:44.697572375] (+2.036943500) imx8qxpmek block_bio_remap: { 
-> cpu_id = 0 }, { dev = 187695200, sector = 9382032, nr_sector = 8, rwbs 
-> = ( "RWBS_FLAG_WRITE" : container = 1 ), old_dev = 187695206, 
-> old_sector = 278672 }
-> [14:03:44.697584375] (+0.000012000) imx8qxpmek block_bio_queue: { 
-> cpu_id = 0 }, { dev = 187695200, sector = 9382032, nr_sector = 8, rwbs 
-> = ( "RWBS_FLAG_WRITE" : container = 1 ), tid = 1609, comm = 
-> "kworker/u8:0" }
-> [14:03:44.697604250] (+0.000019875) imx8qxpmek block_getrq: { cpu_id = 
-> 0 }, { dev = 187695200, sector = 9382032, nr_sector = 8, rwbs = ( 
-> "RWBS_FLAG_WRITE" : container = 1 ), tid = 1609, comm = "kworker/u8:0" }*
->
-> The interesting thing to note with the working events is that all of 
-> them have "RWBS_FLAG_WRITE" and no other types from 
-> https://github.com/lttng/lttng-modules/blob/stable-2.12/instrumentation/events/lttng-module/block.h#L39 
-> which I would expect to see.
->
-> I am lost for hints as to what I need to look up... any help would be 
-> highly appreciated.
->
-> -- 
-> BR,
-> Awais
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+SnVzdCBhZGRpbmcgdG8gRnJhbmNpcycgZXhwbGFuYXRpb24gKGFuZCBmb2xsb3dpbmcgdXAgb24g
+QXdhaXMnIHF1ZXN0aW9ucyBvbiBJUkMpOgp0aGUgcmVhc29uIHRoZSBgcHJpbnQtZW51bS1mbGFn
+c2Agb3B0aW9uIGlzIG5vdCB0aGUgZGVmYXVsdCBpcyBmb3VuZCBoZXJlIFsxXS4KCnRsO2RyOiBi
+aXR3aXNlIGVudW1lcmF0aW9ucyBhcmUgbm90IGRlZmluZWQgaW4gQ1RGIDEuOCBhbmQgd2lsbCBs
+aWtlbHkgYmUKcGFydCBvZiBDVEYgMi4wLgoKQWxzbywgdGhpcyBvcHRpb24gaXMgb25seSBhdmFp
+bGFibGUgaW4gbWFzdGVyIGZvciB0aGUgbW9tZW50IGFuZCB3aWxsIGJlIHBhcnQKb2YgYSBmdXR1
+cmUgMi4xIHJlbGVhc2UuCgpUaGFua3MsCkrDqXLDqW1pZQoKWzFdIGh0dHBzOi8vcmV2aWV3Lmx0
+dG5nLm9yZy9jL2JhYmVsdHJhY2UvKy8zMDQ1LzMxI21lc3NhZ2UtYzc3MDliNDQzMWFkNzIwOTYy
+ZmU5YjgwODgwYmM2ODlmMjk0YzRhOQoKLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQpGcm9t
+OiAibHR0bmctZGV2IiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KVG86ICJBd2FpcyBCZWxh
+bCIgPGF3YWlzX2JlbGFsQG1lbnRvci5jb20+LCAibHR0bmctZGV2IiA8bHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZz4KU2VudDogVHVlc2RheSwgTWFyY2ggOSwgMjAyMSA5OjM0OjA5IEFNClN1Ympl
+Y3Q6IFJlOiBbbHR0bmctZGV2XSBsdHRuZy1tb2R1bGVzOiBibG9jazogaW52YWxpZC91bmtub3du
+IHZhbHVlIGZvciByd2JzIGZpZWxkCgpIaSwKCllvdSBzZWUgdGhpcyAiVW5rbm93biB2YWx1ZSAz
+MyIgYmVjYXVzZSB0aGVyZSBhcmUgbm8gbGFiZWwgd2l0aCB0aGUgCnZhbHVlIDMzIGluIHRoZSAi
+YmxvY2tfcnFfdHlwZSIgZW51bWVyYXRpb24uCgpNb3JlIHNwZWNpZmljYWxseSwgeW91IHNlZSB0
+aGUgdmFsdWUgIjMzIiBiZWNhdXNlIGl0J3MgdGhlIHJlc3VsdCBvZiB0d28gCk9SLWVkIGJpdGZs
+YWdzIChSV0JTX0ZMQUdfV1JJVEUgfCBSV0JTX0ZMQUdfU1lOQykuCgpUaGUgdHlwZSBvZiB0aGUg
+InJ3YnMiIGZpZWxkIGluIHRoZSBldmVudCB3YXMgY2hhbmdlZCBmcm9tIGludGVnZXIgdG8gCmVu
+dW0gaW4gdGhhdCBjb21taXQgWzBdLiBUaGF0IGNoYW5nZSB3YXMgbWFkZSB0byBhbGxvdyB0cmFj
+ZSByZWFkZXJzIHRvIApwcmludCBPUi1lZCB2YWx1ZXMgbW9yZSBuaWNlbHkgaGF2ZSBhbGwgdGhl
+eSBuZWVkIHRvIGRvIGl0LiBJbiBmYWN0LCAKYmFiZWx0cmFjZTIgaW1wbGVtZW50cyBzdWNoIGZl
+YXR1cmUgYW5kIHlvdSBjYW4gdHJ5IGl0IHdpdGggdGhlIApmb2xsb3dpbmcgY29tbWFuZDoKCiQg
+YmFiZWx0cmFjZTIgLWMgc2luay50ZXh0LnByZXR0eSAtcCBwcmludC1lbnVtLWZsYWdzPXRydWUg
+PHBhdGgtdG8tdHJhY2U+CgpBbmQgd291bGQgcHJpbnQgdGhhdCBmaWVsZCBhcyBzdWNoOiAoICJS
+V0JTX0ZMQUdfV1JJVEUiIHwgCiJSV0JTX0ZMQUdfU1lOQyIgOiBjb250YWluZXIgPSAzMyApCgpJ
+IGJlbGlldmUgdGhpcyBmZWF0dXJlIGlzIHR1cm4gb2ZmIGluIEJhYmVsdHJhY2UyIGJ5IGRlZmF1
+bHQgdG8gYmUgCmJhY2t3YXJkIGNvbXBhdGlibGUgd2l0aCBCYWJlbHRyYWNlIDEuNS4KCkl0J3Mg
+aW1wb3J0YW50IHRvIG5vdGUgdGhhdCBiZWZvcmUgdGhhdCBjaGFuZ2UgaW4gdGhlIGtlcm5lbCB0
+cmFjZXIgCkJhYmVsdHJhY2Ugd291bGQgaGF2ZSBzaW1wbHkgcHJpbnRlZCAicndicyA9IDMzIiBz
+byB5b3UncmUgbm90IGxvc2luZyAKYW55IGluZm9ybWF0aW9uIGhlcmUuCgpTbywgdHJ5IGl0IG91
+dCB3aXRoIEJhYmVsdHJhY2UyLCBpdCBzaG91bGQgd29yayBhcyB5b3UgZXhwZWN0LgoKCkNoZWVy
+cywKCkZyYW5jaXMKClswXSAKaHR0cHM6Ly9naXRodWIuY29tL2x0dG5nL2x0dG5nLW1vZHVsZXMv
+Y29tbWl0LzIzNjM0NTE1ZTcyNzFjOGM4NTk0YWQ4N2E2Njg1MjMyZDRlZmYyOTcKCgpPbiAzLzkv
+MjEgODoxMCBBTSwgQXdhaXMgQmVsYWwgdmlhIGx0dG5nLWRldiB3cm90ZToKPgo+IEhpLAo+Cj4g
+SSBhbSB1c2luZyBsdHRuZy1tb2R1bGVzIDIuMTIuNSB3aXRoIGEgNS40LjkzIGtlcm5lbCBvbiBh
+biBhYXJjaDY0IAo+IHRhcmdldC4gQWZ0ZXIgY3JlYXRpbmcgYSBzZXNzaW9uIEkgcnVuCj4KPiAq
+bHR0bmcgZW5hYmxlLWV2ZW50IC1rIGJsb2NrKioKPgo+IHRvIGVuYWJsZSBhbGwgdGhlIGJsb2Nr
+XyBrZXJuZWwgZXZlbnRzIGJ1dCB3aGVuIEkgcnVuIGJhYmVsdHJhY2Ugb24gCj4gdGhlIGdlbmVy
+YXRlZCB0cmFjZXMgSSBnZXQgYSBoYW5kZnVsIG9mCj4KPiAqW3dhcm5pbmddIFVua25vd24gdmFs
+dWUgMzMgaW4gZW51bS4KPiAuLi4KPiAuLi4KPiAqCj4KPiB3aXRoIGRpZmZlcmVudCB2YWx1ZXMg
+aW4gcGxhY2Ugb2YgMzMuIFRoaXMgZG9lcyBub3QgaGFwcGVuIHdpdGggYW55IAo+IG90aGVyIGtl
+cm5lbCBldmVudCB0eXBlCj4KPiAqQmFiZWxUcmFjZSBUcmFjZSBWaWV3ZXIgYW5kIENvbnZlcnRl
+ciAxLjUuOCoKPgo+IEFsc28gaWYgSSB0cnkgdG8gZG8gYSAnbHR0bmcgdmlldycgb24gdGhpcyBz
+ZXNzaW9uIEkgY2FuIGlkZW50aWZ5IHRoYXQgCj4gdGhpcyBoYXMgc29tZXRoaW5nIHRvIGRvIHdp
+dGggdGhlIHJ3YnMgZmllbGQgYXMgSSBnZXQKPgo+ICpbMTQ6MDM6NDIuNjQ5NzE5NzUwXSAoKzAu
+MDAwMDA1NzUwKSBpbXg4cXhwbWVrIGJsb2NrX2Jpb19yZW1hcDogeyAKPiBjcHVfaWQgPSAzIH0s
+IHsgZGV2ID0gMTg3Njk1MjAwLCBzZWN0b3IgPSAyNDYwMDgwLCBucl9zZWN0b3IgPSA4LCByd2Jz
+IAo+ID0gKCA8dW5rbm93bj4gOiBjb250YWluZXIgPSAzMyApLCBvbGRfZGV2ID0gMTg3Njk1MjAz
+LCBvbGRfc2VjdG9yID0gCj4gMjEwNTc3NiB9Cj4gWzE0OjAzOjQyLjY0OTcyMjEyNV0gKCswLjAw
+MDAwMjM3NSkgaW14OHF4cG1layBibG9ja19iaW9fcXVldWU6IHsgCj4gY3B1X2lkID0gMyB9LCB7
+IGRldiA9IDE4NzY5NTIwMCwgc2VjdG9yID0gMjQ2MDA4MCwgbnJfc2VjdG9yID0gOCwgcndicyAK
+PiA9ICggPHVua25vd24+IDogY29udGFpbmVyID0gMzMgKSwgdGlkID0gNDI4LCBjb21tID0gImpi
+ZDIvbW1jYmxrMXAzLSIgfQo+IFsxNDowMzo0Mi42NDk3MjUwMDBdICgrMC4wMDAwMDI4NzUpIGlt
+eDhxeHBtZWsgYmxvY2tfYmlvX2JhY2ttZXJnZTogeyAKPiBjcHVfaWQgPSAzIH0sIHsgZGV2ID0g
+MTg3Njk1MjAwLCBzZWN0b3IgPSAyNDYwMDgwLCBucl9zZWN0b3IgPSA4LCByd2JzIAo+ID0gKCA8
+dW5rbm93bj4gOiBjb250YWluZXIgPSAzMyApLCB0aWQgPSA0MjgsIGNvbW0gPSAiamJkMi9tbWNi
+bGsxcDMtIiB9Cj4gLi4uCj4gLi4uKgo+Cj4gSSBiZWxpZXZlIDx1bmtub3duPiBpbiB0aGUgbG9n
+IHBvaW50cyB0byBhIHN5bXB0b20/IFdoaWxlIGZvciB0aGUgCj4gZXZlbnRzL2NvbnRhaW5lciBp
+ZCB0aGF0IGRvIG5vdCBnZW5lcmF0ZSB0aGlzIHdhcm5pbmcgSSBoYXZlIGluIHRoZSAKPiBzYW1l
+IHRyYWNlCj4KPiAqWzE0OjAzOjQ0LjY5NzU3MjM3NV0gKCsyLjAzNjk0MzUwMCkgaW14OHF4cG1l
+ayBibG9ja19iaW9fcmVtYXA6IHsgCj4gY3B1X2lkID0gMCB9LCB7IGRldiA9IDE4NzY5NTIwMCwg
+c2VjdG9yID0gOTM4MjAzMiwgbnJfc2VjdG9yID0gOCwgcndicyAKPiA9ICggIlJXQlNfRkxBR19X
+UklURSIgOiBjb250YWluZXIgPSAxICksIG9sZF9kZXYgPSAxODc2OTUyMDYsIAo+IG9sZF9zZWN0
+b3IgPSAyNzg2NzIgfQo+IFsxNDowMzo0NC42OTc1ODQzNzVdICgrMC4wMDAwMTIwMDApIGlteDhx
+eHBtZWsgYmxvY2tfYmlvX3F1ZXVlOiB7IAo+IGNwdV9pZCA9IDAgfSwgeyBkZXYgPSAxODc2OTUy
+MDAsIHNlY3RvciA9IDkzODIwMzIsIG5yX3NlY3RvciA9IDgsIHJ3YnMgCj4gPSAoICJSV0JTX0ZM
+QUdfV1JJVEUiIDogY29udGFpbmVyID0gMSApLCB0aWQgPSAxNjA5LCBjb21tID0gCj4gImt3b3Jr
+ZXIvdTg6MCIgfQo+IFsxNDowMzo0NC42OTc2MDQyNTBdICgrMC4wMDAwMTk4NzUpIGlteDhxeHBt
+ZWsgYmxvY2tfZ2V0cnE6IHsgY3B1X2lkID0gCj4gMCB9LCB7IGRldiA9IDE4NzY5NTIwMCwgc2Vj
+dG9yID0gOTM4MjAzMiwgbnJfc2VjdG9yID0gOCwgcndicyA9ICggCj4gIlJXQlNfRkxBR19XUklU
+RSIgOiBjb250YWluZXIgPSAxICksIHRpZCA9IDE2MDksIGNvbW0gPSAia3dvcmtlci91ODowIiB9
+Kgo+Cj4gVGhlIGludGVyZXN0aW5nIHRoaW5nIHRvIG5vdGUgd2l0aCB0aGUgd29ya2luZyBldmVu
+dHMgaXMgdGhhdCBhbGwgb2YgCj4gdGhlbSBoYXZlICJSV0JTX0ZMQUdfV1JJVEUiIGFuZCBubyBv
+dGhlciB0eXBlcyBmcm9tIAo+IGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy1tb2R1bGVz
+L2Jsb2Ivc3RhYmxlLTIuMTIvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvYmxv
+Y2suaCNMMzkgCj4gd2hpY2ggSSB3b3VsZCBleHBlY3QgdG8gc2VlLgo+Cj4gSSBhbSBsb3N0IGZv
+ciBoaW50cyBhcyB0byB3aGF0IEkgbmVlZCB0byBsb29rIHVwLi4uIGFueSBoZWxwIHdvdWxkIGJl
+IAo+IGhpZ2hseSBhcHByZWNpYXRlZC4KPgo+IC0tIAo+IEJSLAo+IEF3YWlzCj4KPiBfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWls
+aW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
+L2x0dG5nLWRldgo=
