@@ -2,60 +2,68 @@ Return-Path: <SRS0=0DGv=IH=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF01DC433DB
-	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 13:11:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA921C433E0
+	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 14:34:23 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3133F6514A
-	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 13:11:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3133F6514A
+	by mail.kernel.org (Postfix) with ESMTPS id 9E1016522D
+	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 14:34:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9E1016522D
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4DvwZr1LXczFDh;
-	Tue,  9 Mar 2021 08:11:32 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4DvyQN3W36zDxd;
+	Tue,  9 Mar 2021 09:34:20 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1615295492;
-	bh=vlyOyhi7upmXKhWFBtac9TmWoxLmfXZCQcJ14lijcyo=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TgczUBj0zSfyzP/yQ1VYkENha5VmvtOT+vKJ1rBvbATVmwHk+yrq1olMRdvLiH4D3
-	 7jePYydRT6xZKGnnya9lpEq82VEUZww4SeXn1fT8Mp36yah6dRfkfD4WtOioPLmvao
-	 HkcjvqggiN9uqAyGDEodVHNDaX6o/7G6Zfl7m+scATyFltPFMkd2O5lBLg4HjwnllG
-	 HuVtvlmJ5eTblS98dJB1nXlFCGN2j1rP+kMoUFDWDOvQX3oGX8Ly1VjMV4NA0v4As4
-	 YtPP3/S/BOKm34c8tTcd/81BYnpSotlopALcp0Hw8NrcGh4dlpgss38A9yMLdCoHgw
-	 qlbp+tAmtow4Q==
-Received: from esa1.mentor.iphmx.com (esa1.mentor.iphmx.com [68.232.129.153])
- by lists.lttng.org (Postfix) with ESMTPS id 4DvwZp6BzwzFDf
- for <lttng-dev@lists.lttng.org>; Tue,  9 Mar 2021 08:11:30 -0500 (EST)
-IronPort-SDR: 24QX8zaLM6HAQG14rYQ31Fh6X/ioLtiE3ZCYcwa/PUBtZA9NXlNJJZ3VcRmXLV4tpmB9fWNzwG
- 4uX0xk55xaZsu18eoCIua9aCbSZRfLYHkPHhl2jSCSZ5EIpIYLJbunaoQK/IZFzFQWTpa2TB+r
- lkcA3wSlbVocykz1NyHDU9tvyzYxF/HJfIRtzwLu8GEDJ2YSCzKQfzPF4gPDT1TpnB2znmdunI
- 5nnGrYeCzdeM7TlO8HWo06aUKFtOZeJlmRkel6T5w6w4rXawNJ9yIdYs6vaL1zvNs48FDXwjPA
- wcs=
-X-IronPort-AV: E=Sophos;i="5.81,234,1610438400"; d="scan'208,217";a="61232238"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
- by esa1.mentor.iphmx.com with ESMTP; 09 Mar 2021 05:10:13 -0800
-IronPort-SDR: EDYSAx2mc7Izv2jcgospUUF4lu468NfdZtbZjWedNML11smGiePf4zA8egmiBjsLFnlgg/hfNw
- 8EpbbRMHDKDd1wVh3S9dr5Xfbo8dknyjAp1W9UtDunz7BynPKh1I6yyvJE7uDDbpaHyfX0ArkY
- 9s677m2qhiEJXQiY0cPG+XExB2bKFfmOO5mCUXPK1COMWQSRj48tMh4WriallHCfioJOk7KaaJ
- cXpNmUbHmES7MKu9CYRJE0+XElcw4Kb82NuIPgORTjFwf1ZtqkK2VsRRvCogDqLV8U16pYUErF
- 6AA=
-To: <lttng-dev@lists.lttng.org>
-Message-ID: <f02c9dd6-b95c-19be-a7b0-cca3efda149c@mentor.com>
-Date: Tue, 9 Mar 2021 18:10:07 +0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+	s=default; t=1615300461;
+	bh=D8XQ/iDT1uXL0JVQQHTnAoJESv1zk0qfRanubDjkaqE=;
+	h=To:References:Date:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=YwbS+4MkSKYaqJIgWXnahUj8mdhVoEDnTWwDzmMQk8K/6Lseo0qShxb17MSbn7DGH
+	 WKi70FKX6wdxDbVpEjLeJBXFWDy25LGLdjaF4WBNRQgtu1XU+gN6eMqx8SbGTXZjlD
+	 trNotqt9jHho+6PZiG5l855TJFIIQFyviZmIoNOTWt6wweKEOTdCl0MVx1q7W+i3uB
+	 6PwmWC1NPGlC6XvGda5ZRlqvMzgghQ5UiGLDxWYf3h2Igm2CWQRkvWWVO0irFi84/x
+	 zYdguM3DyfdUc3TlaObcipxsSMIAssJAACAitsT3Zzr8+5c+C53LT9i9dE95agOth3
+	 4LQj34Rl4P+NQ==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4DvyQL2DWjzDVm
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Mar 2021 09:34:17 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 934BA278952
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Mar 2021 09:34:11 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id Ed4dDCZ18CmF; Tue,  9 Mar 2021 09:34:10 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id B3DC227894D;
+ Tue,  9 Mar 2021 09:34:10 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com B3DC227894D
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id W3mzNOtftmZ4; Tue,  9 Mar 2021 09:34:10 -0500 (EST)
+Received: from [192.168.0.28]
+ (cpebc4dfb40f613-cmbc4dfb40f610.cpe.net.cable.rogers.com [174.118.12.38])
+ by mail.efficios.com (Postfix) with ESMTPSA id 7C82327894A;
+ Tue,  9 Mar 2021 09:34:10 -0500 (EST)
+To: Awais Belal <awais_belal@mentor.com>, lttng-dev@lists.lttng.org
+References: <f02c9dd6-b95c-19be-a7b0-cca3efda149c@mentor.com>
+Message-ID: <a320badd-11ec-a937-ffdb-5ca1e0efcc38@efficios.com>
+Date: Tue, 9 Mar 2021 09:34:09 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
+In-Reply-To: <f02c9dd6-b95c-19be-a7b0-cca3efda149c@mentor.com>
 Content-Language: en-US
-Subject: [lttng-dev] lttng-modules: block: invalid/unknown value for rwbs
- field
+Subject: Re: [lttng-dev] lttng-modules: block: invalid/unknown value for
+ rwbs field
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -67,176 +75,121 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Awais Belal via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Awais Belal <awais_belal@mentor.com>
-Content-Type: multipart/mixed; boundary="===============4005434250625999211=="
+From: Francis Deslauriers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Francis Deslauriers <francis.deslauriers@efficios.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============4005434250625999211==
-Content-Type: multipart/alternative;
-	boundary="------------B531300889DC06FD36D0A7B5"
-Content-Language: en-US
-
---------------B531300889DC06FD36D0A7B5
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-
 Hi,
 
-I am using lttng-modules 2.12.5 with a 5.4.93 kernel on an aarch64 
-target. After creating a session I run
+You see this "Unknown value 33" because there are no label with the 
+value 33 in the "block_rq_type" enumeration.
 
-*lttng enable-event -k block**
+More specifically, you see the value "33" because it's the result of two 
+OR-ed bitflags (RWBS_FLAG_WRITE | RWBS_FLAG_SYNC).
 
-to enable all the block_ kernel events but when I run babeltrace on the 
-generated traces I get a handful of
+The type of the "rwbs" field in the event was changed from integer to 
+enum in that commit [0]. That change was made to allow trace readers to 
+print OR-ed values more nicely have all they need to do it. In fact, 
+babeltrace2 implements such feature and you can try it with the 
+following command:
 
-*[warning] Unknown value 33 in enum.
-...
-...
-*
+$ babeltrace2 -c sink.text.pretty -p print-enum-flags=true <path-to-trace>
 
-with different values in place of 33. This does not happen with any 
-other kernel event type
+And would print that field as such: ( "RWBS_FLAG_WRITE" | 
+"RWBS_FLAG_SYNC" : container = 33 )
 
-*BabelTrace Trace Viewer and Converter 1.5.8*
+I believe this feature is turn off in Babeltrace2 by default to be 
+backward compatible with Babeltrace 1.5.
 
-Also if I try to do a 'lttng view' on this session I can identify that 
-this has something to do with the rwbs field as I get
+It's important to note that before that change in the kernel tracer 
+Babeltrace would have simply printed "rwbs = 33" so you're not losing 
+any information here.
 
-*[14:03:42.649719750] (+0.000005750) imx8qxpmek block_bio_remap: { 
-cpu_id = 3 }, { dev = 187695200, sector = 2460080, nr_sector = 8, rwbs = 
-( <unknown> : container = 33 ), old_dev = 187695203, old_sector = 2105776 }
-[14:03:42.649722125] (+0.000002375) imx8qxpmek block_bio_queue: { cpu_id 
-= 3 }, { dev = 187695200, sector = 2460080, nr_sector = 8, rwbs = ( 
-<unknown> : container = 33 ), tid = 428, comm = "jbd2/mmcblk1p3-" }
-[14:03:42.649725000] (+0.000002875) imx8qxpmek block_bio_backmerge: { 
-cpu_id = 3 }, { dev = 187695200, sector = 2460080, nr_sector = 8, rwbs = 
-( <unknown> : container = 33 ), tid = 428, comm = "jbd2/mmcblk1p3-" }
-...
-...*
-
-I believe <unknown> in the log points to a symptom? While for the 
-events/container id that do not generate this warning I have in the same 
-trace
-
-*[14:03:44.697572375] (+2.036943500) imx8qxpmek block_bio_remap: { 
-cpu_id = 0 }, { dev = 187695200, sector = 9382032, nr_sector = 8, rwbs = 
-( "RWBS_FLAG_WRITE" : container = 1 ), old_dev = 187695206, old_sector = 
-278672 }
-[14:03:44.697584375] (+0.000012000) imx8qxpmek block_bio_queue: { cpu_id 
-= 0 }, { dev = 187695200, sector = 9382032, nr_sector = 8, rwbs = ( 
-"RWBS_FLAG_WRITE" : container = 1 ), tid = 1609, comm = "kworker/u8:0" }
-[14:03:44.697604250] (+0.000019875) imx8qxpmek block_getrq: { cpu_id = 0 
-}, { dev = 187695200, sector = 9382032, nr_sector = 8, rwbs = ( 
-"RWBS_FLAG_WRITE" : container = 1 ), tid = 1609, comm = "kworker/u8:0" }*
-
-The interesting thing to note with the working events is that all of 
-them have "RWBS_FLAG_WRITE" and no other types from 
-https://github.com/lttng/lttng-modules/blob/stable-2.12/instrumentation/events/lttng-module/block.h#L39 
-which I would expect to see.
-
-I am lost for hints as to what I need to look up... any help would be 
-highly appreciated.
-
--- 
-BR,
-Awais
+So, try it out with Babeltrace2, it should work as you expect.
 
 
---------------B531300889DC06FD36D0A7B5
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Cheers,
 
-<html>
-  <head>
+Francis
 
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  </head>
-  <body>
-    <p><font face="Tahoma">Hi,</font></p>
-    <p><font face="Tahoma">I am using lttng-modules 2.12.5 with a 5.4.93
-        kernel on an aarch64 target. After creating a session I run<br>
-        <br>
-        <b><font size="-1">lttng enable-event -k block*</font></b><br>
-      </font></p>
-    <p><font face="Tahoma">to enable all the block_ kernel events but
-        when I run babeltrace on the generated traces I get a handful of<br>
-      </font></p>
-    <p><b><font size="-1" face="Tahoma">[warning] Unknown value 33 in
-          enum.<br>
-          ...<br>
-          ...<br>
-        </font></b></p>
-    <p><font face="Tahoma">with different values in place of 33. This
-        does not happen with any other kernel event type<br>
-      </font></p>
-    <p><font face="Tahoma"><b><font size="-1">BabelTrace Trace Viewer
-            and Converter 1.5.8</font></b><br>
-      </font></p>
-    <p><font face="Tahoma">Also if I try to do a 'lttng view' on this
-        session I can identify that this has something to do with the
-        rwbs field as I get</font></p>
-    <p><font face="Tahoma"><b><font size="-1">[14:03:42.649719750]
-            (+0.000005750) imx8qxpmek block_bio_remap: { cpu_id = 3 }, {
-            dev = 187695200, sector = 2460080, nr_sector = 8, rwbs = (
-            &lt;unknown&gt; : container = 33 ), old_dev = 187695203,
-            old_sector = 2105776 }<br>
-            [14:03:42.649722125] (+0.000002375) imx8qxpmek
-            block_bio_queue: { cpu_id = 3 }, { dev = 187695200, sector =
-            2460080, nr_sector = 8, rwbs = ( &lt;unknown&gt; : container
-            = 33 ), tid = 428, comm = "jbd2/mmcblk1p3-" }<br>
-            [14:03:42.649725000] (+0.000002875) imx8qxpmek
-            block_bio_backmerge: { cpu_id = 3 }, { dev = 187695200,
-            sector = 2460080, nr_sector = 8, rwbs = ( &lt;unknown&gt; :
-            container = 33 ), tid = 428, comm = "jbd2/mmcblk1p3-" }<br>
-            ...<br>
-            ...</font></b><br>
-      </font></p>
-    <p><font face="Tahoma">I believe &lt;unknown&gt; in the log points
-        to a symptom? While for the events/container id that do not
-        generate this warning I have in the same trace</font></p>
-    <p><font face="Tahoma"><b><font size="-1">[14:03:44.697572375]
-            (+2.036943500) imx8qxpmek block_bio_remap: { cpu_id = 0 }, {
-            dev = 187695200, sector = 9382032, nr_sector = 8, rwbs = (
-            "RWBS_FLAG_WRITE" : container = 1 ), old_dev = 187695206,
-            old_sector = 278672 }<br>
-            [14:03:44.697584375] (+0.000012000) imx8qxpmek
-            block_bio_queue: { cpu_id = 0 }, { dev = 187695200, sector =
-            9382032, nr_sector = 8, rwbs = ( "RWBS_FLAG_WRITE" :
-            container = 1 ), tid = 1609, comm = "kworker/u8:0" }<br>
-            [14:03:44.697604250] (+0.000019875) imx8qxpmek block_getrq:
-            { cpu_id = 0 }, { dev = 187695200, sector = 9382032,
-            nr_sector = 8, rwbs = ( "RWBS_FLAG_WRITE" : container = 1 ),
-            tid = 1609, comm = "kworker/u8:0" }</font></b><br>
-      </font></p>
-    <p><font face="Tahoma">The interesting thing to note with the
-        working events is that all of them have "</font><font
-        face="Tahoma"><font face="Tahoma">RWBS_FLAG_WRITE</font>" and no
-        other types from
-<a class="moz-txt-link-freetext" href="https://github.com/lttng/lttng-modules/blob/stable-2.12/instrumentation/events/lttng-module/block.h#L39">https://github.com/lttng/lttng-modules/blob/stable-2.12/instrumentation/events/lttng-module/block.h#L39</a>
-        which I would expect to see.</font></p>
-    <p><font face="Tahoma">I am lost for hints as to what I need to look
-        up... any help would be highly appreciated.</font><br>
-    </p>
-    <pre class="moz-signature" cols="72">-- 
-BR,
-Awais</pre>
-  </body>
-</html>
+[0] 
+https://github.com/lttng/lttng-modules/commit/23634515e7271c8c8594ad87a6685232d4eff297
 
---------------B531300889DC06FD36D0A7B5--
 
---===============4005434250625999211==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+On 3/9/21 8:10 AM, Awais Belal via lttng-dev wrote:
+>
+> Hi,
+>
+> I am using lttng-modules 2.12.5 with a 5.4.93 kernel on an aarch64 
+> target. After creating a session I run
+>
+> *lttng enable-event -k block**
+>
+> to enable all the block_ kernel events but when I run babeltrace on 
+> the generated traces I get a handful of
+>
+> *[warning] Unknown value 33 in enum.
+> ...
+> ...
+> *
+>
+> with different values in place of 33. This does not happen with any 
+> other kernel event type
+>
+> *BabelTrace Trace Viewer and Converter 1.5.8*
+>
+> Also if I try to do a 'lttng view' on this session I can identify that 
+> this has something to do with the rwbs field as I get
+>
+> *[14:03:42.649719750] (+0.000005750) imx8qxpmek block_bio_remap: { 
+> cpu_id = 3 }, { dev = 187695200, sector = 2460080, nr_sector = 8, rwbs 
+> = ( <unknown> : container = 33 ), old_dev = 187695203, old_sector = 
+> 2105776 }
+> [14:03:42.649722125] (+0.000002375) imx8qxpmek block_bio_queue: { 
+> cpu_id = 3 }, { dev = 187695200, sector = 2460080, nr_sector = 8, rwbs 
+> = ( <unknown> : container = 33 ), tid = 428, comm = "jbd2/mmcblk1p3-" }
+> [14:03:42.649725000] (+0.000002875) imx8qxpmek block_bio_backmerge: { 
+> cpu_id = 3 }, { dev = 187695200, sector = 2460080, nr_sector = 8, rwbs 
+> = ( <unknown> : container = 33 ), tid = 428, comm = "jbd2/mmcblk1p3-" }
+> ...
+> ...*
+>
+> I believe <unknown> in the log points to a symptom? While for the 
+> events/container id that do not generate this warning I have in the 
+> same trace
+>
+> *[14:03:44.697572375] (+2.036943500) imx8qxpmek block_bio_remap: { 
+> cpu_id = 0 }, { dev = 187695200, sector = 9382032, nr_sector = 8, rwbs 
+> = ( "RWBS_FLAG_WRITE" : container = 1 ), old_dev = 187695206, 
+> old_sector = 278672 }
+> [14:03:44.697584375] (+0.000012000) imx8qxpmek block_bio_queue: { 
+> cpu_id = 0 }, { dev = 187695200, sector = 9382032, nr_sector = 8, rwbs 
+> = ( "RWBS_FLAG_WRITE" : container = 1 ), tid = 1609, comm = 
+> "kworker/u8:0" }
+> [14:03:44.697604250] (+0.000019875) imx8qxpmek block_getrq: { cpu_id = 
+> 0 }, { dev = 187695200, sector = 9382032, nr_sector = 8, rwbs = ( 
+> "RWBS_FLAG_WRITE" : container = 1 ), tid = 1609, comm = "kworker/u8:0" }*
+>
+> The interesting thing to note with the working events is that all of 
+> them have "RWBS_FLAG_WRITE" and no other types from 
+> https://github.com/lttng/lttng-modules/blob/stable-2.12/instrumentation/events/lttng-module/block.h#L39 
+> which I would expect to see.
+>
+> I am lost for hints as to what I need to look up... any help would be 
+> highly appreciated.
+>
+> -- 
+> BR,
+> Awais
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============4005434250625999211==--
