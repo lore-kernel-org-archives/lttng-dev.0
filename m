@@ -1,68 +1,63 @@
-Return-Path: <SRS0=0DGv=IH=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=w840=IO=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D3D8C433E0
-	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 15:11:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F152C433E0
+	for <lttng-dev@archiver.kernel.org>; Tue, 16 Mar 2021 20:41:41 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A40596521D
-	for <lttng-dev@archiver.kernel.org>; Tue,  9 Mar 2021 15:11:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A40596521D
+	by mail.kernel.org (Postfix) with ESMTPS id A78A264F83
+	for <lttng-dev@archiver.kernel.org>; Tue, 16 Mar 2021 20:41:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A78A264F83
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4DvzFg5j84zDVs;
-	Tue,  9 Mar 2021 10:11:51 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4F0QDz0JldzJBC;
+	Tue, 16 Mar 2021 16:41:39 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1615302712;
-	bh=D6ZLSTnOrWdwYw9SacvyOzcNHJHW1pUjq13g0fljxDU=;
-	h=To:CC:References:Date:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=VU1/o5WCa3lSuj10MYoVwHzPCPCvDtJTzI7MS5HoADgiagNRtG4c2SH3MTsgSsZEV
-	 CWugMtaeNmyQGc/QGEwjzMnKRQmvKL0/DR/O5KG5itN58A0n9coTBBlz4YWV1woDb1
-	 2hvqnX9/iOuwHz52pBFUKgjUWxZAwnQYodoGabuEN+kTS2un02N4bbSMMB5lChrc2Y
-	 iQohIiFvUwOslkXEQzxZUN3fQWbPImL91qSGfNgSGGnnbwHHH6qTYfWtmcqVwfKmyq
-	 9KSl40SjB/lcyW5CWTEAqNUxsG1nPDyNnhh/IhYRKJaFH1dOyNGGg19rZKSMVUwvFv
-	 nB1XlD+604gpg==
-Received: from esa1.mentor.iphmx.com (esa1.mentor.iphmx.com [68.232.129.153])
- by lists.lttng.org (Postfix) with ESMTPS id 4DvzFd4qBMzDpX
- for <lttng-dev@lists.lttng.org>; Tue,  9 Mar 2021 10:11:48 -0500 (EST)
-IronPort-SDR: Xt8RPIHexlnnKvwY8fYNxVBEjFvsL/iXZwWbPqby9K71pEa6pngtKyZopX8CUzPgmUkZah1aeM
- b0pBrwKhuLqosK5lhCUyreLJ4cw8q2JPNwLOaF7ozdap76fBQJ8SqsqCUFAKn6KhaEAeHmUwZ0
- 1UfQumQu3x3pDoOZEpLDYODKFmw77rSGWdqSneF0/xq0zIABBX4lPgXDUPUEUz1bxWErZez9qt
- efVrkm16nsqKhjOXuNm5PG7C6uUObr1b5/mf9NW+4YT/vb22mxOo5bVAL8SchbjvCsY6d3Wz7D
- xjA=
-X-IronPort-AV: E=Sophos;i="5.81,234,1610438400"; d="scan'208";a="61237060"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
- by esa1.mentor.iphmx.com with ESMTP; 09 Mar 2021 07:11:40 -0800
-IronPort-SDR: hhc2S4H+iASPapw8aOST8X81+uv8LcNZue8Pev+wdgEosiEQLf5iCyVXv/A2Vk6CVg49JrJbCZ
- uZFCAInC+AcN+7W9g6Y6GKE/5tk3tYTYyfZOg4f4Q+P/pzmI6wHuHrZ7ghsfZTMhfg1PL//fp7
- En3fEhpnLci8KeeQj4LEHexQAEJc2+ed8lQ3sLC+N0i7IJVlZSMKW+uFuANqBOXt4mVa9B4eDM
- 6/B8Bzujy+VWZj67RkxoA7uEO7NMgDTWJgcXw571U97GEKY71UxJ8bOsTZk9UQGT/qfvDEoPh1
- 4Fo=
-To: =?UTF-8?Q?J=c3=a9r=c3=a9mie_Galarneau?= <jeremie.galarneau@efficios.com>, 
- Francis Deslauriers <francis.deslauriers@efficios.com>
-CC: lttng-dev <lttng-dev@lists.lttng.org>
-References: <f02c9dd6-b95c-19be-a7b0-cca3efda149c@mentor.com>
- <a320badd-11ec-a937-ffdb-5ca1e0efcc38@efficios.com>
- <324604657.2268.1615301352176.JavaMail.zimbra@efficios.com>
-Message-ID: <05bc0191-6fd6-5f8d-a3a2-8c65c2db492d@mentor.com>
-Date: Tue, 9 Mar 2021 20:11:33 +0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+	s=default; t=1615927299;
+	bh=BFtP/rZj42SnQCn2VywNME5+emQKJsdv9MhCNYqSUXM=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=QRsb3eSuKIU1Bp2WkWU63rHeyvcLl1XTO78kpSA+esGMRANeWjBOmLTVySWoRZhEr
+	 DAeBPgs06kkS3pgv7Jq0GxGTlIDT76MHjeaAtRH8L0Ib+G+loP8Hl1n0v7j2ayW/fk
+	 mzQmMBXp1K/EGZl/5gaE92uPtcC21OEw/weEGXfPj+172QJJ33557Il/ERoKuNhVyB
+	 eQ3pbcJrtAcrvAYOOUGQCMrZfhpWvSI71kKzcxmqDHXzR5g51Gl8gKEtrJSzez3VQs
+	 feZlXnwlFtX0fg5WabVLWA4DW0eGAEfMX6bp+BWM4VFGjNCxdCTx0iLyUwqX6QbZ6P
+	 L2y9UfaBcuSjw==
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
+ [IPv6:2607:f8b0:4864:20::32c])
+ by lists.lttng.org (Postfix) with ESMTPS id 4F0QDx1fTBzHrx
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Mar 2021 16:41:37 -0400 (EDT)
+Received: by mail-ot1-x32c.google.com with SMTP id
+ 31-20020a9d00220000b02901b64b9b50b1so7582018ota.9
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Mar 2021 13:41:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=2R23isGxvlpl5urq8GpzTUnM94l/xJJCDJx/lNT+ObY=;
+ b=m0xlihjqugd0CxVzF21DRcOKwhTdO9Ex9th7XLcCzlaI/8cuGmvJO8K7onc6DrcFMq
+ xB3QcQJkBqOmdELIOs5Ela22eHfbSCM7Zvn2WDlZMWQxn5eBjQxABAsID8UQYAqQtTYb
+ oouE2be1UCQer3lCgM8EVOaW66I2HD9Ik98LXqWrVTizR0Aptk/2aHhNLLJiZ/OIumAH
+ SeFi82vJfm2CvobJ5dy56uxclBT6UMozs5BD9qT8/N0Se4/VUxeeSlylOcp6spqsApj7
+ yHeVV5OpMzpNac2EpyN24cIMPeoZhGZumfBjV8qNXWQU/vcM6Xb8Nh63iPd3Kp+P5JZo
+ 5iNA==
+X-Gm-Message-State: AOAM5329JRfZ16OB5E5BjR13iGvvgNMncXA5zYxqptlFOkuIE30YhKAE
+ PyFCL3IQtgVyopALj4A8CL7GHAV1D6w0MAzGUcZsIBlt
+X-Google-Smtp-Source: ABdhPJxPT2kULWPZ5MQyZ+IG2Ktqe5c7gjNi6ISfadUZgGXE+ylptxqEzj8hXE6mf+GIfOOKvPEFrXu4cmDkyfVD8A8=
+X-Received: by 2002:a9d:12c6:: with SMTP id g64mr525417otg.226.1615927296103; 
+ Tue, 16 Mar 2021 13:41:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <324604657.2268.1615301352176.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
-Subject: Re: [lttng-dev] lttng-modules: block: invalid/unknown value for
- rwbs field
+Date: Tue, 16 Mar 2021 13:41:25 -0700
+Message-ID: <CAPj=Wkj51Cg6OT2XOBHJB+zYei30NMML7ek8FGJ+EUsKiyecww@mail.gmail.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Subject: [lttng-dev] Statically linking babeltrace and lttng col
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -74,103 +69,104 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Awais Belal via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Awais Belal <awais_belal@mentor.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Eqbal via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Eqbal <eqbalzee@gmail.com>
+Content-Type: multipart/mixed; boundary="===============2267538925142715081=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-PiBTbywgdHJ5IGl0IG91dCB3aXRoIEJhYmVsdHJhY2UyLCBpdCBzaG91bGQgd29yayBhcyB5b3Ug
-ZXhwZWN0LgpUaGFua3MgYSBsb3QgZ3V5cywgYnQyIHdvcmtzIGFzIGV4cGVjdGVkLgoKQlIsCkF3
-YWlzCgpPbiAwOS8wMy8yMDIxIDE5OjQ5LCBKw6lyw6ltaWUgR2FsYXJuZWF1IHdyb3RlOgo+IEp1
-c3QgYWRkaW5nIHRvIEZyYW5jaXMnIGV4cGxhbmF0aW9uIChhbmQgZm9sbG93aW5nIHVwIG9uIEF3
-YWlzJyBxdWVzdGlvbnMgb24gSVJDKToKPiB0aGUgcmVhc29uIHRoZSBgcHJpbnQtZW51bS1mbGFn
-c2Agb3B0aW9uIGlzIG5vdCB0aGUgZGVmYXVsdCBpcyBmb3VuZCBoZXJlIFsxXS4KPgo+IHRsO2Ry
-OiBiaXR3aXNlIGVudW1lcmF0aW9ucyBhcmUgbm90IGRlZmluZWQgaW4gQ1RGIDEuOCBhbmQgd2ls
-bCBsaWtlbHkgYmUKPiBwYXJ0IG9mIENURiAyLjAuCj4KPiBBbHNvLCB0aGlzIG9wdGlvbiBpcyBv
-bmx5IGF2YWlsYWJsZSBpbiBtYXN0ZXIgZm9yIHRoZSBtb21lbnQgYW5kIHdpbGwgYmUgcGFydAo+
-IG9mIGEgZnV0dXJlIDIuMSByZWxlYXNlLgo+Cj4gVGhhbmtzLAo+IErDqXLDqW1pZQo+Cj4gWzFd
-IGh0dHBzOi8vcmV2aWV3Lmx0dG5nLm9yZy9jL2JhYmVsdHJhY2UvKy8zMDQ1LzMxI21lc3NhZ2Ut
-Yzc3MDliNDQzMWFkNzIwOTYyZmU5YjgwODgwYmM2ODlmMjk0YzRhOQo+Cj4gLS0tLS0gT3JpZ2lu
-YWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJsdHRuZy1kZXYiIDxsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnPgo+IFRvOiAiQXdhaXMgQmVsYWwiIDxhd2Fpc19iZWxhbEBtZW50b3IuY29tPiwgImx0
-dG5nLWRldiIgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4gU2VudDogVHVlc2RheSwgTWFy
-Y2ggOSwgMjAyMSA5OjM0OjA5IEFNCj4gU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIGx0dG5nLW1v
-ZHVsZXM6IGJsb2NrOiBpbnZhbGlkL3Vua25vd24gdmFsdWUgZm9yIHJ3YnMgZmllbGQKPgo+IEhp
-LAo+Cj4gWW91IHNlZSB0aGlzICJVbmtub3duIHZhbHVlIDMzIiBiZWNhdXNlIHRoZXJlIGFyZSBu
-byBsYWJlbCB3aXRoIHRoZQo+IHZhbHVlIDMzIGluIHRoZSAiYmxvY2tfcnFfdHlwZSIgZW51bWVy
-YXRpb24uCj4KPiBNb3JlIHNwZWNpZmljYWxseSwgeW91IHNlZSB0aGUgdmFsdWUgIjMzIiBiZWNh
-dXNlIGl0J3MgdGhlIHJlc3VsdCBvZiB0d28KPiBPUi1lZCBiaXRmbGFncyAoUldCU19GTEFHX1dS
-SVRFIHwgUldCU19GTEFHX1NZTkMpLgo+Cj4gVGhlIHR5cGUgb2YgdGhlICJyd2JzIiBmaWVsZCBp
-biB0aGUgZXZlbnQgd2FzIGNoYW5nZWQgZnJvbSBpbnRlZ2VyIHRvCj4gZW51bSBpbiB0aGF0IGNv
-bW1pdCBbMF0uIFRoYXQgY2hhbmdlIHdhcyBtYWRlIHRvIGFsbG93IHRyYWNlIHJlYWRlcnMgdG8K
-PiBwcmludCBPUi1lZCB2YWx1ZXMgbW9yZSBuaWNlbHkgaGF2ZSBhbGwgdGhleSBuZWVkIHRvIGRv
-IGl0LiBJbiBmYWN0LAo+IGJhYmVsdHJhY2UyIGltcGxlbWVudHMgc3VjaCBmZWF0dXJlIGFuZCB5
-b3UgY2FuIHRyeSBpdCB3aXRoIHRoZQo+IGZvbGxvd2luZyBjb21tYW5kOgo+Cj4gJCBiYWJlbHRy
-YWNlMiAtYyBzaW5rLnRleHQucHJldHR5IC1wIHByaW50LWVudW0tZmxhZ3M9dHJ1ZSA8cGF0aC10
-by10cmFjZT4KPgo+IEFuZCB3b3VsZCBwcmludCB0aGF0IGZpZWxkIGFzIHN1Y2g6ICggIlJXQlNf
-RkxBR19XUklURSIgfAo+ICJSV0JTX0ZMQUdfU1lOQyIgOiBjb250YWluZXIgPSAzMyApCj4KPiBJ
-IGJlbGlldmUgdGhpcyBmZWF0dXJlIGlzIHR1cm4gb2ZmIGluIEJhYmVsdHJhY2UyIGJ5IGRlZmF1
-bHQgdG8gYmUKPiBiYWNrd2FyZCBjb21wYXRpYmxlIHdpdGggQmFiZWx0cmFjZSAxLjUuCj4KPiBJ
-dCdzIGltcG9ydGFudCB0byBub3RlIHRoYXQgYmVmb3JlIHRoYXQgY2hhbmdlIGluIHRoZSBrZXJu
-ZWwgdHJhY2VyCj4gQmFiZWx0cmFjZSB3b3VsZCBoYXZlIHNpbXBseSBwcmludGVkICJyd2JzID0g
-MzMiIHNvIHlvdSdyZSBub3QgbG9zaW5nCj4gYW55IGluZm9ybWF0aW9uIGhlcmUuCj4KPiBTbywg
-dHJ5IGl0IG91dCB3aXRoIEJhYmVsdHJhY2UyLCBpdCBzaG91bGQgd29yayBhcyB5b3UgZXhwZWN0
-Lgo+Cj4KPiBDaGVlcnMsCj4KPiBGcmFuY2lzCj4KPiBbMF0KPiBodHRwczovL2dpdGh1Yi5jb20v
-bHR0bmcvbHR0bmctbW9kdWxlcy9jb21taXQvMjM2MzQ1MTVlNzI3MWM4Yzg1OTRhZDg3YTY2ODUy
-MzJkNGVmZjI5Nwo+Cj4KPiBPbiAzLzkvMjEgODoxMCBBTSwgQXdhaXMgQmVsYWwgdmlhIGx0dG5n
-LWRldiB3cm90ZToKPj4gSGksCj4+Cj4+IEkgYW0gdXNpbmcgbHR0bmctbW9kdWxlcyAyLjEyLjUg
-d2l0aCBhIDUuNC45MyBrZXJuZWwgb24gYW4gYWFyY2g2NAo+PiB0YXJnZXQuIEFmdGVyIGNyZWF0
-aW5nIGEgc2Vzc2lvbiBJIHJ1bgo+Pgo+PiAqbHR0bmcgZW5hYmxlLWV2ZW50IC1rIGJsb2NrKioK
-Pj4KPj4gdG8gZW5hYmxlIGFsbCB0aGUgYmxvY2tfIGtlcm5lbCBldmVudHMgYnV0IHdoZW4gSSBy
-dW4gYmFiZWx0cmFjZSBvbgo+PiB0aGUgZ2VuZXJhdGVkIHRyYWNlcyBJIGdldCBhIGhhbmRmdWwg
-b2YKPj4KPj4gKlt3YXJuaW5nXSBVbmtub3duIHZhbHVlIDMzIGluIGVudW0uCj4+IC4uLgo+PiAu
-Li4KPj4gKgo+Pgo+PiB3aXRoIGRpZmZlcmVudCB2YWx1ZXMgaW4gcGxhY2Ugb2YgMzMuIFRoaXMg
-ZG9lcyBub3QgaGFwcGVuIHdpdGggYW55Cj4+IG90aGVyIGtlcm5lbCBldmVudCB0eXBlCj4+Cj4+
-ICpCYWJlbFRyYWNlIFRyYWNlIFZpZXdlciBhbmQgQ29udmVydGVyIDEuNS44Kgo+Pgo+PiBBbHNv
-IGlmIEkgdHJ5IHRvIGRvIGEgJ2x0dG5nIHZpZXcnIG9uIHRoaXMgc2Vzc2lvbiBJIGNhbiBpZGVu
-dGlmeSB0aGF0Cj4+IHRoaXMgaGFzIHNvbWV0aGluZyB0byBkbyB3aXRoIHRoZSByd2JzIGZpZWxk
-IGFzIEkgZ2V0Cj4+Cj4+ICpbMTQ6MDM6NDIuNjQ5NzE5NzUwXSAoKzAuMDAwMDA1NzUwKSBpbXg4
-cXhwbWVrIGJsb2NrX2Jpb19yZW1hcDogewo+PiBjcHVfaWQgPSAzIH0sIHsgZGV2ID0gMTg3Njk1
-MjAwLCBzZWN0b3IgPSAyNDYwMDgwLCBucl9zZWN0b3IgPSA4LCByd2JzCj4+ID0gKCA8dW5rbm93
-bj4gOiBjb250YWluZXIgPSAzMyApLCBvbGRfZGV2ID0gMTg3Njk1MjAzLCBvbGRfc2VjdG9yID0K
-Pj4gMjEwNTc3NiB9Cj4+IFsxNDowMzo0Mi42NDk3MjIxMjVdICgrMC4wMDAwMDIzNzUpIGlteDhx
-eHBtZWsgYmxvY2tfYmlvX3F1ZXVlOiB7Cj4+IGNwdV9pZCA9IDMgfSwgeyBkZXYgPSAxODc2OTUy
-MDAsIHNlY3RvciA9IDI0NjAwODAsIG5yX3NlY3RvciA9IDgsIHJ3YnMKPj4gPSAoIDx1bmtub3du
-PiA6IGNvbnRhaW5lciA9IDMzICksIHRpZCA9IDQyOCwgY29tbSA9ICJqYmQyL21tY2JsazFwMy0i
-IH0KPj4gWzE0OjAzOjQyLjY0OTcyNTAwMF0gKCswLjAwMDAwMjg3NSkgaW14OHF4cG1layBibG9j
-a19iaW9fYmFja21lcmdlOiB7Cj4+IGNwdV9pZCA9IDMgfSwgeyBkZXYgPSAxODc2OTUyMDAsIHNl
-Y3RvciA9IDI0NjAwODAsIG5yX3NlY3RvciA9IDgsIHJ3YnMKPj4gPSAoIDx1bmtub3duPiA6IGNv
-bnRhaW5lciA9IDMzICksIHRpZCA9IDQyOCwgY29tbSA9ICJqYmQyL21tY2JsazFwMy0iIH0KPj4g
-Li4uCj4+IC4uLioKPj4KPj4gSSBiZWxpZXZlIDx1bmtub3duPiBpbiB0aGUgbG9nIHBvaW50cyB0
-byBhIHN5bXB0b20/IFdoaWxlIGZvciB0aGUKPj4gZXZlbnRzL2NvbnRhaW5lciBpZCB0aGF0IGRv
-IG5vdCBnZW5lcmF0ZSB0aGlzIHdhcm5pbmcgSSBoYXZlIGluIHRoZQo+PiBzYW1lIHRyYWNlCj4+
-Cj4+ICpbMTQ6MDM6NDQuNjk3NTcyMzc1XSAoKzIuMDM2OTQzNTAwKSBpbXg4cXhwbWVrIGJsb2Nr
-X2Jpb19yZW1hcDogewo+PiBjcHVfaWQgPSAwIH0sIHsgZGV2ID0gMTg3Njk1MjAwLCBzZWN0b3Ig
-PSA5MzgyMDMyLCBucl9zZWN0b3IgPSA4LCByd2JzCj4+ID0gKCAiUldCU19GTEFHX1dSSVRFIiA6
-IGNvbnRhaW5lciA9IDEgKSwgb2xkX2RldiA9IDE4NzY5NTIwNiwKPj4gb2xkX3NlY3RvciA9IDI3
-ODY3MiB9Cj4+IFsxNDowMzo0NC42OTc1ODQzNzVdICgrMC4wMDAwMTIwMDApIGlteDhxeHBtZWsg
-YmxvY2tfYmlvX3F1ZXVlOiB7Cj4+IGNwdV9pZCA9IDAgfSwgeyBkZXYgPSAxODc2OTUyMDAsIHNl
-Y3RvciA9IDkzODIwMzIsIG5yX3NlY3RvciA9IDgsIHJ3YnMKPj4gPSAoICJSV0JTX0ZMQUdfV1JJ
-VEUiIDogY29udGFpbmVyID0gMSApLCB0aWQgPSAxNjA5LCBjb21tID0KPj4gImt3b3JrZXIvdTg6
-MCIgfQo+PiBbMTQ6MDM6NDQuNjk3NjA0MjUwXSAoKzAuMDAwMDE5ODc1KSBpbXg4cXhwbWVrIGJs
-b2NrX2dldHJxOiB7IGNwdV9pZCA9Cj4+IDAgfSwgeyBkZXYgPSAxODc2OTUyMDAsIHNlY3RvciA9
-IDkzODIwMzIsIG5yX3NlY3RvciA9IDgsIHJ3YnMgPSAoCj4+ICJSV0JTX0ZMQUdfV1JJVEUiIDog
-Y29udGFpbmVyID0gMSApLCB0aWQgPSAxNjA5LCBjb21tID0gImt3b3JrZXIvdTg6MCIgfSoKPj4K
-Pj4gVGhlIGludGVyZXN0aW5nIHRoaW5nIHRvIG5vdGUgd2l0aCB0aGUgd29ya2luZyBldmVudHMg
-aXMgdGhhdCBhbGwgb2YKPj4gdGhlbSBoYXZlICJSV0JTX0ZMQUdfV1JJVEUiIGFuZCBubyBvdGhl
-ciB0eXBlcyBmcm9tCj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy1tb2R1bGVzL2Js
-b2Ivc3RhYmxlLTIuMTIvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvYmxvY2su
-aCNMMzkKPj4gd2hpY2ggSSB3b3VsZCBleHBlY3QgdG8gc2VlLgo+Pgo+PiBJIGFtIGxvc3QgZm9y
-IGhpbnRzIGFzIHRvIHdoYXQgSSBuZWVkIHRvIGxvb2sgdXAuLi4gYW55IGhlbHAgd291bGQgYmUK
-Pj4gaGlnaGx5IGFwcHJlY2lhdGVkLgo+Pgo+PiAtLSAKPj4gQlIsCj4+IEF3YWlzCj4+Cj4+IF9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+IGx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBodHRwczovL2xp
-c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
-bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============2267538925142715081==
+Content-Type: multipart/alternative; boundary="000000000000779ad705bdad6440"
+
+--000000000000779ad705bdad6440
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+I have an application where I want to statically link both babeltrace2
+library including the built in plugins as well as lttng ctl library. I
+couldn=E2=80=99t find much documentation regarding that. I know you can con=
+figure
+babeltrace with =E2=80=94enable-built-in-plugins but that seems to just lin=
+k the
+eventual binary tool with the plugins.
+
+I tried to statically link the individual plugin archives (ctf, text,
+utils) using =E2=80=94whole-archive but I am getting an error message sayin=
+g some
+of the functions have multiple definitions in liblttng-ctl archive. E.g.,
+
+=E2=80=9Cbabeltrace-plugin-ctf.a (libctf_parser_la-lexer.o) : in function
+=E2=80=98yyrestart=E2=80=99: lexer.c:1875: multiple definition of =E2=80=98=
+yyrestart=E2=80=99
+liblttng-ctl.a (libfilter_la-filter-lexer.o):filter-lexer.c:(.text+0x17e5):
+first defined here.
+
+Without =E2=80=94whole-archive the build succeeds (I am using cmake) but th=
+e
+plugins are missing in my app (when trying to use bt_plugin_find with
+static).
+
+I am using lttng-tools stable-2.12 and babeltrace2 stable-2.0 from GitHub.
+
+What do I need to do to properly link lttng-ctl, babeltrace2 and the built
+in plugins?
+
+Thanks,
+Eqbal
+
+--000000000000779ad705bdad6440
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div>Hi,<div dir=3D"auto"><br></div><div dir=3D"auto"><font style=3D"color:=
+rgb(49,49,49)"><span style=3D"word-spacing:1px">I have an application where=
+ I want to statically link both babeltrace2 library including the built in =
+plugins as well as lttng ctl library. I couldn=E2=80=99t find much document=
+ation regarding that. I know you can configure babeltrace with =E2=80=94ena=
+ble-built-in-plugins but that seems to just link the eventual binary tool w=
+ith the plugins.</span></font></div><div dir=3D"auto"><div style=3D"font-si=
+ze:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto">=C2=A0</div><div=
+ style=3D"font-size:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto"=
+>I tried to statically link the individual plugin archives (ctf, text, util=
+s) using =E2=80=94whole-archive but I am getting an error=C2=A0message sayi=
+ng some of the functions have multiple definitions in liblttng-ctl archive.=
+ E.g.,=C2=A0</div><div style=3D"font-size:1rem;word-spacing:1px;color:rgb(4=
+9,49,49)" dir=3D"auto"><br></div><div style=3D"font-size:1rem;word-spacing:=
+1px;color:rgb(49,49,49)" dir=3D"auto">=E2=80=9Cbabeltrace-plugin-ctf.a (lib=
+ctf_parser_la-lexer.o) : in function =E2=80=98yyrestart=E2=80=99: lexer.c:1=
+875: multiple definition of =E2=80=98yyrestart=E2=80=99 liblttng-ctl.a (lib=
+filter_la-filter-lexer.o):filter-lexer.c:(.text+0x17e5): first defined here=
+.</div><div style=3D"font-size:1rem;word-spacing:1px;color:rgb(49,49,49)" d=
+ir=3D"auto"><br></div><div style=3D"font-size:1rem;word-spacing:1px;color:r=
+gb(49,49,49)" dir=3D"auto">Without =E2=80=94whole-archive the build succeed=
+s (I am using cmake) but the plugins are missing in my app (when trying to =
+use bt_plugin_find with static).</div><div style=3D"font-size:1rem;word-spa=
+cing:1px;color:rgb(49,49,49)" dir=3D"auto"><br></div><div style=3D"font-siz=
+e:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto">I am using lttng-=
+tools stable-2.12 and babeltrace2 stable-2.0 from GitHub.</div><div style=
+=3D"font-size:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto"><br><=
+/div><div style=3D"font-size:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=
+=3D"auto">What do I need to do to properly link lttng-ctl, babeltrace2 and =
+the built in plugins?</div><div style=3D"font-size:1rem;word-spacing:1px;co=
+lor:rgb(49,49,49)" dir=3D"auto"><br></div><div style=3D"font-size:1rem;word=
+-spacing:1px;color:rgb(49,49,49)" dir=3D"auto">Thanks,</div><div style=3D"f=
+ont-size:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto">Eqbal</div=
+></div><div dir=3D"auto"><br></div><div dir=3D"auto"><br></div>
+</div>
+
+--000000000000779ad705bdad6440--
+
+--===============2267538925142715081==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2267538925142715081==--
