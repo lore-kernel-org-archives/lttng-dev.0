@@ -1,63 +1,66 @@
-Return-Path: <SRS0=w840=IO=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=EUdU=IP=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	MAILING_LIST_MULTI,PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F152C433E0
-	for <lttng-dev@archiver.kernel.org>; Tue, 16 Mar 2021 20:41:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11A86C433DB
+	for <lttng-dev@archiver.kernel.org>; Wed, 17 Mar 2021 13:45:22 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A78A264F83
-	for <lttng-dev@archiver.kernel.org>; Tue, 16 Mar 2021 20:41:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A78A264F83
+	by mail.kernel.org (Postfix) with ESMTPS id C3D1464F50
+	for <lttng-dev@archiver.kernel.org>; Wed, 17 Mar 2021 13:45:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org C3D1464F50
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4F0QDz0JldzJBC;
-	Tue, 16 Mar 2021 16:41:39 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4F0ry66FrnzJHD;
+	Wed, 17 Mar 2021 09:45:18 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1615927299;
-	bh=BFtP/rZj42SnQCn2VywNME5+emQKJsdv9MhCNYqSUXM=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QRsb3eSuKIU1Bp2WkWU63rHeyvcLl1XTO78kpSA+esGMRANeWjBOmLTVySWoRZhEr
-	 DAeBPgs06kkS3pgv7Jq0GxGTlIDT76MHjeaAtRH8L0Ib+G+loP8Hl1n0v7j2ayW/fk
-	 mzQmMBXp1K/EGZl/5gaE92uPtcC21OEw/weEGXfPj+172QJJ33557Il/ERoKuNhVyB
-	 eQ3pbcJrtAcrvAYOOUGQCMrZfhpWvSI71kKzcxmqDHXzR5g51Gl8gKEtrJSzez3VQs
-	 feZlXnwlFtX0fg5WabVLWA4DW0eGAEfMX6bp+BWM4VFGjNCxdCTx0iLyUwqX6QbZ6P
-	 L2y9UfaBcuSjw==
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com
- [IPv6:2607:f8b0:4864:20::32c])
- by lists.lttng.org (Postfix) with ESMTPS id 4F0QDx1fTBzHrx
- for <lttng-dev@lists.lttng.org>; Tue, 16 Mar 2021 16:41:37 -0400 (EDT)
-Received: by mail-ot1-x32c.google.com with SMTP id
- 31-20020a9d00220000b02901b64b9b50b1so7582018ota.9
- for <lttng-dev@lists.lttng.org>; Tue, 16 Mar 2021 13:41:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=2R23isGxvlpl5urq8GpzTUnM94l/xJJCDJx/lNT+ObY=;
- b=m0xlihjqugd0CxVzF21DRcOKwhTdO9Ex9th7XLcCzlaI/8cuGmvJO8K7onc6DrcFMq
- xB3QcQJkBqOmdELIOs5Ela22eHfbSCM7Zvn2WDlZMWQxn5eBjQxABAsID8UQYAqQtTYb
- oouE2be1UCQer3lCgM8EVOaW66I2HD9Ik98LXqWrVTizR0Aptk/2aHhNLLJiZ/OIumAH
- SeFi82vJfm2CvobJ5dy56uxclBT6UMozs5BD9qT8/N0Se4/VUxeeSlylOcp6spqsApj7
- yHeVV5OpMzpNac2EpyN24cIMPeoZhGZumfBjV8qNXWQU/vcM6Xb8Nh63iPd3Kp+P5JZo
- 5iNA==
-X-Gm-Message-State: AOAM5329JRfZ16OB5E5BjR13iGvvgNMncXA5zYxqptlFOkuIE30YhKAE
- PyFCL3IQtgVyopALj4A8CL7GHAV1D6w0MAzGUcZsIBlt
-X-Google-Smtp-Source: ABdhPJxPT2kULWPZ5MQyZ+IG2Ktqe5c7gjNi6ISfadUZgGXE+ylptxqEzj8hXE6mf+GIfOOKvPEFrXu4cmDkyfVD8A8=
-X-Received: by 2002:a9d:12c6:: with SMTP id g64mr525417otg.226.1615927296103; 
- Tue, 16 Mar 2021 13:41:36 -0700 (PDT)
-MIME-Version: 1.0
-Date: Tue, 16 Mar 2021 13:41:25 -0700
-Message-ID: <CAPj=Wkj51Cg6OT2XOBHJB+zYei30NMML7ek8FGJ+EUsKiyecww@mail.gmail.com>
+	s=default; t=1615988719;
+	bh=qpy02AjFuCXYe/hiKebdgYUNC1lK6SeFkf5+XNHT7PA=;
+	h=To:CC:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=i6wG9CLqqUEzkX85+8a28l5rK9xDHIpqMPiVDmE96oac+8LLJLROYWs0bagiOa8va
+	 aYZno6wt+Fbv1R+UKvoxvx2q2QrF7nMkPNZ97cqIPdSh6qmS3TWbF2bn5cWJ0Xsmg3
+	 DJJrAURdGUefFyxhO40Lfmporyqe+tV/bXAUBLcBBYsMwFuphClH7mRHu2/V8m71Jr
+	 IVoK8+JhUy81e9cymd/6A0oUqx8fdg092rBtZWXY24L5O4hkETd6Wtu5RK5gCySs+r
+	 50uRGsxldKqjkaBbTEiZHktSoELt39lBwSezTXgvBG9MFyKql+sgdYqg91ZfVLISlL
+	 JAAmuTwcqBLqQ==
+Received: from esa2.mentor.iphmx.com (esa2.mentor.iphmx.com [68.232.141.98])
+ by lists.lttng.org (Postfix) with ESMTPS id 4F0ry459ygzJHC
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Mar 2021 09:45:16 -0400 (EDT)
+IronPort-SDR: 70YyraTEm5uNugQZ1ZFHIWeVLMM7JUD8eLntkxauks9wt2KoGSpccCKgtSc6BVVIcPQspGZTOj
+ uScwK9WkRm/Cu4gd8VhNXId6DLS7nGzwim+eTYtKeiPsY0KnqqtalrPDJ4XzdPgzyPaDQsWgnW
+ 0bw15TZmSEpyu1OrGWHgRdB82/TyoV4XMCADA0o8CsxCh4cuIwov0wkcbLbSfXSSkCyW0EO42E
+ O9Mknu8w2p9rJoqENOx1Xjv/X4obtiQrF85BKT50vrzU7/H5u2LUK7RbNd26pwWJwyVAU4BFcI
+ SYg=
+X-IronPort-AV: E=Sophos;i="5.81,256,1610438400"; d="scan'208,217";a="59181745"
+Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
+ by esa2.mentor.iphmx.com with ESMTP; 17 Mar 2021 05:44:02 -0800
+IronPort-SDR: 7CBdUt3N5YlU+7gO6vBpdSkGmj/rda6XsHa3qU3NKNrCcHGOYUIoVe7h7iJn5QCtzVqDfttzWB
+ II5g1s1Bn1zn+EFxNAhhJibwuxu2dvMiCjGbq+xjq9jcvPU8P8nGAe8dg7yiVwUoBmVJJMlGsD
+ ducNvbvj+Wp+XpRuqfo0/ZeWNeMeHRGBNsnuT4VU87hAzfjTIkVQqVP6rXhrc71A3cP8ZT2Zuc
+ BTeMr4qYFwDDSLzKhPcZ/e8lU/25TrMStBAAbOM+giC2nJGCsGAgRTG2pjcKurjBRwmSdctaCR
+ mKU=
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Subject: [lttng-dev] Statically linking babeltrace and lttng col
+CC: "Krishnakar, Srikanth" <Srikanth_Krishnakar@mentor.com>
+Thread-Topic: LTTNG Support for arm64 based k3-am654 board 
+Thread-Index: AQHXGzOV+6Br9rlLv0edjM4AEfE12w==
+Date: Wed, 17 Mar 2021 13:43:59 +0000
+Message-ID: <1615988639233.71702@mentor.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [147.34.91.1]
+MIME-Version: 1.0
+Subject: [lttng-dev] Reg: LTTNG Support for arm64 based k3-am654 board
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -69,96 +72,272 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Eqbal via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Eqbal <eqbalzee@gmail.com>
-Content-Type: multipart/mixed; boundary="===============2267538925142715081=="
+From: "Vadivel, Arulpandiyan via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: "Vadivel, Arulpandiyan" <Arulpandiyan_Vadivel@mentor.com>
+Content-Type: multipart/mixed; boundary="===============4571786249902331951=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============2267538925142715081==
-Content-Type: multipart/alternative; boundary="000000000000779ad705bdad6440"
+--===============4571786249902331951==
+Content-Language: en-GB
+Content-Type: multipart/alternative;
+	boundary="_000_161598863923371702mentorcom_"
 
---000000000000779ad705bdad6440
-Content-Type: text/plain; charset="UTF-8"
+--_000_161598863923371702mentorcom_
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Team,
 
-I have an application where I want to statically link both babeltrace2
-library including the built in plugins as well as lttng ctl library. I
-couldn=E2=80=99t find much documentation regarding that. I know you can con=
-figure
-babeltrace with =E2=80=94enable-built-in-plugins but that seems to just lin=
-k the
-eventual binary tool with the plugins.
+    We are working on the Texas Instrument's K3-am654 board(ARM64 based), o=
+n 4.19.165-cip41 RT and Non-RT kernel. We would like to have the lttng supp=
+ort on the board. Hence I have added below configurations.  With these conf=
+igurations enabled I am not able to access the console itself and kernel st=
+uck at Starting kernel itself as below.  Further we have added earlycon to =
+debug the early console.  Bootargs given below. With these earlycon option =
+also we are still stuck at  Starting kernel  itself.
 
-I tried to statically link the individual plugin archives (ctf, text,
-utils) using =E2=80=94whole-archive but I am getting an error message sayin=
-g some
-of the functions have multiple definitions in liblttng-ctl archive. E.g.,
 
-=E2=80=9Cbabeltrace-plugin-ctf.a (libctf_parser_la-lexer.o) : in function
-=E2=80=98yyrestart=E2=80=99: lexer.c:1875: multiple definition of =E2=80=98=
-yyrestart=E2=80=99
-liblttng-ctl.a (libfilter_la-filter-lexer.o):filter-lexer.c:(.text+0x17e5):
-first defined here.
+Could you please help me to understand below queries,
 
-Without =E2=80=94whole-archive the build succeeds (I am using cmake) but th=
-e
-plugins are missing in my app (when trying to use bt_plugin_find with
-static).
+  *    Do we have the support of lttng for TI's K3-am654 board?
+  *    Or did we miss something in the kernel?
 
-I am using lttng-tools stable-2.12 and babeltrace2 stable-2.0 from GitHub.
 
-What do I need to do to properly link lttng-ctl, babeltrace2 and the built
-in plugins?
+Bootargs
+setenv bootargs "console=3DttyS3,115200n8 root=3D/dev/mmcblk0p1 rw rootfsty=
+pe=3Dext4 rootwait earlycon=3Dns16550a,mmio32,0x02810000"
+load mmc 0:1 0x82000000 /usr/lib/linux-image-4.19.165-cip41-rt18/ti/k3-am65=
+4-base-board.dtb
+load mmc 0:1 0x80080000 /boot/vmlinuz-4.19.165-cip41-rt18;
+load mmc 0:1 0x81000000 /boot/initrd.img-4.19.165-cip41-rt18;
+booti 0x80080000 0x81000000:20000 0x82000000
 
-Thanks,
-Eqbal
+?
+?Boot logs
+=3D>
+=3D> run bootcmd_mmc0
+switch to partitions #0, OK
+mmc0 is current device
+Scanning mmc 0:1...
+77332 bytes read in 9 ms (8.2 MiB/s)
+16533512 bytes read in 4217 ms (3.7 MiB/s)
+8740838 bytes read in 731 ms (11.4 MiB/s)
+## Flattened Device Tree blob at 82000000
+   Booting using the fdt blob at 0x8200000
+   Loading Ramdisk to fd670000, end fdec5fe6 ... OK
+   Loading Device Tree to 00000000fd65a000, end 00000000fd66fe13 ... OK
 
---000000000000779ad705bdad6440
-Content-Type: text/html; charset="UTF-8"
+Starting kernel ...
+
+Kernel Configurations.
+CONFIG_KPROBES=3Dy
+CONFIG_PERF_EVENTS=3Dy
+CONFIG_HAVE_SYSCALL_TRACEPOINTS=3Dy
+CONFIG_EVENT_TRACING=3Dy
+CONFIG_KRETPROBES=3Dy
+CONFIG_KALLSYMS=3Dy
+CONFIG_KALLSYMS_ALL=3Dy
+CONFIG_HIGH_RES_TIMERS=3Dy
+CONFIG_TRACEPOINTS=3Dy
+CONFIG_FTRACE=3Dy
+CONFIG_FUNCTION_TRACER=3Dy
+CONFIG_LTTNG=3Dm
+
+Regards,
+Arulpandiyan V.
+
+--_000_161598863923371702mentorcom_
+Content-Type: text/html; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-<div>Hi,<div dir=3D"auto"><br></div><div dir=3D"auto"><font style=3D"color:=
-rgb(49,49,49)"><span style=3D"word-spacing:1px">I have an application where=
- I want to statically link both babeltrace2 library including the built in =
-plugins as well as lttng ctl library. I couldn=E2=80=99t find much document=
-ation regarding that. I know you can configure babeltrace with =E2=80=94ena=
-ble-built-in-plugins but that seems to just link the eventual binary tool w=
-ith the plugins.</span></font></div><div dir=3D"auto"><div style=3D"font-si=
-ze:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto">=C2=A0</div><div=
- style=3D"font-size:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto"=
->I tried to statically link the individual plugin archives (ctf, text, util=
-s) using =E2=80=94whole-archive but I am getting an error=C2=A0message sayi=
-ng some of the functions have multiple definitions in liblttng-ctl archive.=
- E.g.,=C2=A0</div><div style=3D"font-size:1rem;word-spacing:1px;color:rgb(4=
-9,49,49)" dir=3D"auto"><br></div><div style=3D"font-size:1rem;word-spacing:=
-1px;color:rgb(49,49,49)" dir=3D"auto">=E2=80=9Cbabeltrace-plugin-ctf.a (lib=
-ctf_parser_la-lexer.o) : in function =E2=80=98yyrestart=E2=80=99: lexer.c:1=
-875: multiple definition of =E2=80=98yyrestart=E2=80=99 liblttng-ctl.a (lib=
-filter_la-filter-lexer.o):filter-lexer.c:(.text+0x17e5): first defined here=
-.</div><div style=3D"font-size:1rem;word-spacing:1px;color:rgb(49,49,49)" d=
-ir=3D"auto"><br></div><div style=3D"font-size:1rem;word-spacing:1px;color:r=
-gb(49,49,49)" dir=3D"auto">Without =E2=80=94whole-archive the build succeed=
-s (I am using cmake) but the plugins are missing in my app (when trying to =
-use bt_plugin_find with static).</div><div style=3D"font-size:1rem;word-spa=
-cing:1px;color:rgb(49,49,49)" dir=3D"auto"><br></div><div style=3D"font-siz=
-e:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto">I am using lttng-=
-tools stable-2.12 and babeltrace2 stable-2.0 from GitHub.</div><div style=
-=3D"font-size:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto"><br><=
-/div><div style=3D"font-size:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=
-=3D"auto">What do I need to do to properly link lttng-ctl, babeltrace2 and =
-the built in plugins?</div><div style=3D"font-size:1rem;word-spacing:1px;co=
-lor:rgb(49,49,49)" dir=3D"auto"><br></div><div style=3D"font-size:1rem;word=
--spacing:1px;color:rgb(49,49,49)" dir=3D"auto">Thanks,</div><div style=3D"f=
-ont-size:1rem;word-spacing:1px;color:rgb(49,49,49)" dir=3D"auto">Eqbal</div=
-></div><div dir=3D"auto"><br></div><div dir=3D"auto"><br></div>
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none"><!-- p { margin-top: 0px; m=
+argin-bottom: 0px; }--></style>
+</head>
+<body dir=3D"ltr" style=3D"font-size:12pt;color:#000000;background-color:#F=
+FFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;">
+<p>Hi Team,&nbsp;<br>
+</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;We are working on the Texas Instrument's&nbsp;K3=
+-am654 board(ARM64 based),&nbsp;on 4.19.165-cip41&nbsp;RT and Non-RT&nbsp;k=
+ernel. We would like to have the lttng support on the board. Hence I have a=
+dded below configurations.&nbsp; With these configurations enabled&nbsp;I a=
+m not able&nbsp;to
+ access the console itself and kernel stuck at&nbsp;<strong><em>Starting ke=
+rnel </em></strong>itself as below.&nbsp;&nbsp;<span style=3D"font-size: 12=
+pt;">Further we&nbsp;have added earlycon to debug</span><span style=3D"font=
+-size: 12pt;"> the early console.&nbsp; Bootargs given below.
+ With these earlycon option also we are still stuck at&nbsp;&nbsp;<strong s=
+tyle=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size: 16px=
+; background-color: rgb(255, 255, 255);"><em>Starting kernel&nbsp;</em></st=
+rong> itself.&nbsp;</span></p>
+<p><span style=3D"font-size: 12pt;"><br>
+</span></p>
+<p><span style=3D"font-size: 12pt;">Could you please help me to understand =
+below queries,</span><br>
+</p>
+<ul dir=3D"" class=3D"" style=3D"">
+<li>&nbsp;Do we have the support of lttng for TI's&nbsp;K3-am654 board?<br>
+</li><li><span style=3D"font-size: 12pt;">&nbsp;Or did we&nbsp;miss somethi=
+ng in the kernel?</span></li></ul>
+<p><span style=3D"font-size: 12pt;"><br>
+</span></p>
+<div><span style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; fon=
+t-size: 16px; background-color: rgb(255, 255, 255);"><strong>Bootargs</stro=
+ng></span><br style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; =
+font-size: 16px; background-color: rgb(255, 255, 255);">
 </div>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 16px; background-color: rgb(255, 255, 255);">
+<em>setenv bootargs &quot;console=3DttyS3,115200n8 root=3D/dev/mmcblk0p1 rw=
+ rootfstype=3Dext4 rootwait earlycon=3Dns16550a,mmio32,0x02810000&quot;</em=
+></div>
+</div>
+<div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 16px; background-color: rgb(255, 255, 255);">
+<em>load mmc 0:1 0x82000000 /usr/lib/linux-image-4.19.165-cip41-rt18/ti/k3-=
+am654-base-board.dtb</em></div>
+</div>
+<div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 16px; background-color: rgb(255, 255, 255);">
+<div><em>load mmc 0:1 0x80080000 /boot/vmlinuz-4.19.165-cip41-rt18;</em></d=
+iv>
+</div>
+</div>
+<div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 16px; background-color: rgb(255, 255, 255);">
+<div><em>load mmc 0:1 0x81000000 /boot/initrd.img-4.19.165-cip41-rt18;</em>=
+</div>
+</div>
+</div>
+<div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 16px; background-color: rgb(255, 255, 255);">
+<div><em>booti 0x80080000 0x81000000:20000 0x82000000</em></div>
+</div>
+</div>
+</blockquote>
+<div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 16px; background-color: rgb(255, 255, 255);">
+</div>
+<br>
+</div>
+<em style=3D"font-size: 12pt;">&#8203;</em><br>
+<em style=3D"font-size: 12pt;"><strong>&#8203;Boot logs</strong></em><br>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>
+<div><em>=3D&gt;</em></div>
+</div>
+<div>
+<div><em>=3D&gt; run bootcmd_mmc0</em></div>
+</div>
+<div>
+<div><em>switch to partitions #0, OK</em></div>
+</div>
+<div>
+<div><em>mmc0 is current device</em></div>
+</div>
+<div>
+<div><em>Scanning mmc 0:1...</em></div>
+</div>
+<div>
+<div><em>77332 bytes read in 9 ms (8.2 MiB/s)</em></div>
+</div>
+<div>
+<div><em>16533512 bytes read in 4217 ms (3.7 MiB/s)</em></div>
+</div>
+<div>
+<div><em>8740838 bytes read in 731 ms (11.4 MiB/s)</em></div>
+</div>
+<div>
+<div><em>## Flattened Device Tree blob at 82000000</em></div>
+</div>
+<div>
+<div><em>&nbsp; &nbsp;Booting using the fdt blob at 0x8200000</em></div>
+</div>
+<div>
+<div><em>&nbsp; &nbsp;Loading Ramdisk to fd670000, end fdec5fe6 ... OK</em>=
+</div>
+</div>
+<div>
+<div><em>&nbsp; &nbsp;Loading Device Tree to 00000000fd65a000, end 00000000=
+fd66fe13 ... OK</em></div>
+</div>
+<div>
+<div><br>
+</div>
+</div>
+<div>
+<div><em style=3D"color: rgb(255, 0, 0); text-decoration: none solid rgb(25=
+5, 0, 0);"><span style=3D"color: rgb(255, 0, 0); text-decoration: none soli=
+d rgb(255, 0, 0);">Starting kernel ...</span></em></div>
+</div>
+</blockquote>
+<div><br>
+</div>
+<div>Kernel Configurations.<br>
+</div>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_KPROBES=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_PERF_EVENTS=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_HAVE_SYSCALL_TRACEPOINTS=3Dy<br>
+</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_EVENT_TRACING=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_KRETPROBES=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_KALLSYMS=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_KALLSYMS_ALL=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_HIGH_RES_TIMERS=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_TRACEPOINTS=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_FTRACE=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_FUNCTION_TRACER=3Dy</div>
+</blockquote>
+<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
+<div>CONFIG_LTTNG=3Dm</div>
+</blockquote>
+</blockquote>
+<div><br>
+</div>
+<div>Regards,<br>
+</div>
+<div>Arulpandiyan V.<br>
+</div>
+</body>
+</html>
 
---000000000000779ad705bdad6440--
+--_000_161598863923371702mentorcom_--
 
---===============2267538925142715081==
+--===============4571786249902331951==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -169,4 +348,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2267538925142715081==--
+--===============4571786249902331951==--
