@@ -7,59 +7,61 @@ X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FEEDC433C1
-	for <lttng-dev@archiver.kernel.org>; Wed, 24 Mar 2021 14:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D885FC433E0
+	for <lttng-dev@archiver.kernel.org>; Wed, 24 Mar 2021 15:33:08 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 9B44961580
-	for <lttng-dev@archiver.kernel.org>; Wed, 24 Mar 2021 14:25:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9B44961580
+	by mail.kernel.org (Postfix) with ESMTPS id 0E323619FF
+	for <lttng-dev@archiver.kernel.org>; Wed, 24 Mar 2021 15:33:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0E323619FF
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4F59Wf27xQzMLS;
-	Wed, 24 Mar 2021 10:25:50 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4F5C1G4QPCzMVM;
+	Wed, 24 Mar 2021 11:33:06 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1616595950;
-	bh=K9tnV2xP3T3TKomdrpHzpt9g6yq3zeYyoZQ78Fv6MlI=;
+	s=default; t=1616599987;
+	bh=nq/s8MgBBjwGWa4mqTsdFWYiQ7vYe8ionneeIj8C7YM=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=zX5IeO0jqwCxUKRnLTRYnIiaAXzm0Jf0S/0ZSkMOWf86+bywAu6yWd1+vpPIPyU9g
-	 yejgQLwPtyFf+F53XlWD2EnlwgwW7aXDWm1jNCqeehn5gugJutLVqZos4N4iXCFUOU
-	 oTtHyPQz2PZVCTQUlBsQuuogSquQNDiBDTq7wWn7xVNntmejs74ggnCiQ4Y/jryt0L
-	 Qec3EdNhmqxaisxSTBrw9HB45ySF5DuuRNI9HEtToRL0772ji5JCF5QdxZIpAX/Oqs
-	 eoVcdoi+uoJriym7x1cRg2AspnO6Hpiw2WKHMIL/jpTJSZ8CV2D29VlGldcLQvTyf3
-	 0ohstWV1haHRQ==
+	b=TDRPN4rSOGSvwJrK78L0Fv6kWL0RHXB1gHH8Q5r1gp5DjlstyxVEvpKf6K0qY/JfS
+	 kAdxO4HyR4eDK9no985TPGeoxjVKdq+yAHqWjOQBYmQzI+0cBHShJ2TPvoOj0C0k8o
+	 e7P4EMJ3Xt1NIJ3QlNQnzJgGnk18JtQpoinRe9vumvFlHVG0ySTZAhn6FiNerrHk4R
+	 1ahX+lP4GS5DlmWxSpRwn5v/wjQctlyihLWvdf4bYOhVtMX6mB2w9P664y0T+sg9h5
+	 ryzvGTKyW9qvusV9PlP/4ZkPnETIy2J6NPv2l7DHF1fAnnbKU+rullNMLxG5smOM4u
+	 zl6CbGSFnY15w==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4F59Wd0DWfzMLR
- for <lttng-dev@lists.lttng.org>; Wed, 24 Mar 2021 10:25:48 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4F5C1D3YPjzM6T
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Mar 2021 11:33:04 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 9DA9E248B65
- for <lttng-dev@lists.lttng.org>; Wed, 24 Mar 2021 10:25:42 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 06AD4248EEC
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Mar 2021 11:32:58 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id SRIxBB843So8; Wed, 24 Mar 2021 10:25:42 -0400 (EDT)
+ with ESMTP id 8TuuZRH1owJN; Wed, 24 Mar 2021 11:32:56 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 1E1FF248BB3;
- Wed, 24 Mar 2021 10:25:42 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1E1FF248BB3
+ by mail.efficios.com (Postfix) with ESMTP id C6A6D2493B3;
+ Wed, 24 Mar 2021 11:32:56 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C6A6D2493B3
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id 5AgS4gF_YOpd; Wed, 24 Mar 2021 10:25:42 -0400 (EDT)
+ with ESMTP id tnhlUay2TyE5; Wed, 24 Mar 2021 11:32:56 -0400 (EDT)
 Received: from joraj-alpa (192-222-181-218.qc.cable.ebox.net [192.222.181.218])
- by mail.efficios.com (Postfix) with ESMTPSA id B0DD024887C;
- Wed, 24 Mar 2021 10:25:41 -0400 (EDT)
-Date: Wed, 24 Mar 2021 10:25:40 -0400
+ by mail.efficios.com (Postfix) with ESMTPSA id 793762493B2;
+ Wed, 24 Mar 2021 11:32:56 -0400 (EDT)
+Date: Wed, 24 Mar 2021 11:32:55 -0400
 To: MONTET Julien <julien.montet@reseau.eseo.fr>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Message-ID: <20210324142540.GB344120@joraj-alpa>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Message-ID: <20210324153255.GC344120@joraj-alpa>
 References: <PR3PR02MB62023431654FB93182EA21A1D1639@PR3PR02MB6202.eurprd02.prod.outlook.com>
+ <20210324142540.GB344120@joraj-alpa>
+ <PR3PR02MB6202F969540C279A6A171F83D1639@PR3PR02MB6202.eurprd02.prod.outlook.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <PR3PR02MB62023431654FB93182EA21A1D1639@PR3PR02MB6202.eurprd02.prod.outlook.com>
+In-Reply-To: <PR3PR02MB6202F969540C279A6A171F83D1639@PR3PR02MB6202.eurprd02.prod.outlook.com>
 Subject: Re: [lttng-dev] Issues on basic LTTng trace userspace (tutorial)
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
@@ -81,52 +83,70 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
 Hi Julien,
 
-On Wed, Mar 24, 2021 at 11:29:04AM +0000, MONTET Julien via lttng-dev wrote:
-> Hello the LTTng team !
-> 
-> I would like, at first, to thank you for your projet and your impressive work !
-> 
-> For the past few days I have been trying to learn how to use lttng (v2.12).
-> 
-> I followed the installation on your website for an Ubuntu 20.04.
-> [cid:c663399f-0584-43d3-90c5-3aa277ee7020]
+Please always keep the mailing list in CC.
 
-Good. So just to validate you used the stable 2.12 PPA as described in this
-section [1] ?.
+> I am running 'lttng list --userspace' with the application running in another terminal (like the tutorial, and also with a while that loop on tracepoint(...).
 
-[1] https://lttng.org/docs/v2.12/#doc-ubuntu-ppa
+ok.
 
 > 
-> The steps to get the trace of a Linux kernel and the babel trace are great !
-> 
-> However, I am stuck for the 'Trace a user application' : https://lttng.org/docs/v2.12/#doc-tracing-your-own-user-application
-> Compilation steps are ok, it launches without error but lttng list --userspace  gives me nothing.
+> You can find here the Ubuntu paste : Ubuntu Pastebin<https://paste.ubuntu.com/p/bWw25kmSTq/>
 
-When you perform the `lttng list --userspace` command is your user application
-running? If not, `lttng list --userspace` can only list running application.
+Based on this, it seems like lttng-ust is unable to find the socket for a sessiond either
+locally (for your user) [1] or a global one (root lttng-sessiond) [2].
 
-If your application is running, we will need to go a bit further and have some
-debug info.
+[1] 43:  libust[207688/207690]: Info: sessiond not accepting connections to local apps socket (in ust_listener_thread() at lttng-ust-comm.c:1822)
+[2] 45:  libust[207688/207689]: Info: sessiond not accepting connections to global apps socket (in ust_listener_thread() at lttng-ust-comm.c:1822)
 
-You can at least check if lttng-ust, on the application side, can successfully
-communicate with the lttng-sessiond process. For this, you will have to use
-LTTNG_UST_DEBUG.
+Since you installed via the PPA, a systemd service control service is installed
+that control a global (root) lttng-sessiond.
 
-Here's how to us it:
+First let's stop it.
+   sudo systemctl stop lttng-sessiond.service
 
- 1) Make sure a lttng-sessiond is present,
- 2) Start your application like so:  LTTNG_UST_DEBUG=1 your_application,
- 3) Debug messages from lttng-ust should appear on the stderr.
+Then in a console, again use a paste service to share the content of /tmp/lttng-sessiond.log with us
 
-Please use a paste service [2] to share this information with us. 
+   sudo lttng-sessiond -vvv > /tmp/lttng-sessiond.log 2>&1
 
-[2] https://paste.ubuntu.com/
+In another console, while the lttng-sessiond process is running, please have a look at the /var/run/lttng directory:
 
-Au plaisir!
+ ls -la /var/run/lttng/
 
--- 
-Jonathan Rajotte-Julien
-EfficiOS
+Again use a paste service to share this with us.
+
+Also can you provide the output of the following while using the user you are
+normally using to play with lttng:
+
+ groups
+
+You can also try to spawn a local lttng-sessiond for the user.
+  Note that a global and many local lttng-sessiond can coexist but for the sake of debugging
+  we will only have one of each at a time. 
+
+Kill the root lttng-sessiond we started earlier and start a local one:
+
+ lttng-sessiond -vvv > /tmp/lttng-sessiond-local.log 2>&1 
+
+ Note the absence of `sudo` here.
+
+Again please share the content of /tmp/lttng-sessiond-local.log via a paste
+service.
+
+From there you can retry your experiment with the `lttng list` command.
+
+Cheers
+
+
+> The command lines entered to compile are quite the same, I just had to modify :
+> this :     gcc -o hello hello.o hello-tp.o
+> to this : gcc -o hello hello.o hello-tp.o -L/usr/local/lib -llttng-ust -ldl
+
+As per the doc [3]:
+    gcc -o hello hello.o hello-tp.o -llttng-ust -ldl
+
+[3] https://lttng.org/docs/v2.12/#doc-tracing-your-own-user-application Bullet point #6
+
+Cheers
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
