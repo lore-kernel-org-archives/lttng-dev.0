@@ -2,116 +2,119 @@ Return-Path: <SRS0=Aspu=I3=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A528C433C1
-	for <lttng-dev@archiver.kernel.org>; Mon, 29 Mar 2021 09:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBB25C433C1
+	for <lttng-dev@archiver.kernel.org>; Mon, 29 Mar 2021 11:30:52 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 4022A61883
-	for <lttng-dev@archiver.kernel.org>; Mon, 29 Mar 2021 09:43:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4022A61883
+	by mail.kernel.org (Postfix) with ESMTPS id 14599617C9
+	for <lttng-dev@archiver.kernel.org>; Mon, 29 Mar 2021 11:30:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 14599617C9
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4F871y2fbmzPsQ;
-	Mon, 29 Mar 2021 05:43:50 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4F89PQ0zNfzPy2;
+	Mon, 29 Mar 2021 07:30:50 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1617011031;
-	bh=GyMK4izq26Wn9VsYnW5FL29bOt9ezCMErjyxodRY3nc=;
+	s=default; t=1617017451;
+	bh=/cRj0EABYV+B90WsAAldD967MHm0VDaLXxwRmuPqoLs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NPNQzGArQkG2dLbIcKul8mLIxe0eMnkFarTCjEd9jhlUfAIzsT6cRzitTKA2X77PW
-	 lCw/YEli/IOOGXeq66M5PmfsGw7n3TQaVuudmRTc58LJeLwhksP+Y3yd2ut2nELuM/
-	 HVOu2RYNqx7LWyNt+Xz0aWbigA/JkctM8hlVpHeg7vNNbVB+2UY4u0jeiQaQlUzZwF
-	 dlymnUWjF+X84GrLR9xe35FiAqeqDRMj2zIZcSa4tdphRwFT83Z+iFathioMdf6osU
-	 YwCb8fb6P2AAGxbwnTaNAtPpQ//31wFGmgkj2ZcBd3+ZhY0b24Ju8hdu9vIFOxhGP3
-	 NvOtX+0HM32hQ==
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com
- (mail-eopbgr90042.outbound.protection.outlook.com [40.107.9.42])
- by lists.lttng.org (Postfix) with ESMTPS id 4F871w0yT9zPjr
- for <lttng-dev@lists.lttng.org>; Mon, 29 Mar 2021 05:43:47 -0400 (EDT)
+	b=I0XpdWF/m2Z7pcZKCwcEuEZcfgP79fYO8DdDPGJQ59WIjDZuGYvbtHPsPm4KJfdc0
+	 HHqoqCC0NaluqVOAG0l8SjqtPtk22CupQcsVzsqjUCX++rE2W/859YSsRBS9tU1pQ3
+	 OVtM0eUUFAj6fb0Jz2A12JtdolEGY0DSbZ6XN3HAeDOFWHTzkIwOuusFA6BxBTMRhe
+	 b8Ea3uLIqaukakUzJKB2Fy/PE1exVzi3E4QMuAmkQezVA+LeRuDrboChnHE6oQNc9r
+	 RCRrhcyc4O0ii8kz3Pwl3J1laFVYkac/73uwQ4QHgmFymtpPBvkYr2/NkoDVny8n6y
+	 Xr6gBIGL99o6w==
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam08on2044.outbound.protection.outlook.com [40.107.100.44])
+ by lists.lttng.org (Postfix) with ESMTPS id 4F89PM1Rj3zQDx
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Mar 2021 07:30:46 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bIJ8Y0WTLK0vlwMaOa6njGjm/3eG+g+t/lp3yvi6x8oIiMi9tYaBkIy6C3C/OIKCB1wH9BqKEYatrqpgkkIsMd4a+XgsAZGtopbG3WtVq+ED8x8h3tOilgnhBRvgJ90bdSMsGkldBk57RZ+NqLWLN6V1qMLN3f7JehMx4XJ0sjSoVb9pEfmEZ5HTFgCLjt/IJV6zimf/v/24I+V9z1NWcNXhdPRnuq0f9JOxo0e1oRNbu1w/RcbgML4zoEsjLifZTcLRGbEfML3D0iPwnQKDT4UQwWeStp1VYHXgEhqW6uzVaw0bJRh4JZb4zyo0ViC2av1rEogfIIxGBZqJ2k/HBw==
+ b=nP7LJb6f5sbxO6FlWywTkHa9id234vlLncekyeSG+7H0q5npP7YetnWr//jdn1w7Xo8u5oa43CSSCsE5AnE+sIutMehVx7Qtp+EcybrnPalQUosjC0FynPa5MgIFrYwXlx9ahKG0R32VQ3QFHxZRoVb1j8FBV/TSOR0lO2NqSixZiDDcKniODZB796uod72fry5N0gwbstSoCzcNOUM0Y8AzQ36/PH70n1pFsN69hJMPJgzDC1Xjj1QmxYD/zpGSmtOy/9kBlCxBVCu0TchjA+v9hMuwp4BAcBi6mZbMSWX8sg2G71D360HPLtsannwCJQ+3DR8z3iSfJPwjGp0czQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CxKwdO9zmWDE3tVmM0hvaovjw+fT/cydzgVTcrBai14=;
- b=Yvqf+bWYKcpjzxETyrGqCiM8vL7ZKmqEZMhoEYg6fjA0Ou8chum4UPThBILxZW8CT06xcADFFOMqUUzp+KsWIDXaSyMvvyPw47BVvPUFpVHmN3HnIT0YeDXqE9eUc2M5VRGH4iujVpMSuDk4N75XZ6I07PqOwyxm9Dk+H7IqWCm82i6OcHzZW/jf9qDVbi/iCSyNuZokVoUfSYihErUeCgGaQAHcSaIUBCCgXnJwQ/UsyGwQ/ZXlr0U0tu9LKGOyJkp0XcvUMDPXslAM9Og8bZmLQ8Qqz9z4ilBqTp789y5RtbZ2na4sr8p8IYuTEJ7e7nlWcriaxGiQs2stziq4bg==
+ bh=VTRmySM6mWRxJKtYQQyqptizm2/la235PsDwy5vVyuo=;
+ b=ZRBL8fsXUdPcWY2uVDSeXKq8zAaounZ0os6YH+pYb39bgU4KtJn4LTKU8koVRuXqhTt7yaagrcnlIga/N5rmTWRmCQBlKoH4/S9wxPa5Dus5C7wFl2A7BISm/d2piVineVkdWyBpmKchiJcWXfIi2tIy61fioE9LrX/1soOe1lnAdmCCtTJPdPFGH9ffFQbSHs1RZaWrksdxKYz0mVhtF4stAB9/wYPnwqmqGmM6rgc6ely7SVSkBPsX1wiq7TvMuEO/ZDnofeKIh7zHYnk6/o9XEkdXLukR+YCoAYY21arXimE3KYs4Q9b3q6RXxNpH+omBXE3J64ArByMT9PX8Ag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=reseau.eseo.fr; dmarc=pass action=none
- header.from=reseau.eseo.fr; dkim=pass header.d=reseau.eseo.fr; arc=none
-Received: from PR3PR02MB6202.eurprd02.prod.outlook.com (2603:10a6:102:63::15)
- by PR1PR02MB4892.eurprd02.prod.outlook.com (2603:10a6:102:7::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.31; Mon, 29 Mar
- 2021 09:43:42 +0000
-Received: from PR3PR02MB6202.eurprd02.prod.outlook.com
- ([fe80::9183:a57e:a921:f482]) by PR3PR02MB6202.eurprd02.prod.outlook.com
- ([fe80::9183:a57e:a921:f482%7]) with mapi id 15.20.3977.033; Mon, 29 Mar 2021
- 09:43:42 +0000
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Thread-Topic: LTTng 32 bits : Cannot find liburcu-bp 0.11 or newer
-Thread-Index: AQHXJHzLqHvA9992nUqnoJi/yO/byA==
-Date: Mon, 29 Mar 2021 09:43:42 +0000
-Message-ID: <PR3PR02MB62022F27BFAE30836B7E094ED17E9@PR3PR02MB6202.eurprd02.prod.outlook.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [165.225.20.90]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bef3d963-c9d2-4e24-094a-08d8f29723ca
-x-ms-traffictypediagnostic: PR1PR02MB4892:
-x-microsoft-antispam-prvs: <PR1PR02MB48924B26AF720102D6158A42D17E9@PR1PR02MB4892.eurprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cOLDOcGCZ9hYB6MJedMmpOzWBPJyVDnvOp+M1Va0MaVGYEg+mTY10kG+tdHi8XdPla2dfas1GWNNJHhnXIAFlYl9S7TUXk7OFtv89dLkl0uz902Ci/j452/sjccHVcM+J6oP1uXl5RC9IRc7fixJgWjZjmWX2jSkphyeNyLNKc57GXQrM0+xqogCdv5HIbU73HLgrOCtjsSfruuDTJ3az6/Ujc28fFmGXz7cN0gQj6JIHRRj3H5cy6zB/PIkQYHjx+XPhO6I4nFy9BKJLFZUdXRc6r99lxMgqWjM8G9ri8yluTKO3sII8Wklq2r+l2L38B1fGW4UHhPSCzR8CMIzuy2FefTGE3HMUgoRk5/3Pq1wooevwW0agCYCZHC4PRr+5dFUbDPPLg9CqgNGZkdjR9kpUQZiyJSb8XVRLXk5dt3pvLxrGDeY1y9gP5z6la/PLyhTpxmVDxSq/6iYaMUsPdkbq2rIgM7nGMOkJHX8U6yeU48pW+RWxcFJLgNH20uRfC4Ikisp1tFJ8vU7p0H2n/WvEGM+Ml3gav2n7FUp6HHIxvk6I57Sp/nsHJg/sf0NOseZL173S/4RbL+ZhF029WKn46wfGX5JNVvIIjVngvJ+SIJilgjwzkfV4zC2HIs9+2PGA17TpQj3MwEkmQKws4O4cZBy7D5v2Pqsjphi4ArqgRmNthl0XrlA6R4TI9NWyTZe3gdXkVNJQVyvE0+yl5aXpTib0pUZIOcuABbCPR0=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PR3PR02MB6202.eurprd02.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(366004)(39850400004)(136003)(396003)(346002)(376002)(71200400001)(52536014)(21615005)(7696005)(19627405001)(478600001)(33656002)(55236004)(6506007)(186003)(966005)(5660300002)(786003)(64756008)(66556008)(66446008)(66946007)(166002)(6916009)(4744005)(66476007)(26005)(86362001)(316002)(76116006)(38100700001)(8676002)(8936002)(2906002)(9686003)(55016002);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata: =?iso-8859-1?Q?gJh/qIUDZLZD9JKF0lOQWE66gUUT/6vJ/IUJ9bOS5vWZ104x4iwkgZ4MWd?=
- =?iso-8859-1?Q?uitQOulefg3mtWmQcgs4Us22qbPbcoRjpxynP0XTxmTkmNGmnhIRo/2rnI?=
- =?iso-8859-1?Q?DoK3aSAj9aCYbkXfyAFdyka1HOAvvtNKJh+fbOUhSa3juJ2pEGke0hhTgX?=
- =?iso-8859-1?Q?tcrS6YTJIvU3SOV5Y7dRD6LFTKoCk0hUAtYURkwo111FTRDDIfgUNo4Po0?=
- =?iso-8859-1?Q?q7rq13dNtHRLsn94R+VgjurMRz7gsK0Mknm2RcFkIMP1XN20R8sFzF9o3L?=
- =?iso-8859-1?Q?I/dC2/7rG06W7Oi0KjBgfVqlWjypU7CsYQx1KOVV8IEDWdXfqlsD5xDlPD?=
- =?iso-8859-1?Q?CYmikYbknip2f8fIxhVmVXSTBXE2BzK4OMCB7lkfxDMFSkjFYXTNNULxq5?=
- =?iso-8859-1?Q?uj6XtDBB8uP0zQVCyRLZedslSkxJ88oYpZyhfAp6mWf4nv2BKPUyFS4jE+?=
- =?iso-8859-1?Q?XFHlbhN3R++7IL5u9wwO8tUqlwAyvOIdAEbNA51jpHm0YtRZC2U27d7opl?=
- =?iso-8859-1?Q?bKknRiwnE60H76DvB7X6vBpflbo07HOexsfdFvZy2kD7PpErJRoJrhLUSi?=
- =?iso-8859-1?Q?jfvczxpZRbU78+UV5AuAgOmOxDNNi+Zgi5A6YwV1iycHks1vgiYA6kgMw9?=
- =?iso-8859-1?Q?Hu1+YeaA6CNPDYosx9HXW95fYAaCOlXUzERtPeoxIysSupwle5/xn8RYGu?=
- =?iso-8859-1?Q?JQS5+hEtMEoeB+rrknWo5OB4rP1GssyLwJAJP8E01Tt0D7rBuB/5PHDZi1?=
- =?iso-8859-1?Q?nx1h/4+CQL+zNuzgiOtRDXc68VWS3Vq31YZC2BiBlzoxubkZAtAVvG3CAx?=
- =?iso-8859-1?Q?K5vTKXmY8Xuy4RI1vDFtmPwEakhstnv72nz0YVky8B0RIkGcyfgTPrGCew?=
- =?iso-8859-1?Q?GpZBNH0iQ4A59Rc0GbN5AoOf4RPYBYiWwS+PpQMImOCz1d2EnbZghwjr3Y?=
- =?iso-8859-1?Q?Ude37D8pFBAXm1m+yawC8Thwrn4OGunCMDmDracI4facC/HTvO3qWORIe9?=
- =?iso-8859-1?Q?gfg8OF2xeJOrSXLapsSYQv5PhIWqhxfYpX0h5ILbbJGg34GwHtXAu8E7FZ?=
- =?iso-8859-1?Q?JvNESQ4FT08aeFjjCJBmFa9WultoIgPpihKGWGNQUnR3zPRJFmkkCAZAPU?=
- =?iso-8859-1?Q?uZZCCT//tQ0UfH1wnm2ZHUeqbBGyIJYQmWZKMRFgLubBr0i4tBqRGe/c6Q?=
- =?iso-8859-1?Q?ndqr/iBA+SKqCBA0cIecuCw8rLzkSci3IFE8vxeTkD3BABFcpRvGXA9MuU?=
- =?iso-8859-1?Q?GubYNbojZ40CWnUHdwM3long06cxRyn7wU0uU34c4axnWPFQJCvNhfprr7?=
- =?iso-8859-1?Q?cylErg/Z/ykWgBLByIsrDMgGls+pue4W/67tBM1cIPcsdbY=3D?=
-x-ms-exchange-transport-forked: True
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from BY5PR11MB4241.namprd11.prod.outlook.com (2603:10b6:a03:1ca::13)
+ by BYAPR11MB3398.namprd11.prod.outlook.com (2603:10b6:a03:19::19)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3977.33; Mon, 29 Mar
+ 2021 11:30:45 +0000
+Received: from BY5PR11MB4241.namprd11.prod.outlook.com
+ ([fe80::551b:e310:2ae4:3011]) by BY5PR11MB4241.namprd11.prod.outlook.com
+ ([fe80::551b:e310:2ae4:3011%6]) with mapi id 15.20.3977.033; Mon, 29 Mar 2021
+ 11:30:45 +0000
+To: lttng-dev@lists.lttng.org
+Date: Mon, 29 Mar 2021 19:30:32 +0800
+Message-Id: <20210329113032.1560900-1-yanfei.xu@windriver.com>
+X-Mailer: git-send-email 2.27.0
+X-Originating-IP: [60.247.85.82]
+X-ClientProxiedBy: HKAPR03CA0020.apcprd03.prod.outlook.com
+ (2603:1096:203:c9::7) To BY5PR11MB4241.namprd11.prod.outlook.com
+ (2603:10b6:a03:1ca::13)
 MIME-Version: 1.0
-X-OriginatorOrg: reseau.eseo.fr
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from pek-lpggp1.wrs.com (60.247.85.82) by
+ HKAPR03CA0020.apcprd03.prod.outlook.com (2603:1096:203:c9::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3999.14 via Frontend Transport; Mon, 29 Mar 2021 11:30:44 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ca556258-146a-4689-3326-08d8f2a6178a
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3398:
+X-Microsoft-Antispam-PRVS: <BYAPR11MB3398A4B031E8F841F56A57E4E47E9@BYAPR11MB3398.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1079;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d7xXS70x4C/U3ish7JnEjbJPPfKXkcGCYWYIwnmJVVp4KojNaF+QBasqEHzalegQwp4AxBTaIG6Ax8vEiLggCqn5Fy2agWlqcWfNdwPBvlvCha3ZOa+KkmQ0t9QwzAYn1ngxFbvG9T5Zbvngz8sGD3coO6kuSWFuOOkuGXAFr7oM5j0VPbsIHFbCAYPCEUxx0l+zB/N1Wq6UIJ5et6OINwuO3A51phkqY0bZ+JCAI+hMX4p7L6CdJlpMDfo5Q8zW7+VwsbuReBSRgXsDrPr/SMMzgueqEZjYXtrzpcTWiPk97RYVnDywje1VgD4R5cGL5/V0Uo//JibGVPm7eVMfuwqfEvtpqj56ymURpY2xS1GwerID4JXv44dX0JKVx55L+07etBCyLCi9ByVdvw91fw81w2ZKGEWsxr59tOnfkcXUjktM0p36HdQCtb55MPHHMxDhpo6YVbb+mwqDlZcgAPB7lokkAvPFnleUEacVH0yo2KpuJjHxYOKgLO23UNdQem1tYm+r/Al2uGsHmdt1qYm89+92vG9ikimq18vF4KO5UykDoUh9y2AcX7+MCaerJRlMHbESKyhCYDOeu3/Q6QaGtx7wLP4TkRd1nK65WTUi48lRZZeOge9rXk8lTu+C5lZXG6Of8SGcwbJJbMqdkg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BY5PR11MB4241.namprd11.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(346002)(136003)(376002)(396003)(39840400004)(366004)(38100700001)(2616005)(5660300002)(956004)(36756003)(6916009)(6512007)(9686003)(2906002)(83380400001)(66946007)(66556008)(66476007)(316002)(6506007)(8676002)(16526019)(26005)(8936002)(186003)(478600001)(6486002)(6666004)(86362001)(52116002)(1076003);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?fMdm1IRsEGkP2JTomQ8rZr2NuX5i9Hgsf9d4k8+UqG12bVDgPWe+004PUJpR?=
+ =?us-ascii?Q?pCIn/3ZcbfAyyA7XEYLQXbLWjTyql1+Ddd4eNMQEeOmXIY07aDo517okt055?=
+ =?us-ascii?Q?BBmJyao9bAHcF9UsxEGRPbcw2bdpKmekdiPNk+xDO+lHwEsMm++ugKjVaTPg?=
+ =?us-ascii?Q?DoRhkn/rZ42+OAx1BH6TjLqj1npGV+d6fxnCfiP/+pqwjbpl/UIMLZ8Qeyzj?=
+ =?us-ascii?Q?XyNkFWdRb0jG9wotZzRusTBvtuONORXG1bj4B6cF4amP64s+nJxr13u0+xMX?=
+ =?us-ascii?Q?x6C75HPmpbseloktA6VmxiLThCQPGjLOVo0qNHrQswNBlhGXQ7s2NlsmiKgS?=
+ =?us-ascii?Q?haDVIHMs/7/Pq0gkdvOG2JZvOzjEbYKiLCllom+mwOJeA7AePEudwwt5IetE?=
+ =?us-ascii?Q?GUbhZDytP9b0ZZG72IyBYB98aTogZEFyZ1X7/pGgB5PlWqZqIeHgyVGXSbuc?=
+ =?us-ascii?Q?OYd6Qg1o/NMwk9bgWrLvJZssviOpd4hZ4DurUtrkT0B9IGY16A3ELCNgvKWg?=
+ =?us-ascii?Q?/jcrXHcdsFN7Kz/Nc4aZMOh0RWCACuCl7wGr38fS1R0KrCGS5ZEW3DBWJoVv?=
+ =?us-ascii?Q?jvcqe7/TEAJZWIIveXdxGE+xO2G9NSjyX+dEL3Qd2RKwo/di7qSrXPDv5vgs?=
+ =?us-ascii?Q?QK8g2KHV519WhAIAIK4dC5gJaHkqCxgHxjKeQaFWUFZiDtjY/X9RdJrORczh?=
+ =?us-ascii?Q?/Tp0Mvo8m5OJ1RUlqMYwNRBEQ6RBiJ/B1/Re/QLMO9H4JZp2bw33MXxEM+lH?=
+ =?us-ascii?Q?gjD/JjGN5zNLa21XzqPEI40ybs7B/GUr0pf4Vh+CgcxNqesDU3eirW0Ellk1?=
+ =?us-ascii?Q?hH+8FajN0bkMdbTXZYqSmNZNGy54tw8GeBFDmrhqsdIXo+aPHb2+h3HamZK8?=
+ =?us-ascii?Q?rgy7DRuyMt7+C1dE+y0nx4T9XgvE6hcQBSvyPxalC73mk3LVqImnJX91qJbq?=
+ =?us-ascii?Q?WILPN6xm8oEKC4wLJlKMYE435B8heQwowKZl7BH4xauEDvinKN66WZpu7Ycg?=
+ =?us-ascii?Q?NFIckgWEItXwS2yjv0aVX/81R/WiRo4/tyUso3QTPgSA1QECg4GxiF/8KNvx?=
+ =?us-ascii?Q?XPN4Rh5Y5ctkdgJCEXAVgu28l01rm7kdxvXnHFqQGEin+isqEr8jLygYwuWa?=
+ =?us-ascii?Q?pvQVg7s/3G+F9W7WP0l5wFDkPmxup/NjDbIPtSCGgKM1WAWMFEngCp26F/Ey?=
+ =?us-ascii?Q?e6GOJhyadXFPMSYK6TXrJvBfYSbv8TjO56CbnFoSapC7p0Q+DMdPWnXKLIJd?=
+ =?us-ascii?Q?BlJ5201Ddxia0mrrA6KfGENwX9/TThBvaEm0Mq6A+1NWKaST6kh9rb4jvaC1?=
+ =?us-ascii?Q?VuNVLz8Z8PcVVUc+JKBSNLBa?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca556258-146a-4689-3326-08d8f2a6178a
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB4241.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PR3PR02MB6202.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bef3d963-c9d2-4e24-094a-08d8f29723ca
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2021 09:43:42.5938 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4d7ad159-1265-437a-b9f6-2946247d5bf9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SktbQJlSsD6kbaI7SCWLrhIFSQyxVtC+2Uy5347c4xfHBO6vUMWwOHIZgTcFnRbS5zdanBYCE+90mC+h4j1In0W0wm2VIPdkdzmnPA/7+40=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1PR02MB4892
-Subject: [lttng-dev] LTTng 32 bits : Cannot find liburcu-bp 0.11 or newer
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2021 11:30:44.9429 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hFZU1lc97UFpQcmeAN379c/j4NNNjI5udpp+g2fqqdoOuCLmFZqON5aEFOeLGALEvuEAY8fwy8RAPTrx/tcpYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3398
+Subject: [lttng-dev] [PATCH lttng-modules] Fix: lttng-statedump-impl: wrap
+ some helpers unexported in kernel
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -123,163 +126,178 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: MONTET Julien via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: MONTET Julien <julien.montet@reseau.eseo.fr>
-Content-Type: multipart/mixed; boundary="===============6840519023607675616=="
+From: Yanfei Xu via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: yanfei.xu@windriver.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============6840519023607675616==
-Content-Language: fr-FR
-Content-Type: multipart/alternative;
-	boundary="_000_PR3PR02MB62022F27BFAE30836B7E094ED17E9PR3PR02MB6202eurp_"
+From: Yanfei Xu <yanfei.xu@windriver.com>
 
---_000_PR3PR02MB62022F27BFAE30836B7E094ED17E9PR3PR02MB6202eurp_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+disk_part_iter_* helpers were unexported in the v5.11 kernel
+by 'commit bc359d03c7ec("block: add a disk_uevent helper")'.
+Thus we make some wrappers for them to avoid compile failed.
 
-Hi everyone,
+Signed-off-by: Yanfei Xu <yanfei.xu@windriver.com>
+---
+ include/wrapper/genhd.h    | 104 +++++++++++++++++++++++++++++++++++++
+ src/lttng-statedump-impl.c |   9 ++--
+ 2 files changed, 108 insertions(+), 5 deletions(-)
 
-I successfully installed and used LTTng on x86 and x64 (kernel event, users=
-pace, and other tools like TraceCompass).
-
-Now, I am looking for a way to use LTTng on other processors (arm32, ...).
-
-I tried to follow the tutorial and, to be honest, I am quite not lost on st=
-ep 2. (libuuid, popt, libxml2)
-https://lttng.org/docs/v2.12/#doc-instrumenting-32-bit-app-on-64-bit-system
-
-My current issue is on the step 3.
-During the installation (./configure), I have the following error :
-error: Cannot find liburcu-bp 0.11 or newer. Use LDFLAGS=3D-Ldir to specify=
- its location.
-
-This file - liburcu - is in /usr/local/lib32 : Ubuntu Pastebin<https://past=
-e.ubuntu.com/p/b67Bxf6cfB/>
-
-This topic was started a long time ago here :
-https://lists.lttng.org/pipermail/lttng-dev/2013-February/019641.html
-
-Would you mind helping me ?
-
---_000_PR3PR02MB62022F27BFAE30836B7E094ED17E9PR3PR02MB6202eurp_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-Hi everyone,</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-I successfully installed and used LTTng on x86 and x64 (kernel event, users=
-pace, and other tools like TraceCompass).</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-Now, I am looking for a way to use LTTng on other processors (arm32, ...).<=
-/div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-I tried to follow the tutorial and, to be honest, I am quite not lost on st=
-ep<span style=3D"color: rgb(0, 0, 0); font-family: Calibri, Arial, Helvetic=
-a, sans-serif; font-size: 12pt;">&nbsp;2. (libuuid, popt, libxml2)</span></=
-div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<span style=3D"margin:0px;font-size:12pt"><a href=3D"https://lttng.org/docs=
-/v2.12/#doc-instrumenting-32-bit-app-on-64-bit-system" style=3D"margin:0px"=
->https://lttng.org/docs/v2.12/#doc-instrumenting-32-bit-app-on-64-bit-syste=
-m</a></span><br>
-<span style=3D"margin:0px;font-size:12pt"></span><br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-My current issue is on the step 3.&nbsp;</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-During the installation (./configure), I have the following error :&nbsp;</=
-div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<b>error: Cannot find liburcu-bp 0.11 or newer. Use LDFLAGS=3D-Ldir to spec=
-ify its location.</b></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-This file - liburcu - is in&nbsp;<span style=3D"color: rgba(0, 0, 0, 0.75);=
- font-family: &quot;Andale Mono WT&quot;, &quot;Andale Mono&quot;, &quot;Bi=
-tstream Vera Sans Mono&quot;, &quot;Liberation Mono&quot;, &quot;Nimbus Mon=
-o L&quot;, &quot;Ubuntu Mono&quot;, Monaco, Consolas, &quot;Lucida Console&=
-quot;, &quot;Lucida Sans Typewriter&quot;, &quot;Courier New&quot;, Courier=
-, monospace; font-size: 12px;">/usr/local/lib32
- :&nbsp;<a href=3D"https://paste.ubuntu.com/p/b67Bxf6cfB/" id=3D"LPlnk27073=
-1">Ubuntu Pastebin</a></span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-This topic was started a long time ago here :</div>
-<div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<a href=3D"https://lists.lttng.org/pipermail/lttng-dev/2013-February/019641=
-.html" id=3D"LPlnk239338">https://lists.lttng.org/pipermail/lttng-dev/2013-=
-February/019641.html</a><br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-Would you mind helping me ?</div>
-<div id=3D"Signature">
-<div id=3D"divtagdefaultwrapper" dir=3D"ltr" style=3D"color:rgb(0,0,0); fon=
-t-family:Calibri,Helvetica,sans-serif,&quot;EmojiFont&quot;,&quot;Apple Col=
-or Emoji&quot;,&quot;Segoe UI Emoji&quot;,NotoColorEmoji,&quot;Segoe UI Sym=
-bol&quot;,&quot;Android Emoji&quot;,EmojiSymbols; font-size:12pt">
-<p></p>
-</div>
-</div>
-</div>
-</body>
-</html>
-
---_000_PR3PR02MB62022F27BFAE30836B7E094ED17E9PR3PR02MB6202eurp_--
-
---===============6840519023607675616==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/include/wrapper/genhd.h b/include/wrapper/genhd.h
+index 68980388..91159daf 100644
+--- a/include/wrapper/genhd.h
++++ b/include/wrapper/genhd.h
+@@ -94,4 +94,108 @@ struct device_type *wrapper_get_disk_type(void)
+ 
+ #endif
+ 
++
++#if (LTTNG_LINUX_VERSION_CODE >= LTTNG_KERNEL_VERSION(5,11,0))
++
++/**
++ * disk_part_iter_exit - finish up partition iteration
++ * @piter: iter of interest
++ *
++ * Called when iteration is over.  Cleans up @piter.
++ *
++ * CONTEXT:
++ * Don't care.
++ */
++static
++void wrapper_disk_part_iter_exit(struct disk_part_iter *piter)
++{
++        if (piter->part)
++                bdput(piter->part);
++        piter->part = NULL;
++}
++
++/**
++ * disk_part_iter_init - initialize partition iterator
++ * @piter: iterator to initialize
++ * @disk: disk to iterate over
++ * @flags: DISK_PITER_* flags
++ *
++ * Initialize @piter so that it iterates over partitions of @disk.
++ *
++ * CONTEXT:
++ * Don't care.
++ */
++static
++void wrapper_disk_part_iter_init(struct disk_part_iter *piter, struct gendisk *disk,
++		                                          unsigned int flags)
++{
++        piter->disk = disk;
++        piter->part = NULL;
++        if (flags & (DISK_PITER_INCL_PART0 | DISK_PITER_INCL_EMPTY_PART0))
++                piter->idx = 0;
++        else
++                piter->idx = 1;
++        piter->flags = flags;
++}
++
++/**
++ * disk_part_iter_next - proceed iterator to the next partition and return it
++ * @piter: iterator of interest
++ *
++ * Proceed @piter to the next partition and return it.
++ *
++ * CONTEXT:
++ * Don't care.
++ */
++static
++struct block_device *wrapper_disk_part_iter_next(struct disk_part_iter *piter)
++{
++        struct block_device *part;
++        unsigned long idx;
++
++        /* put the last partition */
++        wrapper_disk_part_iter_exit(piter);
++
++        rcu_read_lock();
++        xa_for_each_start(&piter->disk->part_tbl, idx, part, piter->idx) {
++                if (!bdev_nr_sectors(part) &&
++                    !(piter->flags & DISK_PITER_INCL_EMPTY) &&
++                    !(piter->flags & DISK_PITER_INCL_EMPTY_PART0 &&
++                      piter->idx == 0))
++                        continue;
++
++                piter->part = bdgrab(part);
++                if (!piter->part)
++                        continue;
++                piter->idx = idx + 1;
++                break;
++        }
++        rcu_read_unlock();
++
++        return piter->part;
++}
++
++#else
++
++static
++void wrapper_disk_part_iter_exit(struct disk_part_iter *piter)
++{
++        disk_part_iter_exit(piter);
++}
++
++static
++void wrapper_disk_part_iter_init(struct disk_part_iter *piter, struct gendisk *disk,
++		                                                          unsigned int flags)
++{
++        disk_part_iter_init(piter, disk, flags);
++}
++
++static
++struct block_device *wrapper_disk_part_iter_next(struct disk_part_iter *piter)
++{
++	return disk_part_iter_next(piter);
++}
++
++#endif
++
+ #endif /* _LTTNG_WRAPPER_GENHD_H */
+diff --git a/src/lttng-statedump-impl.c b/src/lttng-statedump-impl.c
+index b3453bf5..90efe086 100644
+--- a/src/lttng-statedump-impl.c
++++ b/src/lttng-statedump-impl.c
+@@ -194,7 +194,6 @@ enum lttng_process_status {
+ 	LTTNG_DEAD = 7,
+ };
+ 
+-
+ #if (LTTNG_LINUX_VERSION_CODE >= LTTNG_KERNEL_VERSION(5,11,0))
+ 
+ #define LTTNG_PART_STRUCT_TYPE struct block_device
+@@ -278,19 +277,19 @@ int lttng_enumerate_block_devices(struct lttng_session *session)
+ 		    (disk->flags & GENHD_FL_SUPPRESS_PARTITION_INFO))
+ 			continue;
+ 
+-		disk_part_iter_init(&piter, disk, DISK_PITER_INCL_PART0);
+-		while ((part = disk_part_iter_next(&piter))) {
++		wrapper_disk_part_iter_init(&piter, disk, DISK_PITER_INCL_PART0);
++		while ((part = wrapper_disk_part_iter_next(&piter))) {
+ 			char name_buf[BDEVNAME_SIZE];
+ 
+ 			if (lttng_get_part_name(disk, part, name_buf) == -ENOSYS) {
+-				disk_part_iter_exit(&piter);
++				wrapper_disk_part_iter_exit(&piter);
+ 				class_dev_iter_exit(&iter);
+ 				return -ENOSYS;
+ 			}
+ 			trace_lttng_statedump_block_device(session,
+ 					lttng_get_part_devt(part), name_buf);
+ 		}
+-		disk_part_iter_exit(&piter);
++		wrapper_disk_part_iter_exit(&piter);
+ 	}
+ 	class_dev_iter_exit(&iter);
+ 	return 0;
+-- 
+2.27.0
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============6840519023607675616==--
