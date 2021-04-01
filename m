@@ -2,70 +2,67 @@ Return-Path: <SRS0=VMqU=I6=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B166C433ED
-	for <lttng-dev@archiver.kernel.org>; Thu,  1 Apr 2021 16:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 261B9C433B4
+	for <lttng-dev@archiver.kernel.org>; Thu,  1 Apr 2021 16:33:55 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 83ABC6137F
-	for <lttng-dev@archiver.kernel.org>; Thu,  1 Apr 2021 16:21:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 83ABC6137F
+	by mail.kernel.org (Postfix) with ESMTPS id 71ADE61379
+	for <lttng-dev@archiver.kernel.org>; Thu,  1 Apr 2021 16:33:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 71ADE61379
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4FB7jN13pgzT1r;
-	Thu,  1 Apr 2021 12:21:28 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4FB7zj1XySzSgj;
+	Thu,  1 Apr 2021 12:33:53 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1617294088;
-	bh=ijs8Q4swjfEfYZ57P8+KsbXOm5IztDV3/du7Tn9PwR0=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1617294833;
+	bh=f/EQsBHmsDz+sFymaRHsuKxi2cLsdPNZS2yC6tcWzTs=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=MTPdygrtn28GI2pKdnNJ/PgAtQcXgAsUq9b33a8Vsp6mqksyxP/Xrw1xuZ8L3ylJF
-	 ievIKRKboFaEYo+fGGuwDnGxdkOqPwtA2BaghqRpt1nF7z8ng7Vd74Hu+vWj5rmTXg
-	 t8tiTzqasrGcpe2ep8/90RvfNzxxtxc8yK4nRk6FPCBxEdh6jcT5rkPSoalcj7J22f
-	 q/tiKDFtOvfbCnf9H9mnIWxRIlDNT9WmK+VaDnII0qxfd4SMV67seMeq879XTpTxG7
-	 C7/DWT5B5mm2XS6Oz2XPpPwNQvpj73FoGmsVHdzR4moraY3xTzNpo5Kvb51pY3AO7G
-	 0jST+NF0SlQPw==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4FB7jL4vF7zT7s
- for <lttng-dev@lists.lttng.org>; Thu,  1 Apr 2021 12:21:26 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 767D42B2D9B;
- Thu,  1 Apr 2021 12:21:20 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id pGm3esk2qH80; Thu,  1 Apr 2021 12:21:20 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 1960C2B2BE1;
- Thu,  1 Apr 2021 12:21:20 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1960C2B2BE1
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id k5Fyy0adE5EM; Thu,  1 Apr 2021 12:21:20 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 0D3F52B285F;
- Thu,  1 Apr 2021 12:21:20 -0400 (EDT)
-Date: Thu, 1 Apr 2021 12:21:20 -0400 (EDT)
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Anders Wallin <wallinux@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>, 
- Jeremie Galarneau <jgalar@efficios.com>
-Message-ID: <1789853155.51246.1617294080020.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1708925974.51224.1617293982339.JavaMail.zimbra@efficios.com>
+	b=LycYW1+9EmtgcvpVR42wG1ZK0JjC8K6Rv5Foy99kKhvcII1pBr/iN0hSbTfoGw9Tc
+	 5reLwVUJmMCxGG62oBc3Y4oZB6bWXZ8RGqA6QdjSiiWWY6x7ugKn4+vh1nYOkqRdeI
+	 v4igz8vB2CGOGHHQZaNXS3ptxbkXWky3QANmrKkTZy6bAFlhIwxHaNmCsItVp4Z7JL
+	 X5+v9mRLRsgllX1LNCz/Q+ffmMQXLbb6uI0GHn9PIRqW7/zWlIoSIKSgojKVAPagJ9
+	 8fybrsSnQKS5CY5g1hf4awqB4hqiUh5YWKEdk4QsCzXS1qyl5AdYZt16ULLoIFiDCl
+	 O0UvuMLG0O/eA==
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by lists.lttng.org (Postfix) with ESMTPS id 4FB7zg6zVmzSgg
+ for <lttng-dev@lists.lttng.org>; Thu,  1 Apr 2021 12:33:51 -0400 (EDT)
+Received: by mail-il1-x12d.google.com with SMTP id y17so2535147ila.6
+ for <lttng-dev@lists.lttng.org>; Thu, 01 Apr 2021 09:33:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=O/PYBukDRW9UPoHUHoMrgGxv8OOdpBqANwhOvjCfcjc=;
+ b=TQhPoN/bTNKkl4zLy9pSZE7qFKTC7by8FMT8IxNLhNSGkJuj0gN2rzjGIaItvyAtaK
+ VzjDvFUdoXGq86VQL7wruc/Ux14pf1T8KhSfwfxiFEkchaVLl/oYWmrN5UJeKukFxhwF
+ U0JJU/q9vL4kphEKM1Vi/rSNkMHwvFXK8IudKv0H/+TquUAyXkHrxIyHa14WOmnRzo5z
+ gF1DqNBKtNjvKgYV5YH5Bh3h1qZ6cYGaSP7QVoK1kTitsz1t8LYk6X7Y8y579bVlMhl0
+ 4LMr1Fqjpq/AwuZ6GenH1uoIe/4lSsp+PADugXIGZutfwm49GTnvFTyjIKm1J1E5QJHo
+ meIg==
+X-Gm-Message-State: AOAM530D7W2hylpIy6JaoCq/W7WPm4R5bQ8FThIYA+vBdFohLJ6TiJFQ
+ 6t38XAsbw1zHAxTQnMQhAgGGpiwWCZOPQF0hj6o=
+X-Google-Smtp-Source: ABdhPJxMyVgsgghavJS0+WrHTuJ//AVWEikuRSCQv/ZPBJ+NNCLd0TKxNxOP8eCAL7FRrgSvaHJgoRJu4BLcQ7CYzMk=
+X-Received: by 2002:a92:c50c:: with SMTP id r12mr7484444ilg.52.1617294831075; 
+ Thu, 01 Apr 2021 09:33:51 -0700 (PDT)
+MIME-Version: 1.0
 References: <20210331185624.406960-1-wallinux@gmail.com>
  <1708925974.51224.1617293982339.JavaMail.zimbra@efficios.com>
-MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3996 (ZimbraWebClient - FF87 (Linux)/8.8.15_GA_4007)
-Thread-Topic: test code assumes that child process is schedule to run before
- parent
-Thread-Index: Y+O+t91Nkj6egFP+44Ih2zZDUXt4n7662Yfb
+In-Reply-To: <1708925974.51224.1617293982339.JavaMail.zimbra@efficios.com>
+Date: Thu, 1 Apr 2021 18:33:39 +0200
+Message-ID: <CAF2baFeqo=55EKV8D0CKiboQjqq8FH+7hSaqYwOomQrhN7u2dw@mail.gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>,
+ Jeremie Galarneau <jgalar@efficios.com>
 Subject: Re: [lttng-dev] [PATCH lttng-tools] Fix: test code assumes that
  child process is schedule to run before parent
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -79,57 +76,210 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Anders Wallin via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Anders Wallin <wallinux@gmail.com>
+Content-Type: multipart/mixed; boundary="===============1450711451293562556=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-LS0tLS0gT24gQXByIDEsIDIwMjEsIGF0IDEyOjE5IFBNLCBsdHRuZy1kZXYgbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZyB3cm90ZToKCj4gLS0tLS0gT24gTWFyIDMxLCAyMDIxLCBhdCAyOjU2IFBN
-LCBsdHRuZy1kZXYgbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyB3cm90ZToKPiAKPj4gdGhlIGZv
-bGxvd2luZyB0ZXN0cyBmYWlscyBvbiBhcm02NAo+PiAtIHRlc3RfZXZlbnRfdnBpZF90cmFja2Vy
-IHVzdCAwICIke0VWRU5UX05BTUV9Igo+PiAtIHRlc3RfZXZlbnRfdnBpZF90cmFja191bnRyYWNr
-IHVzdCAwICIke0VWRU5UX05BTUV9Igo+PiAtIHRlc3RfZXZlbnRfcGlkX3RyYWNrZXIgdXN0IDAg
-IiR7RVZFTlRfTkFNRX0iCj4+IC0gdGVzdF9ldmVudF9waWRfdHJhY2tfdW50cmFjayB1c3QgMCAi
-JHtFVkVOVF9OQU1FfSIKPj4gCj4+IFNpZ25lZC1vZmYtYnk6IEFuZGVycyBXYWxsaW4gPHdhbGxp
-bnV4QGdtYWlsLmNvbT4KPj4gLS0tCj4+IHRlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvdHJhY2tlci90
-ZXN0X2V2ZW50X3RyYWNrZXIgfCA0ICsrKy0KPj4gMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9u
-cygrKSwgMSBkZWxldGlvbigtKQo+PiAKPj4gZGlmZiAtLWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24v
-dG9vbHMvdHJhY2tlci90ZXN0X2V2ZW50X3RyYWNrZXIKPj4gYi90ZXN0cy9yZWdyZXNzaW9uL3Rv
-b2xzL3RyYWNrZXIvdGVzdF9ldmVudF90cmFja2VyCj4+IGluZGV4IDcxMTY5MGFmLi42NDljN2U2
-MSAxMDA3NTUKPj4gLS0tIGEvdGVzdHMvcmVncmVzc2lvbi90b29scy90cmFja2VyL3Rlc3RfZXZl
-bnRfdHJhY2tlcgo+PiArKysgYi90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3RyYWNrZXIvdGVzdF9l
-dmVudF90cmFja2VyCj4+IEBAIC01LDcgKzUsNyBAQAo+PiAjCj4+ICMgU1BEWC1MaWNlbnNlLUlk
-ZW50aWZpZXI6IEdQTC0yLjAtb25seQo+PiAKPj4gLVRFU1RfREVTQz0iTFRUbmcgLSBFdmVudCB0
-cmFrZXIgdGVzdCIKPj4gK1RFU1RfREVTQz0iTFRUbmcgLSBFdmVudCB0cmFja2VyIHRlc3QiCj4+
-IAo+PiBDVVJESVI9JChkaXJuYW1lICIkMCIpLwo+PiBURVNURElSPSIkQ1VSRElSLy4uLy4uLy4u
-Igo+PiBAQCAtNDIsNiArNDIsOCBAQCBmdW5jdGlvbiBwcmVwYXJlX3VzdF9hcHAKPj4gCj4+IAkk
-VEVTVEFQUF9CSU4gLWkgJE5SX0lURVIgLXcgJE5SX1VTRUNfV0FJVCAtYSAiJEFGVEVSX0ZJUlNU
-X1BBVEgiIC1iCj4+IAkiJEJFRk9SRV9MQVNUX1BBVEgiICYKPj4gCUNISUxEX1BJRD0kIQo+PiAr
-CSMgdm9sdW50YXJ5IGNvbnRleHQgc3dpdGNoIHRvIHN0YXJ0ICRURVNUQVBQX0JJTgo+PiArCXNs
-ZWVwIDAuMQo+IAo+IE5vLCB3ZSBoYXZlIGJlZW4gYml0dGVuIGFnYWluIGFuZCBhZ2FpbiBieSB0
-ZXN0IGlzc3VlcyBoaWRkZW4gYnkgc2xlZXBzIGluIHRoZQo+IHRlc3QgY29kZS4gVXNpbmcgc2xl
-ZXBzIGZvciBzeW5jaHJvbml6YXRpb24gaXMgZmxha3kuCj4gCj4gSSBkb24ndCBrbm93IGlmIHdl
-IGRvY3VtZW50ZWQgaXQsIGJ1dCB3ZSBhcyBtYWludGFpbmVycyBhcmUgc3Ryb25nbHkgYWdhaW5z
-dAo+IGFueXRoaW5nIHRoYXQgbG9va3MgbGlrZSBhIGRlbGF5LWJhc2VkIGFwcHJvYWNoIHRvIGZp
-eGluZyBhIHJhY2UgaW4gdGhlIHRlc3RzLgo+IFRoaXMgdHlwaWNhbGx5IGp1c3QgYnVyeSB0aGUg
-cmFjZSB1bmRlciB0aGUgY2FycGV0IGFuZCBpdCBzaG93cyB1cCBvbmx5IGluCj4gc3BlY2lmaWMg
-Y29uZGl0aW9ucyBvbiB0aGUgQ0kgd29ya2Vycy4KPiAKPiBXZSBuZWVkIHRvIGFkZCBwcm9wZXIg
-cmVuZGV6LXZvdXMgYmFzZWQgc3luY2hyb25pemF0aW9uIHRvIHRoZSB0ZXN0IGlmIHNvbWUKPiBp
-cyBtaXNzaW5nLgo+IAo+IEFkZGluZyBKw6lyw6ltaWUgaW4gQ0MuCgpBbmQgdGhlbiBJIHJlYWQg
-b24gdGhlIHJlc3Qgb2YgdGhlIGVtYWlsIHRocmVhZC4uLiBzbyBpdCdzIGJlaW5nIHRha2VuIGNh
-cmUgb2YsIGdvb2QhIDopCgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+IFRoYW5rcywKPiAKPiBNYXRo
-aWV1Cj4gCj4gCj4+IH0KPj4gCj4+IGZ1bmN0aW9uIHRyYWNlX3VzdF9hcHAKPj4gLS0KPj4gMi4z
-MS4xCj4+IAo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Xwo+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-Pj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo+IAo+IC0tCj4gTWF0aGlldSBEZXNub3llcnMKPiBFZmZpY2lPUyBJbmMuCj4gaHR0cDov
-L3d3dy5lZmZpY2lvcy5jb20KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3
-dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============1450711451293562556==
+Content-Type: multipart/alternative; boundary="000000000000e745c505beebcb83"
+
+--000000000000e745c505beebcb83
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+I agree, new version on the way w/o sleep!
+Anders Wallin
+
+
+On Thu, Apr 1, 2021 at 6:19 PM Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
+
+> ----- On Mar 31, 2021, at 2:56 PM, lttng-dev lttng-dev@lists.lttng.org
+> wrote:
+>
+> > the following tests fails on arm64
+> > - test_event_vpid_tracker ust 0 "${EVENT_NAME}"
+> > - test_event_vpid_track_untrack ust 0 "${EVENT_NAME}"
+> > - test_event_pid_tracker ust 0 "${EVENT_NAME}"
+> > - test_event_pid_track_untrack ust 0 "${EVENT_NAME}"
+> >
+> > Signed-off-by: Anders Wallin <wallinux@gmail.com>
+> > ---
+> > tests/regression/tools/tracker/test_event_tracker | 4 +++-
+> > 1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tests/regression/tools/tracker/test_event_tracker
+> > b/tests/regression/tools/tracker/test_event_tracker
+> > index 711690af..649c7e61 100755
+> > --- a/tests/regression/tools/tracker/test_event_tracker
+> > +++ b/tests/regression/tools/tracker/test_event_tracker
+> > @@ -5,7 +5,7 @@
+> > #
+> > # SPDX-License-Identifier: GPL-2.0-only
+> >
+> > -TEST_DESC=3D"LTTng - Event traker test"
+> > +TEST_DESC=3D"LTTng - Event tracker test"
+> >
+> > CURDIR=3D$(dirname "$0")/
+> > TESTDIR=3D"$CURDIR/../../.."
+> > @@ -42,6 +42,8 @@ function prepare_ust_app
+> >
+> >       $TESTAPP_BIN -i $NR_ITER -w $NR_USEC_WAIT -a "$AFTER_FIRST_PATH" =
+-b
+> >       "$BEFORE_LAST_PATH" &
+> >       CHILD_PID=3D$!
+> > +     # voluntary context switch to start $TESTAPP_BIN
+> > +     sleep 0.1
+>
+> No, we have been bitten again and again by test issues hidden by sleeps i=
+n
+> the
+> test code. Using sleeps for synchronization is flaky.
+>
+> I don't know if we documented it, but we as maintainers are strongly
+> against
+> anything that looks like a delay-based approach to fixing a race in the
+> tests.
+> This typically just bury the race under the carpet and it shows up only i=
+n
+> specific conditions on the CI workers.
+>
+> We need to add proper rendez-vous based synchronization to the test if so=
+me
+> is missing.
+>
+> Adding J=C3=A9r=C3=A9mie in CC.
+>
+> Thanks,
+>
+> Mathieu
+>
+>
+> > }
+> >
+> > function trace_ust_app
+> > --
+> > 2.31.1
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+
+--000000000000e745c505beebcb83
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">I agree, new version on the way w/o sleep!=C2=A0<br clear=
+=3D"all"><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"=
+gmail_signature">Anders Wallin</div></div><br></div><br><div class=3D"gmail=
+_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, Apr 1, 2021 at 6:19 P=
+M Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com">m=
+athieu.desnoyers@efficios.com</a>&gt; wrote:<br></div><blockquote class=3D"=
+gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(20=
+4,204,204);padding-left:1ex">----- On Mar 31, 2021, at 2:56 PM, lttng-dev <=
+a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lis=
+ts.lttng.org</a> wrote:<br>
+<br>
+&gt; the following tests fails on arm64<br>
+&gt; - test_event_vpid_tracker ust 0 &quot;${EVENT_NAME}&quot;<br>
+&gt; - test_event_vpid_track_untrack ust 0 &quot;${EVENT_NAME}&quot;<br>
+&gt; - test_event_pid_tracker ust 0 &quot;${EVENT_NAME}&quot;<br>
+&gt; - test_event_pid_track_untrack ust 0 &quot;${EVENT_NAME}&quot;<br>
+&gt; <br>
+&gt; Signed-off-by: Anders Wallin &lt;<a href=3D"mailto:wallinux@gmail.com"=
+ target=3D"_blank">wallinux@gmail.com</a>&gt;<br>
+&gt; ---<br>
+&gt; tests/regression/tools/tracker/test_event_tracker | 4 +++-<br>
+&gt; 1 file changed, 3 insertions(+), 1 deletion(-)<br>
+&gt; <br>
+&gt; diff --git a/tests/regression/tools/tracker/test_event_tracker<br>
+&gt; b/tests/regression/tools/tracker/test_event_tracker<br>
+&gt; index 711690af..649c7e61 100755<br>
+&gt; --- a/tests/regression/tools/tracker/test_event_tracker<br>
+&gt; +++ b/tests/regression/tools/tracker/test_event_tracker<br>
+&gt; @@ -5,7 +5,7 @@<br>
+&gt; #<br>
+&gt; # SPDX-License-Identifier: GPL-2.0-only<br>
+&gt; <br>
+&gt; -TEST_DESC=3D&quot;LTTng - Event traker test&quot;<br>
+&gt; +TEST_DESC=3D&quot;LTTng - Event tracker test&quot;<br>
+&gt; <br>
+&gt; CURDIR=3D$(dirname &quot;$0&quot;)/<br>
+&gt; TESTDIR=3D&quot;$CURDIR/../../..&quot;<br>
+&gt; @@ -42,6 +42,8 @@ function prepare_ust_app<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTAPP_BIN -i $NR_ITER -w $NR_USEC_WAIT -a=
+ &quot;$AFTER_FIRST_PATH&quot; -b<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;$BEFORE_LAST_PATH&quot; &amp;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0CHILD_PID=3D$!<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0# voluntary context switch to start $TESTAPP_BIN<=
+br>
+&gt; +=C2=A0 =C2=A0 =C2=A0sleep 0.1<br>
+<br>
+No, we have been bitten again and again by test issues hidden by sleeps in =
+the<br>
+test code. Using sleeps for synchronization is flaky.<br>
+<br>
+I don&#39;t know if we documented it, but we as maintainers are strongly ag=
+ainst<br>
+anything that looks like a delay-based approach to fixing a race in the tes=
+ts.<br>
+This typically just bury the race under the carpet and it shows up only in<=
+br>
+specific conditions on the CI workers.<br>
+<br>
+We need to add proper rendez-vous based synchronization to the test if some=
+<br>
+is missing.<br>
+<br>
+Adding J=C3=A9r=C3=A9mie in CC.<br>
+<br>
+Thanks,<br>
+<br>
+Mathieu<br>
+<br>
+<br>
+&gt; }<br>
+&gt; <br>
+&gt; function trace_ust_app<br>
+&gt; --<br>
+&gt; 2.31.1<br>
+&gt; <br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
+ev@lists.lttng.org</a><br>
+&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
+ rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
+an/listinfo/lttng-dev</a><br>
+<br>
+-- <br>
+Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
+tp://www.efficios.com</a><br>
+</blockquote></div>
+
+--000000000000e745c505beebcb83--
+
+--===============1450711451293562556==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1450711451293562556==--
