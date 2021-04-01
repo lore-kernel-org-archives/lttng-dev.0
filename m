@@ -2,69 +2,70 @@ Return-Path: <SRS0=VMqU=I6=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 261B9C433B4
-	for <lttng-dev@archiver.kernel.org>; Thu,  1 Apr 2021 16:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 410B4C433B4
+	for <lttng-dev@archiver.kernel.org>; Thu,  1 Apr 2021 16:36:40 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 71ADE61379
-	for <lttng-dev@archiver.kernel.org>; Thu,  1 Apr 2021 16:33:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 71ADE61379
+	by mail.kernel.org (Postfix) with ESMTPS id AF13361379
+	for <lttng-dev@archiver.kernel.org>; Thu,  1 Apr 2021 16:36:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AF13361379
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4FB7zj1XySzSgj;
-	Thu,  1 Apr 2021 12:33:53 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4FB82t5ZYHzT67;
+	Thu,  1 Apr 2021 12:36:38 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1617294833;
-	bh=f/EQsBHmsDz+sFymaRHsuKxi2cLsdPNZS2yC6tcWzTs=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LycYW1+9EmtgcvpVR42wG1ZK0JjC8K6Rv5Foy99kKhvcII1pBr/iN0hSbTfoGw9Tc
-	 5reLwVUJmMCxGG62oBc3Y4oZB6bWXZ8RGqA6QdjSiiWWY6x7ugKn4+vh1nYOkqRdeI
-	 v4igz8vB2CGOGHHQZaNXS3ptxbkXWky3QANmrKkTZy6bAFlhIwxHaNmCsItVp4Z7JL
-	 X5+v9mRLRsgllX1LNCz/Q+ffmMQXLbb6uI0GHn9PIRqW7/zWlIoSIKSgojKVAPagJ9
-	 8fybrsSnQKS5CY5g1hf4awqB4hqiUh5YWKEdk4QsCzXS1qyl5AdYZt16ULLoIFiDCl
-	 O0UvuMLG0O/eA==
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
- [IPv6:2607:f8b0:4864:20::12d])
- by lists.lttng.org (Postfix) with ESMTPS id 4FB7zg6zVmzSgg
- for <lttng-dev@lists.lttng.org>; Thu,  1 Apr 2021 12:33:51 -0400 (EDT)
-Received: by mail-il1-x12d.google.com with SMTP id y17so2535147ila.6
- for <lttng-dev@lists.lttng.org>; Thu, 01 Apr 2021 09:33:51 -0700 (PDT)
+	s=default; t=1617294998;
+	bh=P0WYAN1rwUELznRN9uIXojcd6fXne3axUVkxkxMDB+g=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=IjHVsPDyf7mIYxbcOlVPvLUW5VCDOrROIxFnrQ0u/85ReOrdMYHWhL1VEdJHCgPVF
+	 jBrOPXoIbbJBjg01BGRh48uKO5UeO/+4JdzIiKwUROz+j2Te+8JEgIQmX+8xeQHYmO
+	 eIP2rfZ3q0U4bnnSCzzO4AUz9F2oT2i4TvAji5R/T+NABbGammitgGacadJNg8Pnp0
+	 0WLRutAekiyHZ5HjG+PaxcaWY4vuPi82OHASFi62PX+BKDn1i+lUMhulJ3FT0sq0sU
+	 Alwm7plJ1J1VIv2JAvtEOLbL5ef3yPNm9XB6Km4QQ6JkeDyUbU84M2ec8EPOivVqvu
+	 4gyGY7JHK4RJA==
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by lists.lttng.org (Postfix) with ESMTPS id 4FB82r6M1QzT20
+ for <lttng-dev@lists.lttng.org>; Thu,  1 Apr 2021 12:36:36 -0400 (EDT)
+Received: by mail-lf1-x130.google.com with SMTP id b14so3731815lfv.8
+ for <lttng-dev@lists.lttng.org>; Thu, 01 Apr 2021 09:36:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=O/PYBukDRW9UPoHUHoMrgGxv8OOdpBqANwhOvjCfcjc=;
- b=TQhPoN/bTNKkl4zLy9pSZE7qFKTC7by8FMT8IxNLhNSGkJuj0gN2rzjGIaItvyAtaK
- VzjDvFUdoXGq86VQL7wruc/Ux14pf1T8KhSfwfxiFEkchaVLl/oYWmrN5UJeKukFxhwF
- U0JJU/q9vL4kphEKM1Vi/rSNkMHwvFXK8IudKv0H/+TquUAyXkHrxIyHa14WOmnRzo5z
- gF1DqNBKtNjvKgYV5YH5Bh3h1qZ6cYGaSP7QVoK1kTitsz1t8LYk6X7Y8y579bVlMhl0
- 4LMr1Fqjpq/AwuZ6GenH1uoIe/4lSsp+PADugXIGZutfwm49GTnvFTyjIKm1J1E5QJHo
- meIg==
-X-Gm-Message-State: AOAM530D7W2hylpIy6JaoCq/W7WPm4R5bQ8FThIYA+vBdFohLJ6TiJFQ
- 6t38XAsbw1zHAxTQnMQhAgGGpiwWCZOPQF0hj6o=
-X-Google-Smtp-Source: ABdhPJxMyVgsgghavJS0+WrHTuJ//AVWEikuRSCQv/ZPBJ+NNCLd0TKxNxOP8eCAL7FRrgSvaHJgoRJu4BLcQ7CYzMk=
-X-Received: by 2002:a92:c50c:: with SMTP id r12mr7484444ilg.52.1617294831075; 
- Thu, 01 Apr 2021 09:33:51 -0700 (PDT)
+ h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=XK9J1bMfagj70UDo77tvn5Do1GAhjGvYxCZA9eM4/Ms=;
+ b=NC8K2guvvcUFL/duxoYJOcWekJ7LnRc6MfROoUetL7c9FwXLFUzLKZs14BtHMNrV6M
+ 3C3pR1xLthgH7rbAcNsWeK9OxmV1YfVGTJQ7L60gpyJufcpix23cJXvvxPf9P5C6ZsfL
+ djMhFFyJTO/HouuKNtiFKW244Jdv6aDJoq0uHVjgoIad4OywxunqIA5MuunjBEeKvYY3
+ R/a05Q0nqUs5hnO/b2zWpi/RoPxtSYEap1jJTnLsof/VBHTh169mnqm2jMv52QkAREca
+ NAUyTPqG0gSENDAlFfomN9fmzEXQrmM9pVyT6NPUri2plWSd/FlnG6NKLQDabyvHORY5
+ gZhA==
+X-Gm-Message-State: AOAM5329r1FlWfTIJ2mpg8/aN09yLk/z88eceaIWg1E6vItzYAA0Hb/v
+ dSCKcNtKYt24w2WWyjM5HcyBRHxmS/4VPQ==
+X-Google-Smtp-Source: ABdhPJyY+EXtTilSF5Llk0A87g1cG+hzXA5RdUDUGIgL+DFpywWWiaq5co1rcRED2z0h7vRihlcang==
+X-Received: by 2002:ac2:4d95:: with SMTP id g21mr6278910lfe.29.1617294994681; 
+ Thu, 01 Apr 2021 09:36:34 -0700 (PDT)
+Received: from arn-awallin-linux-l5.corp.ad.wrs.com
+ (h-82-196-111-243.NA.cust.bahnhof.se. [82.196.111.243])
+ by smtp.gmail.com with ESMTPSA id v19sm592742lfi.39.2021.04.01.09.36.33
+ for <lttng-dev@lists.lttng.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 01 Apr 2021 09:36:33 -0700 (PDT)
+To: lttng-dev@lists.lttng.org
+Date: Thu,  1 Apr 2021 18:36:33 +0200
+Message-Id: <20210401163633.839259-1-wallinux@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20210331185624.406960-1-wallinux@gmail.com>
- <1708925974.51224.1617293982339.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1708925974.51224.1617293982339.JavaMail.zimbra@efficios.com>
-Date: Thu, 1 Apr 2021 18:33:39 +0200
-Message-ID: <CAF2baFeqo=55EKV8D0CKiboQjqq8FH+7hSaqYwOomQrhN7u2dw@mail.gmail.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>,
- Jeremie Galarneau <jgalar@efficios.com>
-Subject: Re: [lttng-dev] [PATCH lttng-tools] Fix: test code assumes that
- child process is schedule to run before parent
+Subject: [lttng-dev] [PATCH lttng-tools] testapp: gen-ust-events: added help
+ and sync-before-first-event
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -78,208 +79,242 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: Anders Wallin via lttng-dev <lttng-dev@lists.lttng.org>
 Reply-To: Anders Wallin <wallinux@gmail.com>
-Content-Type: multipart/mixed; boundary="===============1450711451293562556=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============1450711451293562556==
-Content-Type: multipart/alternative; boundary="000000000000e745c505beebcb83"
+- added verbose option to print traces
+- added sync-before-first-event to wait on file before first event
+- added help option
+- added missing short option "-e"
+- don't allow negative wait times
 
---000000000000e745c505beebcb83
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Anders Wallin <wallinux@gmail.com>
+---
+ .../testapp/gen-ust-events/gen-ust-events.c   | 95 ++++++++++++++++---
+ 1 file changed, 82 insertions(+), 13 deletions(-)
 
-I agree, new version on the way w/o sleep!
-Anders Wallin
-
-
-On Thu, Apr 1, 2021 at 6:19 PM Mathieu Desnoyers <
-mathieu.desnoyers@efficios.com> wrote:
-
-> ----- On Mar 31, 2021, at 2:56 PM, lttng-dev lttng-dev@lists.lttng.org
-> wrote:
->
-> > the following tests fails on arm64
-> > - test_event_vpid_tracker ust 0 "${EVENT_NAME}"
-> > - test_event_vpid_track_untrack ust 0 "${EVENT_NAME}"
-> > - test_event_pid_tracker ust 0 "${EVENT_NAME}"
-> > - test_event_pid_track_untrack ust 0 "${EVENT_NAME}"
-> >
-> > Signed-off-by: Anders Wallin <wallinux@gmail.com>
-> > ---
-> > tests/regression/tools/tracker/test_event_tracker | 4 +++-
-> > 1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tests/regression/tools/tracker/test_event_tracker
-> > b/tests/regression/tools/tracker/test_event_tracker
-> > index 711690af..649c7e61 100755
-> > --- a/tests/regression/tools/tracker/test_event_tracker
-> > +++ b/tests/regression/tools/tracker/test_event_tracker
-> > @@ -5,7 +5,7 @@
-> > #
-> > # SPDX-License-Identifier: GPL-2.0-only
-> >
-> > -TEST_DESC=3D"LTTng - Event traker test"
-> > +TEST_DESC=3D"LTTng - Event tracker test"
-> >
-> > CURDIR=3D$(dirname "$0")/
-> > TESTDIR=3D"$CURDIR/../../.."
-> > @@ -42,6 +42,8 @@ function prepare_ust_app
-> >
-> >       $TESTAPP_BIN -i $NR_ITER -w $NR_USEC_WAIT -a "$AFTER_FIRST_PATH" =
--b
-> >       "$BEFORE_LAST_PATH" &
-> >       CHILD_PID=3D$!
-> > +     # voluntary context switch to start $TESTAPP_BIN
-> > +     sleep 0.1
->
-> No, we have been bitten again and again by test issues hidden by sleeps i=
-n
-> the
-> test code. Using sleeps for synchronization is flaky.
->
-> I don't know if we documented it, but we as maintainers are strongly
-> against
-> anything that looks like a delay-based approach to fixing a race in the
-> tests.
-> This typically just bury the race under the carpet and it shows up only i=
-n
-> specific conditions on the CI workers.
->
-> We need to add proper rendez-vous based synchronization to the test if so=
-me
-> is missing.
->
-> Adding J=C3=A9r=C3=A9mie in CC.
->
-> Thanks,
->
-> Mathieu
->
->
-> > }
-> >
-> > function trace_ust_app
-> > --
-> > 2.31.1
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
->
-
---000000000000e745c505beebcb83
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">I agree, new version on the way w/o sleep!=C2=A0<br clear=
-=3D"all"><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"=
-gmail_signature">Anders Wallin</div></div><br></div><br><div class=3D"gmail=
-_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, Apr 1, 2021 at 6:19 P=
-M Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com">m=
-athieu.desnoyers@efficios.com</a>&gt; wrote:<br></div><blockquote class=3D"=
-gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(20=
-4,204,204);padding-left:1ex">----- On Mar 31, 2021, at 2:56 PM, lttng-dev <=
-a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lis=
-ts.lttng.org</a> wrote:<br>
-<br>
-&gt; the following tests fails on arm64<br>
-&gt; - test_event_vpid_tracker ust 0 &quot;${EVENT_NAME}&quot;<br>
-&gt; - test_event_vpid_track_untrack ust 0 &quot;${EVENT_NAME}&quot;<br>
-&gt; - test_event_pid_tracker ust 0 &quot;${EVENT_NAME}&quot;<br>
-&gt; - test_event_pid_track_untrack ust 0 &quot;${EVENT_NAME}&quot;<br>
-&gt; <br>
-&gt; Signed-off-by: Anders Wallin &lt;<a href=3D"mailto:wallinux@gmail.com"=
- target=3D"_blank">wallinux@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt; tests/regression/tools/tracker/test_event_tracker | 4 +++-<br>
-&gt; 1 file changed, 3 insertions(+), 1 deletion(-)<br>
-&gt; <br>
-&gt; diff --git a/tests/regression/tools/tracker/test_event_tracker<br>
-&gt; b/tests/regression/tools/tracker/test_event_tracker<br>
-&gt; index 711690af..649c7e61 100755<br>
-&gt; --- a/tests/regression/tools/tracker/test_event_tracker<br>
-&gt; +++ b/tests/regression/tools/tracker/test_event_tracker<br>
-&gt; @@ -5,7 +5,7 @@<br>
-&gt; #<br>
-&gt; # SPDX-License-Identifier: GPL-2.0-only<br>
-&gt; <br>
-&gt; -TEST_DESC=3D&quot;LTTng - Event traker test&quot;<br>
-&gt; +TEST_DESC=3D&quot;LTTng - Event tracker test&quot;<br>
-&gt; <br>
-&gt; CURDIR=3D$(dirname &quot;$0&quot;)/<br>
-&gt; TESTDIR=3D&quot;$CURDIR/../../..&quot;<br>
-&gt; @@ -42,6 +42,8 @@ function prepare_ust_app<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTAPP_BIN -i $NR_ITER -w $NR_USEC_WAIT -a=
- &quot;$AFTER_FIRST_PATH&quot; -b<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;$BEFORE_LAST_PATH&quot; &amp;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0CHILD_PID=3D$!<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0# voluntary context switch to start $TESTAPP_BIN<=
-br>
-&gt; +=C2=A0 =C2=A0 =C2=A0sleep 0.1<br>
-<br>
-No, we have been bitten again and again by test issues hidden by sleeps in =
-the<br>
-test code. Using sleeps for synchronization is flaky.<br>
-<br>
-I don&#39;t know if we documented it, but we as maintainers are strongly ag=
-ainst<br>
-anything that looks like a delay-based approach to fixing a race in the tes=
-ts.<br>
-This typically just bury the race under the carpet and it shows up only in<=
-br>
-specific conditions on the CI workers.<br>
-<br>
-We need to add proper rendez-vous based synchronization to the test if some=
-<br>
-is missing.<br>
-<br>
-Adding J=C3=A9r=C3=A9mie in CC.<br>
-<br>
-Thanks,<br>
-<br>
-Mathieu<br>
-<br>
-<br>
-&gt; }<br>
-&gt; <br>
-&gt; function trace_ust_app<br>
-&gt; --<br>
-&gt; 2.31.1<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev</a><br>
-<br>
--- <br>
-Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
-tp://www.efficios.com</a><br>
-</blockquote></div>
-
---000000000000e745c505beebcb83--
-
---===============1450711451293562556==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/tests/utils/testapp/gen-ust-events/gen-ust-events.c b/tests/utils/testapp/gen-ust-events/gen-ust-events.c
+index df1e58e4..5fefb2d8 100644
+--- a/tests/utils/testapp/gen-ust-events/gen-ust-events.c
++++ b/tests/utils/testapp/gen-ust-events/gen-ust-events.c
+@@ -28,6 +28,15 @@
+ #define TRACEPOINT_DEFINE
+ #include "tp.h"
+ 
++/* #define NDEBUG */
++
++#ifndef NDEBUG
++int verbose;
++#define TRACE(format, ...) { if (verbose) printf(" ---TRACE: " format, __VA_ARGS__); }
++#else
++#define TRACE(format, ...)
++#endif
++
+ static struct option long_options[] =
+ {
+ 	/* These options set a flag. */
+@@ -38,9 +47,33 @@ static struct option long_options[] =
+ 	{"sync-before-last-event-touch", required_argument, 0, 'c'},
+ 	{"sync-before-exit", required_argument, 0, 'd'},
+ 	{"sync-before-exit-touch", required_argument, 0, 'e'},
++	{"sync-before-first-event", required_argument, 0, 'f'},
++	{"help", no_argument, 0, 'h'},
++#ifndef NDEBUG
++	{"verbose", no_argument, 0, 'v'},
++#endif
+ 	{0, 0, 0, 0}
+ };
+ 
++const char *program_name;
++
++static void print_usage(void)
++{
++	printf("Usage:  %s options\n", program_name);
++	printf("  -h  --help                                    Display this usage information\n"
++#ifndef NDEBUG
++	       "  -v  --verbose                                 Print verbose messages\n"
++#endif
++	       "  -i  --iter [iterations]                       Number of iterations, default=100, forever=-1\n"
++	       "  -w  --wait [usec]                             Time in usec between events, default=0\n"
++	       "  -a  --sync-after-first-event [filename]       Create file after first event\n"
++	       "  -b  --sync-before-last-event [filename]       Wait for file before writing last event\n"
++	       "  -c  --sync-before-last-event-touch [filename] Create file after last event\n"
++	       "  -d  --sync-before-exit [filename]             Wait for file before exit\n"
++	       "  -e  --sync-before-exit-touch [filename]       Create file before exit\n"
++	       "  -f  --sync-before-first-event [filename]      Wait for file before creating the first event\n");
++}
++
+ int main(int argc, char **argv)
+ {
+ 	unsigned int i, netint;
+@@ -54,7 +87,7 @@ int main(int argc, char **argv)
+ 	uint32_t net_values[] = { 1, 2, 3 };
+ 	int nr_iter = 100, ret = 0, first_event_file_created = 0;
+ 	useconds_t nr_usec = 0;
+-	char *after_first_event_file_path = NULL;
++	char *after_first_event_file_path_touch = NULL;
+ 	char *before_last_event_file_path = NULL;
+ 	/*
+ 	 * Touch a file to indicate that all events except one were
+@@ -65,16 +98,20 @@ int main(int argc, char **argv)
+ 	char *before_exit_file_path_touch = NULL;
+ 	/* Wait on file before exiting */
+ 	char *before_exit_file_path = NULL;
++	/* Wait on file before starting */
++	char *before_first_event_file_path = NULL;
++
++	program_name = argv[0];
+ 
+ 	for (i = 0; i < 3; i++) {
+ 		net_values[i] = htonl(net_values[i]);
+ 	}
+ 
+-	while ((option = getopt_long(argc, argv, "i:w:a:b:c:d:",
++	while ((option = getopt_long(argc, argv, "i:w:a:b:c:d:e:f:hv",
+ 			long_options, &option_index)) != -1) {
+ 		switch (option) {
+ 		case 'a':
+-			after_first_event_file_path = strdup(optarg);
++			after_first_event_file_path_touch = strdup(optarg);
+ 			break;
+ 		case 'b':
+ 			before_last_event_file_path = strdup(optarg);
+@@ -88,22 +125,30 @@ int main(int argc, char **argv)
+ 		case 'e':
+ 			before_exit_file_path_touch = strdup(optarg);
+ 			break;
++		case 'f':
++			before_first_event_file_path = strdup(optarg);
++			break;
+ 		case 'i':
+ 			nr_iter = atoi(optarg);
+ 			break;
++#ifndef NDEBUG
++		case 'v':
++			verbose = 1;
++			break;
++#endif
+ 		case 'w':
+-			nr_usec = atoi(optarg);
++			/* only postive values are valid */
++			nr_usec = (atoi(optarg) < 0) ? 0 : atoi(optarg);
+ 			break;
+-		case '?':
+-			/* getopt_long already printed an error message. */
++		case 'h':
+ 		default:
+-			ret = -1;
++			print_usage();
+ 			goto end;
+ 		}
+ 	}
+ 
+ 	if (optind != argc) {
+-		fprintf(stderr, "Error: takes long options only.\n");
++		fprintf(stderr, "Error: takes options only.\n");
+ 
+ 		/*
+ 		 * Aborting the test program for now because callers typically don't check
+@@ -113,6 +158,7 @@ int main(int argc, char **argv)
+ 		 * we should eventually ensure that all scripts test and report the test
+ 		 * app return values.
+ 		 */
++		print_usage();
+ 		abort();
+ 
+ 		ret = -1;
+@@ -125,9 +171,23 @@ int main(int argc, char **argv)
+ 		goto end;
+ 	}
+ 
++	TRACE("iter: %i\n", nr_iter);
++	TRACE("wait: %i (usec)\n", nr_usec);
++
++	if (before_first_event_file_path) {
++		TRACE("before_first_event_file_path(%i): %s\n",
++		      -1, before_first_event_file_path);
++		ret = wait_on_file(before_first_event_file_path);
++		if (ret != 0) {
++			goto end;
++		}
++	}
++
+ 	for (i = 0; nr_iter < 0 || i < nr_iter; i++) {
+ 		if (nr_iter >= 0 && i == nr_iter - 1) {
+ 			if (before_last_event_file_path_touch) {
++				TRACE("before_last_event_file_path_touch(%i): %s\n",
++				      i, before_last_event_file_path_touch);
+ 				ret = create_file(before_last_event_file_path_touch);
+ 				if (ret != 0) {
+ 					goto end;
+@@ -139,6 +199,8 @@ int main(int argc, char **argv)
+ 			 * event.
+ 			 */
+ 			if (before_last_event_file_path) {
++				TRACE("before_last_event_file_path(%i): %s\n",
++				      i, before_last_event_file_path);
+ 				ret = wait_on_file(before_last_event_file_path);
+ 				if (ret != 0) {
+ 					goto end;
+@@ -153,9 +215,10 @@ int main(int argc, char **argv)
+ 		 * First loop we create the file if asked to indicate
+ 		 * that at least one tracepoint has been hit.
+ 		 */
+-		if (after_first_event_file_path && first_event_file_created == 0) {
+-			ret = create_file(after_first_event_file_path);
+-
++		if (after_first_event_file_path_touch && first_event_file_created == 0) {
++			TRACE("after_first_event_file_path_touch(%i): %s\n",
++			      i, after_first_event_file_path_touch);
++			ret = create_file(after_first_event_file_path_touch);
+ 			if (ret != 0) {
+ 				goto end;
+ 			} else {
+@@ -164,7 +227,7 @@ int main(int argc, char **argv)
+ 		}
+ 
+ 		if (nr_usec) {
+-		        if (usleep_safe(nr_usec)) {
++			if (usleep_safe(nr_usec)) {
+ 				ret = -1;
+ 				goto end;
+ 			}
+@@ -175,22 +238,28 @@ int main(int argc, char **argv)
+ 	}
+ 
+ 	if (before_exit_file_path_touch) {
++		TRACE("before_exit_file_path_touch(%i): %s\n",
++		      i, before_exit_file_path_touch);
+ 		ret = create_file(before_exit_file_path_touch);
+ 		if (ret != 0) {
+ 			goto end;
+ 		}
+ 	}
+ 	if (before_exit_file_path) {
++		TRACE("before_exit_file_path(%i): %s\n",
++		      i, before_exit_file_path);
+ 		ret = wait_on_file(before_exit_file_path);
+ 		if (ret != 0) {
+ 			goto end;
+ 		}
+ 	}
+ end:
+-	free(after_first_event_file_path);
++	TRACE("end status: %i\n", ret);
++	free(after_first_event_file_path_touch);
+ 	free(before_last_event_file_path);
+ 	free(before_last_event_file_path_touch);
+ 	free(before_exit_file_path);
+ 	free(before_exit_file_path_touch);
++	free(before_first_event_file_path);
+ 	exit(!ret ? EXIT_SUCCESS : EXIT_FAILURE);
+ }
+-- 
+2.31.1
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1450711451293562556==--
