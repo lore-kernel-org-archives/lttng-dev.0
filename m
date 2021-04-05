@@ -2,65 +2,91 @@ Return-Path: <SRS0=Pen4=JC=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FORGED_MSGID_YAHOO,FREEMAIL_REPLYTO_END_DIGIT,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3DDFC433B4
-	for <lttng-dev@archiver.kernel.org>; Mon,  5 Apr 2021 18:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAF14C433B4
+	for <lttng-dev@archiver.kernel.org>; Mon,  5 Apr 2021 22:34:09 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2BA6E610A7
-	for <lttng-dev@archiver.kernel.org>; Mon,  5 Apr 2021 18:36:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2BA6E610A7
+	by mail.kernel.org (Postfix) with ESMTPS id 1E0F361359
+	for <lttng-dev@archiver.kernel.org>; Mon,  5 Apr 2021 22:34:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1E0F361359
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4FDfWJ3sWmz12fs;
-	Mon,  5 Apr 2021 14:36:28 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4FDlnW2TPJz12fk;
+	Mon,  5 Apr 2021 18:34:07 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1617647789;
-	bh=b0PogeJe2seBt88XeZbfo10ilapRBmqBwX8wyF/5Vb8=;
-	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=ajsGq7jRm73zdxj351rJsUsfo63UJiehiiLel7uMDpfr/ztE8rFz/R5H/ko1pG0jR
-	 hWapB3fGzq5ihfYRHlrLcQUFXxbeEXKvH1DO5NoLKOJgysiuO6vlC7l7K47UbBuqqP
-	 e8mbwgs5+aRkRMSodb1pUlEpS+L8G577pP4TBFLviFqrqJ09zVULCx9AyLmnROv0FP
-	 8thWy3rhYhHkZeuZvjcS/q8lj5c5AJPN9dL6FmxoOF7BcZqFdg57uHYHPPznzt7Evb
-	 xpCLN23hNrsU203xwkDi/Retn9LfYskLrK641opw8gCFvZil/tSlDWa5NF/Brs0dmr
-	 T3gXbTSWHB+ng==
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com
- [IPv6:2607:f8b0:4864:20::234])
- by lists.lttng.org (Postfix) with ESMTPS id 4FDfWH5FWFz12Vs
- for <lttng-dev@lists.lttng.org>; Mon,  5 Apr 2021 14:36:27 -0400 (EDT)
-Received: by mail-oi1-x234.google.com with SMTP id c16so12517121oib.3
- for <lttng-dev@lists.lttng.org>; Mon, 05 Apr 2021 11:36:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to;
- bh=mEJEhz5FevcKrmW58y2YzC0X3wwG8Fr4cRNKQUSdN8E=;
- b=b8NU47t8d3daOhNLk+LWCxRi+ZW8Gesh11vSbBkCgC99nk158oODhQj+IPZbxly5uK
- b+sdYQbkRL5C9nYZDGal9DxWYrXFb0zsbI/HeyQ803cn2AmpQXGxLKLhHqOBtTTqbH6p
- z6+orkuEsViFWnyU+jnK3s7f8uDLvY7tG++Q+AIIVxp+4+TkV9r8bsgY62u13wtqxW/0
- k728/LRgM+IHxlg/YpOm7jLsLD03m45W3RIkl61t3QDCJc44XKnqmk/+m50sMLBwjudJ
- Gqfj62iLsOjYbJs1X3QFogSK6kLYiGAJ666vQLqc4huRNRT0/dq8hnzpPA0tYwmVl63i
- 9LJg==
-X-Gm-Message-State: AOAM533kIws0uFJkqydZ8kZZ/6/fkyhWizb8RTQ44CNZoBLdjqGpORXI
- /4du77S4DZBPDN1TkMLw4kOBWeHOrRqVWAuUHvcGakSAjp4=
-X-Google-Smtp-Source: ABdhPJwGrIAYsNX4fXxOmcyCw/3Lkp2rMbhgZVE6T/Q1vs7I299+ERsWbiZiBXsKeZb4cej7gL+tMj8JWq+lLHk7q+E=
-X-Received: by 2002:aca:1a19:: with SMTP id a25mr308261oia.167.1617647786688; 
- Mon, 05 Apr 2021 11:36:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAPj=WkgS6XxzCazt4gWOiebas+BJ3fxSz-KRyXUpDQRLovM-NA@mail.gmail.com>
-In-Reply-To: <CAPj=WkgS6XxzCazt4gWOiebas+BJ3fxSz-KRyXUpDQRLovM-NA@mail.gmail.com>
-Date: Mon, 5 Apr 2021 11:36:15 -0700
-Message-ID: <CAPj=Wkg4AbcxsAnzXFOH2EbNzw52SdhFcJN2zSHZoNgLDfmkrA@mail.gmail.com>
+	s=default; t=1617662048;
+	bh=0cViZse0E3A+LMOSyUiS0Wp4lAoxBkUeWDCEouDz2Cs=;
+	h=Date:To:References:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=tdVdYjhmmHTKwgm8HcUOz7xp8hA9mSPpPDgsRkVNiY3hnCJSrmd2ZaZVbU2HjTEYX
+	 H2/hpQaq9JGI8hXNEsTG9ixQalE+pBW5f/AIyfFPzHliywMDFWqvIe5nUjm7MWlp5z
+	 U8yubbjqOb8QJAzd2nB4RLW3XM5GoLLFocY14MXtUa7CijV0rNvDSVVqjsbfj62Q95
+	 QsFc1tkWBCQ2E1jnHjgJ3GsebYPyCLub+kIBjN6oR55mDWALgyQOk/Hk5Vn3yJJjvK
+	 u9XgnfU3pTVOcJ8y+mx8oaabSw3YQjFBf6Oxp//lClKdcys4TAO+ONtfrUDbytI6p9
+	 sSDV0oIuzy7gQ==
+Received: from sonic310-14.consmr.mail.bf2.yahoo.com
+ (sonic310-14.consmr.mail.bf2.yahoo.com [74.6.135.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4FDdLX418yz12KW
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Apr 2021 13:43:48 -0400 (EDT)
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048;
+ t=1617644627; bh=7FYVQ0RzYimRToRRzPQnCaZWsLgAux7Us6IjKLWGjrS=;
+ h=X-Sonic-MF:From:Date:Subject:To:From:Subject;
+ b=nRUusI+6RQMJjvYFry1s5sFdjsFHFNqY9ao7QofD/x6uKTb1g7Dpi0vcmsoToHIB38QwfxPQMO9taKnza5g5v1w2F2reDNqfI6qZBWZei/9TghF8VnU2i8O6aqr2cjn1dQqpMHpmIfrPMJa3/9TYNIn5SCp1y38cB4ibKC4laMAMY2hVdGuRF0yVp6YWr41riuI4Whoow3pX1ktOuYhwjMRVo8SrURv5+hA8tuq6ovy/2t7nSNGfdcjWY6hpywCEmF6a4wuGKEu3MghaOZ0aT1oRm6DivRD/cE04d1jPFUMdNZCHFCm77QCxNYbuzCdL+4KfjbtYNCrmPz9wcztnuQ==
+X-YMail-OSG: SENZ1uEVM1m.uN.3bpl.8IRw299CbIY_SFIYuMc3NsuyzZRWPlBIQ6rMQJ0A2sv
+ dTbSzdMaOgqT8fHY4MNMewjmlE0GVv6krcBCtuhtEC60Klt_Ing_CkLzyXwfqRr86H.ERSG8FFTu
+ ZJ_MCgqVfvCHuW1wiIjgKnDrVnFEXUl9X0pgRailBbD3jBLPc_tX.ZUA2L7YGafHPgUfiuMlXcH0
+ 0wO.DYmvaIqlNpASi4AhHqyiFZIIpJI15zOyCKeC9LitmOb5rDEa35T5DJeo_gZIwBxp98t8QATs
+ 2fINgHGKH5udoaR0SNUKLcXnbvCsc02chcoshyfD8_jJdfoSJZXDi45sdqRb_j_HLlQKISOGYi1u
+ JwqgXiChowGDRfc35FltH3YUx9lK_UNcP2.n_cl7Fj4NjYKmsb7.NL0_ZPTgseO5sbzqJDywWd2W
+ Bp5GILYZtnn70V8e_J9UZtmMDT16bbclOeMI6Nu75n4ipwJbulxZfcaTbdGpOn0L2k_mHhS1y0Rr
+ GXFxlCktCIRzg601r_d5XVFxDcxN_zIj12xEYe9wylJvNOopFBYhE0qyVaeCtVz5lNBqQ_bsd77U
+ pbziXE4U_VH0Z5xcaHiw0oInAtPhSvErV6mQvrPBjNqeSUDcj_hChjzgzmT51EhoF9wwkWsdBZXf
+ bFF079ToqI1mKx48RJ1xJ0lkS5BqFzksx55fZ.WuNJCJTj2q.rf_Fq2gNWJEZx3HFxfbAOB3TnyX
+ anBRjJN.YdZEeogVZhoX5bPYVs_5u7hZ5XnQtbQFcugjDeYK7kc6eKyKkerZVTvckjdpiZysAag8
+ RHzq9aYdjfKEwyb1QBP4G.FzbijOV_1t7SGKeLXR9oAdapS3zsdn7NwwUFdNgu6ReCHoPFCearxp
+ MBEFPw7.hHfxMa3L2iQLeyG0MtE_Ukt3NsxEkBS41LwKjyhPCxBIWXmN09v5xoWmoOPx1sFZ5x8r
+ AlgQf_YpE_gUtj2cm0Z45jFoAP74d0xOa4FsRs9cJNTkv95KaYZRe0hXSnz6CITSyHn9WtwurEuS
+ ns_4fRPnOWkiI46NL9BHhl8eUE7hMdC20LTgR2Dbx.R9qIf8bM6kAHB4mf2GLtm2W59lMtGZf0S7
+ auJb.0prprhryCX9ovZUgl16i2zMKRX6f5eot7NCX0Q5V.LdI16n7BaMmKgjWP5uGAWCpejlegZ3
+ ylSptKuTfhOub_wVOQ2WRYcRJDIkjs64C2r2UDOygh3fBxrObbAS9by0nkdtXl_Qzq6A.OVHFOP1
+ iPefoqQgVNu.I0mf0GW5jO45vT9jRaAqe87lSbpkR34xKX_fuTwMupXQwmDSN.1Q7_ph_T1_8_20
+ BtoV.vO013j5B7wqWq5ADDKcFLPIrxmanHtG1fCdZid9JL7AMzrtuXcUzq7v0Ycb4nE3oWYafpdi
+ lV7VuI1YdflBD3h.yHmzD6zgVHrLVgnFJS0Nr58jLHgBCHddAaIWjdLJdG7rX071By.nzFBDINi9
+ XBrcjsrS.BzHLRAEMEl6BMAaeS96fFv3L9rMTiDT6m6WB9o4CzwL9IwTJ.Vq7LevM3ZgG1v249Uy
+ N1AGYkqACFFJFYhGTGV1aUX6cQD9g6XKChHhQrS1COAKMTklOLSdPWeVknaQlVdTp399eVCT3.YZ
+ BL1IpxjeBdPj5qBv7JhyqePPNec3ltmiiemzx5sCMYunBP_JinkGhdcEvWOHNhfwXDZSv4eV00pc
+ OReUbeV7nb7XntKWr118dml2Ezm_XDqkm9WMOaKggZpesOkkhV2hyoo4u53QnqYsw1BbASiMe35R
+ n4bmNS4yrlMiVhjGFK9zkuYPVyyaCkY8tYMxbnUZwYPAO4Dm5YiWRxP4lRL0NMsPqhhPxPQ78B46
+ LtV98pNjTayJslRk6A8d9AdCWfxTXq4LLy_QlqNy4XHCpRLTQ9PazA4wtfxJ9iuDpVP.O0gkoOvT
+ WJ_VdgPaq.5a9Y4dSymU51AnhRcZRrj8DBwe2SUiyY0bV.LapLl7kOkmUUFk5q6TLBY6_6sit0PS
+ pWVWjyvt7hOFDSU4MUqqSAbc_dmNT3vcmgod.GoCdM4ncs5vf04TWifiD1IAOEbR2PHBFTVlZVTx
+ zyoe07zrM2wD9I9r01WMfzi3AWW44QOvPbzl2e_lqA6RoTdptmP_pu9wtdKJhSXQoqtmwXGt7GlT
+ MMDyIMaNLKrd3j21CZB29LiEsYS9UNJu4RiCuHLAoDNDARXhhp8pH8_Ndx422g.TJXYWCB8hDLTQ
+ L8UQlbNwua15dkSL3APq0LFPQRZu7yDwo3BQZchxl2DIOHUTsI450it_fNxrfuSOqWc.zFzgWN.v
+ GIboki209vzbUGwLmpnhXSDLNliKCzd2MEjtuPv6.yEt.MKxOBScvcEceZzlJVt7.5gVpf8dmGH.
+ MmpuYwl8_gZUsDme7o3Sf6MDxp5sXMSri7BEXiGoEpJBmso8cW7d1RJ5I1EUGAU7akITBsmigwa_
+ psjw-
+X-Sonic-MF: <lbj137@yahoo.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by
+ sonic310.consmr.mail.bf2.yahoo.com with HTTP; Mon, 5 Apr 2021 17:43:47 +0000
+Received: by kubenode507.mail-prod1.omega.ne1.yahoo.com (VZM Hermes SMTP
+ Server) with ESMTPA ID 64e38690bdd6ca285a4cc6084ad4b89c; 
+ Mon, 05 Apr 2021 17:43:41 +0000 (UTC)
+Mime-Version: 1.0 (1.0)
+Date: Mon, 5 Apr 2021 13:43:40 -0400
+Message-Id: <13D87E55-7D1B-49B0-9555-656A837ADEB3@yahoo.com>
 To: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] Userspace tracing in docker containers
+X-Mailer: iPhone Mail (18D70)
+References: <13D87E55-7D1B-49B0-9555-656A837ADEB3.ref@yahoo.com>
+X-Mailman-Approved-At: Mon, 05 Apr 2021 18:34:05 -0400
+Subject: [lttng-dev] QSBR urcu question
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -72,167 +98,20 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Eqbal via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Eqbal <eqbalzee@gmail.com>
-Content-Type: multipart/mixed; boundary="===============0236658100803549835=="
+From: lbj via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: lbj <lbj137@yahoo.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============0236658100803549835==
-Content-Type: multipart/alternative; boundary="000000000000b284c105bf3df9f3"
 
---000000000000b284c105bf3df9f3
-Content-Type: text/plain; charset="UTF-8"
+Hello all,
 
->If I comment out the getsockopt call, my application tracing starts to
-work.
+I am using the QSBR flavor of URCU and I have a question: is it ok to call rcu_register_thread more than once per thread? Similarly, is it ok to call rcu_unregister_thread more than once per thread? I am using a library that uses a threadpool I have no control over. A thread from its threadpool invokes a callback function of mine. Threads may be reused. I would like to call rcu_register_thread at the beginning of my callback and rcu_unregister_thread at the end. The thread in question may exit or may be reused at some later point, I have no control over that. So I want to make sure that periodically registering and unregistering the same thread is ok. Thanks for any information.
 
-Correction on the above, I meant I comment out the check for pid being
-non-zero in the get_cred call, not the whole getsockopt call.
-
-diff --git a/liblttng-ust-ctl/ustctl.c b/liblttng-ust-ctl/ustctl.c
-index 39860ebf..96aeef3c 100644
---- a/liblttng-ust-ctl/ustctl.c
-+++ b/liblttng-ust-ctl/ustctl.c
-@@ -1825,10 +1825,10 @@ int get_cred(int sock,
-                "application registered claiming [ pid: %u, ppid: %u, uid:
-%u, gid: %u ]",
-                ucred.pid, ucred.uid, ucred.gid,
-                reg_msg->pid, reg_msg->ppid, reg_msg->uid, reg_msg->gid);
--       if (!ucred.pid) {
--               ERR("Unix socket credential pid=0. Refusing application in
-distinct, non-nested pid namespace.");
--               return -LTTNG_UST_ERR_PEERCRED_PID;
--       }
-+       // if (!ucred.pid) {
-+       //      ERR("Unix socket credential pid=0. Refusing application in
-distinct, non-nested pid namespace.");
-+       //      return -LTTNG_UST_ERR_PEERCRED_PID;
-+       // }
-        *pid = ucred.pid;
-        *uid = ucred.uid;
-        *gid = ucred.gid;
-
-On Mon, Apr 5, 2021 at 11:09 AM Eqbal <eqbalzee@gmail.com> wrote:
-
-> Hi,
->
-> I am trying to get user space tracing working for an application running
-> in a docker container. I am running lttng session daemon in another
-> container. I mounted the unix socket locations (either /var/run/lttng for
-> root or $HOME/.lttng for another user). By doing that I can run commands
-> like lttng create or lttng list <session-name>, but the tracepoint events
-> from the application don't get registered and there is no trace output.
->
-> I enabled LTTNG_UST_DEBUG an ran lttng-sessiond in verbose mode (-vvv and
-> --verbose-consumer) and got the following error message:
->
-> "*Unix socket credential pid=0. Refusing application in distinct,
-> non-nested pid namespace.*"
->
-> It appears that for some calls to the session daemon there is a getsockopt
-> syscall made with *SO_PEERCRED* which returns 0 for pid and the call is
-> failed with *LTTNG_UST_ERR_PEERCRED_PID* error (see get_cred call in
-> ustctl.c).
->
-> If I comment out the getsockopt call, my application tracing starts to
-> work.
->
-> From what I found, docker cannot support getsockopt/SO_PEERCRED call to
-> get peer pid on the unix socket which would make sense as it's in a
-> separate namespace.
->
-> I have a few questions on this:
-> 1. What is the reason for the get_cred/getsockopt call with SO_PEERCRED? I
-> would like to understand why it's required for some and not other calls.
-> 2. Is there any workaround for this problem, so that I can get this to
-> work with the container topology I am working with (app in one container
-> and lttng daemons in another).
-> 3. Related to 2, are there any gotchas to bypassing the getsockopt call in
-> get_cred?
->
-> Appreciate your help regarding this.
->
-> Thanks,
-> Eqbal
->
-
---000000000000b284c105bf3df9f3
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">&gt;If I comment out the getsockopt call, my application t=
-racing starts to work.<div><br></div><div>Correction on the above, I meant =
-I comment out the check for pid being non-zero in the get_cred call, not th=
-e whole getsockopt call.</div><div><br></div><div>diff --git a/liblttng-ust=
--ctl/ustctl.c b/liblttng-ust-ctl/ustctl.c<br>index 39860ebf..96aeef3c 10064=
-4<br>--- a/liblttng-ust-ctl/ustctl.c<br>+++ b/liblttng-ust-ctl/ustctl.c<br>=
-@@ -1825,10 +1825,10 @@ int get_cred(int sock,<br>=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &quot;application registered claiming [ pid=
-: %u, ppid: %u, uid: %u, gid: %u ]&quot;,<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ucred.pid, ucred.uid, ucred.gid,<br>=C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 reg_msg-&gt;pid, reg_msg-&gt;=
-ppid, reg_msg-&gt;uid, reg_msg-&gt;gid);<br>- =C2=A0 =C2=A0 =C2=A0 if (!ucr=
-ed.pid) {<br>- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ERR(&quot;U=
-nix socket credential pid=3D0. Refusing application in distinct, non-nested=
- pid namespace.&quot;);<br>- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 return -LTTNG_UST_ERR_PEERCRED_PID;<br>- =C2=A0 =C2=A0 =C2=A0 }<br>+ =
-=C2=A0 =C2=A0 =C2=A0 // if (!ucred.pid) {<br>+ =C2=A0 =C2=A0 =C2=A0 // =C2=
-=A0 =C2=A0 =C2=A0ERR(&quot;Unix socket credential pid=3D0. Refusing applica=
-tion in distinct, non-nested pid namespace.&quot;);<br>+ =C2=A0 =C2=A0 =C2=
-=A0 // =C2=A0 =C2=A0 =C2=A0return -LTTNG_UST_ERR_PEERCRED_PID;<br>+ =C2=A0 =
-=C2=A0 =C2=A0 // }<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 *pid =3D ucred.pid;<br>=
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 *uid =3D ucred.uid;<br>=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 *gid =3D ucred.gid;</div></div><br><div class=3D"gmail_quote"><div dir=
-=3D"ltr" class=3D"gmail_attr">On Mon, Apr 5, 2021 at 11:09 AM Eqbal &lt;<a =
-href=3D"mailto:eqbalzee@gmail.com">eqbalzee@gmail.com</a>&gt; wrote:<br></d=
-iv><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bord=
-er-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr"><div>=
-Hi,</div><div><br></div><div>I am trying to get user space tracing working =
-for an application running in a docker container. I am running lttng sessio=
-n daemon in another container. I mounted the unix socket locations (either =
-/var/run/lttng for root or $HOME/.lttng for another user). By doing that I =
-can run commands like lttng create or lttng list &lt;session-name&gt;, but =
-the tracepoint events from the application don&#39;t get registered and the=
-re is no trace output.</div><div><br></div><div>I enabled LTTNG_UST_DEBUG a=
-n ran lttng-sessiond in verbose mode (-vvv and --verbose-consumer) and got =
-the following error message:</div><div><br></div><div>&quot;<span style=3D"=
-color:rgb(206,145,120)"><i><span style=3D"color:rgb(0,0,0)">Unix socket cre=
-dential pid=3D0. Refusing application in distinct, non-nested pid namespace=
-.</span></i>&quot;</span></div><div><span style=3D"color:rgb(206,145,120)">=
-<br></span></div><div><span style=3D"color:rgb(0,0,0)">It appears that for =
-some calls to the session daemon there is a getsockopt syscall made with <i=
->SO_PEERCRED</i> which returns 0 for pid and the call is failed with</span>=
-<span style=3D"color:rgb(79,193,255)"> <b><span style=3D"color:rgb(0,0,0)">=
-LTTNG_UST_ERR_PEERCRED_PID</span></b> <span style=3D"color:rgb(0,0,0)">erro=
-r (see get_cred call in ustctl.c).</span></span></div><div><br></div><div>I=
-f I comment out the getsockopt call, my application tracing starts to work.=
-</div><div><br></div><div>From what I found, docker cannot support getsocko=
-pt/SO_PEERCRED call to get peer pid on the unix socket which would make sen=
-se as it&#39;s in a separate namespace.</div><div><br></div><div>I have a f=
-ew questions on this:</div><div>1. What is the reason for the get_cred/gets=
-ockopt call with SO_PEERCRED? I would like to understand why it&#39;s requi=
-red for some and not other calls.</div><div>2. Is there any workaround for =
-this problem, so that I can get this to work with the container topology I =
-am working with (app in one container and lttng daemons in another).</div><=
-div>3. Related to 2, are there any gotchas to bypassing the getsockopt call=
- in get_cred?</div><div><br></div><div>Appreciate your help regarding this.=
-</div><div><br></div><div>Thanks,</div><div>Eqbal<br></div><div><span style=
-=3D"color:rgb(79,193,255)"><span style=3D"color:rgb(0,0,0)"></span></span><=
-span style=3D"color:rgb(206,145,120)"></span></div></div>
-</blockquote></div>
-
---000000000000b284c105bf3df9f3--
-
---===============0236658100803549835==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Jeff
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0236658100803549835==--
