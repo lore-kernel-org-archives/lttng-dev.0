@@ -2,95 +2,68 @@ Return-Path: <SRS0=1TmG=JM=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FORGED_MSGID_YAHOO,FREEMAIL_REPLYTO_END_DIGIT,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBF79C43462
-	for <lttng-dev@archiver.kernel.org>; Thu, 15 Apr 2021 14:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32E41C433ED
+	for <lttng-dev@archiver.kernel.org>; Thu, 15 Apr 2021 16:00:39 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 5D6F4613F8
-	for <lttng-dev@archiver.kernel.org>; Thu, 15 Apr 2021 14:54:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 5D6F4613F8
+	by mail.kernel.org (Postfix) with ESMTPS id 7B3B5611AB
+	for <lttng-dev@archiver.kernel.org>; Thu, 15 Apr 2021 16:00:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7B3B5611AB
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4FLj755Tcxz1B6m;
-	Thu, 15 Apr 2021 10:54:57 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4FLkZr3xqPz1BS9;
+	Thu, 15 Apr 2021 12:00:36 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1618498498;
-	bh=fd6j0ORznbSbI1lacYLPUghN5SMQM0u4NJ1Xg7oowrE=;
-	h=Date:References:Cc:In-Reply-To:To:Subject:List-Id:
+	s=default; t=1618502437;
+	bh=VKmRhQhFBXNqQhHJPO7JaCVmw36dZPxXe/E6RcVFwVA=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=M4uwCZeBPX9GH2KKl4zW3Sgg0arC5HRRWyBLO4b2OEEGOqsxXSg7jphkdCkPLefzc
-	 9kxIazax1AVRfY4XbSXFkuzE6lOBIE9X28iAOGAJOc2Z1PkS7E8Xwu9HvupYei67ww
-	 Mroz340e6Q2l/v6RkrSNOKWdIdWslbjTligUIwCjj+cRU7chXN2rcXsIPTc5zBCaVN
-	 XxdXYqHpjqfhk7H8uT9KFyqjkj2bz88oRxyGc4BKM2vt+WUCw7BDtgTkBz8DgCsM/p
-	 TfIZX/37SHUyRZ94tcKI+Q+r1ClU4/7r2rN3NT5uCCePDqJtHsUfzoPya7i8kimAR/
-	 geSxxAWPar95A==
-Received: from sonic308-1.consmr.mail.bf2.yahoo.com
- (sonic308-1.consmr.mail.bf2.yahoo.com [74.6.130.40])
- by lists.lttng.org (Postfix) with ESMTPS id 4FLj743v03z1B2x
- for <lttng-dev@lists.lttng.org>; Thu, 15 Apr 2021 10:54:56 -0400 (EDT)
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048;
- t=1618498496; bh=tBOgezYsa06r1c3t9Yi6e+oR6GJpRdUiF/FMo30LhYv=;
- h=X-Sonic-MF:From:Subject:Date:To:From:Subject;
- b=tdrSOcTy922LmdSif7GK1UMvz3vOqYsQWV4GJKyEkGM5HFY7twYnadt4jcl1jsmbgFbHlg4EmQYtYJQYdxrUFbqIz3x+9RZZK43EXooUptECZDZppRZr5QZOgorZhsot/fyfSvob6RZ5YtroMgsm5qvoW3q1IeVaPRlQvLL+EjpXJt3+qZqEnr6l1BxFFhOaEJCTMuKhcqm+yyCCqbAc4+Hq98/fcd3eGEd21tV4qPzIymx42km0X42XZViROrT82CbG/FqGxzrU0KexYQ2OjG8kgFali0nbe6dzua0PiTIyISdjT4JBId+ir4StTonUOUe00RJj/Ex84YB6VQofTg==
-X-YMail-OSG: GHxzkMYVM1k3kzU11pVX9PVCjgcMclbGmwHJCSOFKu9m2K5PRXksBxONGY5C_lh
- mzCRE22zQdwrrU5T4j2ibGM9ibfTH6R0yR95Mc9BUXmEwWrxiLpYe3jEi3VXoSj8YrUp8_uGHzq_
- bi6jWgnmnCMvSkCNPImxOxeOnu.rlk6YptPCGvo4OyJXKcWovY.abNl0jceYe9qcuTaNOQkoJlmE
- Ha2mbKPeIwdjRLKeguY_8tlFP6zGf3fCxgmrnDchtXtrRWvjqUywld9ael1vr2DRvzPLD9kfPtqo
- qyZDNZrlc.IEXywXeKpLZQEBDm9j2kmbenyb8SvZ1QEZAfMYs6wbXtaxVLbDcSUhChGvobmBzIiO
- Y5w._qMTmpS70hdZdBXEX3KPtapsuGRvwmIPwraeUB8UUcnEj3qsrKNmhnPGfkUDZcDAB6cvX6Yg
- TwMZJ.6Am2oSILCJ6BRBFj9e96ukq1_jFeL1NkExoMDni7q5M6j4GCmLezLeu7JVof8PsqNIhagi
- 3.fU_su_QvPykuLqAatwJ.owq8Ck4FozFG5WWKe39aXdvRlcf47ktj3LA_KQJ9H833XF4pWQ8yPb
- qLxQPm1fCskXBxm4yaDDNaMB41EKkBpvj_FkwCOR5Jkuku2V8YPUGeJpkJYw0ZhLGFx6u5ZdECeu
- jWzioLgtB.GG3D7RLuPhwl8Q6T_HSwF4UaSXXS.lE8jpw0HQGua1amPOA9ItUhldWNfPtgQdMXsq
- QdFOCMyAOKNksGU0.9FUe0onF8SpawQf118f5pB7gqAoghjFLKGwq9a3P5ZHfwH.3DduYAuiofV0
- Qnw.KjOqDRmijIAceDqIe2UCz8abkr_sRK7Lo99R1WhWJ.HOfBm0065nwATUOLRQYA34Vo5I2unG
- 6JWe1zGStvYzIemuTfAaE6z_G2CqkpFSnoEx91qA.IPY3jdN412P1QESjmaRcWRlyrWqmQsEmxJU
- KPfGnJb6L1K3zJj13_R.6jkvaemWCztr8YKq1RKF1WGDaaz6FDAqZExcGmuvDs.gQ10F5aLTqNHR
- nyowgGnoZ2kXaqmUyVSasPL2drjgqszoNo.B51FHGpyqwsBj1aOmz60QykaKG0u50Ql4fdVbuIsx
- vZqL3GC2Qobvy3x3FQO0AoKi4MYKo3iLVgM5mn6JakX7L9rcU7YoS1fiJAgoJzbf6uLOektoo_Ox
- XBPI17HG47ukyCRPUzC9Oer8i3gvK1dWm1vOgd.tamoxaAW6027HFHLKE2gj4YTlcI4mxjqsBxn_
- JOre9xYeqy5fLA3QWfZ_WRVWzHaiTzjSdn.x_tR_i.Ye3T.P9mA8qt_z0ermK2AAnpYxBqKZmTkU
- sRIjitl9CzqdW.fCh0LonaxsYdHZvuAQcJtPZO8bgRyZcWs7ZAYjuHwRT7jKLDHVnLabrfkNZggv
- WNGVwA5aK5x5FYj7gGRIY9UZZefc2U9tBYmMtZBVyokV416VfmxrbA30LSZGQ5GWNBOkCJK.LT3p
- fAzQTPfZ07bv.s5H5FA8Hao_fRmVhF6Vr2ZDZRRbqSlzWLBek9T67vfhhZXxtmNQsSdbhvetsn7u
- afeRSyJM1k4s12gsbfmx3MNObrbhU3T19uDk_T5uDNjLkwVl5IiNd9komlAMyHGDdFywxTSG2FOg
- j0uQkDBA4Ysokkf8salo0Nbi3DyQ6IZtMsnThFaA0PyRk9cnxmtIo_0suGeJnGc7ejKjuQYUl_Ky
- 4tC0DwyqSd005BP.0XZ2PJYPPJ19yEqkOcf6Cg7g7EwV9hHJmXnn3WKsNkZejt.9H65DTF9XDDlu
- vcGvpyFYPAqL6nSGt6F_AhJTpALHf91v9b1s0U0OhPqoo6gg_MrWhrjD1A3Zxi7hsris6O_X5RuN
- RyEQZ8TdsQZyEmK_uFIK8WRV78P_Gr3iXU_l3Uyu.1zFnALdKaXna2OKswXUczr1SYyhNXTBzTgc
- VRg.d3lsCHW7msz_lyzeRPyNNc9xPOkcjSxGixAjedixMplZt7JwOw_TZnr.RFsBK8FiZg22aFrn
- 5IEVtZMGW6Ll76UQWBO1n_Dpd2vV5k_eeX29HuATCurkxsvRFbhT0ddvdQDLrvpyrlA1zr027eH4
- oS.yezslTvAd10PBImj5g3_6q4aoVeNugIG32s1WAxXT2idMhKRCQ0vTpTDVNfodSOeYaY2ABvwl
- kOVHtVbKDQYS6m.j49.GETEx1vLaw_inWNvXkCgY.QbpiODSg7FMEDO_e8M4kUueHLXqiNGqAxNG
- M.arfYtl6wJRMbDRv1k0e3CBMSVyf0g.nFiU9FwmGVYxeaiq47jLx40WhLUz0eJTfIF.qDQv1NDX
- J1oAjpX3VymiOJFFssqG92d1jy8XPvQqJwYyAeOjEiNavDT6nPrVEpWbCENYj3kAJ5gGUtvjMYiy
- 02.LjdgcmtcXuLTNjSwAyClkIEkwXGVMHcVQCI8UGB0lIRmIe44HfSTCc7h5t_SJEHYit96mTR9C
- jfsb7w4exd7hr8XGAuSiskKzUDTXeQR.Bb.7I4wIzjJla28ATGFyyYG2hduIQG9OHPUdzoZGhYvN
- IHBktwjnlEQK7F0lDpWEPzhgwmMrowL2hV5yp1TBkFH3voLCOW2.iOao1Go4O1P2KIwa.gWeIQz3
- vrLwykMLFHJnPMHM.jfv3doWsoyoHEGP_dIGDedqMzFbvct6RZxo6mk3Gt0WQCjrrOGhScgonyNo
- -
-X-Sonic-MF: <lbj137@yahoo.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by
- sonic308.consmr.mail.bf2.yahoo.com with HTTP; Thu, 15 Apr 2021 14:54:56 +0000
-Received: by kubenode523.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP
- Server) with ESMTPA ID 3e52e679cd6a0983589304de1abb4c5b; 
- Thu, 15 Apr 2021 14:54:50 +0000 (UTC)
-Mime-Version: 1.0 (1.0)
-Date: Thu, 15 Apr 2021 10:54:48 -0400
-Message-Id: <7E67A2E3-2ABD-430D-8F06-A09A6E69FD8C@yahoo.com>
-References: <412098958.77686.1618491853089.JavaMail.zimbra@efficios.com>
+	b=wU2beIqcwnawCqjg6sJZq+4a7I7Kz2YMP6801Gqd1gjH+yQmMAdevowmyT2AEn4fT
+	 GKJjRBgOvIVSzML2jOkyNRhf4tGAfQbNYNigbne7QNOJSbbET2Ay0JOH1Iyz/tZXCK
+	 11Vil8lc1foVE8Arcx1YUuTfly5xRjvqIn6GnEmmsZ/2y07+7pytkNrbRd1Hlr+AQf
+	 CxafChWuHrP/pIDFNSUBkPpE67wB+KmxIlYwifouqmAclRJwyHF+r/SCKvs4Rdw0Le
+	 pZbSqaxVVYyIoZ5nRbBbIQEPaw9AqGwLx0qmsfm1LJfwXCv6Wmx3ZW+xb95kncZPLH
+	 TKcal9c4o8iJg==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4FLkZq3JjZz1BS7
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Apr 2021 12:00:35 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 04BDE32DBCE
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Apr 2021 12:00:29 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id rdHoBcQsgJxC; Thu, 15 Apr 2021 12:00:28 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 9071132DBCD;
+ Thu, 15 Apr 2021 12:00:28 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9071132DBCD
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id Ndf9cx-mfVEB; Thu, 15 Apr 2021 12:00:28 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 7B8F232D86D;
+ Thu, 15 Apr 2021 12:00:28 -0400 (EDT)
+Date: Thu, 15 Apr 2021 12:00:28 -0400 (EDT)
+To: lbj <lbj137@yahoo.com>
 Cc: paulmck <paulmck@kernel.org>, lttng-dev <lttng-dev@lists.lttng.org>
-In-Reply-To: <412098958.77686.1618491853089.JavaMail.zimbra@efficios.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-X-Mailer: iPhone Mail (18D70)
+Message-ID: <219280299.78204.1618502428396.JavaMail.zimbra@efficios.com>
+In-Reply-To: <7E67A2E3-2ABD-430D-8F06-A09A6E69FD8C@yahoo.com>
+References: <412098958.77686.1618491853089.JavaMail.zimbra@efficios.com>
+ <7E67A2E3-2ABD-430D-8F06-A09A6E69FD8C@yahoo.com>
+MIME-Version: 1.0
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3996 (ZimbraWebClient - FF87 (Linux)/8.8.15_GA_4007)
+Thread-Topic: QSBR urcu read lock question
+Thread-Index: nLQzDa0ilDyo/mKTGWaTlW8XQn2Zvg==
 Subject: Re: [lttng-dev] QSBR urcu read lock question
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
@@ -103,88 +76,42 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: lbj via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: lbj <lbj137@yahoo.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-TWF0aGlldSwKVGhhbmtzIHNvIG11Y2ggZm9yIHlvdXIgd2VhbHRoIGlmIGluZm9ybWF0aW9uIGFu
-ZCB0aW1lbHkgcmVzcG9uc2VzLCB0aGV5IGFyZSBncmVhdGx5IGFwcHJlY2lhdGVkLiBGaW5hbCBx
-dWVzdGlvbjogaXMgdGhlcmUgYW55IGhhcm0gaW4gZXhwbGljaXRseSBjYWxsaW5nIHJjdV90aHJl
-YWRfb25saW5lL3JjdV90aHJlYWRfb2ZmbGluZSBmcm9tIHdpdGhpbiBteSBjYWxsX3JjdSBjYWxs
-YmFjayBmdW5jdGlvbj8gRnJvbSB3aGF0IHlvdSBkZXNjcmliZWQgaXQgc291bmRzIGxpa2UgaXQg
-d291bGQgYmUgcmVkdW5kYW50LCBidXQgcHJlc3VtYWJseSB3b3VsZCBiZSBoYXJtbGVzcy4gQ29y
-cmVjdD8gVGhhbmtzIGFnYWluLgpKZWZmCgpTZW50IGZyb20gbXkgaVBob25lCgo+IE9uIEFwciAx
-NSwgMjAyMSwgYXQgOTowNCBBTSwgTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJz
-QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gCj4g77u/LS0tLS0gT24gQXByIDE1LCAyMDIxLCBhdCA4
-OjQxIEFNLCBsYmogbGJqMTM3QHlhaG9vLmNvbSB3cm90ZToKPiAKPj4gSGkgTWF0aGlldSwKPj4g
-V2hlbiBJIHNheSDigJxyZWNsYW1hdGlvbiB0aHJlYWTigJ0gSSBkbyBtZWFuIHRoZSB0aHJlYWQg
-bGF1bmNoZWQgYnkgY2FsbF9yY3UgdGhhdAo+PiBpcyB0eXBpY2FsbHkgcmVzcG9uc2libGUgZm9y
-IG1lbW9yeSBkZWFsbG9jYXRpb25zLiBJcyBpcyBwb3NzaWJsZS9yZWNvbW1lbmRlZAo+PiB0byBy
-ZWdpc3RlciBmb3IgcmN1IGFuZCB0aGVuIHRha2UgYW4gcmN1LXJlYWRlciBsb2NrIGluIHN1Y2gg
-YSB0aHJlYWQ/IFRoYXQgaXMKPj4gbXkgbWFpbiBxdWVzdGlvbi4KPj4gCj4+IEFzIGZvciByZWFk
-ZXIgbG9ja3MgYmVpbmcgbm8tb3BzIGluIFFTQlIsIEkgcmVhZCB0aGF0IGJ1dCBkb250IHF1aXRl
-IHVuZGVyc3RhbmQKPj4gaXQuIFNvbWV0aGluZyBtdXN0IGJlIHByZXZlbnRpbmcgbWVtb3J5IHJl
-Y2xhbWF0aW9uIG9mIHJjdSBwcm90ZWN0ZWQgZWxlbWVudHMKPj4gd2hlbiBJIHRha2UgdGhhdCBs
-b2NrLgo+IAo+IE5vdGUgdGhhdCBhIFJDVSByZWFkLXNpZGUgImxvY2siIGlzIHJlYWxseSBqdXN0
-IGEgbWFya2VyIGFib3V0IHRoZSBiZWdpbm5pbmcvZW5kCj4gb2YgYSB0cmFuc2FjdGlvbiB3aGlj
-aCBkZWxheXMgZ3JhY2UgcGVyaW9kcy4gV2UgdXNlIHRoZSBuYW1lICJsb2NrIiB0byBtYXRjaAo+
-IHRoZSBrZXJuZWwgUkNVIEFQSXMsIGJ1dCBpdCBzaG91bGQgbm90IGJlIGNvbnNpZGVyZWQgYXMg
-ZG9pbmcgYW55IGtpbmQgb2YgbXV0dWFsCj4gZXhjbHVzaW9uLgo+IAo+PiAKPj4gTXkgc3BlY2lm
-aWMgc2l0dWF0aW9uIGlzOiBJIGhhdmUgYSBRU0JSIHJjdSBwcm90ZWN0ZWQg4oCccG9saWN54oCd
-IG9iamVjdCAoanVzdCBhCj4+IHJlZ3VsYXIgb2xkIEMrKyBvYmplY3QgdGhhdCBwZXJpb2RpY2Fs
-bHkgZ2V0cyByZWZyZXNoZWQgYW5kIG11c3QgYmUgYXRvbWljYWxseQo+PiB1cGRhdGVkIGJlY2F1
-c2Ugd29ya2VyIGNvcmVzIGFyZSByZWFkaW5nIGl0IHdoaWxlIHNwaW5uaW5nLCBhbmQgdGhleSBj
-YW50IHNsb3cKPj4gZG93bikuIFdoZW4gYSBuZXcgcG9saWN5IGlzIHJlY2VpdmVkIHdlIGludm9r
-ZSBjYWxsX3JjdSBvbiB0aGUgb2xkIHBvbGljeS4KPj4gY2FsbF9yY3Ugd2lsbCBldmVudHVhbGx5
-IGxhdW5jaCBhIHRocmVhZCBpbiB3aGljaCB0aGUgb2xkIHBvbGljeeKAmXMgcmVzb3VyY2VzCj4+
-IGFyZSByZWNsYWltZWQuIEluIHRoaXMgdGhyZWFkIEkgd291bGQgbGlrZSB0byBpdGVyYXRlIHRo
-cm91Z2ggYW5vdGhlciwgc2VwYXJhdGUKPj4gc3RydWN0dXJlLCB3aGljaCBpcyBhbHNvIFFTQlIg
-cmN1IHByb3RlY3RlZCAoYSB1cmN1IGhhc2h0YWJsZSkuIFRvIGRvIHNvCj4+IHNhZmVseSwgcHJl
-c3VtYWJseSBJIG11c3QgdXNlIGFuIHJjdSByZWFkbG9jay4gSSBqdXN0IHdhbnQgdG8gbWFrZSBz
-dXJlIHN1Y2ggYQo+PiBzY2VuYXJpbyBpcyByZWFzb25hYmxlIGFuZCBhdCB2ZXJ5IGxlYXN0IG5v
-dCBjb250cmEtaW5kaWNhdGVkLiBUaGFua3MhCj4gCj4gSWYgeW91IGxvb2sgYXQgdXJjdS1jYWxs
-LXJjdS1pbXBsLmgsIHlvdSB3aWxsIG5vdGljZSB0aGF0IGNhbGxfcmN1X3RocmVhZCgpCj4gaW5k
-ZWVkIHJlZ2lzdGVycyBpdHNlbGYgYXMgYSByZWFkZXIgdGhyZWFkLgo+IAo+IFNvIHRoZSBjYWxs
-LXJjdSBjYWxsYmFja3MgY2FuIGluZGVlZCB0YWtlIGEgUkNVIHJlYWQtc2lkZSBsb2NrLCBidXQg
-Zm9yIFFTQlIKPiB0aGUgc3RvcnkgZG9lcyBub3QgZW5kIHRoZXJlLCBiZWNhdXNlIGR1ZSB0byB0
-aGUgbmF0dXJlIG9mIFFTQlIsIHRoZSByZWFkLXNpZGUKPiBsb2NrIGlzIGluZGVlZCBhIG5vLW9w
-LCBhbmQgaXQgcmVsaWVzIGluc3RlYWQgb24gYWxsIHJlZ2lzdGVyZWQgUVNCUiByZWFkZXIKPiB0
-aHJlYWRzIHRvIHBlcmlvZGljYWxseSBpbnZva2UgdXJjdV9xc2JyX3F1aWVzY2VudF9zdGF0ZSgp
-IHRvIHJlcG9ydCB0aGF0IHRoZXkKPiBhcmUgaW4gYSBxdWllc2NlbnQgc3RhdGUsIG9yIGludm9r
-ZSB1cmN1X3FzYnJfdGhyZWFkX29mZmxpbmUoKSBpZiB0aGV5IGV4cGVjdCB0byBiZQo+IGluIGEg
-cXVpZXNjZW50IHN0YXRlIGZvciBhIGxvbmcgcGVyaW9kIG9mIHRpbWUgKGUuZy4gYmxvY2tpbmcp
-LCBmb2xsb3dlZCBieQo+IHVyY3VfcXNicl90aHJlYWRfb25saW5lKCkuCj4gCj4gQW5kIGluZGVl
-ZCwgdGhlIGNhbGxfcmN1X3RocmVhZCBwdXRzIGl0c2VsZiBpbiAib2ZmbGluZSIgbW9kZSB3aGls
-ZSBhd2FpdGluZyBmb3IKPiBncmFjZSBwZXJpb2RzICh0aGlzIGlzIGltcGxpY2l0bHkgZG9uZSB3
-aXRoaW4gdGhlIHFzYnIgc3luY2hyb25pemVfcmN1KCkgaW1wbGVtZW50YXRpb24pCj4gYW5kIHdo
-ZW4gc2xlZXBpbmcuCj4gCj4gU28geWVzLCB5b3Ugc2hvdWxkIGJlIGFibGUgdG8gaGF2ZSBhIFJD
-VSByZWFkLXNpZGUgZnJvbSB3aXRoaW4gYSBjYWxsLXJjdSB3b3JrZXIKPiB0aHJlYWQsIGFuZCBp
-dCdzIE9LIHRvIGFzc3VtZSB5b3UgY2FuIGRvIGEgUkNVIHRyYXZlcnNhbCB3aXRoIHRoZSBRU0JS
-IHVyY3UgZmxhdm9yCj4gZnJvbSBhIGNhbGwtcmN1IHdvcmtlciB0aHJlYWQgYXMgd2VsbC4KPiAK
-PiBUaGFua3MsCj4gCj4gTWF0aGlldQo+IAo+PiAKPj4gSmVmZgo+PiAKPj4gCj4+IAo+PiBTZW50
-IGZyb20gbXkgaVBob25lCj4+IAo+Pj4gT24gQXByIDE1LCAyMDIxLCBhdCA4OjIwIEFNLCBNYXRo
-aWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+Pj4gd3JvdGU6
-Cj4+PiAKPj4+IO+7vy0tLS0tIE9uIEFwciAxMywgMjAyMSwgYXQgMTE6MTkgUE0sIGx0dG5nLWRl
-diBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIHdyb3RlOgo+Pj4gCj4+Pj4gSGVsbG8gYWxsLAo+
-Pj4+IAo+Pj4+IEkgaGF2ZSB0d28gZGlmZmVyZW50IGVudGl0aWVzIHRoYXQgYXJlIGJvdGggcHJv
-dGVjdGVkIGJ5IFFTQlIgcmN1OiBhIHBvbGljeSBhbmQKPj4+PiBhIGhhc2h0YWJsZS4gSW4gdGhl
-IHJlY2xhbWF0aW9uIHRocmVhZCBmb3IgdGhlIHBvbGljeSBJIHdvdWxkIGxpa2UgdG8gdGFrZSBh
-Cj4+Pj4gcmVhZCBsb2NrIHNvIHRoYXQgSSBjYW4gc2FmZWx5IGl0ZXJhdGUgdGhyb3VnaCB0aGUg
-aGFzaHRhYmxlLiBJIGRvbnQgc2VlCj4+Pj4gYW55dGhpbmcgd3Jvbmcgd2l0aCB0aGlzLCBidXQg
-SSBqdXN0IHdhbnRlZCB0byBtYWtlIHN1cmUgaXQgd2FzIG9rIHNpbmNlIHRha2luZwo+Pj4+IGFu
-IHJjdSByZWFkIGxvY2sgaW4gYW4gcmN1IHJlY2xhbWF0aW9uIHRocmVhZCBzZWVtcyBsaWtlIGl0
-IG1heSBiZSBhIGJpdAo+Pj4+IHN1c3BlY3QuIFRoYW5rcyBmb3IgYW55IGluc2lnaHRzLCBsZXQg
-bWUga25vdyBpZiBjbGFyaWZpY2F0aW9uIGlzIG5lZWRlZCEKPj4+IAo+Pj4gV2hlbiB5b3Ugc2F5
-ICJ0aGUgcmVjbGFtYXRpb24gdGhyZWFkIGZvciB0aGUgcG9saWN5IiwgZG8geW91IHJlZmVyIHRv
-IGEgY2FsbC1yY3UKPj4+IHdvcmtlciB0aHJlYWQgPwo+Pj4gCj4+PiBBbHNvLCB5b3UgYXJlIGF3
-YXJlIHRoYXQgUkNVIHJlYWQtc2lkZSBsb2NrL3VubG9jayBhcmUgZWZmZWN0aXZlbHkgbm8tb3Bz
-IGZvcgo+Pj4gUVNCUiByY3UsIHJpZ2h0ID8KPj4+IAo+Pj4gVGhhbmtzLAo+Pj4gCj4+PiBNYXRo
-aWV1Cj4+PiAKPj4+IC0tCj4+PiBNYXRoaWV1IERlc25veWVycwo+Pj4gRWZmaWNpT1MgSW5jLgo+
-Pj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KPiAKPiAtLSAKPiBNYXRoaWV1IERlc25veWVycwo+
-IEVmZmljaU9TIEluYy4KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
-bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+----- On Apr 15, 2021, at 10:54 AM, lbj lbj137@yahoo.com wrote:
+
+> Mathieu,
+> Thanks so much for your wealth if information and timely responses, they are
+> greatly appreciated. Final question: is there any harm in explicitly calling
+> rcu_thread_online/rcu_thread_offline from within my call_rcu callback function?
+> From what you described it sounds like it would be redundant, but presumably
+> would be harmless. Correct? Thanks again.
+
+You could indeed invoke pairs of:
+
+  rcu_thread_offline();   <--- emphasis on _offline_ here.
+  [ long wait ... ]
+  rcu_thread_online();
+
+in that specific order within the call-rcu worker thread. Note that the qsbr state
+of the call-rcu worker thread is "online" when it invokes the callbacks, so each callback
+should make sure that state is back to "online" before it returns control back
+to its caller.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
