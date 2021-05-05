@@ -2,63 +2,72 @@ Return-Path: <SRS0=ctY1=KA=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E26D1C433ED
-	for <lttng-dev@archiver.kernel.org>; Wed,  5 May 2021 13:46:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD761C433B4
+	for <lttng-dev@archiver.kernel.org>; Wed,  5 May 2021 14:47:11 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id E7A4E613BA
-	for <lttng-dev@archiver.kernel.org>; Wed,  5 May 2021 13:46:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org E7A4E613BA
+	by mail.kernel.org (Postfix) with ESMTPS id 1B23A6109E
+	for <lttng-dev@archiver.kernel.org>; Wed,  5 May 2021 14:47:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1B23A6109E
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4FZyfb12HHz1hfk;
-	Wed,  5 May 2021 09:46:14 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Fb00r6m4zz1hlF;
+	Wed,  5 May 2021 10:47:08 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1620222375;
-	bh=ZhCrDaEgNV2ZZHRzK627L4Asi4xRE7x8zAfHgT5Ay7c=;
-	h=To:References:Date:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=HbCtBagNg9V7Uv42PIrSsw+SD9Peiw6zfEraC2t3x12Z3Fh++7nyHVPF2IXDVFa4V
-	 snOyATR7JJG7QFzir0gM4bR9BYtfcZcLdhqoMKAVqkiiyDRwM8rzvqncdLBxX/wGIO
-	 4Gflh9zKvgkKEsQhweOV0E1v2k5v9sVEAvT2hmJQiQipQKuU4UsAC5sBqoUqIQi+yN
-	 wlQEWKXJFfEt1Ac2ClvdgGrmfik8gIdbOF0MtoIutlCBmamsyrdWtgoiZGsmOHJLks
-	 XJmJpG6laXzqwpOSLbBU3Fyu3lk9od10wKZMOjxQceO4cYq5r3qehoIsXlDd+CVkuN
-	 ES1F1d2BYTSQQ==
-Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
- by lists.lttng.org (Postfix) with ESMTPS id 4FZyfY3F77z1hhf
- for <lttng-dev@lists.lttng.org>; Wed,  5 May 2021 09:46:13 -0400 (EDT)
-Received: from simark.ca (simark.ca [158.69.221.121]) (authenticated bits=0)
- by smtp.polymtl.ca (8.14.7/8.14.7) with ESMTP id 145Djx3f006889
- (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT); 
- Wed, 5 May 2021 09:46:04 -0400
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp.polymtl.ca 145Djx3f006889
-Received: from [10.0.0.11] (192-222-157-6.qc.cable.ebox.net [192.222.157.6])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by simark.ca (Postfix) with ESMTPSA id 594071E54D;
- Wed,  5 May 2021 09:45:59 -0400 (EDT)
-To: Dimitri Scheftelowitsch <dimitri.scheftelowitsch@esrlabs.com>,
- lttng-dev@lists.lttng.org
-References: <CANQXvtRR1HvzQkwmzH_HMGGJjx2PP_XAiOgLZxjMWbuyhzjH6g@mail.gmail.com>
- <69a2d37a-d60d-deba-02d2-c3084f62b84f@polymtl.ca>
-Message-ID: <555b0ddc-fbad-82d0-c052-27006310a577@polymtl.ca>
-Date: Wed, 5 May 2021 09:45:58 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+	s=default; t=1620226029;
+	bh=VLjkVnYfWjk9DdONzHFmhiYnjZToH0WhgMQUVAPJel8=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Vt9HsmVgFu12m4N231R26wwm+9akPjslJrNAteZAbi6ppJOG3gP0fTdh/n6rvxwLF
+	 VUMODgZ6HkF5+IL7rQPcFiExUcYzxpMBFKH9AZkN+vvkzHReKltbfTqlK9vm7enaki
+	 aqA1SaOnaGyH3b6ybRxALIk5wg+kiMkdLh/aHn54XOBFC5G7EvbTVtAA7KWY3mRumZ
+	 Pw3H4DdhSq36C5z7Ir+hhzs9Sf68LHrAet1D8Jp9AwOl1v/x65Lr0dXQZPqD+zofz0
+	 CaQtir7c0Y7QKpxFE1OOGSKTzH5HUcXXeyIDypv79TyA8eT54SnykysT3U/5yLi/sK
+	 05uiLws8fufdA==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Fb00p4rLvz1hWR
+ for <lttng-dev@lists.lttng.org>; Wed,  5 May 2021 10:47:05 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 5B3283258AB
+ for <lttng-dev@lists.lttng.org>; Wed,  5 May 2021 10:46:59 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id qObGIgoJ35tN; Wed,  5 May 2021 10:46:58 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id BA7C03254C8;
+ Wed,  5 May 2021 10:46:58 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com BA7C03254C8
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id 4KVyQkB4jpeo; Wed,  5 May 2021 10:46:58 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id B0314325821;
+ Wed,  5 May 2021 10:46:58 -0400 (EDT)
+Date: Wed, 5 May 2021 10:46:58 -0400 (EDT)
+To: Martin Wilck <mwilck@suse.com>
+Cc: paulmck <paulmck@kernel.org>, lttng-dev <lttng-dev@lists.lttng.org>
+Message-ID: <1131444540.26817.1620226018595.JavaMail.zimbra@efficios.com>
+In-Reply-To: <46bbe62ed2ebed63b6566516c792591deaf52a4a.camel@suse.com>
+References: <ebac01302ecae6cc2dd0ace8fcfffa6ab593e0fe.camel@suse.com>
+ <580855125.21864.1619808103861.JavaMail.zimbra@efficios.com>
+ <46bbe62ed2ebed63b6566516c792591deaf52a4a.camel@suse.com>
 MIME-Version: 1.0
-In-Reply-To: <69a2d37a-d60d-deba-02d2-c3084f62b84f@polymtl.ca>
-Content-Language: en-US
-X-Poly-FromMTA: (simark.ca [158.69.221.121]) at Wed, 5 May 2021 13:45:59 +0000
-Subject: Re: [lttng-dev] Babeltrace trimmer segfaults on custom trace
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4018 (ZimbraWebClient - FF88 (Linux)/8.8.15_GA_4007)
+Thread-Topic: User-space RCU: call rcu_barrier() before dissociating helper
+ thread?
+Thread-Index: 8AC08yLOaMoeHtkDqGWsDvcaVsaBlw==
+Subject: Re: [lttng-dev] User-space RCU: call rcu_barrier() before
+ dissociating helper thread?
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -70,38 +79,136 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Simon Marchi via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Simon Marchi <simon.marchi@polymtl.ca>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On 2021-05-04 9:57 p.m., Simon Marchi via lttng-dev wrote:
-> I tried to see if it would be possible for you
-> to just not use packets, but unfortunately I stumbled on what looks like
-> a bug in the CTF metadata parser, it hardcodes whether streams classes
-> have packets to true:
-> 
->   https://github.com/efficios/babeltrace/blob/534d93a8b2ba86f56dfdf6aa7a10911da5f6432c/src/plugins/ctf/common/metadata/ctf-meta-translate.c#L576
-
-Hi Dimitri,
-
-After talking with Philippe (Babeltrace 2's main contributor), this is
-not a bug in the CTF metadata parser.  According to [1]:
-
-    If the packet size field is missing, the whole stream only contains a single packet. 
-
-So when if you don't have a packet header/context at all, the trace is
-considered to have a single big packet.  That's why the metadata parser
-always create streams with packets.
-
-But the suggestion of adding timestamps to your packet is still valid.
-
-Simon
-
-[1] https://diamon.org/ctf/#spec5.2
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+LS0tLS0gT24gTWF5IDUsIDIwMjEsIGF0IDM6NTQgQU0sIE1hcnRpbiBXaWxjayBtd2lsY2tAc3Vz
+ZS5jb20gd3JvdGU6Cgo+IE9uIEZyaSwgMjAyMS0wNC0zMCBhdCAxNDo0MSAtMDQwMCwgTWF0aGll
+dSBEZXNub3llcnMgd3JvdGU6Cj4+IC0tLS0tIE9uIEFwciAyOSwgMjAyMSwgYXQgOTo0OSBBTSwg
+bHR0bmctZGV2Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmfCoHdyb3RlOgo+PiAKPj4gPiBJ
+biBtdWx0aXBhdGgtdG9vbHMsIHdlIGFyZSB1c2luZyBhIGN1c3RvbSBSQ1UgaGVscGVyIHRocmVh
+ZCwgd2hpY2gKPj4gPiBpcyBjbGVhbmVkCj4+ID4gb3V0Cj4+ID4gb24gZXhpdDoKPj4gPiAKPj4g
+PiBodHRwczovL2dpdGh1Yi5jb20vb3BlbnN2Yy9tdWx0aXBhdGgtdG9vbHMvYmxvYi8yM2EwMWZh
+Njc5NDgxZmYxMTQ0MTM5MjIyZmJkMmM0Yzg2M2I3OGY4L211bHRpcGF0aGQvbWFpbi5jI0wzMDU4
+Cj4+ID4gCj4+ID4gSSBwdXQgYSBjYWxsIHRvIHJjdV9iYXJyaWVyKCkgdGhlcmUgaW4gb3JkZXIg
+dG8gbWFrZSBzdXJlIGFsbAo+PiA+IGNhbGxiYWNrcyBoYWQKPj4gPiBmaW5pc2hlZAo+PiA+IGJl
+Zm9yZSBkZXRhY2hpbmcgdGhlIGhlbHBlciB0aHJlYWQuCj4+ID4gCj4+ID4gTm93IHdlIGdvdCBh
+IHJlcG9ydCB0aGF0IHJjdV9iYXJyaWVyKCkgaXNuJ3QgYXZhaWxhYmxlIGJlZm9yZSB1c2VyLQo+
+PiA+IHNwYWNlIFJDVSAwLjgKPj4gPiAoaHR0cHM6Ly9naXRodWIuY29tL29wZW5zdmMvbXVsdGlw
+YXRoLXRvb2xzL2lzc3Vlcy81KSAoYW5kIFJIRUw3IC8KPj4gPiBDZW50b3M3Cj4+ID4gc3RpbGwg
+aGFzIDAuNy4xNikuCj4+ID4gCj4+ID4gUXVlc3Rpb246IHdhcyBpdCBvdmVyLWNhdXRpb3VzIG9y
+IG90aGVyd2lzZSB3cm9uZyB0byBjYWxsCj4+ID4gcmN1X2JhcnJpZXIoKSBiZWZvcmUKPj4gPiBz
+ZXRfdGhyZWFkX2NhbGxfcmN1X2RhdGEoTlVMTCk/IENhbiB3ZSBtYXliZSBqdXN0IHNraXAgdGhp
+cyBjYWxsPwo+PiA+IElmIG5vLCB3aGF0Cj4+ID4gd291bGQgYmUgdGhlIHJlY29tbWVuZGVkIHdh
+eSBmb3IgbGlidXJjdSA8IDAuOCB0byBkaXNzb2NpYXRlIGEKPj4gPiBoZWxwZXIgdGhyZWFkPwo+
+PiA+IAo+PiA+IChOb3RlOiBJJ20gbm90IGN1cnJlbnRseSBzdWJzY3JpYmVkIHRvIGx0dG5nLWRl
+dikuCj4+IAo+PiBGaXJzdCBvZiBhbGwsIHRoZXJlIGlzIGEgc2lnbmlmaWNhbnQgcmVhc29uIHdo
+eSBsaWJ1cmN1IGRvZXMgbm90IGZyZWUKPj4gdGhlICJkZWZhdWx0Igo+PiBjYWxsX3JjdSB3b3Jr
+ZXIgdGhyZWFkIGRhdGEgc3RydWN0dXJlcyBhdCBwcm9jZXNzIGV4aXQuIFRoaXMgaXMKPj4gY2F1
+c2VkIGJ5IHRoZSBmYWN0IHRoYXQKPj4gYSBjYWxsX3JjdSBjYWxsYmFjayBtYXkgdmVyeSB3ZWxs
+IGludm9rZSBjYWxsX3JjdSgpIHRvIHJlLWVucXVldWUKPj4gbW9yZSB3b3JrLgo+PiAKPj4gQUZB
+SVUgdGhpcyBpcyBzb21ld2hhdCBzaW1pbGFyIHRvIHdoYXQgaGFwcGVucyB0byB0aGUgTGludXgg
+a2VybmVsCj4+IFJDVSBpbXBsZW1lbnRhdGlvbgo+PiB3aGVuIHRoZSBtYWNoaW5lIG5lZWRzIHRv
+IGJlIHNodXRkb3duIG9yIHJlYm9vdGVkOiB0aGVyZSBtYXkgaW5kZWVkCj4+IG5ldmVyIGJlIGFu
+eSBwb2ludAo+PiBpbiB0aW1lIHdoZXJlIGl0IGlzIHNhZmUgdG8gZnJlZSB0aGUgY2FsbF9yY3Ug
+d29ya2VyIHRocmVhZCBkYXRhCj4+IHN0cnVjdHVyZXMgd2l0aG91dCBsZWFrcywKPj4gZHVlIHRv
+IHRoZSBmYWN0IHRoYXQgYSBjYWxsX3JjdSBjYWxsYmFjayBtYXkgcmUtZW5xdWV1ZSBmdXJ0aGVy
+IHdvcmsKPj4gaW5kZWZpbml0ZWx5Lgo+PiAKPj4gU28gbXkgdW5kZXJzdGFuZGluZyBpcyB0aGF0
+IHlvdSBpbXBsZW1lbnQgeW91ciBvd24gY2FsbCByY3Ugd29ya2VyCj4+IHRocmVhZCBiZWNhdXNl
+IHRoZQo+PiBvbmUgcHJvdmlkZWQgYnkgbGlidXJjdSBsZWFrcyBkYXRhIHN0cnVjdHVyZSBvbiBw
+cm9jZXNzIGV4aXQsIGFuZCB5b3UKPj4gZXhwZWN0IHRoYXQKPj4gY2FsbCByY3VfYmFycmllciBv
+bmNlIHdpbGwgc3VmZmljZSB0byBlbnN1cmUgcXVpZXNjZW5jZSBvZiB0aGUgY2FsbAo+PiByY3Ug
+d29ya2VyIHRocmVhZAo+PiBkYXRhIHN0cnVjdHVyZXMuIFVuZm9ydHVuYXRlbHksIHRoaXMgZG9l
+cyBub3QgY292ZXIgdGhlIHNjZW5hcmlvCj4+IHdoZXJlIGEgY2FsbF9yY3UKPj4gY2FsbGJhY2sg
+cmUtZW5xdWV1ZXMgYWRkaXRpb25hbCB3b3JrLgo+IAo+IEkgdW5kZXJzdGFuZC4gSW4gbXVsdGlw
+YXRoLXRvb2xzLCB3ZSBvbmx5IGhhdmUgb25lIGNhbGxiYWNrLCB3aGljaAo+IGRvZXNuJ3QgcmUt
+ZW5xdWV1ZSBhbnkgd29yay4gT3VyIGNhbGxiYWNrIHJlYWxseSBqdXN0IGNhbGxzIGZyZWUoKSBv
+biBhCj4gZGF0YSBzdHJ1Y3R1cmUuIEFuZCBpdCdzIHVubGlrZWx5IHRoYXQgd2UnbGwgZ2V0IG1v
+cmUgUkNVIGNhbGxiYWNrcyBhbnkKPiB0aW1lIHNvb24uCj4gCj4gU28sIHRvIGNsYXJpZnkgbXkg
+cXVlc3Rpb246IERvZXMgaXQgbWFrZSBzZW5zZSB0byBjYWxsIHJjdV9iYXJyaWVyKCkKPiBiZWZv
+cmUgc2V0X3RocmVhZF9jYWxsX3JjdV9kYXRhKE5VTEwpIGluIHRoaXMgY2FzZT8KClllcywgaXQg
+d291bGQgZW5zdXJlIHRoYXQgYWxsIHBlbmRpbmcgY2FsbGJhY2tzIGFyZSBleGVjdXRlZCBwcmlv
+ciB0bwpyZW1vdmluZyB0aGUgd29ya2VyIHRocmVhZC4gQW5kIGNvbnNpZGVyaW5nIHRoYXQgeW91
+IGRvbid0IGhhdmUgY2hhaW5lZApjYWxsYmFja3MsIGl0IG1ha2VzIHNlbnNlIHRvIGludm9rZSBy
+Y3VfYmFycmllcigpIG9ubHkgb25jZS4KCj4gSWYgeWVzLCBpcyB0aGVyZSBhbgo+IGFsdGVybmF0
+aXZlIGZvciBzYWZlbHkgZGV0YWNoaW5nIHRoZSBjdXN0b20gUkNVIHRocmVhZCBpZiByY3VfYmFy
+cmllcigpCj4gaXMgdW5hdmFpbGFibGU/CgpJIHN1c3BlY3QgeW91IGNvdWxkIHJlLWltcGxlbWVu
+dCBzb21ldGhpbmcgc2ltaWxhciB0byByY3VfYmFycmllcigpIHdpdGhpbgp5b3VyIGFwcGxpY2F0
+aW9uIHRocm91Z2ggY2FsbF9yY3UgYW5kIGEgcmVuZGV6LXZvdXMgc3luY2hyb25pemF0aW9uLiBJ
+dAphbGwgZGVwZW5kcyBvbiBob3cgbXVjaCBjb21wbGV4aXR5IHlvdSB3YW50IHRvIGFkZCB0byB5
+b3VyIGFwcGxpY2F0aW9uCmZvciB0aGUgc2FrZSBvZiBub3QgbGVha2luZyBkYXRhIHN0cnVjdHVy
+ZXMgd2hlbiB1c2luZyBvbGQgdmVyc2lvbnMgb2YKbGlidXJjdS4KCj4gCj4+IFNvIHdpdGhvdXQg
+a25vd2luZyBtb3JlIGRldGFpbHMgb24gdGhlIHJlYXNvbnMgd2h5IHlvdSB3aXNoIHRvIGNsZWFu
+Cj4+IHVwIG1lbW9yeSBhdAo+PiBwcm9jZXNzIGV4aXQsIGFuZCB3aHkgaXQgd291bGQgYmUgdmFs
+aWQgdG8gZG8gc28gaW4geW91ciBwYXJ0aWN1bGFyCj4+IHVzZS1jYXNlLCBpdCdzCj4+IHJhdGhl
+ciBkaWZmaWN1bHQgZm9yIG1lIHRvIGVsYWJvcmF0ZSBhIGNvbXBsZXRlIGFuc3dlci4KPiAKPiBt
+dWx0aXBhdGhkIGlzIGEgbG9uZy1ydW5uaW5nIHByb2Nlc3MsIHNvIGJlaW5nIHdhcnkgb2YgbWVt
+b3J5IGxlYWtzIGlzCj4gaW1wb3J0YW50LiB2YWxncmluZCB0ZXN0cyBwb3AgdXAgYW4gdWdseSB3
+YXJuaW5nIGFib3V0IGxpYnVyY3UgLSBpdCdzCj4gb2J2aW91c2x5IG5vdCBhIGJpZyBpc3N1ZSwg
+YXMgaXQgb2NjdXJzIG9ubHkgb24gZXhpdCwgYnV0IGl0IG1ha2VzIGEKPiBuZWdhdGl2ZSBpbXBy
+ZXNzaW9uIG9uIHVzZXJzIHJ1bm5pbmcgbWVtb3J5IGxlYWsgdGVzdHMuIEl0J3MgcG9zc2libGUK
+PiB0byB3b3JrIGFyb3VuZCB0aGF0IGJ5IHVzaW5nIHZhbGdyaW5kICJzdXBwcmVzc2lvbnMiLCBi
+dXQgc28gZmFyIG15Cj4gcG9saWN5IHdhcyB0byB1c2UgdGhlc2Ugb25seSBhcyBsYXN0IHJlc29y
+dCBtZWFzdXJlLCBpbiBjYXNlIHdlCj4gY291bGRuJ3QgZmluZCBhbnkgd2F5IHRvIHdvcmsgYXJv
+dW5kIGl0IGluIG91ciBjb2RlLiBUaGF0J3Mgd2h5IEkgY2FtZQo+IHVwIHdpdGggdGhlICJjdXN0
+b20gUkNVIHRocmVhZCIgYXBwcm9hY2guCj4gCj4gQW55d2F5LCBmcm9tIHdoYXQgeW91J3JlIHNh
+eWluZywgaXQgbWlnaHQgYmUgYmUgYmV0dGVyIHRvIHNpbXBseSBhY2NlcHQKPiB0aGUgZmFjdCB0
+aGF0IHRoaXMgcHNldWRvLW1lbW9yeS1sZWFrIGV4aXN0cyB0aGFuIHRyeWluZyB0byBmaXggaXQg
+aW4KPiBhbiB1bnNhZmUgd2F5IHdpdGggb2xkZXIgbGlidXJjdSB2ZXJzaW9ucy4KCklmIHdlIHB1
+c2ggdGhpcyBsaW5lIG9mIHRoaW5raW5nIHRvIHRoZSBleHRyZW1lLCB3ZSBzaG91bGQgbG9vayBp
+bnRvIHdoYXQKaW1wcm92ZW1lbnQgc2hvdWxkIGJlIHRvIHRvIGxpYnVyY3UgdXBzdHJlYW0gc28g
+d2UgZml4IHRoaXMgc2l0dWF0aW9uIGluCnRoZSBmdXR1cmUsIGFuZCB0aGVuIHlvdSBjYW4gZGVj
+aWRlIGhvdyB5b3Ugd2FudCB0byBoYW5kbGUgbGVnYWN5IGxpYnVyY3UKb24geW91ciBzaWRlLgoK
+Pj4gSSBjYW4gc2VlIHRoYXQgbWF5YmUgd2UgY291bGQgY2hhbmdlIGxpYnVyY3UgdG8gbWFrZSBp
+dCBzbyB0aGF0IHdlCj4+IGZyZWUgYWxsCj4+IGNhbGxfcmN1IGRhdGEgc3RydWN0dXJlcyBfaWZf
+IHRoZXkgaGFwcGVuIHRvIGJlIGVtcHR5IG9mIGNhbGxiYWNrcyBhdAo+PiBwcm9jZXNzIGV4aXQs
+Cj4+IGFmdGVyIGludm9raW5nIG9uZSByY3VfYmFycmllci4gVGhhdCBzaG91bGQgdGFrZSBjYXJl
+IG9mIG5vdCBsZWFraW5nCj4+IGRhdGEgc3RydWN0dXJlcwo+PiBpbiB0aGUgY29tbW9uIGNhc2Ug
+d2hlcmUgY2FsbF9yY3UgZG9lcyBub3QgZW5xdWV1ZSBmdXJ0aGVyIGNhbGxiYWNrcy4KPj4gCj4+
+IFRob3VnaHRzID8KPiAKPiBUaGF0IHdvdWxkIGJlIG5pY2UsIGJ1dCBpdCB3b3VsZG4ndCBoZWxw
+IG1lIGluIHRoZSBzcGVjaWZpYyBjYXNlLCB3aGVyZQo+IEkgaGF2ZSB0byBkZWFsIHdpdGggYW4g
+b2xkIHZlcnNpb24gb2YgbGlidXJjdS4KPiAKPiBQZXJoYXBzIHlvdSBjb3VsZCBhbHNvIGNvbnNp
+ZGVyIGFuIEFQSSBleHRlbnNpb24gYnkgd2hpY2ggYW4KPiBhcHBsaWNhdGlvbiBjb3VsZCB0ZWxs
+IGxpYnVyY3UgdGhhdCBpdCdzIGV4aXRpbmcsIGFuZCBubyBmdXJ0aGVyCj4gY2FsbGJhY2tzIHNo
+b3VsZCBiZSBzY2hlZHVsZWQ/CgpCdXQgdGhlbiBob3cgaXMgdGhlIGFwcGxpY2F0aW9uIHN1cHBv
+c2VkIHRvIGRlYWwgd2l0aCB0aGlzID8gRm9yIGluc3RhbmNlLAp0aGUgY2FsbF9yY3UgY2FsbGJh
+Y2sgY291bGQgYmUgdXNlZCB0byBpbXBsZW1lbnQgYSBjb25kaXRpb24gdmFyaWFibGUgcmVuZGV6
+LXZvdXMKcG9pbnQgd2hpY2ggYmxvY2tzIG90aGVyIHBhcnRzIG9mIHRoZSBhcHBsaWNhdGlvbiB1
+bnRpbCBpdCBpcyBleGVjdXRlZC4KCkkgaGF2ZSBhIGZldyBpZGVhcyBvbiBob3cgdG8gZGVhbCB3
+aXRoIHRoaXMgaW4gbGlidXJjdSB1cHN0cmVhbToKCjEpIFdlIGNvdWxkIGltcGxlbWVudCBsaWJy
+YXJ5IGRlc3RydWN0b3IgZnVuY3Rpb25zIHdoaWNoIGNsZWFudXAgdGhlIGNhbGwgcmN1CiAgIHdv
+cmtlciB0aHJlYWRzIChhbmQgdGhlaXIgZGF0YSBzdHJ1Y3R1cmVzKSBfb25seSBpZl8gdGhleSBh
+cmUgcXVpZXNjZW50IGFuZAogICB0aGVpciBhc3NvY2lhdGVkIGNhbGxiYWNrIGxpc3QgaXMgZW1w
+dHkuCgoyLjEpIFdlIGNvdWxkIGRvY3VtZW50IHRoYXQgdGhlIGFwcGxpY2F0aW9uIG5lZWRzIHRv
+IGludm9rZSByY3VfYmFycmllcigpIGJlZm9yZQogICAgIGl0IGV4aXRzIGlmIGl0IHdpc2hlcyB0
+byBlbnN1cmUgdGhhdCBhbGwgY2FsbF9yY3UgY2FsbGJhY2tzIGFyZSBleGVjdXRlZCBiZWZvcmUK
+ICAgICBpdCBleGl0cy4gV2Ugc2hvdWxkIGRvY3VtZW50IHRoYXQgaWYgdGhlIGFwcGxpY2F0aW9u
+IGNoYWlucyBjYWxsX3JjdSBjYWxsYmFja3MsCiAgICAgaXQgbmVlZHMgdG8gaW52b2tlIHJjdV9i
+YXJyaWVyKCkgYXMgbWFueSB0aW1lcyBhcyB0aGVyZSBhcmUgY29uc2VjdXRpdmUgY2hhaW5pbmcu
+CiAgICAgQW5kIG9mIGNvdXJzZSwgdGhhdCBhIG5ldmVyLWVuZGluZyBjaGFpbmluZyBvZiBjYWxs
+X3JjdSBjYWxsYmFja3Mgd2lsbCBuZWNlc3NhcmlseQogICAgIGxlYWQgdG8gbWVtb3J5IGxlYWtz
+IGF0IGFwcGxpY2F0aW9uIGV4aXQuCgoyLjIpIEFsdGVybmF0aXZlbHksIHdlIGNvdWxkIGhhdmUg
+dGhlIHJjdV9iYXJyaWVyIGludm9rZWQgZnJvbSB3aXRoaW4gbGlidXJjdSdzIGRlc3RydWN0b3Iu
+CiAgICAgVGhlIG51bWJlciBvZiB0aW1lcyByY3VfYmFycmllciB3b3VsZCBiZSBpbnZva2VkIGNv
+dWxkIGJlIGNvbmZpZ3VyZWQgdGhyb3VnaCBhIG5ldyBBUEkuCiAgICAgVGhlIGRlZmF1bHQgY291
+bGQgYmUgdGhhdCByY3VfYmFycmllciBpcyBpbnZva2VkIG9uY2UuIEFuIGFwcGxpY2F0aW9uIGNv
+dWxkIGNob29zZSB0bwogICAgIG92ZXJyaWRlIHRoaXMgc28gcmN1X2JhcnJpZXIgaXMgbmV2ZXIg
+Y2FsbGVkIGF0IGFwcGxpY2F0aW9uIGV4aXQgaWYgaXQgY2FyZXMgbW9yZSBhYm91dAogICAgIGV4
+aXRpbmcgcXVpY2tseSB0aGFuIGxlYWtpbmcgbWVtb3J5LgoKSSB3b3VsZCBzbGlnaHRseSBmYXZv
+ciBhcHByb2FjaGVzICgxKSArICgyLjEpLCBiZWNhdXNlIGl0IGxlYXZlcyBhbGwgZmxleGliaWxp
+dHkgdG8gdGhlCmFwcGxpY2F0aW9uOiBpZiBjYWxsX3JjdSBpcyBpbnZva2VkIGZyb20gd2l0aGlu
+IGEgbGlicmFyeSwgdGhlbiB0aGF0IGxpYnJhcnkgaXMgZnJlZSB0bwpjaG9vc2UgaG93IG1hbnkg
+dGltZXMgaXQgbmVlZHMgdG8gaW52b2tlIHJjdV9iYXJyaWVyIGluIGl0cyBvd24gbGlicmFyeSBk
+ZXN0cnVjdG9yIChlLmcuCm9uIGRsY2xvc2UoKSkuCgpJbiBvcmRlciB0byBtYWtlIHN1cmUgdGhl
+ICJjb21tb24gdXNlLWNhc2UiIGRvZXMgbm90IGxlYWsgbWVtb3J5IHRob3VnaCwgd2UgY291bGQg
+bWFrZSBzdXJlCmxpYnVyY3UgZG9lcyBvbmUgcmN1X2JhcnJpZXIgYW5kIGNvbmRpdGlvbmFsbHkg
+Y2xlYW51cCB0aGUgd29ya2VyIHRocmVhZCArIGRhdGEgc3RydWN0dXJlcyBpZgp0aGUgY2FsbGJh
+Y2sgbGlzdCBpcyBlbXB0eSBhZnRlciB0aGUgYmFycmllci4KClRob3VnaHRzID8KClRoYW5rcywK
+Ck1hdGhpZXUKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cu
+ZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+czovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
