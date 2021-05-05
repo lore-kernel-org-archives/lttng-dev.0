@@ -1,65 +1,63 @@
-Return-Path: <SRS0=W2C5=J7=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=ctY1=KA=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 298BEC433B4
-	for <lttng-dev@archiver.kernel.org>; Tue,  4 May 2021 14:44:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F341BC433ED
+	for <lttng-dev@archiver.kernel.org>; Wed,  5 May 2021 02:03:34 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 36822613B4
-	for <lttng-dev@archiver.kernel.org>; Tue,  4 May 2021 14:44:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 36822613B4
+	by mail.kernel.org (Postfix) with ESMTPS id 0877F613B4
+	for <lttng-dev@archiver.kernel.org>; Wed,  5 May 2021 02:03:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0877F613B4
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4FZMzx3XQ3z1gt6;
-	Tue,  4 May 2021 10:44:13 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4FZg3m3LHMz1h2n;
+	Tue,  4 May 2021 22:03:32 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1620139454;
-	bh=TSKIPxAP1OtYnDRiwQz9gMLYQskFy/r/dPi2Ylm4goo=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=hV1lV7lFiGbITBpsQJgN/lUt2IlgQMaXQ+jElcjQy55MbyNYupVg3FXPE3KFTW1Vn
-	 Y12sqD/UFUmXGdb+BQAF/+RrT1TTnIO8tVxahTITAuyYiS2LjLRYpWu+xo4BzCikkQ
-	 +CgyHyciC/QovAfhZsPLRYFoAOVsfxbgs66g1qISKgY8NSYV3N97oJJPOfIiNh7iLF
-	 SLHFuWD/VIWTRoYUr0z6V3ku7VahDFwVvtMEVl3bVgLLEf0uCmIW9LQ2IF41v5JXVY
-	 GDFm39jb0c21JFqPgl8phRiBu3RvLbuWBTUewTUrfxd97V6CT7Zc9gMc2SrtpK62fw
-	 g8mYxM9sMe5rQ==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4FZMzv75jDz1h1p
- for <lttng-dev@lists.lttng.org>; Tue,  4 May 2021 10:44:11 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 857532E33F4
- for <lttng-dev@lists.lttng.org>; Tue,  4 May 2021 10:44:05 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id eQkcp-qDAm94; Tue,  4 May 2021 10:44:05 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 0D2332E2E86;
- Tue,  4 May 2021 10:44:05 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 0D2332E2E86
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id ZHcS1bce_DML; Tue,  4 May 2021 10:44:05 -0400 (EDT)
-Received: from joraj-alpa (192-222-181-218.qc.cable.ebox.net [192.222.181.218])
- by mail.efficios.com (Postfix) with ESMTPSA id B8B1C2E32EF;
- Tue,  4 May 2021 10:44:04 -0400 (EDT)
-Date: Tue, 4 May 2021 10:44:03 -0400
-To: Eqbal <eqbalzee@gmail.com>
-Cc: lttng-dev@lists.lttng.org
-Message-ID: <20210504144403.GB346954@joraj-alpa>
-References: <CAPj=WkjEZN+_NgrnF3djfF_jCyp+D195e+KpzqzAK9kfmrTu6Q@mail.gmail.com>
+	s=default; t=1620180212;
+	bh=Zgwq91aU7xixqSw2L/odjlB389ujJvDYwhX/FdFqARU=;
+	h=To:References:Date:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=F81uW5EkDMcsOaNRWmJmVlzdiROQOXTs4ta5/j35xgPaYVf2CXBE6nBOzHShsISoC
+	 fzuHFrbOk7BX1bFjOP3uR3cf2JyH/prO4Mfg+wxZtuoregFpLi5vUS73DmZMj9hvTr
+	 T4A20YpK5V3IFbQbac6P2wpExU/fuoGyDhEd4bhAQTQgadvqPQswKVVrKQTaIZ/73H
+	 pQE7J5mGTajabC6kudtSNlV3UpMIec+VjQMGIwcQ3o84jP2KUzri2eMut/PphrS7BQ
+	 sJK+GKqGtlNXQpnwLxpy2NWgJKDPJQj+Ug9b0kMZAnRXIMLr27n3gd18Ep1bqFMlXO
+	 2ZfsSGDgGrU6w==
+Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
+ by lists.lttng.org (Postfix) with ESMTPS id 4FZg3k3YWyz1hMQ
+ for <lttng-dev@lists.lttng.org>; Tue,  4 May 2021 22:03:30 -0400 (EDT)
+Received: from simark.ca (simark.ca [158.69.221.121]) (authenticated bits=0)
+ by smtp.polymtl.ca (8.14.7/8.14.7) with ESMTP id 1451vEMJ019262
+ (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT); 
+ Tue, 4 May 2021 21:57:19 -0400
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp.polymtl.ca 1451vEMJ019262
+Received: from [10.0.0.11] (192-222-157-6.qc.cable.ebox.net [192.222.157.6])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by simark.ca (Postfix) with ESMTPSA id 6652E1E01F;
+ Tue,  4 May 2021 21:57:14 -0400 (EDT)
+To: Dimitri Scheftelowitsch <dimitri.scheftelowitsch@esrlabs.com>,
+ lttng-dev@lists.lttng.org
+References: <CANQXvtRR1HvzQkwmzH_HMGGJjx2PP_XAiOgLZxjMWbuyhzjH6g@mail.gmail.com>
+Message-ID: <69a2d37a-d60d-deba-02d2-c3084f62b84f@polymtl.ca>
+Date: Tue, 4 May 2021 21:57:14 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAPj=WkjEZN+_NgrnF3djfF_jCyp+D195e+KpzqzAK9kfmrTu6Q@mail.gmail.com>
-Subject: Re: [lttng-dev] lttng live event loss with babeltrace2
+In-Reply-To: <CANQXvtRR1HvzQkwmzH_HMGGJjx2PP_XAiOgLZxjMWbuyhzjH6g@mail.gmail.com>
+Content-Language: en-US
+X-Poly-FromMTA: (simark.ca [158.69.221.121]) at Wed, 5 May 2021 01:57:14 +0000
+Subject: Re: [lttng-dev] Babeltrace trimmer segfaults on custom trace
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -71,73 +69,79 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+From: Simon Marchi via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Simon Marchi <simon.marchi@polymtl.ca>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On Mon, May 03, 2021 at 05:05:10PM -0700, Eqbal via lttng-dev wrote:
+On 2021-05-04 10:21 a.m., Dimitri Scheftelowitsch via lttng-dev wrote:
+> 
 > Hi,
 > 
-> I have a lttng live session trace consumer application using libbabeltrace2
-> where I create a graph to consume lttng live session traces and output to
-> another sink. I am running the graph in a loop at some polling interval as
-> long as I get BT_GRAPH_RUN_STATUS_AGAIN status. What I am noticing is that
-> if my polling interval is large enough I tend to lose either all or some of
-> the events. I experimented with various polling intervals and it seems if
-> the polling interval is less than *DELAYUS *from "lttng-create
-> --live=DELAYUS" option then I am able to get all the events, otherwise I
-> tend to lose events.
+> as mentioned on the IRC channel, babeltrace2 (both HEAD and current release in the lttng Ubuntu 20 repo) aborts with a violated precondition in `bt_clock_snapshot_get_ns_from_origin` on some custom traces we created. One of these traces is attached. It seems that the offending message is of type `BT_MESSAGE_TYPE_PACKET_BEGINNING`. What is confusing is that the pretty-printer does not seem to be influenced by this, and furthermore, I am not sure that this type of message actually requires a timestamp (at least if I understood the CTF spec correctly). Is this an issue with the trace itself or rather with babeltrace2?
 > 
-> Here are the steps I follow:
-> 1. start session daemon and relay daemon
-> 2. create a live session (with default delay of 1s), enable events and start
-> 3. Start my application (hello world example from lttng docs)
-
-Not sure if you modified it in any way, but be careful with short lived apps
-since an app can terminate before lttng-ust have a chance to register.
-
-> 4. Start the consumer application built using libbabeltrace that connects
-> to the live session
-
-hmm. Note that when attaching to a session it does not start at the beginning of the
-trace collected by lttng-relayd, it start at the last received data from
-lttng-relayd from the lttng-consumerd (LTTNG_VIEWER_SEEK_LAST).
-
-Hence I would recommend that these steps be inversed:
-
-4. Start the consumer application built using libbabeltrace that connects
-to the live session
-3. Start my application (hello world example from lttng docs)
-
-
+> To reproduce: `babeltrace2 nvctf --timerange="17:09:13.034123470,17:29:18.034216302"`.
 > 
-> I noticed that the events are actually persisted in the ~/lttng-traces by
-> the relay daemon, but it does not reach babeltrace consumer application. I
-> have noticed the same behavior with babeltrace2 cli.
-> 
-> I would like to understand what is the reason for such behavior and if
-> playing with the polling interval in relation to the DELAYUS value is the
-> right thing to do.
+> Any help would be appreciated.
 
-I think I reproduced the issue but I'm not completely sure it is the same
-problem. Please file an issue on the bug tracker [1] with
-as much information as possible, the exact lttng
-commands used, the current behaviour and the expected behaviour. 
-I'll add my findings if relevant.
+Hi Dimitri,
 
-But I think it might be a weird handling of how we handle the first "empty"
-retry and the subsequent get phase. After the initial phase everything seems to
-work as expected.
+Thanks for providing a trace, the issue was very easy to reproduce.
 
-[1] https://bugs.lttng.org/
+There are indeed some missing checks in the trimmer code and the lib
+code to avoid hitting some asserts when dealing with packets that have
+no timestamps (clock snapshots).  I have a beginning of a patch here:
 
+  https://review.lttng.org/c/babeltrace/+/5677
 
--- 
-Jonathan Rajotte-Julien
-EfficiOS
+However, once that is fixed, I hit:
+
+  https://github.com/efficios/babeltrace/blob/534d93a8b2ba86f56dfdf6aa7a10911da5f6432c/src/plugins/utils/trimmer/trimmer.c#L1284-L1290
+
+If the trace has packets, the trimmer component currently requires
+packets to have timestamps.   It would be possible for the trimmer to
+support packet messages without timestamps, but support for it is not
+implemented right now.  I tried to see if it would be possible for you
+to just not use packets, but unfortunately I stumbled on what looks like
+a bug in the CTF metadata parser, it hardcodes whether streams classes
+have packets to true:
+
+  https://github.com/efficios/babeltrace/blob/534d93a8b2ba86f56dfdf6aa7a10911da5f6432c/src/plugins/ctf/common/metadata/ctf-meta-translate.c#L576
+
+So when I tried removing the packet from your trace, trimmer was still
+unhappy about it.
+
+The easiest immediate fix for you would probably be to add some
+timestamps to your packets.  Looking at an LTTng trace, we can see:
+
+struct packet_context {
+        uint64_clock_monotonic_t timestamp_begin;
+        uint64_clock_monotonic_t timestamp_end;
+        uint64_t content_size;
+        uint64_t packet_size;
+        uint64_t packet_seq_num;
+        unsigned long events_discarded;
+        uint32_t cpu_id;
+};
+
+and
+
+stream {
+        id = 0;
+        event.header := struct event_header_large;
+        packet.context := struct packet_context;
+};
+
+So you can try adding a packet context with the two "timestamp" fields.
+Just make sure that timestamp_begin is <= your first event's timestamp
+and timestamp_end is >= your last event's timestamp.
+
+And of course, the other option is to fix Babeltrace, if you have some
+cycles to spare.
+
+Simon
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
