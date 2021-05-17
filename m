@@ -1,65 +1,153 @@
-Return-Path: <SRS0=4/8y=KK=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=B+Lc=KM=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0FABC433B4
-	for <lttng-dev@archiver.kernel.org>; Sat, 15 May 2021 05:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C9E7C433B4
+	for <lttng-dev@archiver.kernel.org>; Mon, 17 May 2021 14:36:17 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1CC4C61264
-	for <lttng-dev@archiver.kernel.org>; Sat, 15 May 2021 05:26:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1CC4C61264
+	by mail.kernel.org (Postfix) with ESMTPS id 01DC46192C
+	for <lttng-dev@archiver.kernel.org>; Mon, 17 May 2021 14:36:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 01DC46192C
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Fhv5P4Gvgz1pHZ;
-	Sat, 15 May 2021 01:26:33 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4FkMBl18Dqz1pwb;
+	Mon, 17 May 2021 10:36:14 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1621056394;
-	bh=zx8zrTrvW8ABOFJM956XQ6FRDhGuzGDgZXZy35m8iRw=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=N9cTrVra4x24NohH8t+3ux2RtchORsAek9ieb6CffrUv5q/gOAc3MpX9DJed4ajnh
-	 XipgvJ4eb8BFOgwciCasRp4jTR66ZKCX/UvEWuamIhJWDee0weT5dXKutF7PrODe3o
-	 Rl6eYOzGHP3AybkifcqAYgKJBwgLAaBH8KzoyT571mG521ZR9+DwU/dIvb9DzcjG8p
-	 dj7l1g9GbINKe4zvpMonQOGkWrzYZ1wHQglviYuqG+2hHELuGr46uWshkYhvoBvsr+
-	 lc4Lo+qAbwjYU5DsqMaKWdL5nyiLbidpjFQTL74SvnVnvWqgP1JUyduPavsDTqpHfB
-	 1E2LiZJtNQVrA==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4Fhv5N1NV8z1pF8
- for <lttng-dev@lists.lttng.org>; Sat, 15 May 2021 01:26:32 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id B53202BCA0B
- for <lttng-dev@lists.lttng.org>; Sat, 15 May 2021 01:26:26 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id EsxluEzGqOFd; Sat, 15 May 2021 01:26:24 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 9D6EC2BCB07;
- Sat, 15 May 2021 01:26:24 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9D6EC2BCB07
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id U214ZKN5NQl9; Sat, 15 May 2021 01:26:24 -0400 (EDT)
-Received: from Mercury (unknown [107.159.88.171])
- by mail.efficios.com (Postfix) with ESMTPSA id 7C4022BCB06;
- Sat, 15 May 2021 01:26:24 -0400 (EDT)
-Date: Sat, 15 May 2021 01:26:24 -0400
-To: lttng-dev@lists.lttng.org
-Cc: diamon-discuss@lists.linuxfoundation.org,
- linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <YJ9bgH7uw24flNDD@Mercury>
+	s=default; t=1621262175;
+	bh=9/x88NGOIIeHXVcSH33e4blG4aRzwbxrfQ6jBtFHtFk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=x8ACPCC7RYjzPU/LpMzoUcrMDZaZ61JHvFUBFf5QU31IOqbJu9EIWTBvYPbYhaA0i
+	 TryD6kfyzACQfEE+FhCxUuBJGWehE+RqITX46dMe/IXmNW32g8RQ/sH8zo6dOdCrBv
+	 94j4Ioai0MpRFcYhnnquYUngEkm5aDfbgeziTvwme4JyUGm8P+uwyhiEXo8q8J0icC
+	 z5H4FwJ7I3XItEob26JeMMBiRymOK6bpRX+azRPztF0Ox0LyKQw6u7kxde9ay+0Dhr
+	 BQJ3/1Jpi5P+3ZLlrp4joL+Xiqw8mKGqnsk1xfmxAD9T7/8O3Ak93jaDkst+RxyZcc
+	 YPw858FzH8DuA==
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10on2077.outbound.protection.outlook.com [40.107.94.77])
+ by lists.lttng.org (Postfix) with ESMTPS id 4FkMBj4xtWz1q2F
+ for <lttng-dev@lists.lttng.org>; Mon, 17 May 2021 10:36:13 -0400 (EDT)
+Received: from MWHPR17CA0071.namprd17.prod.outlook.com (2603:10b6:300:93::33)
+ by MN2PR08MB6224.namprd08.prod.outlook.com (2603:10b6:208:1b2::12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.28; Mon, 17 May
+ 2021 12:04:06 +0000
+Received: from MW2NAM12FT019.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:300:93:cafe::59) by MWHPR17CA0071.outlook.office365.com
+ (2603:10b6:300:93::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.25 via Frontend
+ Transport; Mon, 17 May 2021 12:04:06 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 213.95.163.135) smtp.mailfrom=elektrobit.com; lists.lttng.org; dkim=pass
+ (signature was verified) header.d=elektrobit.onmicrosoft.com; lists.lttng.org; 
+ dmarc=none action=none header.from=elektrobit.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ elektrobit.com discourages use of 213.95.163.135 as permitted sender)
+Received: from denue6es002.localdomain (213.95.163.135) by
+ MW2NAM12FT019.mail.protection.outlook.com (10.13.180.86) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4150.11 via Frontend Transport; Mon, 17 May 2021 12:04:05 +0000
+Received: from denue6es002.securemail.local (localhost [127.0.0.1])
+ by denue6es002.localdomain (Postfix) with SMTP id 4FkHq76lZzzlbv
+ for <lttng-dev@lists.lttng.org>; Mon, 17 May 2021 14:04:03 +0200 (CEST)
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com
+ (mail-bn7nam10lp2108.outbound.protection.outlook.com [104.47.70.108])
+ by denue6es002.localdomain (Postfix) with ESMTPS
+ for <lttng-dev@lists.lttng.org>; Mon, 17 May 2021 14:04:03 +0200 (CEST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nakWM0xB065js0U6tFKQbiM0BYo+uFkb/9VUGRPuRkgatHCmFAMfWwz+ROQaCUkdyo+7HhdWCh8+rKq4iiq0ZxkL5vB8y8F+yBOKqWPYditTxBbHGV1Nd8GhSkdJwBqsUluAJ9t/KTfax6M/6gaZdZe6V9DvLm7q+q9CHqz02E0jay8ALa51c8mKKPeehN5snUADkZzhNbSozAhZioFYQIBTaHOjJakHiFwj+7qOLpMWdB2NQBtBu+cUwjdA37DF2PIFJiMjW04RU+EhVPdFFfRqZBaics54ivM6mI8wug6Csm25vxEt8BZlYp+UtX+huNdhHH4+enGawGwKcTPSfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=63WQhA6tOXgONJel02LkWxtg5GPosz/VOG8k1ow/Nho=;
+ b=iNMpvgx8eiVDq//bS77MCi/CjjkE7+C2S0jJYODWWf+6UBZvzzmAOe/rAaeDPULEWlQZxx6AbqonlB1VFs7RMRieW0bwlMU9opjXAIZVK5S5blKcSwGwzP5YT8yRMv1CiB7OaQ9lRbPnK2xgJvnG+OLid5TC++OAA1bsOrUJaMS0qurSy2M08trx2Xj4AS6LxAN3Zvtnu9+KVm3nPQnqiobJ4DOew9EsZBRoyONia5EZSeDp7LEkFV4HqnjxG9ISKmxfh1IPKNrZOhH1aAcITWcgmk+rOdMRJDaq1FiLmFl1bf2fhVAktkHNhdNeB4mnvdm/ZomkugreOFZhEeD9hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 213.95.148.172) smtp.rcpttodomain=lists.lttng.org
+ smtp.mailfrom=elektrobit.com; dmarc=none action=none
+ header.from=elektrobit.com; dkim=none (message not signed); arc=none
+Received: from MWHPR04CA0065.namprd04.prod.outlook.com (2603:10b6:300:6c::27)
+ by BYAPR08MB5750.namprd08.prod.outlook.com (2603:10b6:a03:129::29)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.29; Mon, 17 May
+ 2021 12:04:01 +0000
+Received: from MW2NAM12FT012.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:300:6c:cafe::a2) by MWHPR04CA0065.outlook.office365.com
+ (2603:10b6:300:6c::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.25 via Frontend
+ Transport; Mon, 17 May 2021 12:04:01 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 213.95.148.172) smtp.mailfrom=elektrobit.com; lists.lttng.org; dkim=none
+ (message not signed) header.d=none;lists.lttng.org; dmarc=none action=none
+ header.from=elektrobit.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ elektrobit.com discourages use of 213.95.148.172 as permitted sender)
+Received: from denue6es010.ebgroup.elektrobit.com (213.95.148.172) by
+ MW2NAM12FT012.mail.protection.outlook.com (10.13.180.79) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4150.11 via Frontend Transport; Mon, 17 May 2021 12:04:00 +0000
+Received: from denue6es010.ebgroup.elektrobit.com (10.243.160.100) by
+ denue6es010.ebgroup.elektrobit.com (10.243.160.100) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Mon, 17 May 2021 14:03:56 +0200
+Received: from denue6es010.ebgroup.elektrobit.com ([fe80::e1fb:46b:8e36:4b79])
+ by denue6es010.ebgroup.elektrobit.com ([fe80::e1fb:46b:8e36:4b79%5])
+ with mapi id 15.01.2242.010; Mon, 17 May 2021 14:03:56 +0200
+To: <lttng-dev@lists.lttng.org>
+Thread-Topic: Compute execution times of threads
+Thread-Index: AddLFJcC7fD3NBHjQpa9Z0GTDp7GVQ==
+Date: Mon, 17 May 2021 12:03:56 +0000
+Message-ID: <63cae3953d25479ab410be167b5155d7@elektrobit.com>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.243.160.111]
 MIME-Version: 1.0
-Content-Disposition: inline
-Subject: [lttng-dev] =?iso-8859-1?q?=5BRELEASE=5D_LTTng_2=2E13=2E0-rc2_-_?=
- =?iso-8859-1?q?Nordicit=E9_-_Linux_kernel_and_user-space_tracer?=
+X-EOPAttributedMessage: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7728e20c-1523-4ba2-5521-08d9192bdea1
+X-MS-TrafficTypeDiagnostic: BYAPR08MB5750:|MN2PR08MB6224:
+X-Microsoft-Antispam-PRVS: <MN2PR08MB6224BBA2CEE012B082BCEA17952D9@MN2PR08MB6224.namprd08.prod.outlook.com>
+X-SM-outgoing: yes
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: lZDEuSqxDa1RQsawyq/Nll4C2hv92uP9gMNgI7VOfR50MowsZfKVklAmZbwkUNGW0gRa/V9rGoFmEiHTRiMnQg6D0j6tvJD9c0oDc4vUIMqeJJOpfbzCBWY1uT1XTjZd1YIJ1pUejPYndcTBA6UdLe1iKyq3YrQP6Ify5nyQzDAqjW8eDusdDSPCsc0fF47pymIPYE5AnXQ3f9a/SV9le5Dod3VFxVoWYkykVz3tIWKVnSsxXxPtYZLYf1TuJXu6kVWI1Dx2A/fAqJGwicta2KsHRENylleUC1R2Ev02HqA2x1fx66cT5l19Llhbj1Gl8y2LTC5+4U0ku3FfBxOvRi6c9lNfKwV7gL+6S3M1YABbPwXpU3ZeWPwtKMa4rUFtjicqvY1gdpzikCcMaNI7BQboebXR6eeplyfKlfZeWbzPcYW/7ySYRgIV2EQQFL2vVpJSu52LVcTz0uKLjaQg7JxYPnb+vTdavYniuujU9a+FaOIM/k+o1PlT70t6Iv0dWF13X1JzZlvQEDTVCdxtny4EX2J59QvZZXLoTaW8MCsPfSdXOlKDcjAvjcA1q/JILdiMmIxqoh7mF4EqeXSC3rHvIwy8U21Z782CQhwg7qzublbp10TiDjGCvy0KC772FuyzHaFYldEZ4wv2H7/sKqUFBCnCtEG6ng4CAbP/r8E=
+X-Forefront-Antispam-Report-Untrusted: CIP:213.95.148.172; CTRY:DE; LANG:en;
+ SCL:1; SRV:; IPV:CAL; SFV:NSPM; H:denue6es010.ebgroup.elektrobit.com;
+ PTR:eth1-fw1-nbg6.eb.noris.de; CAT:NONE;
+ SFS:(4636009)(39850400004)(376002)(396003)(346002)(136003)(36840700001)(46966006)(2876002)(5660300002)(8676002)(186003)(36860700001)(82740400003)(83380400001)(47076005)(426003)(8936002)(6916009)(478600001)(26005)(356005)(24736004)(108616005)(70586007)(36756003)(70206006)(2906002)(7696005)(316002)(81166007)(86362001)(82310400003)(2616005)(336012);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR08MB5750
+X-SM-smarthost: [elektrobit-com.mail.protection.outlook.com]
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: MW2NAM12FT019.eop-nam12.prod.protection.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: c20a0427-0b94-49c6-db34-08d9192bdbc9
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qiA/yXHoxg/OsDE93fgQKlGLSCRsAPEWuTLI3RhqH3lGirhn9S0usGYEGer5PHNVXhItEZ3wvukZzR8e21z9Z2FR9qlMI/ZAj715coVTU6G6edo0NBmgjTYNnZuLJGrJvBJzFDmpMLK+eHtD+rNqT9Pr3LVhn2aBVHQII+q/wLmIvP6zDu4U+VjTCC2KudZZjFu/ZRQjTYNvz4uSl7EfUfNzqjq25HGAT6mINUET+mSLJYm9ll36IKTCi3sfw/h3yoCHx4M/9t6WZXxK/aCMayPK30XrzDGngkBGjeDKGUrqXBWs2fKLsmq8I4LTSwblUyZ1eKO5MNE+KTkYcpOmK3GDFabdwpfTkjpQ8bBZ0kMTjJg7GClfCHt7k1aWw1TUlQ/oxvA1mTYismIv1aV9yFHiiFLA8qFhxdJSyZ/4QeFIkJJ6MI9M4Q1CX6aasimL//jqTRtVFW293KFgAdQRO7XPYZK0s7JL/QQFkPY8OdHQhtVWXEzIJ0yTApd9s0tB8IugJdrN/VVew5wLoWx3WJpmE3SPMdp0Wowe0N9mJpsMMKTa4yFhHcUC1At0Y0h11sWoPh537lEyw2SH1eijK+nyV3y/cGekrwRpKHXL6UuqYxiqiwIkQ8CoERDzUu+zpLJkMu8G/rRo+wAnwMgKd0dUDD+YKCCSS+ii3RT/nTAWQ8J7KKpjMFN+/SXbF0/V
+X-Forefront-Antispam-Report: CIP:213.95.163.135; CTRY:DE; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:denue6es002.localdomain;
+ PTR:denue6es002.automotive.elektrobit.com; CAT:NONE;
+ SFS:(4636009)(396003)(376002)(39850400004)(136003)(346002)(36840700001)(46966006)(26005)(2616005)(2906002)(36906005)(316002)(8936002)(6916009)(36756003)(5660300002)(82740400003)(478600001)(47076005)(186003)(336012)(2876002)(426003)(70206006)(70586007)(7696005)(108616005)(24736004)(82310400003)(36860700001)(8676002)(83380400001)(86362001)(27056005);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: elektrobit.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2021 12:04:05.4551 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7728e20c-1523-4ba2-5521-08d9192bdea1
+X-MS-Exchange-CrossTenant-Id: e764c36b-012e-4216-910d-8fd16283182d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e764c36b-012e-4216-910d-8fd16283182d; Ip=[213.95.163.135];
+ Helo=[denue6es002.localdomain]
+X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT019.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR08MB6224
+Subject: [lttng-dev] Compute execution times of threads
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -71,251 +159,214 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?q?J=C3=A9r=C3=A9mie_Galarneau_via_lttng-dev?=
- <lttng-dev@lists.lttng.org>
-Reply-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau
- <jeremie.galarneau@efficios.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+From: Phil Hertha via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Phil.Hertha@elektrobit.com
+Content-Type: multipart/mixed; boundary="===============3330669889792860311=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi everyone,
+--===============3330669889792860311==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_63cae3953d25479ab410be167b5155d7elektrobitcom_"
 
-Today marks the release of the second LTTng 2.13 - Nordicit=E9 release cand=
-idate.
+--_000_63cae3953d25479ab410be167b5155d7elektrobitcom_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-A prettyfied version of this annoucement is available here:
-https://github.com/lttng/lttng-tools/releases/tag/v2.13.0-rc2
+Hi all,
 
-If you were already testing the first release candidate of this release, pl=
-ease
-note that LTTng-UST and LTTng-tools must be updated to "rc2" in locked-step
-due to ABI changes. Also note that probe providers must be rebuilt against
-LTTng-UST 2.13.0-rc2.
+I am currently working on my master thesis on a Linux project with regard t=
+o communication- and execution times.
+Therefore I want to trace some user-space applications using lttng-ust.
+Here I want to compute the best and worst case execution times and the resp=
+onse time of several threads.
+The simplest approach would be to trace the start and end of each execution=
+, but this would neglect scheduling effects such as interference with highe=
+r priority tasks, where the thread would pause execution.
+What would be the best practice approach to calculate the CPU usage of each=
+ thread activation.
+Lttng seems to be doing something similar in their kernel traces.
 
-Have a look at the first release candidate's release notes for an
-overview of the features introduced in LTTng 2.13.
+I am using lttng-ust for tracing and pythonic babeltrace2 for parsing of th=
+e trace.
+Additionally it would be possible to collect an kernel trace if required.
 
-https://github.com/lttng/lttng-tools/releases/tag/v2.13.0-rc1
+I really appreciate any help you can provide.
 
-
-What's new in LTTng-UST (Linux application tracer) 2.13.0-rc2?
----
-
-- Allow explicit tracepoint instance provider name. Allow re-using a tracep=
-oint
-  class from tracepoint instances in other providers.
-
-  This is a localized API-breaking change introduced very early in the
-  2.13-rc cycle. The LTTNG_UST_TRACEPOINT_EVENT_INSTANCE macro newly introd=
-uced
-  in LTTng-UST 2.13-rc1 now takes an extra "template_provider" argument.
-
-  This changes the ABI exposed by the probe providers, so bump the probe
-  provider major version, and make newer LTTng-UST reject old incompatible
-  major.
-
-  Probe providers built against LTTng-UST 2.13-rc1 must be rebuilt against
-  LTTng-UST 2.13-rc2 to be traced.
-
-- Add probe descriptor field to enumeration and event class
-
-  Also breaks the ABI exposed by probe providers (provider major version al=
-ready
-  bumped for rc2). This enables additional validation of probe provider
-  compatibility when using event class and enumerations across providers.
-
-- Validate provider version for event class.
-
-- Validate provider version for event enumeration field types.
-
-- Introduce api0 and api1 compilation tests. This tests whether the API 0
-  compatibility API works. See ust-api-compat.h for details.
-
-- Fix Java (JUL and log4j) application context segmentation fault and leaks.
-
-- liblttng-ust-ctl: implement SIGBUS handling:
-
-  This fixes a long-standing DoS where an unprivileged application could ca=
-use
-  a SIGBUS in the consumer daemon by truncating the shared memory files it
-  receives from the session daemon. This requires that LTTng-tools be upgra=
-ded
-  to 2.13-rc2 in locked-step with LTTng-UST 2.13-rc2.
-
-- Restore communication protocol backward compatibility with LTTng-UST 2.12
-
-  - liblttng-ust-ctl: keep using lttng-ust-sock-8 and lttng-ust-wait-8 file=
-name
-
-    LTTng-UST 2.13-rc1 erroneously changed the file names of those socket a=
-nd
-    pipe files from [...]-8 to [...]-9, even though we intended to keep pro=
-tocol
-    compatibility between LTTng-UST 2.12 and LTTng-tools/ust 2.13. This cha=
-nges
-    reverts back to the prior filenames to make sure LTTng-UST 2.12 applica=
-tions
-    can be traced by a 2.13 LTTng-tools using 2.13 LTTng-UST.
-
-  - Fix: add missing fields in struct lttng_ust_abi_channel_config
-
-    Three fields were removed by mistake from this structure which is ABI
-    between the consumer daemon and applications traced with LTTng-UST. Add=
- them
-    back to allow tracing 2.12 LTTng-UST applications with a 2.13 LTTng-too=
-ls
-    using 2.13 LTTng-UST.
-
-- Fix LTTng-UST communication protocol variable-length data handling
-
-  When mixing older (e.g. 2.12) and newer versions of LTTng-UST talking to =
-each
-  other between application and LTTng-tools, situations where commands are
-  unknown lead to out-of-sync communication protocol.
-
-  Change the protocol for commands new to LTTng-UST 2.13 so they acknowledg=
-e the
-  fixed-size commands before the variable-sized data is sent, so the
-  communication protocol is kept in sync even when unknown command error
-  happens. This also happens for more ancient commands released in prior
-  versions for which we cannot change the protocol. Shutdown the socket fro=
-m the
-  session daemon side when we detect such errors, because there is no point=
- in
-  trying to communicate further on an out-of-sync socket.
-
-- Detect mixed liblttng-ust and liblttng-ust-tracepoint .so.0 and .so.1 lib=
-raries
-
-  Detect and report with a new "critical" logging message whether .so.0 and
-  .so.1 tracer libraries are loaded within a single process, which is an
-  unsupported use-case. Note that the LTTNG_UST_DEBUG environment variable =
-must
-  be set to allow users to observe those critical messages.
-
-  We also introduce a new LTTNG_UST_ABORT_ON_CRITICAL environment variable =
-to
-  allow the tracer to abort() the process whenever a critical logging state=
-ment
-  is encountered. This is meant to facilitate discovering problematic
-  deployments where an application indirectly loads different soname major
-  numbers of LTTng-UST through its instrumented shared libraries.
-
-See the ChangeLog for the full list of changes:
-https://github.com/lttng/lttng-ust/blob/13861e2d/ChangeLog
+Best regards
+Phil Hertha
 
 
-What's new in LTTng-modules (Linux kernel tracer) 2.13.0-rc2?
----
+--_000_63cae3953d25479ab410be167b5155d7elektrobitcom_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-- There are refactoring commits that were introduced after 2.13-rc1 to alig=
-n the
-  code of LTTng-modules with the refactoring that was done in LTTng-UST pri=
-or to
-  2.13-rc1. Given that LTTng-modules does not expose its kernel APIs to ext=
-ernal
-  users, it was possible to do this refactoring even after rc1.
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+/* List Definitions */
+@list l0
+	{mso-list-id:1762872202;
+	mso-list-template-ids:1353623570;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l0:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:72.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l0:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:108.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l0:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:144.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l0:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:180.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l0:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:216.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l0:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:252.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l0:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:288.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l0:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0A7;
+	mso-level-tab-stop:324.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72" style=3D"word-wrap:=
+break-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hi all,<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">I am currently working on my master thesis on a Linu=
+x project with regard to communication- and execution times.<o:p></o:p></p>
+<p class=3D"MsoNormal">Therefore I want to trace some user-space applicatio=
+ns using lttng-ust.<o:p></o:p></p>
+<p class=3D"MsoNormal">Here I want to compute the best and worst case execu=
+tion times and the response time of several threads.<o:p></o:p></p>
+<p class=3D"MsoNormal">The simplest approach would be to trace the start an=
+d end of each execution, but this would neglect scheduling effects such as =
+interference with higher priority tasks, where the thread would pause execu=
+tion.<o:p></o:p></p>
+<p class=3D"MsoNormal">What would be the best practice approach to calculat=
+e the CPU usage of each thread activation.<o:p></o:p></p>
+<p class=3D"MsoNormal">Lttng seems to be doing something similar in their k=
+ernel traces.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">I am using lttng-ust for tracing and pythonic babelt=
+race2 for parsing of the trace.<o:p></o:p></p>
+<p class=3D"MsoNormal">Additionally it would be possible to collect an kern=
+el trace if required.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">I really appreciate any help you can provide.<o:p></=
+o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Best regards<span style=3D"font-size:10.0pt"><br>
+Phil Hertha</span><o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</body>
+</html>
 
-- Compiling the system call tracing code has typically been a resource-heavy
-  endeavour both in terms of memory usage (~1G memory required) and CPU tim=
-e. It
-  has been split into smaller compile units to allow parallel compilation a=
-nd
-  lessen the memory requirements on the compiler.
+--_000_63cae3953d25479ab410be167b5155d7elektrobitcom_--
 
-- Bitwise enumerations are now disabled by default. Only compiled in with m=
-ake
-  CONFIG_LTTNG_EXPERIMENTAL_BITWISE_ENUM=3Dy.
+--===============3330669889792860311==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-- Fix: increment buffer offset when failing to copy from user-space.
-
-- Implement ring buffer Pascal string copy: allows taking C-strings as inpu=
-ts
-  and record them to ctf_array_text and ctf_sequence_text fields (which are
-  Pascal strings) without causing out-of-bound reads of the C-strings of th=
-ose
-  are smaller than the size reserved for the pascal strings. This mirrors t=
-he
-  behaviour introduced in LTTng-UST 2.13-rc1.
-
-- Support for 5.12 Linux kernels,
-
-- Support recent stable kernel branches 4.14, 4.19, 5.4,
-
-- Support for newer Ubuntu 4.15, 5.4, and RHEL 8.2/8.3 kernels,
-
-See the ChangeLog for the full list of changes:
-https://github.com/lttng/lttng-modules/blob/f982b51a/ChangeLog
-
-
-What's new in LTTng-tools 2.13.0-rc2?
----
-
-- The new features introduced in the 2.13 release are now fully documented =
-as
-  part of the installed man pages. A number of improvements were also made =
-to
-  the existing documentation such as adding examples for the lttng-add-cont=
-ext
-  command.
-
-- lttng client messages referring to "event rule hit" conditions have been
-  changed to use the correct "event-rule matches" condition name.
-
-- An example was added under doc/examples/trigger-condition-event-matches. =
-It
-  contains an application instrumented with LTTng-UST, a script that adds
-  triggers to notify external clients whenever the application's events occ=
-ur,
-  and a notification client which consumes the resulting notification along=
- with
-  any captured payload.
-
-  See https://github.com/lttng/lttng-tools/tree/c3195dc0/doc/examples/trigg=
-er-condition-event-matches#readme
-
-- A bug resulting in the production of erroneous path hierarchies when a
-  snapshot is streamed to a relay daemon was fixed. This bug resulted in
-  duplicated domain names being present in the final path of a snapshot
-  ("ust/ust" or "kernel/kernel") which could cause some automation scripts =
-to
-  fail.
-
-- A bug that caused some trace data to be invisible to live viewers has been
-  fixed.
-
-  See https://lists.lttng.org/pipermail/lttng-dev/2021-May/029953.html
-
-- A number of bugs that could result, under rare circumstances, in a hang w=
-hen
-  using the lttng-clear command against a session that contains kernel chan=
-nels
-  was fixed.
-
-- Miscellaneous stability improvements.
-
-See the ChangeLog for the full list of changes:
-https://github.com/lttng/lttng-tools/blob/4be5babe/ChangeLog
-
-
-Links
----
-
-Project website:
-https://lttng.org
-
-Download links:
-https://lttng.org/files/lttng-tools/lttng-tools-2.13.0-rc2.tar.bz2
-https://lttng.org/files/lttng-ust/lttng-ust-2.13.0-rc2.tar.bz2
-https://lttng.org/files/lttng-modules/lttng-modules-2.13.0-rc2.tar.bz2
-
-GPG signatures:
-https://lttng.org/files/lttng-tools/lttng-tools-2.13.0-rc2.tar.bz2.asc
-https://lttng.org/files/lttng-ust/lttng-ust-2.13.0-rc2.tar.bz2.asc
-https://lttng.org/files/lttng-modules/lttng-modules-2.13.0-rc2.tar.bz2.asc
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============3330669889792860311==--
