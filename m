@@ -2,69 +2,72 @@ Return-Path: <SRS0=dYoO=KP=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_REPLYTO_END_DIGIT,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B28CC433ED
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 09:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEABFC43460
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 12:18:17 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D14CF6101D
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 09:11:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D14CF6101D
+	by mail.kernel.org (Postfix) with ESMTPS id 2111B611AD
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 12:18:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2111B611AD
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Fm3rw3Pskz1rbg;
-	Thu, 20 May 2021 05:11:44 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Fm8073lSpz1rhg;
+	Thu, 20 May 2021 08:18:15 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1621501904;
-	bh=cwI/vr0y6LWvt8DaWh13FMvSZ/I2Ykl85J69AmMtfdE=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=kWmab8KbC617Ki4DpL+12SxEGyiLwqi2I8paj+KR62MyfCneS9Nv9Zj9vvdMTq+ov
-	 onW6FYGw/GvCCNeV7AS0hWOhfD0bGQzXDtYlzmZsvzcLtdjrQFDhI/75FaMVx2QnsW
-	 20uGnwvVMxHX2vxPq+kWsSg5pKjm2Xx/weqvY1NIgKqVgWZk/TNpsG5CZfR1Mzmh6e
-	 B1Xach/CyFFi4ZSbLOA55j6Kom3rC+qYnPNvSlsemLquEXjOM6U1RR5Mv+XlVX+AnO
-	 KiK8s0vkX9aCw1W/sOqJ4CExysA38rc5/KSnhRARe4y2hLevv/YiP6JJmxpexVTOmT
-	 3hfR4VKGjyLNA==
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by lists.lttng.org (Postfix) with ESMTPS id 4Fm3rv1lKnz1rKk
- for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 05:11:43 -0400 (EDT)
-Received: by mail-oi1-x22b.google.com with SMTP id s19so15762935oic.7
- for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 02:11:42 -0700 (PDT)
+	s=default; t=1621513096;
+	bh=fR9wl3OqrVIWvuC/qZaEhgGoMrnxFGWY2vt9gGUGz6A=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=vrw6OlhVhjknD2kT32k0zOgHWLfCtnvGiCLRX6E2FWFG1C653jhaeQXsR/4aCCG0B
+	 A9VL+LXdVe3Gbkaqeplvzer5XNiG04vdfKELez/0o44c1Br4vcTu0HqxB2C+tZ4p74
+	 kMV8kUdIpyNkNpSkgoEUpSsF4OFioeTfOsrCFkCyRO8Rgurr9Q8uzV6r6Krvry/4AV
+	 xc3fKVMT547vVMiLegC1bYHTdft3XoDoXIC+RAVxMm5uxPMakzrNDeW2ui0Cj0TI6w
+	 4uJDFN3OoLrqKyYNHJuCOI0fAG0Yj2zv250q6XfTe3rrSc5pmCVGPsGdD4xcjkT70r
+	 LoXPAfc/zMaGg==
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Fm8062kk6z1rhd
+ for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 08:18:14 -0400 (EDT)
+Received: by mail-ej1-x62f.google.com with SMTP id p24so23684175ejb.1
+ for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 05:18:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=mgoZDTfaMtpcH6dMEGkU53W6r0VTnFo6lQABiH+seYk=;
- b=Ae1Y4ywSl8BpsJBClFlgvKu2exrBQOcWGJ0wGVFaZMetABCgJyajwVcc2baqv23XFf
- oJe4YlZGp+5PjTCes12LKVYGBijRBqigYNJ5+lg1s8fTmZl/tluUjiNIrYk/Y0U3FQhx
- 9WqItA3BpV8BuOhnZhuMRUofS/cDPHTq5gMYYskVMEuDGHDTAgRANfLojNZkF6/umn+9
- VToFsU0kupbC7GoDY1nVgdmR6RhMN4cpHuhzV9B6AE7w7RRw4ex539I39bIKC6KJN7JB
- 1nYyyzJkhPHYrkuapIqM+w+qnbtDRd2yprK1bQN6EKgrO6ENc9NpYCtqaVGI81+F4Hn/
- PpHg==
-X-Gm-Message-State: AOAM531hXOPSiH8X4fIXDCNegOTGTrGbbBDTmsTlaI6CDG4Nrv7EzXqu
- Gasr2/EyGJ0cMl0QG0iTiKlNSEVgseq6EV7Ht/4=
-X-Google-Smtp-Source: ABdhPJyaTkf96me9bO/rZGA74VssCc2EGxv1ck1j/UdySq+evfhaNE5Kh2yMc5EUfGvFl1yYJnuRjFVjevdKD+nYHqs=
-X-Received: by 2002:aca:acc7:: with SMTP id v190mr2651228oie.28.1621501902348; 
- Thu, 20 May 2021 02:11:42 -0700 (PDT)
+ h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+ :content-transfer-encoding;
+ bh=eR/8xH1TaNdomWLy/XJpn8sA/L1Rs2/O//6Gaz3pGL0=;
+ b=NzlYp6tv7HLgkj9BnDeedjI7AXd1W+WQTwqjOvenEkAYDZ88a7k1UxFrgud0Pt0EWw
+ xxhdMLpgLIi39rQLETGCqUCTRfZZkB1YljrGg9uOwhbW3oGMdR7rlNeYDVCM6jdXY52I
+ JDmd1is9ygJMqrCuDlXaaOIWRtSnt93K5dLwhe4SRUueE3Vr9yQxrO78+rlq2xxajrVs
+ 63bT9xv9bufbtr26WlVpSJXzMMkQm4ewvJMlnct5PPzI9/voGRuwIWDYFVEQUboVpFHi
+ kEYtYEo0RWsSnJmlH5uFmHntqBTNDf51TG7yRbumKKg3iF9F6BBRJKUUxRE6Xx5tQHCB
+ Bogg==
+X-Gm-Message-State: AOAM532vn6yej6uNaP16dLUDi/fz5F4rOlwIhOX8YtDYY9CSLt+Hc8Ru
+ 4y6RxqFlU/siswKbJo77JnaDRoGMS7CEYQ==
+X-Google-Smtp-Source: ABdhPJwLPn9RcRvyittl/6fDheGrBdrY6VPByi/33IjKuj0V+S8iNdacmvsDBM3dHqy85EGX+weeVw==
+X-Received: by 2002:a17:907:1b1e:: with SMTP id
+ mp30mr4514270ejc.532.1621513093014; 
+ Thu, 20 May 2021 05:18:13 -0700 (PDT)
+Received: from debian-noppl.. (84-114-45-16.cable.dynamic.surfer.at.
+ [84.114.45.16])
+ by smtp.gmail.com with ESMTPSA id kx3sm1286319ejc.44.2021.05.20.05.18.12
+ for <lttng-dev@lists.lttng.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 20 May 2021 05:18:12 -0700 (PDT)
+To: lttng-dev@lists.lttng.org
+Date: Thu, 20 May 2021 14:18:06 +0200
+Message-Id: <20210520121807.55428-1-nolange79@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <PR3PR02MB6202C5373D6CECC72EBF45DAD12B9@PR3PR02MB6202.eurprd02.prod.outlook.com>
- <CADYdroOAiKwD_um-ONn=UfNQrOxjs0fM-7ozhUNc18jUQX9cQw@mail.gmail.com>
- <AM7PR02MB6194C2E06B14077092AA06A0D12A9@AM7PR02MB6194.eurprd02.prod.outlook.com>
-In-Reply-To: <AM7PR02MB6194C2E06B14077092AA06A0D12A9@AM7PR02MB6194.eurprd02.prod.outlook.com>
-Date: Thu, 20 May 2021 11:11:31 +0200
-Message-ID: <CADYdroNm+rLkqXV3tjtQ94_PQM_mTiHvmx3JzJG5h2YHbRfguA@mail.gmail.com>
-To: MONTET Julien <julien.montet@reseau.eseo.fr>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] LTTng - Xenomai : different results between
- timestamp-lttng and rt_time_read()
+Subject: [lttng-dev] [PATCH lttng-ust] Improve tracelog handling,
+ reduce exported functions
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -83,42 +86,235 @@ Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Am Do., 20. Mai 2021 um 10:28 Uhr schrieb MONTET Julien
-<julien.montet@reseau.eseo.fr>:
->
-> Hi Norbert,
->
-> Thank you for your answer !
->
-> Yes, I am using a Xenomai cobalt - xenomai is 3.1
-> cat /proc/xenomai/version => 3.1
->
-> After the installation, I tested "test tools" in /proc/xenomai/ and it worked nice.
+Instead of creating functions for each loglevel, simply pass the
+callback as argument.
 
-Just asked to make sure, thought the scripts usual add some -xeno tag
-to the kernel version.
+Further pack all preprocessor information into a struct that
+the compiler already can prepare.
 
-> What do you mean by "it might deadlock really good" ?
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ include/lttng/tracelog.h     |  49 +++++--------
+ src/lib/lttng-ust/tracelog.c | 130 +++++++++++++++--------------------
+ 2 files changed, 75 insertions(+), 104 deletions(-)
 
-clock_gettime will either use a syscall (kills realtime always) or is
-optimized via VDSO (which very likely is your case).
+diff --git a/include/lttng/tracelog.h b/include/lttng/tracelog.h
+index e97c8275..cd5032e3 100644
+--- a/include/lttng/tracelog.h
++++ b/include/lttng/tracelog.h
+@@ -14,51 +14,40 @@
+ extern "C" {
+ #endif
+ 
+-#define LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(level)					\
+-	extern void lttng_ust__tracelog_##level(const char *file,	\
+-		int line, const char *func, const char *fmt, ...)	\
+-		__attribute__ ((format(printf, 4, 5)));			\
+-									\
+-	extern void lttng_ust__vtracelog_##level(const char *file,	\
+-		int line, const char *func, const char *fmt,		\
+-		va_list ap)						\
+-		__attribute__ ((format(printf, 4, 0)));
+-
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_EMERG);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_ALERT);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_CRIT);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_ERR);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_WARNING);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_NOTICE);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_INFO);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_SYSTEM);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROGRAM);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROCESS);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_MODULE);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_UNIT);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_FUNCTION);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_LINE);
+-LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG);
+-
+-#undef LTTNG_UST_TP_TRACELOG_CB_TEMPLATE
++struct lttng_ust__tracelog_sourceinfo {
++	const char *file;
++	const char *func;
++	int line;
++};
++
++extern void lttng_ust__tracelog_printf(
++	__typeof__(lttng_ust_tracepoint_cb_lttng_ust_tracelog___LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG) *callback,
++	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, ...)
++	__attribute__ ((format(printf, 3, 4)));
++
++extern void lttng_ust__tracelog_vprintf(
++	__typeof__(lttng_ust_tracepoint_cb_lttng_ust_tracelog___LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG) *callback,
++	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, va_list ap)
++	__attribute__ ((format(printf, 3, 0)));
+ 
+ #define lttng_ust_tracelog(level, fmt, ...)					\
+ 	do {								\
++		static const struct lttng_ust__tracelog_sourceinfo src = { __FILE__, __func__, __LINE__ }; \
+ 		LTTNG_UST_STAP_PROBEV(tracepoint_lttng_ust_tracelog, level, ## __VA_ARGS__); \
+ 		if (caa_unlikely(lttng_ust_tracepoint_lttng_ust_tracelog___##level.state)) \
+-			lttng_ust__tracelog_##level(__FILE__, __LINE__, __func__, \
++			lttng_ust__tracelog_printf(&lttng_ust_tracepoint_cb_lttng_ust_tracelog___##level, &src, \
+ 				fmt, ## __VA_ARGS__);			\
+ 	} while (0)
+ 
+ #define lttng_ust_vtracelog(level, fmt, ap)					\
+ 	do {								\
++		static const struct lttng_ust__tracelog_sourceinfo src = { __FILE__, __func__, __LINE__ }; \
+ 		if (caa_unlikely(lttng_ust_tracepoint_lttng_ust_tracelog___##level.state)) \
+-			lttng_ust__vtracelog_##level(__FILE__, __LINE__, __func__, \
++			lttng_ust__tracelog_vprintf(&lttng_ust_tracepoint_cb_lttng_ust_tracelog___##level, &src, \
+ 				fmt, ap);				\
+ 	} while (0)
+ 
+ #if LTTNG_UST_COMPAT_API(0)
+-#define TP_TRACELOG_CB_TEMPLATE LTTNG_UST_TP_TRACELOG_CB_TEMPLATE
+ #define tracelog	lttng_ust_tracelog
+ #define vtracelog	lttng_ust_vtracelog
+ #endif
+diff --git a/src/lib/lttng-ust/tracelog.c b/src/lib/lttng-ust/tracelog.c
+index 8147d7a3..b28c6c78 100644
+--- a/src/lib/lttng-ust/tracelog.c
++++ b/src/lib/lttng-ust/tracelog.c
+@@ -15,78 +15,60 @@
+ #define LTTNG_UST_TRACEPOINT_DEFINE
+ #include "lttng-ust-tracelog-provider.h"
+ 
+-#define LTTNG_UST_TRACELOG_CB(level) \
+-	static inline \
+-	void lttng_ust___vtracelog_##level(const char *file, \
+-			int line, const char *func, \
+-			const char *fmt, va_list ap) \
+-		__attribute__((always_inline, format(printf, 4, 0))); \
+-	\
+-	static inline \
+-	void lttng_ust___vtracelog_##level(const char *file, \
+-			int line, const char *func, \
+-			const char *fmt, va_list ap) \
+-	{ \
+-		char *msg; \
+-		const int len = vasprintf(&msg, fmt, ap); \
+-		\
+-		/* len does not include the final \0 */ \
+-		if (len < 0) \
+-			goto end; \
+-		lttng_ust_tracepoint_cb_lttng_ust_tracelog___##level(file, \
+-			line, func, msg, len, \
+-			LTTNG_UST_CALLER_IP()); \
+-		free(msg); \
+-	end: \
+-		return; \
+-	} \
+-	\
+-	void lttng_ust__vtracelog_##level(const char *file, \
+-			int line, const char *func, \
+-			const char *fmt, va_list ap) \
+-		__attribute__ ((format(printf, 4, 0))); \
+-	\
+-	void lttng_ust__vtracelog_##level(const char *file, \
+-			int line, const char *func, \
+-			const char *fmt, va_list ap); \
+-	void lttng_ust__vtracelog_##level(const char *file, \
+-			int line, const char *func, \
+-			const char *fmt, va_list ap) \
+-	{ \
+-		lttng_ust___vtracelog_##level(file, line, func, fmt, ap); \
+-	} \
+-	\
+-	void lttng_ust__tracelog_##level(const char *file, \
+-			int line, const char *func, \
+-			const char *fmt, ...) \
+-		__attribute__ ((format(printf, 4, 5))); \
+-	\
+-	void lttng_ust__tracelog_##level(const char *file, \
+-			int line, const char *func, \
+-			const char *fmt, ...); \
+-	void lttng_ust__tracelog_##level(const char *file, \
+-			int line, const char *func, \
+-			const char *fmt, ...) \
+-	{ \
+-		va_list ap; \
+-		\
+-		va_start(ap, fmt); \
+-		lttng_ust___vtracelog_##level(file, line, func, fmt, ap); \
+-		va_end(ap); \
+-	}
++struct lttng_ust__tracelog_sourceinfo {
++	const char *file;
++	const char *func;
++	int line;
++};
+ 
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_EMERG)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_ALERT)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_CRIT)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_ERR)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_WARNING)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_NOTICE)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_INFO)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_SYSTEM)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROGRAM)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROCESS)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_MODULE)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_UNIT)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_FUNCTION)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_LINE)
+-LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG)
++typedef __typeof__(lttng_ust_tracepoint_cb_lttng_ust_tracelog___LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG) tpcallback_t;
++
++extern void lttng_ust__tracelog_printf(tpcallback_t *callback,
++	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, ...)
++	__attribute__ ((format(printf, 3, 4)));
++
++extern void lttng_ust__tracelog_vprintf(tpcallback_t *callback,
++	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, va_list ap)
++	__attribute__ ((format(printf, 3, 0)));
++
++static inline
++void lttng_ust___tracelog_vprintf(tpcallback_t *callback,
++	const struct lttng_ust__tracelog_sourceinfo *source,
++	const char *fmt, va_list ap)
++	__attribute__((always_inline, format(printf, 3, 0)));
++
++
++static inline
++void lttng_ust___tracelog_vprintf(tpcallback_t *callback,
++	const struct lttng_ust__tracelog_sourceinfo *source,
++	const char *fmt, va_list ap)
++{
++	char *msg;
++	const int len = vasprintf(&msg, fmt, ap);
++
++	/* len does not include the final \0 */
++	if (len >= 0)
++		goto end;
++	(*callback)(source->file, source->line, source->func, msg, len,
++		LTTNG_UST_CALLER_IP());
++	free(msg);
++end:
++	return;
++}
++
++
++void lttng_ust__tracelog_printf(tpcallback_t *callback,
++	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, ...)
++{
++	va_list ap;
++
++	va_start(ap, fmt);
++	lttng_ust___tracelog_vprintf(callback, source, fmt, ap);
++	va_end(ap);
++}
++
++void lttng_ust__tracelog_vprintf(tpcallback_t *callback,
++	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, va_list ap)
++{
++	lttng_ust___tracelog_vprintf(callback, source, fmt, ap);
++}
+-- 
+2.30.2
 
-What happens is that the kernel will take a spinlock, then write new
-values, then releases the spinlock.
-your program will aswell spin (but just to see if the spinlock is
-free), read the values and interpolates them.
-
-But if your program interrupts the kernel while the kernel holds the
-lock (all on the same cpu core), then it will spin forever and the
-kernel will never execute.
-
-The ugly truth is, that any library you use could call those
-functions, you need to very closely look at your realtime path.
-Some checkers can help: https://github.com/nolange/preload_checkers
-
-
-
-Norbert.
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
