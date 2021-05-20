@@ -7,64 +7,66 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7885C433B4
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 13:42:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7EEBC433B4
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 13:44:32 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 1D0EB60240
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 13:42:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1D0EB60240
+	by mail.kernel.org (Postfix) with ESMTPS id 6BAC360240
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 13:44:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 6BAC360240
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Fm9sm4hYkz1rg7;
-	Thu, 20 May 2021 09:42:52 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Fm9vg0CMKz1rxB;
+	Thu, 20 May 2021 09:44:31 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1621518173;
-	bh=a6GztwWrqFslBA/amemsOE0sSKUtWXOgKeOJZlP5yoY=;
+	s=default; t=1621518271;
+	bh=fEb/jXm/Ws+HZN9NoN0iZcrU22CQ2eFAJKTOd70Mo74=;
 	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=V4+ndmIqeseAeawkmDJU8/oAMRuGjIJk1DIHE89nN59yjQFRJsMw8P+nA+piZpRhk
-	 SjN1ugiYYRBEwmAM5laLDBGzSDzTzq6XlyxG1VttdnJzi1bDe/bZCdhjr0gYApH8on
-	 sXB8Zn1gyR9yAuc2Kb6dgKDrsUiiiNHyD79QzVXLi/hifgtTMSWJ5XZHgqhZQ7S57e
-	 5dYVe/ORQg7ftTacuXrxc6NJ+iYx/KTJhKrOmmalhopsfco2RbEcxel1doFFzTYZkn
-	 MrkBEamH16yPiPItoMv6UDjlPWMUddKLQJwfQSqg765Pht+vSYLFRWh7YJDdBm5mVC
-	 kh6vxaGsiW6rg==
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
- [IPv6:2607:f8b0:4864:20::22c])
- by lists.lttng.org (Postfix) with ESMTPS id 4Fm9sk69j8z1rLt
- for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 09:42:50 -0400 (EDT)
-Received: by mail-oi1-x22c.google.com with SMTP id w127so12587127oig.12
- for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 06:42:50 -0700 (PDT)
+	b=OHP26b3pIIT49Fh8Wyh6FmIjtxAgKnxiHbLgN56zG866K/cvdGH7ky9RGy+5a/+85
+	 lfRYrNFVhUzsEfZxCaP/gB1+WBt0bBZQK/reBlzF2rpNQD5BFLppVsLL+9yv2OAqPs
+	 5Xr2vh3QALY+bwDZaSCVAVP013dqss3TjVhYSYOaKb9hpGOrMh/RxPiBn2s1W96dKw
+	 +iiwqkp60e7FlpvhFTktjrtRJVi8nO+jUQOSZyoiJj88RveiLTt39c4gmV8/f4RZ7k
+	 s2TCTzQaIFd/uFyluMVBwiiOlhTL5htZD8BK0RHepu0n1IRxAWZP2ip9QYV+b0lM1W
+	 2qqs1E+rxpRJA==
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com
+ [IPv6:2607:f8b0:4864:20::22a])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Fm9vd4h3Bz1rlT
+ for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 09:44:29 -0400 (EDT)
+Received: by mail-oi1-x22a.google.com with SMTP id b25so16491006oic.0
+ for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 06:44:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=/vX6od2clUS/CrzqoTmWE1dN0dkMXmBj1PU4ClELYg8=;
- b=KrM88uBpsKQOzYG9DSsAQpevdweg+0/fTPm3aqwjLrzeaWJh7Kbde5k4YVr7uPVcT5
- W5o7W/hjUGDLNGIjEE+V8uZV3LmQB8gvkxfIMr9/M+6cKdzNiGgMVL8PTH8X1o6OHtSN
- R5yaZUb2+ifrlP1WOuUOc667ElReLA341LcZEZqjc7tghufd4Cy15nZZtSvrOtQ/K7+u
- bVA2ab/pyC9bZGExJU8MuD3B80BM4DUJZjkRR1s6JLlOVT2A8ebqu6r0O6E68pRveHGC
- kLYV9LqNRVMVDO4oLwKSejTIHux6PVCWz0lpIkrEk6vMiYT9wEhC4y40ykAYmY16fUwn
- q52w==
-X-Gm-Message-State: AOAM533umNDVxS4iltUnZkg6V57qRbGsYvpaV4BFTY8smPV/N962+rMA
- ShYUJPwmpTVo0WREp42/7JydGGm2+fJ0voQM8XA=
-X-Google-Smtp-Source: ABdhPJxnphKavbOzndsDBcCprGiT4AmYlVnrsvMTuOvCjM7pXhbRIJkNi9sSWy+QIkqUH6UsBckJLNyUTv9B+tTSgJ0=
-X-Received: by 2002:aca:acc7:: with SMTP id v190mr3383674oie.28.1621518169939; 
- Thu, 20 May 2021 06:42:49 -0700 (PDT)
+ bh=Re2Kft3XxHa1CyAnmh6tTgUgPFswDcn7BgFS50sPtw4=;
+ b=RFrIFHdAYBhzq/lkwkiCiYtfvCsZRyKBqTYJJFOXrtvAl31wR0cFXvZzAkhdX7L90T
+ XKZum0Gul/Upzdwi9AO0o1rtjE8Y7oQbphVkF9mKos823Bre1cuOe0To4HsOlmck5t0P
+ P1WgKB9rJ9pVHo7EVcq+Em+JiuJFN91urxUux1CTLV2+xQX/KVjhJedOyDzLJ7yn/cOG
+ AhKd3f0zOLFPMXK5nRaVY5aR7Hy9cqILOSEmJPHHYXOU9xF+Lji5rfxYOdk4A99ovFF4
+ Y0CyQsy6y24gumNB7hBs2N6Stsbsek6u7I+v96fapvybN5Fk/Qr4VDQZb9LeI+fa/CDv
+ 20kA==
+X-Gm-Message-State: AOAM5324k6r1HIOK0rG2+w8BUIBvCXsVv3G4rZEINWy6PpohU+LIihr8
+ EFSR8er4Dfrsm6WsfAJDBFPyhJnkwlkKtMtzj4Y=
+X-Google-Smtp-Source: ABdhPJw55aLKl3f85pClOTMhF4cVm5p3j5vHpcKHCsxvWBJZO6JlGmM2nim/VnEDF9Tl6S/QR3kSITki8xQQ71LkB4Q=
+X-Received: by 2002:a05:6808:1402:: with SMTP id
+ w2mr2153737oiv.72.1621518269101; 
+ Thu, 20 May 2021 06:44:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <CADYdroN3=pAe66crtsVT9aHE4T+bT61-tvHFKCuwZYkHhuyFjw@mail.gmail.com>
- <217443874.51651.1621450365666.JavaMail.zimbra@efficios.com>
- <CADYdroMVaMq6wdySyV-JGDyJaFpaLO1cHd2=hEb=WMpBHUz0Jg@mail.gmail.com>
- <1519877397.52210.1621517299822.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1519877397.52210.1621517299822.JavaMail.zimbra@efficios.com>
-Date: Thu, 20 May 2021 15:42:39 +0200
-Message-ID: <CADYdroNEtUen6OiVSXeP7EgRrPGv6wW3FtV1-i0php5DoJQUFg@mail.gmail.com>
+References: <20210519165648.792939-1-nolange79@gmail.com>
+ <1498635684.51674.1621450841774.JavaMail.zimbra@efficios.com>
+ <CADYdroMkj-tsaBBFqnDsRk2cX5DNxO-yYzLpARJzkNx6CRc5jg@mail.gmail.com>
+ <1632491203.52217.1621517618464.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1632491203.52217.1621517618464.JavaMail.zimbra@efficios.com>
+Date: Thu, 20 May 2021 15:44:18 +0200
+Message-ID: <CADYdroN9bvvG2ga+UUatA0qUZi8LgoYTvT1RW4EGUBx6Gnjyog@mail.gmail.com>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] reading context fields causes syscalls
+Subject: Re: [lttng-dev] [PATCH] Avoid using the heap for small strings with
+ tracef/tracelog
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -83,114 +85,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Am Do., 20. Mai 2021 um 15:28 Uhr schrieb Mathieu Desnoyers
+Am Do., 20. Mai 2021 um 15:33 Uhr schrieb Mathieu Desnoyers
 <mathieu.desnoyers@efficios.com>:
 >
-> ----- On May 20, 2021, at 8:46 AM, Norbert Lange nolange79@gmail.com wrote:
+> ----- On May 20, 2021, at 8:20 AM, Norbert Lange nolange79@gmail.com wrote:
 >
-> > Am Mi., 19. Mai 2021 um 20:52 Uhr schrieb Mathieu Desnoyers
-> > <mathieu.desnoyers@efficios.com>:
-> >>
-> >> ----- On May 19, 2021, at 8:11 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
-> >>
-> >> > Hello,
-> >> >
-> >> > Several context fields will cause a syscall atleast the first time a
-> >> > tracepoint is
-> >> > recorded. For example all of the following:
-> >> >
-> >> > `lttng add-context -c chan --userspace --type=vpid --type=vtid --type=procname`
-> >> >
-> >> > Each of them seems cached in TLS however, and most should never change
-> >> > after startup.
-> >> >
-> >> > As I am using Lttng over Xenomai, syscalls are strictly forbidden, I
-> >> > would like to have some function that prepares all data, which I can
-> >> > call on each thread before it switches to realtime work.
-> >> >
-> >> > Kinda similar to urcu_bp_register_thread, I'd like to have some
-> >> > `lttng_ust_warmup_thread` function that fetches the context values
-> >> > that can be cached. (urcu_bp_register_thread should be called there
-> >> > aswell)
-> >> > I considered just doing a tracepoint, but AFAIK the channel can be
-> >> > changed/configured after the process is running. So this is not robust
-> >> > enough.
-> >>
-> >> The new lttng_ust_init_thread() API in lttng-ust 2.13 would be the right
-> >> place to do this I think:
-> >>
-> >> /*
-> >>  * Initialize this thread's LTTng-UST data structures. There is
-> >>  * typically no need to call this, because LTTng-UST initializes its
-> >>  * per-thread data structures lazily, but it should be called explicitly
-> >>  * upon creation of each thread before signal handlers nesting over
-> >>  * those threads use LTTng-UST tracepoints.
-> >>  */
-> >>
-> >> It would make sense that this new initialization helper also initializes
-> >> all contexts which cache the result of a system call. Considering that
-> >> contexts can be used from the filter and capture bytecode interpreter, as
-> >> well as contexts added to channels, I think we'd need to simply initialize
-> >> them all.
-> >
-> > Yeah, just figured that it doesnt help at all if I do a tracepoint, as
-> > it might just be disabled ;)
-> > lttng_ust_init_thread() sounds right for that, maybe add one or 2 arguments for
-> > stuff you want initialized / dont want initialized over the default.
-> >
-> > I take that the downside of eager initialization is potentially wasted
-> > resources (now ignoring any one-time runtime cost).
+> > This patch was intended for 2.12, no src/common/tracer.h there.
 >
-> I would not want to introduce too much coupling between the application and
-> the tracer though. The public API I've added for the 2.13 release cycle takes
-> no argument, and I'm not considering changing that at this stage (we are already
-> at -rc2, so we're past the API freeze).
+> You should post feature patches against the master branch. Or if you just
+> want to send a RFC, and you work on an older branch, please state that the
+> patch is RFC and which branch the patch is against, but that work won't
+> be merged unless it's rebased against master.
 
-Ok, figured if that's preferred then nows the last chance
+Yeah, I read the contributing guide since then, sorry =)
 
+> > Also this patch is brocken, as a va_list cant be iterated twice.
 >
-> I'd be open to adding an extra API with a different purpose though. Currently
-> lttng_ust_init_thread is meant to initialize per-thread data structures for
-> tracing signal handlers.
+> Right. But you could easily do:
 >
-> Your use-case is different: you aim at tracing from a context which cannot
-> issue system calls. Basically, any attempt to issue a system call from that
-> thread after this is a no-go. I would be tempted to introduce something like
-> "lttng_ust_{set,clear}_thread_no_syscall" or such, which would have the following
-> effects when set:
+> va_start() [ first use ] va_end()
+> then
+> va_start() [ second use ] va_end(), right ?
 
-No systemcalls and no clock_gettime().
->
-> * Force immediate initialization of all thread's cached context information,
-
-Definitely needed (adding context is often needed I guess)
-
-> * Set a TLS variable flag indicating that the tracer should not do any system
->   call whatsoever. The tracer could either use dummy data (zeroes), log an error,
->   or abort() the process if a thread in no_syscall mode attempts to issue a system
->   call. This could be dynamically selected by a new environment variable.
-
-How this works is than Xenomai will generate a synchronous signal,
-which as default aborts. So fallbacks are nice, but error handling
-isn't necessary.
-
-Somewhat offtopic, but why is lltng not using __thread for TLS access,
-usually I only see this for really old stuff?
-
-> * Prevent threads in no_syscall mode from calling the write() system call on
->   sub-buffer switch (of course the read-timer channel option is preferred).
-
-Yeah, that was part of the last discussion. What would happen without
-write notification?
-Bufferstate is polled elsewhere too, or will it just be full forever?
-
-Come to think of it, maybe it would be better to add some form of
-"tags" to software,
-(like a defined symbol or ELF .note section) which could prevent
-processes to be traced
-if in the wrong mode (no read-timer), or change what work the
-lttng_ust_init_thread function
-does.
+New patch vs master does this.
 
 Norbert
 _______________________________________________
