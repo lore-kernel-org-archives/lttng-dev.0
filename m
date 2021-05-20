@@ -2,72 +2,70 @@ Return-Path: <SRS0=dYoO=KP=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_REPLYTO_END_DIGIT,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D58EBC433ED
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 16:25:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3ABBC433ED
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 16:40:48 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0C8F4606A5
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 16:25:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0C8F4606A5
+	by mail.kernel.org (Postfix) with ESMTPS id 1736A610CC
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 16:40:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 1736A610CC
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4FmFTh3XJTz1s42;
-	Thu, 20 May 2021 12:25:44 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4FmFq25kLbz1sC2;
+	Thu, 20 May 2021 12:40:46 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1621527945;
-	bh=9EG9O/c0iPCnE/DD36geu/mFifwsF1UvcwKyeahZKQY=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1621528847;
+	bh=5+A0aqEncreSGFZSDkykLjzPvJS9KeLt5E88KWR/Qgg=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=W/TzvglOZruB5++DZiwY+J3kB3DFz8E5IJtVI/FOqtR3Bn/lxRtRdlSP1DGVX2qh4
-	 cxoGvKMXKsPXPityfmkc0RL/GcSBYX3eVIhfs5HB+8wqiD61Cm681zEHuIMwvXVZcJ
-	 aFEU/TFs2Mu7Ak4nIHgT3UM4msdE4viYCizw8ZX+8eh307tGjl9FWF6+VPNguKqHiD
-	 lyprEuycNPeQJ+XtRYXH7jzhtgW5qhZVgpDME4fVIVoVG9+8Nmd20VT6r2v3amSzKS
-	 bZk0Qvb+W2nKHXZ8/hVgKDKFgNCBBkWlEyYW0VR8/tjBET7Ql0SQevq3z0DkZyG1Ve
-	 IVdJ2zMUPYXLg==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4FmFTg1tCNz1s5q
- for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 12:25:43 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C697433712D
- for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 12:25:37 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id JrFcLH0Xo9vT; Thu, 20 May 2021 12:25:35 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id BD51A33712B;
- Thu, 20 May 2021 12:25:35 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com BD51A33712B
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id Zo2B7Qn1JfME; Thu, 20 May 2021 12:25:35 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id AF023336EF5;
- Thu, 20 May 2021 12:25:35 -0400 (EDT)
-Date: Thu, 20 May 2021 12:25:35 -0400 (EDT)
-To: Norbert Lange <nolange79@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Message-ID: <523808152.52514.1621527935563.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CADYdroPZTrNg+gYy9SLyDnUGUd1kNq3vkzzjSwJx9e7Tz68quw@mail.gmail.com>
-References: <20210520121807.55428-1-nolange79@gmail.com>
- <1600729511.52338.1621520352970.JavaMail.zimbra@efficios.com>
- <CADYdroN3FF3Qs_B55s_Un2qOGz3sP=JMpV=QWRFcO7KVzL-8_A@mail.gmail.com>
- <982122605.52445.1621524098787.JavaMail.zimbra@efficios.com>
- <CADYdroPZTrNg+gYy9SLyDnUGUd1kNq3vkzzjSwJx9e7Tz68quw@mail.gmail.com>
+	b=CdIfdtSFQxmoI08x009QpAPlOarI+OIjRccUBotoRYQuVe0pZ2hoC3HD0UoKd0AY3
+	 t2wjbEu9ZjHMQKSKb3SCV9wj1i6McDQQOeV4eRJuq1PWoI/fpQRb66bIodVWnjoiKu
+	 00Kj7Z1qCW8O14hChXNaXSx9eFD4YI/OzB/b+DJulkJvZL249Q6tGB/BnhT2wFjvOU
+	 aZ/bfVJb64wXy/60UkX4jgSndSLHSSgtMWLXCK7bppuxrGlvjsEyWFDsQoyn62aiUS
+	 vPvbJ8sagVy+w1P0voYUJvu+0Hmw92EHOe4cr1PUV7YOsF++RUR49B6ADQHVtANt5o
+	 9aEoeETfQFPCQ==
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com
+ [IPv6:2607:f8b0:4864:20::332])
+ by lists.lttng.org (Postfix) with ESMTPS id 4FmFq05Dwjz1rdV
+ for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 12:40:44 -0400 (EDT)
+Received: by mail-ot1-x332.google.com with SMTP id
+ d3-20020a9d29030000b029027e8019067fso15380101otb.13
+ for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 09:40:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=J9Y4TLoWmLEqNT4hm15Z8+q7EPXhQg9NKQ6HmuZOhqY=;
+ b=blovLiRKm5j8pklyuk78GPTIzB/5daoXpbHt1yCDue3O4mBmyfMdNIQ5zx64XQWIju
+ vRMi3oz4eYVMyJMnBYyZFN0j/ZiTVRKm4LKTVORxMIbfI7aortG8Bn7sAKDduv6dSDt9
+ hIIVlV5AiWIbm07DepRljTGAQ7usSSQ2oRwWhUKrBtmrJN6WaQ0153QJSxbc+hM9+MdO
+ Vdc9Oa/Zovd212p/X45U9piVGkeyu4Fr6GjdS6om99TxNBysnEWDFaLV8BRYZm2mruCR
+ dX81zzO7zeVdcKIolYzoTpqY9tqS0i4Npl2ixaBKHOB9lMdMSHZQmafuLo9HapKSveV9
+ dt2A==
+X-Gm-Message-State: AOAM530VodL70p9aEekNnnXBsu/7Z+UNPg1WgpAeePl5kWEcQ6KF8v3f
+ VpVR0HPvHppCoCkTRMpDkaWg10S1NNi1GQGewMM=
+X-Google-Smtp-Source: ABdhPJyd/bkD9aXAX2Qyiwi6XIYAEMLxKz8ptL4c0azbcG2QqfyKVQlL8u1iH7vrZbk8flhXKZ9lk9ykhnApCbwNJHs=
+X-Received: by 2002:a05:6830:51:: with SMTP id
+ d17mr4600772otp.75.1621528843865; 
+ Thu, 20 May 2021 09:40:43 -0700 (PDT)
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4018 (ZimbraWebClient - FF88 (Linux)/8.8.15_GA_4007)
-Thread-Topic: Improve tracelog handling, reduce exported functions
-Thread-Index: A/ABAU9NCXIwzjHgoQs9TVyi/x7FvQ==
-Subject: Re: [lttng-dev] [PATCH lttng-ust] Improve tracelog handling,
- reduce exported functions
+References: <CADYdroPf5mcRMvfewsT6SQsWG0RKg6GcV8=T8BupxbooHT2=aA@mail.gmail.com>
+ <d7833098-93b8-712a-460a-da8ed7a3d044@efficios.com>
+In-Reply-To: <d7833098-93b8-712a-460a-da8ed7a3d044@efficios.com>
+Date: Thu, 20 May 2021 18:40:32 +0200
+Message-ID: <CADYdroOcJkQkEZgCJa=aTwpiHZ6qHNU81wQnu=+smLoXuSB8og@mail.gmail.com>
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Content-Type: multipart/mixed; boundary="000000000000bbb39105c2c59a63"
+Subject: Re: [lttng-dev] 2.13-rc2 fails to build with buildroot crosscompiler
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -79,84 +77,139 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Norbert Lange via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Norbert Lange <nolange79@gmail.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
------ On May 20, 2021, at 11:54 AM, Norbert Lange nolange79@gmail.com wrote:
-[...]
+--000000000000bbb39105c2c59a63
+Content-Type: text/plain; charset="UTF-8"
 
->> What prevents you from linking against lttng-ust.so again ?
-> 
-> I did not poke around enough with Lttng to be confident it wont have
-> side effects,
-> I really don't want it active in production. It doesn't seem there is
-> much public knowledge with Xenomai either.
-> lttng-ust.so will spawn threads, lttng-ust-tracepoint.so is mostly passive,
+Am Do., 20. Mai 2021 um 16:37 Uhr schrieb Michael Jeanson
+<mjeanson@efficios.com>:
+>
+> On 2021-05-20 9:52 a.m., Norbert Lange via lttng-dev wrote:
+> > Hello,
+> >
+> > many tests fail to build, apparently because transitive dependencies
+> > are not found.
+> > I managed to patch out building the test sub-directory, at which
+> > points the errors are gone,
+> > I dont know how to fix it with automake, seems like
+> > /tmp/ZBuild/build/lttng-libust-2.13.0-rc2/src/lib/lttng-ust/.libs
+> > should be added to library search paths.
+> >
+> > Norbert
+>
+> The libtool integration with autotools should be handling these transitive
+> dependencies but somehow doesn't seem to work in your environment. A
+> workaround could be to add the liblttng-ust-common.la file to all the test file:///home/noppl/git/buildroot/0001-package-lttng-bump-to-2.13rc2-WIP.patch
 
-There is indeed a split between instrumentation and runtime threads done
-with lttng-ust-tracepoint.so vs lttng-ust.so.
+ > binaries _LDADD where liblttng-ust.la is already present, for example:
+>
+> ust_fields_compatapi1_LDADD = \
+>         $(top_builddir)/src/lib/lttng-ust/liblttng-ust.la \
+>         $(top_builddir)/src/lib/lttng-ust-common/liblttng-ust-common.la \
+>         $(DL_LIBS)
+>
+> Can you check if this works?
 
-I understand that this split is missing for tracelog and tracef, and
-would be a good thing to have.
+I suppose it would, but there are many many of these errors also by
+linking libraries build in the test directory, would cost some time
+and I am not able to triage automake/libtool issues.
+Is that the solution upstream wants to use?
 
-I would be interested to move the tracelog and tracef implementation
-from liblttng-ust.so to liblttng-ust-tracepoint.so, even this late
-in the -rc cycle, because all users of tracelog/tracef need to link
-against liblttng-ust-tracepoint.so anyway. So moving these symbols
-should not affect anyone.
+I attached a patch for https://buildroot.org/ to pick the current
+lttng rc2. using buildroot is easy (but timeconsuming if you build the
+cross-compiler aswell):
 
-Can you give it a try and let me know if it works for you ?
+make O=/tmp/build defconfig
+make O=/tmp/build menuconfig
 
-> So Id want a dynamic tracepoint-provider than i can dlopen (so that
-> the signal masks are inherited,
-> I hope you dont touch them).
+Pick your hosts/prefered architecture in Target options
+In toolchain menu pick kernel headers + c library type (glibc for me)
 
-The signals are all blocked for lttng-ust listener threads. We don't
-modify the signal masks in the tracepoint probes. Not sure which is
-the target of your question though.
+Enable:
+Target packages -> Libraries -> Other -> lttng-libust
+Target packages -> Debugging, profiling and benchmark -> lttng-tools
 
-> 
-> Of course I could just remove all lttng libraries on the production
-> system aswell. Still doesnt change that
-> tracelog and tracef doesnt work that way.
+Then
+make O=/tmp/build
 
-Would moving the tracelog/tracef implementation to liblttng-ust-tracepoint.so
-solve your issues ?
+Norbert
 
-> 
-> I implemented my own tracelog/tracef using the normal lttng
-> tracepoints for now, they totally break on source level with 2.13
-> aswell ;)
-> is it ok if I do this to access them:
-> 
-> #define TRACEPOINT_DEFINE
-> #define TRACEPOINT_PROBE_DYNAMIC_LINKAGE
-> // 2.12
-> // #include <lttng/lttng-ust-tracelog.h>
-> // #include <lttng/lttng-ust-tracef.h>
-> // 2.13
-> #include <lttng/tp/lttng-ust-tracelog.h>
-> #include <lttng/tp/lttng-ust-tracef.h>
-> 
-> ie. I would load lttng-ust.so later and can then use those tracepoints.
+--000000000000bbb39105c2c59a63
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-package-lttng-bump-to-2.13rc2-WIP.patch"
+Content-Disposition: attachment; 
+	filename="0001-package-lttng-bump-to-2.13rc2-WIP.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kox48v160>
+X-Attachment-Id: f_kox48v160
 
-Reimplementing the tracelog/tracef providers is not an intended use-case.
-I'd very much prefer if we move their implementation to
-liblttng-ust-tracepoint.so.
+RnJvbSAwZTUyNjZkODI2ZTdmY2JkZDNlMDk5NzdmNThiZmZmODJlOGQ3NDc2IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBOb3JiZXJ0IExhbmdlIDxub2xhbmdlNzlAZ21haWwuY29tPgpE
+YXRlOiBUaHUsIDIwIE1heSAyMDIxIDE4OjExOjQ0ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gcGFj
+a2FnZS9sdHRuZzogYnVtcCB0byAyLjEzcmMyIChXSVApCgotLS0KIHBhY2thZ2UvbHR0bmctbGli
+dXN0L2x0dG5nLWxpYnVzdC5oYXNoIHwgNCArKy0tCiBwYWNrYWdlL2x0dG5nLWxpYnVzdC9sdHRu
+Zy1saWJ1c3QubWsgICB8IDIgKy0KIHBhY2thZ2UvbHR0bmctdG9vbHMvbHR0bmctdG9vbHMuaGFz
+aCAgIHwgNCArKy0tCiBwYWNrYWdlL2x0dG5nLXRvb2xzL2x0dG5nLXRvb2xzLm1rICAgICB8IDIg
+Ky0KIDQgZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQoKZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvbHR0bmctbGlidXN0L2x0dG5nLWxpYnVzdC5oYXNoIGIvcGFja2Fn
+ZS9sdHRuZy1saWJ1c3QvbHR0bmctbGlidXN0Lmhhc2gKaW5kZXggNDBiZDg3MGU4Ni4uMmY1OGRi
+MmJmNSAxMDA2NDQKLS0tIGEvcGFja2FnZS9sdHRuZy1saWJ1c3QvbHR0bmctbGlidXN0Lmhhc2gK
+KysrIGIvcGFja2FnZS9sdHRuZy1saWJ1c3QvbHR0bmctbGlidXN0Lmhhc2gKQEAgLTEsNSArMSw1
+IEBACi0jIEZyb20gaHR0cHM6Ly9sdHRuZy5vcmcvZmlsZXMvbHR0bmctdXN0L2x0dG5nLXVzdC0y
+LjEyLjEudGFyLmJ6Mi5zaGEyNTYKLXNoYTI1NiAgNDhhMzk0OGIxNjgxOTUxMjNhNzQ5ZDIyODE4
+ODA5YmQyNTEyN2JiNWYxYTY2NDU4YzNjMDEyYjIxMGQyYTA1MSAgbHR0bmctdXN0LTIuMTIuMS50
+YXIuYnoyCisjIEZyb20gaHR0cHM6Ly9sdHRuZy5vcmcvZmlsZXMvbHR0bmctdXN0L2x0dG5nLXVz
+dC0yLjEzLjAtcmMyLnRhci5iejIuc2hhMjU2CitzaGEyNTYgIDUxYTJiZDJlN2NiMTViNGZiMTEw
+ZmM2Y2VlYjExODI1NjY4OGM0YjFkYTFkYWRmYWJkYjFkZTlmMDc5ZmQ4Y2YgIGx0dG5nLXVzdC0y
+LjEzLjAtcmMyLnRhci5iejIKIAogIyBIYXNoIGZvciBsaWNlbnNlIGZpbGUKIHNoYTI1NiAgNzQx
+MjVhODRjMjE2NjMwMDc3Njk4MDE2NmUyOWRlNDBkNWY5OGQxYTc1ZTQ4N2YwYmJjMGMwM2I0Y2Qy
+MzQyZSAgQ09QWUlORwpkaWZmIC0tZ2l0IGEvcGFja2FnZS9sdHRuZy1saWJ1c3QvbHR0bmctbGli
+dXN0Lm1rIGIvcGFja2FnZS9sdHRuZy1saWJ1c3QvbHR0bmctbGlidXN0Lm1rCmluZGV4IDYwOGU4
+NzgxYjEuLmQ5OTU3NzUwNGEgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbHR0bmctbGlidXN0L2x0dG5n
+LWxpYnVzdC5taworKysgYi9wYWNrYWdlL2x0dG5nLWxpYnVzdC9sdHRuZy1saWJ1c3QubWsKQEAg
+LTUsNyArNSw3IEBACiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCiBMVFROR19MSUJVU1RfU0lU
+RSA9IGh0dHA6Ly9sdHRuZy5vcmcvZmlsZXMvbHR0bmctdXN0Ci1MVFROR19MSUJVU1RfVkVSU0lP
+TiA9IDIuMTIuMQorTFRUTkdfTElCVVNUX1ZFUlNJT04gPSAyLjEzLjAtcmMyCiBMVFROR19MSUJV
+U1RfU09VUkNFID0gbHR0bmctdXN0LSQoTFRUTkdfTElCVVNUX1ZFUlNJT04pLnRhci5iejIKIExU
+VE5HX0xJQlVTVF9MSUNFTlNFID0gTEdQTC0yLjEsIE1JVCAoc3lzdGVtIGhlYWRlcnMpLCBHUEwt
+Mi4wIChsaWJsdHRuZy11c3QtY3RsL3VzdGN0bC5jIHVzZWQgYnkgbHR0bmctc2Vzc2lvbmQpCiBM
+VFROR19MSUJVU1RfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
+bHR0bmctdG9vbHMvbHR0bmctdG9vbHMuaGFzaCBiL3BhY2thZ2UvbHR0bmctdG9vbHMvbHR0bmct
+dG9vbHMuaGFzaAppbmRleCBhOTRlY2M0YTM1Li5kMDBhYjEzM2M3IDEwMDY0NAotLS0gYS9wYWNr
+YWdlL2x0dG5nLXRvb2xzL2x0dG5nLXRvb2xzLmhhc2gKKysrIGIvcGFja2FnZS9sdHRuZy10b29s
+cy9sdHRuZy10b29scy5oYXNoCkBAIC0xLDUgKzEsNSBAQAotIyBGcm9tIGh0dHBzOi8vbHR0bmcu
+b3JnL2ZpbGVzL2x0dG5nLXRvb2xzL2x0dG5nLXRvb2xzLTIuMTIuMy50YXIuYnoyLnNoYTI1Ngot
+c2hhMjU2ICAyODkwZGEyMzBlZGQ1MjNmY2Y0OTdlOWViMjgxMzNiNzYwNmQ2NGZhMDFiY2JmZmFk
+YmZjYmE0MjEwNGRiMTUzICBsdHRuZy10b29scy0yLjEyLjMudGFyLmJ6MgorIyBGcm9tIGh0dHBz
+Oi8vbHR0bmcub3JnL2ZpbGVzL2x0dG5nLXRvb2xzL2x0dG5nLXRvb2xzLTIuMTMuMC1yYzIudGFy
+LmJ6Mi5zaGEyNTYKK3NoYTI1NiAgNWMyNmQzOTYzNGFkYjAwZThlOTUzYzNjYWY0ZGZjYjliYTMx
+YzUxMGNmMjEzOTU2MjliNzQxZmEzMzhlMWIwOCAgbHR0bmctdG9vbHMtMi4xMy4wLXJjMi50YXIu
+YnoyCiAKICMgTG9jYWxseSBjb21wdXRlZAogc2hhMjU2ICAwNjhlNTVjN2RiZTU5NzQwMDE5OWFl
+ZTc1YWM1ZTcxYmRiMmNhODhjNGM5YTRjZmE4ZTFmYmM2MWY5MzNlZGE1ICBMSUNFTlNFCmRpZmYg
+LS1naXQgYS9wYWNrYWdlL2x0dG5nLXRvb2xzL2x0dG5nLXRvb2xzLm1rIGIvcGFja2FnZS9sdHRu
+Zy10b29scy9sdHRuZy10b29scy5tawppbmRleCA4Nzg5ZGVkMzMzLi5mMWIxYzcyMTdiIDEwMDY0
+NAotLS0gYS9wYWNrYWdlL2x0dG5nLXRvb2xzL2x0dG5nLXRvb2xzLm1rCisrKyBiL3BhY2thZ2Uv
+bHR0bmctdG9vbHMvbHR0bmctdG9vbHMubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIwogCi1MVFROR19UT09MU19WRVJTSU9OID0gMi4xMi4zCitMVFROR19UT09M
+U19WRVJTSU9OID0gMi4xMy4wLXJjMgogTFRUTkdfVE9PTFNfU0lURSA9IGh0dHBzOi8vbHR0bmcu
+b3JnL2ZpbGVzL2x0dG5nLXRvb2xzCiBMVFROR19UT09MU19TT1VSQ0UgPSBsdHRuZy10b29scy0k
+KExUVE5HX1RPT0xTX1ZFUlNJT04pLnRhci5iejIKIExUVE5HX1RPT0xTX0lOU1RBTExfU1RBR0lO
+RyA9IFlFUwotLSAKMi4zMC4yCgo=
+--000000000000bbb39105c2c59a63
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--000000000000bbb39105c2c59a63--
