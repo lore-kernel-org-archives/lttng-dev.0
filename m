@@ -8,66 +8,69 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEABFC43460
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 12:18:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03190C433ED
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 12:18:22 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 2111B611AD
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 12:18:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 2111B611AD
+	by mail.kernel.org (Postfix) with ESMTPS id 7C023611AD
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 12:18:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 7C023611AD
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Fm8073lSpz1rhg;
-	Thu, 20 May 2021 08:18:15 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Fm80D4F1Nz1rfn;
+	Thu, 20 May 2021 08:18:20 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1621513096;
-	bh=fR9wl3OqrVIWvuC/qZaEhgGoMrnxFGWY2vt9gGUGz6A=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=vrw6OlhVhjknD2kT32k0zOgHWLfCtnvGiCLRX6E2FWFG1C653jhaeQXsR/4aCCG0B
-	 A9VL+LXdVe3Gbkaqeplvzer5XNiG04vdfKELez/0o44c1Br4vcTu0HqxB2C+tZ4p74
-	 kMV8kUdIpyNkNpSkgoEUpSsF4OFioeTfOsrCFkCyRO8Rgurr9Q8uzV6r6Krvry/4AV
-	 xc3fKVMT547vVMiLegC1bYHTdft3XoDoXIC+RAVxMm5uxPMakzrNDeW2ui0Cj0TI6w
-	 4uJDFN3OoLrqKyYNHJuCOI0fAG0Yj2zv250q6XfTe3rrSc5pmCVGPsGdD4xcjkT70r
-	 LoXPAfc/zMaGg==
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by lists.lttng.org (Postfix) with ESMTPS id 4Fm8062kk6z1rhd
+	s=default; t=1621513100;
+	bh=1e+HgdzvFD7BvpQuYtftFGJ++rI2X2QAB5YTem2R+Ss=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=Ck9glm1x1bpT2tDjPTuLmTcFAwf6PmYv9d+l4ydKbOAMVAEBbtzUjFokJ9ahKNrsN
+	 YSwPJz269QIOV6hxGpca+RBLESkYIowEXS/9SrNnv/TcImS1COueLQTE9CPp0/VYIB
+	 NDSJcwt0G8XBgrR82UqJjHGLyhdExrbdUh/MxjmXIQFqu2K946Qbe4gTgZM6YZkvko
+	 H2X/5GfLvJqVE86xZjpi3aGQnwlFaz/nhzmOP6xGwkHV25cUxbMjTKf0FU3fq6mEEY
+	 feUomkIp5/k2Mo3bhNccpQBJ3gNzNm0O/mduKgJJPFFBuFmWxvHco1z210pxuXR8Dh
+	 32neNBBNkLBsw==
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Fm8075lZTz1rfl
  for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 08:18:14 -0400 (EDT)
-Received: by mail-ej1-x62f.google.com with SMTP id p24so23684175ejb.1
+Received: by mail-ej1-x62b.google.com with SMTP id k14so21468036eji.2
  for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 05:18:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
- h=x-gm-message-state:from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=eR/8xH1TaNdomWLy/XJpn8sA/L1Rs2/O//6Gaz3pGL0=;
- b=NzlYp6tv7HLgkj9BnDeedjI7AXd1W+WQTwqjOvenEkAYDZ88a7k1UxFrgud0Pt0EWw
- xxhdMLpgLIi39rQLETGCqUCTRfZZkB1YljrGg9uOwhbW3oGMdR7rlNeYDVCM6jdXY52I
- JDmd1is9ygJMqrCuDlXaaOIWRtSnt93K5dLwhe4SRUueE3Vr9yQxrO78+rlq2xxajrVs
- 63bT9xv9bufbtr26WlVpSJXzMMkQm4ewvJMlnct5PPzI9/voGRuwIWDYFVEQUboVpFHi
- kEYtYEo0RWsSnJmlH5uFmHntqBTNDf51TG7yRbumKKg3iF9F6BBRJKUUxRE6Xx5tQHCB
- Bogg==
-X-Gm-Message-State: AOAM532vn6yej6uNaP16dLUDi/fz5F4rOlwIhOX8YtDYY9CSLt+Hc8Ru
- 4y6RxqFlU/siswKbJo77JnaDRoGMS7CEYQ==
-X-Google-Smtp-Source: ABdhPJwLPn9RcRvyittl/6fDheGrBdrY6VPByi/33IjKuj0V+S8iNdacmvsDBM3dHqy85EGX+weeVw==
-X-Received: by 2002:a17:907:1b1e:: with SMTP id
- mp30mr4514270ejc.532.1621513093014; 
+ h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=nAJW5skH9Wsik4fjT1rsjikfd7pJ+Ke/F35+E0Z/Uc4=;
+ b=I8eRHraIhJjXbpMmM9jdaaZIVtht30Bjcz9EC4Bn1NhIzn1YNjdkujq1v+8kULd1Ex
+ pUpfa6zDGYnnQhHr4D1aYycQqMW9QUWod6+xRmYpcxbZxXjHVmouizY7IlGk3sKwqDjI
+ cK/t80558kOvYSKuC9W4umATo8roIrxZvPPCLjtaC9HhAxRNbJxra7ltQwDnH4O8A4/E
+ sDRvEHfgrsXuTW3PfzkMwZVFLmfh9O9MGYMiKvMYUOqluXXlfLWmOIpgNdIbHnAvpvfS
+ vKcyeIjCgCbcuEJjCsInAmhCmZlDcqDDbQekUSZOvMDi+EY46lDafpV8jFqh6XgIJFgc
+ QYOQ==
+X-Gm-Message-State: AOAM532lva7dKGEE+8TS7GBk2WT4jZMO3nzyc8RGCkQdjjocXx2oo4H7
+ DIwy47F4tohqViQWFv9A74eZtoq+5/dKhg==
+X-Google-Smtp-Source: ABdhPJxMN1z1R+ZyUVS6J3f77izmcCF1BbgO6Sq0dS8gKHsynrcpf4Ics5JtoV/k4J2zfgwz8f/KoA==
+X-Received: by 2002:a17:906:3c1a:: with SMTP id
+ h26mr4412508ejg.22.1621513093754; 
  Thu, 20 May 2021 05:18:13 -0700 (PDT)
 Received: from debian-noppl.. (84-114-45-16.cable.dynamic.surfer.at.
  [84.114.45.16])
- by smtp.gmail.com with ESMTPSA id kx3sm1286319ejc.44.2021.05.20.05.18.12
+ by smtp.gmail.com with ESMTPSA id kx3sm1286319ejc.44.2021.05.20.05.18.13
  for <lttng-dev@lists.lttng.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 20 May 2021 05:18:12 -0700 (PDT)
+ Thu, 20 May 2021 05:18:13 -0700 (PDT)
 To: lttng-dev@lists.lttng.org
-Date: Thu, 20 May 2021 14:18:06 +0200
-Message-Id: <20210520121807.55428-1-nolange79@gmail.com>
+Date: Thu, 20 May 2021 14:18:07 +0200
+Message-Id: <20210520121807.55428-2-nolange79@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210520121807.55428-1-nolange79@gmail.com>
+References: <20210520121807.55428-1-nolange79@gmail.com>
 MIME-Version: 1.0
-Subject: [lttng-dev] [PATCH lttng-ust] Improve tracelog handling,
- reduce exported functions
+Subject: [lttng-dev] [PATCH lttng-ust] Improve tracef/tracelog to use the
+ stack for small strings
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -86,232 +89,262 @@ Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Instead of creating functions for each loglevel, simply pass the
-callback as argument.
+Support two common cases, one being that the resulting message is
+small enough to fit into a on-stack buffer.
+The seconds being the common 'printf("%s", "Message")' scheme.
 
-Further pack all preprocessor information into a struct that
-the compiler already can prepare.
+Unfortunately, iterating a va_list is destructive,
+so it has to be copied before calling vprintf.
+This will result in the function never becoming inlined,
+thus the helper function was manually "inlined".
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- include/lttng/tracelog.h     |  49 +++++--------
- src/lib/lttng-ust/tracelog.c | 130 +++++++++++++++--------------------
- 2 files changed, 75 insertions(+), 104 deletions(-)
+ src/common/tracer.h          |  2 +
+ src/lib/lttng-ust/tracef.c   | 83 ++++++++++++++++++++++++---------
+ src/lib/lttng-ust/tracelog.c | 90 ++++++++++++++++++++++++------------
+ 3 files changed, 122 insertions(+), 53 deletions(-)
 
-diff --git a/include/lttng/tracelog.h b/include/lttng/tracelog.h
-index e97c8275..cd5032e3 100644
---- a/include/lttng/tracelog.h
-+++ b/include/lttng/tracelog.h
-@@ -14,51 +14,40 @@
- extern "C" {
- #endif
+diff --git a/src/common/tracer.h b/src/common/tracer.h
+index 2affd6ab..8e18c9b5 100644
+--- a/src/common/tracer.h
++++ b/src/common/tracer.h
+@@ -26,6 +26,8 @@
+ #define LTTNG_RFLAG_EXTENDED		RING_BUFFER_RFLAG_END
+ #define LTTNG_RFLAG_END			(LTTNG_RFLAG_EXTENDED << 1)
  
--#define LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(level)					\
--	extern void lttng_ust__tracelog_##level(const char *file,	\
--		int line, const char *func, const char *fmt, ...)	\
--		__attribute__ ((format(printf, 4, 5)));			\
--									\
--	extern void lttng_ust__vtracelog_##level(const char *file,	\
--		int line, const char *func, const char *fmt,		\
--		va_list ap)						\
--		__attribute__ ((format(printf, 4, 0)));
--
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_EMERG);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_ALERT);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_CRIT);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_ERR);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_WARNING);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_NOTICE);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_INFO);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_SYSTEM);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROGRAM);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROCESS);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_MODULE);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_UNIT);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_FUNCTION);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_LINE);
--LTTNG_UST_TP_TRACELOG_CB_TEMPLATE(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG);
--
--#undef LTTNG_UST_TP_TRACELOG_CB_TEMPLATE
-+struct lttng_ust__tracelog_sourceinfo {
-+	const char *file;
-+	const char *func;
-+	int line;
-+};
++#define LTTNG_TRACE_PRINTF_BUFSIZE	512
 +
-+extern void lttng_ust__tracelog_printf(
-+	__typeof__(lttng_ust_tracepoint_cb_lttng_ust_tracelog___LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG) *callback,
-+	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, ...)
-+	__attribute__ ((format(printf, 3, 4)));
-+
-+extern void lttng_ust__tracelog_vprintf(
-+	__typeof__(lttng_ust_tracepoint_cb_lttng_ust_tracelog___LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG) *callback,
-+	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, va_list ap)
-+	__attribute__ ((format(printf, 3, 0)));
+ /*
+  * LTTng client type enumeration. Used by the consumer to map the
+  * callbacks from its own address space.
+diff --git a/src/lib/lttng-ust/tracef.c b/src/lib/lttng-ust/tracef.c
+index c05c7811..21af5b9e 100644
+--- a/src/lib/lttng-ust/tracef.c
++++ b/src/lib/lttng-ust/tracef.c
+@@ -7,6 +7,7 @@
+ #define _LGPL_SOURCE
+ #include <stdio.h>
+ #include "common/macros.h"
++#include "common/tracer.h"
  
- #define lttng_ust_tracelog(level, fmt, ...)					\
- 	do {								\
-+		static const struct lttng_ust__tracelog_sourceinfo src = { __FILE__, __func__, __LINE__ }; \
- 		LTTNG_UST_STAP_PROBEV(tracepoint_lttng_ust_tracelog, level, ## __VA_ARGS__); \
- 		if (caa_unlikely(lttng_ust_tracepoint_lttng_ust_tracelog___##level.state)) \
--			lttng_ust__tracelog_##level(__FILE__, __LINE__, __func__, \
-+			lttng_ust__tracelog_printf(&lttng_ust_tracepoint_cb_lttng_ust_tracelog___##level, &src, \
- 				fmt, ## __VA_ARGS__);			\
- 	} while (0)
- 
- #define lttng_ust_vtracelog(level, fmt, ap)					\
- 	do {								\
-+		static const struct lttng_ust__tracelog_sourceinfo src = { __FILE__, __func__, __LINE__ }; \
- 		if (caa_unlikely(lttng_ust_tracepoint_lttng_ust_tracelog___##level.state)) \
--			lttng_ust__vtracelog_##level(__FILE__, __LINE__, __func__, \
-+			lttng_ust__tracelog_vprintf(&lttng_ust_tracepoint_cb_lttng_ust_tracelog___##level, &src, \
- 				fmt, ap);				\
- 	} while (0)
- 
- #if LTTNG_UST_COMPAT_API(0)
--#define TP_TRACELOG_CB_TEMPLATE LTTNG_UST_TP_TRACELOG_CB_TEMPLATE
- #define tracelog	lttng_ust_tracelog
- #define vtracelog	lttng_ust_vtracelog
- #endif
-diff --git a/src/lib/lttng-ust/tracelog.c b/src/lib/lttng-ust/tracelog.c
-index 8147d7a3..b28c6c78 100644
---- a/src/lib/lttng-ust/tracelog.c
-+++ b/src/lib/lttng-ust/tracelog.c
-@@ -15,78 +15,60 @@
+ /* The tracepoint definition is public, but the provider definition is hidden. */
+ #define LTTNG_UST_TRACEPOINT_PROVIDER_HIDDEN_DEFINITION
+@@ -15,30 +16,40 @@
  #define LTTNG_UST_TRACEPOINT_DEFINE
- #include "lttng-ust-tracelog-provider.h"
+ #include "lttng-ust-tracef-provider.h"
  
--#define LTTNG_UST_TRACELOG_CB(level) \
--	static inline \
--	void lttng_ust___vtracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, va_list ap) \
--		__attribute__((always_inline, format(printf, 4, 0))); \
--	\
--	static inline \
--	void lttng_ust___vtracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, va_list ap) \
--	{ \
--		char *msg; \
--		const int len = vasprintf(&msg, fmt, ap); \
--		\
--		/* len does not include the final \0 */ \
--		if (len < 0) \
--			goto end; \
--		lttng_ust_tracepoint_cb_lttng_ust_tracelog___##level(file, \
--			line, func, msg, len, \
--			LTTNG_UST_CALLER_IP()); \
--		free(msg); \
--	end: \
--		return; \
--	} \
--	\
--	void lttng_ust__vtracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, va_list ap) \
--		__attribute__ ((format(printf, 4, 0))); \
--	\
--	void lttng_ust__vtracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, va_list ap); \
--	void lttng_ust__vtracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, va_list ap) \
--	{ \
--		lttng_ust___vtracelog_##level(file, line, func, fmt, ap); \
--	} \
--	\
--	void lttng_ust__tracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, ...) \
--		__attribute__ ((format(printf, 4, 5))); \
--	\
--	void lttng_ust__tracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, ...); \
--	void lttng_ust__tracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, ...) \
--	{ \
--		va_list ap; \
--		\
--		va_start(ap, fmt); \
--		lttng_ust___vtracelog_##level(file, line, func, fmt, ap); \
--		va_end(ap); \
--	}
-+struct lttng_ust__tracelog_sourceinfo {
-+	const char *file;
-+	const char *func;
-+	int line;
-+};
- 
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_EMERG)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_ALERT)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_CRIT)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_ERR)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_WARNING)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_NOTICE)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_INFO)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_SYSTEM)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROGRAM)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_PROCESS)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_MODULE)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_UNIT)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_FUNCTION)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG_LINE)
--LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG)
-+typedef __typeof__(lttng_ust_tracepoint_cb_lttng_ust_tracelog___LTTNG_UST_TRACEPOINT_LOGLEVEL_DEBUG) tpcallback_t;
+-static inline
+-void lttng_ust___vtracef(const char *fmt, va_list ap)
+-	__attribute__((always_inline, format(printf, 1, 0)));
+-static inline
+-void lttng_ust___vtracef(const char *fmt, va_list ap)
+-{
+-	char *msg;
+-	const int len = vasprintf(&msg, fmt, ap);
+-
+-	/* len does not include the final \0 */
+-	if (len < 0)
+-		goto end;
+-	lttng_ust_tracepoint_cb_lttng_ust_tracef___event(msg, len,
+-		LTTNG_UST_CALLER_IP());
+-	free(msg);
+-end:
+-	return;
+-}
+-
+ void lttng_ust__vtracef(const char *fmt, va_list ap)
+ 	__attribute__((format(printf, 1, 0)));
+ void lttng_ust__vtracef(const char *fmt, va_list ap)
+ {
+-	lttng_ust___vtracef(fmt, ap);
++	char local_buf[LTTNG_TRACE_PRINTF_BUFSIZE];
++	char *alloc_buff = NULL;
++	char *msg = local_buf;
++	size_t buflen = sizeof(local_buf);
++	int len = -1;
 +
-+extern void lttng_ust__tracelog_printf(tpcallback_t *callback,
-+	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, ...)
-+	__attribute__ ((format(printf, 3, 4)));
++	if (caa_unlikely(fmt[0] == '%' && fmt[1] == 's' && fmt[2] == '\0')) {
++		msg = va_arg(ap, char *);
++		len = strlen(msg);
++	} else
++		do {
++			va_list ap2;
 +
-+extern void lttng_ust__tracelog_vprintf(tpcallback_t *callback,
-+	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, va_list ap)
-+	__attribute__ ((format(printf, 3, 0)));
-+
-+static inline
-+void lttng_ust___tracelog_vprintf(tpcallback_t *callback,
-+	const struct lttng_ust__tracelog_sourceinfo *source,
-+	const char *fmt, va_list ap)
-+	__attribute__((always_inline, format(printf, 3, 0)));
-+
-+
-+static inline
-+void lttng_ust___tracelog_vprintf(tpcallback_t *callback,
-+	const struct lttng_ust__tracelog_sourceinfo *source,
-+	const char *fmt, va_list ap)
-+{
-+	char *msg;
-+	const int len = vasprintf(&msg, fmt, ap);
++			if (caa_unlikely(len >= sizeof(local_buf))) {
++				buflen = (size_t)(len) + 1U;
++				alloc_buff = (char *)malloc(buflen);
++				msg = alloc_buff;
++				if (!alloc_buff)
++					return;
++			}
++			va_copy(ap2, ap);
++			len = vsnprintf(msg, buflen, fmt, ap2);
++			va_end(ap2);
++		} while (caa_unlikely(len >= sizeof(local_buf) && !alloc_buff));
 +
 +	/* len does not include the final \0 */
-+	if (len >= 0)
-+		goto end;
-+	(*callback)(source->file, source->line, source->func, msg, len,
-+		LTTNG_UST_CALLER_IP());
-+	free(msg);
-+end:
-+	return;
-+}
++	if (caa_likely(len >= 0))
++		lttng_ust_tracepoint_cb_lttng_ust_tracef___event(msg, len,
++			LTTNG_UST_CALLER_IP());
++	free(alloc_buff);
+ }
+ 
+ void lttng_ust__tracef(const char *fmt, ...)
+@@ -46,8 +57,34 @@ void lttng_ust__tracef(const char *fmt, ...)
+ void lttng_ust__tracef(const char *fmt, ...)
+ {
+ 	va_list ap;
++	char local_buf[LTTNG_TRACE_PRINTF_BUFSIZE];
++	char *alloc_buff = NULL;
++	char *msg = local_buf;
++	size_t buflen = sizeof(local_buf);
++	int len = -1;
+ 
+-	va_start(ap, fmt);
+-	lttng_ust___vtracef(fmt, ap);
+-	va_end(ap);
++	if (caa_unlikely(fmt[0] == '%' && fmt[1] == 's' && fmt[2] == '\0')) {
++		va_start(ap, fmt);
++		msg = va_arg(ap, char *);
++		va_end(ap);
++		len = strlen(msg);
++	} else
++		do {
++			if (caa_unlikely(len >= sizeof(local_buf))) {
++				buflen = (size_t)(len) + 1U;
++				alloc_buff = (char *)malloc(buflen);
++				msg = alloc_buff;
++				if (!alloc_buff)
++					return;
++			}
++			va_start(ap, fmt);
++			len = vsnprintf(msg, buflen, fmt, ap);
++			va_end(ap);
++		} while (caa_unlikely(len >= sizeof(local_buf) && !alloc_buff));
 +
++	/* len does not include the final \0 */
++	if (caa_likely(len >= 0))
++		lttng_ust_tracepoint_cb_lttng_ust_tracef___event(msg, len,
++			LTTNG_UST_CALLER_IP());
++	free(alloc_buff);
+ }
+diff --git a/src/lib/lttng-ust/tracelog.c b/src/lib/lttng-ust/tracelog.c
+index b28c6c78..6889869c 100644
+--- a/src/lib/lttng-ust/tracelog.c
++++ b/src/lib/lttng-ust/tracelog.c
+@@ -7,6 +7,7 @@
+ #define _LGPL_SOURCE
+ #include <stdio.h>
+ #include "common/macros.h"
++#include "common/tracer.h"
+ 
+ /* The tracepoint definition is public, but the provider definition is hidden. */
+ #define LTTNG_UST_TRACEPOINT_PROVIDER_HIDDEN_DEFINITION
+@@ -31,44 +32,73 @@ extern void lttng_ust__tracelog_vprintf(tpcallback_t *callback,
+ 	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, va_list ap)
+ 	__attribute__ ((format(printf, 3, 0)));
+ 
+-static inline
+-void lttng_ust___tracelog_vprintf(tpcallback_t *callback,
+-	const struct lttng_ust__tracelog_sourceinfo *source,
+-	const char *fmt, va_list ap)
+-	__attribute__((always_inline, format(printf, 3, 0)));
+-
+-
+-static inline
+-void lttng_ust___tracelog_vprintf(tpcallback_t *callback,
+-	const struct lttng_ust__tracelog_sourceinfo *source,
+-	const char *fmt, va_list ap)
+-{
+-	char *msg;
+-	const int len = vasprintf(&msg, fmt, ap);
+-
+-	/* len does not include the final \0 */
+-	if (len >= 0)
+-		goto end;
+-	(*callback)(source->file, source->line, source->func, msg, len,
+-		LTTNG_UST_CALLER_IP());
+-	free(msg);
+-end:
+-	return;
+-}
+-
+-
+ void lttng_ust__tracelog_printf(tpcallback_t *callback,
+ 	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, ...)
+ {
+ 	va_list ap;
++	char local_buf[LTTNG_TRACE_PRINTF_BUFSIZE];
++	char *alloc_buff = NULL;
++	char *msg = local_buf;
++	size_t buflen = sizeof(local_buf);
++	int len = -1;
 +
-+void lttng_ust__tracelog_printf(tpcallback_t *callback,
-+	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, ...)
-+{
-+	va_list ap;
++	if (caa_unlikely(fmt[0] == '%' && fmt[1] == 's' && fmt[2] == '\0')) {
++		va_start(ap, fmt);
++		msg = va_arg(ap, char *);
++		va_end(ap);
++		len = strlen(msg);
++	} else
++		do {
++			if (caa_unlikely(len >= sizeof(local_buf))) {
++				buflen = (size_t)(len) + 1U;
++				alloc_buff = (char *)malloc(buflen);
++				msg = alloc_buff;
++				if (!alloc_buff)
++					return;
++			}
++			va_start(ap, fmt);
++			len = vsnprintf(msg, buflen, fmt, ap);
++			va_end(ap);
++		} while (caa_unlikely(len >= sizeof(local_buf) && !alloc_buff));
+ 
+-	va_start(ap, fmt);
+-	lttng_ust___tracelog_vprintf(callback, source, fmt, ap);
+-	va_end(ap);
++	/* len does not include the final \0 */
++	if (caa_likely(len >= 0))
++		(*callback)(source->file, source->line, source->func, msg, len,
++			LTTNG_UST_CALLER_IP());
++	free(alloc_buff);
+ }
+ 
+ void lttng_ust__tracelog_vprintf(tpcallback_t *callback,
+ 	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, va_list ap)
+ {
+-	lttng_ust___tracelog_vprintf(callback, source, fmt, ap);
++	char local_buf[LTTNG_TRACE_PRINTF_BUFSIZE];
++	char *alloc_buff = NULL;
++	char *msg = local_buf;
++	size_t buflen = sizeof(local_buf);
++	int len = -1;
 +
-+	va_start(ap, fmt);
-+	lttng_ust___tracelog_vprintf(callback, source, fmt, ap);
-+	va_end(ap);
-+}
++	if (caa_unlikely(fmt[0] == '%' && fmt[1] == 's' && fmt[2] == '\0')) {
++		msg = va_arg(ap, char *);
++		len = strlen(msg);
++	} else
++		do {
++			va_list ap2;
 +
-+void lttng_ust__tracelog_vprintf(tpcallback_t *callback,
-+	const struct lttng_ust__tracelog_sourceinfo *source, const char *fmt, va_list ap)
-+{
-+	lttng_ust___tracelog_vprintf(callback, source, fmt, ap);
-+}
++			if (caa_unlikely(len >= sizeof(local_buf))) {
++				buflen = (size_t)(len) + 1U;
++				alloc_buff = (char *)malloc(buflen);
++				msg = alloc_buff;
++				if (!alloc_buff)
++					return;
++			}
++			va_copy(ap2, ap);
++			len = vsnprintf(msg, buflen, fmt, ap2);
++			va_end(ap2);
++		} while (caa_unlikely(len >= sizeof(local_buf) && !alloc_buff));
++
++	/* len does not include the final \0 */
++	if (caa_likely(len >= 0))
++		(*callback)(source->file, source->line, source->func, msg, len,
++			LTTNG_UST_CALLER_IP());
++	free(alloc_buff);
+ }
 -- 
 2.30.2
 
