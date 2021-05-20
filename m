@@ -7,72 +7,66 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54DFFC433ED
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 15:39:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43EA6C433B4
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 15:54:31 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A97E0610A2
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 15:39:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org A97E0610A2
+	by mail.kernel.org (Postfix) with ESMTPS id 577D7610CC
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 May 2021 15:54:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 577D7610CC
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4FmDSb3rGPz1rm8;
-	Thu, 20 May 2021 11:39:43 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4FmDnc4nvYz1rd9;
+	Thu, 20 May 2021 11:54:28 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1621525183;
-	bh=Rlx8OSKsGmJCq5SJXNXN/QXSwwh9B8YZmOQ/1ptCD7k=;
+	s=default; t=1621526069;
+	bh=90N56Ifv1RJeSc/tMKTZ2e+lV5iBz2P6eRU602hgnnY=;
 	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Gm94f+fgPBIUybBkTEHPGrjzt6FVeB8e9Xs7CnNlDOUY4RYfrNrYdDH9T32B2A5WL
-	 I0GKqnixqPdl/BVQYq0MEUW4z8MGZRoqze9wz3uf3+Vljl4HGIQxrqj6/EBye00R//
-	 ALNE216HE8h7kVy4ZK0EfSlTLaQ74s5JzNOOXTuazCwArFx8xp/RGjOqwsNOHI+Yfx
-	 eUl91zmh4wvF4Ye4QI68IG1yeExJHvV4WmTe4nF7CWKs2ej+SyqyweejFgGrmeXN3r
-	 ff5eNW0GuGpZYt0COj28BldT2ckG47V75y7RDapnIophUetqiI9Ni45XQuDTnmn6a0
-	 6g8Kobs+tANjQ==
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com
- [IPv6:2607:f8b0:4864:20::32a])
- by lists.lttng.org (Postfix) with ESMTPS id 4FmDSY5zXHz1rgv
- for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 11:39:41 -0400 (EDT)
-Received: by mail-ot1-x32a.google.com with SMTP id
- 36-20020a9d0ba70000b02902e0a0a8fe36so15207330oth.8
- for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 08:39:41 -0700 (PDT)
+	b=l9O6GwWBCwmqBXkbfBXzrnLegit3SmaKWouGhqhOIhcUU9V3RCTWBNzNPsY3zy2ui
+	 zMvM96ZG41Ij55ZGPU4vLtV0J+I8q2tCilYb3hipf4lUdmmwQ3oB9mkszls0MWGItt
+	 rZOg6C/W3LVkD2AiKAJ5BENPfsaEEe63Bf1q4YkZ5w3cI+Cmv6rzZM9J72pYEpoYlt
+	 DofAftifcfuzirxDuoaSLfCl4dqKC4m+SyjnXi9OgYEEW0rzOr8bAFxg/wGvDqChAP
+	 Nl9WA7Ivfck29rhMDTlpJqMtTQG45v4tyfyeTd/TloKWmtDc3uTerKDCNZ0fDchbEl
+	 f2BpCpcRM9mFg==
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com
+ [IPv6:2607:f8b0:4864:20::c32])
+ by lists.lttng.org (Postfix) with ESMTPS id 4FmDnb70M1z1rh6
+ for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 11:54:27 -0400 (EDT)
+Received: by mail-oo1-xc32.google.com with SMTP id
+ s1-20020a4ac1010000b02901cfd9170ce2so3884075oop.12
+ for <lttng-dev@lists.lttng.org>; Thu, 20 May 2021 08:54:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=F8AemLAt/RdYTuSK/AAEBh7ZyUM4eAslxQ/cddZZkBM=;
- b=mi6ppreq3ToPGyEY03a8YZKYHYUHWsoiM1i/nQwxSNgGxJPWYKzHwmQQ3uu0JpVx3g
- 5TQvAgGUAXGahU33EJuAl2QZT0xnVyt7IB54YJ1ivJWdQJx+3kPBdJl+UYXVAEWZni/p
- 3oRysCiRI0mzZytOctb/X+zmqyZgrzjMAT3Z/OCVTPwQzyC5jK6zrhL8trtJImLk5jMB
- kgmQFpR4RulbD7hhsW8giVv5bJEnfmN5egr5tUsOe1pQ9VTPduUnDk0CAjdbpchIULTQ
- d7unYk3BjKybHlhJoPIXu/HPb+7lTHDC9fB3d3WoXy47/JjLkXx3WevYzhi7BwAYKnQf
- sLhg==
-X-Gm-Message-State: AOAM530NeYqYHBSjY9/YldUvviC2PhGAaWu8CY9/N5PYDJz5tyPx+R0S
- ZUtaTeMy0OXoYYHH3eBpdUU/cziW/d+gErDD74A=
-X-Google-Smtp-Source: ABdhPJyMYLK01O1Do9B95OEDbLt5iDRCQfFmtY2NHkrOyR1TSA1TjRhvyospmm6QhIdTYc6eDquzNn4Eh7DVHwoPYTo=
-X-Received: by 2002:a05:6830:51:: with SMTP id
- d17mr4392681otp.75.1621525181067; 
- Thu, 20 May 2021 08:39:41 -0700 (PDT)
+ bh=0VnzijFU9mOA6wU7rpSJ/S2VTjRJH/GekYI70SpoFAE=;
+ b=E8OzlJkCDh5qheweda6HQfsSLA9Q/WS4EP3HI+wiHL1UlIWYyZu4/9gIxkdUA5u9p/
+ Y+JcGCJvjdsulQhwo0wtUu+t/ooQVucM+LFX+2MKSl17RfExdSoXy8152bgIuXTwl9Vp
+ zRRrNHHivhSsPv+VqBjV4wkDQ+2zGhmMZGPKDLkmvCtSHAFGs0IejdfnL/HnOB084cJX
+ soaq3cXfyWdqrEe1GkAxMn8qwhGJCL7SVWM9KyhbbTDG5pD56opQ361APYoTRG67J+hm
+ P92DsUtN7VCkbcAN2j+DgrAjrFNc/TcAkVwHN+nwBvkBwutSizVTTH6azb+6HzpwSmQH
+ Ryng==
+X-Gm-Message-State: AOAM532UZRKb1ZKzhuZp+3TfJG372wak+Xd9BmSYPYo60DCIj3HID6PX
+ dvKHScyaqbGHn6em6hZuUi+XCgSOWSEkU22rodg=
+X-Google-Smtp-Source: ABdhPJyOWNWwo1QMQxWW3v3F4c/pA8qrujmbFAlv+33pn0niZbXpwc2akdnS6UpweDC7dQwXAEmaWZBHD78p3QdUlCw=
+X-Received: by 2002:a4a:abc8:: with SMTP id o8mr4301591oon.77.1621526067154;
+ Thu, 20 May 2021 08:54:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <PR3PR02MB6202C5373D6CECC72EBF45DAD12B9@PR3PR02MB6202.eurprd02.prod.outlook.com>
- <CADYdroOAiKwD_um-ONn=UfNQrOxjs0fM-7ozhUNc18jUQX9cQw@mail.gmail.com>
- <AM7PR02MB6194C2E06B14077092AA06A0D12A9@AM7PR02MB6194.eurprd02.prod.outlook.com>
- <CADYdroNm+rLkqXV3tjtQ94_PQM_mTiHvmx3JzJG5h2YHbRfguA@mail.gmail.com>
- <851697925.52293.1621518874455.JavaMail.zimbra@efficios.com>
- <201689209.52304.1621519010729.JavaMail.zimbra@efficios.com>
- <186729016.52398.1621523346736.JavaMail.zimbra@efficios.com>
-In-Reply-To: <186729016.52398.1621523346736.JavaMail.zimbra@efficios.com>
-Date: Thu, 20 May 2021 17:39:30 +0200
-Message-ID: <CADYdroOCUu7BWqMZ1CMa5mHSJB50V1aS+98sVfgXQRPdnJTyYg@mail.gmail.com>
+References: <20210520121807.55428-1-nolange79@gmail.com>
+ <1600729511.52338.1621520352970.JavaMail.zimbra@efficios.com>
+ <CADYdroN3FF3Qs_B55s_Un2qOGz3sP=JMpV=QWRFcO7KVzL-8_A@mail.gmail.com>
+ <982122605.52445.1621524098787.JavaMail.zimbra@efficios.com>
+In-Reply-To: <982122605.52445.1621524098787.JavaMail.zimbra@efficios.com>
+Date: Thu, 20 May 2021 17:54:16 +0200
+Message-ID: <CADYdroPZTrNg+gYy9SLyDnUGUd1kNq3vkzzjSwJx9e7Tz68quw@mail.gmail.com>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: MONTET Julien <julien.montet@reseau.eseo.fr>,
- lttng-dev <lttng-dev@lists.lttng.org>, 
- Jan Kiszka <jan.kiszka@siemens.com>, Xenomai <xenomai@xenomai.org>
-Subject: Re: [lttng-dev] LTTng - Xenomai : different results between
- timestamp-lttng and rt_time_read()
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: [lttng-dev] [PATCH lttng-ust] Improve tracelog handling,
+ reduce exported functions
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -91,74 +85,99 @@ Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Am Do., 20. Mai 2021 um 17:09 Uhr schrieb Mathieu Desnoyers
+Am Do., 20. Mai 2021 um 17:21 Uhr schrieb Mathieu Desnoyers
 <mathieu.desnoyers@efficios.com>:
 >
-> ----- On May 20, 2021, at 9:56 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+> ----- On May 20, 2021, at 10:57 AM, Norbert Lange nolange79@gmail.com wrote:
 >
-> > ----- On May 20, 2021, at 9:54 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
-> >
-> >> ----- On May 20, 2021, at 5:11 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
+> > Am Do., 20. Mai 2021 um 16:19 Uhr schrieb Mathieu Desnoyers
+> > <mathieu.desnoyers@efficios.com>:
 > >>
-> >>> Am Do., 20. Mai 2021 um 10:28 Uhr schrieb MONTET Julien
-> >>> <julien.montet@reseau.eseo.fr>:
-> >>>>
-> >>>> Hi Norbert,
-> >>>>
-> >>>> Thank you for your answer !
-> >>>>
-> >>>> Yes, I am using a Xenomai cobalt - xenomai is 3.1
-> >>>> cat /proc/xenomai/version => 3.1
-> >>>>
-> >>>> After the installation, I tested "test tools" in /proc/xenomai/ and it worked
-> >>>> nice.
-> >>>
-> >>> Just asked to make sure, thought the scripts usual add some -xeno tag
-> >>> to the kernel version.
-> >>>
-> >>>> What do you mean by "it might deadlock really good" ?
-> >>>
-> >>> clock_gettime will either use a syscall (kills realtime always) or is
-> >>> optimized via VDSO (which very likely is your case).
-> >>>
-> >>> What happens is that the kernel will take a spinlock, then write new
-> >>> values, then releases the spinlock.
-> >>> your program will aswell spin (but just to see if the spinlock is
-> >>> free), read the values and interpolates them.
-> >>>
-> >>> But if your program interrupts the kernel while the kernel holds the
-> >>> lock (all on the same cpu core), then it will spin forever and the
-> >>> kernel will never execute.
+> >> ----- On May 20, 2021, at 8:18 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
 > >>
-> >> Just one clarification: the specific locking strategy used by the
-> >> Linux kernel monotonic clock vDSO is a "seqlock", where the kernel
-> >> sets a bit which keeps concurrent readers looping until they observe
+> >> > Instead of creating functions for each loglevel, simply pass the
+> >> > callback as argument.
+> >> >
+> >> > Further pack all preprocessor information into a struct that
+> >> > the compiler already can prepare.
+> >>
+> >> This introduces an ABI break too late in the cycle.
 > >
-> > When I say "sets a bit", I actually mean "increment a sequence counter",
-> > and readers observe either odd or even state, thus knowing whether
-> > they need to retry, and whether the value read before/after reading
-> > the data structure changed.
+> > So 2.14 would be the next chance I guess
 >
-> Looking again at the Linux kernel's kernel/time/vsyscall.c implementation
-> of vdso_update_{begin,end}, I notice that interrupts are disabled across
-> the entire update. So I understand that the Interrupt pipeline (I-pipe)
-> interrupt gets delivered even when the kernel disables interrupts. Did
-> you consider modifying the I-pipe kernel patch to change the vdso update so
-> it updates the vdso from within an I-pipe virq handler ?
+> No. The original ABI was introduced about 10 years ago with lttng-ust 2.0,
+> and lttng-ust 2.13 introduces the first ABI break since. I don't
+> plan on doing any ABI break in lttng-ust in the foreseeable future.
+>
+> ABI breaks require that our users recompile all their instrumented
+> applications, which is really cumbersome for large software deployments.
+> We don't break ABI lightly.
 
-Yes, I did use an non-upstreamed patch for a while to get things in order:
-https://www.xenomai.org/pipermail/xenomai/2018-December/040134.html
+Yeah, I understand.
 
-I would prefer just a NMI safe source that might jump back a bit, no matter how.
 
-> AFAIU this would allow Xenomai userspace to use the Linux kernel vDSO
-> clock sources.
+> >> Also, I'm not so keen on adding an indirect call on the fast-path
+> >> when it's not absolutely needed.
+> >
+> > Code seems pretty similar: https://godbolt.org/z/oK1WhWqGT
+>
+> By fast-path, I also mean:
+>
+> +        (*callback)(source->file, source->line, source->func, msg, len,
+> +                LTTNG_UST_CALLER_IP());
+>
+> Which introduces an indirect call which needs to be taken when tracing
+> is active.
 
-The Xenomai folks are trying to get their next-gen abstraction "dovetail" closer
-coupled to the kernel, AFAIR their will be VDSO support and
-unification of the clock sources.
+The worst thing is that it would tax branch-predictors. Indirect jumps aren't
+that horrible, and if you have public interpose-able ELF symbols you
+have more of them than you might know...
 
-Still need to get stuff running today =)
+And that's a function that calls a printf variant, and did alloc memory.
+
+> >> What is wrong with having one symbol per loglevel ?
+> >
+> > Macro-magic is cumbersome to edit, more code, more relocations.
+>
+> If it was still time for ABI breaks, I would be tempted to consider it
+> especially given that tracelog and tracef are not expected to be "high-speed",
+> but now is too late for breaking ABI.
+>
+> >
+> > Easier to adapt aswell, could roll my own tracelog functions while
+> > using lttng_ust__tracelog_printf (started soind that as I don't want
+> > to link to lttng-ust.so)
+>
+> What prevents you from linking against lttng-ust.so again ?
+
+I did not poke around enough with Lttng to be confident it wont have
+side effects,
+I really don't want it active in production. It doesn't seem there is
+much public knowledge with Xenomai either.
+lttng-ust.so will spawn threads, lttng-ust-tracepoint.so is mostly passive,
+So Id want a dynamic tracepoint-provider than i can dlopen (so that
+the signal masks are inherited,
+I hope you dont touch them).
+
+Of course I could just remove all lttng libraries on the production
+system aswell. Still doesnt change that
+tracelog and tracef doesnt work that way.
+
+I implemented my own tracelog/tracef using the normal lttng
+tracepoints for now, they totally break on source level with 2.13
+aswell ;)
+is it ok if I do this to access them:
+
+#define TRACEPOINT_DEFINE
+#define TRACEPOINT_PROBE_DYNAMIC_LINKAGE
+// 2.12
+// #include <lttng/lttng-ust-tracelog.h>
+// #include <lttng/lttng-ust-tracef.h>
+// 2.13
+#include <lttng/tp/lttng-ust-tracelog.h>
+#include <lttng/tp/lttng-ust-tracef.h>
+
+ie. I would load lttng-ust.so later and can then use those tracepoints.
 
 Norbert
 _______________________________________________
