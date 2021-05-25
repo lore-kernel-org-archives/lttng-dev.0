@@ -2,71 +2,75 @@ Return-Path: <SRS0=Lz2h=KU=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_FONT_LOW_CONTRAST,
-	HTML_MESSAGE,HTML_NONELEMENT_30_40,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_REPLYTO_END_DIGIT,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C13CAC2B9F8
-	for <lttng-dev@archiver.kernel.org>; Tue, 25 May 2021 08:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2740C2B9F8
+	for <lttng-dev@archiver.kernel.org>; Tue, 25 May 2021 08:46:50 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 0100C61159
-	for <lttng-dev@archiver.kernel.org>; Tue, 25 May 2021 08:15:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0100C61159
+	by mail.kernel.org (Postfix) with ESMTPS id 536796108D
+	for <lttng-dev@archiver.kernel.org>; Tue, 25 May 2021 08:46:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 536796108D
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Fq6NF6GsZz1wCY;
-	Tue, 25 May 2021 04:15:57 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Fq73r60MBz1vh2;
+	Tue, 25 May 2021 04:46:48 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1621930558;
-	bh=cSTHm+qjA6Ut/eK3B/zTXs+UyyAL8DgmNu8FKGX89cI=;
-	h=To:Cc:Date:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Wy25aL4/HpgUwkMmGohdlPnjLXT1RsO5uox2eB2khJ8KuEggJqmJvoKgpBL/5mmgf
-	 f/kulm6Q91LxPnwVi1GvVCC305uM6TCMA7ChCYik+V0bQKxZW9ww7lP7rR33G3+99P
-	 UT1tk0IgXpl3z1YzfDevIF6CsaOPFDDF9PlrjBpXZ78pQ3ClPpiD8eIJSHH9ymxaRy
-	 56kCQg1AsmRMMZ+xxkepX/msMOsijpBGw6YzJAQKvbIne8uHelhXFIPb2cppwIgur7
-	 leP54lqAVweNXWf3xKXYBpmEqFvKghGZqllfYN2WPAb4sMvzJDtUrhGWQaDlfx+W1+
-	 4deS8ox/WKb5g==
-Received: from qq.com (smtpbg477.qq.com [59.36.132.88])
- by lists.lttng.org (Postfix) with ESMTPS id 4Fq6Mv3tYXz1wCW
- for <lttng-dev@lists.lttng.org>; Tue, 25 May 2021 04:15:38 -0400 (EDT)
-X-QQ-GoodBg: 0
-X-QQ-SSF: 00100000000000F0
-X-QQ-FEAT: d1t2hSjUHbHTQqY90Lwrdek/1M3PcDmkszVO8EqQRjIcPQLOIMsA4GJIBqX7J
- XGUv5I//L3RTazqN/sK0N4p1bpe15Ko/jF1OOivAIDV493MTAOyzkV+WssO0ZxF/JJ2qLL2
- tSr49hPySPr1OzklHcFbBjrjpMzDLlcqpvSoM9WqDVCVtxNbSkfrIYsdWwWyaFFY1IGiR4T
- EyTo4XaVAg/c8do5IeVYpVTzEWAEy9f6xgjdbCcQkNjKhRxqWgUjjpRmgGb7hpUEVV3GtTx
- wajEWDOTai0GgASbBmqQamFYF9zYwqaSYujReHLN/cpJ7M0L3RiQ4ouuZF7h3LvAsv3A==
-X-QQ-BUSINESS-ORIGIN: 2
-X-Originating-IP: 58.33.93.110
-X-QQ-STYLE: 
-X-QQ-mid: llogic34t1621930429t3669791
-To: "=?utf-8?B?Sm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4=?="
- <jonathan.rajotte-julien@efficios.com>
-Cc: "=?utf-8?B?bHR0bmctZGV2?=" <lttng-dev@lists.lttng.org>
-Mime-Version: 1.0
-Date: Tue, 25 May 2021 16:13:48 +0800
-X-Priority: 3
-Message-ID: <tencent_02D5BD1E0DB6EEBD7DC3A97D@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
-References: <tencent_7588A64434D8A77544C70CAA@qq.com>
- <20190716142832.GA20789@joraj-alpa>
-In-Reply-To: <20190716142832.GA20789@joraj-alpa>
-X-QQ-ReplyHash: 1584420506
-X-QQ-SENDSIZE: 520
-Received: from qq.com (unknown [127.0.0.1]) by smtp.qq.com (ESMTP) with SMTP
- id ; Tue, 25 May 2021 16:13:50 +0800 (CST)
-Feedback-ID: llogic:magic-shield.com:qybgforeign:qybgforeign5
-X-QQ-Bgrelay: 1
-Subject: [lttng-dev] LTTng container awareness
+	s=default; t=1621932409;
+	bh=gxGGuGvnwbtv7RmiXaZvmVqlDRxZwLpfkco5C9EUfi0=;
+	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=aXKNPUvU6T2HIhdJHaaj04XjhQxf7i+n8OvRs9rHmbjjZE2zuEeAdToCfaQbIrTlw
+	 +tScWnIBqlMpsf0VS4z1uF8DHl4+s0kMDvZsL0rYXOY/Dj7ygCdjNaQXjeLEEsebXs
+	 B5CJj7Tdyirew+ayqjVDMiH/6Q+4BZ5a06yeSXGFOS5F8l8FLjHLN5Le8owK3j8qSQ
+	 JsLiOaNFMCoHo3TbxWcGbUOwi2aXy0HUE83JBAzS2rpKDD7dzrDQaNMyaif3g+Am6V
+	 LsbJ5nCRJNLrirM6TvXyHL0ASZ6KUP1++4QE0glQjrLQgsfG1sKaj14hfUEG12wkgL
+	 9sb96LxLTh0Bg==
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com
+ [IPv6:2607:f8b0:4864:20::333])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Fq73p6cZpz1wHy
+ for <lttng-dev@lists.lttng.org>; Tue, 25 May 2021 04:46:46 -0400 (EDT)
+Received: by mail-ot1-x333.google.com with SMTP id
+ i23-20020a9d68d70000b02902dc19ed4c15so27962589oto.0
+ for <lttng-dev@lists.lttng.org>; Tue, 25 May 2021 01:46:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=Y2jOcofkOyVSili3ONXaLeX9USNp2YBBtn07TYWh+vg=;
+ b=oicC0fOunSm8lz4rtPol9mXdPJyoRfPtx9cnlMiq2QM6eyOl4P8fPDvMiw1GUUWtAv
+ /sUwkOHqGKFvYTTMvFiiPm3r4ubtO3gVlf7QQNCDV06t5EVVL7U1OZMdWzT2DqmJq4Lq
+ utmi9+cNlx9WF5lrvC1Rwv+q5AmlrqfDznSLnu5Iie4/d1NGb7m/ZgrkMNvKFnH1HiIK
+ 7U7wsJ2tcz4WZYQykfSSVyE/KyVvJw1RyNwFr0qlbjcIv5oIbvMaT+VJsVFSvec/IHUa
+ 0Rr21LK5KQMQz82yC1fiXs3GFFT0PPL/Iies3ngWAy96VKtjsjHcM9VYMOZ4V+f/QKaW
+ wl1g==
+X-Gm-Message-State: AOAM533He+yDIz5Xw6D3g8Mi9nJG4As1NEs5JuBTdSuDlyQlO8UQhg8S
+ VjnmH6PiMkkIa/ukPhzuygERCHASO5/TiY2KK7o=
+X-Google-Smtp-Source: ABdhPJyebvkniAvjJH1pZb9Vb92qkfosIGoD34MCj8r2wM4F38wGZg6/iWYL1UHSMkM6282P4BuTK+CCPUH8f230EO0=
+X-Received: by 2002:a9d:5c14:: with SMTP id o20mr7834109otk.328.1621932406149; 
+ Tue, 25 May 2021 01:46:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <PR3PR02MB6202C5373D6CECC72EBF45DAD12B9@PR3PR02MB6202.eurprd02.prod.outlook.com>
+ <CADYdroOAiKwD_um-ONn=UfNQrOxjs0fM-7ozhUNc18jUQX9cQw@mail.gmail.com>
+ <AM7PR02MB6194C2E06B14077092AA06A0D12A9@AM7PR02MB6194.eurprd02.prod.outlook.com>
+ <CADYdroNm+rLkqXV3tjtQ94_PQM_mTiHvmx3JzJG5h2YHbRfguA@mail.gmail.com>
+ <851697925.52293.1621518874455.JavaMail.zimbra@efficios.com>
+ <201689209.52304.1621519010729.JavaMail.zimbra@efficios.com>
+ <186729016.52398.1621523346736.JavaMail.zimbra@efficios.com>
+ <CADYdroOCUu7BWqMZ1CMa5mHSJB50V1aS+98sVfgXQRPdnJTyYg@mail.gmail.com>
+ <PR3PR02MB6202E077AEC8C62B022780EED1299@PR3PR02MB6202.eurprd02.prod.outlook.com>
+In-Reply-To: <PR3PR02MB6202E077AEC8C62B022780EED1299@PR3PR02MB6202.eurprd02.prod.outlook.com>
+Date: Tue, 25 May 2021 10:46:35 +0200
+Message-ID: <CADYdroMmANMwnkfVMUOJuFJ-=_ggnE_4u=qoFSsdtgk_1SkTEQ@mail.gmail.com>
+To: MONTET Julien <julien.montet@reseau.eseo.fr>
+Subject: Re: [lttng-dev] LTTng - Xenomai : different results between
+ timestamp-lttng and rt_time_read()
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -78,143 +82,42 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?b?5p2o5rW3IHZpYSBsdHRuZy1kZXY=?= <lttng-dev@lists.lttng.org>
-Reply-To: =?utf-8?B?5p2o5rW3?= <hai.yang@magic-shield.com>
-Content-Type: multipart/mixed; boundary="===============5491394615516458715=="
+From: Norbert Lange via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Norbert Lange <nolange79@gmail.com>
+Cc: Jan Kiszka <jan.kiszka@siemens.com>, lttng-dev <lttng-dev@lists.lttng.org>,
+ Xenomai <xenomai@xenomai.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-This is a multi-part message in MIME format.
+Am Fr., 21. Mai 2021 um 12:13 Uhr schrieb MONTET Julien
+<julien.montet@reseau.eseo.fr>:
+>
+> Hello Mathieu, Norbert and Jan,
+>
+> Thank you for all of your explainations and the overview of the system.
+> No I didn't change the ipipe patch for the vDSO, I may try this.
+> If I have correctly understood, this patch prevents Cobalt from entering in a deadlock when the kernel is using the vDSO and the program interrupts the kernel at the same time. On which kernel does it word (aroubd 4.19) ?
+> I currently try to avoid kernel 5.4 because I remember I faced some boot issues (but it is on another topic).
 
---===============5491394615516458715==
-Content-Type: multipart/alternative;
-	boundary="----=_NextPart_60ACB1BC_1355A1E8_5C92F85A"
-Content-Transfer-Encoding: 8Bit
+That patch was for 4.19 AFAIR, but its specific to x86. The Linux
+kernel cleaned up the vdso handling to have a common base with some
+5.x version,
+but back then its been separate for each arch
 
-This is a multi-part message in MIME format.
+>
+> Here the issues i faced (drawn on TraceCompass). Are these the deadlocks we are talking about ?
+> https://postimg.cc/BP4G3bF0 (on 11:02:56:380)
+> https://postimg.cc/q6wHvrcC
 
-------=_NextPart_60ACB1BC_1355A1E8_5C92F85A
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
+Nope, if you get such a deadlock, then your only hope is Xenomai's
+Watchdog killing the process.
+It should happen very rarely (but thats not an argument if your
+software should run for years).
 
-SGkNCg0KDQpMVFRuZyBoYWQgdGhlIDIwMTkgcGxhbiB0byBkZWNvdXBsZSB0b29saW5nIGZv
-ciBjb250YWluZXIgYXdhcmVuZXNzLCBob3cgaXMgdGhlIHByb2dyZXNzIG9uIHRoYXQ/DQpo
-dHRwczovL2FyY2hpdmUuZm9zZGVtLm9yZy8yMDE5L3NjaGVkdWxlL2V2ZW50L2NvbnRhaW5l
-cnNfbHR0bmcvDQoNCg0KQXMgc3RhdGVkIGluIHBhZ2UgMTgsJm5ic3A7TFRUbmcgaXMgY29t
-cHJpc2VkIG9mIG1hbnkgY29tcG9uZW50cyB0aGF0Jm5ic3A7ZXhwZWN0IGEg4oCcbW9ub2xp
-dGlj4oCdIHN5c3RlbS4gSG93IGFib3V0IHRoZSBmdXR1cmUgdG8gY29udGFpbmVyaXplIHRo
-ZSBMVFRuZz8NCg0KDQoNCg0KUmVnYXJkcw0KSGFpDQoNCg0KDQombmJzcDsNCiZuYnNwOw0K
-Jm5ic3A7DQotLS0tLS0tLS0tLS0tLS0tLS0mbmJzcDtPcmlnaW5hbCZuYnNwOy0tLS0tLS0t
-LS0tLS0tLS0tLQ0KRnJvbTogJm5ic3A7IkpvbmF0aGFuIFJham90dGUtSnVsaWVuIjxqb25h
-dGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20mZ3Q7Ow0KRGF0ZTogJm5ic3A7VHVl
-LCBKdWwgMTYsIDIwMTkgMTA6MjggUE0NClRvOiAmbmJzcDsi5p2o5rW3IjxoYWkueWFuZ0Bt
-YWdpYy1zaGllbGQuY29tJmd0OzsgDQpDYzogJm5ic3A7Imx0dG5nLWRldiI8bHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZyZndDs7IA0KU3ViamVjdDogJm5ic3A7UmU6IFtsdHRuZy1kZXZd
-IFByb3MgYW5kIENvbnMgb2YgTFRUbmcNCg0KJm5ic3A7DQoNCkhpIEhhaSwNCg0KT24gVHVl
-LCBKdWwgMTYsIDIwMTkgYXQgMTA6MTk6MzhBTSArMDgwMCwg5p2o5rW3IHdyb3RlOg0KJmd0
-OyBPYnZpb3VzbHkgTFRUbmcgaGFzIG11Y2ggbG93ZXIgb3ZlcmhlYWQgY29tcGFyZWQgdG8g
-YXVkaXRkLCB3aGVuIHdlIHR1cm4gb24NCiZndDsgYWxsIHN5c3RlbSBjYWxscyBhbmQgdXNl
-IHRoZSBzYW1lIGxvYWQuIElzIGl0IHRydWUgZm9yIGJvdGggdXNlciBzcGFjZSBhbmQNCiZn
-dDsga2VybmVsIHNwYWNlPw0KDQpsdHRuZy11c3QgKHVzZXJzcGFjZSB0cmFjZXIpIG1vc3Rs
-eSB1c2UgdGhlIHNhbWUgY29uY2VwdCBhcyB0aGUga2VybmVsdHJhY2VyDQoocGVyLWNwdSBy
-aW5nIGJ1ZmZlcnMsIGJpbmFyeSBvdXRwdXQvQ1RGLCBkZWxheWVkIGNvbnN1bXB0aW9uIG9m
-IGV2ZW50cywgZXRjLikuDQpUaGVyZSBpcyBzb21lIHBlbmFsdHkgZm9yIGRvaW5nIHRoaW5n
-cyBpbiB1c2Vyc3BhY2Ugc2luY2Ugd2UgbmVlZCBzb21lDQppbmZvcm1hdGlvbiBmcm9tIHRo
-ZSBrZXJuZWwgZm9yIGVhY2ggdHJhY2Vwb2ludCBoaXQgKGUuZyB0aGUgY3VycmVudCBjcHUN
-Cm51bWJlcikuIEJ1dCBhZ2FpbiBtb3N0IG9mIHRoZXNlIGhvdCBwYXRocyBhcmUgcXVpdGUg
-b3B0aW1pemVkLg0KDQpJbiBhbnkgY2FzZSBJIGVuY291cmFnZSB5b3UgdG8gdHJ5IGl0IG91
-dCBvbiB5b3VyIHdvcmtsb2FkIGFuZCBsdHRuZyBmaXQgeW91cg0KbmVlZHMuDQoNCklmIHlv
-dSBkbyBub3QgZmluZCBhIHBhcnRpY3VsYXIgZmVhdHVyZSBpbiB0aGUgZG9jIFsxXSwgZG8g
-bm90IGhlc2l0YXRlIHRvIGNvbnRhY3QNCnRoaXMgbWFpbGluZyBsaXN0IGZvciBtb3JlIGlu
-Zm9ybWF0aW9uLg0KDQomZ3Q7U28gZmFyIEkgaGF2ZW4ndCBzZWVuIGFueSByZXBvcnQgY29t
-cGFyZSBMVFRuZyBhbmQgYXVkaXRkLA0KJmd0OyBhbnlvbmUga25vd3M/DQoNCkkgZG8gbm90
-IHJlbWVtYmVyIGFueSBjb252ZXJzYXRpb24gb24gdGhpcyB0b3BpYy4gQWZ0ZXIgcmVhZGlu
-ZyBhIGJpdCBvbiBhdWRpdGQsDQpsdHRuZyBtaWdodCBiZSBhIGdvb2QgcmVwbGFjZW1lbnQg
-ZGVwZW5kaW5nIG9uIHlvdXIgY29uc3RyYWludHMgYW5kIG5lZWRzLg0KDQpbMV0gaHR0cHM6
-Ly9sdHRuZy5vcmcvZG9jcy92Mi4xMC8NCg0KQ2hlZXJzDQotLSANCkpvbmF0aGFuIFJham90
-dGUtSnVsaWVuDQpFZmZpY2lPUw==
-
-------=_NextPart_60ACB1BC_1355A1E8_5C92F85A
-Content-Type: text/html;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
-
-PGRpdj5IaTwvZGl2PjxkaXY+PGJyPjwvZGl2PjxkaXY+TFRUbmcgaGFkIHRoZSAyMDE5IHBs
-YW4gdG8gZGVjb3VwbGUgdG9vbGluZyBmb3IgY29udGFpbmVyIGF3YXJlbmVzcywgaG93IGlz
-IHRoZSBwcm9ncmVzcyBvbiB0aGF0PzwvZGl2PjxkaXY+aHR0cHM6Ly9hcmNoaXZlLmZvc2Rl
-bS5vcmcvMjAxOS9zY2hlZHVsZS9ldmVudC9jb250YWluZXJzX2x0dG5nLzwvZGl2PjxkaXY+
-PGJyPjwvZGl2PjxkaXY+QXMgc3RhdGVkIGluIHBhZzxmb250IF9fZWRpdG9yd2FycF9fPSIx
-IiBzdHlsZT0iZGlzcGxheTogaW5saW5lOyBmb250LXNpemU6IDE0cHg7IGZvbnQtZmFtaWx5
-OiAmcXVvdDtsdWNpZGEgR3JhbmRlJnF1b3Q7LCBWZXJkYW5hLCAmcXVvdDtNaWNyb3NvZnQg
-WWFIZWkmcXVvdDs7IGNvbG9yOiByZ2IoMCwgMCwgMCk7IGJhY2tncm91bmQtY29sb3I6IHJn
-YmEoMCwgMCwgMCwgMCk7IGZvbnQtd2VpZ2h0OiA0MDA7IGZvbnQtc3R5bGU6IG5vcm1hbDsi
-PmUgMTgsJm5ic3A7TFRUbmcgaXMgY29tcHJpc2VkIG9mIG1hbnkgY29tcG9uZW50cyB0aGF0
-Jm5ic3A7PC9mb250PjxzcGFuIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiByZ2JhKDAsIDAs
-IDAsIDApOyI+ZXhwZWN0IGEg4oCcbW9ub2xpdGlj4oCdIHN5c3RlbS4gSG93IGFib3V0IHRo
-ZSBmdXR1cmUgdG8gY29udGFpbmVyaXplIHRoZSBMVFRuZz88L3NwYW4+PC9kaXY+PGRpdj48
-L2Rpdj48ZGl2PjxzaWduIHNpZ25pZD0iOTgiPjxkaXY+PGZvbnQ+PGJyPjwvZm9udD48ZGl2
-IHN0eWxlPSJjb2xvcjojOTA5MDkwO2ZvbnQtZmFtaWx5OkFyaWFsIE5hcnJvdztmb250LXNp
-emU6MTJweCI+PC9kaXY+PC9kaXY+PGRpdj48Zm9udD5SZWdhcmRzPC9mb250PjwvZGl2Pjxk
-aXY+PGZvbnQ+SGFpPGJyPjwvZm9udD48L2Rpdj48ZGl2IHN0eWxlPSJmb250LXNpemU6MTRw
-eDtmb250LWZhbWlseTpWZXJkYW5hO2NvbG9yOiMwMDA7Ij48L2Rpdj48L3NpZ24+PC9kaXY+
-PGRpdj4mbmJzcDs8L2Rpdj48ZGl2PjxpbmNsdWRldGFpbD48ZGl2PiZuYnNwOzwvZGl2Pjxk
-aXY+Jm5ic3A7PC9kaXY+PGRpdiBzdHlsZT0iZm9udDpWZXJkYW5hIG5vcm1hbCAxNHB4O2Nv
-bG9yOiMwMDA7Ij48ZGl2IHN0eWxlPSJGT05ULVNJWkU6IDEycHg7Rk9OVC1GQU1JTFk6IEFy
-aWFsIE5hcnJvdztwYWRkaW5nOjJweCAwIDJweCAwOyI+LS0tLS0tLS0tLS0tLS0tLS0tJm5i
-c3A7T3JpZ2luYWwmbmJzcDstLS0tLS0tLS0tLS0tLS0tLS08L2Rpdj48ZGl2IHN0eWxlPSJG
-T05ULVNJWkU6IDEycHg7YmFja2dyb3VuZDojZWZlZmVmO3BhZGRpbmc6OHB4OyI+PGRpdiBp
-ZD0ibWVudV9zZW5kZXIiPjxiPkZyb206IDwvYj4mbmJzcDsiSm9uYXRoYW4gUmFqb3R0ZS1K
-dWxpZW4iJmx0O2pvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbSZndDs7PC9k
-aXY+PGRpdj48Yj5EYXRlOiA8L2I+Jm5ic3A7VHVlLCBKdWwgMTYsIDIwMTkgMTA6MjggUE08
-L2Rpdj48ZGl2PjxiPlRvOiA8L2I+Jm5ic3A7IuadqOa1tyImbHQ7aGFpLnlhbmdAbWFnaWMt
-c2hpZWxkLmNvbSZndDs7IDx3YnI+PC9kaXY+PGRpdj48Yj5DYzogPC9iPiZuYnNwOyJsdHRu
-Zy1kZXYiJmx0O2x0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcmZ3Q7OyA8d2JyPjwvZGl2Pjxk
-aXY+PGI+U3ViamVjdDogPC9iPiZuYnNwO1JlOiBbbHR0bmctZGV2XSBQcm9zIGFuZCBDb25z
-IG9mIExUVG5nPC9kaXY+PC9kaXY+PGRpdj4mbmJzcDs8L2Rpdj48ZGl2IHN0eWxlPSJwb3Np
-dGlvbjpyZWxhdGl2ZTsiPjxkaXYgaWQ9InRtcGNvbnRlbnRfcmVzIj48L2Rpdj5IaSBIYWks
-PGJyPjxicj5PbiBUdWUsIEp1bCAxNiwgMjAxOSBhdCAxMDoxOTozOEFNICswODAwLCDmnajm
-tbcgd3JvdGU6PGJyPiZndDsgT2J2aW91c2x5IExUVG5nIGhhcyBtdWNoIGxvd2VyIG92ZXJo
-ZWFkIGNvbXBhcmVkIHRvIGF1ZGl0ZCwgd2hlbiB3ZSB0dXJuIG9uPGJyPiZndDsgYWxsIHN5
-c3RlbSBjYWxscyBhbmQgdXNlIHRoZSBzYW1lIGxvYWQuIElzIGl0IHRydWUgZm9yIGJvdGgg
-dXNlciBzcGFjZSBhbmQ8YnI+Jmd0OyBrZXJuZWwgc3BhY2U/PGJyPjxicj5sdHRuZy11c3Qg
-KHVzZXJzcGFjZSB0cmFjZXIpIG1vc3RseSB1c2UgdGhlIHNhbWUgY29uY2VwdCBhcyB0aGUg
-a2VybmVsdHJhY2VyPGJyPihwZXItY3B1IHJpbmcgYnVmZmVycywgYmluYXJ5IG91dHB1dC9D
-VEYsIGRlbGF5ZWQgY29uc3VtcHRpb24gb2YgZXZlbnRzLCBldGMuKS48YnI+VGhlcmUgaXMg
-c29tZSBwZW5hbHR5IGZvciBkb2luZyB0aGluZ3MgaW4gdXNlcnNwYWNlIHNpbmNlIHdlIG5l
-ZWQgc29tZTxicj5pbmZvcm1hdGlvbiBmcm9tIHRoZSBrZXJuZWwgZm9yIGVhY2ggdHJhY2Vw
-b2ludCBoaXQgKGUuZyB0aGUgY3VycmVudCBjcHU8YnI+bnVtYmVyKS4gQnV0IGFnYWluIG1v
-c3Qgb2YgdGhlc2UgaG90IHBhdGhzIGFyZSBxdWl0ZSBvcHRpbWl6ZWQuPGJyPjxicj5JbiBh
-bnkgY2FzZSBJIGVuY291cmFnZSB5b3UgdG8gdHJ5IGl0IG91dCBvbiB5b3VyIHdvcmtsb2Fk
-IGFuZCBsdHRuZyBmaXQgeW91cjxicj5uZWVkcy48YnI+PGJyPklmIHlvdSBkbyBub3QgZmlu
-ZCBhIHBhcnRpY3VsYXIgZmVhdHVyZSBpbiB0aGUgZG9jIFsxXSwgZG8gbm90IGhlc2l0YXRl
-IHRvIGNvbnRhY3Q8YnI+dGhpcyBtYWlsaW5nIGxpc3QgZm9yIG1vcmUgaW5mb3JtYXRpb24u
-PGJyPjxicj4mZ3Q7U28gZmFyIEkgaGF2ZW4ndCBzZWVuIGFueSByZXBvcnQgY29tcGFyZSBM
-VFRuZyBhbmQgYXVkaXRkLDxicj4mZ3Q7IGFueW9uZSBrbm93cz88YnI+PGJyPkkgZG8gbm90
-IHJlbWVtYmVyIGFueSBjb252ZXJzYXRpb24gb24gdGhpcyB0b3BpYy4gQWZ0ZXIgcmVhZGlu
-ZyBhIGJpdCBvbiBhdWRpdGQsPGJyPmx0dG5nIG1pZ2h0IGJlIGEgZ29vZCByZXBsYWNlbWVu
-dCBkZXBlbmRpbmcgb24geW91ciBjb25zdHJhaW50cyBhbmQgbmVlZHMuPGJyPjxicj5bMV0g
-aHR0cHM6Ly9sdHRuZy5vcmcvZG9jcy92Mi4xMC88YnI+PGJyPkNoZWVyczxicj4tLSA8YnI+
-Sm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW48YnI+RWZmaWNpT1M8YnI+PC9kaXY+PC9kaXY+PCEt
-LTwhW2VuZGlmXS0tPjwvaW5jbHVkZXRhaWw+PC9kaXY+
-
-------=_NextPart_60ACB1BC_1355A1E8_5C92F85A--
-
-
-
-
---===============5491394615516458715==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Norbert
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5491394615516458715==--
-
-
-
