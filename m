@@ -7,70 +7,70 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2740C2B9F8
-	for <lttng-dev@archiver.kernel.org>; Tue, 25 May 2021 08:46:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61409C2B9F8
+	for <lttng-dev@archiver.kernel.org>; Tue, 25 May 2021 13:32:31 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 536796108D
-	for <lttng-dev@archiver.kernel.org>; Tue, 25 May 2021 08:46:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 536796108D
+	by mail.kernel.org (Postfix) with ESMTPS id 9AC316108D
+	for <lttng-dev@archiver.kernel.org>; Tue, 25 May 2021 13:32:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9AC316108D
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Fq73r60MBz1vh2;
-	Tue, 25 May 2021 04:46:48 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4FqFPS4KSgz1wPG;
+	Tue, 25 May 2021 09:32:28 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1621932409;
-	bh=gxGGuGvnwbtv7RmiXaZvmVqlDRxZwLpfkco5C9EUfi0=;
-	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=aXKNPUvU6T2HIhdJHaaj04XjhQxf7i+n8OvRs9rHmbjjZE2zuEeAdToCfaQbIrTlw
-	 +tScWnIBqlMpsf0VS4z1uF8DHl4+s0kMDvZsL0rYXOY/Dj7ygCdjNaQXjeLEEsebXs
-	 B5CJj7Tdyirew+ayqjVDMiH/6Q+4BZ5a06yeSXGFOS5F8l8FLjHLN5Le8owK3j8qSQ
-	 JsLiOaNFMCoHo3TbxWcGbUOwi2aXy0HUE83JBAzS2rpKDD7dzrDQaNMyaif3g+Am6V
-	 LsbJ5nCRJNLrirM6TvXyHL0ASZ6KUP1++4QE0glQjrLQgsfG1sKaj14hfUEG12wkgL
-	 9sb96LxLTh0Bg==
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com
- [IPv6:2607:f8b0:4864:20::333])
- by lists.lttng.org (Postfix) with ESMTPS id 4Fq73p6cZpz1wHy
- for <lttng-dev@lists.lttng.org>; Tue, 25 May 2021 04:46:46 -0400 (EDT)
-Received: by mail-ot1-x333.google.com with SMTP id
- i23-20020a9d68d70000b02902dc19ed4c15so27962589oto.0
- for <lttng-dev@lists.lttng.org>; Tue, 25 May 2021 01:46:46 -0700 (PDT)
+	s=default; t=1621949549;
+	bh=VWJHcyBu+8n9Ot1utMTZq8yno1hEDCdbg2RL/dMzYKE=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=Kjgw//WRZScX7koU/NGF+x9MAhBxmsVOJJMLeVLbpidlO5Xs1iFYrUU7Fxk6tg0nq
+	 ZGS00idgSiWPsqtUmzzigkLFSpHUvdCj884OQfriXw8UDL15TIV3nom1zqE7tdpMEm
+	 Vs5U126P4xpqczTiZN97HDr3F7NSY3bVdIgKFgIqpvRgwiP2I6Yz5Ze+tJucM1C7nA
+	 K0xgHruyovowZSwKHiX2z77XA/rGsR9uD0kmwYFvb/tQwp/IM/c3SiRtPq3YHS0SxN
+	 4Top9D2ww5G0qagwUSw0hBdzfXate3YNeRs7AVsvq1lmBvnpFSrVfxxgOnV8PAXE7R
+	 38zz5I/sJegOg==
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com
+ [IPv6:2607:f8b0:4864:20::336])
+ by lists.lttng.org (Postfix) with ESMTPS id 4FqFPR1vmWz1w9v
+ for <lttng-dev@lists.lttng.org>; Tue, 25 May 2021 09:32:27 -0400 (EDT)
+Received: by mail-ot1-x336.google.com with SMTP id
+ 69-20020a9d0a4b0000b02902ed42f141e1so28582173otg.2
+ for <lttng-dev@lists.lttng.org>; Tue, 25 May 2021 06:32:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:mime-version:references:in-reply-to:from:date
  :message-id:subject:to:cc;
- bh=Y2jOcofkOyVSili3ONXaLeX9USNp2YBBtn07TYWh+vg=;
- b=oicC0fOunSm8lz4rtPol9mXdPJyoRfPtx9cnlMiq2QM6eyOl4P8fPDvMiw1GUUWtAv
- /sUwkOHqGKFvYTTMvFiiPm3r4ubtO3gVlf7QQNCDV06t5EVVL7U1OZMdWzT2DqmJq4Lq
- utmi9+cNlx9WF5lrvC1Rwv+q5AmlrqfDznSLnu5Iie4/d1NGb7m/ZgrkMNvKFnH1HiIK
- 7U7wsJ2tcz4WZYQykfSSVyE/KyVvJw1RyNwFr0qlbjcIv5oIbvMaT+VJsVFSvec/IHUa
- 0Rr21LK5KQMQz82yC1fiXs3GFFT0PPL/Iies3ngWAy96VKtjsjHcM9VYMOZ4V+f/QKaW
- wl1g==
-X-Gm-Message-State: AOAM533He+yDIz5Xw6D3g8Mi9nJG4As1NEs5JuBTdSuDlyQlO8UQhg8S
- VjnmH6PiMkkIa/ukPhzuygERCHASO5/TiY2KK7o=
-X-Google-Smtp-Source: ABdhPJyebvkniAvjJH1pZb9Vb92qkfosIGoD34MCj8r2wM4F38wGZg6/iWYL1UHSMkM6282P4BuTK+CCPUH8f230EO0=
-X-Received: by 2002:a9d:5c14:: with SMTP id o20mr7834109otk.328.1621932406149; 
- Tue, 25 May 2021 01:46:46 -0700 (PDT)
+ bh=0cOObiyoOLCeaZdxFQsMv8Z1b4lJfJ9jHLtz4aro4OY=;
+ b=l/xfFiFQzndL1plb3mklarTAxJ/0eitH9z0zyRTKXkY5EvnQ7zesrU1lVVNAB+roZS
+ Qqru1J5VdnPrEAw4bAbdCiQLeUESv7ls/jWGwIxo2mOkGsoVHexOE5qSSWOCRLBzjjT3
+ eXjTGPwdTitYSibMcXu0tF1BHmRP+XjUCeber4nXiiIjWYL44/SJyxmVS253iz/J44nU
+ NgTigtwPGnwEmrLpDW4NIzFgWkLTRR4eKHguhFAZQ5Nv8MWQ/7XMAcCzUiI1fvgpxOuF
+ VYQ5Vcls9B5In8J3Oen5CiSXNcgwmy6yDQn9WzBSbDZNSw48k45M3A36b1Wdd2ZXMPib
+ ++6A==
+X-Gm-Message-State: AOAM533a0hSGoL3BHVPTzFXcP4tv/EbaEvmA8u6aKusQ7OYAUPN5e55k
+ hgDaQT9pvqND4HjSnMe+nBINx1tSLjXbDza486A=
+X-Google-Smtp-Source: ABdhPJzBMF/x+miwGKfXZH+bUZKjGRgCQeMLSoaz1OuD1GrLspz1bJPCFPBKZD42bb4u6ntVEbOBTW1mUq+bnGTYNdk=
+X-Received: by 2002:a9d:7612:: with SMTP id k18mr22872103otl.178.1621949546337; 
+ Tue, 25 May 2021 06:32:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <PR3PR02MB6202C5373D6CECC72EBF45DAD12B9@PR3PR02MB6202.eurprd02.prod.outlook.com>
- <CADYdroOAiKwD_um-ONn=UfNQrOxjs0fM-7ozhUNc18jUQX9cQw@mail.gmail.com>
- <AM7PR02MB6194C2E06B14077092AA06A0D12A9@AM7PR02MB6194.eurprd02.prod.outlook.com>
- <CADYdroNm+rLkqXV3tjtQ94_PQM_mTiHvmx3JzJG5h2YHbRfguA@mail.gmail.com>
- <851697925.52293.1621518874455.JavaMail.zimbra@efficios.com>
- <201689209.52304.1621519010729.JavaMail.zimbra@efficios.com>
- <186729016.52398.1621523346736.JavaMail.zimbra@efficios.com>
- <CADYdroOCUu7BWqMZ1CMa5mHSJB50V1aS+98sVfgXQRPdnJTyYg@mail.gmail.com>
- <PR3PR02MB6202E077AEC8C62B022780EED1299@PR3PR02MB6202.eurprd02.prod.outlook.com>
-In-Reply-To: <PR3PR02MB6202E077AEC8C62B022780EED1299@PR3PR02MB6202.eurprd02.prod.outlook.com>
-Date: Tue, 25 May 2021 10:46:35 +0200
-Message-ID: <CADYdroMmANMwnkfVMUOJuFJ-=_ggnE_4u=qoFSsdtgk_1SkTEQ@mail.gmail.com>
-To: MONTET Julien <julien.montet@reseau.eseo.fr>
-Subject: Re: [lttng-dev] LTTng - Xenomai : different results between
- timestamp-lttng and rt_time_read()
+References: <20210520121807.55428-1-nolange79@gmail.com>
+ <1600729511.52338.1621520352970.JavaMail.zimbra@efficios.com>
+ <CADYdroN3FF3Qs_B55s_Un2qOGz3sP=JMpV=QWRFcO7KVzL-8_A@mail.gmail.com>
+ <982122605.52445.1621524098787.JavaMail.zimbra@efficios.com>
+ <CADYdroPZTrNg+gYy9SLyDnUGUd1kNq3vkzzjSwJx9e7Tz68quw@mail.gmail.com>
+ <523808152.52514.1621527935563.JavaMail.zimbra@efficios.com>
+ <CADYdroMFR3P7OmHt=U9bUUpkWOfqBWdn9f6c4N+J_g5G9WL=Cw@mail.gmail.com>
+ <154847626.52635.1621531127222.JavaMail.zimbra@efficios.com>
+In-Reply-To: <154847626.52635.1621531127222.JavaMail.zimbra@efficios.com>
+Date: Tue, 25 May 2021 15:32:15 +0200
+Message-ID: <CADYdroO7wuokeU_zqzPw0VsCc1HrTZAipai6qp1tQrX0aVhdPA@mail.gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: [lttng-dev] [PATCH lttng-ust] Improve tracelog handling,
+ reduce exported functions
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -84,39 +84,63 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: Norbert Lange via lttng-dev <lttng-dev@lists.lttng.org>
 Reply-To: Norbert Lange <nolange79@gmail.com>
-Cc: Jan Kiszka <jan.kiszka@siemens.com>, lttng-dev <lttng-dev@lists.lttng.org>,
- Xenomai <xenomai@xenomai.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Am Fr., 21. Mai 2021 um 12:13 Uhr schrieb MONTET Julien
-<julien.montet@reseau.eseo.fr>:
+Am Do., 20. Mai 2021 um 19:18 Uhr schrieb Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com>:
 >
-> Hello Mathieu, Norbert and Jan,
 >
-> Thank you for all of your explainations and the overview of the system.
-> No I didn't change the ipipe patch for the vDSO, I may try this.
-> If I have correctly understood, this patch prevents Cobalt from entering in a deadlock when the kernel is using the vDSO and the program interrupts the kernel at the same time. On which kernel does it word (aroubd 4.19) ?
-> I currently try to avoid kernel 5.4 because I remember I faced some boot issues (but it is on another topic).
-
-That patch was for 4.19 AFAIR, but its specific to x86. The Linux
-kernel cleaned up the vdso handling to have a common base with some
-5.x version,
-but back then its been separate for each arch
-
 >
-> Here the issues i faced (drawn on TraceCompass). Are these the deadlocks we are talking about ?
-> https://postimg.cc/BP4G3bF0 (on 11:02:56:380)
-> https://postimg.cc/q6wHvrcC
+> ----- On May 20, 2021, at 12:51 PM, Norbert Lange nolange79@gmail.com wrote:
+>
+> > Am Do., 20. Mai 2021 um 18:25 Uhr schrieb Mathieu Desnoyers
+> > <mathieu.desnoyers@efficios.com>:
+> >>
+> >> ----- On May 20, 2021, at 11:54 AM, Norbert Lange nolange79@gmail.com wrote:
+> >> [...]
+> >>
+> >> >> What prevents you from linking against lttng-ust.so again ?
+> >> >
+> >> > I did not poke around enough with Lttng to be confident it wont have
+> >> > side effects,
+> >> > I really don't want it active in production. It doesn't seem there is
+> >> > much public knowledge with Xenomai either.
+> >> > lttng-ust.so will spawn threads, lttng-ust-tracepoint.so is mostly passive,
+> >>
+> >> There is indeed a split between instrumentation and runtime threads done
+> >> with lttng-ust-tracepoint.so vs lttng-ust.so.
+> >>
+> >> I understand that this split is missing for tracelog and tracef, and
+> >> would be a good thing to have.
+> >>
+> >> I would be interested to move the tracelog and tracef implementation
+> >> from liblttng-ust.so to liblttng-ust-tracepoint.so, even this late
+> >> in the -rc cycle, because all users of tracelog/tracef need to link
+> >> against liblttng-ust-tracepoint.so anyway. So moving these symbols
+> >> should not affect anyone.
+> >>
+> >> Can you give it a try and let me know if it works for you ?
+> >
+> > Will take some time, whats the timeframe you need for feedback?
+>
+> Here is the tentative commit:
+>
+> https://review.lttng.org/c/lttng-ust/+/5927 Move tracef/tracelog symbols to liblttng-ust-tracepoint.so
+>
 
-Nope, if you get such a deadlock, then your only hope is Xenomai's
-Watchdog killing the process.
-It should happen very rarely (but thats not an argument if your
-software should run for years).
+Make a own thread for this?
+I testet this, but get errors as liblttng-ust-tracepoint.so depends on
+symbols from liblttng-ust.so.
 
-Norbert
+/usr/lib/gcc/x86_64-linux-gnu/10/../../../../x86_64-linux-gnu/bin/ld:
+/tmp/opt/hipase2/buildroot-acpu/host/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/liblttng-ust-tracepoint.so:
+undefined reference to `lttng_ust_probe_register'
+/usr/lib/gcc/x86_64-linux-gnu/10/../../../../x86_64-linux-gnu/bin/ld:
+/tmp/opt/hipase2/buildroot-acpu/host/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/liblttng-ust-tracepoint.so:
+undefined reference to `lttng_ust_probe_unregister'
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
