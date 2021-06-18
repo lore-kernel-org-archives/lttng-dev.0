@@ -1,63 +1,68 @@
-Return-Path: <SRS0=Se4k=LL=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=VPNp=LM=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_REPLYTO_END_DIGIT,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF350C2B9F4
-	for <lttng-dev@archiver.kernel.org>; Thu, 17 Jun 2021 22:13:57 +0000 (UTC)
-Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC9CEC48BE8
+	for <lttng-dev@archiver.kernel.org>; Fri, 18 Jun 2021 17:11:59 +0000 (UTC)
+Received: from lists.lttng.org (unknown [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 30E3E61249
-	for <lttng-dev@archiver.kernel.org>; Thu, 17 Jun 2021 22:13:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 30E3E61249
-Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
-Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
+	by mail.kernel.org (Postfix) with ESMTPS id 12AAC61004
+	for <lttng-dev@archiver.kernel.org>; Fri, 18 Jun 2021 17:11:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 12AAC61004
+Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=lists.lttng.org
+Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4G5btW1HwZzJ4N;
-	Thu, 17 Jun 2021 18:13:55 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4G657T2f6PzJSy;
+	Fri, 18 Jun 2021 13:11:49 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1623968036;
-	bh=b3hYp6hh3fTt0feH6FWNOEqTftPz71Oz0us7SBUQS6s=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=vCqMEqyeIhnYP5OdvmH6MJRymH5hGXt0AyaDw3nFCb+3SIJxTa9pV/6G2IFh0P1j5
-	 o9dD3EgG6Z71GV1WhOAKc5PZZuE06Q+zeprvMu6JywStTX1DLi39hGWI8oqnHQAizB
-	 3CpGwB8pqveGYvy5fZVVTTupV3ZhasHAof7jGdY7NLOSZIr8Ff8iS85x46B5eWd1vV
-	 MqU0+0+jJbVviW4tihUg16kMqgtH2NhVs27xmoR0on2KYXbUq+6L1oQt9IaN78++eS
-	 aKyKmOqja9lBqOtuPAH3m2XCgBQFydJ2cGDKcLv/qMQtsk7pJKn1/+dvmKNPSfA3Ln
-	 ACnukoDLJnt2A==
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com
- [IPv6:2607:f8b0:4864:20::32f])
- by lists.lttng.org (Postfix) with ESMTPS id 4G5btT49HqzJ5N
- for <lttng-dev@lists.lttng.org>; Thu, 17 Jun 2021 18:13:53 -0400 (EDT)
-Received: by mail-ot1-x32f.google.com with SMTP id
- 6-20020a9d07860000b02903e83bf8f8fcso7693211oto.12
- for <lttng-dev@lists.lttng.org>; Thu, 17 Jun 2021 15:13:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=JF0W1fEZ1vjZl6czrPoSLj+lze1ctrs9ZOMbUPBxCkg=;
- b=rgGmJoNFFZF3tZ2OlnxprMtl1jJ7aW2HDizTN7byDvXT2eUOCAghXlp57WZBIRCJqL
- WTmcmWf++eABvbt7OSMTJiET74ZKXaFCnymnpfl0z58iCrC5mPq+xxqt8ZWDpde3jIUq
- upfU6+sgfk8pdrd+9hT5Bi/H5CSrQ+5LWnfYDZ+PLOIz7MVjIVThB0CkDrRaN5e/EL+O
- gYr1adqfDEgIZ4t7ewWWLXAxbX9V7JwWgE0vaznqoNzZ7cEuixD/E5YruAGPd7WQPXOx
- 9B5BffryXJ9ZqU+gyiV8qtQk0FIlotM9Rl9MhKs9xPujXcIMGD0f51ykupXONkrSvotl
- eiBw==
-X-Gm-Message-State: AOAM531ogjCZuZ3/nodZqQBgTrPt8yfiGddiurKaSiGZNWPwUFtieyYB
- zBGvViwP7obst2MeRsYcpU3/CTLU1Nu/pdd+twFv71auFGVD0A==
-X-Google-Smtp-Source: ABdhPJxrWVd6lsQsmjswsOquzbrve6SesQdT4/n/sZ1+5AFrHqP4rK2KgeLluwhqcGWbxZFWDYSmpkIZufR7swle1ok=
-X-Received: by 2002:a9d:5c14:: with SMTP id o20mr6205350otk.328.1623968030619; 
- Thu, 17 Jun 2021 15:13:50 -0700 (PDT)
+	s=default; t=1624036310;
+	bh=CKmAK0AdUFBmKGPuIs2EZE+RE6hPLkMtKS+A2dSBmP0=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=X1F1cSPrIbXaFbJHcOXppZIJoVDfCeSf84cfAAYShYe0osaRL7e/qJEePaQwunVeG
+	 jyq1076ONyBxq5sSlQtJfx7U2Gmv6M39bIrVN8f+UADSLTwBGE9oqXixRSHE85mRNS
+	 EKpXYYduP9S9BbMV5vVvmZmVtgUT4eqqyE/z17q51kAmn7BcwtCNFVG/Y5JDOh3VDP
+	 rGEWeYEHvdHnBHVg5YsLUf61YT8Qgvh4tr06Yq4R9Gl/czh5kAqV9OygSYDEmgBQVm
+	 jTQQjB8s+gsSQImKnJd8gh9NTfUSvmU9byGB/4vG4grI2DQQ/EB0sr+kwQXdxhfGeI
+	 2/55E+sVa8LkA==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4G657R5LNgzJSw
+ for <lttng-dev@lists.lttng.org>; Fri, 18 Jun 2021 13:11:47 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 73649345F05;
+ Fri, 18 Jun 2021 13:11:41 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id Y8lnZ78Fy1sc; Fri, 18 Jun 2021 13:11:37 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 0B9D2345F04;
+ Fri, 18 Jun 2021 13:11:37 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 0B9D2345F04
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id haVpbEZVXE3U; Fri, 18 Jun 2021 13:11:37 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id F143B345D37;
+ Fri, 18 Jun 2021 13:11:36 -0400 (EDT)
+Date: Fri, 18 Jun 2021 13:11:36 -0400 (EDT)
+To: Norbert Lange <nolange79@gmail.com>
+Message-ID: <424774796.12773.1624036296954.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CADYdroPw9Xnwqx97xQSyiFLR1s-Sb2RvtcbdRGu-VmG0Tfydgg@mail.gmail.com>
+References: <CADYdroPw9Xnwqx97xQSyiFLR1s-Sb2RvtcbdRGu-VmG0Tfydgg@mail.gmail.com>
 MIME-Version: 1.0
-Date: Fri, 18 Jun 2021 00:13:39 +0200
-Message-ID: <CADYdroPw9Xnwqx97xQSyiFLR1s-Sb2RvtcbdRGu-VmG0Tfydgg@mail.gmail.com>
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [lttng-dev] Disabling sys_membarrier in lttng urcu
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4018 (ZimbraWebClient - FF89 (Linux)/8.8.15_GA_4026)
+Thread-Topic: Disabling sys_membarrier in lttng urcu
+Thread-Index: fTkCbu8ZNTvPu1TjWhQtg44hRtSm7w==
+Subject: Re: [lttng-dev] Disabling sys_membarrier in lttng urcu
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -69,37 +74,61 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Norbert Lange via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Norbert Lange <nolange79@gmail.com>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hello,
+----- On Jun 17, 2021, at 6:13 PM, lttng-dev lttng-dev@lists.lttng.org wrote:
 
-Some old topic, see
-https://lists.lttng.org/pipermail/lttng-dev/2019-November/029411.html.
-(I actually thought this was solved meanwhile).
+> Hello,
+> 
+> Some old topic, see
+> https://lists.lttng.org/pipermail/lttng-dev/2019-November/029411.html.
+> (I actually thought this was solved meanwhile).
+> 
+> With lttng 2.13 liburcu is replicated in lttng-ust so my old custom
+> hack aint helping.
+> 
+> Aside from another crude hack, I thought about doing this:
+> 
+> extern int lttng_ust_urcu_has_sys_membarrier;
+> int setup() {
+>  lttng_ust_urcu_has_sys_membarrier = 0;
+> }
+> 
+> this is obvious possible in my own program, but I don't know if some
+> lttng daemon would need to update RCU structures in shared memory that
+> should sync to other processes (and wont do that with sys_membarrier
+> in case of Xenomai threads)?
+> 
+> Seems safer to me to hack it out once more...
 
-With lttng 2.13 liburcu is replicated in lttng-ust so my old custom
-hack aint helping.
+We currently don't have any RCU synchronization across shared memory,
+and the implementation we have in lttng-ust only tracks threads within
+the same process, so it would be safe to tweak the lttng-ust-urcu behavior
+to use membarrier or not based on an environment variable.
 
-Aside from another crude hack, I thought about doing this:
+So I think we could expose a new "--disable-sys-membarrier" configure option
+to lttng-ust, and maybe add a LTTNG_UST_MEMBARRIER environment variable.
+This would likely be 2.14 material though.
 
-extern int lttng_ust_urcu_has_sys_membarrier;
-int setup() {
-  lttng_ust_urcu_has_sys_membarrier = 0;
-}
+I also notice that lttng-ust 2.13's implementation of RCU still refers to
+CONFIG_RCU_FORCE_SYS_MEMBARRIER which belongs to liburcu. This is
+probably something we'll want to fix right away before we release 2.13
+final.
 
-this is obvious possible in my own program, but I don't know if some
-lttng daemon would need to update RCU structures in shared memory that
-should sync to other processes (and wont do that with sys_membarrier
-in case of Xenomai threads)?
+Thanks,
 
-Seems safer to me to hack it out once more...
+Mathieu
 
-Norbert
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
