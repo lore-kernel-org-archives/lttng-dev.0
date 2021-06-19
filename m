@@ -1,68 +1,71 @@
-Return-Path: <SRS0=VPNp=LM=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=ohKM=LN=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC9CEC48BE8
-	for <lttng-dev@archiver.kernel.org>; Fri, 18 Jun 2021 17:11:59 +0000 (UTC)
-Received: from lists.lttng.org (unknown [167.114.26.123])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97884C49EA3
+	for <lttng-dev@archiver.kernel.org>; Sat, 19 Jun 2021 03:42:20 +0000 (UTC)
+Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 12AAC61004
-	for <lttng-dev@archiver.kernel.org>; Fri, 18 Jun 2021 17:11:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 12AAC61004
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=lists.lttng.org
-Authentication-Results: mail.kernel.org; spf=tempfail smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
+	by mail.kernel.org (Postfix) with ESMTPS id 9360A611B0
+	for <lttng-dev@archiver.kernel.org>; Sat, 19 Jun 2021 03:42:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 9360A611B0
+Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
+Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4G657T2f6PzJSy;
-	Fri, 18 Jun 2021 13:11:49 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4G6M6n5CKLzJfr;
+	Fri, 18 Jun 2021 23:42:09 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1624036310;
-	bh=CKmAK0AdUFBmKGPuIs2EZE+RE6hPLkMtKS+A2dSBmP0=;
+	s=default; t=1624074130;
+	bh=9MW1nzrWNKPyJgKMpq7glT8kWxG4hZO5v4HMyDMV7lM=;
 	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=X1F1cSPrIbXaFbJHcOXppZIJoVDfCeSf84cfAAYShYe0osaRL7e/qJEePaQwunVeG
-	 jyq1076ONyBxq5sSlQtJfx7U2Gmv6M39bIrVN8f+UADSLTwBGE9oqXixRSHE85mRNS
-	 EKpXYYduP9S9BbMV5vVvmZmVtgUT4eqqyE/z17q51kAmn7BcwtCNFVG/Y5JDOh3VDP
-	 rGEWeYEHvdHnBHVg5YsLUf61YT8Qgvh4tr06Yq4R9Gl/czh5kAqV9OygSYDEmgBQVm
-	 jTQQjB8s+gsSQImKnJd8gh9NTfUSvmU9byGB/4vG4grI2DQQ/EB0sr+kwQXdxhfGeI
-	 2/55E+sVa8LkA==
+	b=LARRwyyCjubACgOkwS2cKaVAXQOwbLToT7HYlkAiZD5PeYfHvBrrkUOG74eJiQCXE
+	 JJJ//F3Uy278E8ig/t6KQX9qRjlaCP1AE0w/xXqyBdtkhRmh/UyguglKZXt9ETn95c
+	 SPdXUFVRKZ6f/JQMPE9D+aWNEExkuktScpmtNcXjzzKY6qv6/AxYHtmmSkaBMt8FF0
+	 7WsBUf9WdanRyQqQqYe4hYqfl80vkxETL8wlZ80SO4CL1NxAKry2xQblUJAsFhg0ti
+	 EZCsmdc7S6BieixPnXIqn7q3DJCiyPyczrK1WgXskRLMsSyAjbxwd3Frdi20cVSE5J
+	 X2Lk2RD+CBgCw==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4G657R5LNgzJSw
- for <lttng-dev@lists.lttng.org>; Fri, 18 Jun 2021 13:11:47 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4G6M6m3VskzJCn
+ for <lttng-dev@lists.lttng.org>; Fri, 18 Jun 2021 23:42:08 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 73649345F05;
- Fri, 18 Jun 2021 13:11:41 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 9381934947D;
+ Fri, 18 Jun 2021 23:42:02 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id Y8lnZ78Fy1sc; Fri, 18 Jun 2021 13:11:37 -0400 (EDT)
+ with ESMTP id JJZQB8MKjjNW; Fri, 18 Jun 2021 23:42:01 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 0B9D2345F04;
- Fri, 18 Jun 2021 13:11:37 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 0B9D2345F04
+ by mail.efficios.com (Postfix) with ESMTP id 4E3FA349665;
+ Fri, 18 Jun 2021 23:42:01 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4E3FA349665
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id haVpbEZVXE3U; Fri, 18 Jun 2021 13:11:37 -0400 (EDT)
+ with ESMTP id veIsmXaoOEyJ; Fri, 18 Jun 2021 23:42:01 -0400 (EDT)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id F143B345D37;
- Fri, 18 Jun 2021 13:11:36 -0400 (EDT)
-Date: Fri, 18 Jun 2021 13:11:36 -0400 (EDT)
-To: Norbert Lange <nolange79@gmail.com>
-Message-ID: <424774796.12773.1624036296954.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CADYdroPw9Xnwqx97xQSyiFLR1s-Sb2RvtcbdRGu-VmG0Tfydgg@mail.gmail.com>
-References: <CADYdroPw9Xnwqx97xQSyiFLR1s-Sb2RvtcbdRGu-VmG0Tfydgg@mail.gmail.com>
+ by mail.efficios.com (Postfix) with ESMTP id 28DDD349571;
+ Fri, 18 Jun 2021 23:42:01 -0400 (EDT)
+Date: Fri, 18 Jun 2021 23:42:01 -0400 (EDT)
+To: Steven Rostedt <rostedt@goodmis.org>
+Message-ID: <1743432091.13845.1624074121104.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20210615115738.46818ace@oasis.local.home>
+References: <1119833442.5505.1623700847146.JavaMail.zimbra@efficios.com>
+ <CAB4xu_1H-4gdandyRx+F0nb1g+sLKatx=oJdzQspM+3hJXoYhA@mail.gmail.com>
+ <20210615115738.46818ace@oasis.local.home>
 MIME-Version: 1.0
 X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4018 (ZimbraWebClient - FF89 (Linux)/8.8.15_GA_4026)
-Thread-Topic: Disabling sys_membarrier in lttng urcu
-Thread-Index: fTkCbu8ZNTvPu1TjWhQtg44hRtSm7w==
-Subject: Re: [lttng-dev] Disabling sys_membarrier in lttng urcu
+X-Mailer: Zimbra 8.8.15_GA_4018 (ZimbraWebClient - GC91 (Linux)/8.8.15_GA_4026)
+Thread-Topic: Usage example of libbabeltrace (babeltrace2) to read CTF traces
+ from a GUI
+Thread-Index: j6XFERVpPvjmpz4jUrwN+G99/Vf/uA==
+Subject: Re: [lttng-dev] Usage example of libbabeltrace (babeltrace2) to
+ read CTF traces from a GUI
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -74,61 +77,480 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+From: Philippe Proulx via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Philippe Proulx <pproulx@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>,
+ Jeremie Galarneau <jgalar@efficios.com>, linux-trace-devel@vger.kernel.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
------ On Jun 17, 2021, at 6:13 PM, lttng-dev lttng-dev@lists.lttng.org wrote:
+----- Original Message -----
+> From: "Steven Rostedt" <rostedt@goodmis.org>
+> To: "Philippe Proulx" <pproulx@efficios.com>
+> Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "Jeremie Galarneau" <jgalar@efficios.com>, "lttng-dev"
+> <lttng-dev@lists.lttng.org>, linux-trace-devel@vger.kernel.org
+> Sent: Tuesday, 15 June, 2021 11:57:38
+> Subject: Re: [lttng-dev] Usage example of libbabeltrace (babeltrace2) to read CTF traces from a GUI
 
-> Hello,
+> [ Adding linux-trace-devel too ]
 > 
-> Some old topic, see
-> https://lists.lttng.org/pipermail/lttng-dev/2019-November/029411.html.
-> (I actually thought this was solved meanwhile).
+> On Tue, 15 Jun 2021 11:13:41 -0400
+> Philippe Proulx <pproulx@efficios.com> wrote:
 > 
-> With lttng 2.13 liburcu is replicated in lttng-ust so my old custom
-> hack aint helping.
+>> I can cook a minimal working example in the following days.
 > 
-> Aside from another crude hack, I thought about doing this:
-> 
-> extern int lttng_ust_urcu_has_sys_membarrier;
-> int setup() {
->  lttng_ust_urcu_has_sys_membarrier = 0;
-> }
-> 
-> this is obvious possible in my own program, but I don't know if some
-> lttng daemon would need to update RCU structures in shared memory that
-> should sync to other processes (and wont do that with sys_membarrier
-> in case of Xenomai threads)?
-> 
-> Seems safer to me to hack it out once more...
+> That would be great, thanks!
 
-We currently don't have any RCU synchronization across shared memory,
-and the implementation we have in lttng-ust only tracks threads within
-the same process, so it would be safe to tweak the lttng-ust-urcu behavior
-to use membarrier or not based on an environment variable.
+Here you go (Pastebin: <https://pastebin.com/0MFQkiAw>):
 
-So I think we could expose a new "--disable-sys-membarrier" configure option
-to lttng-ust, and maybe add a LTTNG_UST_MEMBARRIER environment variable.
-This would likely be 2.14 material though.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <assert.h>
+#include <babeltrace2/babeltrace.h>
 
-I also notice that lttng-ust 2.13's implementation of RCU still refers to
-CONFIG_RCU_FORCE_SYS_MEMBARRIER which belongs to liburcu. This is
-probably something we'll want to fix right away before we release 2.13
-final.
+/*
+ * Shared data between our relay sink component and the
+ * bt_graph_run_once() call site.
+ */
+struct relay_data {
+	bt_message_array_const msgs;
+	uint64_t msg_count;
+};
 
-Thanks,
+/*
+ * Consumer method of our relay sink component class.
+ *
+ * See <https://babeltrace.org/docs/v2.0/libbabeltrace2/group__api-graph.html#ga301a677396bd8f5bd8b920fd5fa60418>.
+ */
+static bt_graph_simple_sink_component_consume_func_status relay_consume(
+		bt_message_iterator * const msg_iter,
+		void * const user_data)
+{
+	struct relay_data * const relay_data =
+		(struct relay_data *) user_data;
+	bt_message_iterator_next_status msg_iter_next_status;
+	bt_graph_simple_sink_component_consume_func_status status =
+		BT_GRAPH_SIMPLE_SINK_COMPONENT_CONSUME_FUNC_STATUS_OK;
 
-Mathieu
+	/* Consume the next messages, storing them in `*relay_data` */
+	msg_iter_next_status = bt_message_iterator_next(msg_iter,
+		&relay_data->msgs, &relay_data->msg_count);
+	switch (msg_iter_next_status) {
+	case BT_MESSAGE_ITERATOR_NEXT_STATUS_END:
+		status = BT_GRAPH_SIMPLE_SINK_COMPONENT_CONSUME_FUNC_STATUS_END;
+		break;
+	case BT_GRAPH_SIMPLE_SINK_COMPONENT_CONSUME_FUNC_STATUS_MEMORY_ERROR:
+		status = BT_GRAPH_SIMPLE_SINK_COMPONENT_CONSUME_FUNC_STATUS_MEMORY_ERROR;
+		break;
+	case BT_GRAPH_SIMPLE_SINK_COMPONENT_CONSUME_FUNC_STATUS_ERROR:
+		status = BT_GRAPH_SIMPLE_SINK_COMPONENT_CONSUME_FUNC_STATUS_ERROR;
+		break;
+	default:
+		assert(status ==
+			BT_GRAPH_SIMPLE_SINK_COMPONENT_CONSUME_FUNC_STATUS_OK);
+		break;
+	}
 
--- 
-Mathieu Desnoyers
+	return status;
+}
+
+/*
+ * Adds our own sink component named `relay` to the trace processing
+ * graph `graph`.
+ *
+ * On success, `*comp` is the added sink component.
+ *
+ * See <https://babeltrace.org/docs/v2.0/libbabeltrace2/group__api-graph.html#api-graph-lc-add-ss>.
+ */
+static bt_graph_add_component_status add_relay_comp(bt_graph * const graph,
+		struct relay_data * const relay_data,
+		const bt_component_sink ** const comp)
+{
+	return bt_graph_add_simple_sink_component(graph, "relay", NULL,
+		relay_consume, NULL, relay_data, comp);
+}
+
+/*
+ * Creates and returns the parameters to initialize the `src.ctf.fs`
+ * component with the trace directory `trace_dir`.
+ *
+ * See <https://babeltrace.org/docs/v2.0/libbabeltrace2/group__api-val.html>.
+ */
+static bt_value *create_ctf_fs_comp_params(const char * const trace_dir)
+{
+	bt_value *params;
+	bt_value *inputs = NULL;
+	bt_value_map_insert_entry_status insert_entry_status;
+	bt_value_array_append_element_status append_elem_status;
+
+	/* Create an empty map value */
+	params = bt_value_map_create();
+	if (!params) {
+		goto error;
+	}
+
+	/*
+	 * Insert an empty array value having the key `inputs`.
+	 *
+	 * `inputs` is a borrowed value object here, _not_ our
+	 * reference.
+	 */
+	insert_entry_status = bt_value_map_insert_empty_array_entry(params,
+		"inputs", &inputs);
+	if (insert_entry_status != BT_VALUE_MAP_INSERT_ENTRY_STATUS_OK) {
+		goto error;
+	}
+
+	/* Append the trace directory to the `inputs` array value */
+	append_elem_status = bt_value_array_append_string_element(inputs,
+		trace_dir);
+	if (append_elem_status != BT_VALUE_ARRAY_APPEND_ELEMENT_STATUS_OK) {
+		goto error;
+	}
+
+	goto end;
+
+error:
+	BT_VALUE_PUT_REF_AND_RESET(params);
+
+end:
+	return params;
+}
+
+/*
+ * Adds a `src.ctf.fs` component named `ctf` to read the trace directory
+ * `trace_dir` to the trace processing graph `graph`.
+ *
+ * See <https://babeltrace.org/docs/v2.0/man7/babeltrace2-source.ctf.fs.7/>.
+ *
+ * On success, `*comp` is the added source component.
+ */
+static bt_graph_add_component_status add_ctf_fs_comp(bt_graph * const graph,
+		const char * const trace_dir,
+		const bt_component_source ** const comp)
+{
+	const bt_plugin *plugin;
+	bt_plugin_find_status plugin_find_status;
+	const bt_component_class_source *comp_cls;
+	bt_value *params = NULL;
+	bt_graph_add_component_status add_comp_status;
+
+	/* Find the `ctf` plugin */
+	plugin_find_status = bt_plugin_find("ctf", BT_TRUE, BT_TRUE,
+		BT_TRUE, BT_TRUE, BT_TRUE, &plugin);
+	if (plugin_find_status != BT_PLUGIN_FIND_STATUS_OK) {
+		goto error;
+	}
+
+	/* Borrow the `fs` source component class within the `ctf` plugin */
+	comp_cls = bt_plugin_borrow_source_component_class_by_name_const(
+		plugin, "fs");
+	if (!comp_cls) {
+		goto error;
+	}
+
+	/* Create the parameters to initialize the source component */
+	params = create_ctf_fs_comp_params(trace_dir);
+	if (!params) {
+		goto error;
+	}
+
+	/* Add the source component to the graph */
+	add_comp_status = bt_graph_add_source_component(graph, comp_cls,
+		"ctf", params, BT_LOGGING_LEVEL_NONE, comp);
+	goto end;
+
+error:
+	add_comp_status = BT_GRAPH_ADD_COMPONENT_STATUS_ERROR;
+
+end:
+	bt_plugin_put_ref(plugin);
+	bt_value_put_ref(params);
+	return add_comp_status;
+}
+
+/*
+ * Adds a `flt.utils.muxer` component named `muxer` to the trace
+ * processing graph `graph`.
+ *
+ * See <https://babeltrace.org/docs/v2.0/man7/babeltrace2-filter.utils.muxer.7/>.
+ *
+ * On success, `*comp` is the added filter component.
+ */
+static bt_graph_add_component_status add_muxer_comp(bt_graph * const graph,
+		const bt_component_filter ** const comp)
+{
+	const bt_plugin *plugin;
+	bt_plugin_find_status plugin_find_status;
+	const bt_component_class_filter *comp_cls;
+	bt_graph_add_component_status add_comp_status;
+
+	/* Find the `utils` plugin */
+	plugin_find_status = bt_plugin_find("utils", BT_TRUE, BT_TRUE,
+		BT_TRUE, BT_TRUE, BT_TRUE, &plugin);
+	if (plugin_find_status != BT_PLUGIN_FIND_STATUS_OK) {
+		goto error;
+	}
+
+	/* Borrow the `muxer` filter comp. class within the `utils` plugin */
+	comp_cls = bt_plugin_borrow_filter_component_class_by_name_const(
+		plugin, "muxer");
+	if (!comp_cls) {
+		goto error;
+	}
+
+	/* Add the filter component to the graph (no init. parameters) */
+	add_comp_status = bt_graph_add_filter_component(graph, comp_cls,
+		"muxer", NULL, BT_LOGGING_LEVEL_NONE, comp);
+	goto end;
+
+error:
+	add_comp_status = BT_GRAPH_ADD_COMPONENT_STATUS_ERROR;
+
+end:
+	bt_plugin_put_ref(plugin);
+	return add_comp_status;
+}
+
+/*
+ * Creates a trace processing graph having this layout:
+ *
+ *     +------------+    +-----------------+    +--------------+
+ *     | src.ctf.fs |    | flt.utils.muxer |    | Our own sink |
+ *     |    [ctf]   |    |     [muxer]     |    |    [relay]   |
+ *     |            |    |                 |    |              |
+ *     |    stream0 @--->@ in0         out @--->@ in           |
+ *     |    stream1 @--->@ in1             |    +--------------+
+ *     |    stream2 @--->@ in2             |
+ *     |    stream3 @--->@ in3             |
+ *     +------------+    @ in4             |
+ *                       +-----------------+
+ *
+ * In the example above, the `src.ctf.fs` component reads a CTF trace
+ * having four data streams. The `trace_dir` parameter is the directory
+ * containing the CTF trace to read.
+ *
+ * Our own relay sink component, of which the consuming method is
+ * relay_consume(), consumes messages from the `flt.utils.muxer`
+ * component, storing them to a structure (`*relay_data`) shared with
+ * the bt_graph_run_once() call site.
+ *
+ * See <https://babeltrace.org/docs/v2.0/libbabeltrace2/group__api-graph.html>.
+ */
+static bt_graph *create_graph(const char * const trace_dir,
+		struct relay_data * const relay_data)
+{
+	bt_graph *graph;
+	const bt_component_source *ctf_fs_comp;
+	const bt_component_filter *muxer_comp;
+	const bt_component_sink *relay_comp;
+	bt_graph_add_component_status add_comp_status;
+	bt_graph_connect_ports_status connect_ports_status;
+	uint64_t i;
+
+	/* Create an empty trace processing graph */
+	graph = bt_graph_create(0);
+	if (!graph) {
+		goto error;
+	}
+
+	/* Create and add the three required components to `graph` */
+	add_comp_status = add_ctf_fs_comp(graph, trace_dir, &ctf_fs_comp);
+	if (add_comp_status != BT_GRAPH_ADD_COMPONENT_STATUS_OK) {
+		goto error;
+	}
+
+	add_comp_status = add_muxer_comp(graph, &muxer_comp);
+	if (add_comp_status != BT_GRAPH_ADD_COMPONENT_STATUS_OK) {
+		goto error;
+	}
+
+	add_comp_status = add_relay_comp(graph, relay_data, &relay_comp);
+	if (add_comp_status != BT_GRAPH_ADD_COMPONENT_STATUS_OK) {
+		goto error;
+	}
+
+	/*
+	 * Connect all the output ports of the `ctf` source component to
+	 * the input ports of the `muxer` filter component.
+	 *
+	 * An `flt.utils.muxer` component adds an input port every time
+	 * you connect one, making one always available.
+	 *
+	 * See <https://babeltrace.org/docs/v2.0/man7/babeltrace2-filter.utils.muxer.7/#doc-_input>.
+	 */
+	for (i = 0; i < bt_component_source_get_output_port_count(ctf_fs_comp);
+			i++) {
+		const bt_port_output * const out_port =
+			bt_component_source_borrow_output_port_by_index_const(
+				ctf_fs_comp, i);
+		const bt_port_input * const in_port =
+			bt_component_filter_borrow_input_port_by_index_const(
+				muxer_comp, i);
+
+		/* Connect ports */
+		connect_ports_status = bt_graph_connect_ports(graph,
+			out_port, in_port, NULL);
+
+		if (connect_ports_status != BT_GRAPH_CONNECT_PORTS_STATUS_OK) {
+			goto error;
+		}
+	}
+
+	/* Connect the `muxer` output port to the `relay` input port */
+	connect_ports_status = bt_graph_connect_ports(graph,
+		bt_component_filter_borrow_output_port_by_index_const(
+			muxer_comp, 0),
+		bt_component_sink_borrow_input_port_by_index_const(
+			relay_comp, 0), NULL);
+	if (connect_ports_status != BT_GRAPH_CONNECT_PORTS_STATUS_OK) {
+		goto error;
+	}
+
+	goto end;
+
+error:
+	BT_GRAPH_PUT_REF_AND_RESET(graph);
+
+end:
+	return graph;
+}
+
+/*
+ * Handles a single message `msg`, printing its name if it's an event
+ * message.
+ *
+ * See <https://babeltrace.org/docs/v2.0/libbabeltrace2/group__api-msg.html>.
+ */
+static void handle_msg(const bt_message * const msg)
+{
+	const bt_event *event;
+
+	if (bt_message_get_type(msg) != BT_MESSAGE_TYPE_EVENT) {
+		goto end;
+	}
+
+	event = bt_message_event_borrow_event_const(msg);
+	puts(bt_event_class_get_name(bt_event_borrow_class_const(event)));
+
+end:
+	return;
+}
+
+/*
+ * Runs the trace processing graph `graph`, our relay sink component
+ * transferring its consumed messages to `*relay_data`.
+ *
+ * See <https://babeltrace.org/docs/v2.0/libbabeltrace2/group__api-graph.html#api-graph-lc-run>.
+ */
+static int run_graph(bt_graph * const graph,
+		struct relay_data * const relay_data)
+{
+	bt_graph_run_once_status status;
+
+	while (true) {
+		uint64_t i;
+
+		/*
+		 * bt_graph_run_once() calls the consuming method of
+		 * our relay sink component (relay_consume()).
+		 *
+		 * relay_consume() consumes a batch of messages from the
+		 * `flt.utils.muxer` component and stores them in
+		 * `*relay_data`.
+		 */
+		status = bt_graph_run_once(graph);
+		assert(status != BT_GRAPH_RUN_ONCE_STATUS_AGAIN);
+		if (status != BT_GRAPH_RUN_ONCE_STATUS_OK) {
+			break;
+		}
+
+		/* Handle each consumed message */
+		for (i = 0; i < relay_data->msg_count; i++) {
+			const bt_message * const msg = relay_data->msgs[i];
+
+			handle_msg(msg);
+
+			/*
+			 * The message reference `msg` is ours: release
+			 * it now.
+			 */
+			bt_message_put_ref(msg);
+		}
+	}
+
+	return status == BT_GRAPH_RUN_ONCE_STATUS_END ? 0 : -1;
+}
+
+/*
+ * Reads the CTF trace located in the directory `argv[1]`, printing one
+ * event name per line to the standard output.
+ */
+int main(const int argc, const char * const * const argv)
+{
+	int ret = EXIT_SUCCESS;
+	struct relay_data relay_data = { 0 };
+	bt_graph *graph;
+
+	assert(argc == 2);
+
+	/* Create the trace processing graph */
+	graph = create_graph(argv[1], &relay_data);
+	if (!graph) {
+		ret = EXIT_FAILURE;
+		goto end;
+	}
+
+	/* Run the graph, printing one event name per line */
+	if (run_graph(graph, &relay_data)) {
+		ret = EXIT_FAILURE;
+	}
+
+end:
+	bt_graph_put_ref(graph);
+	return ret;
+}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Build as such:
+
+    $ cc -Wextra -Wall -o read-ctf-example read-ctf-example.c \
+         $(pkg-config babeltrace2 --cflags --libs)
+
+Feel free to ask us any questions.
+
+Philippe Proulx
 EfficiOS Inc.
-http://www.efficios.com
+https://www.efficios.com/
+
+> 
+> -- Steve
+> 
+>> 
+>> Phil
+>> 
+>> [1]: https://babeltrace.org/docs/v2.0/libbabeltrace2/
+>> [2]:
+>> https://babeltrace.org/docs/v2.0/libbabeltrace2/group__api-graph.html#gaa8432f03a967d01b764fb1bc959c8e89
+>> 
+>> >
+>> > Thanks,
+>> >
+>> > Mathieu
+>> >
+>> > --
+>> > Mathieu Desnoyers
+>> > EfficiOS Inc.
+>> > http://www.efficios.com
+>> > _______________________________________________
+>> > lttng-dev mailing list
+>> > lttng-dev@lists.lttng.org
+> > > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
