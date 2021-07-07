@@ -2,54 +2,70 @@ Return-Path: <SRS0=qlDs=L7=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.2 required=3.0 tests=BAYES_05,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A03FC07E96
-	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jul 2021 02:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9A19C07E95
+	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jul 2021 13:46:29 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id 3109461CB2
-	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jul 2021 02:43:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 3109461CB2
+	by mail.kernel.org (Postfix) with ESMTPS id F13D561C89
+	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jul 2021 13:46:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F13D561C89
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4GKNyz1cVYzSj3;
-	Tue,  6 Jul 2021 22:43:39 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4GKggX72crzSwC;
+	Wed,  7 Jul 2021 09:46:16 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1625625820;
-	bh=1kY0xYQOYky02/sKdxAqeZGxRGBDe+oH7PTpKlrl+Uc=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=y6dw4l7kyR9Qb9sv2fBHfEtQMLwqFAJpW8iD1jmhiHLoMp2201uDPn/z3iDRClS35
-	 lPA9LK7mZTh2q1bKYFCDZkt+87gLKsPHNRx5qUKGgok3mVnHKsvXfCRPGpbdABUSHS
-	 IK1KKr7sS6s0ryRMDpPTtNApfTQx1BEjjYmIDc29EyPJyLNFKkNYL/8o2JIUVjGuxD
-	 evU2t6vBa1PAc690ERQIekA1nd2hlQduXIAW0XB3Y6vatKTmv3VicN7qtxidG+AHza
-	 6dmn2q0EhvkHvPPPL99Q8A/HZsb/zMsCIoNzspXmEN9KbFXyD624XQnMEUp8o4DlH4
-	 6HofPq7y/ywdg==
-Received: from out4436.biz.mail.alibaba.com (out4436.biz.mail.alibaba.com
- [47.88.44.36])
- by lists.lttng.org (Postfix) with ESMTPS id 4GKNyx0h5tzSj2
- for <lttng-dev@lists.lttng.org>; Tue,  6 Jul 2021 22:43:36 -0400 (EDT)
-X-Alimail-AntiSpam: AC=CONTINUE; BC=0.09430134|-1; CH=green;
- DM=|CONTINUE|false|; DS=CONTINUE|ham_social|0.128363-0.00754733-0.86409;
- FP=0|0|0|0|0|-1|-1|-1; HT=e01e04400; MF=zhenyu.ren@aliyun.com; NM=1; PH=DW;
- RN=1; RT=1; SR=0; TI=W4_6173578_DEFAULT_0AC264D1_1625624195067_o7001c2363; 
-Received: from WS-web
- (zhenyu.ren@aliyun.com[W4_6173578_DEFAULT_0AC264D1_1625624195067_o7001c2363])
- by e01e01406.eu6 at Wed, 07 Jul 2021 10:37:39 +0800
-Date: Wed, 07 Jul 2021 10:37:39 +0800
-To: "lttng-dev" <lttng-dev@lists.lttng.org>
-Message-ID: <a286a436-454c-4aa1-b184-cccd0825370e.zhenyu.ren@aliyun.com>
-X-Mailer: [Alimail-Mailagent revision 2546561][W4_6173578][DEFAULT][Chrome]
+	s=default; t=1625665577;
+	bh=yPUP0o8HBbUJnZAVTaMEQT0LTg+tS8J0TgQQnJa8L8s=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=SDKeS1wAZVCy6KU7VjC2NOr6CCFcU8P0/6V4XRy02dlEwaY1XFuOhniPFbYGVc+Tp
+	 vb+dAr7MfnjbJhqBBKD10FRJtFE6UmopBVsz2JVKoT6HRlVeMP+Dj+bSS0ALwMr8oA
+	 EtOPYFLws1M5IgQWS/ircx49fheWTKfDzRdY1hLKexYGo+5lgEPUiDzFz5htnxCPIr
+	 3RAhx/RYEvpv1ct3IyWjaEs52/rk0sosXbGPrvn1qkfvGMvbpNGvF31OwL1XgOt2Ih
+	 WLyxmWOWxKucEc7ZxU8CgveqrCW0SYXVjQpbaOjmL/HIRDj4Fm/Po3YNh7ulDfw3Tl
+	 DkZAOt3GUzvrw==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4GKggW3ZpSzSw9
+ for <lttng-dev@lists.lttng.org>; Wed,  7 Jul 2021 09:46:15 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C12B234B921
+ for <lttng-dev@lists.lttng.org>; Wed,  7 Jul 2021 09:46:09 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id rVMSW_kqVosq; Wed,  7 Jul 2021 09:46:05 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C984634B919;
+ Wed,  7 Jul 2021 09:46:05 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C984634B919
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id F8K6QoVRgrj4; Wed,  7 Jul 2021 09:46:05 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id B868F34B37C;
+ Wed,  7 Jul 2021 09:46:05 -0400 (EDT)
+Date: Wed, 7 Jul 2021 09:46:05 -0400 (EDT)
+To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Message-ID: <1613735014.8733.1625665565618.JavaMail.zimbra@efficios.com>
+In-Reply-To: <a286a436-454c-4aa1-b184-cccd0825370e.zhenyu.ren@aliyun.com>
+References: <a286a436-454c-4aa1-b184-cccd0825370e.zhenyu.ren@aliyun.com>
 MIME-Version: 1.0
-x-aliyun-mail-creator: W4_6173578_DEFAULT_M3LTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNSkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzgxLjAuNDA0NC4xMzggU2FmYXJpLzUzNy4zNg==vN
-Subject: [lttng-dev] =?utf-8?q?what_will_happen_during_tracing_if_getcpu?=
- =?utf-8?q?=28=29_doesn=27t_return_correct_cpu_number_occasionally=3F?=
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4059 (ZimbraWebClient - FF89 (Linux)/8.8.15_GA_4059)
+Thread-Topic: what will happen during tracing if getcpu() doesn't return
+ correct cpu number occasionally?
+Thread-Index: mHanKvsgQlE1eBDaRSpDFE0iDxnlXw==
+Subject: Re: [lttng-dev] what will happen during tracing if getcpu() doesn't
+ return correct cpu number occasionally?
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -61,83 +77,163 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "zhenyu.ren via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Content-Type: multipart/mixed; boundary="===============9061438588519042172=="
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: multipart/mixed; boundary="===============2187317392108577367=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============9061438588519042172==
-Content-Type: multipart/alternative;
-  boundary="----=ALIBOUNDARY_84299_7fb492dff940_60e51373_26f12b"
+--===============2187317392108577367==
+Content-Type: multipart/alternative; 
+	boundary="=_88cef2e3-38e0-4c6a-ab13-a3b4d08e9f3c"
 
-------=ALIBOUNDARY_84299_7fb492dff940_60e51373_26f12b
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+--=_88cef2e3-38e0-4c6a-ab13-a3b4d08e9f3c
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-SGksIAogICBJIGtub3cgbHR0bmctdXN0IHRyYWNlcG9pbnQgcHJvY2VzcyB1c2VzIHBlciBjcHUg
-bG9ja2xlc3MgcmluZ2J1ZmZlciBhbGdvcml0aG0gZm9yIGhpZ2ggcGVyZm9ybWFuY2Ugc28gdGhh
-dCBpdCByZWxpZXMgb24gZ2V0Y3B1KCkgdG8gcmV0dXJuIHRoZSBjcHUgbnVtYmVyIG9uIHdoaWNo
-IHRoZSBhcHAgaXMgcnVubmluZy4KICAgVW5mb3J0dW5hdGVseSwgSSBhbSB3b3JraW5nIG9uIGFy
-bSB0aGF0IGxpbnV4IGtlcm5lbCBkb2VzIG5vdCBzdXBwb3J0IHZkc28gZ2V0Y3B1KCkgaW1wbGVt
-ZW50aW9uIGFuZCBvbmUgZ2V0Y3B1KCkgd2lsbCB0YWtlIDIwMG5zISEhCiAgIE15IHF1ZXN0aW9u
-IGlzIDoKICAgMS4gZG8geW91IGhhdmUgYW55IGFkdmljZSBmb3IgdGhhdD8KICAgMi4gSWYgSSBp
-bXBsZW1lbnQgYSBjYWNoZS12ZXJzaW9uIGZvciBnZXRjcHUoKShqdXN0IGxpa2UgZ2V0Y3B1KCkg
-aW1wbGVtZW50aW9uIGJlZm9yZSBrZXJuZWwgMi42LjIzICksIHdoYXQgd2lsbCBoYXBwZW4gZHVy
-aW5nIHRyYWNpbmcgcHJvY2Vzcz8gIAogICAgICBTaW5jZSB1c2Ugb2YgdGhlIGNhY2hlIGNvdWxk
-IHNwZWVkIGdldGNwdSgpIGNhbGxzLCBhdCB0aGUgY29zdCB0aGF0IHRoZXJlIHdhcyBhIHZlcnkg
-c21hbGwgY2hhbmNlIHRoYXQgdGhlIHJldHVybmVkIGNwdSBudW1iZXIgd291bGQgYmUgb3V0IG9m
-IGRhdGUsIEkgYW0gbm90IHN1cmUgd2hldGhlciB0aGUgIndyb25nIiBjcHUgbnVtYmVyIHdpbGwg
-cmVzdWx0IGluIHRoZSB0cmFjaW5nIGFwcCBjcmFzaGluZz8KClRoYW5rcwp6aGVueXUucmVu
-------=ALIBOUNDARY_84299_7fb492dff940_60e51373_26f12b
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+----- On Jul 6, 2021, at 10:37 PM, lttng-dev <lttng-dev@lists.lttng.org> wrote: 
 
-PGRpdiBjbGFzcz0iX19hbGl5dW5fZW1haWxfYm9keV9ibG9jayI+PGRpdiAgc3R5bGU9ImNsZWFy
-OmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNp
-bVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij5IaSwmbmJzcDs8L3NwYW4+PC9k
-aXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRh
-aG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7
-Ij4mbmJzcDsgJm5ic3A7SSBrbm93IGx0dG5nLXVzdCB0cmFjZXBvaW50IHByb2Nlc3MgdXNlcyBw
-ZXIgY3B1IGxvY2tsZXNzIHJpbmdidWZmZXIgYWxnb3JpdGhtJm5ic3A7Zm9yIGhpZ2ggcGVyZm9y
-bWFuY2Ugc28gdGhhdCBpdCByZWxpZXMgb24gZ2V0Y3B1KCkgdG8gcmV0dXJuIHRoZSBjcHUgbnVt
-YmVyIG9uIHdoaWNoIHRoZSBhcHAgaXMgcnVubmluZy48L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9
-ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhl
-aXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij4mbmJzcDsgJm5ic3A7
-VW5mb3J0dW5hdGVseSwmbmJzcDtJJm5ic3A7YW0mbmJzcDt3b3JraW5nJm5ic3A7b24gYXJtIHRo
-YXQgbGludXgga2VybmVsIGRvZXMmbmJzcDtub3QmbmJzcDtzdXBwb3J0Jm5ic3A7dmRzbyBnZXRj
-cHUoKSBpbXBsZW1lbnRpb24gYW5kIG9uZSBnZXRjcHUoKSB3aWxsIHRha2UgMjAwbnMhISE8L3Nw
-YW4+PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFt
-aWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMw
-MDAwMDA7Ij4mbmJzcDsgJm5ic3A7TXkgcXVlc3Rpb24gaXMgOjwvc3Bhbj48L2Rpdj48ZGl2ICBz
-dHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFs
-LFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPiZuYnNwOyAm
-bmJzcDsxLiBkbyB5b3UgaGF2ZSBhbnkgYWR2aWNlIGZvciB0aGF0Pzwvc3Bhbj48L2Rpdj48ZGl2
-ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFy
-aWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPiZuYnNw
-OyAmbmJzcDsyLiBJZiBJIGltcGxlbWVudCBhIGNhY2hlLXZlcnNpb24gZm9yIGdldGNwdSgpKGp1
-c3QgbGlrZSBnZXRjcHUoKSBpbXBsZW1lbnRpb24gYmVmb3JlIGtlcm5lbCAyLjYuMjMgKSwgd2hh
-dCB3aWxsIGhhcHBlbiBkdXJpbmcgdHJhY2luZyBwcm9jZXNzPyZuYnNwOyA8L3NwYW4+PC9kaXY+
-PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9t
-YSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij4m
-bmJzcDsgJm5ic3A7ICZuYnNwOyBTaW5jZSB1c2UmbmJzcDtvZiZuYnNwO3RoZSZuYnNwO2NhY2hl
-Jm5ic3A7Y291bGQmbmJzcDtzcGVlZCZuYnNwO2dldGNwdSgpJm5ic3A7Y2FsbHMsJm5ic3A7YXQm
-bmJzcDt0aGUmbmJzcDtjb3N0Jm5ic3A7dGhhdCZuYnNwO3RoZXJlJm5ic3A7d2FzJm5ic3A7YSZu
-YnNwO3ZlcnkmbmJzcDtzbWFsbCZuYnNwO2NoYW5jZSZuYnNwO3RoYXQmbmJzcDt0aGUmbmJzcDty
-ZXR1cm5lZCBjcHUgbnVtYmVyIHdvdWxkJm5ic3A7YmUmbmJzcDtvdXQmbmJzcDtvZiZuYnNwO2Rh
-dGUsIEkgYW0gbm90IHN1cmUgd2hldGhlciB0aGUgIndyb25nIiBjcHUgbnVtYmVyIHdpbGwgcmVz
-dWx0IGluIHRoZSB0cmFjaW5nIGFwcCBjcmFzaGluZz88L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9
-ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhl
-aXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij48YnIgPjwvc3Bhbj48
-L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6
-VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAw
-MDsiPlRoYW5rczwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBz
-dHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZTox
-NC4wcHg7Y29sb3I6IzAwMDAwMDsiPnpoZW55dS5yZW48L3NwYW4+PC9kaXY+PC9kaXY+
-------=ALIBOUNDARY_84299_7fb492dff940_60e51373_26f12b--
+> Hi,
+> I know lttng-ust tracepoint process uses per cpu lockless ringbuffer algorithm
+> for high performance so that it relies on getcpu() to return the cpu number on
+> which the app is running.
+> Unfortunately, I am working on arm that linux kernel does not support vdso
+> getcpu() implemention and one getcpu() will take 200ns!!!
+> My question is :
+> 1. do you have any advice for that?
 
+You might want to try wiring up the "rseq" system call in user-space to provide an accurate cpu_id 
+field in a __rseq_abi TLS variable. It is always kept up to date by the kernel. The rseq system call 
+is implemented on ARM. However the __rseq_abi TLS is a shared resource across libraries, and 
+we have not agreed with glibc people on how exactly it must be shared within a process. 
 
---===============9061438588519042172==
+> 2. If I implement a cache-version for getcpu()(just like getcpu() implemention
+> before kernel 2.6.23 ), what will happen during tracing process?
+
+You'd have to give more details on how this "cache-version" works. 
+
+> Since use of the cache could speed getcpu() calls, at the cost that there was a
+> very small chance that the returned cpu number would be out of date, I am not
+> sure whether the "wrong" cpu number will result in the tracing app crashing?
+
+LTTng-UST always has to expect that it can be migrated at any point between getcpu and writes to 
+per-cpu data. Therefore, it always relies on atomic operations when interacting with the ring buffer, 
+and there is no expectation that it runs on the "right" CPU compared to the ring buffer data structure 
+for consistency. Therefore, you won't experience crashes nor corruption even if the CPU number is 
+wrong once in a while, as long as it belongs to the "possible CPUs". 
+
+This behavior is selected by lttng's libringbuffer "RING_BUFFER_SYNC_GLOBAL" configuration 
+option internally, as selected by lttng-ust. 
+
+Note that the kernel tracer instead selects "RING_BUFFER_SYNC_PER_CPU", which is faster, but 
+requires that preemption (or migration) be disabled between the "smp_processor_id()" and writes to 
+the ring buffer per-cpu data structures. 
+
+Thanks, 
+
+Mathieu 
+
+> Thanks
+> zhenyu.ren
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+--=_88cef2e3-38e0-4c6a-ab13-a3b4d08e9f3c
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br data-mce-bogus=3D"1"></div><span id=3D"=
+zwchr" data-marker=3D"__DIVIDER__">----- On Jul 6, 2021, at 10:37 PM, lttng=
+-dev &lt;lttng-dev@lists.lttng.org&gt; wrote:<br></span><div data-marker=3D=
+"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin=
+-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;=
+text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;=
+"><div class=3D"__aliyun_email_body_block"><div><span style=3D"font-family:=
+'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">Hi,=
+&nbsp;</span></div><div><span style=3D"font-family:'tahoma' , 'arial' , 'st=
+heiti' , 'simsun';font-size:14px;color:#000000">&nbsp; &nbsp;I know lttng-u=
+st tracepoint process uses per cpu lockless ringbuffer algorithm&nbsp;for h=
+igh performance so that it relies on getcpu() to return the cpu number on w=
+hich the app is running.</span></div><div><span style=3D"font-family:'tahom=
+a' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">&nbsp; &n=
+bsp;Unfortunately,&nbsp;I&nbsp;am&nbsp;working&nbsp;on arm that linux kerne=
+l does&nbsp;not&nbsp;support&nbsp;vdso getcpu() implemention and one getcpu=
+() will take 200ns!!!</span></div><div><span style=3D"font-family:'tahoma' =
+, 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">&nbsp; &nbsp=
+;My question is :</span></div><div><span style=3D"font-family:'tahoma' , 'a=
+rial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">&nbsp; &nbsp;1. =
+do you have any advice for that?</span></div></div></blockquote><div><br></=
+div><div>You might want to try wiring up the "rseq" system call in user-spa=
+ce to provide an accurate cpu_id<br data-mce-bogus=3D"1"></div><div>field i=
+n a __rseq_abi TLS variable. It is always kept up to date by the kernel. Th=
+e rseq system call<br data-mce-bogus=3D"1"></div><div>is implemented on ARM=
+. However the __rseq_abi TLS is a shared resource across libraries, and<br =
+data-mce-bogus=3D"1"></div><div>we have not agreed with glibc people on how=
+ exactly it must be shared within a process.<br data-mce-bogus=3D"1"></div>=
+<div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px so=
+lid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;=
+font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-ser=
+if;font-size:12pt;"><div class=3D"__aliyun_email_body_block"><div><span sty=
+le=3D"font-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;=
+color:#000000">&nbsp; &nbsp;2. If I implement a cache-version for getcpu()(=
+just like getcpu() implemention before kernel 2.6.23 ), what will happen du=
+ring tracing process?&nbsp; </span></div></div></blockquote><div>You'd have=
+ to give more details on how this "cache-version" works.</div><div><br data=
+-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;m=
+argin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:no=
+rmal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:=
+12pt;"><div class=3D"__aliyun_email_body_block"><div><span style=3D"font-fa=
+mily:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000=
+">&nbsp; &nbsp; &nbsp; Since use&nbsp;of&nbsp;the&nbsp;cache&nbsp;could&nbs=
+p;speed&nbsp;getcpu()&nbsp;calls,&nbsp;at&nbsp;the&nbsp;cost&nbsp;that&nbsp=
+;there&nbsp;was&nbsp;a&nbsp;very&nbsp;small&nbsp;chance&nbsp;that&nbsp;the&=
+nbsp;returned cpu number would&nbsp;be&nbsp;out&nbsp;of&nbsp;date, I am not=
+ sure whether the "wrong" cpu number will result in the tracing app crashin=
+g?</span></div></div></blockquote><div><br></div><div>LTTng-UST always has =
+to expect that it can be migrated at any point between getcpu and writes to=
+<br data-mce-bogus=3D"1"></div><div>per-cpu data. Therefore, it always reli=
+es on atomic operations when interacting with the ring buffer,<br data-mce-=
+bogus=3D"1"></div><div>and there is no expectation that it runs on the "rig=
+ht" CPU compared to the ring buffer data structure<br data-mce-bogus=3D"1">=
+</div><div>for consistency. Therefore, you won't experience crashes nor cor=
+ruption even if the CPU number is</div><div>wrong once in a while, as long =
+as it belongs to the "possible CPUs".<br data-mce-bogus=3D"1"></div><div><b=
+r data-mce-bogus=3D"1"></div><div>This behavior is selected by lttng's libr=
+ingbuffer "RING_BUFFER_SYNC_GLOBAL" configuration<br data-mce-bogus=3D"1"><=
+/div><div>option internally, as selected by lttng-ust.<br data-mce-bogus=3D=
+"1"></div><div><br data-mce-bogus=3D"1"></div><div>Note that the kernel tra=
+cer instead selects "RING_BUFFER_SYNC_PER_CPU", which is faster, but<br dat=
+a-mce-bogus=3D"1"></div><div>requires that preemption (or migration) be dis=
+abled between the "smp_processor_id()" and writes to</div><div>the ring buf=
+fer per-cpu data structures.<br data-mce-bogus=3D"1"></div><div><br data-mc=
+e-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br dat=
+a-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br=
+ data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote=
+ style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;co=
+lor:#000;font-weight:normal;font-style:normal;text-decoration:none;font-fam=
+ily:Helvetica,Arial,sans-serif;font-size:12pt;"><div class=3D"__aliyun_emai=
+l_body_block"><div><span style=3D"font-family:'tahoma' , 'arial' , 'stheiti=
+' , 'simsun';font-size:14px;color:#000000"><br></span></div><div><span styl=
+e=3D"font-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;c=
+olor:#000000">Thanks</span></div><div><span style=3D"font-family:'tahoma' ,=
+ 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">zhenyu.ren</s=
+pan></div></div><br>_______________________________________________<br>lttn=
+g-dev mailing list<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/=
+cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><br><div data-mark=
+er=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br=
+>http://www.efficios.com</div></div></body></html>
+--=_88cef2e3-38e0-4c6a-ab13-a3b4d08e9f3c--
+
+--===============2187317392108577367==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -148,5 +244,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============9061438588519042172==--
-
+--===============2187317392108577367==--
