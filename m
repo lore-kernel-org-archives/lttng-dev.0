@@ -1,71 +1,62 @@
-Return-Path: <SRS0=qlDs=L7=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=UBvy=MB=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9A19C07E95
-	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jul 2021 13:46:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9D54C07E9B
+	for <lttng-dev@archiver.kernel.org>; Fri,  9 Jul 2021 08:31:11 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F13D561C89
-	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jul 2021 13:46:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org F13D561C89
+	by mail.kernel.org (Postfix) with ESMTPS id 0BBCC613CA
+	for <lttng-dev@archiver.kernel.org>; Fri,  9 Jul 2021 08:31:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 0BBCC613CA
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4GKggX72crzSwC;
-	Wed,  7 Jul 2021 09:46:16 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4GLmZv35Zjz1056;
+	Fri,  9 Jul 2021 04:31:03 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1625665577;
-	bh=yPUP0o8HBbUJnZAVTaMEQT0LTg+tS8J0TgQQnJa8L8s=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=SDKeS1wAZVCy6KU7VjC2NOr6CCFcU8P0/6V4XRy02dlEwaY1XFuOhniPFbYGVc+Tp
-	 vb+dAr7MfnjbJhqBBKD10FRJtFE6UmopBVsz2JVKoT6HRlVeMP+Dj+bSS0ALwMr8oA
-	 EtOPYFLws1M5IgQWS/ircx49fheWTKfDzRdY1hLKexYGo+5lgEPUiDzFz5htnxCPIr
-	 3RAhx/RYEvpv1ct3IyWjaEs52/rk0sosXbGPrvn1qkfvGMvbpNGvF31OwL1XgOt2Ih
-	 WLyxmWOWxKucEc7ZxU8CgveqrCW0SYXVjQpbaOjmL/HIRDj4Fm/Po3YNh7ulDfw3Tl
-	 DkZAOt3GUzvrw==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4GKggW3ZpSzSw9
- for <lttng-dev@lists.lttng.org>; Wed,  7 Jul 2021 09:46:15 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C12B234B921
- for <lttng-dev@lists.lttng.org>; Wed,  7 Jul 2021 09:46:09 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id rVMSW_kqVosq; Wed,  7 Jul 2021 09:46:05 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C984634B919;
- Wed,  7 Jul 2021 09:46:05 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C984634B919
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id F8K6QoVRgrj4; Wed,  7 Jul 2021 09:46:05 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id B868F34B37C;
- Wed,  7 Jul 2021 09:46:05 -0400 (EDT)
-Date: Wed, 7 Jul 2021 09:46:05 -0400 (EDT)
-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Message-ID: <1613735014.8733.1625665565618.JavaMail.zimbra@efficios.com>
-In-Reply-To: <a286a436-454c-4aa1-b184-cccd0825370e.zhenyu.ren@aliyun.com>
-References: <a286a436-454c-4aa1-b184-cccd0825370e.zhenyu.ren@aliyun.com>
+	s=default; t=1625819464;
+	bh=AkYy7kja7+68KVW2yDydawJMkQnhGrJxXfJJL89jlHM=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=U2Bp3DzN6VU02XzE4l9OTTWmrv3fc85/VPvIYmesVJPXMq5uz1iaeluZwjzx88eZr
+	 n1jTaKkaw0VEUii63cl8k06Hn2bG1c8AyG8HO7bq+4Cc/xtLMwAdY92CkUA1/vwlUP
+	 RZsxjrpLk3qAxYWM3gf3kVUjm5GgIKTU6mN8Kj8SWgS3Y5LSKn0bDbmvKRAcwpRUdR
+	 zLZin12WgyoEU4avc5TT3HzFL0uXpOvdm3N+kCjrW1juPHC7pk8vTbGPUNIhRU6xJy
+	 A9ly+eHn73719OqsK6B093pS4nQ+rnnGSHy266xLEDeMcoJnq+xXk7U3osdQt3OFR2
+	 UWP95PXOsrTdw==
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com
+ [IPv6:2607:f8b0:4864:20::230])
+ by lists.lttng.org (Postfix) with ESMTPS id 4GLmZt11VXzysZ
+ for <lttng-dev@lists.lttng.org>; Fri,  9 Jul 2021 04:31:01 -0400 (EDT)
+Received: by mail-oi1-x230.google.com with SMTP id a189so1100469oii.2
+ for <lttng-dev@lists.lttng.org>; Fri, 09 Jul 2021 01:31:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=dz61t+UpZ4zgRWpkSyiq+t+0lp5an8nv1rzM5nTs97E=;
+ b=NFcqviiKsmbZEwe853oP9WrRlUW8LUhLhRYS1EwQC5PlAQzXYxIKXPjZB3AcvhVnKV
+ ee95HhzLqbw0O9ND78zPRafBsihTGBzEALveU9wvyRr/rx6gyPwCyLQ3LBydmrkehHwQ
+ A2z4+TJ85DQQoYXyR0f7v/2fPov7ygUjoHQ688nPFZYl4st9DV+tfX8jwBVQgknnKFih
+ 2wEEo7X4zD1x1Y8zi9/1NcSe6EGimXGMv3F6mWDeYAOxf+LVLuJ6zNITVsfEa7WPkrbN
+ mQQz6cMVi7r/+/mPRY0Eo1JoMvt0noK2yko8en5LXvSOj5eFfYMeCY6l4KKtDSNblAcu
+ fQhg==
+X-Gm-Message-State: AOAM5335p5SE6+3l8n/WPMnydYiQs9nJe44kahoFvvCOHC1h8hNJzZd4
+ nMFgKTDRzRSRE7apW+VpAA9EuQjhhqBMhgb5Bz/LZD2Y3I4=
+X-Google-Smtp-Source: ABdhPJyBikqXWfxKFgZB7dgNhtzCblzZSWOk8upGaTyGRqLihxbMHaOalHpuxrCARX6vcMPXWXOP2O5mQwHY15/ixL0=
+X-Received: by 2002:aca:4d10:: with SMTP id a16mr112410oib.41.1625819459033;
+ Fri, 09 Jul 2021 01:30:59 -0700 (PDT)
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4059 (ZimbraWebClient - FF89 (Linux)/8.8.15_GA_4059)
-Thread-Topic: what will happen during tracing if getcpu() doesn't return
- correct cpu number occasionally?
-Thread-Index: mHanKvsgQlE1eBDaRSpDFE0iDxnlXw==
-Subject: Re: [lttng-dev] what will happen during tracing if getcpu() doesn't
- return correct cpu number occasionally?
+Date: Fri, 9 Jul 2021 04:30:48 -0400
+Message-ID: <CAA+-46q3vLWvu6WNueSybHZ-7hE=S=eZo1WWXDDq7YOa7hyjWg@mail.gmail.com>
+To: lttng-dev@lists.lttng.org
+Subject: [lttng-dev] unable to add callstack-user context
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -77,163 +68,64 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: multipart/mixed; boundary="===============2187317392108577367=="
+From: Evan Galea via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Evan Galea <evanjamesgalea@gmail.com>
+Content-Type: multipart/mixed; boundary="===============8993784453582673371=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============2187317392108577367==
-Content-Type: multipart/alternative; 
-	boundary="=_88cef2e3-38e0-4c6a-ab13-a3b4d08e9f3c"
+--===============8993784453582673371==
+Content-Type: multipart/alternative; boundary="000000000000531c2905c6ac9703"
 
---=_88cef2e3-38e0-4c6a-ab13-a3b4d08e9f3c
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--000000000000531c2905c6ac9703
+Content-Type: text/plain; charset="UTF-8"
 
------ On Jul 6, 2021, at 10:37 PM, lttng-dev <lttng-dev@lists.lttng.org> wrote: 
+Hi there, I'm a little new to lttng and tracing in general. I am using a
+Java Userspace agent, which is working well, but I am having trouble adding
+callstack context to my tracing channels. I'm not sure if it's relevant but
+running 'lttng add-context --list" shows callstack-user in the list.
 
-> Hi,
-> I know lttng-ust tracepoint process uses per cpu lockless ringbuffer algorithm
-> for high performance so that it relies on getcpu() to return the cpu number on
-> which the app is running.
-> Unfortunately, I am working on arm that linux kernel does not support vdso
-> getcpu() implemention and one getcpu() will take 200ns!!!
-> My question is :
-> 1. do you have any advice for that?
+the commands I input are:
 
-You might want to try wiring up the "rseq" system call in user-space to provide an accurate cpu_id 
-field in a __rseq_abi TLS variable. It is always kept up to date by the kernel. The rseq system call 
-is implemented on ARM. However the __rseq_abi TLS is a shared resource across libraries, and 
-we have not agreed with glibc people on how exactly it must be shared within a process. 
+lttng create
+lttng enable-channel --userspace mychannel
+lttng enable-event --userspace --all --channel mychannel
+lttng add-context --userspace --channel mychannel --type callstack-user
+>Error: callstack-user: UST invalid context
 
-> 2. If I implement a cache-version for getcpu()(just like getcpu() implemention
-> before kernel 2.6.23 ), what will happen during tracing process?
+When I run the following command instead:
+lttng add-context --userspace --channel mychannel --type vpid
 
-You'd have to give more details on how this "cache-version" works. 
+I am able to get it to work and I see vpid appear in my traces. Are there
+any other things I need to set up first to be able to use it?
 
-> Since use of the cache could speed getcpu() calls, at the cost that there was a
-> very small chance that the returned cpu number would be out of date, I am not
-> sure whether the "wrong" cpu number will result in the tracing app crashing?
+also, are there any commands that can list the per-domain contexts
+available?
 
-LTTng-UST always has to expect that it can be migrated at any point between getcpu and writes to 
-per-cpu data. Therefore, it always relies on atomic operations when interacting with the ring buffer, 
-and there is no expectation that it runs on the "right" CPU compared to the ring buffer data structure 
-for consistency. Therefore, you won't experience crashes nor corruption even if the CPU number is 
-wrong once in a while, as long as it belongs to the "possible CPUs". 
-
-This behavior is selected by lttng's libringbuffer "RING_BUFFER_SYNC_GLOBAL" configuration 
-option internally, as selected by lttng-ust. 
-
-Note that the kernel tracer instead selects "RING_BUFFER_SYNC_PER_CPU", which is faster, but 
-requires that preemption (or migration) be disabled between the "smp_processor_id()" and writes to 
-the ring buffer per-cpu data structures. 
-
-Thanks, 
-
-Mathieu 
-
-> Thanks
-> zhenyu.ren
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_88cef2e3-38e0-4c6a-ab13-a3b4d08e9f3c
-Content-Type: text/html; charset=utf-8
+--000000000000531c2905c6ac9703
+Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br data-mce-bogus=3D"1"></div><span id=3D"=
-zwchr" data-marker=3D"__DIVIDER__">----- On Jul 6, 2021, at 10:37 PM, lttng=
--dev &lt;lttng-dev@lists.lttng.org&gt; wrote:<br></span><div data-marker=3D=
-"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin=
--left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;=
-text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;=
-"><div class=3D"__aliyun_email_body_block"><div><span style=3D"font-family:=
-'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">Hi,=
-&nbsp;</span></div><div><span style=3D"font-family:'tahoma' , 'arial' , 'st=
-heiti' , 'simsun';font-size:14px;color:#000000">&nbsp; &nbsp;I know lttng-u=
-st tracepoint process uses per cpu lockless ringbuffer algorithm&nbsp;for h=
-igh performance so that it relies on getcpu() to return the cpu number on w=
-hich the app is running.</span></div><div><span style=3D"font-family:'tahom=
-a' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">&nbsp; &n=
-bsp;Unfortunately,&nbsp;I&nbsp;am&nbsp;working&nbsp;on arm that linux kerne=
-l does&nbsp;not&nbsp;support&nbsp;vdso getcpu() implemention and one getcpu=
-() will take 200ns!!!</span></div><div><span style=3D"font-family:'tahoma' =
-, 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">&nbsp; &nbsp=
-;My question is :</span></div><div><span style=3D"font-family:'tahoma' , 'a=
-rial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">&nbsp; &nbsp;1. =
-do you have any advice for that?</span></div></div></blockquote><div><br></=
-div><div>You might want to try wiring up the "rseq" system call in user-spa=
-ce to provide an accurate cpu_id<br data-mce-bogus=3D"1"></div><div>field i=
-n a __rseq_abi TLS variable. It is always kept up to date by the kernel. Th=
-e rseq system call<br data-mce-bogus=3D"1"></div><div>is implemented on ARM=
-. However the __rseq_abi TLS is a shared resource across libraries, and<br =
-data-mce-bogus=3D"1"></div><div>we have not agreed with glibc people on how=
- exactly it must be shared within a process.<br data-mce-bogus=3D"1"></div>=
-<div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px so=
-lid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;=
-font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-ser=
-if;font-size:12pt;"><div class=3D"__aliyun_email_body_block"><div><span sty=
-le=3D"font-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;=
-color:#000000">&nbsp; &nbsp;2. If I implement a cache-version for getcpu()(=
-just like getcpu() implemention before kernel 2.6.23 ), what will happen du=
-ring tracing process?&nbsp; </span></div></div></blockquote><div>You'd have=
- to give more details on how this "cache-version" works.</div><div><br data=
--mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;m=
-argin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:no=
-rmal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:=
-12pt;"><div class=3D"__aliyun_email_body_block"><div><span style=3D"font-fa=
-mily:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000=
-">&nbsp; &nbsp; &nbsp; Since use&nbsp;of&nbsp;the&nbsp;cache&nbsp;could&nbs=
-p;speed&nbsp;getcpu()&nbsp;calls,&nbsp;at&nbsp;the&nbsp;cost&nbsp;that&nbsp=
-;there&nbsp;was&nbsp;a&nbsp;very&nbsp;small&nbsp;chance&nbsp;that&nbsp;the&=
-nbsp;returned cpu number would&nbsp;be&nbsp;out&nbsp;of&nbsp;date, I am not=
- sure whether the "wrong" cpu number will result in the tracing app crashin=
-g?</span></div></div></blockquote><div><br></div><div>LTTng-UST always has =
-to expect that it can be migrated at any point between getcpu and writes to=
-<br data-mce-bogus=3D"1"></div><div>per-cpu data. Therefore, it always reli=
-es on atomic operations when interacting with the ring buffer,<br data-mce-=
-bogus=3D"1"></div><div>and there is no expectation that it runs on the "rig=
-ht" CPU compared to the ring buffer data structure<br data-mce-bogus=3D"1">=
-</div><div>for consistency. Therefore, you won't experience crashes nor cor=
-ruption even if the CPU number is</div><div>wrong once in a while, as long =
-as it belongs to the "possible CPUs".<br data-mce-bogus=3D"1"></div><div><b=
-r data-mce-bogus=3D"1"></div><div>This behavior is selected by lttng's libr=
-ingbuffer "RING_BUFFER_SYNC_GLOBAL" configuration<br data-mce-bogus=3D"1"><=
-/div><div>option internally, as selected by lttng-ust.<br data-mce-bogus=3D=
-"1"></div><div><br data-mce-bogus=3D"1"></div><div>Note that the kernel tra=
-cer instead selects "RING_BUFFER_SYNC_PER_CPU", which is faster, but<br dat=
-a-mce-bogus=3D"1"></div><div>requires that preemption (or migration) be dis=
-abled between the "smp_processor_id()" and writes to</div><div>the ring buf=
-fer per-cpu data structures.<br data-mce-bogus=3D"1"></div><div><br data-mc=
-e-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br dat=
-a-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br=
- data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote=
- style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;co=
-lor:#000;font-weight:normal;font-style:normal;text-decoration:none;font-fam=
-ily:Helvetica,Arial,sans-serif;font-size:12pt;"><div class=3D"__aliyun_emai=
-l_body_block"><div><span style=3D"font-family:'tahoma' , 'arial' , 'stheiti=
-' , 'simsun';font-size:14px;color:#000000"><br></span></div><div><span styl=
-e=3D"font-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;c=
-olor:#000000">Thanks</span></div><div><span style=3D"font-family:'tahoma' ,=
- 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">zhenyu.ren</s=
-pan></div></div><br>_______________________________________________<br>lttn=
-g-dev mailing list<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/=
-cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><br><div data-mark=
-er=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br=
->http://www.efficios.com</div></div></body></html>
---=_88cef2e3-38e0-4c6a-ab13-a3b4d08e9f3c--
+<div dir=3D"ltr"><div dir=3D"ltr"><div>Hi there, I&#39;m a little new to lt=
+tng and tracing in general. I am using a Java Userspace agent, which is wor=
+king well, but I am having trouble adding callstack context to my tracing c=
+hannels. I&#39;m not sure if it&#39;s relevant but running &#39;lttng add-c=
+ontext --list&quot; shows callstack-user in the list.</div><div><br></div><=
+div>the commands I input are:<br></div><div><br></div><div>lttng create <br=
+></div><div>lttng enable-channel --userspace mychannel</div><div>lttng enab=
+le-event --userspace --all --channel mychannel<br></div><div>lttng add-cont=
+ext --userspace --channel mychannel --type callstack-user</div><div>&gt;Err=
+or: callstack-user: UST invalid context</div><div><br></div><div>When I run=
+ the following command instead:<br></div><div>lttng add-context --userspace=
+ --channel mychannel --type vpid</div><div><br></div><div>I am able to get =
+it to work and I see vpid appear in my traces. Are there any other things I=
+ need to set up first to be able to use it?</div><div><br></div><div>also, =
+are there any commands that can list the per-domain contexts available?<i> =
+</i><br></div></div></div>
 
---===============2187317392108577367==
+--000000000000531c2905c6ac9703--
+
+--===============8993784453582673371==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -244,4 +136,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2187317392108577367==--
+--===============8993784453582673371==--
