@@ -1,69 +1,63 @@
-Return-Path: <SRS0=UBvy=MB=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=Psgs=MH=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_REPLYTO_END_DIGIT,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84765C07E99
-	for <lttng-dev@archiver.kernel.org>; Fri,  9 Jul 2021 13:54:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A32EC07E96
+	for <lttng-dev@archiver.kernel.org>; Thu, 15 Jul 2021 11:21:42 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id D3DE761208
-	for <lttng-dev@archiver.kernel.org>; Fri,  9 Jul 2021 13:54:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org D3DE761208
+	by mail.kernel.org (Postfix) with ESMTPS id AA2ED613BA
+	for <lttng-dev@archiver.kernel.org>; Thu, 15 Jul 2021 11:21:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org AA2ED613BA
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4GLvmS24Dnz109K;
-	Fri,  9 Jul 2021 09:54:48 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4GQX500N48z12Qw;
+	Thu, 15 Jul 2021 07:21:39 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1625838888;
-	bh=0BT5jG+1tdspB6TMK/A+U+vZg5+xUPSQkc8xEHamcMA=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=BVrWMZ5w1XEnXx0wwkfidDEtAEVC0CYdpdRd7RwsOoGzKhZkBgQt5qPOWcXTaDpxG
-	 eAxOhNzt/H8G2sjqf+gvVSGhh7Xh7Z8/yVTomM6D3mNKIOK5AWIA2Cm70Mn4VRZ23j
-	 IMOKTrbJidnW8lroSDZjw/dqWgBJDoDmZqQzWpGuVqhqfD9hK20Yx/pyjp6W8C6yvF
-	 bJnjvPVLzYrGU/8mV4ipDGfGFZg1X370GXB7K3zw/85hDEsZeVvC+DmRPL+3KTGQVq
-	 Z8oO6Xet213yHSY5Wf07SOiPBqF20rjh3PlWj/t89+3KPXM3g0JAkbrODzTDJHV1pz
-	 dC1g3CUqlPEnA==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4GLvmQ18dqzynh
- for <lttng-dev@lists.lttng.org>; Fri,  9 Jul 2021 09:54:45 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 9E767356217
- for <lttng-dev@lists.lttng.org>; Fri,  9 Jul 2021 09:54:39 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id igwON3Q_8l9s; Fri,  9 Jul 2021 09:54:35 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 83ED0356120;
- Fri,  9 Jul 2021 09:54:35 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 83ED0356120
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id wG6BSgoCbVDK; Fri,  9 Jul 2021 09:54:35 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 752A835611F;
- Fri,  9 Jul 2021 09:54:35 -0400 (EDT)
-Date: Fri, 9 Jul 2021 09:54:35 -0400 (EDT)
-To: Evan Galea <evanjamesgalea@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Message-ID: <482770069.11167.1625838875359.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CAA+-46q3vLWvu6WNueSybHZ-7hE=S=eZo1WWXDDq7YOa7hyjWg@mail.gmail.com>
-References: <CAA+-46q3vLWvu6WNueSybHZ-7hE=S=eZo1WWXDDq7YOa7hyjWg@mail.gmail.com>
+	s=default; t=1626348100;
+	bh=BJARxsIKL3jdsdygeOJ4QYP33UaqzZqkTd8eT08Lzus=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=daDrFS9C041hwF48DbZ/kxtQFYJMDNMG+LWN3+ar+4Ius19YUgkIIauzI2Sao2Tjc
+	 OSKxsWbX4uPvW7Ho+Kiq4oCNgntAZ6s8TW0ey7RW70KBAw9kOMTbSNkvIO0J4uA6f8
+	 sGYp9ZJmmLb05UGc3r2zPdApcO6dzzbZi1Sho18YMvOa5bJ6HQ91f7rszA20FYmyel
+	 XhRQoeHnT95Wi59HyMIrYoltzhL28MRxNHq23ng+Ln+IlPIFHw/pfRsG++QN7ty1eN
+	 LHa4ljDBqm7qcKj0XkK2AdAXcFCCWI/huYY39VRODHMT6MFP6BRXvenKQs371GTLo0
+	 rVYz9yBwQMJGw==
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com
+ [IPv6:2607:f8b0:4864:20::32b])
+ by lists.lttng.org (Postfix) with ESMTPS id 4GQX4x6gmgz12Hk
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Jul 2021 07:21:37 -0400 (EDT)
+Received: by mail-ot1-x32b.google.com with SMTP id
+ 7-20020a9d0d070000b0290439abcef697so5789877oti.2
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Jul 2021 04:21:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+ bh=Rohek1ImF0JQHy9yeMYC9yCmFLBSt7f7e8+ZHU/w6UQ=;
+ b=B6FSxPOSmDc/zWssK3nmH/WrI0ql9Gt7DOyHQe+3Zmc0UF5yKrnacVLppZ3PIskobd
+ Bwk9bjTUnIdCwy7s2oCySSy4qS0sR2Ftuv0xh4I0/yJk0vT9JdWwjxoSo3gMzOPxeZV8
+ dL0ow4cIOynudkJhyjUl74GJBKVHgF1yEm58ph8vUbaKIuHYWRf1tDp9Xk1wE4AXmM19
+ X9K/hNko4GSRYcX03ladyss7E1RsxHn3RFk4PqSxkK0xj51Oq7c/IZsLNhvkAWz/g1L8
+ KATMUXakXjyBvc0YKGqBB775h+Gs3x8VBVQYafnqIgvqX2ZoXB9eEacEbo3dIm9l/IQq
+ Rd4Q==
+X-Gm-Message-State: AOAM5329tyOTK0U3EZ2OQkLkaRSdUNL2nqohhjdU1GUORTpybSaJKIKS
+ NrWvMuzjQ35FKZ/2SAMCKbhHF6WEDYBuNhkFo28XEl0Cl/w5Zw==
+X-Google-Smtp-Source: ABdhPJzPNw8OlnUfBPvVwfrK3QBwkIybTUAn1DqrFskSRy+ZdBHPkMY2zav6GoPtDHjnLGgyWyLCCcGNmfO0ORJPOLk=
+X-Received: by 2002:a9d:5603:: with SMTP id e3mr3312453oti.178.1626348096802; 
+ Thu, 15 Jul 2021 04:21:36 -0700 (PDT)
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4059 (ZimbraWebClient - FF89 (Linux)/8.8.15_GA_4059)
-Thread-Topic: unable to add callstack-user context
-Thread-Index: bXYt4q9lOk763sg3WhWl7pl6z9aQ4A==
-Subject: Re: [lttng-dev] unable to add callstack-user context
+Date: Thu, 15 Jul 2021 13:21:25 +0200
+Message-ID: <CADYdroMJgt=bMGWmxFV8YAKWouBJeL5244_RM1S-D0SDF+tkzg@mail.gmail.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Subject: [lttng-dev] Feature request: dynamically load from prefix
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -75,133 +69,66 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: multipart/mixed; boundary="===============3351437464262535608=="
+From: Norbert Lange via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Norbert Lange <nolange79@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============3351437464262535608==
-Content-Type: multipart/alternative; 
-	boundary="=_89a983c4-4b9e-4d49-9361-0d8a51d67f4b"
+Hello,
 
---=_89a983c4-4b9e-4d49-9361-0d8a51d67f4b
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+The production rootfs should be untouched, ideally read-only,
+for development/tests a subdirectory can be mounted (eg. /usr/local).
+Idea is that the contents of that directory alone (and at most some
+env variables)
+should allow enabling development features.
 
------ On Jul 9, 2021, at 4:30 AM, lttng-dev <lttng-dev@lists.lttng.org> wrote: 
+For lttng I would have wanted to add a library
+'/usr/local/lib/libmyservice-tracepoints.so' with runpath
+'/usr/local/lib' that would activate lttng tracing,
+pulling in lttng libraries (ust, ust-tracepoint) from /usr/local/lib.
 
-> Hi there, I'm a little new to lttng and tracing in general. I am using a Java
-> Userspace agent, which is working well, but I am having trouble adding
-> callstack context to my tracing channels. I'm not sure if it's relevant but
-> running 'lttng add-context --list" shows callstack-user in the list.
+There is a caveat though, unless 'libmyservice-tracepoints.so'' is
+preloaded, the code in lttng/tracepoint.h will run constructor functions
+to register the tracepoint probes, trying to dlopen the lttng-ust-tracepoint
+library and fail at that because this is not in the library search paths.
 
-It's not surprising, because the callstack-user context is specific to the kernel tracer. 
+At a later time,  'libmyservice-tracepoints.so'' will be loaded, and
+lttng-ust-tracepoint (along with lttng-ust) can be resolved. but the
+tracepoints are not registered.
 
-> the commands I input are:
+So I guess what I would need is to either retrigger the registration
+of tracepoints
+(likely complicated with static and weak symbols potentially causing a mess), or
+redirect the dlopen function.
+Useful would be either try to find the library in /usr/local/lib or
+use '/usr/local/lib/libmyservice-tracepoints.so''
+instead of  lttng-ust-tracepoint (both have (dis)advantages).
 
-> lttng create
-> lttng enable-channel --userspace mychannel
-> lttng enable-event --userspace --all --channel mychannel
-> lttng add-context --userspace --channel mychannel --type callstack-user
-> >Error: callstack-user: UST invalid context
+At any rate, I would welcome some customization macro.
 
-This is expected. 
+For illustration the current hack-around is following
 
-> When I run the following command instead:
-> lttng add-context --userspace --channel mychannel --type vpid
+Norbert Lange
 
-> I am able to get it to work and I see vpid appear in my traces. Are there any
-> other things I need to set up first to be able to use it?
+#define TRACEPOINT_DEFINE
+#define TRACEPOINT_PROBE_DYNAMIC_LINKAGE
 
-> also, are there any commands that can list the per-domain contexts available?
+#include <dlfcn.h>
 
-Not currently, though I think it would make sense to make "lttng add-context --list" allow a tracing domain 
-(e.g. --kernel/--userspace) to be specified as a future improvement. 
+static inline void *s_remap_dlopen(const char *localfilename, int
+flags, unsigned prelen) {
+    void *md = (dlopen)(localfilename + prelen, flags);
+    return md ? md : (dlopen)(localfilename, flags);
+}
 
-Some information about this is available in the lttng-add-context(1) man page, but the fact that the 
-kernel and user callstack contexts are only supported by the kernel tracer don't seem to be mentioned. 
+# ideally this would be LTTNG_TRACEPOINT_PROBE_DLOPEN instead of the dlopen mess
+#define dlopen(x, y) s_remap_dlopen("/usr/local/lib/" x, y,
+(unsigned)sizeof("/usr/local/lib/") - 1U)
 
-Thanks, 
-
-Mathieu 
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_89a983c4-4b9e-4d49-9361-0d8a51d67f4b
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On Jul 9, 2021, at 4:30 AM, lttng-dev &lt;lttng-dev@lists.lttng.o=
-rg&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockqu=
-ote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px=
-;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-=
-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div di=
-r=3D"ltr"><div>Hi there, I'm a little new to lttng and tracing in general. =
-I am using a Java Userspace agent, which is working well, but I am having t=
-rouble adding callstack context to my tracing channels. I'm not sure if it'=
-s relevant but running 'lttng add-context --list" shows callstack-user in t=
-he list.</div></div></div></blockquote><div><br></div><div>It's not surpris=
-ing, because the callstack-user context is specific to the kernel tracer.<b=
-r data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquot=
-e style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;c=
-olor:#000;font-weight:normal;font-style:normal;text-decoration:none;font-fa=
-mily:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div dir=
-=3D"ltr"><br><div>the commands I input are:<br></div><br><div>lttng create =
-<br></div><div>lttng enable-channel --userspace mychannel</div><div>lttng e=
-nable-event --userspace --all --channel mychannel<br></div><div>lttng add-c=
-ontext --userspace --channel mychannel --type callstack-user</div><div>&gt;=
-Error: callstack-user: UST invalid context</div></div></div></blockquote><d=
-iv><br></div><div>This is expected.<br data-mce-bogus=3D"1"></div><div><br =
-data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010=
-FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-styl=
-e:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-s=
-ize:12pt;"><div dir=3D"ltr"><div dir=3D"ltr"><br><div>When I run the follow=
-ing command instead:<br></div><div>lttng add-context --userspace --channel =
-mychannel --type vpid</div><br><div>I am able to get it to work and I see v=
-pid appear in my traces. Are there any other things I need to set up first =
-to be able to use it?</div><br><div>also, are there any commands that can l=
-ist the per-domain contexts available?</div></div></div></blockquote><div><=
-br></div><div>Not currently, though I think it would make sense to make "lt=
-tng add-context --list" allow a tracing domain<br data-mce-bogus=3D"1"></di=
-v><div>(e.g. --kernel/--userspace) to be specified as a future improvement.=
-<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Som=
-e information about this is available in the lttng-add-context(1) man page,=
- but the fact that the<br data-mce-bogus=3D"1"></div><div>kernel and user c=
-allstack contexts are only supported by the kernel tracer don't seem to be =
-mentioned.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></di=
-v><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1">=
-</div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D=
-"1"></div><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5p=
-x;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-dec=
-oration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div d=
-ir=3D"ltr"><div dir=3D"ltr"><div><br></div></div></div>
-<br>_______________________________________________<br>lttng-dev mailing li=
-st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
-listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
-"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
-://www.efficios.com</div></div></body></html>
---=_89a983c4-4b9e-4d49-9361-0d8a51d67f4b--
-
---===============3351437464262535608==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+#include "trace_mytracepoints.h"
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============3351437464262535608==--
