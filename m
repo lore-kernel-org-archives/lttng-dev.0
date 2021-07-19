@@ -1,63 +1,66 @@
 Return-Path: <SRS0=9+xD=ML=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: *
-X-Spam-Status: No, score=1.1 required=3.0 tests=BAYES_50,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 714C2C07E9D
-	for <lttng-dev@archiver.kernel.org>; Mon, 19 Jul 2021 13:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1E78C07E95
+	for <lttng-dev@archiver.kernel.org>; Mon, 19 Jul 2021 21:31:57 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id B1F5261026
-	for <lttng-dev@archiver.kernel.org>; Mon, 19 Jul 2021 13:40:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org B1F5261026
+	by mail.kernel.org (Postfix) with ESMTPS id 4839460FF0
+	for <lttng-dev@archiver.kernel.org>; Mon, 19 Jul 2021 21:31:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 4839460FF0
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lttng-dev-bounces@lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4GT2zX6t0nz147G;
-	Mon, 19 Jul 2021 09:40:40 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4GTFRH4rRqz14Pt;
+	Mon, 19 Jul 2021 17:31:55 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1626702041;
-	bh=GmQNuxai5hDuo1SPT5TGbbUnMHlXU5HnE8zu3+bwm54=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oYvv1kNQFlATeaZTHw/vtXIxODYc0oIiongGE461iMiITwfvgWcIYn176fNzuhxRw
-	 YfV8L4Z/uXNbE6YLRjYGx9ICkIqiZdvzNaPSUjKkrxUBh84mKR6Lh6MUe/QJwmTdwv
-	 jVzF6PaZavZXR6PfQG0jfz2OGMGHG7xvOHBu6c7kiNXbjgQjebDWVTeejgZmROC/J7
-	 3nWS+W5Ut6zyn53YRihEGNB3uf8Zrpb6OhlV8X2V0EW7hyWKCaZZEXah/JfRTiiSjt
-	 PuhHJ6ofPSy45HckTAw/F5OTJ2pln+U/3OCJcwRfYJ8+ZhVQIyJoeqfqw+YFNdIxYb
-	 cNMd7P9WYaTDQ==
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com
- [IPv6:2607:f8b0:4864:20::234])
- by lists.lttng.org (Postfix) with ESMTPS id 4GT2zW2FRyz13tV
- for <lttng-dev@lists.lttng.org>; Mon, 19 Jul 2021 09:40:39 -0400 (EDT)
-Received: by mail-oi1-x234.google.com with SMTP id r80so6956162oie.13
- for <lttng-dev@lists.lttng.org>; Mon, 19 Jul 2021 06:40:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
- bh=BVXeLEY+I0lm5BzZHMe19vu+/8kTOJpiYobqX2xg4XY=;
- b=RSyLuArKbhvUKU8TAj+c7KhSgwGTc9dRvjYfz44NXK+hN+GNDfNaiO6QlY5cEu8mkk
- K8bVN+1YLH2YDponhMFeM95HT5Izpj7fQXBO5b7vX0hR7z6+9sRvqzCwNaJObYlc5uRv
- je0oFFyfLVVasDtSljt2hMzObZ8V/55oKT5XLmrEY3YgmuOSqkRRyfg+JyTymzFDrBqw
- ccFlPL2mQm6DLffpwKG7IuMxDMAuj3gRzHPHg/I+czkCirw+S/xQVqDdGK9P3YJ9Q95x
- m258l8TIj0QeDiUo+Xhod08OGVR7NRx7NfT1/kEAC/RNTzQJAQmCrmkN7DUrkV/pecmn
- nNKA==
-X-Gm-Message-State: AOAM533o4WaHDLZTJ2O5OtJU0yYPSUajlucOWq0rJjLIw8+CW+aEDCxJ
- vAZDw6Pk8xMvyw/aQdHdKs+g6wNX5o6tL/GDwYhvmDnv+qo=
-X-Google-Smtp-Source: ABdhPJwaqjqB6ZlYE0N1+efsTdllsBh0CX/FSa1u7+otGki9eKBX/u80+Dw7PfpjNZveeE83S+Vgyoob7ZhC9tRgn7w=
-X-Received: by 2002:a05:6808:5d8:: with SMTP id
- d24mr17484136oij.74.1626702038283; 
- Mon, 19 Jul 2021 06:40:38 -0700 (PDT)
+	s=default; t=1626730316;
+	bh=F7GVpweV3ZLZT50Sb5I7nC79TKW9nrsyytMQpfv3ayI=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=wbcjbMqDZbxsVpDsKSfU2hvMLNYhb4BLHI7Bqru7093NkrH7DzAbl8eEf+tW284Dk
+	 nsR1ElwbJB49Wj94XZjgY+KRk3+AGNVHkGMkv247XvnqSbdqZ0uAT6sYiYfjKRc6xs
+	 os+N+vAk0+ZhKqpZbxR0NRVXmTp4Dzb7e19cZnCk920vjRvZe/iQQgBw8InCGuc6uY
+	 aoU7UzouJCM64xwNyppGkDm4q9CHr1pWO0N8gonbNfhFdfIeyTrThnEDbeYqvq8GJy
+	 KXab9vNuPeRqMSHQWyp+fFcmCe9kPEnx0Hr/Hn4e1bnd00/FO1qMe7s9A2qV25bABq
+	 iVnLTxU4lRTRg==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4GTFRF5RK5z14XZ
+ for <lttng-dev@lists.lttng.org>; Mon, 19 Jul 2021 17:31:53 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 12D6C36BCD1
+ for <lttng-dev@lists.lttng.org>; Mon, 19 Jul 2021 17:31:47 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id lV_fpJfjTv17; Mon, 19 Jul 2021 17:31:45 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C81EE36BA41;
+ Mon, 19 Jul 2021 17:31:45 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C81EE36BA41
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id z782aA4LZ30C; Mon, 19 Jul 2021 17:31:45 -0400 (EDT)
+Received: from joraj-alpa (modemcable014.202-131-66.mc.videotron.ca
+ [66.131.202.14])
+ by mail.efficios.com (Postfix) with ESMTPSA id A34DC36BBA2;
+ Mon, 19 Jul 2021 17:31:45 -0400 (EDT)
+Date: Mon, 19 Jul 2021 17:31:45 -0400
+To: Evan Galea <evanjamesgalea@gmail.com>
+Cc: lttng-dev@lists.lttng.org
+Message-ID: <20210719213145.GC608796@joraj-alpa>
+References: <CAA+-46pxTLb0trHLGhLwwdf2N5YJQ90mdGtdxm0hn+Gcx=NMoQ@mail.gmail.com>
 MIME-Version: 1.0
-Date: Mon, 19 Jul 2021 09:40:06 -0400
-Message-ID: <CAA+-46pxTLb0trHLGhLwwdf2N5YJQ90mdGtdxm0hn+Gcx=NMoQ@mail.gmail.com>
-To: lttng-dev@lists.lttng.org
-Subject: [lttng-dev] quick question about setting up lttng on Redhat
+Content-Disposition: inline
+In-Reply-To: <CAA+-46pxTLb0trHLGhLwwdf2N5YJQ90mdGtdxm0hn+Gcx=NMoQ@mail.gmail.com>
+Subject: Re: [lttng-dev] quick question about setting up lttng on Redhat
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -69,64 +72,66 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Evan Galea via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Evan Galea <evanjamesgalea@gmail.com>
-Content-Type: multipart/mixed; boundary="===============5502310632797708638=="
+From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============5502310632797708638==
-Content-Type: multipart/alternative; boundary="00000000000025b7aa05c77a15f5"
+Hello,
 
---00000000000025b7aa05c77a15f5
-Content-Type: text/plain; charset="UTF-8"
+On Mon, Jul 19, 2021 at 09:40:06AM -0400, Evan Galea via lttng-dev wrote:
+> Hello there
+> 
+> We have been considering setting up Redhat on my system and have learned
+> that Lttng packages are supported. I was hoping to quickly learn the answer
 
-Hello there
+EfficiOS provides commercial support for RedHat. Please contact
+sales@efficios.com if you need commercial support.
 
-We have been considering setting up Redhat on my system and have learned
-that Lttng packages are supported. I was hoping to quickly learn the answer
-to two questions:
+> to two questions:
+> 
+> 1: As Redhat is based on Fedora, Do I just use the instructions for Fedora?
+> I know it's probably a stupid question but I just want to make sure I'm
+> doing everything correctly.
 
-1: As Redhat is based on Fedora, Do I just use the instructions for Fedora?
-I know it's probably a stupid question but I just want to make sure I'm
-doing everything correctly.
+I do not think so, since the packages repository are not the same AFAIK.
 
-2: Are there any differences between Lttng on Redhat and Lttng on Ubuntu or
-are they simply the same? Again just need to make absolutely sure as I
-don't want to do anything without first knowing
+If you are using RHEL 7 and okai with using lttng 2.10, you can have a look here
+http://packages.efficios.com/
 
-Thank you for your time and sorry if the answers to these questions are
-somewhere I didn't look.
+Installing from source is also a possibility. The only major hurdle might be
+lttng-modules depending on your kernel version.
 
-Evan Galea
+> 
+> 2: Are there any differences between Lttng on Redhat and Lttng on Ubuntu or
+> are they simply the same? Again just need to make absolutely sure as I
+> don't want to do anything without first knowing
 
---00000000000025b7aa05c77a15f5
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+At the functionality level, it will be the same. Distros do not influence the
+functionality we expose. At least not for now...
 
-<div dir=3D"ltr">Hello there<div><br></div><div>We have been considering se=
-tting up Redhat on my system and have learned that Lttng packages are suppo=
-rted. I was hoping to quickly learn the answer to two questions:</div><div>=
-<br></div><div>1: As Redhat is based on Fedora, Do I just use the instructi=
-ons for Fedora? I know it&#39;s probably a stupid question but I just want =
-to make sure I&#39;m doing everything correctly.</div><div><br></div><div>2=
-: Are there any differences between Lttng on Redhat and Lttng on Ubuntu or =
-are they simply the same? Again just need to make absolutely sure as I don&=
-#39;t want to do anything without first knowing</div><div><br></div><div>Th=
-ank you for your time and sorry if the answers to these questions are somew=
-here I didn&#39;t look.</div><div><br></div><div>Evan Galea</div></div>
+For Ubuntu, the lttng project have multiple PPA depending on your need.
 
---00000000000025b7aa05c77a15f5--
+https://launchpad.net/~lttng
 
---===============5502310632797708638==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> 
+> Thank you for your time and sorry if the answers to these questions are
+> somewhere I didn't look.
+> 
+> Evan Galea
 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+-- 
+Jonathan Rajotte-Julien
+EfficiOS
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5502310632797708638==--
