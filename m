@@ -1,68 +1,71 @@
-Return-Path: <SRS0=GPvk=MZ=lists.lttng.org=lttng-dev-bounces@kernel.org>
+Return-Path: <SRS0=Rprf=M2=lists.lttng.org=lttng-dev-bounces@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EFC8C4338F
-	for <lttng-dev@archiver.kernel.org>; Mon,  2 Aug 2021 12:56:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF40CC4338F
+	for <lttng-dev@archiver.kernel.org>; Tue,  3 Aug 2021 18:40:33 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id A428260E09
-	for <lttng-dev@archiver.kernel.org>; Mon,  2 Aug 2021 12:56:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org A428260E09
+	by mail.kernel.org (Postfix) with ESMTPS id 528AF60EFF
+	for <lttng-dev@archiver.kernel.org>; Tue,  3 Aug 2021 18:40:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 528AF60EFF
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4GddL26n6Bz5nP;
-	Mon,  2 Aug 2021 08:56:26 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4GfNwb5chfz686;
+	Tue,  3 Aug 2021 14:40:31 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1627908987;
-	bh=66pwL2D25NlX+IpZJHMTlctl8aSAmqAw2AGaRbnNxW0=;
-	h=To:References:Date:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=mWVSo8sk8Jg24D+MuHzfSYSPp36/zAjCGkwSQ07tkWTvGAXL5dq5VkP/MHSr1yBEN
-	 ZF5BjPAnt0MCwRxFBq3Vx4zTLSMhnAD+oMcgCIqYlqSbvFW4jblE1bwfP2xgeqdmAJ
-	 9mifCeBHisgeWiOS+XticCnAWH7m3cKPLpeOfXgGRCrJnuAV0ZKQ2+DrRYEqBc1LMi
-	 6mSPpjjf/9KiAy017RJT1f4ZmmZCTPuzE/eYFThT1FQv2cRORtpk1mZYhvgm3uXE15
-	 L4iVpUX64MMLC66fSF7QCUULMsFuUFTy9TuEhTA+Zx1fQI+h7fzt1F4SvzL8hHNfO3
-	 WszPWWLAiF0vA==
+	s=default; t=1628016032;
+	bh=S/uenUhbEhuuouW71wtUdN2kehCcDP5kVsGzeOo6wxs=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=So1XmivRa8YMHjB5pSb2yCRoJJDhzi+JMm1drT0kV0H+RGSfQUfNfyYsvS2gDJ51V
+	 ofw1ErycnpNHXgMrdTziG+NjOlpAizVvj5g0p/pJCwblWm1iErILg3Xfx07y7nbuND
+	 XnmJV2Oem+bQIF+G2lcuuU6DC/qCgFS9g/oCmQWJgq2C5tx1R0XDsXLaeTEiL64vI0
+	 aSBjnZ62Aoxleye5QHN/uOrUj8mzEM7JgBil4pDS4cfbpoCT0UuNoU2CI7gziK75wj
+	 KYe5oqoTyyLoYvWxHx6gdRhJzoU5xfVf8ssDuSi5xI2xCoHBdp73lL2zLWq99OQbm1
+	 Q0bqdhZW3S5Wg==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4GddL131C2z5nM
- for <lttng-dev@lists.lttng.org>; Mon,  2 Aug 2021 08:56:25 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4GfNwZ17ywz5w9
+ for <lttng-dev@lists.lttng.org>; Tue,  3 Aug 2021 14:40:28 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C935A35639E
- for <lttng-dev@lists.lttng.org>; Mon,  2 Aug 2021 08:56:19 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 7FB12358D55;
+ Tue,  3 Aug 2021 14:40:22 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id YQ-BC93w4-FJ; Mon,  2 Aug 2021 08:56:19 -0400 (EDT)
+ with ESMTP id 5ayqugLDIobw; Tue,  3 Aug 2021 14:40:21 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 4D5863564A8;
- Mon,  2 Aug 2021 08:56:19 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4D5863564A8
+ by mail.efficios.com (Postfix) with ESMTP id 5CFA03591A1;
+ Tue,  3 Aug 2021 14:40:21 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 5CFA03591A1
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id k_LUJmBJZALV; Mon,  2 Aug 2021 08:56:19 -0400 (EDT)
-Received: from [192.168.1.70] (unknown [142.59.56.168])
- by mail.efficios.com (Postfix) with ESMTPSA id 19A3D35650A;
- Mon,  2 Aug 2021 08:56:19 -0400 (EDT)
-To: Evan Galea <evanjamesgalea@gmail.com>, lttng-dev@lists.lttng.org
-References: <CAA+-46pQev9-S0_htpu7QT8cVF_Rv25deDjRQGMzgnzvRMG9VQ@mail.gmail.com>
-Message-ID: <535d4d75-5ae6-b44a-9570-41a00ec96680@efficios.com>
-Date: Mon, 2 Aug 2021 08:56:17 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+ with ESMTP id HHEFySIPXKEr; Tue,  3 Aug 2021 14:40:21 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 3F584358E52;
+ Tue,  3 Aug 2021 14:40:21 -0400 (EDT)
+Date: Tue, 3 Aug 2021 14:40:21 -0400 (EDT)
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: Jeremie Galarneau <jgalar@efficios.com>, 
+ linux-kernel <linux-kernel@vger.kernel.org>, 
+ Diamon discuss <diamon-discuss@lists.linuxfoundation.org>, 
+ linux-trace-users <linux-trace-users@vger.kernel.org>
+Message-ID: <1790050742.4759.1628016021132.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-In-Reply-To: <CAA+-46pQev9-S0_htpu7QT8cVF_Rv25deDjRQGMzgnzvRMG9VQ@mail.gmail.com>
-Content-Language: en-US
-Subject: Re: [lttng-dev] Assertion tgt_fc failed when trying to trace
- callstack-user
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF90 (Linux)/8.8.15_GA_4059)
+Thread-Index: PqQD//LpuyRhy96Y4KDFlRxjvz+ZYg==
+Thread-Topic: LTTng 2.13.0 - =?utf-8?Q?Nordicit=C3=A9?= - Linux kernel and
+ user-space tracer
+Subject: [lttng-dev] =?utf-8?q?LTTng_2=2E13=2E0_-_Nordicit=C3=A9_-_Linux_?=
+ =?utf-8?q?kernel_and_user-space_tracer?=
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -74,236 +77,155 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Francis Deslauriers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Francis Deslauriers <francis.deslauriers@efficios.com>
-Content-Type: multipart/mixed; boundary="===============4319493384225857046=="
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-This is a multi-part message in MIME format.
---===============4319493384225857046==
-Content-Type: multipart/alternative;
- boundary="------------2237A5D4F3235A18C466102E"
-Content-Language: en-US
-
-This is a multi-part message in MIME format.
---------------2237A5D4F3235A18C466102E
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-
-Hi Evan,
-
-On 8/1/21 5:11 AM, Evan Galea via lttng-dev wrote:
-> Hi there
->
-> Thanks for help on my previous issue. I was able to get=20
-> callstack-user=C2=A0to work and see it in my traces. However, in order =
-to=20
-> get it to run I needed to enable-event --kernel all. Is it necessary=20
-> to have all kernel events enabled to run callstack-user? Or is it just=20
-> one specific event?
->
-> When I try to run it without enabling all kernel events the command is=20
-> accepted and it runs but I get the following error when trying to view=20
-> my traces:
->
-> =C2=A0(=E2=95=AF=C2=B0=E2=96=A1=C2=B0)=E2=95=AF=EF=B8=B5 =E2=94=BB=E2=94=
-=81=E2=94=BB ctf-meta-update-value-storing-indexes.c:65:=20
-> update_field_class_stored_value_index(): Assertion `tgt_fc` failed.
-> Aborted (core dumped)
->
-> What does this error mean? Should I just continue to enable all kernel=20
-> events?
-
-It's a Babeltrace 2 error. Now, we need to find out if the root cause is=20
-the LTTng kernel tracer or Babeltrace2 itself.
-
-What is the "one specific event" you're enabling that seems to cause=20
-this issue?
-
-Do you have access to a Babeltrace 1.5 build? if so, could you try to=20
-read that same trace using it?
-
-Could you please share a small trace reproducing this issue?
-
-What version of LTTng-tools, LTTng-Modules, and Babeltrace2 are you using=
-?
-
-
-Cheers,
-
-Francis
-
->
-> My current command setup, not sure if relevant
->
-> lttng create &&
-> lttng enable-channel mychannel --subbuf-size 100000000
-> lttng enable-event --kernel --all &&
-> lttng add-context -u -t vpid -t vtid -t procname &&
-> lttng add-context --kernel --type callstack-user &&
-> lttng add-context --kernel --type callstack-kernel &&
-> lttng enable-event --jul jello
->
-> again thank you for your time
->
-> Evan Galea
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---------------2237A5D4F3235A18C466102E
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-  <head>
-    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF=
--8">
-  </head>
-  <body>
-    <p>Hi Evan,</p>
-    <div class=3D"moz-cite-prefix">On 8/1/21 5:11 AM, Evan Galea via
-      lttng-dev wrote:<br>
-    </div>
-    <blockquote type=3D"cite"
-cite=3D"mid:CAA+-46pQev9-S0_htpu7QT8cVF_Rv25deDjRQGMzgnzvRMG9VQ@mail.gmai=
-l.com">
-      <meta http-equiv=3D"content-type" content=3D"text/html; charset=3DU=
-TF-8">
-      <div dir=3D"ltr">
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px">Hi there</div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px"><br>
-        </div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px">Thanks for help on
-          my previous issue. I was able to get callstack-user=C2=A0to wor=
-k
-          and see it in my traces. However, in order to get it to run I
-          needed to enable-event --kernel all. Is it necessary to have
-          all kernel events enabled to run callstack-user? Or is it just
-          one specific event?</div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px"><br>
-        </div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px">When I try to run it
-          without enabling all kernel events the command is accepted and
-          it runs but I get the following error when trying to view my
-          traces:</div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px"><br>
-        </div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px">
-          <div style=3D"box-sizing:border-box">=C2=A0(=E2=95=AF=C2=B0=E2=96=
-=A1=C2=B0)=E2=95=AF=EF=B8=B5 =E2=94=BB=E2=94=81=E2=94=BB
-            ctf-meta-update-value-storing-indexes.c:65:
-            update_field_class_stored_value_index(): Assertion `tgt_fc`
-            failed.<br>
-            Aborted (core dumped)</div>
-          <div style=3D"box-sizing:border-box"><br>
-          </div>
-          <div style=3D"box-sizing:border-box">What does this error mean?
-            Should I just continue to enable all kernel events?</div>
-        </div>
-      </div>
-    </blockquote>
-    <p>It's a Babeltrace 2 error. Now, we need to find out if the root
-      cause is the LTTng kernel tracer or Babeltrace2 itself.</p>
-    <p>What is the "one specific event" you're enabling that seems to
-      cause this issue?<br>
-    </p>
-    <p>Do you have access to a Babeltrace 1.5 build? if so, could you
-      try to read that same trace using it?</p>
-    <p>Could you please share a small trace reproducing this issue?</p>
-    <p>What version of LTTng-tools, LTTng-Modules, and Babeltrace2 are
-      you using?</p>
-    <p><br>
-    </p>
-    <p>Cheers,</p>
-    <p>Francis<br>
-    </p>
-    <blockquote type=3D"cite"
-cite=3D"mid:CAA+-46pQev9-S0_htpu7QT8cVF_Rv25deDjRQGMzgnzvRMG9VQ@mail.gmai=
-l.com">
-      <div dir=3D"ltr">
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px">
-          <div style=3D"box-sizing:border-box"><br>
-          </div>
-          <div style=3D"box-sizing:border-box">My current command setup,
-            not sure if relevant</div>
-        </div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px"><br>
-        </div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px">lttng create
-          &amp;&amp;<br>
-          lttng enable-channel mychannel --subbuf-size 100000000<br>
-          lttng enable-event --kernel --all &amp;&amp;<br>
-          lttng add-context -u -t vpid -t vtid -t procname &amp;&amp;<br>
-          lttng add-context --kernel --type callstack-user &amp;&amp;<br>
-          lttng add-context --kernel --type callstack-kernel &amp;&amp;<b=
-r>
-          lttng enable-event --jul jello</div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px"><br>
-        </div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px">again thank you for
-          your time</div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px"><br>
-        </div>
-        <div style=3D"box-sizing:border-box;font-family:&quot;Segoe
-          UI&quot;,system-ui,&quot;Apple Color Emoji&quot;,&quot;Segoe
-          UI Emoji&quot;,sans-serif;font-size:14px">Evan Galea</div>
-      </div>
-      <br>
-      <fieldset class=3D"mimeAttachmentHeader"></fieldset>
-      <pre class=3D"moz-quote-pre" wrap=3D"">____________________________=
-___________________
-lttng-dev mailing list
-<a class=3D"moz-txt-link-abbreviated" href=3D"mailto:lttng-dev@lists.lttn=
-g.org">lttng-dev@lists.lttng.org</a>
-<a class=3D"moz-txt-link-freetext" href=3D"https://lists.lttng.org/cgi-bi=
-n/mailman/listinfo/lttng-dev">https://lists.lttng.org/cgi-bin/mailman/lis=
-tinfo/lttng-dev</a>
-</pre>
-    </blockquote>
-  </body>
-</html>
-
---------------2237A5D4F3235A18C466102E--
-
---===============4319493384225857046==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============4319493384225857046==--
+SGkgZXZlcnlvbmUsCiAgClRvZGF5IGlzIHRoZSBvZmZpY2lhbCByZWxlYXNlIG9mIExUVG5nIDIu
+MTMgLSBOb3JkaWNpdMOpISBJdCBpcyB0aGUgcmVzdWx0IG9mCm9uZSB5ZWFyIG9mIGRldmVsb3Bt
+ZW50IGZyb20gbW9zdCBvZiB0aGUgRWZmaWNpT1MgdGVhbS4KClRoZSBtb3N0IG5vdGFibGUgZmVh
+dHVyZXMgb2YgdGhpcyBuZXcgcmVsZWFzZSBhcmU6CgogIC0gRXZlbnQtcnVsZSBtYXRjaGVzIGNv
+bmRpdGlvbiB0cmlnZ2VycyBhbmQgbmV3IGFjdGlvbnMsIGFsbG93aW5nIGludGVybmFsCiAgICBh
+Y3Rpb25zIG9yIGV4dGVybmFsIG1vbml0b3JpbmcgYXBwbGljYXRpb25zIHRvIHF1aWNrbHkgcmVh
+Y3Qgd2hlbiBrZXJuZWwKICAgIG9yIHVzZXItc3BhY2UgaW5zdHJ1bWVudGF0aW9uIGlzIGhpdCwK
+ICAtIE5vdGlmaWNhdGlvbiBwYXlsb2FkIGNhcHR1cmUsIGFsbG93aW5nIGV4dGVybmFsIG1vbml0
+b3JpbmcgYXBwbGljYXRpb25zCiAgICB0byByZWFkIGVsZW1lbnRzIG9mIHRoZSBpbnN0cnVtZW50
+YXRpb24gcGF5bG9hZCB3aGVuIGluc3RydW1lbnRhdGlvbiBpcwogICAgaGl0LgogIC0gSW5zdHJ1
+bWVudGF0aW9uIEFQSTogdnRyYWNlZiBhbmQgdnRyYWNlbG9nIChMVFRuZy1VU1QpLAogIC0gVXNl
+ciBzcGFjZSB0aW1lIG5hbWVzcGFjZSBjb250ZXh0IChMVFRuZy1VU1QgYW5kIExUVG5nLW1vZHVs
+ZXMpLgoKVGhpcyByZWxlYXNlIGlzIG5hbWVkIGFmdGVyICJOb3JkaWNpdMOpIiwgdGhlIHByb2R1
+Y3Qgb2YgYSBjb2xsYWJvcmF0aW9uIGJldHdlZW4KQ2hhbXAgTGlicmUgYW5kIEJvcsOpYWxlLiBU
+aGlzIGZhcm1ob3VzZSBJUEEgaXMgYnJld2VkIHdpdGggS3ZlaWsgeWVhc3QgYW5kClF1w6liZWMt
+Z3Jvd24gYmFybGV5LCBvYXRzIGFuZCBqdW5pcGVyIGJyYW5jaGVzLiBUaGUgcmVzdWx0IGlzIGEg
+cmVtYXJrYWJsZQpmcnVpdHkgaGF6eSBnb2xkZW4gSVBBIHRoYXQgb2ZmZXJzIGEgYmFsYW5jZWQg
+dG91Y2ggb2YgcmVzaW5vdXMgYW5kIHdvb2RzeQpiaXR0ZXJuZXNzLgoKQmFzZWQgb24gdGhlIExU
+VG5nIHByb2plY3QncyBkb2N1bWVudGVkIHN0YWJsZSByZWxlYXNlcyBsaWZldGltZSwgdGhpcyAy
+LjEzCnJlbGVhc2UgY29pbmNpZGVzIHdpdGggdGhlIGVuZC1vZi1saWZlIChFT0wpIG9mIHRoZSBM
+VFRuZyAyLjExIHJlbGVhc2Ugc2VyaWVzLgoKUmVhZCBvbiBmb3IgYSBzaG9ydCBkZXNjcmlwdGlv
+biBvZiBlYWNoIG9mIHRoZSBuZXcgZmVhdHVyZXMgYW5kIHRoZQpsaW5rcyB0byB0aGlzIHJlbGVh
+c2UuCgpBIHByZXR0aWZpZWQgdmVyc2lvbiBvZiB0aGlzIGFubm91bmNlbWVudCB3aWxsIGJlIGF2
+YWlsYWJsZSBzb29uIG9uIEdpdEh1YjoKaHR0cHM6Ly9naXRodWIuY29tL2x0dG5nL2x0dG5nLXRv
+b2xzL3JlbGVhc2VzL3RhZy92Mi4xMy4wCgoKTm90ZSBvbiBMVFRuZy1VU1QgYmFja3dhcmQgY29t
+cGF0aWJpbGl0eQotLS0KCi0gc29uYW1lIG1ham9yIHZlcnNpb24gY2hhbmdlCiAgVGhpcyByZWxl
+YXNlIGNoYW5nZXMgdGhlIExUVG5nLVVTVCBzb25hbWUgbWFqb3IgZnJvbSAwIHRvIDEuCgogIFRo
+ZSBldmVudCBub3RpZmllciAodHJpZ2dlcnMgdXNpbmcgYW4gZXZlbnQtcnVsZS1tYXRjaGVzIGNv
+bmRpdGlvbikKICBmdW5jdGlvbmFsaXR5IHJlcXVpcmVkIGEgc2lnbmlmaWNhbnQgcmV3b3JrIG9m
+IHB1YmxpYyBkYXRhIHN0cnVjdHVyZXMgd2hpY2gKICBzaG91bGQgbmV2ZXIgaGF2ZSBiZWVuIG1h
+ZGUgcHVibGljIGluIHRoZSBmaXJzdCBwbGFjZS4KCiAgQnVtcGluZyB0aGUgc29uYW1lIG1ham9y
+IHRvIDEsIHdpbGwgcmVxdWlyZSBhcHBsaWNhdGlvbnMgYW5kIHRyYWNlcG9pbnQKICBwcm92aWRl
+cnMgdG8gYmUgcmVidWlsdCBhZ2FpbnN0IGFuIHVwZGF0ZWQgTFRUbmctVVNUIHRvIHVzZSBpdC4K
+CiAgT2xkIGFwcGxpY2F0aW9ucyBhbmQgdHJhY2Vwb2ludCBwcm92aWRlcnMgbGlua2VkIGFnYWlu
+c3QgbGlicmFyaWVzIHdpdGgKICBtYWpvciBzb25hbWUgMCBzaG91bGQgYmUgYWJsZSB0byBjby1l
+eGlzdCBvbiB0aGUgc2FtZSBzeXN0ZW0uCgotIEJ1aWxkaW5nIHByb2JlIHByb3ZpZGVycyB1c2lu
+ZyBhIEMrKyBjb21waWxlciByZXF1aXJlcyBDKysxMQoKLSBBUEkgbmFtZXNwYWNlaW5nCiAgVGhl
+IExUVG5nLVVTVCBBUEkgaXMgbm93IHN5c3RlbWF0aWNhbGx5IG5hbWVzcGFjZWQgdW5kZXIgYGx0
+dG5nX3VzdF8qYCAoZS5nCiAgYHRyYWNlcG9pbnQoKWAgYmVjb21lcyBgbHR0bmdfdXN0X3RyYWNl
+cG9pbnQoKWApLgoKICBIb3dldmVyLCB0aGUgbm9uLW5hbWVzcGFjZWQgbmFtZXMgYXJlIHN0aWxs
+IGV4cG9zZWQgdG8gbWFpbnRhaW4gQVBJCiAgY29tcGF0aWJpbGl0eS4KCgpFdmVudC1ydWxlIG1h
+dGNoZXMgY29uZGl0aW9uIGFuZCBuZXcgYWN0aW9ucwotLS0KCkV4cGFuZGluZyB0aGUgdHJpZ2dl
+ciBpbmZyYXN0cnVjdHVyZSBhbmQgbWFraW5nIGl0IHVzYWJsZSB0aHJvdWdoIHRoZSBgbHR0bmdg
+CmNsaWVudCB3YXMgdGhlIGNvcmUgZm9jdXMgb2YgdGhpcyByZWxlYXNlLgoKQSB0cmlnZ2VyIGlz
+IGFuIGFzc29jaWF0aW9uIGJldHdlZW4gYSBjb25kaXRpb24gYW5kIG9uZSBvciBtb3JlIGFjdGlv
+bnMuIFdoZW4KdGhlIGNvbmRpdGlvbiBhc3NvY2lhdGVkIHRvIGEgdHJpZ2dlciBpcyBtZXQsIHRo
+ZSBhY3Rpb25zIGFzc29jaWF0ZWQgdG8gdGhhdAp0cmlnZ2VyIGFyZSBleGVjdXRlZC4gVGhlIHRy
+YWNpbmcgZG9lcyBub3QgaGF2ZSB0byBiZSBhY3RpdmUgZm9yIHRoZSBjb25kaXRpb25zCnRvIGJl
+IG1ldCwgYW5kIHRyaWdnZXJzIGFyZSBpbmRlcGVuZGVudCBmcm9tIHRyYWNpbmcgc2Vzc2lvbnMu
+CgpTaW5jZSB0aGVpciBpbnRyb2R1Y3Rpb24gYXMgcGFydCBvZiBMVFRuZyAyLjEwLCBuZXcgY29u
+ZGl0aW9ucyBhbmQgYWN0aW9ucyB3ZXJlCmFkZGVkIHRvIG1ha2UgdGhpcyBsaXR0bGUta25vd24g
+bWVjaGFuaXNtIG1vcmUgZmxleGlibGUuCgpGb3IgaW5zdGFuY2UsIGJlZm9yZSB0aGlzIHJlbGVh
+c2UsIHRyaWdnZXJzIHN1cHBvcnRlZCB0aGUgZm9sbG93aW5nIGNvbmRpdGlvbgp0eXBlczoKICAt
+IEJ1ZmZlciB1c2FnZSBleGNlZWRlZCBhIGdpdmVuIHRocmVzaG9sZCwKICAtIEJ1ZmZlciB1c2Fn
+ZSB3ZW50IHVuZGVyIGEgY29uZmlndXJhYmxlIHRocmVzaG9sZCwKICAtIEEgc2Vzc2lvbiByb3Rh
+dGlvbiBvY2N1cnJlZCwKICAtIEEgc2Vzc2lvbiByb3RhdGlvbiBjb21wbGV0ZWQuCgpBIF9ub3Rp
+ZnlfIGFjdGlvbiBjb3VsZCBiZSB1c2VkIHRvIHNlbmQgYSBub3RpZmljYXRpb24gdG8gYSB0aGly
+ZCBwYXJ0eQphcHBsaWNhdGlvbnMgd2hlbmV2ZXIgdGhvc2UgY29uZGl0aW9ucyB3ZXJlIG1ldC4K
+ClRoaXMgbWFkZSBpdCBwb3NzaWJsZSwgZm9yIGluc3RhbmNlLCB0byBkaXNhYmxlIGNlcnRhaW4g
+ZXZlbnQgcnVsZXMgaWYgdGhlCnRyYWNpbmcgYnVmZmVycyB3ZXJlIGFsbW9zdCBmdWxsLiBJdCBj
+b3VsZCBhbHNvIGJlIHVzZWQgdG8gd2FpdCBmb3Igc2Vzc2lvbgpyb3RhdGlvbnMgdG8gYmUgY29t
+cGxldGVkIHRvIHN0YXJ0IHByb2Nlc3NpbmcgdGhlIHJlc3VsdGluZyB0cmFjZSBjaHVuawphcmNo
+aXZlcyBhcyBwYXJ0IG9mIHZhcmlvdXMgcG9zdC1wcm9jZXNzaW5nIHRyYWNlIGFuYWx5c2VzLgoK
+VGhpcyByZWxlYXNlIGludHJvZHVjZXMgYSBuZXcgcG93ZXJmdWwgY29uZGl0aW9uIHR5cGU6IGV2
+ZW50LXJ1bGUgbWF0Y2hlcy4KClRoaXMgdHlwZSBvZiBjb25kaXRpb24gaXMgbWV0IHdoZW4gdGhl
+IHRyYWNlciBlbmNvdW50ZXJzIGFuIGV2ZW50IG1hdGNoaW5nIHRoZQpnaXZlbiBldmVuIHJ1bGUu
+IFRoZSBhcmd1bWVudHMgZGVzY3JpYmluZyB0aGUgZXZlbnQgcnVsZSBhcmUgdGhlIHNhbWUgYXMg
+dGhvc2UKZGVzY3JpYmluZyB0aGUgZXZlbnQgcnVsZXMgb2YgdGhlIGBlbmFibGUtZXZlbnRgIGNv
+bW1hbmQuCgpXaGlsZSB0aGlzIGlzIG5vdCBpbnRlbmRlZCBhcyBhIGdlbmVyYWwgcmVwbGFjZW1l
+bnQgZm9yIHRoZSBleGlzdGluZwpoaWdoLXRocm91Z2hwdXQgdHJhY2luZyBmYWNpbGl0aWVzLCB0
+aGlzIG1ha2VzIGl0IHBvc3NpYmxlIGZvciBhbiBhcHBsaWNhdGlvbgp0byB3YWl0IGZvciBhIHZl
+cnktc3BlY2lmaWMgZXZlbnQgdG8gb2NjdXIgYW5kIHRha2UgYWN0aW9uIHdoZW5ldmVyIGl0IG9j
+Y3Vycy4KVGhlIHB1cnBvc2Ugb2YgZXZlbnQtcnVsZSBtYXRjaGVzIHRyaWdnZXJzIGlzIHRvIHJl
+YWN0IHF1aWNrbHkgdG8gYW4gZXZlbnQKd2l0aG91dCB0aGUgZGVsYXkgaW50cm9kdWNlZCBieSBi
+dWZmZXJpbmcuCgpGb3IgZXhhbXBsZSwgdGhlIGZvbGxvd2luZyBjb21tYW5kIHdpbGwgY3JlYXRl
+IGEgdHJpZ2dlciB0aGF0IGVtaXRzIGEKbm90aWZpY2F0aW9uIHdoZW5ldmVyIHRoZSAnb3BlbmF0
+JyBzeXN0ZW0gY2FsbCBpcyBpbnZva2VkIHdpdGggdGhlCicvZXRjL3Bhc3N3ZCcgZmlsZW5hbWUg
+YXJndW1lbnQuCgokIGx0dG5nIGFkZC10cmlnZ2VyCiAgICAtLWNvbmRpdGlvbiBldmVudC1ydWxl
+LW1hdGNoZXMKICAgICAgLS10eXBlPWtlcm5lbDpzeXNjYWxsCiAgICAgIC0tbmFtZT0nb3BlbmF0
+JwogICAgLS1hY3Rpb24gbm90aWZ5CgpOZXcgYWN0aW9ucyB3ZXJlIGFsc28gaW50cm9kdWNlZCBh
+cyBwYXJ0IG9mIHRoaXMgcmVsZWFzZToKICAtIFN0YXJ0IHNlc3Npb24KICAgIFRoaXMgYWN0aW9u
+IGNhdXNlcyB0aGUgTFRUbmcgc2Vzc2lvbiBkYWVtb24gdG8gc3RhcnQgdHJhY2luZyBmb3IgdGhl
+IHNlc3Npb24KICAgIHdpdGggdGhlIGdpdmVuIG5hbWUuIElmIG5vIHNlc3Npb24gd2l0aCB0aGUg
+Z2l2ZW4gbmFtZSBleGlzdCBhdCB0aGUgdGltZSB0aGUKICAgIGNvbmRpdGlvbiBpcyBtZXQsIG5v
+dGhpbmcgaXMgZG9uZS4KCiAgLSBTdG9wIHNlc3Npb24KICAgIFRoaXMgYWN0aW9uIGNhdXNlcyB0
+aGUgTFRUbmcgc2Vzc2lvbiBkYWVtb24gdG8gc3RvcCB0cmFjaW5nIGZvciB0aGUgc2Vzc2lvbgog
+ICAgd2l0aCB0aGUgZ2l2ZW4gbmFtZS4gSWYgbm8gc2Vzc2lvbiB3aXRoIHRoZSBnaXZlbiBuYW1l
+IGV4aXN0IGF0IHRoZSB0aW1lIHRoZQogICAgY29uZGl0aW9uIGlzIG1ldCwgbm90aGluZyBpcyBk
+b25lLgoKICAtIFJvdGF0ZSBzZXNzaW9uCiAgICBUaGlzIGFjdGlvbiBjYXVzZXMgdGhlIExUVG5n
+IHNlc3Npb24gZGFlbW9uIHRvIHJvdGF0ZSB0aGUgc2Vzc2lvbiB3aXRoIHRoZQogICAgZ2l2ZW4g
+bmFtZS4gU2VlIGx0dG5nLXJvdGF0ZSgxKSBmb3IgbW9yZSBpbmZvcm1hdGlvbiBhYm91dCB0aGUg
+c2Vzc2lvbgogICAgcm90YXRpb24gY29uY2VwdC4gSWYgbm8gc2Vzc2lvbiB3aXRoIHRoZSBnaXZl
+biBuYW1lIGV4aXN0IGF0IHRoZSB0aW1lIHRoZQogICAgY29uZGl0aW9uIGlzIG1ldCwgbm90aGlu
+ZyBpcyBkb25lLgoKICAtIFNuYXBzaG90IHNlc3Npb24KICAgIFRoaXMgYWN0aW9uIGNhdXNlcyB0
+aGUgTFRUbmcgc2Vzc2lvbiBkYWVtb24gdG8gdGFrZSBhIHNuYXBzaG90IG9mIHRoZQogICAgc2Vz
+c2lvbiB3aXRoIHRoZSBnaXZlbiBuYW1lLiBTZWUgbHR0bmctc25hcHNob3QoMSkgZm9yIG1vcmUg
+aW5mb3JtYXRpb24KICAgIGFib3V0IHRoZSBzZXNzaW9uIHNuYXBzaG90IGNvbmNlcHQuIElmIG5v
+IHNlc3Npb24gd2l0aCB0aGUgZ2l2ZW4gbmFtZSBleGlzdAogICAgYXQgdGhlIHRpbWUgdGhlIGNv
+bmRpdGlvbiBpcyBtZXQsIG5vdGhpbmcgaXMgZG9uZS4KClRoZXNlIG5ldyBhY3Rpb25zIGNhbiBh
+bHNvIGJlIGNvbWJpbmVkIHRvZ2V0aGVyLiBGb3IgaW5zdGFuY2UsIHRoZSBmb2xsb3dpbmcKdHJp
+Z2dlciB3aWxsIHN0b3AgYG15X3Nlc3Npb25gLCByZWNvcmQgYSBzbmFwc2hvdCBvZiBgbXlfc2Vz
+c2lvbmAsIGFuZCBub3RpZnkKYW55IGxpc3RlbmluZyBhcHBsaWNhdGlvbiB3aGVuICcvZXRjL3Bh
+c3N3ZCcgaXMgb3BlbmVkOgoKJCBsdHRuZyBhZGQtdHJpZ2dlcgogICAgLS1jb25kaXRpb24gZXZl
+bnQtcnVsZS1tYXRjaGVzCiAgICAgIC0tdHlwZSBrZXJuZWw6c3lzY2FsbAogICAgICAtLW5hbWUg
+J29wZW5hdCcKICAgICAgLS1maWx0ZXIgJ2ZpbGVuYW1lID09ICIvZXRjL3Bhc3N3ZCInCiAgICAt
+LWFjdGlvbiBzdG9wLXNlc3Npb24gbXlfc2Vzc2lvbgogICAgLS1hY3Rpb24gc25hcHNob3Qtc2Vz
+c2lvbiBteV9zZXNzaW9uCiAgICAtLWFjdGlvbiBub3RpZnkKCkZvciBtb3JlIGluZm9ybWF0aW9u
+LCBzZWUgdGhlIGZvbGxvd2luZyBtYW51YWwgcGFnZXM6CiAgLSBsdHRuZy1hZGQtdHJpZ2dlcigx
+KSwKICAtIGx0dG5nLXJlbW92ZS10cmlnZ2VyKDEpLAogIC0gbHR0bmctbGlzdC10cmlnZ2Vycygx
+KS4KCgpOb3RpZmljYXRpb24gcGF5bG9hZCBjYXB0dXJlCi0tLQoKVGhlIG5ldyBldmVudC1ydWxl
+IG1hdGNoZXMgY29uZGl0aW9uIHR5cGUgYWxzbyBhbGxvd3MgJ2NhcHR1cmVzJy4KVGhpcyBhbGxv
+dyBldmVudCByZWNvcmQgYW5kIGNvbnRleHQgZmllbGRzIHRvIGJlIGNhcHR1cmVkIHdoZW4gYW4g
+ZXZlbnQtcnVsZQptYXRjaGVzIGNvbmRpdGlvbiBpcyBzYXRpc2ZpZWQuCgpUaGUgY2FwdHVyZWQg
+ZmllbGQgdmFsdWVzIGFyZSBtYWRlIGF2YWlsYWJsZSBpbiB0aGUgZXZhbHVhdGlvbiBvYmplY3Qg
+b2YgdGhlCm5vdGlmaWNhdGlvbnMgdHJhbnNtaXR0ZWQgdG8gbGlzdGVuaW5nIGFwcGxpY2F0aW9u
+cy4KCkNhcHR1cmUgZGVzY3JpcHRvcnMgY2FuIGJlIHNwZWNpZmllZCB1c2luZyBhIHN5bnRheCBy
+ZW1pbmlzY2VudCBvZiB0aGUgb25lIHVzZWQKYnkgdGhlIGZpbHRlciBleHByZXNzaW9ucy4KClRo
+ZSBmb2xsb3dpbmcgZXhhbXBsZSB3aWxsIGNhcHR1cmUgYSBwcm9jZXNzJ3MgbmFtZSBhbmQgdGhl
+ICdmaWxlbmFtZScgYXJndW1lbnQKb2YgYWxsIGBvcGVuYXQoKWAgc3lzdGVtIGNhbGxzOgoKJCBs
+dHRuZyBhZGQtdHJpZ2dlcgogICAgLS1jb25kaXRpb24gZXZlbnQtcnVsZS1tYXRjaGVzCiAgICAg
+IC0tdHlwZSBrZXJuZWw6c3lzY2FsbAogICAgICAtLW5hbWUgJ29wZW5hdCcKICAgICAgLS1jYXB0
+dXJlICdmaWxlbmFtZScKICAgICAgLS1jYXB0dXJlICckY3R4LnByb2NuYW1lJwogICAgLS1hY3Rp
+b24gbm90aWZ5CgpTZWUgdGhlIGx0dG5nLWFkZC10cmlnZ2VyKDEpIG1hbnVhbCBwYWdlIGZvciBt
+b3JlIGluZm9ybWF0aW9uLgoKCnZ0cmFjZWYgYW5kIHZ0cmFjZWxvZyAoTFRUbmctVVNUKQotLS0K
+Ck5ldyB2ZXJzaW9ucyBvZiB0aGUgYHRyYWNlZigpYCBhbmQgYHRyYWNlbG9nKClgIHRyYWNpbmcg
+aGVscGVycyBhY2NlcHRpbmcKdmFyaWFibGUgYXJndW1lbnQgbGlzdHMgYXJlIGludHJvZHVjZWQg
+YXMgYHZ0cmFjZWYoKWAgYW5kIGB2dHJhY2Vsb2coKWAuCgpTZWUgdGhlIHRyYWNlZigzKSBhbmQg
+dHJhY2Vsb2coMykgbWFudWFsIHBhZ2VzIGZvciBtb3JlIGluZm9ybWF0aW9uLgoKCkFkZCB0aW1l
+IG5hbWVzcGFjZSBjb250ZXh0IChMVFRuZy1VU1QgYW5kIExUVG5nLW1vZHVsZXMpCi0tLQoKSXQg
+aXMgbm93IHBvc3NpYmxlIHRvIGFkZCB0aGUgdGltZSBuYW1lc3BhY2Ugb2YgYSBwcm9jZXNzIGFz
+IGEgY29udGV4dCB0bwpjaGFubmVscyAoYHRpbWVfbnNgKSB1c2luZyB0aGUgYGFkZC1jb250ZXh0
+YCBjb21tYW5kLgoKU2VlIHRoZSB0aW1lX25hbWVzcGFjZXMoNykgbWFudWFsIHBhZ2UgZm9yIG1v
+cmUgaW5mb3JtYXRpb24uCgoKTGlua3MKLS0tCgpQcm9qZWN0IHdlYnNpdGU6IGh0dHBzOi8vbHR0
+bmcub3JnCgpEb3dubG9hZCBsaW5rczoKaHR0cHM6Ly9sdHRuZy5vcmcvZmlsZXMvbHR0bmctdG9v
+bHMvbHR0bmctdG9vbHMtMi4xMy4wLnRhci5iejIKaHR0cHM6Ly9sdHRuZy5vcmcvZmlsZXMvbHR0
+bmctdXN0L2x0dG5nLXVzdC0yLjEzLjAudGFyLmJ6MgpodHRwczovL2x0dG5nLm9yZy9maWxlcy9s
+dHRuZy1tb2R1bGVzL2x0dG5nLW1vZHVsZXMtMi4xMy4wLnRhci5iejIKCkdQRyBzaWduYXR1cmVz
+OgpodHRwczovL2x0dG5nLm9yZy9maWxlcy9sdHRuZy10b29scy9sdHRuZy10b29scy0yLjEzLjAu
+dGFyLmJ6Mi5hc2MKaHR0cHM6Ly9sdHRuZy5vcmcvZmlsZXMvbHR0bmctdXN0L2x0dG5nLXVzdC0y
+LjEzLjAudGFyLmJ6Mi5hc2MKaHR0cHM6Ly9sdHRuZy5vcmcvZmlsZXMvbHR0bmctbW9kdWxlcy9s
+dHRuZy1tb2R1bGVzLTIuMTMuMC50YXIuYnoyLmFzYwoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVm
+ZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
+bi9saXN0aW5mby9sdHRuZy1kZXYK
