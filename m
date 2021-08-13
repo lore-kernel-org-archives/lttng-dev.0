@@ -7,120 +7,64 @@ X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EED76C4338F
-	for <lttng-dev@archiver.kernel.org>; Fri, 13 Aug 2021 07:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64103C4338F
+	for <lttng-dev@archiver.kernel.org>; Fri, 13 Aug 2021 15:02:22 +0000 (UTC)
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.kernel.org (Postfix) with ESMTPS id F02546103E
-	for <lttng-dev@archiver.kernel.org>; Fri, 13 Aug 2021 07:28:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org F02546103E
+	by mail.kernel.org (Postfix) with ESMTPS id 60B236113E
+	for <lttng-dev@archiver.kernel.org>; Fri, 13 Aug 2021 15:02:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 mail.kernel.org 60B236113E
 Authentication-Results: mail.kernel.org; dmarc=pass (p=none dis=none) header.from=lists.lttng.org
 Authentication-Results: mail.kernel.org; spf=pass smtp.mailfrom=lists.lttng.org
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4GmFXM1HJkz9C2;
-	Fri, 13 Aug 2021 03:28:19 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4GmRcC3sHMz9RJ;
+	Fri, 13 Aug 2021 11:02:19 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1628839699;
-	bh=Dbl7wTywNi3hLwNBviUGzZgDCwwmnuU6APM8cZ2Z63U=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pfySsaZdzWGzxyuypcL8XgKK1wwX1t+A61H+q7YC/qlCF690ro6R3XT07dv61tE4j
-	 MLfAS4g+6A8Qcvlo+BFPPoVsGbrNnSYeDbSxiBrkuG7zA3raHABSoFROEvbySHsCd1
-	 /zaNRd4ur6oZsKLNCDjzcZxR178Mxox1hce9B88F/xzTovornCnbXLvod6QXZw8FLS
-	 IlMZ8QzPWo0EkLW7mecoShDl9k44yuMG9Pw1cA9uG6DzXJpid6KUFtxgKZ6s8rxi75
-	 Cq3QER5/oFpjvLmOVa0MbMqUKG+Axui48nIuRWcLE37JlBJLsrw6ZQkeNEBV7cJlic
-	 ZVBVLfuvwB7xA==
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam12on20718.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:fe5b::718])
- by lists.lttng.org (Postfix) with ESMTPS id 4GmFXK48MBz9C1
- for <lttng-dev@lists.lttng.org>; Fri, 13 Aug 2021 03:28:17 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sw8TwuoBGE0c5Jv/ue7+jRDO4dAV045xMOGON+qiBIhm3yxRwB4zQ9LogSATF82X/UJnNwj73g2LvG25TVnAIWS8pJ7mn2eJgJjBQd//N+TjeQGI/0ElpiFednf8PyJDJqcBCb1ylxfEH+EOoSlH8/FxjVbK9IKXLx8zGpUkRSY4XngN9R4HxdQcGmeVmamUlK+OZ/ytuw+K13ekBvlx6FpWRzj307/NNuIeAaXZRla5o9cs7ABYXLL10FhkOOsJZwAXhRuwJBhadTAWQ3Vv5uqb/W7WqADrjbhgElpUmEGNQR7++zi9exQaXVW9xl2VZpz/n59Ofp2mGtTxR4KkFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CDVy8+54gZGEu0yuN6cK6ZAri7hNYHB7lnCFOS/4ksc=;
- b=lFOHtcjU9+q769DItz2qyJs1X2ohJAJpaILhofrfsmyJMk3cCqOOCBw/+DUNGujqwQxLKuPq3jYm/TZFhvtmHawJHQT9MolFEtwPwYCyr1iZ6XevszNprco3UHxd9tNBm0E0xMIQWbNX819JB5Hu43SVx3g06vBt0szE1a5RbmjAKiXjRVCPaGSm5dkENEkrXLcZcdaVgm295McpJqnY5b8PIFFmq9cqdUcqhywis8/TZRgCk19lxYqDRWwvQUoSA5R3Zhx0kq3Mg+pH7mxL8oEVut1DtbwOAB44xVaEwWEWtLSWzf2shiNqah9IwAwa0KoOBULGimnawW0Dcs4F+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cognex.com; dmarc=pass action=none header.from=cognex.com;
- dkim=pass header.d=cognex.com; arc=none
-Received: from DM6PR06MB6186.namprd06.prod.outlook.com (2603:10b6:5:128::21)
- by DM6PR06MB6715.namprd06.prod.outlook.com (2603:10b6:5:257::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.19; Fri, 13 Aug
- 2021 07:28:15 +0000
-Received: from DM6PR06MB6186.namprd06.prod.outlook.com
- ([fe80::9c82:cb4b:7645:e7ed]) by DM6PR06MB6186.namprd06.prod.outlook.com
- ([fe80::9c82:cb4b:7645:e7ed%7]) with mapi id 15.20.4415.019; Fri, 13 Aug 2021
- 07:28:14 +0000
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Thread-Topic: Question about rotating session limitations
-Thread-Index: AdeQFBe4MiBffDDMSoGgI23a8d3kQw==
-Date: Fri, 13 Aug 2021 07:28:14 +0000
-Message-ID: <DM6PR06MB61863EC46C9025E1C0250F3A91FA9@DM6PR06MB6186.namprd06.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d406d203-34ad-4ca2-f99d-08d95e2be9de
-x-ms-traffictypediagnostic: DM6PR06MB6715:
-x-microsoft-antispam-prvs: <DM6PR06MB6715C5B85A38D4F0B434453591FA9@DM6PR06MB6715.namprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cdj1jD97aQGYOyNubIoSr2nRKPPL06UHaoziO7YKbrBP6OM96ol4iYbetIXVcneSpcm8vW4E3x4pWVMx3Mu9boqirWV6slsJKjZkD4k/OxKD8MtYjp+BLVDSukklhtM1frhst9ekUL9fBReGvGdUWcpVzsTyA0bcBcyqmSpSH3JRDsR/is3mmn1oTkW2wVJYetn+KQbEy7zCqgyx3PZbFvsIYA1ZZu3wCfhdQZEujaeK1JDILkQTWa9Q+KeGtRzVH0fJMlxdPjBmAw1xv+K8cN26dGsug2EAmnXBvoaM5WZUp+mx8tP9j+D+hc5ynlTXLfUIZE7wb3wI4iK3MwC0h6lghUi943JivXsZiri0ftaiDeNBDy/+4TnSen/1Nart064JTTNmwTVpj2/SmslR2W6uI9SVsA8e5mUZi7ecNwEZ6NLYzsUK9XsDOs5+uXqYog6iOs/x04Nxe7UZ0ctRyiehWnKvbEPLLWBw1nJJuWFGPTJMq6NmLIdP1yA2+BsMfI1XWqJjAXaCXAYWklg/5cx/MJIxea+kPgcu9DPKaKBHZXEqQr9oLeLA2Zzi1QlvW8v/5S96pDPAGwXdgbpoqlGnVAKxPaJ5vKvpa1a0ag3Yn+JR2Jx0xzOxiDF/MmPuCmRYWQ+vcc7MlT7uixXfxfcMZuJtfwEjbT9oM3Lq+MpOUYr6iZy1v296kAiipNpV0LvBYTy5+GuEVZT4VGeoPviJ73GCwKrScYyLOVsnepBEm3roUnw5LfpirNQHvqKmBPpSuK3a/fxZ48VLhAMgHyF3t5irOLAInOWx18p2ioo=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DM6PR06MB6186.namprd06.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(366004)(38100700002)(33656002)(122000001)(38070700005)(2906002)(316002)(86362001)(966005)(8936002)(9686003)(66446008)(64756008)(55016002)(166002)(508600001)(186003)(6916009)(6506007)(4744005)(26005)(83380400001)(7696005)(52536014)(5660300002)(8676002)(66476007)(66556008)(66946007)(76116006)(71200400001);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WnlSMWF4VXdiZXZLdDVRLzUreHdmdUMydER5QlpvK1UrTHd5QjJOaGxRbTFl?=
- =?utf-8?B?WS80T282MmswRW5mRFgxMVF6RFkxVjI3OGVYZlZVK3BLQjI0TXMvM0pXU1ov?=
- =?utf-8?B?TC8zZnAwTnhIbkMzMFkxdDlGMkhsbU1kSlkwNW5IRGZZaHQxN3ZTbEpzaGE1?=
- =?utf-8?B?RXdQQTlLak14NkIyamhBQnpZeEZxdENOamxtMGxLZUpZYWZpVitvSG1EOWY4?=
- =?utf-8?B?NXhYR1I4OVVucENFRldOaThTSzBCR1RvcTlWeUVGeVAwMUFlSGU5eWZCc1VF?=
- =?utf-8?B?K0lLdnY3L2VKaHczZDcya1RUMi9mbnR6YmZSQmtjSktSQko2NTJrWVl2VFJ5?=
- =?utf-8?B?NEVBMzhpaE13U2w1aFVZUFlNcWpHRFlETUJvWTJLSzRDNUppWGhwSnZQNlVL?=
- =?utf-8?B?MVFZNWRycytPZCtHamM1WDh4Y3NVOFkvWEFLei95SzQwUittSzVhV2JuVVpC?=
- =?utf-8?B?eXgvZEhLaXJwTHNKMnRRNFRveXlUTmlCQnRtbGxVcFpzdDQ4TG9Xb3NRYXJj?=
- =?utf-8?B?SjN3TFZsUE1TWktpK1dwTlloRkdXZk9CN0dqbmVwTUVCdVNsYjNsZDVrK0FJ?=
- =?utf-8?B?SkdvLzNLaWcvUUlEVjJhQUtZckFkN2ZwdUZUaFcxQm5wMGNRUTViYVo2NDVo?=
- =?utf-8?B?YkdRMlo1aGhudzcxWERZSUFWMzhyVGJReEU5RHgxSUR5OS9sM3RmdnV6WE1n?=
- =?utf-8?B?S2ptMGlZdlFLY1laVUovZjRwZW1OOXNCVDJFVS9XcnVQSk5KQUhlVkFmS2xB?=
- =?utf-8?B?aHVUM3lFVThUUjRSNjNRejR1eWgzTWJNR0wvMVNLaFVmS3U5T1dzNVRVR29j?=
- =?utf-8?B?YS9jMHNNUENxZ2J1Uk1LZDFTcjZhbUI2STN4Mm1udTFYNVhNb1dRd0Y1aXcy?=
- =?utf-8?B?Y09jckR3dnA2bDZCdm9MZkFINDFLVG40b1hrYjdGbWdTREVQenhRbHAvaTZx?=
- =?utf-8?B?UkFWMlMxMW1MZVhTZWdBajY0MG5ST2M4dXJzdy9GUDhPYzB1amZQTWVHc0kw?=
- =?utf-8?B?VkE0R2lrQlA5NExEQkQvU0lzVjF4NEIrSERSaHBXT0hTcHE5OFlILy90MFdo?=
- =?utf-8?B?aGZjR3oyUXUySUZpSzRpVStlVVFuSWlhbkV5QlJoemFrcUlnWTJxb3FUWEZy?=
- =?utf-8?B?MGNNTVZ0QmZIeVJYcGhuUllrcDg5MjdIdE1zV3NvQmRidW11SGhRNHBzd1VC?=
- =?utf-8?B?cE1aeDhlaTBuS1dQdGoydGl6TTBYVnhlZWZGVWZxMlFkVnJIR3YreTFFN3Rv?=
- =?utf-8?B?cUV0WU5OZ0FqM0RtakpNVVJEMitQRmE0MzgwQzI1QW1FVXRCUGUwV3NqY3c3?=
- =?utf-8?B?RDlhS3NneVZPdWZMS25QaVNmN2xBRE84aXdwRGdTdVRsWFIzamtEdnZ4MHFz?=
- =?utf-8?B?Q0d6QUhxdElOSkdTdy90R2cwaUJsRVdHQ2x5Q3ZvSzNnUTl4eFdYb3pYcFpN?=
- =?utf-8?B?ZjJuS2Z1RkIzSjM2SUJrZjdKNXFBUUR1UTUzNVRMMFQ1dENiSWwwTkgvRXBJ?=
- =?utf-8?B?ckcxN1F0Yjh3Sm9LSHV5SjdndVZZSjVQaVErVjRpR1BDWnBaMW15cWdxbVFk?=
- =?utf-8?B?Sm1FWU45VE5oMzUrK0hBY3lKeFZRa0VkOEFWNVIvZ0J1OTFWVU1ZZ3pHT2tK?=
- =?utf-8?B?MFVGdHhqZEsyeEFEMUJmdFd2N3hGdmVVQ0M0eVU4N0J4anIyeUJ5b0J6ODZW?=
- =?utf-8?B?eUk3Y3JLemRvcTVuRDcxSGlQQ2k2alZRV0E1dnp6Sy80a2tGUnYzMW0yTkps?=
- =?utf-8?Q?vJSuZQwMfp5LXpvrOh7S9dalzoTU4k4RVXOjOH4?=
-x-ms-exchange-transport-forked: True
+	s=default; t=1628866940;
+	bh=HQlo+hY781KGBXjam4sfzqUCFLHIKm8pw1fJuiiZ95E=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=BbMpwo7jAH42WQsIqcmyIz7+6xzr1gSzyYvqPNBethmB7+aAJ+bExfbxP/KES8WGW
+	 Lny7DT1dYrDMTXwGyHpaauEfckGY0PqX0zk9lmlIMZ9VM4h2pbsbZvAE30o3h1bu5K
+	 PoOkYPL2zCYI3dqT+fvoi6jhrVqmzRv1/kOq1iLSXeFJDFZO+y6UG2LeD8mkBLMMi1
+	 jAAJAg8q4O3hJC7P054EwM487Ef6k+4ulinVAKHCp0+6FhcaqPPdfzHDquSCFRyfqf
+	 i6XR/WpUsAoXEdZ6VKJzFughcWPO79s7A9xhn2ey3Fr2ojSI5RyFxc+qFPtSeByGew
+	 FQ9gOjCta11sQ==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4GmRc933Mrz9RG
+ for <lttng-dev@lists.lttng.org>; Fri, 13 Aug 2021 11:02:17 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 43E8D364EAB;
+ Fri, 13 Aug 2021 10:56:24 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id UJ2Iic-tRDFc; Fri, 13 Aug 2021 10:56:19 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 528EE364FB7;
+ Fri, 13 Aug 2021 10:56:19 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 528EE364FB7
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id 3FIPseYbe30C; Fri, 13 Aug 2021 10:56:19 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 40727364B6B;
+ Fri, 13 Aug 2021 10:56:19 -0400 (EDT)
+Date: Fri, 13 Aug 2021 10:56:19 -0400 (EDT)
+To: "Kramer, Zach" <Zach.Kramer@cognex.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, 
+ Philippe Proulx <pproulx@efficios.com>
+Message-ID: <1088457655.14235.1628866579209.JavaMail.zimbra@efficios.com>
+In-Reply-To: <DM6PR06MB61863EC46C9025E1C0250F3A91FA9@DM6PR06MB6186.namprd06.prod.outlook.com>
+References: <DM6PR06MB61863EC46C9025E1C0250F3A91FA9@DM6PR06MB6186.namprd06.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: cognex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR06MB6186.namprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d406d203-34ad-4ca2-f99d-08d95e2be9de
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2021 07:28:14.9325 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c12007a4-882b-4381-b05a-b783431570c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6wbnBgHQa8yBXLYXi1+w/igfYF4ebf2yG56EMyjIKCtR7w+BQ8zibW44JpFO0nlnr9E6Ag0U+WRtQ50bM8gQFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR06MB6715
-Subject: [lttng-dev] Question about rotating session limitations
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF90 (Linux)/8.8.15_GA_4059)
+Thread-Topic: Question about rotating session limitations
+Thread-Index: AdeQFBe4MiBffDDMSoGgI23a8d3kQ95ixdaP
+Subject: Re: [lttng-dev] Question about rotating session limitations
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.34
 Precedence: list
@@ -132,184 +76,225 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "Kramer, Zach via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "Kramer, Zach" <Zach.Kramer@cognex.com>
-Content-Type: multipart/mixed; boundary="===============7373719459062195138=="
+From: =?utf-8?q?J=C3=A9r=C3=A9mie_Galarneau_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Content-Type: multipart/mixed; boundary="===============0934465056189138407=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============7373719459062195138==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_DM6PR06MB61863EC46C9025E1C0250F3A91FA9DM6PR06MB6186namp_"
+--===============0934465056189138407==
+Content-Type: multipart/alternative; 
+	boundary="=_20c27c58-7aa4-49a4-a726-6e10603a13c7"
 
---_000_DM6PR06MB61863EC46C9025E1C0250F3A91FA9DM6PR06MB6186namp_
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+--=_20c27c58-7aa4-49a4-a726-6e10603a13c7
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-SGVsbG8sDQoNCk9uIGh0dHBzOi8vbHR0bmcub3JnL21hbi8xL2x0dG5nLXJvdGF0ZS92Mi4xMi8g
-b25lIG9mIHRoZSBsaW1pdGF0aW9ucyBpcyBsaXN0ZWQgYXM6DQoNClRoZSBsdHRuZyByb3RhdGUg
-Y29tbWFuZCBvbmx5IHdvcmtzIHdoZW46DQoNCsK3ICAgICAgICAgTm8gY2hhbm5lbCB3YXMgY3Jl
-YXRlZCB3aXRoIGEgY29uZmlndXJlZCB0cmFjZSBmaWxlIGNvdW50IG9yIHNpemUgbGltaXQgKHNl
-ZSB0aGUgLS10cmFjZWZpbGUtc2l6ZSBhbmQgLS10cmFjZWZpbGUtY291bnQgb3B0aW9ucyBpbiBs
-dHRuZy1lbmFibGUtY2hhbm5lbCgxKTxodHRwczovL2x0dG5nLm9yZy9tYW4vMS9sdHRuZy1lbmFi
-bGUtY2hhbm5lbC92Mi4xMj4pLg0KSG93ZXZlciBvbiB2Mi4xMi4xIEkgYW0gYWJsZSB0bzoNCg0K
-ICAxLiAgQ3JlYXRlIGEgdXNlcnNwYWNlIHNlc3Npb24NCiAgMi4gIENyZWF0ZSBhIGNoYW5uZWwg
-dy8gY29uZmlndXJlZCB0cmFjZSBmaWxlIGNvdW50IGFuZCBzaXplIGxpbWl0DQogIDMuICBTdGFy
-dCB0cmFjaW5nDQogIDQuICBsdHRuZyByb3RhdGUNCg0KV2l0aGluIGVhY2ggY2h1bmsgdGhlc2Ug
-cmVzdHJpY3Rpb25zIGFyZSByZXNwZWN0ZWQuDQoNClRoZXJlZm9yZSBteSBxdWVzdGlvbiBpcyB3
-aGF0IGRvZXMgdGhpcyBsaW1pdGF0aW9uIGFjdHVhbGx5IG1lYW4/IElzIGl0IG1vcmUgc28gaW4g
-dGhlIGRpcmVjdGlvbiB0aGF0IHRoZSBhcmNoaXZlcyB3aWxsIG5vdCByZXNwZWN0IHRoZXNlIGxp
-bWl0cyBiZWNhdXNlIHRoZSBjaHVua3MgYWNjdW11bGF0ZT8gT3IgYW0gSSBtaXNzaW5nIHRoZSBw
-b2ludCBlbnRpcmVseT8NCg0KVGhhbmtzLA0KWmFjaA0K
+> From: "lttng-dev" <lttng-dev@lists.lttng.org>
+> To: "lttng-dev" <lttng-dev@lists.lttng.org>
+> Sent: Friday, August 13, 2021 3:28:14 AM
+> Subject: [lttng-dev] Question about rotating session limitations
 
---_000_DM6PR06MB61863EC46C9025E1C0250F3A91FA9DM6PR06MB6186namp_
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
+> Hello,
 
-PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
-bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
-YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
-cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
-VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
-Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
-ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTUgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxl
-PjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6
-V2luZ2RpbmdzOw0KCXBhbm9zZS0xOjUgMCAwIDAgMCAwIDAgMCAwIDA7fQ0KQGZvbnQtZmFjZQ0K
-CXtmb250LWZhbWlseToiQ2FtYnJpYSBNYXRoIjsNCglwYW5vc2UtMToyIDQgNSAzIDUgNCA2IDMg
-MiA0O30NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6Q2FsaWJyaTsNCglwYW5vc2UtMToyIDE1
-IDUgMiAyIDIgNCAzIDIgNDt9DQovKiBTdHlsZSBEZWZpbml0aW9ucyAqLw0KcC5Nc29Ob3JtYWws
-IGxpLk1zb05vcm1hbCwgZGl2Lk1zb05vcm1hbA0KCXttYXJnaW46MGNtOw0KCWZvbnQtc2l6ZTox
-MS4wcHQ7DQoJZm9udC1mYW1pbHk6IkNhbGlicmkiLHNhbnMtc2VyaWY7DQoJbXNvLWZhcmVhc3Qt
-bGFuZ3VhZ2U6RU4tVVM7fQ0KYTpsaW5rLCBzcGFuLk1zb0h5cGVybGluaw0KCXttc28tc3R5bGUt
-cHJpb3JpdHk6OTk7DQoJY29sb3I6IzA1NjNDMTsNCgl0ZXh0LWRlY29yYXRpb246dW5kZXJsaW5l
-O30NCmNvZGUNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0KCWZvbnQtZmFtaWx5OiJDb3VyaWVy
-IE5ldyI7fQ0KcC5Nc29MaXN0UGFyYWdyYXBoLCBsaS5Nc29MaXN0UGFyYWdyYXBoLCBkaXYuTXNv
-TGlzdFBhcmFncmFwaA0KCXttc28tc3R5bGUtcHJpb3JpdHk6MzQ7DQoJbWFyZ2luLXRvcDowY207
-DQoJbWFyZ2luLXJpZ2h0OjBjbTsNCgltYXJnaW4tYm90dG9tOjBjbTsNCgltYXJnaW4tbGVmdDoz
-Ni4wcHQ7DQoJZm9udC1zaXplOjExLjBwdDsNCglmb250LWZhbWlseToiQ2FsaWJyaSIsc2Fucy1z
-ZXJpZjsNCgltc28tZmFyZWFzdC1sYW5ndWFnZTpFTi1VUzt9DQpzcGFuLnMNCgl7bXNvLXN0eWxl
-LW5hbWU6czt9DQouTXNvQ2hwRGVmYXVsdA0KCXttc28tc3R5bGUtdHlwZTpleHBvcnQtb25seTsN
-Cglmb250LWZhbWlseToiQ2FsaWJyaSIsc2Fucy1zZXJpZjsNCgltc28tZmFyZWFzdC1sYW5ndWFn
-ZTpFTi1VUzt9DQpAcGFnZSBXb3JkU2VjdGlvbjENCgl7c2l6ZTo2MTIuMHB0IDc5Mi4wcHQ7DQoJ
-bWFyZ2luOjcyLjBwdCA3Mi4wcHQgNzIuMHB0IDcyLjBwdDt9DQpkaXYuV29yZFNlY3Rpb24xDQoJ
-e3BhZ2U6V29yZFNlY3Rpb24xO30NCi8qIExpc3QgRGVmaW5pdGlvbnMgKi8NCkBsaXN0IGwwDQoJ
-e21zby1saXN0LWlkOjEwMjc0ODgxMzQ7DQoJbXNvLWxpc3QtdHlwZTpoeWJyaWQ7DQoJbXNvLWxp
-c3QtdGVtcGxhdGUtaWRzOi0xMjE0ODYzNTE0IDExNzM2MjkyMDYgMjY4NDM1NDU5IDI2ODQzNTQ2
-MSAyNjg0MzU0NTcgMjY4NDM1NDU5IDI2ODQzNTQ2MSAyNjg0MzU0NTcgMjY4NDM1NDU5IDI2ODQz
-NTQ2MTt9DQpAbGlzdCBsMDpsZXZlbDENCgl7bXNvLWxldmVsLXN0YXJ0LWF0OjE2Ow0KCW1zby1s
-ZXZlbC1udW1iZXItZm9ybWF0OmJ1bGxldDsNCgltc28tbGV2ZWwtdGV4dDrvgrc7DQoJbXNvLWxl
-dmVsLXRhYi1zdG9wOm5vbmU7DQoJbXNvLWxldmVsLW51bWJlci1wb3NpdGlvbjpsZWZ0Ow0KCXRl
-eHQtaW5kZW50Oi0xOC4wcHQ7DQoJZm9udC1mYW1pbHk6U3ltYm9sOw0KCW1zby1mYXJlYXN0LWZv
-bnQtZmFtaWx5OkNhbGlicmk7DQoJbXNvLWJpZGktZm9udC1mYW1pbHk6IlRpbWVzIE5ldyBSb21h
-biI7fQ0KQGxpc3QgbDA6bGV2ZWwyDQoJe21zby1sZXZlbC1udW1iZXItZm9ybWF0OmJ1bGxldDsN
-Cgltc28tbGV2ZWwtdGV4dDpvOw0KCW1zby1sZXZlbC10YWItc3RvcDpub25lOw0KCW1zby1sZXZl
-bC1udW1iZXItcG9zaXRpb246bGVmdDsNCgl0ZXh0LWluZGVudDotMTguMHB0Ow0KCWZvbnQtZmFt
-aWx5OiJDb3VyaWVyIE5ldyI7fQ0KQGxpc3QgbDA6bGV2ZWwzDQoJe21zby1sZXZlbC1udW1iZXIt
-Zm9ybWF0OmJ1bGxldDsNCgltc28tbGV2ZWwtdGV4dDrvgqc7DQoJbXNvLWxldmVsLXRhYi1zdG9w
-Om5vbmU7DQoJbXNvLWxldmVsLW51bWJlci1wb3NpdGlvbjpsZWZ0Ow0KCXRleHQtaW5kZW50Oi0x
-OC4wcHQ7DQoJZm9udC1mYW1pbHk6V2luZ2RpbmdzO30NCkBsaXN0IGwwOmxldmVsNA0KCXttc28t
-bGV2ZWwtbnVtYmVyLWZvcm1hdDpidWxsZXQ7DQoJbXNvLWxldmVsLXRleHQ674K3Ow0KCW1zby1s
-ZXZlbC10YWItc3RvcDpub25lOw0KCW1zby1sZXZlbC1udW1iZXItcG9zaXRpb246bGVmdDsNCgl0
-ZXh0LWluZGVudDotMTguMHB0Ow0KCWZvbnQtZmFtaWx5OlN5bWJvbDt9DQpAbGlzdCBsMDpsZXZl
-bDUNCgl7bXNvLWxldmVsLW51bWJlci1mb3JtYXQ6YnVsbGV0Ow0KCW1zby1sZXZlbC10ZXh0Om87
-DQoJbXNvLWxldmVsLXRhYi1zdG9wOm5vbmU7DQoJbXNvLWxldmVsLW51bWJlci1wb3NpdGlvbjps
-ZWZ0Ow0KCXRleHQtaW5kZW50Oi0xOC4wcHQ7DQoJZm9udC1mYW1pbHk6IkNvdXJpZXIgTmV3Ijt9
-DQpAbGlzdCBsMDpsZXZlbDYNCgl7bXNvLWxldmVsLW51bWJlci1mb3JtYXQ6YnVsbGV0Ow0KCW1z
-by1sZXZlbC10ZXh0Ou+CpzsNCgltc28tbGV2ZWwtdGFiLXN0b3A6bm9uZTsNCgltc28tbGV2ZWwt
-bnVtYmVyLXBvc2l0aW9uOmxlZnQ7DQoJdGV4dC1pbmRlbnQ6LTE4LjBwdDsNCglmb250LWZhbWls
-eTpXaW5nZGluZ3M7fQ0KQGxpc3QgbDA6bGV2ZWw3DQoJe21zby1sZXZlbC1udW1iZXItZm9ybWF0
-OmJ1bGxldDsNCgltc28tbGV2ZWwtdGV4dDrvgrc7DQoJbXNvLWxldmVsLXRhYi1zdG9wOm5vbmU7
-DQoJbXNvLWxldmVsLW51bWJlci1wb3NpdGlvbjpsZWZ0Ow0KCXRleHQtaW5kZW50Oi0xOC4wcHQ7
-DQoJZm9udC1mYW1pbHk6U3ltYm9sO30NCkBsaXN0IGwwOmxldmVsOA0KCXttc28tbGV2ZWwtbnVt
-YmVyLWZvcm1hdDpidWxsZXQ7DQoJbXNvLWxldmVsLXRleHQ6bzsNCgltc28tbGV2ZWwtdGFiLXN0
-b3A6bm9uZTsNCgltc28tbGV2ZWwtbnVtYmVyLXBvc2l0aW9uOmxlZnQ7DQoJdGV4dC1pbmRlbnQ6
-LTE4LjBwdDsNCglmb250LWZhbWlseToiQ291cmllciBOZXciO30NCkBsaXN0IGwwOmxldmVsOQ0K
-CXttc28tbGV2ZWwtbnVtYmVyLWZvcm1hdDpidWxsZXQ7DQoJbXNvLWxldmVsLXRleHQ674KnOw0K
-CW1zby1sZXZlbC10YWItc3RvcDpub25lOw0KCW1zby1sZXZlbC1udW1iZXItcG9zaXRpb246bGVm
-dDsNCgl0ZXh0LWluZGVudDotMTguMHB0Ow0KCWZvbnQtZmFtaWx5OldpbmdkaW5nczt9DQpAbGlz
-dCBsMQ0KCXttc28tbGlzdC1pZDoxMjIxMTM2NTUxOw0KCW1zby1saXN0LXR5cGU6aHlicmlkOw0K
-CW1zby1saXN0LXRlbXBsYXRlLWlkczotMzQ4MDg2MjE0IDI2ODQzNTQ3MSAyNjg0MzU0ODEgMjY4
-NDM1NDgzIDI2ODQzNTQ3MSAyNjg0MzU0ODEgMjY4NDM1NDgzIDI2ODQzNTQ3MSAyNjg0MzU0ODEg
-MjY4NDM1NDgzO30NCkBsaXN0IGwxOmxldmVsMQ0KCXttc28tbGV2ZWwtdGFiLXN0b3A6bm9uZTsN
-Cgltc28tbGV2ZWwtbnVtYmVyLXBvc2l0aW9uOmxlZnQ7DQoJdGV4dC1pbmRlbnQ6LTE4LjBwdDt9
-DQpAbGlzdCBsMTpsZXZlbDINCgl7bXNvLWxldmVsLW51bWJlci1mb3JtYXQ6YWxwaGEtbG93ZXI7
-DQoJbXNvLWxldmVsLXRhYi1zdG9wOm5vbmU7DQoJbXNvLWxldmVsLW51bWJlci1wb3NpdGlvbjps
-ZWZ0Ow0KCXRleHQtaW5kZW50Oi0xOC4wcHQ7fQ0KQGxpc3QgbDE6bGV2ZWwzDQoJe21zby1sZXZl
-bC1udW1iZXItZm9ybWF0OnJvbWFuLWxvd2VyOw0KCW1zby1sZXZlbC10YWItc3RvcDpub25lOw0K
-CW1zby1sZXZlbC1udW1iZXItcG9zaXRpb246cmlnaHQ7DQoJdGV4dC1pbmRlbnQ6LTkuMHB0O30N
-CkBsaXN0IGwxOmxldmVsNA0KCXttc28tbGV2ZWwtdGFiLXN0b3A6bm9uZTsNCgltc28tbGV2ZWwt
-bnVtYmVyLXBvc2l0aW9uOmxlZnQ7DQoJdGV4dC1pbmRlbnQ6LTE4LjBwdDt9DQpAbGlzdCBsMTps
-ZXZlbDUNCgl7bXNvLWxldmVsLW51bWJlci1mb3JtYXQ6YWxwaGEtbG93ZXI7DQoJbXNvLWxldmVs
-LXRhYi1zdG9wOm5vbmU7DQoJbXNvLWxldmVsLW51bWJlci1wb3NpdGlvbjpsZWZ0Ow0KCXRleHQt
-aW5kZW50Oi0xOC4wcHQ7fQ0KQGxpc3QgbDE6bGV2ZWw2DQoJe21zby1sZXZlbC1udW1iZXItZm9y
-bWF0OnJvbWFuLWxvd2VyOw0KCW1zby1sZXZlbC10YWItc3RvcDpub25lOw0KCW1zby1sZXZlbC1u
-dW1iZXItcG9zaXRpb246cmlnaHQ7DQoJdGV4dC1pbmRlbnQ6LTkuMHB0O30NCkBsaXN0IGwxOmxl
-dmVsNw0KCXttc28tbGV2ZWwtdGFiLXN0b3A6bm9uZTsNCgltc28tbGV2ZWwtbnVtYmVyLXBvc2l0
-aW9uOmxlZnQ7DQoJdGV4dC1pbmRlbnQ6LTE4LjBwdDt9DQpAbGlzdCBsMTpsZXZlbDgNCgl7bXNv
-LWxldmVsLW51bWJlci1mb3JtYXQ6YWxwaGEtbG93ZXI7DQoJbXNvLWxldmVsLXRhYi1zdG9wOm5v
-bmU7DQoJbXNvLWxldmVsLW51bWJlci1wb3NpdGlvbjpsZWZ0Ow0KCXRleHQtaW5kZW50Oi0xOC4w
-cHQ7fQ0KQGxpc3QgbDE6bGV2ZWw5DQoJe21zby1sZXZlbC1udW1iZXItZm9ybWF0OnJvbWFuLWxv
-d2VyOw0KCW1zby1sZXZlbC10YWItc3RvcDpub25lOw0KCW1zby1sZXZlbC1udW1iZXItcG9zaXRp
-b246cmlnaHQ7DQoJdGV4dC1pbmRlbnQ6LTkuMHB0O30NCm9sDQoJe21hcmdpbi1ib3R0b206MGNt
-O30NCnVsDQoJe21hcmdpbi1ib3R0b206MGNtO30NCi0tPjwvc3R5bGU+PCEtLVtpZiBndGUgbXNv
-IDldPjx4bWw+DQo8bzpzaGFwZWRlZmF1bHRzIHY6ZXh0PSJlZGl0IiBzcGlkbWF4PSIxMDI2IiAv
-Pg0KPC94bWw+PCFbZW5kaWZdLS0+PCEtLVtpZiBndGUgbXNvIDldPjx4bWw+DQo8bzpzaGFwZWxh
-eW91dCB2OmV4dD0iZWRpdCI+DQo8bzppZG1hcCB2OmV4dD0iZWRpdCIgZGF0YT0iMSIgLz4NCjwv
-bzpzaGFwZWxheW91dD48L3htbD48IVtlbmRpZl0tLT4NCjwvaGVhZD4NCjxib2R5IGxpbms9IiMw
-NTYzQzEiIHZsaW5rPSIjOTU0RjcyIiBzdHlsZT0id29yZC13cmFwOmJyZWFrLXdvcmQiPg0KPGRp
-diBjbGFzcz0iV29yZFNlY3Rpb24xIj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9
-IkRFIj5IZWxsbyw8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
-c3BhbiBsYW5nPSJERSI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1z
-b05vcm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiPk9uIDxhIGhyZWY9Imh0dHBzOi8vbHR0bmcub3Jn
-L21hbi8xL2x0dG5nLXJvdGF0ZS92Mi4xMi8iPg0KaHR0cHM6Ly9sdHRuZy5vcmcvbWFuLzEvbHR0
-bmctcm90YXRlL3YyLjEyLzwvYT4gb25lIG9mIHRoZSBsaW1pdGF0aW9ucyBpcyBsaXN0ZWQgYXM6
-PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgc3R5bGU9Im1hcmdpbi1sZWZ0OjE4LjBwdCI+VGhl
-IDxjb2RlPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTAuMHB0Ij5sdHRuZyByb3RhdGU8L3NwYW4+
-PC9jb2RlPiBjb21tYW5kIG9ubHkgd29ya3Mgd2hlbjo8bzpwPjwvbzpwPjwvcD4NCjxwIHN0eWxl
-PSJtYXJnaW4tbGVmdDo1NC4wcHQ7dGV4dC1pbmRlbnQ6LTE4LjBwdDttc28tbGlzdDpsMCBsZXZl
-bDEgbGZvMSI+PCFbaWYgIXN1cHBvcnRMaXN0c10+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OlN5
-bWJvbCI+PHNwYW4gc3R5bGU9Im1zby1saXN0Oklnbm9yZSI+wrc8c3BhbiBzdHlsZT0iZm9udDo3
-LjBwdCAmcXVvdDtUaW1lcyBOZXcgUm9tYW4mcXVvdDsiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNw
-OyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOw0KPC9zcGFuPjwvc3Bhbj48L3NwYW4+PCFbZW5kaWZd
-Pk5vIGNoYW5uZWwgd2FzIGNyZWF0ZWQgd2l0aCBhIGNvbmZpZ3VyZWQgdHJhY2UgZmlsZSBjb3Vu
-dCBvciBzaXplIGxpbWl0IChzZWUgdGhlDQo8Y29kZT48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEw
-LjBwdCI+LS10cmFjZWZpbGUtc2l6ZTwvc3Bhbj48L2NvZGU+IGFuZCA8Y29kZT48c3BhbiBzdHls
-ZT0iZm9udC1zaXplOjEwLjBwdCI+LS10cmFjZWZpbGUtY291bnQ8L3NwYW4+PC9jb2RlPiBvcHRp
-b25zIGluDQo8YSBocmVmPSJodHRwczovL2x0dG5nLm9yZy9tYW4vMS9sdHRuZy1lbmFibGUtY2hh
-bm5lbC92Mi4xMiI+bHR0bmctZW5hYmxlLWNoYW5uZWw8c3BhbiBjbGFzcz0icyI+PHNwYW4gc3R5
-bGU9ImNvbG9yOmJsdWUiPigxKTwvc3Bhbj48L3NwYW4+PC9hPikuDQo8bzpwPjwvbzpwPjwvcD4N
-CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIj5Ib3dldmVyIG9uIHYyLjEy
-LjEgSSBhbSBhYmxlIHRvOjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxvbCBzdHlsZT0ibWFyZ2lu
-LXRvcDowY20iIHN0YXJ0PSIxIiB0eXBlPSIxIj4NCjxsaSBjbGFzcz0iTXNvTGlzdFBhcmFncmFw
-aCIgc3R5bGU9Im1hcmdpbi1sZWZ0OjBjbTttc28tbGlzdDpsMSBsZXZlbDEgbGZvMiI+PHNwYW4g
-bGFuZz0iRU4tVVMiPkNyZWF0ZSBhIHVzZXJzcGFjZSBzZXNzaW9uPG86cD48L286cD48L3NwYW4+
-PC9saT48bGkgY2xhc3M9Ik1zb0xpc3RQYXJhZ3JhcGgiIHN0eWxlPSJtYXJnaW4tbGVmdDowY207
-bXNvLWxpc3Q6bDEgbGV2ZWwxIGxmbzIiPjxzcGFuIGxhbmc9IkVOLVVTIj5DcmVhdGUgYSBjaGFu
-bmVsIHcvIGNvbmZpZ3VyZWQgdHJhY2UgZmlsZSBjb3VudCBhbmQgc2l6ZSBsaW1pdDxvOnA+PC9v
-OnA+PC9zcGFuPjwvbGk+PGxpIGNsYXNzPSJNc29MaXN0UGFyYWdyYXBoIiBzdHlsZT0ibWFyZ2lu
-LWxlZnQ6MGNtO21zby1saXN0OmwxIGxldmVsMSBsZm8yIj48c3BhbiBsYW5nPSJFTi1VUyI+U3Rh
-cnQgdHJhY2luZzxvOnA+PC9vOnA+PC9zcGFuPjwvbGk+PGxpIGNsYXNzPSJNc29MaXN0UGFyYWdy
-YXBoIiBzdHlsZT0ibWFyZ2luLWxlZnQ6MGNtO21zby1saXN0OmwxIGxldmVsMSBsZm8yIj48c3Bh
-biBsYW5nPSJFTi1VUyI+bHR0bmcgcm90YXRlPG86cD48L286cD48L3NwYW4+PC9saT48L29sPg0K
-PHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiPjxvOnA+Jm5ic3A7PC9vOnA+
-PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIj5XaXRo
-aW4gZWFjaCBjaHVuayB0aGVzZSByZXN0cmljdGlvbnMgYXJlIHJlc3BlY3RlZC48bzpwPjwvbzpw
-Pjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+PG86
-cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gbGFu
-Zz0iRU4tVVMiPlRoZXJlZm9yZSBteSBxdWVzdGlvbiBpcyB3aGF0IGRvZXMgdGhpcyBsaW1pdGF0
-aW9uIGFjdHVhbGx5IG1lYW4/IElzIGl0IG1vcmUgc28gaW4gdGhlIGRpcmVjdGlvbiB0aGF0IHRo
-ZSBhcmNoaXZlcyB3aWxsIG5vdCByZXNwZWN0IHRoZXNlIGxpbWl0cyBiZWNhdXNlIHRoZSBjaHVu
-a3MgYWNjdW11bGF0ZT8gT3IgYW0gSSBtaXNzaW5nIHRoZSBwb2ludCBlbnRpcmVseT88bzpwPjwv
-bzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+
-PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
-bGFuZz0iRU4tVVMiPlRoYW5rcyw8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNv
-Tm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+WmFjaDxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwv
-ZGl2Pg0KPC9ib2R5Pg0KPC9odG1sPg0K
+> On [ https://lttng.org/man/1/lttng-rotate/v2.12/ |
+> https://lttng.org/man/1/lttng-rotate/v2.12/ ] one of the limitations is l=
+isted
+> as:
 
---_000_DM6PR06MB61863EC46C9025E1C0250F3A91FA9DM6PR06MB6186namp_--
+> The lttng rotate command only works when:
 
---===============7373719459062195138==
+> =C2=B7 No channel was created with a configured trace file count or size =
+limit (see
+> the --tracefile-size and --tracefile-count options in [
+> https://lttng.org/man/1/lttng-enable-channel/v2.12 | lttng-enable-channel=
+(1) ]
+> ).
+
+> However on v2.12.1 I am able to:
+
+>     1. Create a userspace session
+>     2. Create a channel w/ configured trace file count and size limit
+>     3. Start tracing
+>     4. lttng rotate
+
+> Within each chunk these restrictions are respected.
+
+> Therefore my question is what does this limitation actually mean? Is it m=
+ore so
+> in the direction that the archives will not respect these limits because =
+the
+> chunks accumulate? Or am I missing the point entirely?
+
+Hi Zach,=20
+
+I think it's simply a documentation error, probably on my part from misadvi=
+sing Philippe.=20
+I'll open a change against the manual page.=20
+
+Thanks for reporting this!=20
+J=C3=A9r=C3=A9mie=20
+
+> Thanks,
+
+> Zach
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--=_20c27c58-7aa4-49a4-a726-6e10603a13c7
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br></div><div><br></div><hr id=3D"zwchr" d=
+ata-marker=3D"__DIVIDER__"><div data-marker=3D"__HEADERS__"><blockquote sty=
+le=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:=
+#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:=
+Helvetica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"lttng-dev" &lt;lt=
+tng-dev@lists.lttng.org&gt;<br><b>To: </b>"lttng-dev" &lt;lttng-dev@lists.l=
+ttng.org&gt;<br><b>Sent: </b>Friday, August 13, 2021 3:28:14 AM<br><b>Subje=
+ct: </b>[lttng-dev] Question about rotating session limitations<br></blockq=
+uote></div><div><style>/*<![CDATA[*/p.MsoNormal, li.MsoNormal, div.MsoNorma=
+l {
+=09margin: 0.0cm;
+=09font-size: 11.0pt;
+=09font-family: Calibri , sans-serif;
+}
+a:link, span.MsoHyperlink {
+=09color: rgb(5,99,193);
+=09text-decoration: underline;
+}
+code {
+=09font-family: "Courier New";
+}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph {
+=09margin-top: 0.0cm;
+=09margin-right: 0.0cm;
+=09margin-bottom: 0.0cm;
+=09margin-left: 36.0pt;
+=09font-size: 11.0pt;
+=09font-family: Calibri , sans-serif;
+}
+span.s {
+}
+*.MsoChpDefault {
+=09font-family: Calibri , sans-serif;
+}
+div.WordSection1 {
+=09page: WordSection1;
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+* {
+}
+ol {
+=09margin-bottom: 0.0cm;
+}
+ul {
+=09margin-bottom: 0.0cm;
+}
+/*]]>*/</style></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=
+=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#0=
+00;font-weight:normal;font-style:normal;text-decoration:none;font-family:He=
+lvetica,Arial,sans-serif;font-size:12pt;">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span lang=3D"DE">Hello,</span></p>
+
+<p class=3D"MsoNormal"><span lang=3D"EN-US">On <a href=3D"https://lttng.org=
+/man/1/lttng-rotate/v2.12/" target=3D"_blank" rel=3D"nofollow noopener nore=
+ferrer">
+https://lttng.org/man/1/lttng-rotate/v2.12/</a> one of the limitations is l=
+isted as:</span></p>
+<p style=3D"margin-left:18pt">The <code><span style=3D"font-size:10pt">lttn=
+g rotate</span></code> command only works when:</p>
+<p style=3D"margin-left:54pt;text-indent:-18pt"><span style=3D"font-family:=
+'symbol'">=C2=B7</span>No channel was created with a configured trace file =
+count or size limit (see the
+<code><span style=3D"font-size:10pt">--tracefile-size</span></code> and <co=
+de><span style=3D"font-size:10pt">--tracefile-count</span></code> options i=
+n
+<a href=3D"https://lttng.org/man/1/lttng-enable-channel/v2.12" target=3D"_b=
+lank" rel=3D"nofollow noopener noreferrer">lttng-enable-channel<span class=
+=3D"s"><span style=3D"color:blue">(1)</span></span></a>).
+</p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">However on v2.12.1 I am able to=
+:</span></p>
+<ol style=3D"margin-top:0cm" type=3D"1" start=3D"1"><li class=3D"MsoListPar=
+agraph" style=3D"margin-left:0cm"><span lang=3D"EN-US">Create a userspace s=
+ession</span></li><li class=3D"MsoListParagraph" style=3D"margin-left:0cm">=
+<span lang=3D"EN-US">Create a channel w/ configured trace file count and si=
+ze limit</span></li><li class=3D"MsoListParagraph" style=3D"margin-left:0cm=
+"><span lang=3D"EN-US">Start tracing</span></li><li class=3D"MsoListParagra=
+ph" style=3D"margin-left:0cm"><span lang=3D"EN-US">lttng rotate</span></li>=
+</ol>
+
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Within each chunk these restric=
+tions are respected.</span></p>
+
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Therefore my question is what d=
+oes this limitation actually mean? Is it more so in the direction that the =
+archives will not respect these limits because the chunks accumulate? Or am=
+ I missing the point entirely?</span></p>
+</div></blockquote><div><br></div><div>Hi Zach,<br data-mce-bogus=3D"1"></d=
+iv><div><br data-mce-bogus=3D"1"></div><div>I think it's simply a documenta=
+tion error, probably on my part from misadvising Philippe.<br data-mce-bogu=
+s=3D"1"></div><div>I'll open a change against the manual page.<br data-mce-=
+bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks for repor=
+ting this!<br data-mce-bogus=3D"1"></div><div>J=C3=A9r=C3=A9mie<br data-mce=
+-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D=
+"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;=
+font-weight:normal;font-style:normal;text-decoration:none;font-family:Helve=
+tica,Arial,sans-serif;font-size:12pt;"><div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Thanks,</span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Zach</span></p>
+</div>
+
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
+listinfo/lttng-dev<br></blockquote></div></div></body></html>
+--=_20c27c58-7aa4-49a4-a726-6e10603a13c7--
+
+--===============0934465056189138407==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -320,4 +305,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============7373719459062195138==--
+--===============0934465056189138407==--
