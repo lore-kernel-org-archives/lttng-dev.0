@@ -4,48 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A121C433F5
-	for <lttng-dev@archiver.kernel.org>; Fri, 10 Dec 2021 01:43:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DE7C433F5
+	for <lttng-dev@archiver.kernel.org>; Fri, 10 Dec 2021 20:45:49 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4J9DFM3q9Sz1sSV;
-	Thu,  9 Dec 2021 20:43:19 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4J9jbc0KZ4z1sZd;
+	Fri, 10 Dec 2021 15:45:48 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1639100600;
-	bh=c9l7erNxIcc0tlFCdsEsBIWMYswY8deNXV6qOarGpds=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=etxFiRYsBJm0vONuUPouOMYX+Az3XKrnH5TT0oiI3ofIKa3tRt7TSuJNkm9yBcouP
-	 zvI1VAtxepyS52PsiHnL41V5G+USCyr0HH9Nhk4B79Th02h+876hJiXfgk5qOKLh6C
-	 1bIst1l6jEBcITkD55BOMiKDMujOol5xcezLZnM9H0wmqtxH1eyqleKmIixRiUpz0W
-	 RniTS0P5p/E5WRDyNi2xfZOnp4laStElM7vYDXgcjYsxuvpmMTliOb78s4fGdwfCAt
-	 WuiU6Y96EUtni+bm+A9pfMK6bduhUQv1Xj8j3qgOt7dC514wFfWAvYQulGupI1xTz5
-	 Dg+NE9cfho7PA==
-Received: from out4436.biz.mail.alibaba.com (out4436.biz.mail.alibaba.com
- [47.88.44.36])
- by lists.lttng.org (Postfix) with ESMTPS id 4J9DFK5FLRz1sZx
- for <lttng-dev@lists.lttng.org>; Thu,  9 Dec 2021 20:43:17 -0500 (EST)
-X-Alimail-AntiSpam: AC=CONTINUE; BC=0.07734591|-1; CH=green;
- DM=|CONTINUE|false|; DS=CONTINUE|ham_alarm|0.00239233-0.000773108-0.996835;
- FP=0|0|0|0|0|-1|-1|-1; HT=e01e01424; MF=zhenyu.ren@aliyun.com; NM=1; PH=DW;
- RN=2; RT=2; SR=0; TI=W4_0.1.10_DEFAULT_2120342A_1639099905796_o7001c12g; 
-Received: from WS-web
- (zhenyu.ren@aliyun.com[W4_0.1.10_DEFAULT_2120342A_1639099905796_o7001c12g])
- by e01f04446.eu6 at Fri, 10 Dec 2021 09:42:49 +0800
-Date: Fri, 10 Dec 2021 09:42:49 +0800
-To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
-Message-ID: <946535e2-fff6-4006-ae1d-e5a127bac406.zhenyu.ren@aliyun.com>
-X-Mailer: [Alimail-Mailagent revision 1204][W4_0.1.10][DEFAULT][Chrome]
+	s=default; t=1639169148;
+	bh=SFrEBKB77LzuoI4Y35SQ4tE3cncmom7B8RFKVEGXDzs=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=iaazd/V1rrIaFGa9SK7EMISdLcC/2ph1fHyoGhphAGdl8wX9a+tjN/sqvl8T2Moaj
+	 NxY496DaxXUE7jsm1R5k4DjuaYHXMv4vVoPTHGbxyP4lCxAzcy27rTd6kUrsEbr8uS
+	 KpqsECiVSbFjCj6g58saIchBUTCUjKjoVHGn5Bze4Q7uCcOoCTQso5k3WVj/89Eoxa
+	 qXdMjbmT8ZXcl7tRzM4aTEh8uLi8/HxPjW4h95hXNWgAKn5/qDgXyf2hr2sl5uM8Dy
+	 haC+KD89kUg2t5qNJ0fMMDvLCNv03GFuXXQUz/jW+/y62xK1SksS5UT6uFT+/Xh0ZI
+	 6MZyFKrWre7eg==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4J9jbZ2Wtwz1sk1
+ for <lttng-dev@lists.lttng.org>; Fri, 10 Dec 2021 15:45:46 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 1B4683927DA
+ for <lttng-dev@lists.lttng.org>; Fri, 10 Dec 2021 15:45:40 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id agyuk7p1VXmw; Fri, 10 Dec 2021 15:45:39 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 2609F3928D0;
+ Fri, 10 Dec 2021 15:45:39 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 2609F3928D0
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id lPglTssnjNj3; Fri, 10 Dec 2021 15:45:39 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 18C10392B27;
+ Fri, 10 Dec 2021 15:45:39 -0500 (EST)
+Date: Fri, 10 Dec 2021 15:45:38 -0500 (EST)
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org
+Message-ID: <1697490258.28441.1639169138969.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-References: <6ad73114-861c-46e3-8f9e-1076e482116f.zhenyu.ren@aliyun.com>
- <1503888133.17265.1638907679680.JavaMail.zimbra@efficios.com>
- <0c3d0086-e024-4aa9-a7f6-d54a7d487849.zhenyu.ren@aliyun.com>,
- <1486080138.26292.1639081214982.JavaMail.zimbra@efficios.com>
-x-aliyun-mail-creator: W4_0.1.10_DEFAULT_M3LTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNSkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzgxLjAuNDA0NC4xMzggU2FmYXJpLzUzNy4zNg==vN
-In-Reply-To: <1486080138.26292.1639081214982.JavaMail.zimbra@efficios.com>
-Subject: [lttng-dev] =?utf-8?b?5Zue5aSN77ya5Zue5aSN77yaIGx0dG5nLWNvbnN1?=
- =?utf-8?q?merd_can_NOT_get_notification_to_consume_ring_buffer_data?=
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4173 (ZimbraWebClient - FF94 (Linux)/8.8.15_GA_4177)
+Thread-Index: A/kqqja9BDVf/kUNVOsd4rXMEufssA==
+Thread-Topic: LTTng-UST 2.13.1 (Linux user-space tracer)
+Subject: [lttng-dev] [RELEASE] LTTng-UST 2.13.1 (Linux user-space tracer)
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.35
 Precedence: list
@@ -57,147 +61,50 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "zhenyu.ren via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Content-Type: multipart/mixed; boundary="===============8567698475167693951=="
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============8567698475167693951==
-Content-Type: multipart/alternative;
-  boundary="----=ALIBOUNDARY_8726_7f7a427f9940_61b2b099_8756"
+This 2.13.1 release of LTTng-UST is a bugfix-only release for various
+shortcomings that were identified in the 2.13.0 release.
 
-------=ALIBOUNDARY_8726_7f7a427f9940_61b2b099_8756
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+A few key highlights: the C++ support for building probe providers has
+been improved, async-signal-safety of the close wrapper has been fixed,
+pthread cancelstate in nested use scenarios is now properly handled.
 
-Pk5vLCBpdCdzIG5vdCB0aGF0IHNpbXBsZQpDYW4gSSB1cGRhdGUgdGhhdCBzdWItYnVmZmVyIGNv
-bW1pdF9jb2xkIGNvdW50ZXIoaG93IGFib3V0IGhvdCBvbmU/KSAgdG8gdGhlICJyaWdodCIgdmFs
-dWUgdGhlbiBza2lwIGNvbnN1bWluZyB0aGlzIHN1Yi1idWZmZXIoYnV0IHVwZGF0ZSB0aGUgY29u
-c3VtZSBjb3VudGVyIGFzIGlmIEkgaGF2ZSBjb25zdW1lZCB0aGUgc3ViLWJ1ZmZlcik/Ckl0IHNl
-ZW1zIHRoZSB0cmFjaW5nIHByb2dyZXNzIHdpbGwgY29udGludWUgd2l0aCB0aGUgY29zdCBvZiBt
-aXNzaW5nIGFsbCB0aGUgc3BhbnMgaW4gdGhhdCBzdWItYnVmZmVyLiAKClRoYW5rcwp6aGVueXUu
-cmVuCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLQrlj5Hku7bkurrvvJpNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNu
-b3llcnNAZWZmaWNpb3MuY29tPgrlj5HpgIHml7bpl7TvvJoyMDIx5bm0MTLmnIgxMOaXpSjmmJ/m
-nJ/kupQpIDA0OjI3CuaUtuS7tuS6uu+8mnpoZW55dS5yZW4gPHpoZW55dS5yZW5AYWxpeXVuLmNv
-bT4K5oqE44CA6YCB77yabHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgrkuLvj
-gIDpopjvvJpSZTog5Zue5aSN77yaW2x0dG5nLWRldl0gbHR0bmctY29uc3VtZXJkIGNhbiBOT1Qg
-Z2V0IG5vdGlmaWNhdGlvbiB0byBjb25zdW1lIHJpbmcgYnVmZmVyIGRhdGEKCi0tLS0tIE9uIERl
-YyA3LCAyMDIxLCBhdCA4OjQ3IFBNLCB6aGVueXUucmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+
-IHdyb3RlOgpIaSwgRGVzbm95ZXJzCgogICAgICAgRm9yIHZhcmlvdXMgcmVhc29ucywgbm9uZSBv
-ZiB0aGUgdGhyZWUgc3VnZ2VzdGlvbnMgeW91IG1lbnRpb25lZCBhYm91dCByZXByb2R1Y2luZyB0
-aGUgcHJvYmxlbSBjYW4gYmUgYWNoaWV2ZWQgZWFzaWx5LgogICAgICAgSSBhbSBhbHNvIHdvbmRl
-ciB3aHkgY29tbWl0IGNvdW50ZXIgbm90IHVwZGF0ZWQuLi5JdCBzZWVtcyB0aGF0IHRoZSBzcGFu
-IHByb2R1Y2VycyBub3QgY29tcGxldGUgY29tbWl0aW5nKGJlIGtpbGxlZD9oYW5nPyk/IEl04oCY
-cyB2ZXJ5IGhhcmQgdG8gZGVidWcgYWxsIHNwYW4gcHJvZHVjZXJzIHNpbmNlIHRoZXkgYXJlIHRv
-byBtYW55Li4uCiAgICAgICBTbywgQ2FuIEkgbWFrZSBsdHRuZy1jb25zdW1lciBqdXN0IHNraXAg
-b3V0IHRoaXMgc3ViYnVmZmVyIGFuZCB0cnkgdG8gY29uc3VtZSB0aGUgbmV4dCBzdWJidWZmZXI/
-Ck5vLCBpdCdzIG5vdCB0aGF0IHNpbXBsZS4gT25jZSB0aGlzIHN0YXRlIGlzIHJlYWNoZWQgKGUu
-Zy4gY2F1c2VkIGJ5IGEga2lsbGVkIGFwcGxpY2F0aW9uKSwganVzdCBza2lwcGluZyB0aGlzIHN1
-Yi1idWZmZXIKd2lsbCBub3QgYWxsb3cgYXBwbGljYXRpb25zIHRvIGNvbnRpbnVlIHVzaW5nIHRo
-aXMgYnVmZmVyIGZvciB0cmFjaW5nIHVudGlsIGl0IGlzIGRlc3Ryb3llZC4KClRoYW5rcywKCk1h
-dGhpZXUKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZm
-aWNpb3MuY29tCgo=
-------=ALIBOUNDARY_8726_7f7a427f9940_61b2b099_8756
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+2021-12-10 (Lost and Found Day) lttng-ust 2.13.1
+        * Fix: ust-compiler: constructor/destructor build on g++ 4.8
+        * ust-compiler: constructor/destructor whitespaces layout and macro dependency
+        * Fix: ust-cancelstate: include string.h for strerror
+        * Fix: libnuma is prepended to LIBS
+        * fix: Allow disabling some abi compat tests
+        * Fix: generate probe registration constructor as a C++ constuctor
+        * Fix: nestable pthread cancelstate
+        * Fix: abort on decrement_sem_count during concurrent tracing start and teardown
+        * fix: allocating C++ compound literal on heap with Clang
+        * Check for C++11 when building C++ probe providers
+        * fix: liblttng-ust-fd async-signal-safe close()
+        * tracepoints: print debug message when lttng-ust-tracepoint.so is not found
+        * Fix: static_assert unavailable with glibc < 2.16
+        * Fix: combined tracing of lttng-ust 2.12/2.13 generates corrupted traces
+        * doc/man: Document LTTNG_UST_ABORT_ON_CRITICAL variable
+        * fix: remove autoconf features default value in help message
+        * Set git-review branch to stable-2.13
+        * Fix: add extern "C" to two header files
 
-PGRpdiBjbGFzcz0iX19hbGl5dW5fZW1haWxfYm9keV9ibG9jayI+PGRpdiAgc3R5bGU9ImNsZWFy
-OmJvdGg7Ij4mZ3Q7PHNwYW4gIHN0eWxlPSJjb2xvcjojMDAwMDAwO2ZvbnQtZmFtaWx5OmFyaWFs
-LGhlbHZldGljYSxzYW5zLXNlcmlmO2ZvbnQtc2l6ZToxNi4wcHg7Zm9udC1zdHlsZTpub3JtYWw7
-Zm9udC12YXJpYW50LWxpZ2F0dXJlczpub3JtYWw7Zm9udC12YXJpYW50LWNhcHM6bm9ybWFsO2Zv
-bnQtd2VpZ2h0OjQwMDt0ZXh0LWFsaWduOnN0YXJ0O3RleHQtaW5kZW50Oi4wcHg7dGV4dC10cmFu
-c2Zvcm06bm9uZTt3aWRvd3M6MjtiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmY7dGV4dC1kZWNvcmF0
-aW9uLXN0eWxlOmluaXRpYWw7dGV4dC1kZWNvcmF0aW9uLWNvbG9yOmluaXRpYWw7ZmxvYXQ6bm9u
-ZTtkaXNwbGF5OmlubGluZTsiPk5vLCBpdCdzIG5vdCB0aGF0IHNpbXBsZTwvc3Bhbj48L2Rpdj48
-ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPkNhbiBJIHVwZGF0ZSB0aGF0IHN1Yi1idWZmZXIgY29t
-bWl0X2NvbGQgY291bnRlcjxzcGFuICBzdHlsZT0iY29sb3I6IzAwMDAwMDtmb250LWZhbWlseTpU
-YWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtmb250LXN0eWxlOm5v
-cm1hbDtmb250LXZhcmlhbnQtbGlnYXR1cmVzOm5vcm1hbDtmb250LXZhcmlhbnQtY2Fwczpub3Jt
-YWw7Zm9udC13ZWlnaHQ6NDAwO3RleHQtYWxpZ246c3RhcnQ7dGV4dC1pbmRlbnQ6LjBweDt0ZXh0
-LXRyYW5zZm9ybTpub25lO3dpZG93czoyO2JhY2tncm91bmQtY29sb3I6I2ZmZmZmZjt0ZXh0LWRl
-Y29yYXRpb24tc3R5bGU6aW5pdGlhbDt0ZXh0LWRlY29yYXRpb24tY29sb3I6aW5pdGlhbDtmbG9h
-dDpub25lO2Rpc3BsYXk6aW5saW5lOyI+KGhvdyBhYm91dCBob3Qgb25lPykmbmJzcDs8L3NwYW4+
-IHRvIHRoZSAicmlnaHQiIHZhbHVlIHRoZW4gc2tpcCBjb25zdW1pbmcgdGhpcyBzdWItYnVmZmVy
-KGJ1dCB1cGRhdGUgdGhlIGNvbnN1bWUgY291bnRlciBhcyBpZiBJIGhhdmUgY29uc3VtZWQgdGhl
-IHN1Yi1idWZmZXIpPzwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+SXQgc2VlbXMgdGhl
-IHRyYWNpbmcgcHJvZ3Jlc3Mgd2lsbCBjb250aW51ZSB3aXRoIHRoZSBjb3N0IG9mIG1pc3Npbmcg
-YWxsIHRoZSBzcGFucyBpbiB0aGF0IHN1Yi1idWZmZXIuJm5ic3A7PC9kaXY+PGRpdiAgc3R5bGU9
-ImNsZWFyOmJvdGg7Ij48YnIgPjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+VGhhbmtz
-PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij56aGVueXUucmVuPC9kaXY+PGJsb2NrcXVv
-dGUgIHN0eWxlPSJtYXJnaW4tcmlnaHQ6LjBweDttYXJnaW4tdG9wOi4wcHg7bWFyZ2luLWJvdHRv
-bTouMHB4OyI+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFt
-aWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMw
-MDAwMDA7Ij4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS08L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48
-c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250
-LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij7lj5Hku7bkurrvvJpNYXRoaWV1IERlc25veWVy
-cyAmbHQ7bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tJmd0Ozwvc3Bhbj48L2Rpdj48ZGl2
-ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFy
-aWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPuWPkemA
-geaXtumXtO+8mjIwMjHlubQxMuaciDEw5pelKOaYn+acn+S6lCkgMDQ6Mjc8L3NwYW4+PC9kaXY+
-PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9t
-YSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij7m
-lLbku7bkurrvvJp6aGVueXUucmVuICZsdDt6aGVueXUucmVuQGFsaXl1bi5jb20mZ3Q7PC9zcGFu
-PjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIHN0eWxlPSJmb250LWZhbWls
-eTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtjb2xvcjojMDAw
-MDAwOyI+5oqE44CA6YCB77yabHR0bmctZGV2ICZsdDtsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Jmd0Ozwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0i
-Zm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7
-Y29sb3I6IzAwMDAwMDsiPuS4u+OAgOmimO+8mlJlOiDlm57lpI3vvJpbbHR0bmctZGV2XSBsdHRu
-Zy1jb25zdW1lcmQgY2FuIE5PVCBnZXQgbm90aWZpY2F0aW9uIHRvIGNvbnN1bWUgcmluZyBidWZm
-ZXIgZGF0YTwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHls
-ZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4w
-cHg7Y29sb3I6IzAwMDAwMDsiPjxiciA+PC9zcGFuPjwvZGl2PjxkaXYgIGNsYXNzPSIgX19hbGl5
-dW5fbm9kZV9oYXNfY29sb3IiIHN0eWxlPSJmb250LWZhbWlseTphcmlhbCxoZWx2ZXRpY2Esc2Fu
-cy1zZXJpZjtmb250LXNpemU6MTYuMHB4O2NvbG9yOiMwMDAwMDA7Ij48ZGl2ID48c3BhbiAgaWQ9
-Inp3Y2hyIj4tLS0tLSBPbiBEZWMgNywgMjAyMSwgYXQgODo0NyBQTSwgemhlbnl1LnJlbiAmbHQ7
-emhlbnl1LnJlbkBhbGl5dW4uY29tJmd0OyB3cm90ZTo8YnIgPjwvc3Bhbj48L2Rpdj48ZGl2ID48
-ZGl2ID48c3BhbiAgY2xhc3M9IiBfX2FsaXl1bl9ub2RlX2hhc19jb2xvciIgc3R5bGU9ImZvbnQt
-ZmFtaWx5OnRhaG9tYSxhcmlhbCxzdGhlaXRpLHNpbXN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9y
-OiMwMDAwMDA7Ij5IaSwgRGVzbm95ZXJzPC9zcGFuPjwvZGl2PjxkaXYgPjxzcGFuICBjbGFzcz0i
-IF9fYWxpeXVuX25vZGVfaGFzX2NvbG9yIiBzdHlsZT0iZm9udC1mYW1pbHk6dGFob21hLGFyaWFs
-LHN0aGVpdGksc2ltc3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPjxiciA+PC9z
-cGFuPjwvZGl2PjxkaXYgPjxzcGFuICBjbGFzcz0iIF9fYWxpeXVuX25vZGVfaGFzX2NvbG9yIiBz
-dHlsZT0iZm9udC1mYW1pbHk6dGFob21hLGFyaWFsLHN0aGVpdGksc2ltc3VuO2ZvbnQtc2l6ZTox
-NC4wcHg7Y29sb3I6IzAwMDAwMDsiPiZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwO0ZvciB2YXJp
-b3VzIHJlYXNvbnMsIG5vbmUgb2YgdGhlIHRocmVlIHN1Z2dlc3Rpb25zIHlvdSBtZW50aW9uZWQg
-YWJvdXQgcmVwcm9kdWNpbmcgdGhlIHByb2JsZW0gY2FuIGJlIGFjaGlldmVkIGVhc2lseS48L3Nw
-YW4+PC9kaXY+PGRpdiA+PHNwYW4gIGNsYXNzPSIgX19hbGl5dW5fbm9kZV9oYXNfY29sb3IiIHN0
-eWxlPSJmb250LWZhbWlseTp0YWhvbWEsYXJpYWwsc3RoZWl0aSxzaW1zdW47Zm9udC1zaXplOjE0
-LjBweDtjb2xvcjojMDAwMDAwOyI+Jm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7SSBhbSBhbHNv
-IHdvbmRlciB3aHkgY29tbWl0IGNvdW50ZXIgbm90IHVwZGF0ZWQuLi5JdCBzZWVtcyB0aGF0IHRo
-ZSBzcGFuIHByb2R1Y2VycyBub3QgY29tcGxldGUgY29tbWl0aW5nKGJlIGtpbGxlZD9oYW5nPyk/
-IEl04oCYcyB2ZXJ5IGhhcmQgdG8gZGVidWcgYWxsIHNwYW4gcHJvZHVjZXJzIHNpbmNlIHRoZXkg
-YXJlIHRvbyBtYW55Li4uPC9zcGFuPjwvZGl2PjxkaXYgPjxzcGFuICBjbGFzcz0iIF9fYWxpeXVu
-X25vZGVfaGFzX2NvbG9yIiBzdHlsZT0iZm9udC1mYW1pbHk6dGFob21hLGFyaWFsLHN0aGVpdGks
-c2ltc3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPiZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwO1NvLCBDYW4gSSBtYWtlIGx0dG5nLWNvbnN1bWVyIGp1c3Qgc2tpcCBvdXQgdGhp
-cyBzdWJidWZmZXIgYW5kIHRyeSB0byBjb25zdW1lIHRoZSBuZXh0IHN1YmJ1ZmZlcj88L3NwYW4+
-PC9kaXY+PGRpdiA+Tm8sIGl0J3Mgbm90IHRoYXQgc2ltcGxlLiBPbmNlIHRoaXMgc3RhdGUgaXMg
-cmVhY2hlZCAoZS5nLiBjYXVzZWQgYnkgYSBraWxsZWQgYXBwbGljYXRpb24pLCBqdXN0IHNraXBw
-aW5nIHRoaXMgc3ViLWJ1ZmZlcjwvZGl2PjxkaXYgPndpbGwgbm90IGFsbG93IGFwcGxpY2F0aW9u
-cyB0byBjb250aW51ZSB1c2luZyB0aGlzIGJ1ZmZlciBmb3IgdHJhY2luZyB1bnRpbCBpdCBpcyBk
-ZXN0cm95ZWQuPGJyID48L2Rpdj48ZGl2ID48YnIgPjwvZGl2PjxkaXYgPlRoYW5rcyw8YnIgPjwv
-ZGl2PjxkaXYgPjxiciA+PC9kaXY+PGRpdiA+TWF0aGlldTxiciA+PC9kaXY+PC9kaXY+PGRpdiA+
-PGJyID48L2Rpdj48ZGl2ID4tLSA8YnIgPjwvZGl2PjxkaXYgPk1hdGhpZXUgRGVzbm95ZXJzPGJy
-ID5FZmZpY2lPUyBJbmMuPGJyID48YSAgaHJlZj0iaHR0cDovL3d3dy5lZmZpY2lvcy5jb20iIHRh
-cmdldD0iX2JsYW5rIj5odHRwOi8vd3d3LmVmZmljaW9zLmNvbTwvYT48L2Rpdj48L2Rpdj48L2Js
-b2NrcXVvdGU+PGRpdiA+PGJyID48L2Rpdj48L2Rpdj4=
-------=ALIBOUNDARY_8726_7f7a427f9940_61b2b099_8756--
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
 
 
---===============8567698475167693951==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============8567698475167693951==--
-
