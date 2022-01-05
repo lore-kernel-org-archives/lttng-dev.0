@@ -4,56 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33699C433EF
-	for <lttng-dev@archiver.kernel.org>; Wed,  5 Jan 2022 20:39:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48348C433F5
+	for <lttng-dev@archiver.kernel.org>; Wed,  5 Jan 2022 21:27:34 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4JThDg1K04zB4y;
-	Wed,  5 Jan 2022 15:39:47 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4JTjHm5Z9wzB50;
+	Wed,  5 Jan 2022 16:27:32 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1641415187;
-	bh=sm/WUa3zoooH1CrBn6G1VLK86DN4ko6pm9Rm6rXZqAQ=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=orumK+aRxiY1VRB2gS9V9/FBL8LBZYKHLjk8uhxwpGnJnjjUNZ3c2AhbzSIYucKxm
-	 ObeBrsJOz7H0W2wPIfK3a9ROaNO1x+XrBkYw/PC2kxHY1FbC/DBfMA2ks4MrXIijZv
-	 vur3hUvzfsiY+sT2XVOvdnPUAsoHUlwABZkGd/fdstang/8JO0BjDKMDYN+MRpzki/
-	 tfbiLNly+73ST6GvBtDJzPIij7Yu9A6MEMHCATwwz02Ond/m7dm4OhTayNIZ2BqFkZ
-	 ymM0rJV7c5oeQIPygm14nLFGHs1uhpC+kPljvmmJHyJP6LDUAoQ2XlpX3xzmieWMxS
-	 8OkHnQpetqsew==
+	s=default; t=1641418053;
+	bh=5sZjhc9cyh+OTcIC6w688eTc0Hc4fqN4uFVnJhk3EFE=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=0zQXOpVTLUy/C/bnn+veQmApeN42Fu73TrYtPJAiTM+zfglSTTLM/XhYxtQt20/Wh
+	 eXey2RO/HtsKCog3n100jh5qqpI0UI2R80+MyzNVmlLPsJIYWyU0QToz990MTm6VDx
+	 xSsenJIBgOZS7JWOCrxAmt0sXxt8sk4diwxOwCDgNG3Jd1f3V114m1NePeo9EhJjMl
+	 pxRClfONnUTPD83XnK+9Yj/xik+BqF0rB4Avh6KySza6FapuRiYahwZ8QTYptU4cex
+	 u6zVtaBGa6jQyuTj1Lr9uo1H/FTEpJ8AVGQJLQhlm0JEFEYU4cyHx7JGR6xOVcBQWA
+	 YG88Na+gLLeew==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4JThDd0txbz9vw
- for <lttng-dev@lists.lttng.org>; Wed,  5 Jan 2022 15:39:44 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 4JTjHl0ftwzBKR
+ for <lttng-dev@lists.lttng.org>; Wed,  5 Jan 2022 16:27:30 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8686B3C980A
- for <lttng-dev@lists.lttng.org>; Wed,  5 Jan 2022 15:39:38 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 7F6E33C987B
+ for <lttng-dev@lists.lttng.org>; Wed,  5 Jan 2022 16:27:24 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id FbqI1sBWzjtz; Wed,  5 Jan 2022 15:39:37 -0500 (EST)
+ with ESMTP id t0zTNLx1n0NY; Wed,  5 Jan 2022 16:27:23 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id CFFA13C95C0;
- Wed,  5 Jan 2022 15:39:37 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com CFFA13C95C0
+ by mail.efficios.com (Postfix) with ESMTP id DC4203C9C13;
+ Wed,  5 Jan 2022 16:27:23 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com DC4203C9C13
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id Mt3U6jItNVuz; Wed,  5 Jan 2022 15:39:37 -0500 (EST)
+ with ESMTP id BXcFK0AJJdKM; Wed,  5 Jan 2022 16:27:23 -0500 (EST)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id BFE7F3C9374;
- Wed,  5 Jan 2022 15:39:37 -0500 (EST)
-Date: Wed, 5 Jan 2022 15:39:37 -0500 (EST)
-To: linux-kernel <linux-kernel@vger.kernel.org>, 
- lttng-dev <lttng-dev@lists.lttng.org>, rp <rp@svcs.cs.pdx.edu>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, 
- Stephen Hemminger <stephen@networkplumber.org>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Lai Jiangshan <jiangshanlai@gmail.com>
-Message-ID: <1604976069.5148.1641415177661.JavaMail.zimbra@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id CFBE53C9C12;
+ Wed,  5 Jan 2022 16:27:23 -0500 (EST)
+Date: Wed, 5 Jan 2022 16:27:23 -0500 (EST)
+To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, 
+ linux-trace-users@vger.kernel.org
+Message-ID: <697935027.5550.1641418043715.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF95 (Linux)/8.8.15_GA_4177)
-Thread-Index: hFOmTmvfinaOxKagaO3L6KLVzo7LIA==
-Thread-Topic: Userspace RCU 0.11.4, 0.12.3 and 0.13.1
-Subject: [lttng-dev] [RELEASE] Userspace RCU 0.11.4, 0.12.3 and 0.13.1
+Thread-Index: m7GiKJygw0akYxq/Mbpwf/qNqXu0iQ==
+Thread-Topic: LTTng-UST 2.12.3 and 2.11.5 (Linux user-space tracer)
+Subject: [lttng-dev] [RELEASE] LTTng-UST 2.12.3 and 2.11.5 (Linux user-space
+ tracer)
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.35
 Precedence: list
@@ -74,87 +71,54 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
 Hi,
 
-This is a release announcement for the currently maintained stable
-branches of the Userspace RCU library. Please note that 0.11.4 is
-the last release of the 0.11 stable branch, which is reaching end
-of life. Users facing issues with the 0.11 stable branch are expected
-to upgrade to 0.12.3 or 0.13.1.
+This is a release announcement for the LTTng-UST 2.12.3 and 2.11.5
+tracer. Those are bug fix releases.
 
-The content of those bug fix releases is fairly straightforward,
-and the change log small enough to be shown in this release
-announcement (see below).
+The 2.11.5 release marks the end of life (EOL) of the stable-2.11 branch.
+Users experiencing issues with the 2.11 branch are expected to upgrade to
+either 2.12.3 or 2.13.1.
 
-Feedback is as always welcome!
+Note that the latest stable branch is 2.13 (its most recent release
+is 2.13.1, released on December 10, 2021).
+
+* Notable changes in 2.12.3:
+
+Two notable fixes are "Fix: nestable pthread cancelstate" and
+"Fix: abort on decrement_sem_count during concurrent tracing start and teardown",
+which fix a rare deadlock scenario at application exit.
+
+Another notable fix is "fix: liblttng-ust-fd async-signal-safe close()", which
+ensures that the implementation of the symbol interposition for "close" is
+async-signal safe, as it should be.
+
+Please refer to the change logs below for the fixes contained in those
+two releases.
+
+Feedback is welcome,
 
 Thanks,
 
 Mathieu
 
-Project website: https://liburcu.org
-Git repository: git://git.liburcu.org/urcu.git
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
 
-Changelog:
 
-2022-01-05 Userspace RCU 0.13.1
-        * fix: properly detect 'cmpxchg' on x86-32
-        * fix: use urcu-tls compat with c++ compiler
-        * fix: remove autoconf features default value in help message
-        * fix: add missing pkgconfig file for memb flavour lib
-        * Make temporary variable in _rcu_dereference non-const
-        * Fix: x86 and s390: uatomic __hp() macro C++ support
-        * Fix: x86 and s390: uatomic __hp() macro clang support
-        * Fix: x86 and s390 uatomic: __hp() macro warning with gcc 11
-        * Fix: changelog: v0.13.0 was released in 2021
+2022-01-05 (National Bird Day) lttng-ust 2.12.3
+        * Fix: ust-cancelstate: include string.h for strerror
+        * Fix: lttng-ust-fd: remove lttng_ust_common_ctor call
+        * Fix: nestable pthread cancelstate
+        * Fix: abort on decrement_sem_count during concurrent tracing start and teardown
+        * fix: liblttng-ust-fd async-signal-safe close()
+        * Set git-review branch to stable-2.12
+        * fix: link benchmark with pthread
+        * Fix: liblttng-ust-ctl have dependencies on liburcu
+        * Fix: add extern "C" to two header files
 
-2022-01-05 Userspace RCU 0.12.3
-        * fix: use urcu-tls compat with c++ compiler
-        * fix: add missing pkgconfig file for memb flavour lib
-        * Make temporary variable in _rcu_dereference non-const
-        * Fix: x86 and s390: uatomic __hp() macro C++ support
-        * Fix: x86 and s390: uatomic __hp() macro clang support
-        * Fix: x86 and s390 uatomic: __hp() macro warning with gcc 11
-        * Document known ABI issue in README.md
-        * fix: clock_gettime on macOs
-        * Fix: rculist header: use parenthesis around macro parameters
-        * Fix: rcuhlist header: use parenthesis around macro parameters
-        * Fix: hlist header: use parenthesis around macro parameters
-        * Fix: list.h: use parenthesis around macro parameters, caa_container_of()
-        * Fix: hlist iteration relies on undefined behavior
-        * Fix: use __atomic_load() rather than atomic load explicit
-        * Fix: use atomic load memory_order_consume for rcu_dereference on C11/C++11
-        * fix: warnings on non-Linux platforms
-        * fix: HAVE_SCHED_SETAFFINITY is not defined
-        * Add git review config to stable branch
-        * fix: include 'sys/endian.h' on FreeBSD
-        * cleanup: explicitly mark unused parameters (-Wunused-parameter)
-        * fix: shadowed local variable (-Wshadow)
-        * cleanup: all functions have declarations (-Wmissing-prototypes)
-        * Import libtap from babeltrace
-
-2022-01-05 Userspace RCU 0.11.4
-        * fix: add missing pkgconfig file for memb flavour lib
-        * Make temporary variable in _rcu_dereference non-const
-        * Fix: x86 and s390: uatomic __hp() macro C++ support
-        * Fix: x86 and s390: uatomic __hp() macro clang support
-        * Fix: x86 and s390 uatomic: __hp() macro warning with gcc 11
-        * Document known ABI issue in README.md
-        * fix: clock_gettime on macOs
-        * Fix: rculist header: use parenthesis around macro parameters
-        * Fix: rcuhlist header: use parenthesis around macro parameters
-        * Fix: hlist header: use parenthesis around macro parameters
-        * Fix: list.h: use parenthesis around macro parameters, caa_container_of()
-        * Fix: hlist iteration relies on undefined behavior
-        * Fix: use __atomic_load() rather than atomic load explicit
-        * Fix: use atomic load memory_order_consume for rcu_dereference on C11/C++11
-        * Fix: gitreview defaultbranch should be stable-0.11
-        * fix: warnings on non-Linux platforms
-        * fix: HAVE_SCHED_SETAFFINITY is not defined
-        * Add git review config to stable branch
-        * fix: include 'sys/endian.h' on FreeBSD
-        * cleanup: explicitly mark unused parameters (-Wunused-parameter)
-        * fix: shadowed local variable (-Wshadow)
-        * cleanup: all functions have declarations (-Wmissing-prototypes)
-        * Import libtap from babeltrace
+2022-01-05 (National Bird Day) lttng-ust 2.11.5
+        * Set git-review branch to stable-2.11
+        * fix: allow building with userspace-rcu 0.13
 
 -- 
 Mathieu Desnoyers
