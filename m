@@ -4,38 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AED7CC433F5
-	for <lttng-dev@archiver.kernel.org>; Fri, 14 Jan 2022 19:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47391C433EF
+	for <lttng-dev@archiver.kernel.org>; Fri, 14 Jan 2022 19:49:13 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4JbBb73ZDyzFgF;
-	Fri, 14 Jan 2022 14:44:51 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4JbBh80DY5zFZ0;
+	Fri, 14 Jan 2022 14:49:12 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1642189492;
-	bh=65BWuwPRKGsQMabA2VHH6ot3CABfTl1EtM40q7CtmfQ=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=c8ifT/jLLfytnpG6jtNwoGTpyJs11Y82NmfGH/YzOt8FoYRqJLyFJxQ+cIGgAxuFv
-	 JhFN/6SyJZfxB9k5g8NmKTdhV6WgjC9NVQCxeacLs0P6rfVpM2zc9PcRJdAqnvK1p6
-	 qSGXAky6MBXpfsE/uowGGjPZRdfGlxehjFqHbF5oF5PxDamEM6j7M85ViRrfC1cpux
-	 ejHWPNo/sDWS+lv03TSBj6YhZl2hdOQvO/ErvQBrn9TIvkb23bdr1pwdzjbx92Yk+m
-	 jWMnYLB+LUYIs9G3uGPycU13YPMsWYvouUZd36Z/RmI13rR5pSst/VvFRYT70+WbDi
-	 9yapcERdGiqNQ==
-Received: from albert.ini-tech.com (ns542098.ip-144-217-255.net
- [144.217.255.55])
- by lists.lttng.org (Postfix) with ESMTPS id 4JbBb53rfdzFg7
- for <lttng-dev@lists.lttng.org>; Fri, 14 Jan 2022 14:44:49 -0500 (EST)
-Received: from smtp.ev0ke.net (unknown [10.2.3.24])
- by albert.ini-tech.com (Postfix) with ESMTP id 43FF1CF90;
- Fri, 14 Jan 2022 19:35:18 +0000 (UTC)
-Date: Fri, 14 Jan 2022 14:34:58 -0500
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Jeremie Galarneau <jgalar@efficios.com>,
+	s=default; t=1642189752;
+	bh=odrxM9PnnPhi6npUCbfWgakbrLZIhavNQTqlFwcCJq0=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=FG2bEMB85ipJqr6EFypCZ4SCi230LsPUqtmDFVYyUGZAIUL+3FxHUMClWV9u5jd85
+	 3FTL2LXJNGnHYEAl++WaqvZGxbV6SZBxWT6PEUb3Lrmjdo/7RsIQ3vOpRxOVuG3Jkv
+	 qhx0kzr10rVKD/mG1cvyBfOz4ISi6bmYVIWza7mIglysGA49bm1XH2m33aGzLJQo3s
+	 yt9/vN+i6am4itCSFQuxCELXHgiWYbkeHa0REqkqQj3Fgq1VvlFMxBSdnfhFL1UZuu
+	 tonknmNElpJhwY9aOQZB8u02prnqx74IApE7E1E4gi85WKAAORsF5YOrH3Uktn+1xB
+	 rrDYmZ6fjGA3w==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4JbBh63fdWzFRx
+ for <lttng-dev@lists.lttng.org>; Fri, 14 Jan 2022 14:49:10 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 496582D5368;
+ Fri, 14 Jan 2022 14:49:04 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id dR4ilVvnnLVl; Fri, 14 Jan 2022 14:49:04 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 0CB142D5367;
+ Fri, 14 Jan 2022 14:49:04 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 0CB142D5367
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id xVPzSH2hPYEG; Fri, 14 Jan 2022 14:49:04 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 007692D5890;
+ Fri, 14 Jan 2022 14:49:03 -0500 (EST)
+Date: Fri, 14 Jan 2022 14:49:03 -0500 (EST)
+To: Julien Desfossez <ju@klipix.org>
+Cc: Jeremie Galarneau <jgalar@efficios.com>, 
  lttng-dev <lttng-dev@lists.lttng.org>
-Message-ID: <20220114193458.xkbuemzdpdxnk5sz@raoul>
-References: <1116808546.33968.1642188662159.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1116808546.33968.1642188662159.JavaMail.zimbra@efficios.com>
-Subject: Re: [lttng-dev] Transfer of LTTng copyright ownership: David Goulet
+Message-ID: <212959050.34078.1642189743892.JavaMail.zimbra@efficios.com>
+MIME-Version: 1.0
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
+Thread-Index: Fvk9Aa6bRoTmShuS1YfrvlnjCBsfqw==
+Thread-Topic: Transfer of LTTng copyright ownership: Julien Desfossez
+Subject: [lttng-dev] Transfer of LTTng copyright ownership: Julien Desfossez
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.35
 Precedence: list
@@ -47,75 +62,33 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: David Goulet via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: David Goulet <dgoulet@ev0ke.net>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6337292496166181503=="
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
+Hi Julien,
 
---===============6337292496166181503==
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="b2jnfu56pmhmq6km"
-Content-Disposition: inline
+In order to facilitate maintenance of the LTTng project, would you agree to
+transfer your copyright ownership for code authored outside of your employment
+at EfficiOS to EfficiOS Inc. ?
 
+This particularly affects the lttng-tools, lttng-ust and lttng-modules files
+with copyright:
 
---b2jnfu56pmhmq6km
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Copyright (C) 201N Julien Desfossez <julien.desfossez@polymtl.ca>
 
-On 14 Jan (14:31:02), Mathieu Desnoyers wrote:
-> Hi David,
->=20
-> In order to facilitate maintenance of the LTTng project, would you agree =
-to
-> transfer your copyright ownership for code authored outside of your emplo=
-yment
-> at EfficiOS to EfficiOS Inc. ?
->=20
-> This particularly affects the lttng-tools and lttng-ust files with copyri=
-ght:
->=20
-> Copyright (C) 201N David Goulet <david.goulet@polymtl.ca>
+Thanks for all your contributions to LTTng !
 
-No problem.
+Mathieu
 
-I agree and this email is GPG signed :).
-
-Cheers!
-David
-
---=20
-xtN36bqNuwFHhNp1j45nwcCwE5HeLkdFZT9naRvLgG0=3D
-
---b2jnfu56pmhmq6km
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEt0QX7d8irJ+ekPSRQuhqKhH0jTYFAmHh0F8ACgkQQuhqKhH0
-jTaZ3wf/fsp1OUageP8LC8nQGCYIknL8wON5k1eR+enZqKQxp0kxjg4SCijS609l
-SRU5q9zYn9oJEo81L2ueiHrnZwCyJ8CUHEbjbX4WOFByDFz85enaPjJLVvkcInQF
-oeVTWtA38LId/z9+CbKfxQaBlaH+AWXAIKg/70WWQw2OBS82T3RqvEEFnK1dJYEA
-fW0QQ7ys/nbBBM3M/RDLzgIjPY2kZ4syMHAkjvQnxcMbQsANBJNR25ycvfnIKk0V
-5IRuGkqZQjzVrO1cJcWVu8KxoyioFJKooWJukqjPPj/7nCqzJFA0vs7XIFVPbdl1
-eNqdwCF7bNDZfFJQY3c31/QnAAbHiA==
-=Unug
------END PGP SIGNATURE-----
-
---b2jnfu56pmhmq6km--
-
---===============6337292496166181503==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============6337292496166181503==--
