@@ -4,58 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81DDBC433EF
-	for <lttng-dev@archiver.kernel.org>; Thu, 20 Jan 2022 15:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40F8CC433EF
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 Jan 2022 15:43:05 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4JfmvS1Wq4zKmb;
-	Thu, 20 Jan 2022 10:41:24 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4JfmxN3J3KzKpC;
+	Thu, 20 Jan 2022 10:43:04 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1642693284;
-	bh=8GuzdUXPCHNzme0ijMSMdk/vZjmv5CDlsJ3wy349adc=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=YqfGXFKPgz6xV/1AXXB0RTY10Nc5HasF2w41FFgNYZCJZiQiTBEpcGGLaazY2H3Sz
-	 KmKNHQ/NRhPxVbhq3P5RvmzTlMtVm9S5ecDJhvUU8c+KTwD8Jox50J9Tw6DW12K9ET
-	 7v0xMX4otijDf4Byvjrmb1pRHJ33DgdQxOgfVMnQrl5VFiA3Rkfi71YTvKz9LrROiq
-	 yzLb01ZSd6lUeWBH2iMLOwY0QMPCByjWUlEuQN4ngPxkue5bxedByd7k5/B9L2FucE
-	 G6DbFVAubHobVHtn80lHQMhO/Ktmyy7NUg5Wkar6mtNRaOQH9z6SoqfI/V9i4aWwOy
-	 azT+HcFQzx0Uw==
+	s=default; t=1642693384;
+	bh=Sp1ho1JnhbvRaXhgzCt3mvX9n+7/VCCh1MGzSAAF1bI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=FOEaWBi9mrxs7GHjghqOUU2VoEEV00+gnCwQ/dh8GrnAuBSTLgzL1DO3IBwX6CRVQ
+	 oF183V5cmgdLo6DptVo1xBo7gz08HHLLg3YOuJSzwXRShW5skQ5QmUDz8cYgJrZVFi
+	 uAoQvoUmafbLfYjWu2+BGk7/w04avjL1cvoEdk1VAMRlKz8T281r8HI8V4JhFLb2BF
+	 5PZSllxybuCKb6hBlnpcltiJZ8TbKdYOYmxuHSHBwl5QSnkITkbG9bPlB/eBlb1ccf
+	 djXDkiWYrcFbhL7sOvPiHbyirQB4sFq7MBRtxS4XP68FuKKgIlCt84Oodh2NpR7Inu
+	 yD8ZPyxNnc25g==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4JfmvR2tRLzKk0
- for <lttng-dev@lists.lttng.org>; Thu, 20 Jan 2022 10:41:23 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 4JfmxM4dyNzKVJ
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Jan 2022 10:43:03 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C2CC43233BC;
- Thu, 20 Jan 2022 10:41:22 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 68C82322F53;
+ Thu, 20 Jan 2022 10:43:03 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id PJIsGSEhgpzs; Thu, 20 Jan 2022 10:41:22 -0500 (EST)
+ with ESMTP id 93H9P7td6vip; Thu, 20 Jan 2022 10:43:03 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 711E93233BB;
- Thu, 20 Jan 2022 10:41:22 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 711E93233BB
+ by mail.efficios.com (Postfix) with ESMTP id 0AC123233C0;
+ Thu, 20 Jan 2022 10:43:03 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 0AC123233C0
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id 78Uee0g_MmOa; Thu, 20 Jan 2022 10:41:22 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 5CFEE3233B9;
- Thu, 20 Jan 2022 10:41:22 -0500 (EST)
-Date: Thu, 20 Jan 2022 10:41:22 -0500 (EST)
-To: olivier moussavoucotte <olivier.moussavoucotte@mail.mcgill.ca>
-Cc: Jeremie Galarneau <jgalar@efficios.com>, 
- Jonathan Rajotte-Julien <joraj@efficios.com>, 
- lttng-dev <lttng-dev@lists.lttng.org>
-Message-ID: <252180467.62240.1642693282241.JavaMail.zimbra@efficios.com>
-In-Reply-To: <YQXPR01MB2712147C9653E6026971BAACAE5A9@YQXPR01MB2712.CANPRD01.PROD.OUTLOOK.COM>
-References: <1338660677.61818.1642692030254.JavaMail.zimbra@efficios.com>
- <YQXPR01MB2712147C9653E6026971BAACAE5A9@YQXPR01MB2712.CANPRD01.PROD.OUTLOOK.COM>
+ with ESMTP id SjI54qZ6vs1i; Thu, 20 Jan 2022 10:43:03 -0500 (EST)
+Received: from thinkos.etherlink (192-222-180-24.qc.cable.ebox.net
+ [192.222.180.24])
+ by mail.efficios.com (Postfix) with ESMTPSA id AD3B1323423;
+ Thu, 20 Jan 2022 10:43:02 -0500 (EST)
+To: jgalar@efficios.com
+Date: Thu, 20 Jan 2022 10:42:50 -0500
+Message-Id: <20220120154250.21412-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
-Thread-Topic: Transfer of LTTng copyright ownership: Olivier Cotte
-Thread-Index: MdjTM5J+pJqA6C4FQZzeZ6aa9M8Czv51v1BfZwoNdWw=
-Subject: Re: [lttng-dev] Transfer of LTTng copyright ownership: Olivier Cotte
+Subject: [lttng-dev] [PATCH lttng-tools] Copyright ownership transfer
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.35
 Precedence: list
@@ -69,126 +60,82 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
 Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: multipart/mixed; boundary="===============4753517551411853375=="
+Cc: Jonathan Rajotte-Julien <jonathan.r.julien@gmail.com>,
+ lttng-dev@lists.lttng.org,
+ Olivier Moussavoucotte <olivier.moussavoucotte@mail.mcgill.ca>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============4753517551411853375==
-Content-Type: multipart/alternative; 
-	boundary="=_76b8cf04-e583-4367-93f3-da88b5a1dfa6"
-
---=_76b8cf04-e583-4367-93f3-da88b5a1dfa6
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Jan 20, 2022, at 10:36 AM, olivier moussavoucotte <olivier.moussavoucotte@mail.mcgill.ca> wrote: 
-
-> Hi everyone,
-
-> I see no inconvienecne into transfering the license to EfficiOS Inc.
-
-Perfect, thank you! The last step will be to reply to the upcoming [PATCH] email 
-with your Signed-off-by: Name <email> tag. 
-
-Mathieu 
-
-> Wish you all best of luck with this work,
-
-> Best,
-> Olivier
-
-> From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Sent: January 20, 2022 11:20 AM
-> To: Olivier Moussavou Cotte <olivier.moussavoucotte@mail.mcgill.ca>
-> Cc: Jeremie Galarneau <jgalar@efficios.com>; Jonathan Rajotte-Julien
-> <joraj@efficios.com>; lttng-dev <lttng-dev@lists.lttng.org>
-> Subject: Transfer of LTTng copyright ownership: Olivier Cotte
-> Hi Olivier,
-
-> In order to facilitate maintenance of the LTTng project, would you agree to
-> transfer your copyright ownership for LTTng code co-authored with Jonathan
-> Rajotte at Polytechnique to EfficiOS Inc. ?
-
-> The copyright in question is for the files mi-lttng.cpp, mi-lttng.h and
-> mi-lttng-4.1.xsd in the lttng-tools project:
-
-> Copyright (C) 2014 Olivier Cotte <olivier.cotte@polymtl.ca>
-
-> Thanks,
-
-> Mathieu
-
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> [ http://www.efficios.com/ | http://www.efficios.com ]
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_76b8cf04-e583-4367-93f3-da88b5a1dfa6
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
-<html><body><div style="font-family: arial, helvetica, sans-serif; font-size: 12pt; color: #000000"><div><br></div><div><br></div><div><span id="zwchr" data-marker="__DIVIDER__">----- On Jan 20, 2022, at 10:36 AM, olivier moussavoucotte &lt;olivier.moussavoucotte@mail.mcgill.ca&gt; wrote:<br></span><style style="display:none">/*<![CDATA[*/P {
-	margin-top: 0;
-	margin-bottom: 0;
-}
-/*]]>*/</style></div><div data-marker="__QUOTED_TEXT__"><blockquote style="border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;">
-<div style="font-family:'calibri' , 'arial' , 'helvetica' , sans-serif;font-size:12pt;color:rgb( 0 , 0 , 0 )">
-Hi everyone,</div>
-<div style="font-family:'calibri' , 'arial' , 'helvetica' , sans-serif;font-size:12pt;color:rgb( 0 , 0 , 0 )">
-<br>
-</div>
-<div style="font-family:'calibri' , 'arial' , 'helvetica' , sans-serif;font-size:12pt;color:rgb( 0 , 0 , 0 )">
-I see no inconvienecne into transfering the license&nbsp;<span style="font-size:12pt;background-color:rgba( 0 , 0 , 0 , 0 );display:inline !important">to EfficiOS Inc.</span></div></blockquote><div>Perfect, thank you! The last step will be to reply to the upcoming [PATCH] email<br></div><div>with your Signed-off-by: Name &lt;email&gt; tag.<br data-mce-bogus="1"></div><div><br data-mce-bogus="1"></div><div>Mathieu<br data-mce-bogus="1"></div><div><br data-mce-bogus="1"></div><blockquote style="border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;">
-<div style="font-family:'calibri' , 'arial' , 'helvetica' , sans-serif;font-size:12pt;color:rgb( 0 , 0 , 0 )">
-<span style="font-size:12pt;background-color:rgba( 0 , 0 , 0 , 0 );display:inline !important"><br></span></div>
-<div style="font-family:'calibri' , 'arial' , 'helvetica' , sans-serif;font-size:12pt;color:rgb( 0 , 0 , 0 )">
-<span style="font-size:12pt;background-color:rgba( 0 , 0 , 0 , 0 );display:inline !important">Wish you all best of luck with this work,</span></div>
-<div style="font-family:'calibri' , 'arial' , 'helvetica' , sans-serif;font-size:12pt;color:rgb( 0 , 0 , 0 )">
-<span style="font-size:12pt;background-color:rgba( 0 , 0 , 0 , 0 );display:inline !important"><br></span></div>
-<div style="font-family:'calibri' , 'arial' , 'helvetica' , sans-serif;font-size:12pt;color:rgb( 0 , 0 , 0 )">
-<span style="font-size:12pt;background-color:rgba( 0 , 0 , 0 , 0 );display:inline !important">Best,
-<div>Olivier</div></span></div>
-
-<hr style="display:inline-block;width:98%">
-<div id="divRplyFwdMsg" dir="ltr"><font style="font-size:11pt" face="Calibri, sans-serif" color="#000000"><b>From:</b> Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;<br><b>Sent:</b> January 20, 2022 11:20 AM<br><b>To:</b> Olivier Moussavou Cotte &lt;olivier.moussavoucotte@mail.mcgill.ca&gt;<br><b>Cc:</b> Jeremie Galarneau &lt;jgalar@efficios.com&gt;; Jonathan Rajotte-Julien &lt;joraj@efficios.com&gt;; lttng-dev &lt;lttng-dev@lists.lttng.org&gt;<br><b>Subject:</b> Transfer of LTTng copyright ownership: Olivier Cotte</font>
-<div>&nbsp;</div>
-</div>
-<div class="BodyFragment"><font size="2"><span style="font-size:11pt"><div class="PlainText">Hi Olivier,<br>
-<br>
-In order to facilitate maintenance of the LTTng project, would you agree to<br>
-transfer your copyright ownership for LTTng code co-authored with Jonathan<br>
-Rajotte at Polytechnique to EfficiOS Inc. ?<br>
-<br>
-The copyright in question is for the files mi-lttng.cpp, mi-lttng.h and<br>
-mi-lttng-4.1.xsd in the lttng-tools project:<br>
-<br>
-Copyright (C) 2014 Olivier Cotte &lt;olivier.cotte@polymtl.ca&gt;<br>
-<br>
-Thanks,<br>
-<br>
-Mathieu<br>
-<br>
--- <br>
-Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-<a href="http://www.efficios.com" target="_blank" rel="nofollow noopener noreferrer">http://www.efficios.com</a><br>
-</div></span></font></div><br></blockquote></div><div><br></div><div data-marker="__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
---=_76b8cf04-e583-4367-93f3-da88b5a1dfa6--
-
---===============4753517551411853375==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============4753517551411853375==--
+QXBwbHkgY29weXJpZ2h0IG93bmVyc2hpcCB0cmFuc2ZlciBmcm9tIEpvbmF0aGFuIFJham90dGUt
+SnVsaWVuIGFuZApPbGl2aWVyIENvdHRlIHRvIEVmZmljaU9TIEluYy4KCkxpbms6IGh0dHBzOi8v
+bGlzdHMubHR0bmcub3JnL3BpcGVybWFpbC9sdHRuZy1kZXYvMjAyMi1KYW51YXJ5LzAzMDExMS5o
+dG1sCkxpbms6IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL3BpcGVybWFpbC9sdHRuZy1kZXYvMjAy
+Mi1KYW51YXJ5LzAzMDExMy5odG1sCgpTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8
+bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgpDYzogT2xpdmllciBNb3Vzc2F2b3Vjb3R0
+ZSA8b2xpdmllci5tb3Vzc2F2b3Vjb3R0ZUBtYWlsLm1jZ2lsbC5jYT4KQ2M6IEpvbmF0aGFuIFJh
+am90dGUtSnVsaWVuIDxqb25hdGhhbi5yLmp1bGllbkBnbWFpbC5jb20+CkNoYW5nZS1JZDogSTBj
+MjgwMGVjMTdmNWQ0MzVjOGExOGYyZGFlMDk2ODA5YjgwMzdiNWQKLS0tCiBzcmMvY29tbW9uL21p
+LWx0dG5nLTQuMS54c2QgICAgICAgICAgICB8IDMgKy0tCiBzcmMvY29tbW9uL21pLWx0dG5nLmNw
+cCAgICAgICAgICAgICAgICB8IDMgKy0tCiBzcmMvY29tbW9uL21pLWx0dG5nLmggICAgICAgICAg
+ICAgICAgICB8IDMgKy0tCiB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL21pL3Rlc3RfbWkgICAgICB8
+IDIgKy0KIHRlc3RzL3V0aWxzL3htbC11dGlscy9leHRyYWN0X3htbC5jcHAgIHwgMiArLQogdGVz
+dHMvdXRpbHMveG1sLXV0aWxzL3ByZXR0eV94bWwuYyAgICAgfCAyICstCiB0ZXN0cy91dGlscy94
+bWwtdXRpbHMvdmFsaWRhdGVfeG1sLmNwcCB8IDIgKy0KIDcgZmlsZXMgY2hhbmdlZCwgNyBpbnNl
+cnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zcmMvY29tbW9uL21pLWx0
+dG5nLTQuMS54c2QgYi9zcmMvY29tbW9uL21pLWx0dG5nLTQuMS54c2QKaW5kZXggNzQ5M2U0ZjRm
+Li43ZDY4YjJlOGUgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24vbWktbHR0bmctNC4xLnhzZAorKysg
+Yi9zcmMvY29tbW9uL21pLWx0dG5nLTQuMS54c2QKQEAgLTEsNyArMSw2IEBACiA8P3htbCB2ZXJz
+aW9uPSIxLjAiIGVuY29kaW5nPSJVVEYtOCI/PgogPCEtLQotQ29weXJpZ2h0IChDKSAyMDE0IE9s
+aXZlciBDb3R0ZSA8b2xpdmllci5jb3R0ZUBwb2x5bXRsLmNhPgotQ29weXJpZ2h0IChDKSAyMDE0
+IEpvbmF0aGFuIFJham90dGUgPGpvbmF0aGFuLnIuanVsaWVuQGdtYWlsLmNvbT4KK0NvcHlyaWdo
+dCAoQykgMjAxNCBFZmZpY2lPUyBJbmMuCiBDb3B5cmlnaHQgKEMpIDIwMTYgSsOpcsOpbWllIEdh
+bGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgogCiBTUERYLUxpY2Vuc2Ut
+SWRlbnRpZmllcjogTUlUCmRpZmYgLS1naXQgYS9zcmMvY29tbW9uL21pLWx0dG5nLmNwcCBiL3Ny
+Yy9jb21tb24vbWktbHR0bmcuY3BwCmluZGV4IGQ0MWEzY2FkYy4uNzg3ODU5MTZmIDEwMDY0NAot
+LS0gYS9zcmMvY29tbW9uL21pLWx0dG5nLmNwcAorKysgYi9zcmMvY29tbW9uL21pLWx0dG5nLmNw
+cApAQCAtMSw2ICsxLDUgQEAKIC8qCi0gKiBDb3B5cmlnaHQgKEMpIDIwMTQgSm9uYXRoYW4gUmFq
+b3R0ZSA8am9uYXRoYW4uci5qdWxpZW5AZ21haWwuY29tPgotICogQ29weXJpZ2h0IChDKSAyMDE0
+IE9saXZpZXIgQ290dGUgPG9saXZpZXIuY290dGVAcG9seW10bC5jYT4KKyAqIENvcHlyaWdodCAo
+QykgMjAxNCBFZmZpY2lPUyBJbmMuCiAgKiBDb3B5cmlnaHQgKEMpIDIwMTYgSsOpcsOpbWllIEdh
+bGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgogICoKICAqIFNQRFgtTGlj
+ZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkKZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vbWkt
+bHR0bmcuaCBiL3NyYy9jb21tb24vbWktbHR0bmcuaAppbmRleCBhOWM1OWE2MmEuLjY5ODk5YTUz
+MiAxMDA2NDQKLS0tIGEvc3JjL2NvbW1vbi9taS1sdHRuZy5oCisrKyBiL3NyYy9jb21tb24vbWkt
+bHR0bmcuaApAQCAtMSw2ICsxLDUgQEAKIC8qCi0gKiBDb3B5cmlnaHQgKEMpIDIwMTQgSm9uYXRo
+YW4gUmFqb3R0ZSA8am9uYXRoYW4uci5qdWxpZW5AZ21haWwuY29tPgotICogQ29weXJpZ2h0IChD
+KSAyMDE0IE9saXZpZXIgQ290dGUgPG9saXZpZXIuY290dGVAcG9seW10bC5jYT4KKyAqIENvcHly
+aWdodCAoQykgMjAxNCBFZmZpY2lPUyBJbmMuCiAgKiBDb3B5cmlnaHQgKEMpIDIwMTYgSsOpcsOp
+bWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgogICoKICAqIFNQ
+RFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkKZGlmZiAtLWdpdCBhL3Rlc3RzL3Jl
+Z3Jlc3Npb24vdG9vbHMvbWkvdGVzdF9taSBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvbWkvdGVz
+dF9taQppbmRleCBmNjczMTNlZTYuLmJkMGM1OWI4NSAxMDA3NTUKLS0tIGEvdGVzdHMvcmVncmVz
+c2lvbi90b29scy9taS90ZXN0X21pCisrKyBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvbWkvdGVz
+dF9taQpAQCAtMSw2ICsxLDYgQEAKICMhL2Jpbi9iYXNoCiAjCi0jIENvcHlyaWdodCAoQykgMjAx
+NCBKb25hdGhhbiBSYWpvdHRlIDxqb25hdGhhbi5yLmp1bGllbkBnbWFpbC5jb20+CisjIENvcHly
+aWdodCAoQykgMjAxNCBFZmZpY2lPUyBJbmMuCiAjCiAjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVy
+OiBMR1BMLTIuMS1vbmx5CiAKZGlmZiAtLWdpdCBhL3Rlc3RzL3V0aWxzL3htbC11dGlscy9leHRy
+YWN0X3htbC5jcHAgYi90ZXN0cy91dGlscy94bWwtdXRpbHMvZXh0cmFjdF94bWwuY3BwCmluZGV4
+IDAxMWYzOGY0YS4uYmM1ZmMzZTUxIDEwMDY0NAotLS0gYS90ZXN0cy91dGlscy94bWwtdXRpbHMv
+ZXh0cmFjdF94bWwuY3BwCisrKyBiL3Rlc3RzL3V0aWxzL3htbC11dGlscy9leHRyYWN0X3htbC5j
+cHAKQEAgLTEsNSArMSw1IEBACiAvKgotICogQ29weXJpZ2h0IChDKSAyMDE0IEpvbmF0aGFuIFJh
+am90dGUgPGpvbmF0aGFuLnIuanVsaWVuQGdtYWlsLmNvbT4KKyAqIENvcHlyaWdodCAoQykgMjAx
+NCBFZmZpY2lPUyBJbmMuCiAgKgogICogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAt
+b25seQogICoKZGlmZiAtLWdpdCBhL3Rlc3RzL3V0aWxzL3htbC11dGlscy9wcmV0dHlfeG1sLmMg
+Yi90ZXN0cy91dGlscy94bWwtdXRpbHMvcHJldHR5X3htbC5jCmluZGV4IGNjYzFiMjNmMy4uYmU2
+ZTAyOTRjIDEwMDY0NAotLS0gYS90ZXN0cy91dGlscy94bWwtdXRpbHMvcHJldHR5X3htbC5jCisr
+KyBiL3Rlc3RzL3V0aWxzL3htbC11dGlscy9wcmV0dHlfeG1sLmMKQEAgLTEsNSArMSw1IEBACiAv
+KgotICogQ29weXJpZ2h0IChDKSAyMDIxIEpvbmF0aGFuIFJham90dGUgPGpvbmF0aGFuLnIuanVs
+aWVuQGdtYWlsLmNvbT4KKyAqIENvcHlyaWdodCAoQykgMjAyMSBFZmZpY2lPUyBJbmMuCiAgKgog
+ICogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb25seQogICoKZGlmZiAtLWdpdCBh
+L3Rlc3RzL3V0aWxzL3htbC11dGlscy92YWxpZGF0ZV94bWwuY3BwIGIvdGVzdHMvdXRpbHMveG1s
+LXV0aWxzL3ZhbGlkYXRlX3htbC5jcHAKaW5kZXggNTYwMDJlZDdjLi5mYThiMmNjOWQgMTAwNjQ0
+Ci0tLSBhL3Rlc3RzL3V0aWxzL3htbC11dGlscy92YWxpZGF0ZV94bWwuY3BwCisrKyBiL3Rlc3Rz
+L3V0aWxzL3htbC11dGlscy92YWxpZGF0ZV94bWwuY3BwCkBAIC0xLDUgKzEsNSBAQAogLyoKLSAq
+IENvcHlyaWdodCAoQykgMjAxNCBKb25hdGhhbiBSYWpvdHRlIDxqb25hdGhhbi5yLmp1bGllbkBn
+bWFpbC5jb20+CisgKiBDb3B5cmlnaHQgKEMpIDIwMTQgRWZmaWNpT1MgSW5jLgogICoKICAqIFNQ
+RFgtTGljZW5zZS1JZGVudGlmaWVyOiBMR1BMLTIuMS1vbmx5CiAgKgotLSAKMi4yMC4xCgpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
