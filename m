@@ -4,57 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8754BC433F5
-	for <lttng-dev@archiver.kernel.org>; Tue, 25 Jan 2022 21:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71F82C433F5
+	for <lttng-dev@archiver.kernel.org>; Thu, 27 Jan 2022 20:35:50 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Jk0XY5sHSzNHP;
-	Tue, 25 Jan 2022 16:36:13 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4JlC5w5dllzQ9t;
+	Thu, 27 Jan 2022 15:35:48 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1643146574;
-	bh=+aUXFVF4IrwlwWt30RQMq1M183RxIuFrCtapJQEkhyo=;
-	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=boPHMU3iNPWmxn1fyG8dE1bTCSNoyUBfOML50iy2eEGgQ29tVw8FuAa/CasFAQ1e5
-	 qfuKbBoF7sfG0GOrWVQLmNzZg8rFW24Gc0BXW2i+Cw1JkRBRjlSLurS0DkWAgBbfEn
-	 AVQtXJxUm97nPSt4HNF32Z64peU0CtHuu5PlObAAZMk/9QUVrFZD5d165wLJSKorSE
-	 hJUJcmZ8bPbBXvgCSzDEk70sniM1OLp9SGdfv3ZQasWxfgNwWfa+ctTtrpm+xAR4Kq
-	 MsvhX4fP9nZsoKoBFgs8ZsUbqoEp0YPV8BmGesJZR787yz7QNpNjTsKKYj51esyzmi
-	 r1zI1+V2Autig==
+	s=default; t=1643315749;
+	bh=ROz/Xw4q1sd/J4zA7HloQFGZYmih0a0hP8l/2Y3P3LI=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=s750z7yDPMmgLJT55MxFPnGz8BAnubYaSJZtB+PZ50g0nGdKWMLSYNUW4kG1waqUj
+	 Dj9crPk1Xd3xIuJOsBZJsvVFcWgysoOaRydu5msZabdNnO7RXECaSdxs5nHCZT/L2j
+	 oaMCaT/c3J/ROvfuQCPtwf5zBJqjd+pBlf8S7rl53v+icVvRTc4KeNykOrIyKJDHw1
+	 dvPkfIlFEYBSupGT48eII3Jbegck3gvU3HcZ8ijsyg9v6EFsYdAhSyzD0sIPKs5bDr
+	 c95xxjrI1cDqRX4b+VRRxEPVXNWraa/LaSUEcSOTOdHVylWH8MkEISQZd/6S6cGPqc
+	 eHaS3Zw2grIEg==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4Jk0XX6PCtzNVZ
- for <lttng-dev@lists.lttng.org>; Tue, 25 Jan 2022 16:36:12 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 4JlC5v0GmszQpd
+ for <lttng-dev@lists.lttng.org>; Thu, 27 Jan 2022 15:35:46 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8E2A93501E6;
- Tue, 25 Jan 2022 16:36:06 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 4DD10378926
+ for <lttng-dev@lists.lttng.org>; Thu, 27 Jan 2022 15:35:40 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id lBsWZscdab1w; Tue, 25 Jan 2022 16:36:02 -0500 (EST)
+ with ESMTP id ZEbCELoJEu9F; Thu, 27 Jan 2022 15:35:39 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8077D3501E4;
- Tue, 25 Jan 2022 16:36:02 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 8077D3501E4
+ by mail.efficios.com (Postfix) with ESMTP id 6FC8D378981;
+ Thu, 27 Jan 2022 15:35:39 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6FC8D378981
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id EPX-IGHcdYa9; Tue, 25 Jan 2022 16:36:02 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 70C783501E3;
- Tue, 25 Jan 2022 16:36:02 -0500 (EST)
-Date: Tue, 25 Jan 2022 16:36:02 -0500 (EST)
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Message-ID: <762143656.71334.1643146562410.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1361211440.68286.1643025545546.JavaMail.zimbra@efficios.com>
-References: <22bf2d37.1dde.17e75a7aeb1.Coremail.zhangwenlong@loongson.cn>
- <945744448.62503.1642694392338.JavaMail.zimbra@efficios.com>
- <bfd9420.3500.17e8b1b5bb5.Coremail.zhangwenlong@loongson.cn>
- <1361211440.68286.1643025545546.JavaMail.zimbra@efficios.com>
+ with ESMTP id FLMgEnkUHnMT; Thu, 27 Jan 2022 15:35:39 -0500 (EST)
+Received: from Mercury (unknown [107.159.88.171])
+ by mail.efficios.com (Postfix) with ESMTPSA id 411A2378980;
+ Thu, 27 Jan 2022 15:35:39 -0500 (EST)
+Date: Thu, 27 Jan 2022 15:35:39 -0500
+To: lttng-dev@lists.lttng.org
+Cc: diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org
+Message-ID: <YfMCG9NUWn+iIXV8@Mercury>
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
-Thread-Topic: Add support for the LOONGARCH architecture
-Thread-Index: pdbSYqQrijeu+Z84cZsr4zcUut9Hu67Haiw1
-Subject: Re: [lttng-dev] Add support for the LOONGARCH architecture
+Content-Disposition: inline
+Subject: [lttng-dev] =?iso-8859-1?q?=5BRELEASE=5D_LTTng-tools_2=2E13=2E4_?=
+ =?iso-8859-1?q?-_Nordicit=E9?=
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.35
 Precedence: list
@@ -66,113 +59,65 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: =?utf-8?q?J=C3=A9r=C3=A9mie_Galarneau_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau
+ <jeremie.galarneau@efficios.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGksCgpJIG5vdGljZSB0aGF0IHRoZSBsb29uZ2FyY2ggZW5hYmxlbWVudCBwYXRjaCBkZWZpbmVz
-OgoKI2RlZmluZSBVQVRPTUlDX0hBU19BVE9NSUNfQllURQojZGVmaW5lIFVBVE9NSUNfSEFTX0FU
-T01JQ19TSE9SVAoKSSB0cmllZCBsb29raW5nIGludG8KCiAgaHR0cHM6Ly9sb29uZ3Nvbi5naXRo
-dWIuaW8vTG9vbmdBcmNoLURvY3VtZW50YXRpb24vTG9vbmdBcmNoLVZvbDEtRU4uaHRtbCNhdG9t
-aWMtbWVtb3J5LWFjY2Vzcy1pbnN0cnVjdGlvbnMKCnRvIGZpZ3VyZSBvdXQgd2hpY2ggYXRvbWlj
-IGluc3RydWN0aW9ucyBvciBMTC9TQyB3b3VsZCBiZSB1c2VkIHRvIHRhcmdldCAxIGFuZCAyIGJ5
-dGUKdmFyaWFibGVzIGF0b21pY2FsbHksIGJ1dCBjb3VsZCBvbmx5IGZpbmQgaW5zdHJ1Y3Rpb25z
-IGZvciB3b3JkIGFuZCBkb3VibGUtd29yZDoKCjIuMi43LjEuIEFNe1NXQVAvQUREL0FORC9PUi9Y
-T1IvTUFYL01JTn1bREJdLntXL0R9LCBBTXtNQVgvTUlOfVtfREJdLntXVS9EVX0KMi4yLjcuMi4g
-TEwue1cvRH0sIFNDLntXL0R9CgpXaGF0IGFtIEkgbWlzc2luZyBoZXJlID8KClRoYW5rcywKCk1h
-dGhpZXUKCi0tLS0tIE9uIEphbiAyNCwgMjAyMiwgYXQgNjo1OSBBTSwgbHR0bmctZGV2IGx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcgd3JvdGU6Cgo+IFVuZm9ydHVuYXRlbHksIHRoZSBxZW11IGFw
-cHJvYWNoIGRvZXMgbm90IGhlbHAgbXVjaCBpbiB0ZXN0aW5nIHRoYXQgdGhlCj4gbGlidXJjdSBp
-bXBsZW1lbnRhdGlvbiB3b3JrcyBjb3JyZWN0bHkgb24gYSBnaXZlbiBhcmNoaXRlY3R1cmUncwo+
-IHNwZWNpZmljIG1lbW9yeSBtb2RlbC4KPiAKPiBsaWJ1cmN1IHJlbGllcyBoZWF2aWx5IG9uIG1l
-bW9yeSBvcmRlcmluZywgYW5kIGxpYnVyY3UtY2RzIHJlbGllcyBvbgo+IGJvdGggbWVtb3J5IG9y
-ZGVyaW5nIGFuZCBhdG9taWMgb3BlcmF0aW9ucyBhbmQgdGhlIG1lbW9yeSBvcmRlcmluZwo+IGd1
-YXJhbnRlZXMgYXNzb2NpYXRlZCB3aXRoIHRoZW0uCj4gCj4gU28gaWYgdGhlcmUgaXMgYW55IHdh
-eSB3ZSBjb3VsZCBnZXQgb3VyIGhhbmRzIG9uIHJlYWwgaGFyZHdhcmUsIGl0Cj4gd291bGQgYmUg
-dmVyeSBtdWNoIHJlbGV2YW50IGZvciBsaWJ1cmN1IHRlc3RpbmcuCj4gCj4gVGhhbmtzLAo+IAo+
-IE1hdGhpZXUKPiAKPiAtLS0tLSBPbiBKYW4gMjQsIDIwMjIsIGF0IDM6MDIgQU0sIOW8oOaWh+m+
-mSB6aGFuZ3dlbmxvbmdAbG9vbmdzb24uY24gd3JvdGU6Cj4gCj4+IEknbSBnbGFkIHRoZSBuZXcg
-YXJjaGl0ZWN0dXJlIGNhbiBiZSBhY2NlcHRlZO+8jEF0IHByZXNlbnQsIG91ciBtYWNoaW5lcyBh
-cmUgaW4KPj4gc2hvcnQgc3VwcGx5LkkgbmVlZCB0byBnbyB0aHJvdWdoIGEgdmVyeSBjb21wbGlj
-YXRlZCBwcm9jZXNzIHRvIHByb3ZpZGUKPj4gbWFjaGluZXMsIENhbiBxZW11IGVtdWxhdG9yIHdv
-cms/Cj4+IAo+PiAKPj4gJmd0OyAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4+ICZndDsg5Y+R5Lu2
-5Lq6OiAiTWF0aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+
-Cj4+ICZndDsg5Y+R6YCB5pe26Ze0OiAyMDIyLTAxLTIwIDIzOjU5OjUyICjmmJ/mnJ/lm5spCj4+
-ICZndDsg5pS25Lu25Lq6OiAi5byg5paH6b6ZIiA8emhhbmd3ZW5sb25nQGxvb25nc29uLmNuPgo+
-PiAmZ3Q7IOaKhOmAgTogbHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+PiAm
-Z3Q7IOS4u+mimDogUmU6IFtsdHRuZy1kZXZdIEFkZCBzdXBwb3J0IGZvciB0aGUgTE9PTkdBUkNI
-IGFyY2hpdGVjdHVyZQo+PiAmZ3Q7Cj4+ICZndDsgLS0tLS0gT24gSmFuIDE5LCAyMDIyLCBhdCAx
-MTowMyBQTSwgbHR0bmctZGV2IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gd3JvdGU6Cj4+
-ICZndDsKPj4gJmd0OyAmZ3Q7IEhlbGxvLCBJJ20gZXhjaXRlZCB0byBjb250cmlidXRlIHRvIHVz
-ZXJzcGFjZS1yY3UsIEkgYWRkZWQgbG9vbmdhcmNoCj4+ICZndDsgJmd0OyBhcmNoaXRlY3R1cmUg
-Zm9yIHVzZXJzcGFjZS1yY3XvvIggVGhlIHBhdGNoIGZpbGUgaXMKPj4gJmd0OyAmZ3Q7IDAwMDEt
-QWRkLXN1cHBvcnQtZm9yLXRoZS1MT09OR0FSQ0gtYXJjaGl0ZWN0dXJlLnBhdGNoICkKPj4gJmd0
-Owo+PiAmZ3Q7ICZndDsgSSBoYXZlIGNvbXBpbGVkIGFuZCB2ZXJpZmllZCBsb2NhbGx5ICh0aGUg
-YnVpbGQgbG9nIGlzIGJ1aWxkX2xvZy50eHQKPj4gKSxhbmQgdGhlbgo+PiAmZ3Q7ICZndDsgaSBy
-dW5lZCBtYWtlIGNoZWNr77yIIHRoZSBtYWtlIGNoZWNrIGxvZyBpcyBtYWtlX2NoZWNrX2xvZy50
-eHQg77yJ77yMIG1ha2UKPj4gJmd0OyAmZ3Q7IHJlZ3Rlc3TvvIh0aGUgbWFrZSByZWd0ZXN0IGxv
-ZyBpcyBtYWtlX3JlZ3Rlc3RfbG9nLnR4dCDvvIkg77yMIG1ha2UKPj4gc2hvcnRfYmVuY2ggKHRo
-ZQo+PiAmZ3Q7ICZndDsgbWFrZSBzaG9ydF9iZW5jaCBsb2cgaXMgbWFrZV9zaG9ydF9iZW5jaF9s
-b2cudHh0ICksbWFrZSBsb25nX2JlbmNoKHRoZQo+PiBtYWtlCj4+ICZndDsgJmd0OyBsb25nX2Jl
-bmNoIGxvZyBpcyBtYWtlX2xvbmdfYmVuY2hfbG9nLnR4dCApCj4+ICZndDsKPj4gJmd0OyBUaGlz
-IGlzIGdyZWF0LCB0aGFua3MgIQo+PiAmZ3Q7Cj4+ICZndDsgQnkgdGhlIHdheSwgaXMgdGhlcmUg
-YW55IHdheSBFZmZpY2lPUyBjb3VsZCBhZGQgdHdvIGxvb25nYXJjaCB0ZXN0IGJvYXJkcwo+PiBp
-bnRvCj4+ICZndDsgb3VyIHRlc3QgcmFjayBmb3IgYXV0b21hdGVkIENJIHRlc3RpbmcgPyBTZWUg
-aHR0cHM6Ly9jaS5sdHRuZy5vcmcKPj4gJmd0Owo+PiAmZ3Q7IFdlIHR5cGljYWxseSBkZXBsb3kg
-YXQgbGVhc3QgdHdvIGJvYXJkcyBmb3IgZWFjaCBnaXZlbiBhcmNoaXRlY3R1cmUgZm9yCj4+IHJl
-ZHVuZGFuY3kKPj4gJmd0OyBhbmQgYXZhaWxhYmlsaXR5IGZvciBib3RoIENJIGFuZCBkZXZlbG9w
-bWVudCB1c2UuCj4+ICZndDsKPj4gJmd0OyBUaGlzIHdvdWxkIGhlbHAgZW5zdXJpbmcgd2UgY2F0
-Y2ggbGlidXJjdSByZWdyZXNzaW9ucyBpbiB0aGUgbG9vbmdhcmNoCj4+IGFyY2hpdGVjdHVyZQo+
-PiAmZ3Q7IGluIHRoZSBmdXR1cmUuCj4+ICZndDsKPj4gJmd0OyBUaGFua3MsCj4+ICZndDsKPj4g
-Jmd0OyBNYXRoaWV1Cj4+ICZndDsKPj4gJmd0Owo+PiAmZ3Q7ICZndDsg5pys6YKu5Lu25Y+K5YW2
-6ZmE5Lu25ZCr5pyJ6b6Z6Iqv5Lit56eR55qE5ZWG5Lia56eY5a+G5L+h5oGv77yM5LuF6ZmQ5LqO
-5Y+R6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq5Lq65oiW576k57uE44CC56aB5q2i
-5Lu75L2V5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So77yI5YyF5ous5L2G5LiN6ZmQ5LqO
-5YWo6YOo5oiW6YOoCj4+ICZndDsgJmd0OyDliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5Hv
-vInmnKzpgq7ku7blj4rlhbbpmYTku7bkuK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzp
-gq7ku7bvvIzor7fmgqjnq4vljbPnlLXor53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDp
-maTmnKzpgq7ku7bjgIIKPj4gJmd0OyAmZ3Q7IFRoaXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50
-cyBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBmcm9tCj4+IExvb25nc29uCj4+ICZn
-dDsgJmd0OyBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5kZWQgb25seSBmb3IgdGhlIHBlcnNv
-biBvciBlbnRpdHkgd2hvc2UKPj4gYWRkcmVzcyBpcwo+PiAmZ3Q7ICZndDsgbGlzdGVkIGFib3Zl
-LiBBbnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaGVyZWluIGluIGFueSB3YXkK
-Pj4gJmd0OyAmZ3Q7IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3IgcGFy
-dGlhbCBkaXNjbG9zdXJlLAo+PiByZXByb2R1Y3Rpb24gb3IKPj4gJmd0OyAmZ3Q7IGRpc3NlbWlu
-YXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIgdGhhbiB0aGUgaW50ZW5kZWQgcmVjaXBpZW50KHMpIGlz
-Cj4+IHByb2hpYml0ZWQuCj4+ICZndDsgJmd0OyBJZiB5b3UgcmVjZWl2ZSB0aGlzIGVtYWlsIGlu
-IGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcGhvbmUKPj4gb3IgZW1haWwKPj4g
-Jmd0OyAmZ3Q7IGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuCj4+ICZndDsgJmd0OyBfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiAmZ3Q7ICZndDsgbHR0
-bmctZGV2IG1haWxpbmcgbGlzdAo+PiAmZ3Q7ICZndDsgbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zwo+PiAmZ3Q7ICZndDsgaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgo+PiAmZ3Q7IC0tCj4+ICZndDsgTWF0aGlldSBEZXNub3llcnMKPj4g
-Jmd0OyBFZmZpY2lPUyBJbmMuCj4+ICZndDsgaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KPj4gPC9s
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPjwvemhhbmd3ZW5sb25nQGxvb25nc29uLmNuPjwvbWF0
-aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+PiAKPj4g5pys6YKu5Lu25Y+K5YW26ZmE5Lu2
-5ZCr5pyJ6b6Z6Iqv5Lit56eR55qE5ZWG5Lia56eY5a+G5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R6YCB
-57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq5Lq65oiW576k57uE44CC56aB5q2i5Lu75L2V
-5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So77yI5YyF5ous5L2G5LiN6ZmQ5LqO5YWo6YOo
-5oiW6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi25oiW5pWj5Y+R77yJ5pys6YKu5Lu25Y+K5YW26ZmE
-5Lu25Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ5pS25pys6YKu5Lu277yM6K+35oKo56uL5Y2z
-55S16K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq65bm25Yig6Zmk5pys6YKu5Lu244CCCj4+IFRo
-aXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1h
-dGlvbiBmcm9tIExvb25nc29uCj4+IFRlY2hub2xvZ3kgLCB3aGljaCBpcyBpbnRlbmRlZCBvbmx5
-IGZvciB0aGUgcGVyc29uIG9yIGVudGl0eSB3aG9zZSBhZGRyZXNzIGlzCj4+IGxpc3RlZCBhYm92
-ZS4gQW55IHVzZSBvZiB0aGUgaW5mb3JtYXRpb24gY29udGFpbmVkIGhlcmVpbiBpbiBhbnkgd2F5
-Cj4+IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3IgcGFydGlhbCBkaXNj
-bG9zdXJlLCByZXByb2R1Y3Rpb24gb3IKPj4gZGlzc2VtaW5hdGlvbikgYnkgcGVyc29ucyBvdGhl
-ciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMgcHJvaGliaXRlZC4KPj4gSWYgeW91
-IHJlY2VpdmUgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGJ5
-IHBob25lIG9yIGVtYWlsCj4+IGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuCj4gCj4gLS0KPiBN
-YXRoaWV1IERlc25veWVycwo+IEVmZmljaU9TIEluYy4KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNv
-bQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0
-bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczov
-L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgotLSAK
-TWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
-bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi all,
+
+We have just released the third bug-fix release of LTTng-tools 2.13 - Nordi=
+cit=E9.
+This release addresses a number of issues listed below.
+
+2022-01-26 lttng-tools 2.13.4 (National Peanut Brittle Day)
+    * Build fix: hashtable: hashtable.cpp does not exist
+    * Fix: _lttng_variant_statedump should expect lttng_ust_ctl_atype_varia=
+nt_nestable
+    * Fix context mismatch across UST version due to legacy array context f=
+ield
+    * Relicence all source and header files included in LGPL code
+    * Move utils_expand_path and utils_expand_path_keep_symlink to libpath.=
+la
+    * Link lttng executable on libcommon-lgpl.a
+    * Introduce libcommon-lgpl for liblttng-ctl
+    * Rename libcommon.so to libcommon-gpl.so
+    * Copyright ownership transfer
+    * Copyright ownership transfer
+    * Fix: relayd: erroneous rundir permission logging message
+    * Fix: sessiond: rotation thread: fatal error when not finding a session
+    * Fix: relayd: rotation failure for multi-domain session
+    * Fix: lttng-ctl: lttng_list_sessions: initialize out_sessions to NULL =
+when returning 0
+    * Fix: lttng: initialize variable in run_command_string
+    * Fix: consumer-stream: live viewers observe timestamps going backwards
+    * Fix: relayd: ressource leaks on viewer_stream_create error
+    * Fix: relayd: live: erroneous message timestamp observed from live vie=
+wer
+    * Fix: relayd: failure to open chunk files concurrently with session cl=
+ear
+    * Fix: relayd: live: metadata stream reference count < 0 assert
+
+Note that v2.13.3 was tagged nearly simultaneously as this release, but
+unannounced since a bad backport caused the generation of the tarball to fa=
+il.
+The change log above combines the changes relevant to both releases.
+
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
+
+Project website: https://lttng.org
+
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.4.tar.bz2
+
+GPG signature:
+https://lttng.org/files/lttng-tools/lttng-tools-2.13.4.tar.bz2.asc
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
