@@ -4,51 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D37EC433F5
-	for <lttng-dev@archiver.kernel.org>; Thu, 27 Jan 2022 20:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3B49C433FE
+	for <lttng-dev@archiver.kernel.org>; Wed, 16 Feb 2022 17:01:57 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4JlC7z454QzQvY;
-	Thu, 27 Jan 2022 15:37:35 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4JzPPw0qD3zKn;
+	Wed, 16 Feb 2022 12:01:56 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1643315856;
-	bh=De0BpwRHDndKSTnWAzxg7xInbHyOit++kvF1P6bU0EM=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1645030916;
+	bh=KUkTG7YV9lvZ7JpYtiGN+EGcgrIiG7Cl6Qf3J8brAY0=;
+	h=Date:To:CC:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=DiqHPeyCy+b8HJK5K3qMVl/cm7+TtwViyG82JZS0vc2DYeQUq8qAhaNrFgOKl+FBr
-	 YNb5o/nlpT/IuSDm3/Gx6ERUaxbExBydNKoVseitT50fcMYm3nU03dwJ+HfKHdknf8
-	 iOTE9u68j39IKJVuzKzwNmSy94+angndkAxw+nwgSlaNrtBmHE23DCcKB47qi0vzHu
-	 Q3glMp9K8NtR944KAu/3IXvwIYBJCBlxLlXRIMUuTI265aDGG1z9LayJAQMeDeFFcr
-	 1MokW1tw0pJ+x2cvincRQ31ONQ9xz0iqz7eodI5ON/AXPAkkbXFFqqVPPdT0/2alZW
-	 pjeQNfQBxDsdw==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4JlC7y2qJyzQPf
- for <lttng-dev@lists.lttng.org>; Thu, 27 Jan 2022 15:37:34 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id E096137871C
- for <lttng-dev@lists.lttng.org>; Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id PTavphWkYKx1; Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 5F5813787B2;
- Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 5F5813787B2
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id RNPLVCDXop1S; Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-Received: from Mercury (unknown [107.159.88.171])
- by mail.efficios.com (Postfix) with ESMTPSA id 3B88A37889C;
- Thu, 27 Jan 2022 15:37:28 -0500 (EST)
-Date: Thu, 27 Jan 2022 15:37:28 -0500
-To: lttng-dev@lists.lttng.org
-Cc: diamon-discuss@lists.linuxfoundation.org, linux-trace-users@vger.kernel.org
-Message-ID: <YfMCiCbVI/t2zBkX@Mercury>
+	b=pPlEwxY1cJduUJoxZPoc5x07XVB+rwu9W6gdSh5GGv72Nry8IYl+je+uTNYZgyJ0t
+	 XAA4aXlxFGFw/l5GmUjDGZMbNU/BlYzIXAzJEMlFhBFfaia3MmCUeE6K8nWstP4Wtr
+	 fu9Jgz7yHhUHVoMMKpyhLtAAzzYGGyN1mDKZAoqAPquT1FHjvd2BV9ziwrIF7L3OBr
+	 lJa7BWMpfyZXsVuBkTKE4FH03tbJ0hUyfut0aFUaZhG+2tFLKfft2iZvvVEJeicPb9
+	 Sx2dWKqzollhyO3PE/w/YxG7X6X6eEq4HRcQmoLHRH/bBcEyxzs8yOerCYo4i1lU7u
+	 eHv/eZmmHZBaQ==
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Jz9F63rcyz17cg
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Feb 2022 02:53:30 -0500 (EST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+ by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Jz8pF0mj7z91xd
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Feb 2022 15:33:41 +0800 (CST)
+Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Feb 2022 15:35:18 +0800
+Received: from [10.174.179.208] (10.174.179.208) by
+ dggpeml500002.china.huawei.com (7.185.36.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Feb 2022 15:35:18 +0800
+Message-ID: <bb4a9de6-3adb-bec0-1bf1-22dd25a8d5c0@huawei.com>
+Date: Wed, 16 Feb 2022 15:35:11 +0800
 MIME-Version: 1.0
-Content-Disposition: inline
-Subject: [lttng-dev] [RELEASE] LTTng-tools 2.12.8 - (Ta) Meilleure
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+To: <lttng-dev@lists.lttng.org>
+CC: <yaowenbin1@huawei.com>, <wuxu.wu@huawei.com>, "hewenliang (C)"
+ <hewenliang4@huawei.com>
+X-Originating-IP: [10.174.179.208]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
+X-Mailman-Approved-At: Wed, 16 Feb 2022 12:01:54 -0500
+Subject: [lttng-dev] [PATCH] QSBR: Use xor operation to replace add
+ operation when changing rcu_gp.ctr value
 X-BeenThere: lttng-dev@lists.lttng.org
-X-Mailman-Version: 2.1.35
+X-Mailman-Version: 2.1.39
 Precedence: list
 List-Id: LTTng development list <lttng-dev.lists.lttng.org>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>, 
@@ -58,44 +60,38 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?q?J=C3=A9r=C3=A9mie_Galarneau_via_lttng-dev?=
- <lttng-dev@lists.lttng.org>
-Reply-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau
- <jeremie.galarneau@efficios.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: yaowenbin via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: yaowenbin <yaowenbin1@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGkgYWxsLAoKV2UgaGF2ZSBqdXN0IHJlbGVhc2VkIHRoZSBlaWdodGggYnVnLWZpeCByZWxlYXNl
-IG9mIExUVG5nLXRvb2xzIDIuMTLigJQoVGEpCk1laWxsZXVyZS4gVGhpcyByZWxlYXNlIGFkZHJl
-c3NlcyBhIG51bWJlciBvZiBpc3N1ZXMgbGlzdGVkIGJlbG93LgoKMjAyMi0wMS0yNiBsdHRuZy10
-b29scyAyLjEyLjggKE5hdGlvbmFsIFBlYW51dCBCcml0dGxlIERheSkKICAgICogUmVsaWNlbmNl
-IGFsbCBzb3VyY2UgYW5kIGhlYWRlciBmaWxlcyBpbmNsdWRlZCBpbiBMR1BMIGNvZGUKICAgICog
-Rml4OiBzZXNzaW9uZDogdXNlIG9mIG51bGwgc2Vzc2lvbiB3aGVuIHNlc3Npb24gaXMgbm90IGZv
-dW5kCiAgICAqIE1vdmUgdXRpbHNfZXhwYW5kX3BhdGggYW5kIHV0aWxzX2V4cGFuZF9wYXRoX2tl
-ZXBfc3ltbGluayB0byBsaWJwYXRoLmxhCiAgICAqIExpbmsgbHR0bmcgZXhlY3V0YWJsZSBvbiBs
-aWJjb21tb24tbGdwbC5hCiAgICAqIEludHJvZHVjZSBsaWJjb21tb24tbGdwbCBmb3IgbGlibHR0
-bmctY3RsCiAgICAqIFJlbmFtZSBsaWJjb21tb24uc28gdG8gbGliY29tbW9uLWdwbC5zbwogICAg
-KiBDb3B5cmlnaHQgb3duZXJzaGlwIHRyYW5zZmVyCiAgICAqIENvcHlyaWdodCBvd25lcnNoaXAg
-dHJhbnNmZXIKICAgICogRml4OiByZWxheWQ6IGVycm9uZW91cyBydW5kaXIgcGVybWlzc2lvbiBs
-b2dnaW5nIG1lc3NhZ2UKICAgICogRml4OiBzZXNzaW9uZDogcm90YXRpb24gdGhyZWFkOiBmYXRh
-bCBlcnJvciB3aGVuIG5vdCBmaW5kaW5nIGEgc2Vzc2lvbgogICAgKiBGaXg6IHJlbGF5ZDogcm90
-YXRpb24gZmFpbHVyZSBmb3IgbXVsdGktZG9tYWluIHNlc3Npb24KICAgICogRml4OiBsdHRuZy1j
-dGw6IGx0dG5nX2xpc3Rfc2Vzc2lvbnM6IGluaXRpYWxpemUgb3V0X3Nlc3Npb25zIHRvIE5VTEwg
-d2hlbiByZXR1cm5pbmcgMAogICAgKiBGaXg6IGx0dG5nOiBpbml0aWFsaXplIHZhcmlhYmxlIGlu
-IHJ1bl9jb21tYW5kX3N0cmluZwogICAgKiBGaXg6IGNvbnN1bWVyLXN0cmVhbTogbGl2ZSB2aWV3
-ZXJzIG9ic2VydmUgdGltZXN0YW1wcyBnb2luZyBiYWNrd2FyZHMKICAgICogRml4OiByZWxheWQ6
-IHJlc3NvdXJjZSBsZWFrcyBvbiB2aWV3ZXJfc3RyZWFtX2NyZWF0ZSBlcnJvcgogICAgKiBGaXg6
-IHJlbGF5ZDogbGl2ZTogZXJyb25lb3VzIG1lc3NhZ2UgdGltZXN0YW1wIG9ic2VydmVkIGZyb20g
-bGl2ZSB2aWV3ZXIKICAgICogRml4OiByZWxheWQ6IGZhaWx1cmUgdG8gb3BlbiBjaHVuayBmaWxl
-cyBjb25jdXJyZW50bHkgd2l0aCBzZXNzaW9uIGNsZWFyCiAgICAqIEZpeDogcmVsYXlkOiBsaXZl
-OiBtZXRhZGF0YSBzdHJlYW0gcmVmZXJlbmNlIGNvdW50IDwgMCBhc3NlcnQKCkFzIGFsd2F5cywg
-cGxlYXNlIHJlcG9ydCBhbnkgaXNzdWUgeW91IG1heSBlbmNvdW50ZXIgdG8gYnVncy5sdHRuZy5v
-cmcKb3Igb24gdGhpcyBtYWlsaW5nIGxpc3QuCgpQcm9qZWN0IHdlYnNpdGU6IGh0dHBzOi8vbHR0
-bmcub3JnCgpEb3dubG9hZCBsaW5rOgpodHRwczovL2x0dG5nLm9yZy9maWxlcy9sdHRuZy10b29s
-cy9sdHRuZy10b29scy0yLjEyLjgudGFyLmJ6MgoKR1BHIHNpZ25hdHVyZToKaHR0cHM6Ly9sdHRu
-Zy5vcmcvZmlsZXMvbHR0bmctdG9vbHMvbHR0bmctdG9vbHMtMi4xMi44LnRhci5iejIuYXNjCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
-YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
-Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+It is enough to have three values of rcu_gp.ctr, 00 for INACTIVE,
+01 or 11 for ACTIVE. So it is possible to replace add operation
+with xor operation when changing rcu_gp.ctr value.
+
+Signed-off-by: yaowenbin <yaowenbin1@huawei.com>
+---
+ src/urcu-qsbr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/urcu-qsbr.c b/src/urcu-qsbr.c
+index 3709412..46135f9 100644
+--- a/src/urcu-qsbr.c
++++ b/src/urcu-qsbr.c
+@@ -391,7 +391,7 @@ void urcu_qsbr_synchronize_rcu(void)
+ 		goto out;
+
+ 	/* Increment current G.P. */
+-	CMM_STORE_SHARED(urcu_qsbr_gp.ctr, urcu_qsbr_gp.ctr + URCU_QSBR_GP_CTR);
++	CMM_STORE_SHARED(urcu_qsbr_gp.ctr, urcu_qsbr_gp.ctr ^ URCU_QSBR_GP_CTR);
+
+ 	/*
+ 	 * Must commit urcu_qsbr_gp.ctr update to memory before waiting for
+-- 
+2.27.0
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
