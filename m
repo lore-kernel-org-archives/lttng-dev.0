@@ -4,48 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB96C433EF
-	for <lttng-dev@archiver.kernel.org>; Wed, 16 Feb 2022 21:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36D13C433F5
+	for <lttng-dev@archiver.kernel.org>; Wed, 23 Feb 2022 14:44:32 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4JzWBh3c5vzLh;
-	Wed, 16 Feb 2022 16:22:36 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4K3f262PFGz2xT;
+	Wed, 23 Feb 2022 09:44:30 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1645046557;
-	bh=JRQkR7+6II6mqLDw3QukhCLBAZLznXjlo1jDBEEfNpw=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=TadCCpMoae6upcAMx1v8/rtE+oGwQWTfLiNJpfHid6DwfjQiCKTVMeGPuALsUS/pA
-	 3GjHliYSNl/7qZno1aOKT9exK4fBjb++UdByHyK3b2K8QIU+82NPGyCXhO80dCDS42
-	 +bE3nHdUOMYmGFEAkK37Oh8aDIkD4OHRmEunqr2CM9yLJPU3HKRzSxZh9I8iu4VEam
-	 MI71ByjsZTWvU42STmxxMsjPlyVtMx3VToGCacBwt12b+FtFklEcYkGItyByqf8tSr
-	 MfXcu43lIa5yqoYHgLUIsX53uTqx0lfG+3/xSuBdyhbQyANoNH0cHB70CT3IOQTldl
-	 HXdJbP+qn+OIA==
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
- by lists.lttng.org (Postfix) with ESMTPS id 4JzWBg31kTzSH
- for <lttng-dev@lists.lttng.org>; Wed, 16 Feb 2022 16:22:35 -0500 (EST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by ams.source.kernel.org (Postfix) with ESMTPS id B6CBFB81ECF;
- Wed, 16 Feb 2022 21:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EF4C004E1;
- Wed, 16 Feb 2022 21:12:41 +0000 (UTC)
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
- id 2A1215C064D; Wed, 16 Feb 2022 13:12:41 -0800 (PST)
-Date: Wed, 16 Feb 2022 13:12:41 -0800
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: yaowenbin <yaowenbin1@huawei.com>,
- lttng-dev <lttng-dev@lists.lttng.org>, wuxu wu <wuxu.wu@huawei.com>,
- h00486469 <hewenliang4@huawei.com>
-Message-ID: <20220216211241.GO4285@paulmck-ThinkPad-P17-Gen-1>
-References: <bb4a9de6-3adb-bec0-1bf1-22dd25a8d5c0@huawei.com>
- <2033818248.4933.1645044800494.JavaMail.zimbra@efficios.com>
+	s=default; t=1645627471;
+	bh=+TJGr7ZIOzc5iZhbQQM3yBlcAo/E0ZCZEbO6bnwmcd4=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=NCOLE8Y6GbIfUXIppqUYMz5a4Soa/haeIBDFGyiDpe/lLR89DWztvXXYRI96hOm2l
+	 jl14EFcqZakFVRbbk+gkA5+lUfNo2F4jOzJCMJYV1F9hcTIhm0VM45Uz39f29icUx8
+	 toL6l6mJZTckETqNsyuRERIjqZt8dSj1sjUukDGsuqkxcoQrDEuUxESYoaVMZOEPPU
+	 BIX4EpJstvQ5MpKDG7nZAZ5agVDde4o0oj8FHpbzMItfNmU+mm1yNxKnneXpcJGEzd
+	 4WhkFSLPr44YQNJCaYKZZ7ttlWK8Dc4ZuT5UO8CIv+t66b04wd/qdnllwYvwVpRzaV
+	 qIzonTgnbC1qg==
+Received: from out199-27.us.a.mail.aliyun.com (out199-27.us.a.mail.aliyun.com
+ [47.90.199.27])
+ by lists.lttng.org (Postfix) with ESMTPS id 4K3f236rxWz349
+ for <lttng-dev@lists.lttng.org>; Wed, 23 Feb 2022 09:44:27 -0500 (EST)
+X-Alimail-AntiSpam: AC=CONTINUE; BC=0.1927238|-1; CH=green; DM=|CONTINUE|false|;
+ DS=SPAM|spam_education_ad|0.935175-0.00045634-0.0643691; FP=0|0|0|0|0|-1|-1|-1;
+ HT=e01e04400; MF=zhenyu.ren@aliyun.com; NM=1; PH=DW; RN=1; RT=1; SR=0;
+ TI=W4_0.1.10_DEFAULT_2126A838_1645625314036_o7001c212o; 
+Received: from WS-web
+ (zhenyu.ren@aliyun.com[W4_0.1.10_DEFAULT_2126A838_1645625314036_o7001c212o])
+ by e01e07486.eu6 at Wed, 23 Feb 2022 22:38:50 +0800
+Date: Wed, 23 Feb 2022 22:38:50 +0800
+To: "lttng-dev" <lttng-dev@lists.lttng.org>
+Message-ID: <e706d6c8-edea-4f26-a9e2-4a66f067204e.zhenyu.ren@aliyun.com>
+X-Mailer: [Alimail-Mailagent][W4_0.1.10][DEFAULT][Chrome]
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <2033818248.4933.1645044800494.JavaMail.zimbra@efficios.com>
-Subject: Re: [lttng-dev] [PATCH] QSBR: Use xor operation to replace add
- operation when changing rcu_gp.ctr value
+x-aliyun-mail-creator: W4_0.1.10_DEFAULT_M3LTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTRfNikgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzk4LjAuNDc1OC4xMDIgU2FmYXJpLzUzNy4zNg==vN
+Subject: [lttng-dev] =?utf-8?q?shm_leak_in_traced_application=3F?=
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -57,68 +49,126 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "Paul E. McKenney via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: paulmck@kernel.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: "zhenyu.ren via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Content-Type: multipart/mixed; boundary="===============1772579205667905542=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On Wed, Feb 16, 2022 at 03:53:20PM -0500, Mathieu Desnoyers wrote:
-> ----- On Feb 16, 2022, at 2:35 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
-> 
-> > It is enough to have three values of rcu_gp.ctr, 00 for INACTIVE,
-> > 01 or 11 for ACTIVE. So it is possible to replace add operation
-> > with xor operation when changing rcu_gp.ctr value.
-> 
-> What is missing here is a description justifying why this change is useful.
-> 
-> What is inherently better about XOR compared to ADD or even binary-OR ?
-> 
-> If it's about performance, then a benchmark on relevant architectures
-> would be useful. But I suspect that if end users care that much about the
-> performance of urcu_qsbr_synchronize_rcu(), they might be doing something
-> wrong.
+--===============1772579205667905542==
+Content-Type: multipart/alternative;
+  boundary="----=ALIBOUNDARY_85418_78dd9940_621646fa_2223f"
 
-Plus having the full counter can be extremely helpful when debugging.
+------=ALIBOUNDARY_85418_78dd9940_621646fa_2223f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-							Thanx, Paul
+SGksIAogICBUaGVyZSBhcmUgbWFueSBpdGVtcyBzdWNoIGFzICIvZGV2L3NobS91c3Qtc2htLWNv
+bnN1bWVyLTgxMTMyIChkZWxldGVkKSIgZXhpc3QgaW4gbHR0bmctc2Vzc2lvbmQgZmQgc3BhY2Vz
+LiBJIGtub3cgaXQgaXMgdGhlIHJlc3VsdCBvZiBzaG1fb3BlbigpIGFuZCBzaG1fdW5sbmlrKCkg
+aW4gY3JlYXRlX3Bvc2l4X3NobSgpLiAKICAgSG93ZXZlciwgdG9kYXksIEkgZm91bmQgdGhlc2Ug
+aXRlbXMgYWxzbyBleGlzdCBpbiBhIHRyYWNlZCBhcHBsaWNhdGlvbiB3aGljaCBpcyBhIGxvbmct
+dGltZSBydW5uaW5nIGRhZW1vbi4gVGhlIG1vc3QgaW1wb3J0YW50IHRoaW5nIEkgZm91bmQgaXMg
+dGhhdCB0aGVyZSBzZWVtcyBubyByZWxpYWJsZSB3YXkgdG8gcmVsZWFzZSBzaGFyZSBtZW1vcnku
+CiAgIEkgdHJpZWQgdG8ga2lsbCBsdHRuZy1zZXNzaW9uZCBidXQgbm90IGFsd2F5cyByZWxlYXNl
+IHNoYXJlIG1lbW9yeS4gU29tZXRpbWVzIEkgbmVlZCB0byBraWxsIHRoZSB0cmFjZWQgYXBwbGlj
+YXRpb24gdG8gZnJlZSBzaGFyZSBtZW1vcnkuLi4uQnV0IGl0IGlzIG5vdCBhIGdvb2QgaWRlYSB0
+byBraWxsIHRoZXNlIGFwcGxpY2F0aW9ucy4KICAgTXkgcXVlc3Rpb25zIGFyZTogCiAgIDEuIElz
+IHRoZXJlIGFueSB3YXkgdG8gcmVsZWFzZSBzaGFyZSBtZW1vcnkgd2l0aG91dCBraWxsaW5nIGFu
+eSB0cmFjZWQgYXBwbGljYXRpb24/CiAgIDIuIElzIGl0IG5vcm1hbCB0aGF0IG1hbnkgaXRlbXMg
+c3VjaCBhcyAiL2Rldi9zaG0vdXN0LXNobS1jb25zdW1lci04MTEzMiAoZGVsZXRlZCkiIGV4aXN0
+IGluIHRoZSB0cmFjZWQgYXBwbGljYXRpb24/CgpUaGFua3MKemhlbnl1LnJlbg==
+------=ALIBOUNDARY_85418_78dd9940_621646fa_2223f
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-> Thanks,
-> 
-> Mathieu
-> 
-> > 
-> > Signed-off-by: yaowenbin <yaowenbin1@huawei.com>
-> > ---
-> > src/urcu-qsbr.c | 2 +-
-> > 1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/src/urcu-qsbr.c b/src/urcu-qsbr.c
-> > index 3709412..46135f9 100644
-> > --- a/src/urcu-qsbr.c
-> > +++ b/src/urcu-qsbr.c
-> > @@ -391,7 +391,7 @@ void urcu_qsbr_synchronize_rcu(void)
-> > 		goto out;
-> > 
-> > 	/* Increment current G.P. */
-> > -	CMM_STORE_SHARED(urcu_qsbr_gp.ctr, urcu_qsbr_gp.ctr + URCU_QSBR_GP_CTR);
-> > +	CMM_STORE_SHARED(urcu_qsbr_gp.ctr, urcu_qsbr_gp.ctr ^ URCU_QSBR_GP_CTR);
-> > 
-> > 	/*
-> > 	 * Must commit urcu_qsbr_gp.ctr update to memory before waiting for
-> > --
-> > 2.27.0
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+PGRpdiBjbGFzcz0iX19hbGl5dW5fZW1haWxfYm9keV9ibG9jayI+PGRpdiAgc3R5bGU9ImNsZWFy
+OmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNp
+bVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij5IaSwmbmJzcDs8L3NwYW4+PC9k
+aXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRh
+aG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7
+Ij4mbmJzcDsgJm5ic3A7VGhlcmUgYXJlIG1hbnkgaXRlbXMgc3VjaCBhcyAiL2Rldi9zaG0vdXN0
+LXNobS1jb25zdW1lci04MTEzMiZuYnNwOyhkZWxldGVkKSIgZXhpc3QgaW4gbHR0bmctc2Vzc2lv
+bmQgZmQgc3BhY2VzLiBJIGtub3cgaXQgaXMgdGhlIHJlc3VsdCBvZiBzaG1fb3BlbigpIGFuZCBz
+aG1fdW5sbmlrKCkgaW4gY3JlYXRlX3Bvc2l4X3NobSgpLiZuYnNwOzwvc3Bhbj48L2Rpdj48ZGl2
+ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFy
+aWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPiZuYnNw
+OyAmbmJzcDtIb3dldmVyLCB0b2RheSwgSSBmb3VuZCB0aGVzZSBpdGVtcyBhbHNvIGV4aXN0IGlu
+IGEgdHJhY2VkIGFwcGxpY2F0aW9uIHdoaWNoIGlzIGEgbG9uZy10aW1lIHJ1bm5pbmcgZGFlbW9u
+LiBUaGUgbW9zdCBpbXBvcnRhbnQgdGhpbmcgSSBmb3VuZCBpcyB0aGF0IHRoZXJlIHNlZW1zIG5v
+IHJlbGlhYmxlIHdheSB0byByZWxlYXNlIHNoYXJlIG1lbW9yeS48L3NwYW4+PC9kaXY+PGRpdiAg
+c3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlh
+bCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij4mbmJzcDsg
+Jm5ic3A7SSB0cmllZCB0byBraWxsIGx0dG5nLXNlc3Npb25kIGJ1dCBub3QgYWx3YXlzIHJlbGVh
+c2Ugc2hhcmUgbWVtb3J5LiBTb21ldGltZXMgSSBuZWVkIHRvIGtpbGwgdGhlIHRyYWNlZCBhcHBs
+aWNhdGlvbiB0byBmcmVlIHNoYXJlIG1lbW9yeS4uLi5CdXQgaXQgaXMgbm90IGEgZ29vZCBpZGVh
+IHRvIGtpbGwgdGhlc2UgYXBwbGljYXRpb25zLjwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xl
+YXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGks
+U2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPiZuYnNwOyAmbmJzcDtNeSBx
+dWVzdGlvbnMgYXJlOiZuYnNwOzwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsi
+PjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2Zv
+bnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPiZuYnNwOyAmbmJzcDsxLiBJcyB0aGVyZSBh
+bnkgd2F5IHRvIHJlbGVhc2Ugc2hhcmUgbWVtb3J5IHdpdGhvdXQga2lsbGluZyBhbnkgdHJhY2Vk
+IGFwcGxpY2F0aW9uPzwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFu
+ICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6
+ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPiZuYnNwOyAmbmJzcDsyLiBJcyBpdCBub3JtYWwgdGhh
+dCBtYW55IGl0ZW1zIHN1Y2ggYXMmbmJzcDs8c3BhbiAgc3R5bGU9ImNvbG9yOiMwMDAwMDA7Zm9u
+dC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Zm9u
+dC1zdHlsZTpub3JtYWw7Zm9udC12YXJpYW50LWxpZ2F0dXJlczpub3JtYWw7Zm9udC12YXJpYW50
+LWNhcHM6bm9ybWFsO2ZvbnQtd2VpZ2h0OjQwMDt0ZXh0LWFsaWduOnN0YXJ0O3RleHQtaW5kZW50
+Oi4wcHg7dGV4dC10cmFuc2Zvcm06bm9uZTt3aWRvd3M6MjtiYWNrZ3JvdW5kLWNvbG9yOiNmZmZm
+ZmY7dGV4dC1kZWNvcmF0aW9uLXRoaWNrbmVzczppbml0aWFsO3RleHQtZGVjb3JhdGlvbi1zdHls
+ZTppbml0aWFsO3RleHQtZGVjb3JhdGlvbi1jb2xvcjppbml0aWFsO2Zsb2F0Om5vbmU7ZGlzcGxh
+eTppbmxpbmU7Ij4iPC9zcGFuPjxzcGFuICBzdHlsZT0iY29sb3I6IzAwMDAwMDtmb250LWZhbWls
+eTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtmb250LXN0eWxl
+Om5vcm1hbDtmb250LXZhcmlhbnQtbGlnYXR1cmVzOm5vcm1hbDtmb250LXZhcmlhbnQtY2Fwczpu
+b3JtYWw7Zm9udC13ZWlnaHQ6NDAwO3RleHQtYWxpZ246c3RhcnQ7dGV4dC1pbmRlbnQ6LjBweDt0
+ZXh0LXRyYW5zZm9ybTpub25lO3dpZG93czoyO2JhY2tncm91bmQtY29sb3I6I2ZmZmZmZjt0ZXh0
+LWRlY29yYXRpb24tdGhpY2tuZXNzOmluaXRpYWw7dGV4dC1kZWNvcmF0aW9uLXN0eWxlOmluaXRp
+YWw7dGV4dC1kZWNvcmF0aW9uLWNvbG9yOmluaXRpYWw7ZmxvYXQ6bm9uZTtkaXNwbGF5OmlubGlu
+ZTsiPi9kZXYvc2htL3VzdC1zaG0tY29uc3VtZXItODExMzImbmJzcDsoZGVsZXRlZCkiIGV4aXN0
+IGluIHRoZSB0cmFjZWQgYXBwbGljYXRpb24/PC9zcGFuPjwvc3Bhbj48L2Rpdj48ZGl2ICBzdHls
+ZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNU
+SGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPjxzcGFuICBzdHls
+ZT0iY29sb3I6IzAwMDAwMDtmb250LWZhbWlseTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47
+Zm9udC1zaXplOjE0LjBweDtmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQtbGlnYXR1cmVz
+Om5vcm1hbDtmb250LXZhcmlhbnQtY2Fwczpub3JtYWw7Zm9udC13ZWlnaHQ6NDAwO3RleHQtYWxp
+Z246c3RhcnQ7dGV4dC1pbmRlbnQ6LjBweDt0ZXh0LXRyYW5zZm9ybTpub25lO3dpZG93czoyO2Jh
+Y2tncm91bmQtY29sb3I6I2ZmZmZmZjt0ZXh0LWRlY29yYXRpb24tdGhpY2tuZXNzOmluaXRpYWw7
+dGV4dC1kZWNvcmF0aW9uLXN0eWxlOmluaXRpYWw7dGV4dC1kZWNvcmF0aW9uLWNvbG9yOmluaXRp
+YWw7ZmxvYXQ6bm9uZTtkaXNwbGF5OmlubGluZTsiPjxiciA+PC9zcGFuPjwvc3Bhbj48L2Rpdj48
+ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1mYW1pbHk6VGFob21h
+LEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6IzAwMDAwMDsiPjxz
+cGFuICBzdHlsZT0iY29sb3I6IzAwMDAwMDtmb250LWZhbWlseTpUYWhvbWEsQXJpYWwsU1RIZWl0
+aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQt
+bGlnYXR1cmVzOm5vcm1hbDtmb250LXZhcmlhbnQtY2Fwczpub3JtYWw7Zm9udC13ZWlnaHQ6NDAw
+O3RleHQtYWxpZ246c3RhcnQ7dGV4dC1pbmRlbnQ6LjBweDt0ZXh0LXRyYW5zZm9ybTpub25lO3dp
+ZG93czoyO2JhY2tncm91bmQtY29sb3I6I2ZmZmZmZjt0ZXh0LWRlY29yYXRpb24tdGhpY2tuZXNz
+OmluaXRpYWw7dGV4dC1kZWNvcmF0aW9uLXN0eWxlOmluaXRpYWw7dGV4dC1kZWNvcmF0aW9uLWNv
+bG9yOmluaXRpYWw7ZmxvYXQ6bm9uZTtkaXNwbGF5OmlubGluZTsiPlRoYW5rczwvc3Bhbj48L3Nw
+YW4+PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFt
+aWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMw
+MDAwMDA7Ij48c3BhbiAgc3R5bGU9ImNvbG9yOiMwMDAwMDA7Zm9udC1mYW1pbHk6VGFob21hLEFy
+aWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Zm9udC1zdHlsZTpub3JtYWw7Zm9u
+dC12YXJpYW50LWxpZ2F0dXJlczpub3JtYWw7Zm9udC12YXJpYW50LWNhcHM6bm9ybWFsO2ZvbnQt
+d2VpZ2h0OjQwMDt0ZXh0LWFsaWduOnN0YXJ0O3RleHQtaW5kZW50Oi4wcHg7dGV4dC10cmFuc2Zv
+cm06bm9uZTt3aWRvd3M6MjtiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmY7dGV4dC1kZWNvcmF0aW9u
+LXRoaWNrbmVzczppbml0aWFsO3RleHQtZGVjb3JhdGlvbi1zdHlsZTppbml0aWFsO3RleHQtZGVj
+b3JhdGlvbi1jb2xvcjppbml0aWFsO2Zsb2F0Om5vbmU7ZGlzcGxheTppbmxpbmU7Ij56aGVueXUu
+cmVuPC9zcGFuPjwvc3Bhbj48L2Rpdj48L2Rpdj4=
+------=ALIBOUNDARY_85418_78dd9940_621646fa_2223f--
+
+
+--===============1772579205667905542==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1772579205667905542==--
+
