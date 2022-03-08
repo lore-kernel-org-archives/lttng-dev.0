@@ -4,55 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F764C433EF
-	for <lttng-dev@archiver.kernel.org>; Tue,  8 Mar 2022 16:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63C34C433EF
+	for <lttng-dev@archiver.kernel.org>; Tue,  8 Mar 2022 17:27:05 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4KCgyW3kP4z9HD;
-	Tue,  8 Mar 2022 11:39:15 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4KCj1h0ZnNz9mg;
+	Tue,  8 Mar 2022 12:27:04 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1646757555;
-	bh=skQ46pz+SQoAc4IbSXdkFK6xMKLIEhf8BKkMi0EuyCg=;
+	s=default; t=1646760424;
+	bh=HR4dscGNcALy8gPF2mBdp8djKlHpAk5tl9iJEMbs5Fg=;
 	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=k4Dwwn2Y+IwohK5kfXtMpIhfzUsswTVLXe452iQO1p3mAuxeQBwAEfs8EFPYGsgCO
-	 J6iAN2NNWIW3oze8KkQL6II7zTcGESZxzIOYNsZG4A7KaOHuteZpW4BOuRANvlaHo2
-	 LwtZB5LEeBPXdvvCB/9Qdb9rbb6lqbcddzQEAdh4hOHsyUkKxI+rVUE6EeAsKWxmDr
-	 3z20l19AGpt+4LVNH5+pomkFD1HLacBm9JoXqBCTeTeP1jYi0DK6He3VOITrs0lLEb
-	 a1rAkdcsIlvzc7iXlUvaUdPGlABT0gu8vQDrHUQ7lRuZVv2EoNTapPnRuOowQgF7hh
-	 nqjR6ZhRPnVSw==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4KCgyT3sHSz9QF
- for <lttng-dev@lists.lttng.org>; Tue,  8 Mar 2022 11:39:08 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 36A243885CF;
- Tue,  8 Mar 2022 11:39:02 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id I-_krsPg_Kpe; Tue,  8 Mar 2022 11:39:01 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id BA0EE3885C3;
- Tue,  8 Mar 2022 11:39:01 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com BA0EE3885C3
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id GDwa_SeosF46; Tue,  8 Mar 2022 11:39:01 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id AD333388980;
- Tue,  8 Mar 2022 11:39:01 -0500 (EST)
-Date: Tue, 8 Mar 2022 11:39:01 -0500 (EST)
-To: =?utf-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
-Message-ID: <38621111.130383.1646757541668.JavaMail.zimbra@efficios.com>
-In-Reply-To: <662b3839.f16c8.17f6a594d6d.Coremail.xiongyuhua@zju.edu.cn>
+	b=MpgzO6c0d7Fstc7nvnfRyclPWq7FLNafp6sTCeqUZYujhHNrgZALhiwBO8IYkv785
+	 kIkvF51DZwn8NVLlv9Nc7zMd2URi5o5X/6/XdabtOyrgN9BDVJjGcXP6pb9Yi0HLl9
+	 vW46Yv+PH5+JvlIll1IG46FNp9vRNPvEVk4MvAk71BTgViP9Y5psvBcY+zRXYp3KxB
+	 SBjxuXv3lvDxsPRVd94kgnNWPw+u4cwKFqKH+Cf08Ycun3BKudeD1mAbNVRz9UJ8o1
+	 fPLas2NFSsEQ2yRo0P5/g570KXtPc12hDMZnvShLqlRe8c5XoEK3IvA2BRh3kL8DTj
+	 kcJCRzIftNCXw==
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net
+ (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+ by lists.lttng.org (Postfix) with SMTP id 4KCj1f27X4z9bg
+ for <lttng-dev@lists.lttng.org>; Tue,  8 Mar 2022 12:27:01 -0500 (EST)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Wed, 9 Mar 2022 01:26:42
+ +0800 (GMT+08:00)
+X-Originating-IP: [115.193.191.84]
+Date: Wed, 9 Mar 2022 01:26:42 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+To: "Jonathan Rajotte-Julien" <jonathan.rajotte-julien@efficios.com>
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <38621111.130383.1646757541668.JavaMail.zimbra@efficios.com>
 References: <662b3839.f16c8.17f6a594d6d.Coremail.xiongyuhua@zju.edu.cn>
+ <38621111.130383.1646757541668.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF97 (Linux)/8.8.15_GA_4232)
-Thread-Topic: In lttng-live mode,
- if the printing speed cannot keep up with the generation speed
- of the parsed ctf data, where will the data be stored?
-Thread-Index: lThsB5CwZqTR8UNX1s1mcon05v6RTQ==
+Message-ID: <69d69d7c.eb4d6.17f6a919e20.Coremail.xiongyuhua@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgCXWRnTkSdihplIAA--.8728W
+X-CM-SenderInfo: qtrviiiqurjio62m3hxhgxhubq/1tbiAwIDDVNG3FyKGgAAsK
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+ CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+ daVFxhVjvjDU=
 Subject: Re: [lttng-dev] In lttng-live mode,
  if the printing speed cannot keep up with the generation speed of
  the parsed ctf data, where will the data be stored?
@@ -67,74 +59,129 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Jonathan Rajotte-Julien via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+From: =?utf-8?b?54aK5q+T5Y2OIHZpYSBsdHRuZy1kZXY=?= <lttng-dev@lists.lttng.org>
+Reply-To: =?UTF-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, ychen@northwestern.edu
-Content-Type: multipart/mixed; boundary="===============6435362099584033693=="
+Content-Type: multipart/mixed; boundary="===============3297116361374644283=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============6435362099584033693==
+--===============3297116361374644283==
 Content-Type: multipart/alternative; 
-	boundary="=_10ce7b3d-065b-4167-8ead-07ec8b601564"
+	boundary="----=_Part_3139420_43517020.1646760402463"
 
---=_10ce7b3d-065b-4167-8ead-07ec8b601564
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+------=_Part_3139420_43517020.1646760402463
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-Hi 
+SWYgZm9yIHNvbWUgcmVhc29uIChmb3IgZXhhbXBsZSwgaGVyZSBteSBzb2NrZXQgc2VuZCBmdW5j
+dGlvbiBpbiBwcmludF9tZXNzYWdlIGlzIGJsb2NrZWQgYW5kIHRoZSBCYWJlbHRyYWNlMiBtYXkg
+YmUgc3VzcGVuZGVkKSwgdGhlIHNwZWVkIG9mIHRoZSByZWFkZXIgKGJhYmVsdHJhY2UyKSBjYW5u
+b3Qga2VlcCB1cCB3aXRoIHRoZSBzcGVlZCBvZiB0aGUgcHJvZHVjZXIobHR0bmcvbHR0bmctY29u
+c3VtZXJkKSwgY2FuIHRoZSBzaXplIG9mIHRoaXMgYnVmZmVyKCJsdHRuZy1yZWxheWQiICkgYmUg
+c2V0PyBIb3cgbXVjaCBkYXRhIGNhbiBpdCBzdG9yZe+8nwoKTG9va2luZyBmb3J3YXJkIHRvIHlv
+dXIgcmVwbHnvvIEKCnRoeAoKWXVodWEKCgoKCi0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0K5Y+R5Lu2
+5Lq6OiJKb25hdGhhbiBSYWpvdHRlLUp1bGllbiIgPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVm
+ZmljaW9zLmNvbT4K5Y+R6YCB5pe26Ze0OjIwMjItMDMtMDkgMDA6Mzk6MDEgKOaYn+acn+S4iSkK
+5pS25Lu25Lq6OiAi54aK5q+T5Y2OIiA8eGlvbmd5dWh1YUB6anUuZWR1LmNuPgrmioTpgIE6IGx0
+dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4sICJNYXRoaWV1IERlc25veWVycyIg
+PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4sIHljaGVuQG5vcnRod2VzdGVybi5lZHUK
+5Li76aKYOiBSZTogSW4gbHR0bmctbGl2ZSBtb2RlLCBpZiB0aGUgcHJpbnRpbmcgc3BlZWQgY2Fu
+bm90IGtlZXAgdXAgd2l0aCB0aGUgZ2VuZXJhdGlvbiBzcGVlZCBvZiB0aGUgcGFyc2VkIGN0ZiBk
+YXRhLCB3aGVyZSB3aWxsIHRoZSBkYXRhIGJlIHN0b3JlZD8KCgpIaQoKCkkgd29uZGVyIGlmIG15
+IHNvY2tldCByZWN2IGZ1bmN0aW9uIGlzIGJsb2NrZWQgb24gdGhlIG90aGVyIGVuZCwgY2F1c2lu
+ZyB0aGUgc29ja2V0IHNlbmQgZnVuY3Rpb24gdG8gYmxvY2sgaW4gcHJpbnRfbWVzc2FnZSBmdW5j
+dGlvbiBpbiBiYWJlbHRyYWNlMjtvciB3aGVuIHByaW50aW5nIHRvIHRoZSBjb25zb2xlLCB0aGUg
+cHJpbnRpbmcgc3BlZWQgY2FuJ3Qga2VlcCB1cCB3aXRoIHRoZSBwYXJzZWQgQ1RGIGRhdGEgZ2Vu
+ZXJhdGlvbiBzcGVlZCBhbmQgdGhlIHByaW50IGJ1ZmZlciBpcyBhbHNvIGZ1bGwuCgpJbiB0aGlz
+IGNhc2UsIGhvdyB3aWxsIEJhYmVsdHJhY2UyIGhhbmRsZSB0aGUgcGFyc2VkIENURiBkYXRhIHRo
+YXQgaGFzIG5vdCBiZWVuIHNlbnQgeWV0LCBzdG9yZSB0aGVtIGluIGEgYnVmZmVyLCBhIHF1ZXVl
+IG9yIGp1c3QgZGlzY2FyZCB0aGVtPyBPciB3b3VsZCB0aGUgYmxvY2tpbmcgZGlyZWN0bHkgY2F1
+c2UgTFRUbmcgdG8gZGlzY2FyZCB0aGUgb3JpZ2luYWwgQ1RGIGRhdGEgYXQgdGhlIHJpbmcgYnVm
+ZmVyIGJlZm9yZSBMVFRuZyBDb25zdW1lciBkYWVtb24/CgoKCk5vdCBzdXJlIEkgdW5kZXJzdGFu
+ZCB5b3VyIHNldHVwIGJ1dCB3aGVuIHVzaW5nIGx0dG5nLWxpdmUsIHlvdSBhcmUgZWZmZWN0aXZl
+bHkgcmVhZGluZyBmcm9tIHRoZSBkYXRhIHRoYXQgbHR0bmctcmVsYXlkIGlzIGNvbGxlY3Rpbmcs
+IHBpZWNlIGJ5IHBpZWNlLgpUaGUgcHJvZHVjaW5nIHNpZGUgaXMgbm90IGFmZmVjdGVkIGJ5IHRo
+ZSBzcGVlZCBhdCB3aGljaCB0aGUgcmVhZGVyIChiYWJlbHRyYWNlMikgY29uc3VtZSBkYXRhIGZy
+b20gbHR0bmctcmVsYXlkIHVzaW5nIHRoZSBsdHRuZy1saXZlIHByb3RvY29sLgpUaGVyZSBtaWdo
+dCBiZSBzb21lIGNvcm5lciBjYXNlIGhlcmUgYW5kIHRoZXJlIGJ1dCBmb3IgbW9zdCBiYXNlIHVz
+YWdlIG9mIHRoZSAibGl2ZSIgZmVhdHVyZSByZWFkZXIgKGJhYmVsdHJhY2UyKSBhbmQgcHJvZHVj
+ZXIobHR0bmcvbHR0bmctY29uc3VtZXJkKQphcmUgImRlY291cGxlZCIuIFlvdSBjYW4gY29uc2lk
+ZXIgdGhlICJsdHRuZy1yZWxheWQiIChhbmQgdGhlIHRyYWNlIG9uIHRoZSBmaWxlc3lzdGVtKSBh
+cyB0aGUgImJ1ZmZlciIgaGVyZS4=
+------=_Part_3139420_43517020.1646760402463
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-> I wonder if my socket recv function is blocked on the other end, causing the
-> socket send function to block in print_message function in babeltrace2;or when
-> printing to the console, the printing speed can't keep up with the parsed CTF
-> data generation speed and the print buffer is also full.
+PHA+CglJZiBmb3Igc29tZSByZWFzb24gKGZvciBleGFtcGxlLCBoZXJlIG15IHNvY2tldCBzZW5k
+IGZ1bmN0aW9uJm5ic3A7aW4gPHNwYW4gc3R5bGU9ImNvbG9yOiMwNTUwQUU7Zm9udC1mYW1pbHk6
+dWktbW9ub3NwYWNlLCBTRk1vbm8tUmVndWxhciwgJnF1b3Q7U0YgTW9ubyZxdW90OywgTWVubG8s
+IENvbnNvbGFzLCAmcXVvdDtMaWJlcmF0aW9uIE1vbm8mcXVvdDssIG1vbm9zcGFjZTtmb250LXNp
+emU6MTJweDt3aGl0ZS1zcGFjZTpwcmU7YmFja2dyb3VuZC1jb2xvcjojRkZGRkZGOyI+cHJpbnRf
+bWVzc2FnZSA8L3NwYW4+aXMgYmxvY2tlZCBhbmQgdGhlIEJhYmVsdHJhY2UyIG1heSBiZSBzdXNw
+ZW5kZWQpLCB0aGUgc3BlZWQgb2YgdGhlIDxzcGFuIHN0eWxlPSJmb250LWZhbWlseTphcmlhbCwg
+aGVsdmV0aWNhLCBzYW5zLXNlcmlmO3doaXRlLXNwYWNlOm5vcm1hbDsiPnJlYWRlciAoYmFiZWx0
+cmFjZTIpPC9zcGFuPiBjYW5ub3Qga2VlcCB1cCB3aXRoIHRoZSBzcGVlZCBvZiB0aGUgPHNwYW4g
+c3R5bGU9ImZvbnQtZmFtaWx5OmFyaWFsLCBoZWx2ZXRpY2EsIHNhbnMtc2VyaWY7d2hpdGUtc3Bh
+Y2U6bm9ybWFsOyI+cHJvZHVjZXIobHR0bmcvbHR0bmctY29uc3VtZXJkKTwvc3Bhbj4sIGNhbiB0
+aGUgc2l6ZSBvZiB0aGlzIGJ1ZmZlcig8c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6YXJpYWwsIGhl
+bHZldGljYSwgc2Fucy1zZXJpZjt3aGl0ZS1zcGFjZTpub3JtYWw7Ij4ibHR0bmctcmVsYXlkIiAp
+PC9zcGFuPiBiZSBzZXQ/IEhvdyBtdWNoIGRhdGEgY2FuIGl0IHN0b3Jl77yfCjwvcD4KPHA+CglM
+b29raW5nIGZvcndhcmQgdG8geW91ciByZXBsee+8gQo8L3A+CjxwPgoJdGh4CjwvcD4KPHA+CglZ
+dWh1YQo8L3A+CjxwPgoJPGJyPgo8L3A+CjxibG9ja3F1b3RlIG5hbWU9InJlcGx5Q29udGVudCIg
+Y2xhc3M9IlJlZmVyZW5jZVF1b3RlIiBzdHlsZT0icGFkZGluZy1sZWZ0OjVweDttYXJnaW4tbGVm
+dDo1cHg7Ym9yZGVyLWxlZnQ6I2I2YjZiNiAycHggc29saWQ7bWFyZ2luLXJpZ2h0OjA7Ij4KCS0t
+LS0t5Y6f5aeL6YKu5Lu2LS0tLS08YnI+CjxiPuWPkeS7tuS6ujo8L2I+PHNwYW4gaWQ9InJjX2Zy
+b20iPiJKb25hdGhhbiBSYWpvdHRlLUp1bGllbiIgJmx0O2pvbmF0aGFuLnJham90dGUtanVsaWVu
+QGVmZmljaW9zLmNvbSZndDs8L3NwYW4+PGJyPgo8Yj7lj5HpgIHml7bpl7Q6PC9iPjxzcGFuIGlk
+PSJyY19zZW50dGltZSI+MjAyMi0wMy0wOSAwMDozOTowMSAo5pif5pyf5LiJKTwvc3Bhbj48YnI+
+CjxiPuaUtuS7tuS6ujo8L2I+ICLnhormr5PljY4iICZsdDt4aW9uZ3l1aHVhQHpqdS5lZHUuY24m
+Z3Q7PGJyPgo8Yj7mioTpgIE6PC9iPiBsdHRuZy1kZXYgJmx0O2x0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcmZ3Q7LCAiTWF0aGlldSBEZXNub3llcnMiICZsdDttYXRoaWV1LmRlc25veWVyc0BlZmZp
+Y2lvcy5jb20mZ3Q7LCB5Y2hlbkBub3J0aHdlc3Rlcm4uZWR1PGJyPgo8Yj7kuLvpopg6PC9iPiBS
+ZTogSW4gbHR0bmctbGl2ZSBtb2RlLCBpZiB0aGUgcHJpbnRpbmcgc3BlZWQgY2Fubm90IGtlZXAg
+dXAgd2l0aCB0aGUgZ2VuZXJhdGlvbiBzcGVlZCBvZiB0aGUgcGFyc2VkIGN0ZiBkYXRhLCB3aGVy
+ZSB3aWxsIHRoZSBkYXRhIGJlIHN0b3JlZD88YnI+Cjxicj4KCTxkaXYgc3R5bGU9ImZvbnQtZmFt
+aWx5OmFyaWFsLCBoZWx2ZXRpY2EsIHNhbnMtc2VyaWY7Zm9udC1zaXplOjEycHQ7Y29sb3I6IzAw
+MDAwMDsiPgoJCTxkaXY+CgkJCUhpPGJyPgoJCTwvZGl2PgoJCTxkaXYgZGF0YS1tYXJrZXI9Il9f
+UVVPVEVEX1RFWFRfXyI+CgkJCTxibG9ja3F1b3RlIHN0eWxlPSJib3JkZXItbGVmdDoycHggc29s
+aWQgIzEwMTBGRjttYXJnaW4tbGVmdDo1cHg7cGFkZGluZy1sZWZ0OjVweDtjb2xvcjojMDAwO2Zv
+bnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0eWxlOm5vcm1hbDt0ZXh0LWRlY29yYXRpb246bm9uZTtm
+b250LWZhbWlseTpIZWx2ZXRpY2EsQXJpYWwsc2Fucy1zZXJpZjtmb250LXNpemU6MTJwdDsiPgoJ
+CQkJPHA+CgkJCQkJPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxNHB4O3doaXRlLXNwYWNlOm5vcm1h
+bDsiPkkgd29uZGVyIGlmIG15IHNvY2tldCByZWN2IGZ1bmN0aW9uIGlzIGJsb2NrZWQgb24gdGhl
+IG90aGVyIGVuZCwgY2F1c2luZyB0aGUgc29ja2V0IHNlbmQgZnVuY3Rpb24gdG8gYmxvY2sgaW4g
+PHNwYW4gc3R5bGU9ImNvbG9yOiMwNTUwYWU7Zm9udC1mYW1pbHk6J3VpLW1vbm9zcGFjZScgLCAn
+c2Ztb25vLXJlZ3VsYXInICwgJ3NmIG1vbm8nICwgJ21lbmxvJyAsICdjb25zb2xhcycgLCAnbGli
+ZXJhdGlvbiBtb25vJyAsIG1vbm9zcGFjZTtmb250LXNpemU6MTJweDt3aGl0ZS1zcGFjZTpwcmU7
+YmFja2dyb3VuZC1jb2xvcjojZmZmZmZmOyI+cHJpbnRfbWVzc2FnZSA8L3NwYW4+ZnVuY3Rpb24g
+aW4gYmFiZWx0cmFjZTI7b3Igd2hlbiBwcmludGluZyB0byB0aGUgY29uc29sZSwgdGhlIHByaW50
+aW5nIHNwZWVkIGNhbid0IGtlZXAgdXAgd2l0aCB0aGUgPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTox
+NHB4O3doaXRlLXNwYWNlOm5vcm1hbDsiPnBhcnNlZCBDVEYmbmJzcDs8L3NwYW4+ZGF0YSBnZW5l
+cmF0aW9uIHNwZWVkIGFuZCB0aGUgcHJpbnQgYnVmZmVyIGlzIGFsc28gZnVsbC48L3NwYW4+IAoJ
+CQkJPC9wPgoJCQkJPHA+CgkJCQkJPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxNHB4OyI+SW4gdGhp
+cyBjYXNlLCBob3cgd2lsbCBCYWJlbHRyYWNlMiBoYW5kbGUgdGhlIHBhcnNlZCBDVEYgZGF0YSB0
+aGF0IGhhcyBub3QgYmVlbiBzZW50IHlldCwgc3RvcmUgdGhlbSBpbiBhIGJ1ZmZlciwgYSBxdWV1
+ZSBvciBqdXN0IGRpc2NhcmQgdGhlbT8gT3Igd291bGQgdGhlIGJsb2NraW5nIGRpcmVjdGx5IGNh
+dXNlIExUVG5nIHRvIGRpc2NhcmQgdGhlIG9yaWdpbmFsIENURiBkYXRhIGF0IHRoZSByaW5nIGJ1
+ZmZlciBiZWZvcmUgTFRUbmcgQ29uc3VtZXIgZGFlbW9uPzwvc3Bhbj4KCQkJCTwvcD4KCQkJPC9i
+bG9ja3F1b3RlPgoJCQk8ZGl2PgoJCQkJPGJyPgoJCQk8L2Rpdj4KCQkJPGRpdj4KCQkJCU5vdCBz
+dXJlIEkgdW5kZXJzdGFuZCB5b3VyIHNldHVwIGJ1dCB3aGVuIHVzaW5nIGx0dG5nLWxpdmUsIHlv
+dSBhcmUgZWZmZWN0aXZlbHkgcmVhZGluZyBmcm9tIHRoZSBkYXRhIHRoYXQgbHR0bmctcmVsYXlk
+IGlzIGNvbGxlY3RpbmcsIHBpZWNlIGJ5IHBpZWNlLgoJCQk8L2Rpdj4KCQkJPGRpdj4KCQkJCVRo
+ZSBwcm9kdWNpbmcgc2lkZSBpcyBub3QgYWZmZWN0ZWQgYnkgdGhlIHNwZWVkIGF0IHdoaWNoIHRo
+ZSByZWFkZXIgKGJhYmVsdHJhY2UyKSBjb25zdW1lIGRhdGEgZnJvbSBsdHRuZy1yZWxheWQgdXNp
+bmcgdGhlIGx0dG5nLWxpdmUgcHJvdG9jb2wuCgkJCTwvZGl2PgoJCQk8ZGl2PgoJCQkJVGhlcmUg
+bWlnaHQgYmUgc29tZSBjb3JuZXIgY2FzZSBoZXJlIGFuZCB0aGVyZSBidXQgZm9yIG1vc3QgYmFz
+ZSB1c2FnZSBvZiB0aGUgImxpdmUiIGZlYXR1cmUgcmVhZGVyIChiYWJlbHRyYWNlMikgYW5kIHBy
+b2R1Y2VyKGx0dG5nL2x0dG5nLWNvbnN1bWVyZCkKCQkJPC9kaXY+CgkJCTxkaXY+CgkJCQlhcmUg
+ImRlY291cGxlZCIuIFlvdSBjYW4gY29uc2lkZXIgdGhlICJsdHRuZy1yZWxheWQiIChhbmQgdGhl
+IHRyYWNlIG9uIHRoZSBmaWxlc3lzdGVtKSBhcyB0aGUgImJ1ZmZlciIgaGVyZS4KCQkJPC9kaXY+
+CgkJPC9kaXY+Cgk8L2Rpdj4KPC9ibG9ja3F1b3RlPg==
+------=_Part_3139420_43517020.1646760402463--
 
-> In this case, how will Babeltrace2 handle the parsed CTF data that has not been
-> sent yet, store them in a buffer, a queue or just discard them? Or would the
-> blocking directly cause LTTng to discard the original CTF data at the ring
-> buffer before LTTng Consumer daemon?
-Not sure I understand your setup but when using lttng-live, you are effectively reading from the data that lttng-relayd is collecting, piece by piece. 
-The producing side is not affected by the speed at which the reader (babeltrace2) consume data from lttng-relayd using the lttng-live protocol. 
-There might be some corner case here and there but for most base usage of the "live" feature reader (babeltrace2) and producer(lttng/lttng-consumerd) 
-are "decoupled". You can consider the "lttng-relayd" (and the trace on the filesystem) as the "buffer" here. 
 
---=_10ce7b3d-065b-4167-8ead-07ec8b601564
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>Hi<br></div><div data-marker=3D"__QUOTED_TE=
-XT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;pa=
-dding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorat=
-ion:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;">
-<p>
-=09<span style=3D"font-size:14px;white-space:normal">I wonder if my socket =
-recv function is blocked on the other end, causing the socket send function=
- to block in <span style=3D"color:#0550ae;font-family:'ui-monospace' , 'sfm=
-ono-regular' , 'sf mono' , 'menlo' , 'consolas' , 'liberation mono' , monos=
-pace;font-size:12px;white-space:pre;background-color:#ffffff">print_message=
- </span>function in babeltrace2;or when printing to the console, the printi=
-ng speed can't keep up with the <span style=3D"font-size:14px;white-space:n=
-ormal">parsed CTF&nbsp;</span>data generation speed and the print buffer is=
- also full.</span>
-</p>
-<p>
-=09<span style=3D"font-size:14px">In this case, how will Babeltrace2 handle=
- the parsed CTF data that has not been sent yet, store them in a buffer, a =
-queue or just discard them? Or would the blocking directly cause LTTng to d=
-iscard the original CTF data at the ring buffer before LTTng Consumer daemo=
-n?</span></p></blockquote><div><br></div><div>Not sure I understand your se=
-tup but when using lttng-live, you are effectively reading from the data th=
-at lttng-relayd is collecting, piece by piece. </div><div>The producing sid=
-e is not affected by the speed at which the reader (babeltrace2) consume da=
-ta from lttng-relayd using the lttng-live protocol.</div><div> There might =
-be some corner case here and there but for most base usage of the "live" fe=
-ature reader (babeltrace2) and producer(lttng/lttng-consumerd)</div><div> a=
-re "decoupled". You can consider the "lttng-relayd" (and the trace on the f=
-ilesystem) as the "buffer" here.</div></div></div></body></html>
---=_10ce7b3d-065b-4167-8ead-07ec8b601564--
-
---===============6435362099584033693==
+--===============3297116361374644283==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -145,4 +192,5 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============6435362099584033693==--
+--===============3297116361374644283==--
+
