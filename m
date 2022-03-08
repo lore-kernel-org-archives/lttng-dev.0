@@ -4,54 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F43AC433F5
-	for <lttng-dev@archiver.kernel.org>; Tue,  8 Mar 2022 15:59:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E1B3C433F5
+	for <lttng-dev@archiver.kernel.org>; Tue,  8 Mar 2022 16:34:10 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4KCg4g3GmQz9VY;
-	Tue,  8 Mar 2022 10:59:31 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4KCgrc3pxGz9QD;
+	Tue,  8 Mar 2022 11:34:08 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1646755172;
-	bh=bw9SUVOmqG51dWmuUkJPJBRvgxBSGDd5dSciy/SiKqs=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=WSWyBq0gwJ0akB02D61ohnZvPgHvZBwTjCkaFs9nb1b7jt/z4utCbFd9gyoNhu4ou
-	 jj21X3NpiROqnHGZZLY9Cf3Q42PZxLLI/uJr7rc96prPLKS+0CSPhq4kEVEvUssZaO
-	 rn0LcTtlqAy1IYj3XNDnFU0JqJ4Go47qoP7G/MIg1HZAXUSMGPmi4mgl9a8Mf/V3MI
-	 vH3j07120vuXpQCbK/uGeZgLi1ccAQXKdMo7Z+i6wv7KRrjF9mOgakmuzxD2ZTK6NB
-	 qHU4LkyK4duYXFCg1my89UZe+HspIxerapq1f5GzpGLhGnnueYbz5DiT4IrWeGAkep
-	 T90HsSdMHhrbQ==
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4KCg4d4FRhz9SG
- for <lttng-dev@lists.lttng.org>; Tue,  8 Mar 2022 10:59:29 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 060D9367F22
- for <lttng-dev@lists.lttng.org>; Tue,  8 Mar 2022 10:59:23 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id BaGnnBjD7vdP; Tue,  8 Mar 2022 10:59:22 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 85FFB367EA5;
- Tue,  8 Mar 2022 10:59:22 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 85FFB367EA5
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id xmdKTYp-sI5Z; Tue,  8 Mar 2022 10:59:22 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 76EF43677FD;
- Tue,  8 Mar 2022 10:59:22 -0500 (EST)
-Date: Tue, 8 Mar 2022 10:59:22 -0500 (EST)
-To: diamon-discuss <diamon-discuss@lists.linuxfoundation.org>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, 
- tracecompass-dev <tracecompass-dev@eclipse.org>
-Message-ID: <270093074.129957.1646755162428.JavaMail.zimbra@efficios.com>
+	s=default; t=1646757249;
+	bh=smuDIT+QxXC9GlJAKz3TdUlhGgyAVtFG5jlxJqTXrXk=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=fUGPOrna0mDYCWrgdUFqzL+wJDqtMqH8olpZXHKdba/RyHPS/ELr1zHK5MDg6EvyM
+	 jZKA1p5Rhcw4Dnm3w7GADTMJKPLxRMr2bTc8tsnSYryVqHt2cOQieXNPHM0yh36vue
+	 ePlruximl7nwR8sD7D56usSzIix2BFKQRcqhYPd80MVbTo7xExzNx+dghVnxvgHdUt
+	 cb8CvurgnYoOOQ0qVIodxT6x8OAdnwhxYU87s4OT5kHvsApenKkw2VyUfWHhPpWdhD
+	 Q323zSwFpFtIfskyqGE7wvDeqoEAUMdZBbcsuS19DK+CIm7wYTTCpe6C0cs5RVh38X
+	 wqUj7NC1h33dg==
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net
+ (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+ by lists.lttng.org (Postfix) with SMTP id 4KCgrZ2Rvgz9QB
+ for <lttng-dev@lists.lttng.org>; Tue,  8 Mar 2022 11:34:05 -0500 (EST)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Wed, 9 Mar 2022 00:25:11
+ +0800 (GMT+08:00)
+X-Originating-IP: [115.193.191.84]
+Date: Wed, 9 Mar 2022 00:25:11 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+To: lttng-dev@lists.lttng.org
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - GC97 (Linux)/8.8.15_GA_4232)
-Thread-Index: FVtoLdTTkTyaKSQFMfO7fn7womzHxA==
-Thread-Topic: CTF 2: removal of the JSON text sequence auxiliary stream feature
-Subject: [lttng-dev] CTF 2: removal of the JSON text sequence auxiliary
- stream feature
+Message-ID: <662b3839.f16c8.17f6a594d6d.Coremail.xiongyuhua@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: by_KCgAXEHpogydi8OwvAA--.6433W
+X-CM-SenderInfo: qtrviiiqurjio62m3hxhgxhubq/1tbiAwIDDVNG3FyJgwABsR
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+ CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+ daVFxhVjvjDU=
+Subject: [lttng-dev] In lttng-live mode,
+ if the printing speed cannot keep up with the generation speed of
+ the parsed ctf data, where will the data be stored?
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -63,67 +55,139 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Philippe Proulx via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Philippe Proulx <pproulx@efficios.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?b?54aK5q+T5Y2OIHZpYSBsdHRuZy1kZXY=?= <lttng-dev@lists.lttng.org>
+Reply-To: =?UTF-8?B?54aK5q+T5Y2O?= <xiongyuhua@zju.edu.cn>
+Cc: "ychen@northwestern.edu" <ychen@northwestern.edu>
+Content-Type: multipart/mixed; boundary="===============5912388277606126562=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hello,
+--===============5912388277606126562==
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_3228502_1063647911.1646756711789"
 
-Upon reflection, the JSON text sequence auxiliary streams of
-CTF2-SPECRC-4.0 [1] and data streams are redundant concepts considering
-that a CTF 2 data stream class may have a namespace and a name to
-identify it as containing specific/auxiliary data.
+------=_Part_3228502_1063647911.1646756711789
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-Moreover, using data streams to transport "auxiliary" data means:
+SGl+CgpJIGFtIGdldHRpbmcgdGhlIHRyYWNlIGRhdGEgdXNpbmcgbHR0bmctbGl2ZSBtb2RlIHZp
+YSBiYWJlbHRyYWNlMi4gSW4gdGhlIGZpbmFsIHN0ZXAsIEkgYm9ycm93ZWQgdGhlIGNvZGUgaW4g
+ZG9jL2FwaS9saWJiYWJlbHRyYWNlMi9leGFtcGxlcy9lcGl0b21lLmMuCgoKCgpUaGUgZGlmZmVy
+ZW5jZSBpcyB0aGF0IGluIHByaW50X21lc3NhZ2UobGluZSAxNzIpIGluIGZ1bmN0aW9uIGVwaXRv
+bWVfb3V0X2NvbnN1bWUsIGluc3RlYWQgb2YgcHJpbnRpbmcgdGhlIGRhdGEgZGlyZWN0bHkgdG8g
+dGhlIGNvbnNvbGUsIEkgc2VuZCBpdCBvdXQgdXNpbmcgdGhlIHNvY2tldC4KCk9mIGNvdXJzZSwg
+SSBjYW4gZ2V0IHRoZSBwYXJzZWQgcmVzdWx0cywgc3VjaCBhcyB0aW1lc3RhbXAsIGV2ZW50LT5u
+YW1lLCBldGMuLCB0aHJvdWdoIHRoZSBzb2NrZXQncyByZWN2IGZ1bmN0aW9uIG9uIHRoZSBvdGhl
+ciBlbmQuCgoKCgpIb3dldmVyLCB3ZSBrbm93IHRoYXQgTFRUbmcgaXMgY29udGludW91c2x5IGdl
+bmVyYXRpbmcgQ1RGIGRhdGEsIGFuZCBCYWJlbFRyYWNlMiB3aWxsIGNvbnRpbnVvdXNseSBwYXJz
+ZSBDVEYgZGF0YS4gQmFiZWx0cmFjZTIgdGhlbiBjb250aW51b3VzbHkgc2VuZHMgcGFyc2VkIENU
+RiBkYXRhIG92ZXIgdGhlIHNvY2tldChpbiBteSBjb2RlKSBvciBwcmludHMgaXQgZGlyZWN0bHkg
+dG8gdGhlIGNvbnNvbGUoaW4gdGhlIGV4YW1wbGUgImVwaXRvbWUiIGdpdmVuKS4KCgoKCkkgd29u
+ZGVyIGlmIG15IHNvY2tldCByZWN2IGZ1bmN0aW9uIGlzIGJsb2NrZWQgb24gdGhlIG90aGVyIGVu
+ZCwgY2F1c2luZyB0aGUgc29ja2V0IHNlbmQgZnVuY3Rpb24gdG8gYmxvY2sgaW4gcHJpbnRfbWVz
+c2FnZSBmdW5jdGlvbiBpbiBiYWJlbHRyYWNlMjtvciB3aGVuIHByaW50aW5nIHRvIHRoZSBjb25z
+b2xlLCB0aGUgcHJpbnRpbmcgc3BlZWQgY2FuJ3Qga2VlcCB1cCB3aXRoIHRoZSBwYXJzZWQgQ1RG
+IGRhdGEgZ2VuZXJhdGlvbiBzcGVlZCBhbmQgdGhlIHByaW50IGJ1ZmZlciBpcyBhbHNvIGZ1bGwu
+CgpJbiB0aGlzIGNhc2UsIGhvdyB3aWxsIEJhYmVsdHJhY2UyIGhhbmRsZSB0aGUgcGFyc2VkIENU
+RiBkYXRhIHRoYXQgaGFzIG5vdCBiZWVuIHNlbnQgeWV0LCBzdG9yZSB0aGVtIGluIGEgYnVmZmVy
+LCBhIHF1ZXVlIG9yIGp1c3QgZGlzY2FyZCB0aGVtPyBPciB3b3VsZCB0aGUgYmxvY2tpbmcgZGly
+ZWN0bHkgY2F1c2UgTFRUbmcgdG8gZGlzY2FyZCB0aGUgb3JpZ2luYWwgQ1RGIGRhdGEgYXQgdGhl
+IHJpbmcgYnVmZmVyIGJlZm9yZSBMVFRuZyBDb25zdW1lciBkYWVtb24/CgoKCgpJIHRob3VnaHQg
+SSBjYW4gZmluZCB0aGUgcmVhc29uIGluIHRoZSBidF9tZXNzYWdlX2l0ZXJhdG9yX25leHQgZnVu
+Y3Rpb24obGluZSAxNDQpLGJ1dCBJIGZhaWxlZC5TbyBJIHdyb3RlIHRoaXMgZW1haWwgaG9waW5n
+IHRvIGZpbmQgb3V0IHdoeS4KCgoKCkxvb2tpbmcgZm9yd2FyZCB0byB5b3VyIHJlcGx5Lkl0IHdv
+dWxkIGJlIGJldHRlciBpZiB5b3UgY291bGQgaGVscCBtZSBwb2ludCBpdCBvdXQgaW4gdGhlIGNv
+ZGUuCgoKCgp0aGFua3MsCgpZdWh1YS4=
+------=_Part_3228502_1063647911.1646756711789
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-* Simpler implementation within existing CTF 1.8 tools: they can already
-  read and/or write data streams.
+PHA+Cgk8c3BhbiBzdHlsZT0iZm9udC1zaXplOjE0cHg7d2hpdGUtc3BhY2U6bm9ybWFsOyI+SGl+
+PC9zcGFuPgo8L3A+CjxwPgoJPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxNHB4O3doaXRlLXNwYWNl
+Om5vcm1hbDsiPkkgYW0gZ2V0dGluZyB0aGUgdHJhY2UgZGF0YSB1c2luZyBsdHRuZy1saXZlIG1v
+ZGUgdmlhIGJhYmVsdHJhY2UyLiBJbiB0aGUgZmluYWwgc3RlcCwgSSBib3Jyb3dlZCB0aGUgY29k
+ZSBpbiA8YSBocmVmPSJodHRwczovL2dpdGh1Yi5jb20vZWZmaWNpb3MvYmFiZWx0cmFjZS9ibG9i
+L21hc3Rlci9kb2MvYXBpL2xpYmJhYmVsdHJhY2UyL2V4YW1wbGVzL2VwaXRvbWUuYyIgdGl0bGU9
+ImRvYy9hcGkvbGliYmFiZWx0cmFjZTIvZXhhbXBsZXMvZXBpdG9tZS5jIiB0YXJnZXQ9Il9ibGFu
+ayI+ZG9jL2FwaS9saWJiYWJlbHRyYWNlMi9leGFtcGxlcy9lcGl0b21lLmM8L2E+Ljwvc3Bhbj4K
+PC9wPgo8cD4KCTxzcGFuIHN0eWxlPSJmb250LXNpemU6MTRweDt3aGl0ZS1zcGFjZTpub3JtYWw7
+Ij48YnI+Cjwvc3Bhbj4KPC9wPgo8cD4KCTxzcGFuIHN0eWxlPSJmb250LXNpemU6MTRweDt3aGl0
+ZS1zcGFjZTpub3JtYWw7Ij5UaGUgZGlmZmVyZW5jZSBpcyB0aGF0IGluIDxzcGFuIHN0eWxlPSJj
+b2xvcjojMDU1MEFFO2ZvbnQtZmFtaWx5OnVpLW1vbm9zcGFjZSwgU0ZNb25vLVJlZ3VsYXIsICZx
+dW90O1NGIE1vbm8mcXVvdDssIE1lbmxvLCBDb25zb2xhcywgJnF1b3Q7TGliZXJhdGlvbiBNb25v
+JnF1b3Q7LCBtb25vc3BhY2U7Zm9udC1zaXplOjEycHg7d2hpdGUtc3BhY2U6cHJlO2JhY2tncm91
+bmQtY29sb3I6I0ZGRkZGRjsiPnByaW50X21lc3NhZ2UobGluZSAxNzIpPC9zcGFuPiBpbiBmdW5j
+dGlvbiA8c3BhbiBzdHlsZT0iY29sb3I6IzgyNTBERjtmb250LWZhbWlseTp1aS1tb25vc3BhY2Us
+IFNGTW9uby1SZWd1bGFyLCAmcXVvdDtTRiBNb25vJnF1b3Q7LCBNZW5sbywgQ29uc29sYXMsICZx
+dW90O0xpYmVyYXRpb24gTW9ubyZxdW90OywgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB4O3doaXRl
+LXNwYWNlOnByZTtiYWNrZ3JvdW5kLWNvbG9yOiNGRkZGRkY7Ij5lcGl0b21lX291dF9jb25zdW1l
+PC9zcGFuPiwgaW5zdGVhZCBvZiBwcmludGluZyB0aGUgZGF0YSBkaXJlY3RseSB0byB0aGUgY29u
+c29sZSwgSSBzZW5kIGl0IG91dCB1c2luZyB0aGUgc29ja2V0Ljwvc3Bhbj4KPC9wPgo8cD4KCTxz
+cGFuIHN0eWxlPSJmb250LXNpemU6MTRweDt3aGl0ZS1zcGFjZTpub3JtYWw7Ij48L3NwYW4+Cjwv
+cD4KPHA+Cgk8c3BhbiBzdHlsZT0iZm9udC1zaXplOjE0cHg7d2hpdGUtc3BhY2U6bm9ybWFsOyI+
+T2YgY291cnNlLCBJIGNhbiBnZXQgdGhlIHBhcnNlZCByZXN1bHRzLCBzdWNoIGFzIHRpbWVzdGFt
+cCwgZXZlbnQtJmd0O25hbWUsIGV0Yy4sIHRocm91Z2ggdGhlIHNvY2tldCdzIHJlY3YgZnVuY3Rp
+b24gb24gdGhlIG90aGVyIGVuZC48L3NwYW4+CjwvcD4KPHA+Cgk8c3BhbiBzdHlsZT0iZm9udC1z
+aXplOjE0cHg7d2hpdGUtc3BhY2U6bm9ybWFsOyI+PGJyPgo8L3NwYW4+CjwvcD4KPHA+Cgk8c3Bh
+biBzdHlsZT0iZm9udC1zaXplOjE0cHg7d2hpdGUtc3BhY2U6bm9ybWFsOyI+SG93ZXZlciwgd2Ug
+a25vdyB0aGF0IExUVG5nIGlzIGNvbnRpbnVvdXNseSBnZW5lcmF0aW5nIENURiBkYXRhLCBhbmQg
+QmFiZWxUcmFjZTIgd2lsbCBjb250aW51b3VzbHkgcGFyc2UgQ1RGIGRhdGEuIEJhYmVsdHJhY2Uy
+IHRoZW4gY29udGludW91c2x5IHNlbmRzIHBhcnNlZCBDVEYgZGF0YSBvdmVyIHRoZSBzb2NrZXQo
+aW4gbXkgY29kZSkgb3IgcHJpbnRzIGl0IGRpcmVjdGx5IHRvIHRoZSBjb25zb2xlKGluJm5ic3A7
+dGhlIGV4YW1wbGUgImVwaXRvbWUiIGdpdmVuKS48L3NwYW4+CjwvcD4KPHA+Cgk8c3BhbiBzdHls
+ZT0iZm9udC1zaXplOjE0cHg7d2hpdGUtc3BhY2U6bm9ybWFsOyI+PGJyPgo8L3NwYW4+CjwvcD4K
+PHA+Cgk8c3BhbiBzdHlsZT0iZm9udC1zaXplOjE0cHg7d2hpdGUtc3BhY2U6bm9ybWFsOyI+SSB3
+b25kZXIgaWYgbXkgc29ja2V0IHJlY3YgZnVuY3Rpb24gaXMgYmxvY2tlZCBvbiB0aGUgb3RoZXIg
+ZW5kLCBjYXVzaW5nIHRoZSBzb2NrZXQgc2VuZCBmdW5jdGlvbiB0byBibG9jayBpbiA8c3BhbiBz
+dHlsZT0iY29sb3I6IzA1NTBBRTtmb250LWZhbWlseTp1aS1tb25vc3BhY2UsIFNGTW9uby1SZWd1
+bGFyLCAmcXVvdDtTRiBNb25vJnF1b3Q7LCBNZW5sbywgQ29uc29sYXMsICZxdW90O0xpYmVyYXRp
+b24gTW9ubyZxdW90OywgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB4O3doaXRlLXNwYWNlOnByZTti
+YWNrZ3JvdW5kLWNvbG9yOiNGRkZGRkY7Ij5wcmludF9tZXNzYWdlIDwvc3Bhbj5mdW5jdGlvbiBp
+biBiYWJlbHRyYWNlMjtvciB3aGVuIHByaW50aW5nIHRvIHRoZSBjb25zb2xlLCB0aGUgcHJpbnRp
+bmcgc3BlZWQgY2FuJ3Qga2VlcCB1cCB3aXRoIHRoZSA8c3BhbiBzdHlsZT0iZm9udC1zaXplOjE0
+cHg7d2hpdGUtc3BhY2U6bm9ybWFsOyI+cGFyc2VkIENURiZuYnNwOzwvc3Bhbj5kYXRhIGdlbmVy
+YXRpb24gc3BlZWQgYW5kIHRoZSBwcmludCBidWZmZXIgaXMgYWxzbyBmdWxsLjwvc3Bhbj4KPC9w
+Pgo8cD4KCTxzcGFuIHN0eWxlPSJmb250LXNpemU6MTRweDsiPkluIHRoaXMgY2FzZSwgaG93IHdp
+bGwgQmFiZWx0cmFjZTIgaGFuZGxlIHRoZSBwYXJzZWQgQ1RGIGRhdGEgdGhhdCBoYXMgbm90IGJl
+ZW4gc2VudCB5ZXQsIHN0b3JlIHRoZW0gaW4gYSBidWZmZXIsIGEgcXVldWUgb3IganVzdCBkaXNj
+YXJkIHRoZW0/IE9yIHdvdWxkIHRoZSBibG9ja2luZyBkaXJlY3RseSBjYXVzZSBMVFRuZyB0byBk
+aXNjYXJkIHRoZSBvcmlnaW5hbCBDVEYgZGF0YSBhdCB0aGUgcmluZyBidWZmZXIgYmVmb3JlIExU
+VG5nIENvbnN1bWVyIGRhZW1vbj88L3NwYW4+CjwvcD4KPHA+Cgk8c3BhbiBzdHlsZT0iZm9udC1z
+aXplOjE0cHg7Ij48YnI+Cjwvc3Bhbj4KPC9wPgo8cD4KCTxzcGFuIHN0eWxlPSJmb250LXNpemU6
+MTRweDsiPkkgdGhvdWdodCBJIGNhbiBmaW5kIHRoZSByZWFzb24gaW4gdGhlJm5ic3A7PHNwYW4g
+c3R5bGU9ImNvbG9yOiMwNTUwQUU7Zm9udC1mYW1pbHk6dWktbW9ub3NwYWNlLCBTRk1vbm8tUmVn
+dWxhciwgJnF1b3Q7U0YgTW9ubyZxdW90OywgTWVubG8sIENvbnNvbGFzLCAmcXVvdDtMaWJlcmF0
+aW9uIE1vbm8mcXVvdDssIG1vbm9zcGFjZTtmb250LXNpemU6MTJweDt3aGl0ZS1zcGFjZTpwcmU7
+YmFja2dyb3VuZC1jb2xvcjojRkZGRkZGOyI+YnRfbWVzc2FnZV9pdGVyYXRvcl9uZXh0PC9zcGFu
+PiBmdW5jdGlvbihsaW5lIDE0NCksYnV0IEkgZmFpbGVkLlNvIEkgd3JvdGUgdGhpcyBlbWFpbCBo
+b3BpbmcgdG8gZmluZCBvdXQgd2h5Ljwvc3Bhbj4KPC9wPgo8cD4KCTxzcGFuIHN0eWxlPSJmb250
+LXNpemU6MTRweDsiPjxicj4KPC9zcGFuPgo8L3A+CjxwPgoJPHNwYW4gc3R5bGU9ImZvbnQtc2l6
+ZToxNHB4OyI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxNHB4O3doaXRlLXNwYWNlOm5vcm1hbDsi
+Pkxvb2tpbmcgZm9yd2FyZCB0byB5b3VyIHJlcGx5Lkl0IHdvdWxkIGJlIGJldHRlciBpZiB5b3Ug
+Y291bGQgaGVscCBtZSBwb2ludCBpdCBvdXQgaW4gdGhlIGNvZGUuPC9zcGFuPjwvc3Bhbj4KPC9w
+Pgo8cD4KCTxzcGFuIHN0eWxlPSJmb250LXNpemU6MTRweDsiPjxzcGFuIHN0eWxlPSJmb250LXNp
+emU6MTRweDt3aGl0ZS1zcGFjZTpub3JtYWw7Ij48YnI+Cjwvc3Bhbj48L3NwYW4+CjwvcD4KPHA+
+Cgk8c3BhbiBzdHlsZT0iZm9udC1zaXplOjE0cHg7Ij48c3BhbiBzdHlsZT0iZm9udC1zaXplOjE0
+cHg7d2hpdGUtc3BhY2U6bm9ybWFsOyI+Cgk8cCBzdHlsZT0iZm9udC1zaXplOjE0cHg7d2hpdGUt
+c3BhY2U6bm9ybWFsOyI+CgkJdGhhbmtzLAoJPC9wPgoJPHAgc3R5bGU9ImZvbnQtc2l6ZToxNHB4
+O3doaXRlLXNwYWNlOm5vcm1hbDsiPgoJCVl1aHVhLgoJPC9wPgo8L3NwYW4+PC9zcGFuPgo8L3A+
+CjxwPgoJPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxNHB4OyI+PC9zcGFuPjxzcGFuIHN0eWxlPSJm
+b250LXNpemU6MTRweDsiPjwvc3Bhbj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjE0cHg7Ij48L3Nw
+YW4+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxNHB4OyI+PC9zcGFuPjxzcGFuIHN0eWxlPSJmb250
+LXNpemU6MTRweDsiPjwvc3Bhbj4KPC9wPg==
+------=_Part_3228502_1063647911.1646756711789--
 
-  This means faster CTF 2 adoption.
 
-* Simpler CTF 2 specification (JSON text sequence auxiliary stream
-  concept is removed).
+--===============5912388277606126562==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-* More compact streams containing auxiliary data out of the box.
-
-* A producer may attach user attributes to a data stream.
-
-Note that if a data stream doesn't need a default clock, then its class
-simply needs to not have any default clock class. This makes it possible
-to have event records only containing data, without timing information.
-
-The only lost benefit of not using JSON text sequence auxiliary streams
-is not being able to read one without a CTF 2 data stream decoder.
-However, I believe there's little point in doing so without having
-access to a complete CTF 2 consumer to process the trace further anyway.
-
-Considering all of the above, I'm about to release CTF2-SPECRC-5.0 which
-removes the JSON text sequence auxiliary stream feature.
-
-To remain backward compatible with CTF 1.8, however, CTF2-SPECRC-5.0
-will specify a data stream class (having the `std` namespace) and event
-record classes to make a data stream contain the trace environment
-(`env` block in TSDL).
-
-CTF 2 might also specify some "hidden" user attribute in the future to
-indicate that a consumer should not display the instances of a given
-data stream class. Indeed, should a data stream contain a symbol map,
-for example, we don't want such data to show up in the output of a
-Babeltrace 2 `sink.text.pretty` component or in the events editor of
-Trace Compass.
-
-Should you have any issue with this approach, please reply to this email
-to illustrate your point of view.
-
-Have a good day,
-
-Philippe Proulx
-EfficiOS Inc.
-https://www.efficios.com/
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============5912388277606126562==--
+
