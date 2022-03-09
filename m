@@ -4,48 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AE3FC433EF
-	for <lttng-dev@archiver.kernel.org>; Wed,  9 Mar 2022 01:35:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8022C433F5
+	for <lttng-dev@archiver.kernel.org>; Wed,  9 Mar 2022 16:37:17 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4KCvrz1FMqz9f1;
-	Tue,  8 Mar 2022 20:35:15 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4KDHsm0yBBzB0Z;
+	Wed,  9 Mar 2022 11:37:16 -0500 (EST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1646789716;
-	bh=gKML96ihTFfeJqflKUBuQLQWokuRLIjEKRudaTBccQk=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1646843836;
+	bh=hd21WHXe/JsbvpkQovERIUDPta+SY0Hfl50sMgaLktM=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=ON/hs63LTMU7MLwftSQjrzO5j7AzsIy83akG3zz+31EnWIItqOazbRUlxeVTryePK
-	 w7C8WQikx8lF70KqETJeF8gUqzMCTAUQ/stxJq7NmarDKOiacVSK410udVmW1QzdhM
-	 NkpxmX+amwLB/oDZa19+5AsPsGOJKB3e4Lm0TA2u1aJopzUaKbq6Mj3X/CRMZfoayl
-	 xx4HGAf4GJMlia+wyJqMHwutADP28A60vMTfghrV1kChqQmyiNilM1agp+rumyPwqP
-	 orO8HHBnf9ye1TdXcareJHIapNaOZ8vTarXvDc6xc9ZFktofnhU0F2bdLODjHJjSKW
-	 M80zL17sto0kA==
-Received: from out199-25.us.a.mail.aliyun.com (out199-25.us.a.mail.aliyun.com
- [47.90.199.25])
- by lists.lttng.org (Postfix) with ESMTPS id 4KCvrx00Xtz9cM
- for <lttng-dev@lists.lttng.org>; Tue,  8 Mar 2022 20:35:12 -0500 (EST)
-X-Alimail-AntiSpam: AC=CONTINUE; BC=0.07432062|-1; CH=green;
- DM=|CONTINUE|false|; DS=CONTINUE|ham_alarm|0.355138-0.00475122-0.640111;
- FP=0|0|0|0|0|-1|-1|-1; HT=e01e04400; MF=zhenyu.ren@aliyun.com; NM=1; PH=DW;
- RN=3; RT=3; SR=0; TI=W4_0.1.10_DEFAULT_21201569_1646789376799_o7001c1973; 
-Received: from WS-web
- (zhenyu.ren@aliyun.com[W4_0.1.10_DEFAULT_21201569_1646789376799_o7001c1973])
- by e01e01406.eu6 at Wed, 09 Mar 2022 09:29:36 +0800
-Date: Wed, 09 Mar 2022 09:29:36 +0800
-To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-Message-ID: <1a87b3ee-9983-4db6-b569-e6e6c1ab8411.zhenyu.ren@aliyun.com>
-X-Mailer: [Alimail-Mailagent][W4_0.1.10][DEFAULT][Chrome]
-MIME-Version: 1.0
+	b=y+ZKiFyoNMuMBV9BoePqebzz3S5MIzmzBZahsoNyCcUPV9zED71EV4N4CbszKTtxH
+	 TrD8qn4kH2QaCw8zqLE6n530gExvaqYXlLo/g6uq6EFmlUcgbbTlFgCy8HsHFVROzx
+	 Dt6ZvPsnRFWqUIrZ7PjOqzPJLwczvx0xmVUuLicDUz43YWX0jtbF+JXVwOX0onzHW0
+	 5SIaMcGwG+pqKpqb85mO95XnF4NsPtu8dtdFgFyGyeKBUoG3qmOiWHf7MlpU8A70Fq
+	 ftsG3tBDpOvM/a1a5JdeSR+iaQrUXvSkyf39UGWrOQ521NHrTsw1ccvTRwbX1zM2sG
+	 ZOb4BeuVVBmhg==
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4KDHsk3WzMzBKH
+ for <lttng-dev@lists.lttng.org>; Wed,  9 Mar 2022 11:37:09 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 293C9393FDC;
+ Wed,  9 Mar 2022 11:37:03 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id 76kX7oR4PFiD; Wed,  9 Mar 2022 11:37:02 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 604C7393FDA;
+ Wed,  9 Mar 2022 11:37:02 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 604C7393FDA
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id 9ogwJaS3nWHh; Wed,  9 Mar 2022 11:37:02 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 4F43D393EDB;
+ Wed,  9 Mar 2022 11:37:02 -0500 (EST)
+Date: Wed, 9 Mar 2022 11:37:02 -0500 (EST)
+To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Message-ID: <816104861.134170.1646843822208.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1a87b3ee-9983-4db6-b569-e6e6c1ab8411.zhenyu.ren@aliyun.com>
 References: <e706d6c8-edea-4f26-a9e2-4a66f067204e.zhenyu.ren@aliyun.com>
  <cbf6b471-85d1-46f5-b10b-2a643b79433c.zhenyu.ren@aliyun.com>
  <c0e023fd-bd52-4125-9e50-c096167386ff.zhenyu.ren@aliyun.com>
  <20220225142111.GC1861057@x>
- <26341add-b962-4027-8c5e-28d940e8f4dc.zhenyu.ren@aliyun.com>,
+ <26341add-b962-4027-8c5e-28d940e8f4dc.zhenyu.ren@aliyun.com>
  <2119663162.129405.1646752637020.JavaMail.zimbra@efficios.com>
-x-aliyun-mail-creator: W4_0.1.10_DEFAULT_M3LTW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNSkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzgxLjAuNDA0NC4xMzggU2FmYXJpLzUzNy4zNg==vN
-In-Reply-To: <2119663162.129405.1646752637020.JavaMail.zimbra@efficios.com>
-Subject: [lttng-dev] =?utf-8?b?5Zue5aSN77yaIOWbnuWkje+8miDlm57lpI3vvJog?=
+ <1a87b3ee-9983-4db6-b569-e6e6c1ab8411.zhenyu.ren@aliyun.com>
+MIME-Version: 1.0
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF97 (Linux)/8.8.15_GA_4232)
+Thread-Topic: =?utf-8?B?5Zue5aSN77yaW2x0dG5nLWRldl0g5Zue5aSN77yaIOWbnuWkje+8miDlm57lpI3vvJo=?=
+ shm leak in traced application?
+Thread-Index: jw7LRmFAcVsMJPBj4cp2PGx88gfkXA==
+Subject: Re: [lttng-dev] 
+ =?utf-8?b?5Zue5aSN77yaIOWbnuWkje+8miDlm57lpI3vvJog?=
  =?utf-8?b?5Zue5aSN77yaIHNobSBsZWFrIGluIHRyYWNlZCBhcHBsaWNhdGlvbj8=?=
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -58,294 +72,373 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "zhenyu.ren via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Content-Type: multipart/mixed; boundary="===============6277397542757815510=="
+Content-Type: multipart/mixed; boundary="===============2971732014250284935=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============6277397542757815510==
-Content-Type: multipart/alternative;
-  boundary="----=ALIBOUNDARY_65600_7feb00b60940_62280300_e15ae"
+--===============2971732014250284935==
+Content-Type: multipart/alternative; 
+	boundary="=_918eaa43-d5ec-4c71-91d5-a88e8d29ff10"
 
-------=ALIBOUNDARY_65600_7feb00b60940_62280300_e15ae
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+--=_918eaa43-d5ec-4c71-91d5-a88e8d29ff10
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-VGhhbmtzIGEgIGxvdCBmb3IgcmVwbHkuIEkgZG8gbm90IHJlcGx5IGl0IGluIGJ1ZyB0cmFja2Vy
-IHNpbmNlIEkgaGF2ZSBub3QgZ290dGVuIGEgcmVsaWFibGUgd2F5IHRvIHJlcHJvZHVjZSB0aGUg
-bGVhayBjYXNlLiAKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tCuWPkeS7tuS6uu+8mk1hdGhpZXUgRGVzbm95ZXJzIDxtYXRo
-aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CuWPkemAgeaXtumXtO+8mjIwMjLlubQz5pyIOOaX
-pSjmmJ/mnJ/kuowpIDIzOjI2CuaUtuS7tuS6uu+8mnpoZW55dS5yZW4gPHpoZW55dS5yZW5AYWxp
-eXVuLmNvbT4K5oqE44CA6YCB77yaSm9uYXRoYW4gUmFqb3R0ZSA8am9uYXRoYW4ucmFqb3R0ZS1q
-dWxpZW5AZWZmaWNpb3MuY29tPjsgbHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-PgrkuLvjgIDpopjvvJpSZTogW2x0dG5nLWRldl0g5Zue5aSN77yaIOWbnuWkje+8miDlm57lpI3v
-vJogc2htIGxlYWsgaW4gdHJhY2VkIGFwcGxpY2F0aW9uPwoKCgotLS0tLSBPbiBNYXIgOCwgMjAy
-MiwgYXQgMTI6MTggQU0sIGx0dG5nLWRldiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIHdyb3Rl
-OgoKPiBIaSwKPiBJbiBzaG1fb2JqZWN0X3RhYmxlX2FwcGVuZF9zaG0oKS9hbGxvY19zaG0oKe+8
-jCB3aHkgbm90IGNhbGxpbmcgRkRfQ0xPRVhFQyBmY250bCgpCj4gdG8gc2htZmRzPyBJIGd1ZXNz
-IHRoaXMgb21pc3Npb24gbGVhZHMgdG8gc2htIGZkcyBsZWFrLgoKVGhvc2UgZmlsZSBkZXNjcmlw
-dG9ycyBhcmUgY3JlYXRlZCB3aGVuIHJlY2VpdmVkIGJ5IHVzdGNvbW1fcmVjdl9mZHNfdW5peF9z
-b2NrLCBhbmQKaW1tZWRpYXRlbHkgYWZ0ZXIgY3JlYXRpb24gdGhleSBhcmUgc2V0IGFzIEZEX0NM
-T0VYRUMuCgpXZSBzaG91bGQgY29udGludWUgdGhpcyBkaXNjdXNzaW9uIGluIHRoZSBidWcgdHJh
-Y2tlciBhcyBzdWdnZXN0ZWQgYnkgSm9uYXRoYW4uCkl0IHdvdWxkIGdyZWF0bHkgaGVscCBpZiB5
-b3UgY2FuIHByb3ZpZGUgYSBzbWFsbCByZXByb2R1Y2VyLgoKVGhhbmtzLAoKTWF0aGlldQoKCj4g
-VGhhbmtzCj4gemhlbnl1LnJlbgoKPj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4+IOWPkeS7tuS6uu+8mkpvbmF0aGFu
-IFJham90dGUtSnVsaWVuIDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+Cj4+
-IOWPkemAgeaXtumXtO+8mjIwMjLlubQy5pyIMjXml6Uo5pif5pyf5LqUKSAyMjozMQo+PiDmlLbk
-u7bkurrvvJp6aGVueXUucmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+Cj4+IOaKhCDpgIHvvJps
-dHRuZy1kZXYgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4+IOS4uyDpopjvvJpSZTogW2x0
-dG5nLWRldl0g5Zue5aSN77yaIOWbnuWkje+8miBzaG0gbGVhayBpbiB0cmFjZWQgYXBwbGljYXRp
-b24/Cgo+PiBIaSB6aGVueXUucmVuLAoKPj4gUGxlYXNlIG9wZW4gYSBidWcgb24gb3VyIGJ1ZyB0
-cmFja2VyIGFuZCBwcm92aWRlIGEgcmVwcm9kdWNlciBhZ2FpbnN0IHRoZSBsYXRlc3QKPj4gc3Rh
-YmxlIHZlcnNpb24gKDIuMTMueCkuCgo+PiBodHRwczovL2J1Z3MubHR0bmcub3JnLwoKPj4gUGxl
-YXNlIGZvbGxvdyB0aGUgZ3VpZGVsaW5lczogaHR0cHM6Ly9idWdzLmx0dG5nLm9yZy8jQnVnLXJl
-cG9ydGluZy1ndWlkZWxpbmVzCgo+PiBDaGVlcnMKCj4+IE9uIEZyaSwgRmViIDI1LCAyMDIyIGF0
-IDEyOjQ3OjM0UE0gKzA4MDAsIHpoZW55dS5yZW4gdmlhIGx0dG5nLWRldiB3cm90ZToKPj4gPiBI
-aSwgbHR0bmctZGV2IHRlYW0KPj4+IFdoZW4gbHR0bmctc2Vzc2lvbmQgZXhpdHMsIHRoZSB1c3Qg
-YXBwbGljYXRpb25zIHNob3VsZCBjYWxsCj4+PiBsdHRuZ191c3Rfb2JqZF90YWJsZV9vd25lcl9j
-bGVhbnVwKCkgYW5kIGNsZWFuIHVwIGFsbCBzaG0gcmVzb3VyY2UodW5tYXAgYW5kCj4+PiBjbG9z
-ZSkuIEhvd2VydmVyIEkgZG8gZmluZCB0aGF0IHRoZSB1c3QgYXBwbGljYXRpb25zIGtlZXAgb3Bl
-bmluZyAiYWxsIiBvZiB0aGUKPj4gPiBzaG0gZmRzKCIvZGV2L3NobS91c3Qtc2htLWNvbnN1bWVy
-LTgxMTMyIChkZWxldGVkKSIpIGFuZCBkbyBOT1QgZnJlZSBzaG0uCj4+PiBJZiB3ZSBydW4gbHR0
-bmctc2Vzc2lvbmQgYWdhaW4sIHVzdCBhcHBsaWNhdGlvbnMgY2FuIGdldCBhIG5ldyBwaWVjZSBv
-ZiBzaG0gYW5kCj4+PiBhIG5ldyBsaXN0IG9mIHNobSBmZHMgc28gZG91YmxlIHNobSB1c2FnZXMu
-IFRoZW4gaWYgd2Uga2lsbCBsdHRuZy1zZXNzaW9uZCwKPj4+IHdoYXQgdGhlIG1vc3RsaWtlbHkg
-aGFwcGVuZWQgaXMgdXN0IGFwcGxpY2F0aW9ucyBjbG9zZSB0aGUgbmV3IGxpc3Qgb2Ygc2htIGZk
-cwo+Pj4gYW5kIGZyZWUgbmV3IHNobSByZXNvdXJjZSBidXQga2VlcGluZyBvbGQgc2htIHN0aWxs
-LiBJbiBvdGhlciB3b3JkLCB3ZSBjYW4gbm90Cj4+ID4gZnJlZSB0aGlzIHBpZWNlIG9mIHNobSB1
-bmxlc3Mgd2Uga2lsbGluZyB1c3QgYXBwbGljYXRpb25zISEhCj4+PiBTbyBJcyB0aGVyZSBhbnkg
-cG9zc2lsYmUgdGhhdCB1c3QgYXBwbGljYXRpb25zIGZhaWxlZCBjYWxsaW5nCj4+PiBsdHRuZ191
-c3Rfb2JqZF90YWJsZV9vd25lcl9jbGVhbnVwKCk/IERvIHlvdSBoYXZlIGV2ZXIgc2VlIHRoaXMg
-cHJvYmxlbT8gRG8geW91Cj4+PiBoYXZlIGFueSBhZHZpY2UgdG8gZnJlZSB0aGUgc2htIHdpdGhv
-dXQga2lsbGxpbmcgdXN0IGFwcGxpY2F0aW9ucyhJIHRyaWVkIHRvCj4+ID4gZGlnIGludG8ga2Vy
-bmVsIHNobV9vcGVuIGFuZCAvZGV2L3NobSwgYnV0IG5vdCBmb3VuZCBhbnkgaWRlYXMpPwoKPj4g
-PiBUaGFua3MgaW4gYWR2YW5jZQo+PiA+IHpoZW55dS5yZW4KCgoKPj4gPiAtLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPj4g
-PiDlj5Hku7bkurrvvJp6aGVueXUucmVuIHZpYSBsdHRuZy1kZXYgPGx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmc+Cj4+ID4g5Y+R6YCB5pe26Ze077yaMjAyMuW5tDLmnIgyM+aXpSjmmJ/mnJ/kuIkp
-IDIzOjA5Cj4+ID4g5pS25Lu25Lq677yabHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnPgo+PiA+IOS4uyDpopjvvJpbbHR0bmctZGV2XSDlm57lpI3vvJogc2htIGxlYWsgaW4gdHJh
-Y2VkIGFwcGxpY2F0aW9uPwoKPj4+ID4iSSBmb3VuZCB0aGVzZSBpdGVtcyBhbHNvIGV4aXN0IGlu
-IGEgdHJhY2VkIGFwcGxpY2F0aW9uIHdoaWNoIGlzIGEgbG9uZy10aW1lCj4+ID4gPnJ1bm5pbmcg
-ZGFlbW9uIgo+PiA+IEV2ZW4gaWYgbHR0bmctc2Vzc2lvbmQgaGFzIGJlZW4ga2lsbGVkISEKCj4+
-ID4gVGhhbmtzCj4+ID4gemhlbnl1LnJlbgo+PiA+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+PiA+IOWPkeS7tuS6uu+8
-mnpoZW55dS5yZW4gdmlhIGx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KPj4g
-PiDlj5HpgIHml7bpl7TvvJoyMDIy5bm0MuaciDIz5pelKOaYn+acn+S4iSkgMjI6NDQKPj4gPiDm
-lLbku7bkurrvvJpsdHRuZy1kZXYgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4+ID4g5Li7
-IOmimO+8mltsdHRuZy1kZXZdIHNobSBsZWFrIGluIHRyYWNlZCBhcHBsaWNhdGlvbj8KCj4+ID4g
-SGksCj4+PiBUaGVyZSBhcmUgbWFueSBpdGVtcyBzdWNoIGFzICIvZGV2L3NobS91c3Qtc2htLWNv
-bnN1bWVyLTgxMTMyIChkZWxldGVkKSIgZXhpc3QKPj4+IGluIGx0dG5nLXNlc3Npb25kIGZkIHNw
-YWNlcy4gSSBrbm93IGl0IGlzIHRoZSByZXN1bHQgb2Ygc2htX29wZW4oKSBhbmQKPj4gPiBzaG1f
-dW5sbmlrKCkgaW4gY3JlYXRlX3Bvc2l4X3NobSgpLgo+Pj4gSG93ZXZlciwgdG9kYXksIEkgZm91
-bmQgdGhlc2UgaXRlbXMgYWxzbyBleGlzdCBpbiBhIHRyYWNlZCBhcHBsaWNhdGlvbiB3aGljaCBp
-cwo+Pj4gYSBsb25nLXRpbWUgcnVubmluZyBkYWVtb24uIFRoZSBtb3N0IGltcG9ydGFudCB0aGlu
-ZyBJIGZvdW5kIGlzIHRoYXQgdGhlcmUKPj4gPiBzZWVtcyBubyByZWxpYWJsZSB3YXkgdG8gcmVs
-ZWFzZSBzaGFyZSBtZW1vcnkuCj4+PiBJIHRyaWVkIHRvIGtpbGwgbHR0bmctc2Vzc2lvbmQgYnV0
-IG5vdCBhbHdheXMgcmVsZWFzZSBzaGFyZSBtZW1vcnkuIFNvbWV0aW1lcyBJCj4+PiBuZWVkIHRv
-IGtpbGwgdGhlIHRyYWNlZCBhcHBsaWNhdGlvbiB0byBmcmVlIHNoYXJlIG1lbW9yeS4uLi5CdXQg
-aXQgaXMgbm90IGEKPj4gPiBnb29kIGlkZWEgdG8ga2lsbCB0aGVzZSBhcHBsaWNhdGlvbnMuCj4+
-ID4gTXkgcXVlc3Rpb25zIGFyZToKPj4+IDEuIElzIHRoZXJlIGFueSB3YXkgdG8gcmVsZWFzZSBz
-aGFyZSBtZW1vcnkgd2l0aG91dCBraWxsaW5nIGFueSB0cmFjZWQKPj4gPiBhcHBsaWNhdGlvbj8K
-Pj4+IDIuIElzIGl0IG5vcm1hbCB0aGF0IG1hbnkgaXRlbXMgc3VjaCBhcyAiL2Rldi9zaG0vdXN0
-LXNobS1jb25zdW1lci04MTEzMgo+PiA+IChkZWxldGVkKSIgZXhpc3QgaW4gdGhlIHRyYWNlZCBh
-cHBsaWNhdGlvbj8KCj4+ID4gVGhhbmtzCj4+ID4gemhlbnl1LnJlbgoKCgo+PiA+IF9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+ID4gbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdAo+PiA+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gPiBodHRwczovL2xp
-c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cgo+PiAtLQo+
-PiBKb25hdGhhbiBSYWpvdHRlLUp1bGllbgo+PiBFZmZpY2lPUwo+IF9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+
-IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Ci0tIApNYXRoaWV1IERlc25veWVycwpFZmZp
-Y2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29t
-------=ALIBOUNDARY_65600_7feb00b60940_62280300_e15ae
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+When this happpens, is the process holding a single (or very few) shm file =
+references, or references to many=20
+shm files ?=20
 
-PGRpdiBjbGFzcz0iX19hbGl5dW5fZW1haWxfYm9keV9ibG9jayI+PGRpdiAgc3R5bGU9ImNsZWFy
-OmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNp
-bVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij5UaGFua3MgYSZuYnNwOyBsb3Qg
-Zm9yIHJlcGx5LiBJIGRvIG5vdCByZXBseSBpdCBpbiBidWcgdHJhY2tlciBzaW5jZSBJIGhhdmUg
-bm90IGdvdHRlbiBhIHJlbGlhYmxlIHdheSB0byByZXByb2R1Y2UgdGhlIGxlYWsgY2FzZS4mbmJz
-cDs8L3NwYW4+PC9kaXY+PGJsb2NrcXVvdGUgIHN0eWxlPSJtYXJnaW4tcmlnaHQ6MDttYXJnaW4t
-dG9wOjA7bWFyZ2luLWJvdHRvbTowOyI+PGRpdiAgc3R5bGU9ImNsZWFyOmJvdGg7Ij48c3BhbiAg
-c3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1bjtmb250LXNpemU6
-MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS08L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9
-ImNsZWFyOmJvdGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhl
-aXRpLFNpbVN1bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij7lj5Hku7bkurrvvJpN
-YXRoaWV1IERlc25veWVycyAmbHQ7bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tJmd0Ozwv
-c3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHlsZT0iZm9udC1m
-YW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4wcHg7Y29sb3I6
-IzAwMDAwMDsiPuWPkemAgeaXtumXtO+8mjIwMjLlubQz5pyIOOaXpSjmmJ/mnJ/kuowpIDIzOjI2
-PC9zcGFuPjwvZGl2PjxkaXYgIHN0eWxlPSJjbGVhcjpib3RoOyI+PHNwYW4gIHN0eWxlPSJmb250
-LWZhbWlseTpUYWhvbWEsQXJpYWwsU1RIZWl0aSxTaW1TdW47Zm9udC1zaXplOjE0LjBweDtjb2xv
-cjojMDAwMDAwOyI+5pS25Lu25Lq677yaemhlbnl1LnJlbiAmbHQ7emhlbnl1LnJlbkBhbGl5dW4u
-Y29tJmd0Ozwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBzdHls
-ZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZToxNC4w
-cHg7Y29sb3I6IzAwMDAwMDsiPuaKhOOAgOmAge+8mkpvbmF0aGFuIFJham90dGUgJmx0O2pvbmF0
-aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbSZndDs7IGx0dG5nLWRldiAmbHQ7bHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs8L3NwYW4+PC9kaXY+PGRpdiAgc3R5bGU9ImNsZWFyOmJv
-dGg7Ij48c3BhbiAgc3R5bGU9ImZvbnQtZmFtaWx5OlRhaG9tYSxBcmlhbCxTVEhlaXRpLFNpbVN1
-bjtmb250LXNpemU6MTQuMHB4O2NvbG9yOiMwMDAwMDA7Ij7kuLvjgIDpopjvvJpSZTogW2x0dG5n
-LWRldl0g5Zue5aSN77yaIOWbnuWkje+8miDlm57lpI3vvJogc2htIGxlYWsgaW4gdHJhY2VkIGFw
-cGxpY2F0aW9uPzwvc3Bhbj48L2Rpdj48ZGl2ICBzdHlsZT0iY2xlYXI6Ym90aDsiPjxzcGFuICBz
-dHlsZT0iZm9udC1mYW1pbHk6VGFob21hLEFyaWFsLFNUSGVpdGksU2ltU3VuO2ZvbnQtc2l6ZTox
-NC4wcHg7Y29sb3I6IzAwMDAwMDsiPjxiciAvPjwvc3Bhbj48L2Rpdj48YnIgPjxiciA+LS0tLS0m
-bmJzcDtPbiZuYnNwO01hciZuYnNwOzgsJm5ic3A7MjAyMiwmbmJzcDthdCZuYnNwOzEyOjE4Jm5i
-c3A7QU0sJm5ic3A7bHR0bmctZGV2Jm5ic3A7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZuYnNw
-O3dyb3RlOjxiciA+PGJyID4mZ3Q7Jm5ic3A7SGksPGJyID4mZ3Q7Jm5ic3A7SW4mbmJzcDtzaG1f
-b2JqZWN0X3RhYmxlX2FwcGVuZF9zaG0oKS9hbGxvY19zaG0oKe+8jCZuYnNwO3doeSZuYnNwO25v
-dCZuYnNwO2NhbGxpbmcmbmJzcDtGRF9DTE9FWEVDJm5ic3A7ZmNudGwoKTxiciA+Jmd0OyZuYnNw
-O3RvJm5ic3A7c2htZmRzPyZuYnNwO0kmbmJzcDtndWVzcyZuYnNwO3RoaXMmbmJzcDtvbWlzc2lv
-biZuYnNwO2xlYWRzJm5ic3A7dG8mbmJzcDtzaG0mbmJzcDtmZHMmbmJzcDtsZWFrLjxiciA+PGJy
-ID5UaG9zZSZuYnNwO2ZpbGUmbmJzcDtkZXNjcmlwdG9ycyZuYnNwO2FyZSZuYnNwO2NyZWF0ZWQm
-bmJzcDt3aGVuJm5ic3A7cmVjZWl2ZWQmbmJzcDtieSZuYnNwO3VzdGNvbW1fcmVjdl9mZHNfdW5p
-eF9zb2NrLCZuYnNwO2FuZDxiciA+aW1tZWRpYXRlbHkmbmJzcDthZnRlciZuYnNwO2NyZWF0aW9u
-Jm5ic3A7dGhleSZuYnNwO2FyZSZuYnNwO3NldCZuYnNwO2FzJm5ic3A7RkRfQ0xPRVhFQy48YnIg
-PjxiciA+V2UmbmJzcDtzaG91bGQmbmJzcDtjb250aW51ZSZuYnNwO3RoaXMmbmJzcDtkaXNjdXNz
-aW9uJm5ic3A7aW4mbmJzcDt0aGUmbmJzcDtidWcmbmJzcDt0cmFja2VyJm5ic3A7YXMmbmJzcDtz
-dWdnZXN0ZWQmbmJzcDtieSZuYnNwO0pvbmF0aGFuLjxiciA+SXQmbmJzcDt3b3VsZCZuYnNwO2dy
-ZWF0bHkmbmJzcDtoZWxwJm5ic3A7aWYmbmJzcDt5b3UmbmJzcDtjYW4mbmJzcDtwcm92aWRlJm5i
-c3A7YSZuYnNwO3NtYWxsJm5ic3A7cmVwcm9kdWNlci48YnIgPjxiciA+VGhhbmtzLDxiciA+PGJy
-ID5NYXRoaWV1PGJyID48YnIgPjxiciA+Jmd0OyZuYnNwO1RoYW5rczxiciA+Jmd0OyZuYnNwO3po
-ZW55dS5yZW48YnIgPjxiciA+Jmd0OyZndDsmbmJzcDstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS08YnIgPiZndDsmZ3Q7Jm5i
-c3A75Y+R5Lu25Lq677yaSm9uYXRoYW4mbmJzcDtSYWpvdHRlLUp1bGllbiZuYnNwOyZsdDtqb25h
-dGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20mZ3Q7PGJyID4mZ3Q7Jmd0OyZuYnNwO+WP
-kemAgeaXtumXtO+8mjIwMjLlubQy5pyIMjXml6Uo5pif5pyf5LqUKSZuYnNwOzIyOjMxPGJyID4m
-Z3Q7Jmd0OyZuYnNwO+aUtuS7tuS6uu+8mnpoZW55dS5yZW4mbmJzcDsmbHQ7emhlbnl1LnJlbkBh
-bGl5dW4uY29tJmd0OzxiciA+Jmd0OyZndDsmbmJzcDvmioQmbmJzcDvpgIHvvJpsdHRuZy1kZXYm
-bmJzcDsmbHQ7bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs8YnIgPiZndDsmZ3Q7Jm5ic3A7
-5Li7Jm5ic3A76aKY77yaUmU6Jm5ic3A7W2x0dG5nLWRldl0mbmJzcDvlm57lpI3vvJombmJzcDvl
-m57lpI3vvJombmJzcDtzaG0mbmJzcDtsZWFrJm5ic3A7aW4mbmJzcDt0cmFjZWQmbmJzcDthcHBs
-aWNhdGlvbj88YnIgPjxiciA+Jmd0OyZndDsmbmJzcDtIaSZuYnNwO3poZW55dS5yZW4sPGJyID48
-YnIgPiZndDsmZ3Q7Jm5ic3A7UGxlYXNlJm5ic3A7b3BlbiZuYnNwO2EmbmJzcDtidWcmbmJzcDtv
-biZuYnNwO291ciZuYnNwO2J1ZyZuYnNwO3RyYWNrZXImbmJzcDthbmQmbmJzcDtwcm92aWRlJm5i
-c3A7YSZuYnNwO3JlcHJvZHVjZXImbmJzcDthZ2FpbnN0Jm5ic3A7dGhlJm5ic3A7bGF0ZXN0PGJy
-ID4mZ3Q7Jmd0OyZuYnNwO3N0YWJsZSZuYnNwO3ZlcnNpb24mbmJzcDsoMi4xMy54KS48YnIgPjxi
-ciA+Jmd0OyZndDsmbmJzcDtodHRwczovL2J1Z3MubHR0bmcub3JnLzxiciA+PGJyID4mZ3Q7Jmd0
-OyZuYnNwO1BsZWFzZSZuYnNwO2ZvbGxvdyZuYnNwO3RoZSZuYnNwO2d1aWRlbGluZXM6Jm5ic3A7
-aHR0cHM6Ly9idWdzLmx0dG5nLm9yZy8jQnVnLXJlcG9ydGluZy1ndWlkZWxpbmVzPGJyID48YnIg
-PiZndDsmZ3Q7Jm5ic3A7Q2hlZXJzPGJyID48YnIgPiZndDsmZ3Q7Jm5ic3A7T24mbmJzcDtGcmks
-Jm5ic3A7RmViJm5ic3A7MjUsJm5ic3A7MjAyMiZuYnNwO2F0Jm5ic3A7MTI6NDc6MzRQTSZuYnNw
-OyswODAwLCZuYnNwO3poZW55dS5yZW4mbmJzcDt2aWEmbmJzcDtsdHRuZy1kZXYmbmJzcDt3cm90
-ZTo8YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO0hpLCZuYnNwO2x0dG5nLWRldiZuYnNwO3Rl
-YW08YnIgPiZndDsmZ3Q7Jmd0OyZuYnNwO1doZW4mbmJzcDtsdHRuZy1zZXNzaW9uZCZuYnNwO2V4
-aXRzLCZuYnNwO3RoZSZuYnNwO3VzdCZuYnNwO2FwcGxpY2F0aW9ucyZuYnNwO3Nob3VsZCZuYnNw
-O2NhbGw8YnIgPiZndDsmZ3Q7Jmd0OyZuYnNwO2x0dG5nX3VzdF9vYmpkX3RhYmxlX293bmVyX2Ns
-ZWFudXAoKSZuYnNwO2FuZCZuYnNwO2NsZWFuJm5ic3A7dXAmbmJzcDthbGwmbmJzcDtzaG0mbmJz
-cDtyZXNvdXJjZSh1bm1hcCZuYnNwO2FuZDxiciA+Jmd0OyZndDsmZ3Q7Jm5ic3A7Y2xvc2UpLiZu
-YnNwO0hvd2VydmVyJm5ic3A7SSZuYnNwO2RvJm5ic3A7ZmluZCZuYnNwO3RoYXQmbmJzcDt0aGUm
-bmJzcDt1c3QmbmJzcDthcHBsaWNhdGlvbnMmbmJzcDtrZWVwJm5ic3A7b3BlbmluZyZuYnNwOyZx
-dW90O2FsbCZxdW90OyZuYnNwO29mJm5ic3A7dGhlPGJyID4mZ3Q7Jmd0OyZuYnNwOyZndDsmbmJz
-cDtzaG0mbmJzcDtmZHMoJnF1b3Q7L2Rldi9zaG0vdXN0LXNobS1jb25zdW1lci04MTEzMiZuYnNw
-OyhkZWxldGVkKSZxdW90OykmbmJzcDthbmQmbmJzcDtkbyZuYnNwO05PVCZuYnNwO2ZyZWUmbmJz
-cDtzaG0uPGJyID4mZ3Q7Jmd0OyZndDsmbmJzcDtJZiZuYnNwO3dlJm5ic3A7cnVuJm5ic3A7bHR0
-bmctc2Vzc2lvbmQmbmJzcDthZ2FpbiwmbmJzcDt1c3QmbmJzcDthcHBsaWNhdGlvbnMmbmJzcDtj
-YW4mbmJzcDtnZXQmbmJzcDthJm5ic3A7bmV3Jm5ic3A7cGllY2UmbmJzcDtvZiZuYnNwO3NobSZu
-YnNwO2FuZDxiciA+Jmd0OyZndDsmZ3Q7Jm5ic3A7YSZuYnNwO25ldyZuYnNwO2xpc3QmbmJzcDtv
-ZiZuYnNwO3NobSZuYnNwO2ZkcyZuYnNwO3NvJm5ic3A7ZG91YmxlJm5ic3A7c2htJm5ic3A7dXNh
-Z2VzLiZuYnNwO1RoZW4mbmJzcDtpZiZuYnNwO3dlJm5ic3A7a2lsbCZuYnNwO2x0dG5nLXNlc3Np
-b25kLDxiciA+Jmd0OyZndDsmZ3Q7Jm5ic3A7d2hhdCZuYnNwO3RoZSZuYnNwO21vc3RsaWtlbHkm
-bmJzcDtoYXBwZW5lZCZuYnNwO2lzJm5ic3A7dXN0Jm5ic3A7YXBwbGljYXRpb25zJm5ic3A7Y2xv
-c2UmbmJzcDt0aGUmbmJzcDtuZXcmbmJzcDtsaXN0Jm5ic3A7b2YmbmJzcDtzaG0mbmJzcDtmZHM8
-YnIgPiZndDsmZ3Q7Jmd0OyZuYnNwO2FuZCZuYnNwO2ZyZWUmbmJzcDtuZXcmbmJzcDtzaG0mbmJz
-cDtyZXNvdXJjZSZuYnNwO2J1dCZuYnNwO2tlZXBpbmcmbmJzcDtvbGQmbmJzcDtzaG0mbmJzcDtz
-dGlsbC4mbmJzcDtJbiZuYnNwO290aGVyJm5ic3A7d29yZCwmbmJzcDt3ZSZuYnNwO2NhbiZuYnNw
-O25vdDxiciA+Jmd0OyZndDsmbmJzcDsmZ3Q7Jm5ic3A7ZnJlZSZuYnNwO3RoaXMmbmJzcDtwaWVj
-ZSZuYnNwO29mJm5ic3A7c2htJm5ic3A7dW5sZXNzJm5ic3A7d2UmbmJzcDtraWxsaW5nJm5ic3A7
-dXN0Jm5ic3A7YXBwbGljYXRpb25zISEhPGJyID4mZ3Q7Jmd0OyZndDsmbmJzcDtTbyZuYnNwO0lz
-Jm5ic3A7dGhlcmUmbmJzcDthbnkmbmJzcDtwb3NzaWxiZSZuYnNwO3RoYXQmbmJzcDt1c3QmbmJz
-cDthcHBsaWNhdGlvbnMmbmJzcDtmYWlsZWQmbmJzcDtjYWxsaW5nPGJyID4mZ3Q7Jmd0OyZndDsm
-bmJzcDtsdHRuZ191c3Rfb2JqZF90YWJsZV9vd25lcl9jbGVhbnVwKCk/Jm5ic3A7RG8mbmJzcDt5
-b3UmbmJzcDtoYXZlJm5ic3A7ZXZlciZuYnNwO3NlZSZuYnNwO3RoaXMmbmJzcDtwcm9ibGVtPyZu
-YnNwO0RvJm5ic3A7eW91PGJyID4mZ3Q7Jmd0OyZndDsmbmJzcDtoYXZlJm5ic3A7YW55Jm5ic3A7
-YWR2aWNlJm5ic3A7dG8mbmJzcDtmcmVlJm5ic3A7dGhlJm5ic3A7c2htJm5ic3A7d2l0aG91dCZu
-YnNwO2tpbGxsaW5nJm5ic3A7dXN0Jm5ic3A7YXBwbGljYXRpb25zKEkmbmJzcDt0cmllZCZuYnNw
-O3RvPGJyID4mZ3Q7Jmd0OyZuYnNwOyZndDsmbmJzcDtkaWcmbmJzcDtpbnRvJm5ic3A7a2VybmVs
-Jm5ic3A7c2htX29wZW4mbmJzcDthbmQmbmJzcDsvZGV2L3NobSwmbmJzcDtidXQmbmJzcDtub3Qm
-bmJzcDtmb3VuZCZuYnNwO2FueSZuYnNwO2lkZWFzKT88YnIgPjxiciA+Jmd0OyZndDsmbmJzcDsm
-Z3Q7Jm5ic3A7VGhhbmtzJm5ic3A7aW4mbmJzcDthZHZhbmNlPGJyID4mZ3Q7Jmd0OyZuYnNwOyZn
-dDsmbmJzcDt6aGVueXUucmVuPGJyID48YnIgPjxiciA+PGJyID4mZ3Q7Jmd0OyZuYnNwOyZndDsm
-bmJzcDstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS08YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO+WPkeS7tuS6uu+8mnpo
-ZW55dS5yZW4mbmJzcDt2aWEmbmJzcDtsdHRuZy1kZXYmbmJzcDsmbHQ7bHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZyZndDs8YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO+WPkemAgeaXtumXtO+8
-mjIwMjLlubQy5pyIMjPml6Uo5pif5pyf5LiJKSZuYnNwOzIzOjA5PGJyID4mZ3Q7Jmd0OyZuYnNw
-OyZndDsmbmJzcDvmlLbku7bkurrvvJpsdHRuZy1kZXYmbmJzcDsmbHQ7bHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZyZndDs8YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO+S4uyZuYnNwO+mimO+8
-mltsdHRuZy1kZXZdJm5ic3A75Zue5aSN77yaJm5ic3A7c2htJm5ic3A7bGVhayZuYnNwO2luJm5i
-c3A7dHJhY2VkJm5ic3A7YXBwbGljYXRpb24/PGJyID48YnIgPiZndDsmZ3Q7Jmd0OyZuYnNwOyZn
-dDsmcXVvdDtJJm5ic3A7Zm91bmQmbmJzcDt0aGVzZSZuYnNwO2l0ZW1zJm5ic3A7YWxzbyZuYnNw
-O2V4aXN0Jm5ic3A7aW4mbmJzcDthJm5ic3A7dHJhY2VkJm5ic3A7YXBwbGljYXRpb24mbmJzcDt3
-aGljaCZuYnNwO2lzJm5ic3A7YSZuYnNwO2xvbmctdGltZTxiciA+Jmd0OyZndDsmbmJzcDsmZ3Q7
-Jm5ic3A7Jmd0O3J1bm5pbmcmbmJzcDtkYWVtb24mcXVvdDs8YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0
-OyZuYnNwO0V2ZW4mbmJzcDtpZiZuYnNwO2x0dG5nLXNlc3Npb25kJm5ic3A7aGFzJm5ic3A7YmVl
-biZuYnNwO2tpbGxlZCEhPGJyID48YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO1RoYW5rczxi
-ciA+Jmd0OyZndDsmbmJzcDsmZ3Q7Jm5ic3A7emhlbnl1LnJlbjxiciA+Jmd0OyZndDsmbmJzcDsm
-Z3Q7Jm5ic3A7LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tPGJyID4mZ3Q7Jmd0OyZuYnNwOyZndDsmbmJzcDvlj5Hku7bkurrv
-vJp6aGVueXUucmVuJm5ic3A7dmlhJm5ic3A7bHR0bmctZGV2Jm5ic3A7Jmx0O2x0dG5nLWRldkBs
-aXN0cy5sdHRuZy5vcmcmZ3Q7PGJyID4mZ3Q7Jmd0OyZuYnNwOyZndDsmbmJzcDvlj5HpgIHml7bp
-l7TvvJoyMDIy5bm0MuaciDIz5pelKOaYn+acn+S4iSkmbmJzcDsyMjo0NDxiciA+Jmd0OyZndDsm
-bmJzcDsmZ3Q7Jm5ic3A75pS25Lu25Lq677yabHR0bmctZGV2Jm5ic3A7Jmx0O2x0dG5nLWRldkBs
-aXN0cy5sdHRuZy5vcmcmZ3Q7PGJyID4mZ3Q7Jmd0OyZuYnNwOyZndDsmbmJzcDvkuLsmbmJzcDvp
-opjvvJpbbHR0bmctZGV2XSZuYnNwO3NobSZuYnNwO2xlYWsmbmJzcDtpbiZuYnNwO3RyYWNlZCZu
-YnNwO2FwcGxpY2F0aW9uPzxiciA+PGJyID4mZ3Q7Jmd0OyZuYnNwOyZndDsmbmJzcDtIaSw8YnIg
-PiZndDsmZ3Q7Jmd0OyZuYnNwO1RoZXJlJm5ic3A7YXJlJm5ic3A7bWFueSZuYnNwO2l0ZW1zJm5i
-c3A7c3VjaCZuYnNwO2FzJm5ic3A7JnF1b3Q7L2Rldi9zaG0vdXN0LXNobS1jb25zdW1lci04MTEz
-MiZuYnNwOyhkZWxldGVkKSZxdW90OyZuYnNwO2V4aXN0PGJyID4mZ3Q7Jmd0OyZndDsmbmJzcDtp
-biZuYnNwO2x0dG5nLXNlc3Npb25kJm5ic3A7ZmQmbmJzcDtzcGFjZXMuJm5ic3A7SSZuYnNwO2tu
-b3cmbmJzcDtpdCZuYnNwO2lzJm5ic3A7dGhlJm5ic3A7cmVzdWx0Jm5ic3A7b2YmbmJzcDtzaG1f
-b3BlbigpJm5ic3A7YW5kPGJyID4mZ3Q7Jmd0OyZuYnNwOyZndDsmbmJzcDtzaG1fdW5sbmlrKCkm
-bmJzcDtpbiZuYnNwO2NyZWF0ZV9wb3NpeF9zaG0oKS48YnIgPiZndDsmZ3Q7Jmd0OyZuYnNwO0hv
-d2V2ZXIsJm5ic3A7dG9kYXksJm5ic3A7SSZuYnNwO2ZvdW5kJm5ic3A7dGhlc2UmbmJzcDtpdGVt
-cyZuYnNwO2Fsc28mbmJzcDtleGlzdCZuYnNwO2luJm5ic3A7YSZuYnNwO3RyYWNlZCZuYnNwO2Fw
-cGxpY2F0aW9uJm5ic3A7d2hpY2gmbmJzcDtpczxiciA+Jmd0OyZndDsmZ3Q7Jm5ic3A7YSZuYnNw
-O2xvbmctdGltZSZuYnNwO3J1bm5pbmcmbmJzcDtkYWVtb24uJm5ic3A7VGhlJm5ic3A7bW9zdCZu
-YnNwO2ltcG9ydGFudCZuYnNwO3RoaW5nJm5ic3A7SSZuYnNwO2ZvdW5kJm5ic3A7aXMmbmJzcDt0
-aGF0Jm5ic3A7dGhlcmU8YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO3NlZW1zJm5ic3A7bm8m
-bmJzcDtyZWxpYWJsZSZuYnNwO3dheSZuYnNwO3RvJm5ic3A7cmVsZWFzZSZuYnNwO3NoYXJlJm5i
-c3A7bWVtb3J5LjxiciA+Jmd0OyZndDsmZ3Q7Jm5ic3A7SSZuYnNwO3RyaWVkJm5ic3A7dG8mbmJz
-cDtraWxsJm5ic3A7bHR0bmctc2Vzc2lvbmQmbmJzcDtidXQmbmJzcDtub3QmbmJzcDthbHdheXMm
-bmJzcDtyZWxlYXNlJm5ic3A7c2hhcmUmbmJzcDttZW1vcnkuJm5ic3A7U29tZXRpbWVzJm5ic3A7
-STxiciA+Jmd0OyZndDsmZ3Q7Jm5ic3A7bmVlZCZuYnNwO3RvJm5ic3A7a2lsbCZuYnNwO3RoZSZu
-YnNwO3RyYWNlZCZuYnNwO2FwcGxpY2F0aW9uJm5ic3A7dG8mbmJzcDtmcmVlJm5ic3A7c2hhcmUm
-bmJzcDttZW1vcnkuLi4uQnV0Jm5ic3A7aXQmbmJzcDtpcyZuYnNwO25vdCZuYnNwO2E8YnIgPiZn
-dDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO2dvb2QmbmJzcDtpZGVhJm5ic3A7dG8mbmJzcDtraWxsJm5i
-c3A7dGhlc2UmbmJzcDthcHBsaWNhdGlvbnMuPGJyID4mZ3Q7Jmd0OyZuYnNwOyZndDsmbmJzcDtN
-eSZuYnNwO3F1ZXN0aW9ucyZuYnNwO2FyZTo8YnIgPiZndDsmZ3Q7Jmd0OyZuYnNwOzEuJm5ic3A7
-SXMmbmJzcDt0aGVyZSZuYnNwO2FueSZuYnNwO3dheSZuYnNwO3RvJm5ic3A7cmVsZWFzZSZuYnNw
-O3NoYXJlJm5ic3A7bWVtb3J5Jm5ic3A7d2l0aG91dCZuYnNwO2tpbGxpbmcmbmJzcDthbnkmbmJz
-cDt0cmFjZWQ8YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO2FwcGxpY2F0aW9uPzxiciA+Jmd0
-OyZndDsmZ3Q7Jm5ic3A7Mi4mbmJzcDtJcyZuYnNwO2l0Jm5ic3A7bm9ybWFsJm5ic3A7dGhhdCZu
-YnNwO21hbnkmbmJzcDtpdGVtcyZuYnNwO3N1Y2gmbmJzcDthcyZuYnNwOyZxdW90Oy9kZXYvc2ht
-L3VzdC1zaG0tY29uc3VtZXItODExMzI8YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwOyhkZWxl
-dGVkKSZxdW90OyZuYnNwO2V4aXN0Jm5ic3A7aW4mbmJzcDt0aGUmbmJzcDt0cmFjZWQmbmJzcDth
-cHBsaWNhdGlvbj88YnIgPjxiciA+Jmd0OyZndDsmbmJzcDsmZ3Q7Jm5ic3A7VGhhbmtzPGJyID4m
-Z3Q7Jmd0OyZuYnNwOyZndDsmbmJzcDt6aGVueXUucmVuPGJyID48YnIgPjxiciA+PGJyID4mZ3Q7
-Jmd0OyZuYnNwOyZndDsmbmJzcDtfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXzxiciA+Jmd0OyZndDsmbmJzcDsmZ3Q7Jm5ic3A7bHR0bmctZGV2Jm5ic3A7bWFp
-bGluZyZuYnNwO2xpc3Q8YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO2x0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmc8YnIgPiZndDsmZ3Q7Jm5ic3A7Jmd0OyZuYnNwO2h0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXY8YnIgPjxiciA+Jmd0OyZn
-dDsmbmJzcDstLTxiciA+Jmd0OyZndDsmbmJzcDtKb25hdGhhbiZuYnNwO1Jham90dGUtSnVsaWVu
-PGJyID4mZ3Q7Jmd0OyZuYnNwO0VmZmljaU9TPGJyID4mZ3Q7Jm5ic3A7X19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX188YnIgPiZndDsmbmJzcDtsdHRuZy1kZXYm
-bmJzcDttYWlsaW5nJm5ic3A7bGlzdDxiciA+Jmd0OyZuYnNwO2x0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmc8YnIgPiZndDsmbmJzcDtodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2PGJyID4tLSZuYnNwOzxiciA+TWF0aGlldSZuYnNwO0Rlc25v
-eWVyczxiciA+RWZmaWNpT1MmbmJzcDtJbmMuPGJyID5odHRwOi8vd3d3LmVmZmljaW9zLmNvbTwv
-YmxvY2txdW90ZT48L2Rpdj4=
-------=ALIBOUNDARY_65600_7feb00b60940_62280300_e15ae--
+I wonder if you end up in a scenario where an application very frequently p=
+erforms exec(), and therefore=20
+sometimes the exec() will happen in the window between the unix socket file=
+ descriptor reception and=20
+call to fcntl FD_CLOEXEC.=20
 
+Thanks,=20
 
---===============6277397542757815510==
+Mathieu=20
+
+----- On Mar 8, 2022, at 8:29 PM, zhenyu.ren <zhenyu.ren@aliyun.com> wrote:=
+=20
+
+> Thanks a lot for reply. I do not reply it in bug tracker since I have not=
+ gotten
+> a reliable way to reproduce the leak case.
+
+>> ------------------------------------------------------------------
+>> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9AMathieu Desnoyers <mathieu.desnoyers=
+@efficios.com>
+>> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2022=E5=B9=B43=E6=9C=888=E6=
+=97=A5(=E6=98=9F=E6=9C=9F=E4=BA=8C) 23:26
+>> =E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren <zhenyu.ren@aliyun.com>
+>> =E6=8A=84 =E9=80=81=EF=BC=9AJonathan Rajotte <jonathan.rajotte-julien@ef=
+ficios.com>; lttng-dev
+>> <lttng-dev@lists.lttng.org>
+>> =E4=B8=BB =E9=A2=98=EF=BC=9ARe: [lttng-dev] =E5=9B=9E=E5=A4=8D=EF=BC=9A =
+=E5=9B=9E=E5=A4=8D=EF=BC=9A =E5=9B=9E=E5=A4=8D=EF=BC=9A shm leak in traced =
+application?
+
+>> ----- On Mar 8, 2022, at 12:18 AM, lttng-dev lttng-dev@lists.lttng.org w=
+rote:
+
+>> > Hi,
+>> > In shm_object_table_append_shm()/alloc_shm()=EF=BC=8C why not calling =
+FD_CLOEXEC fcntl()
+>> > to shmfds? I guess this omission leads to shm fds leak.
+
+>> Those file descriptors are created when received by ustcomm_recv_fds_uni=
+x_sock,
+>> and
+>> immediately after creation they are set as FD_CLOEXEC.
+
+>> We should continue this discussion in the bug tracker as suggested by Jo=
+nathan.
+>> It would greatly help if you can provide a small reproducer.
+
+>> Thanks,
+
+>> Mathieu
+
+>> > Thanks
+>> > zhenyu.ren
+
+>> >> ------------------------------------------------------------------
+>> >> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9AJonathan Rajotte-Julien <jonathan=
+.rajotte-julien@efficios.com>
+>> >> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2022=E5=B9=B42=E6=9C=882=
+5=E6=97=A5(=E6=98=9F=E6=9C=9F=E4=BA=94) 22:31
+>> >> =E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren <zhenyu.ren@aliyun.com=
+>
+>> >> =E6=8A=84 =E9=80=81=EF=BC=9Alttng-dev <lttng-dev@lists.lttng.org>
+>> >> =E4=B8=BB =E9=A2=98=EF=BC=9ARe: [lttng-dev] =E5=9B=9E=E5=A4=8D=EF=BC=
+=9A =E5=9B=9E=E5=A4=8D=EF=BC=9A shm leak in traced application?
+
+>> >> Hi zhenyu.ren,
+
+>> >> Please open a bug on our bug tracker and provide a reproducer against=
+ the latest
+>> >> stable version (2.13.x).
+
+>> >> https://bugs.lttng.org/
+
+>> >> Please follow the guidelines: https://bugs.lttng.org/#Bug-reporting-g=
+uidelines
+
+>> >> Cheers
+
+>> >> On Fri, Feb 25, 2022 at 12:47:34PM +0800, zhenyu.ren via lttng-dev wr=
+ote:
+>> >> > Hi, lttng-dev team
+>> >>> When lttng-sessiond exits, the ust applications should call
+>> >>> lttng_ust_objd_table_owner_cleanup() and clean up all shm resource(u=
+nmap and
+>> >>> close). Howerver I do find that the ust applications keep opening "a=
+ll" of the
+>> >> > shm fds("/dev/shm/ust-shm-consumer-81132 (deleted)") and do NOT fre=
+e shm.
+>> >>> If we run lttng-sessiond again, ust applications can get a new piece=
+ of shm and
+>> >>> a new list of shm fds so double shm usages. Then if we kill lttng-se=
+ssiond,
+>> >>> what the mostlikely happened is ust applications close the new list =
+of shm fds
+>> >>> and free new shm resource but keeping old shm still. In other word, =
+we can not
+>> >> > free this piece of shm unless we killing ust applications!!!
+>> >>> So Is there any possilbe that ust applications failed calling
+>> >>> lttng_ust_objd_table_owner_cleanup()? Do you have ever see this prob=
+lem? Do you
+>> >>> have any advice to free the shm without killling ust applications(I =
+tried to
+>> >> > dig into kernel shm_open and /dev/shm, but not found any ideas)?
+
+>> >> > Thanks in advance
+>> >> > zhenyu.ren
+
+>> >> > ------------------------------------------------------------------
+>> >> > =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren via lttng-dev <lttng=
+-dev@lists.lttng.org>
+>> >> > =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2022=E5=B9=B42=E6=9C=
+=8823=E6=97=A5(=E6=98=9F=E6=9C=9F=E4=B8=89) 23:09
+>> >> > =E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9Alttng-dev <lttng-dev@lists.lttn=
+g.org>
+>> >> > =E4=B8=BB =E9=A2=98=EF=BC=9A[lttng-dev] =E5=9B=9E=E5=A4=8D=EF=BC=9A=
+ shm leak in traced application?
+
+>> >>> >"I found these items also exist in a traced application which is a =
+long-time
+>> >> > >running daemon"
+>> >> > Even if lttng-sessiond has been killed!!
+
+>> >> > Thanks
+>> >> > zhenyu.ren
+>> >> > ------------------------------------------------------------------
+>> >> > =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren via lttng-dev <lttng=
+-dev@lists.lttng.org>
+>> >> > =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2022=E5=B9=B42=E6=9C=
+=8823=E6=97=A5(=E6=98=9F=E6=9C=9F=E4=B8=89) 22:44
+>> >> > =E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9Alttng-dev <lttng-dev@lists.lttn=
+g.org>
+>> >> > =E4=B8=BB =E9=A2=98=EF=BC=9A[lttng-dev] shm leak in traced applicat=
+ion?
+
+>> >> > Hi,
+>> >>> There are many items such as "/dev/shm/ust-shm-consumer-81132 (delet=
+ed)" exist
+>> >>> in lttng-sessiond fd spaces. I know it is the result of shm_open() a=
+nd
+>> >> > shm_unlnik() in create_posix_shm().
+>> >>> However, today, I found these items also exist in a traced applicati=
+on which is
+>> >>> a long-time running daemon. The most important thing I found is that=
+ there
+>> >> > seems no reliable way to release share memory.
+>> >>> I tried to kill lttng-sessiond but not always release share memory. =
+Sometimes I
+>> >>> need to kill the traced application to free share memory....But it i=
+s not a
+>> >> > good idea to kill these applications.
+>> >> > My questions are:
+>> >>> 1. Is there any way to release share memory without killing any trac=
+ed
+>> >> > application?
+>> >>> 2. Is it normal that many items such as "/dev/shm/ust-shm-consumer-8=
+1132
+>> >> > (deleted)" exist in the traced application?
+
+>> >> > Thanks
+>> >> > zhenyu.ren
+
+>> >> > _______________________________________________
+>> >> > lttng-dev mailing list
+>> >> > lttng-dev@lists.lttng.org
+>> >> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+>> >> --
+>> >> Jonathan Rajotte-Julien
+>> >> EfficiOS
+>> > _______________________________________________
+>> > lttng-dev mailing list
+>> > lttng-dev@lists.lttng.org
+>> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> http://www.efficios.com
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+--=_918eaa43-d5ec-4c71-91d5-a88e8d29ff10
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div>When this happpens, is the process holding =
+a single (or very few) shm file references, or references to many<br data-m=
+ce-bogus=3D"1"></div><div>shm files ?<br data-mce-bogus=3D"1"></div><div><b=
+r data-mce-bogus=3D"1"></div><div>I wonder if you end up in a scenario wher=
+e an application very frequently performs exec(), and therefore<br data-mce=
+-bogus=3D"1"></div><div>sometimes the exec() will happen in the window betw=
+een the unix socket file descriptor reception and<br data-mce-bogus=3D"1"><=
+/div><div>call to fcntl FD_CLOEXEC.<br data-mce-bogus=3D"1"></div><div><br =
+data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div>=
+<br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><=
+div><br></div><div><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On =
+Mar 8, 2022, at 8:29 PM, zhenyu.ren &lt;zhenyu.ren@aliyun.com&gt; wrote:<br=
+></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"bor=
+der-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font=
+-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica=
+,Arial,sans-serif;font-size:12pt;"><div class=3D"__aliyun_email_body_block"=
+><div><span style=3D"font-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';=
+font-size:14px;color:#000000">Thanks a&nbsp; lot for reply. I do not reply =
+it in bug tracker since I have not gotten a reliable way to reproduce the l=
+eak case.&nbsp;</span></div><blockquote style=3D"margin-right:0;margin-top:=
+0;margin-bottom:0"><div><span style=3D"font-family:'tahoma' , 'arial' , 'st=
+heiti' , 'simsun';font-size:14px;color:#000000">---------------------------=
+---------------------------------------</span></div><div><span style=3D"fon=
+t-family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#00=
+0000">=E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9AMathieu Desnoyers &lt;mathieu.des=
+noyers@efficios.com&gt;</span></div><div><span style=3D"font-family:'tahoma=
+' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">=E5=8F=91=
+=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2022=E5=B9=B43=E6=9C=888=E6=97=A5(=E6=
+=98=9F=E6=9C=9F=E4=BA=8C) 23:26</span></div><div><span style=3D"font-family=
+:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000">=
+=E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren &lt;zhenyu.ren@aliyun.com&gt=
+;</span></div><div><span style=3D"font-family:'tahoma' , 'arial' , 'stheiti=
+' , 'simsun';font-size:14px;color:#000000">=E6=8A=84=E3=80=80=E9=80=81=EF=
+=BC=9AJonathan Rajotte &lt;jonathan.rajotte-julien@efficios.com&gt;; lttng-=
+dev &lt;lttng-dev@lists.lttng.org&gt;</span></div><div><span style=3D"font-=
+family:'tahoma' , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#0000=
+00">=E4=B8=BB=E3=80=80=E9=A2=98=EF=BC=9ARe: [lttng-dev] =E5=9B=9E=E5=A4=8D=
+=EF=BC=9A =E5=9B=9E=E5=A4=8D=EF=BC=9A =E5=9B=9E=E5=A4=8D=EF=BC=9A shm leak =
+in traced application?</span></div><div><span style=3D"font-family:'tahoma'=
+ , 'arial' , 'stheiti' , 'simsun';font-size:14px;color:#000000"><br></span>=
+</div><br><br>-----&nbsp;On&nbsp;Mar&nbsp;8,&nbsp;2022,&nbsp;at&nbsp;12:18&=
+nbsp;AM,&nbsp;lttng-dev&nbsp;lttng-dev@lists.lttng.org&nbsp;wrote:<br><br>&=
+gt;&nbsp;Hi,<br>&gt;&nbsp;In&nbsp;shm_object_table_append_shm()/alloc_shm()=
+=EF=BC=8C&nbsp;why&nbsp;not&nbsp;calling&nbsp;FD_CLOEXEC&nbsp;fcntl()<br>&g=
+t;&nbsp;to&nbsp;shmfds?&nbsp;I&nbsp;guess&nbsp;this&nbsp;omission&nbsp;lead=
+s&nbsp;to&nbsp;shm&nbsp;fds&nbsp;leak.<br><br>Those&nbsp;file&nbsp;descript=
+ors&nbsp;are&nbsp;created&nbsp;when&nbsp;received&nbsp;by&nbsp;ustcomm_recv=
+_fds_unix_sock,&nbsp;and<br>immediately&nbsp;after&nbsp;creation&nbsp;they&=
+nbsp;are&nbsp;set&nbsp;as&nbsp;FD_CLOEXEC.<br><br>We&nbsp;should&nbsp;conti=
+nue&nbsp;this&nbsp;discussion&nbsp;in&nbsp;the&nbsp;bug&nbsp;tracker&nbsp;a=
+s&nbsp;suggested&nbsp;by&nbsp;Jonathan.<br>It&nbsp;would&nbsp;greatly&nbsp;=
+help&nbsp;if&nbsp;you&nbsp;can&nbsp;provide&nbsp;a&nbsp;small&nbsp;reproduc=
+er.<br><br>Thanks,<br><br>Mathieu<br><br><br>&gt;&nbsp;Thanks<br>&gt;&nbsp;=
+zhenyu.ren<br><br>&gt;&gt;&nbsp;-------------------------------------------=
+-----------------------<br>&gt;&gt;&nbsp;=E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=
+=9AJonathan&nbsp;Rajotte-Julien&nbsp;&lt;jonathan.rajotte-julien@efficios.c=
+om&gt;<br>&gt;&gt;&nbsp;=E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2022=
+=E5=B9=B42=E6=9C=8825=E6=97=A5(=E6=98=9F=E6=9C=9F=E4=BA=94)&nbsp;22:31<br>&=
+gt;&gt;&nbsp;=E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren&nbsp;&lt;zhenyu=
+.ren@aliyun.com&gt;<br>&gt;&gt;&nbsp;=E6=8A=84&nbsp;=E9=80=81=EF=BC=9Alttng=
+-dev&nbsp;&lt;lttng-dev@lists.lttng.org&gt;<br>&gt;&gt;&nbsp;=E4=B8=BB&nbsp=
+;=E9=A2=98=EF=BC=9ARe:&nbsp;[lttng-dev]&nbsp;=E5=9B=9E=E5=A4=8D=EF=BC=9A&nb=
+sp;=E5=9B=9E=E5=A4=8D=EF=BC=9A&nbsp;shm&nbsp;leak&nbsp;in&nbsp;traced&nbsp;=
+application?<br><br>&gt;&gt;&nbsp;Hi&nbsp;zhenyu.ren,<br><br>&gt;&gt;&nbsp;=
+Please&nbsp;open&nbsp;a&nbsp;bug&nbsp;on&nbsp;our&nbsp;bug&nbsp;tracker&nbs=
+p;and&nbsp;provide&nbsp;a&nbsp;reproducer&nbsp;against&nbsp;the&nbsp;latest=
+<br>&gt;&gt;&nbsp;stable&nbsp;version&nbsp;(2.13.x).<br><br>&gt;&gt;&nbsp;h=
+ttps://bugs.lttng.org/<br><br>&gt;&gt;&nbsp;Please&nbsp;follow&nbsp;the&nbs=
+p;guidelines:&nbsp;https://bugs.lttng.org/#Bug-reporting-guidelines<br><br>=
+&gt;&gt;&nbsp;Cheers<br><br>&gt;&gt;&nbsp;On&nbsp;Fri,&nbsp;Feb&nbsp;25,&nb=
+sp;2022&nbsp;at&nbsp;12:47:34PM&nbsp;+0800,&nbsp;zhenyu.ren&nbsp;via&nbsp;l=
+ttng-dev&nbsp;wrote:<br>&gt;&gt;&nbsp;&gt;&nbsp;Hi,&nbsp;lttng-dev&nbsp;tea=
+m<br>&gt;&gt;&gt;&nbsp;When&nbsp;lttng-sessiond&nbsp;exits,&nbsp;the&nbsp;u=
+st&nbsp;applications&nbsp;should&nbsp;call<br>&gt;&gt;&gt;&nbsp;lttng_ust_o=
+bjd_table_owner_cleanup()&nbsp;and&nbsp;clean&nbsp;up&nbsp;all&nbsp;shm&nbs=
+p;resource(unmap&nbsp;and<br>&gt;&gt;&gt;&nbsp;close).&nbsp;Howerver&nbsp;I=
+&nbsp;do&nbsp;find&nbsp;that&nbsp;the&nbsp;ust&nbsp;applications&nbsp;keep&=
+nbsp;opening&nbsp;"all"&nbsp;of&nbsp;the<br>&gt;&gt;&nbsp;&gt;&nbsp;shm&nbs=
+p;fds("/dev/shm/ust-shm-consumer-81132&nbsp;(deleted)")&nbsp;and&nbsp;do&nb=
+sp;NOT&nbsp;free&nbsp;shm.<br>&gt;&gt;&gt;&nbsp;If&nbsp;we&nbsp;run&nbsp;lt=
+tng-sessiond&nbsp;again,&nbsp;ust&nbsp;applications&nbsp;can&nbsp;get&nbsp;=
+a&nbsp;new&nbsp;piece&nbsp;of&nbsp;shm&nbsp;and<br>&gt;&gt;&gt;&nbsp;a&nbsp=
+;new&nbsp;list&nbsp;of&nbsp;shm&nbsp;fds&nbsp;so&nbsp;double&nbsp;shm&nbsp;=
+usages.&nbsp;Then&nbsp;if&nbsp;we&nbsp;kill&nbsp;lttng-sessiond,<br>&gt;&gt=
+;&gt;&nbsp;what&nbsp;the&nbsp;mostlikely&nbsp;happened&nbsp;is&nbsp;ust&nbs=
+p;applications&nbsp;close&nbsp;the&nbsp;new&nbsp;list&nbsp;of&nbsp;shm&nbsp=
+;fds<br>&gt;&gt;&gt;&nbsp;and&nbsp;free&nbsp;new&nbsp;shm&nbsp;resource&nbs=
+p;but&nbsp;keeping&nbsp;old&nbsp;shm&nbsp;still.&nbsp;In&nbsp;other&nbsp;wo=
+rd,&nbsp;we&nbsp;can&nbsp;not<br>&gt;&gt;&nbsp;&gt;&nbsp;free&nbsp;this&nbs=
+p;piece&nbsp;of&nbsp;shm&nbsp;unless&nbsp;we&nbsp;killing&nbsp;ust&nbsp;app=
+lications!!!<br>&gt;&gt;&gt;&nbsp;So&nbsp;Is&nbsp;there&nbsp;any&nbsp;possi=
+lbe&nbsp;that&nbsp;ust&nbsp;applications&nbsp;failed&nbsp;calling<br>&gt;&g=
+t;&gt;&nbsp;lttng_ust_objd_table_owner_cleanup()?&nbsp;Do&nbsp;you&nbsp;hav=
+e&nbsp;ever&nbsp;see&nbsp;this&nbsp;problem?&nbsp;Do&nbsp;you<br>&gt;&gt;&g=
+t;&nbsp;have&nbsp;any&nbsp;advice&nbsp;to&nbsp;free&nbsp;the&nbsp;shm&nbsp;=
+without&nbsp;killling&nbsp;ust&nbsp;applications(I&nbsp;tried&nbsp;to<br>&g=
+t;&gt;&nbsp;&gt;&nbsp;dig&nbsp;into&nbsp;kernel&nbsp;shm_open&nbsp;and&nbsp=
+;/dev/shm,&nbsp;but&nbsp;not&nbsp;found&nbsp;any&nbsp;ideas)?<br><br>&gt;&g=
+t;&nbsp;&gt;&nbsp;Thanks&nbsp;in&nbsp;advance<br>&gt;&gt;&nbsp;&gt;&nbsp;zh=
+enyu.ren<br><br><br><br>&gt;&gt;&nbsp;&gt;&nbsp;---------------------------=
+---------------------------------------<br>&gt;&gt;&nbsp;&gt;&nbsp;=E5=8F=
+=91=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren&nbsp;via&nbsp;lttng-dev&nbsp;&lt;l=
+ttng-dev@lists.lttng.org&gt;<br>&gt;&gt;&nbsp;&gt;&nbsp;=E5=8F=91=E9=80=81=
+=E6=97=B6=E9=97=B4=EF=BC=9A2022=E5=B9=B42=E6=9C=8823=E6=97=A5(=E6=98=9F=E6=
+=9C=9F=E4=B8=89)&nbsp;23:09<br>&gt;&gt;&nbsp;&gt;&nbsp;=E6=94=B6=E4=BB=B6=
+=E4=BA=BA=EF=BC=9Alttng-dev&nbsp;&lt;lttng-dev@lists.lttng.org&gt;<br>&gt;&=
+gt;&nbsp;&gt;&nbsp;=E4=B8=BB&nbsp;=E9=A2=98=EF=BC=9A[lttng-dev]&nbsp;=E5=9B=
+=9E=E5=A4=8D=EF=BC=9A&nbsp;shm&nbsp;leak&nbsp;in&nbsp;traced&nbsp;applicati=
+on?<br><br>&gt;&gt;&gt;&nbsp;&gt;"I&nbsp;found&nbsp;these&nbsp;items&nbsp;a=
+lso&nbsp;exist&nbsp;in&nbsp;a&nbsp;traced&nbsp;application&nbsp;which&nbsp;=
+is&nbsp;a&nbsp;long-time<br>&gt;&gt;&nbsp;&gt;&nbsp;&gt;running&nbsp;daemon=
+"<br>&gt;&gt;&nbsp;&gt;&nbsp;Even&nbsp;if&nbsp;lttng-sessiond&nbsp;has&nbsp=
+;been&nbsp;killed!!<br><br>&gt;&gt;&nbsp;&gt;&nbsp;Thanks<br>&gt;&gt;&nbsp;=
+&gt;&nbsp;zhenyu.ren<br>&gt;&gt;&nbsp;&gt;&nbsp;---------------------------=
+---------------------------------------<br>&gt;&gt;&nbsp;&gt;&nbsp;=E5=8F=
+=91=E4=BB=B6=E4=BA=BA=EF=BC=9Azhenyu.ren&nbsp;via&nbsp;lttng-dev&nbsp;&lt;l=
+ttng-dev@lists.lttng.org&gt;<br>&gt;&gt;&nbsp;&gt;&nbsp;=E5=8F=91=E9=80=81=
+=E6=97=B6=E9=97=B4=EF=BC=9A2022=E5=B9=B42=E6=9C=8823=E6=97=A5(=E6=98=9F=E6=
+=9C=9F=E4=B8=89)&nbsp;22:44<br>&gt;&gt;&nbsp;&gt;&nbsp;=E6=94=B6=E4=BB=B6=
+=E4=BA=BA=EF=BC=9Alttng-dev&nbsp;&lt;lttng-dev@lists.lttng.org&gt;<br>&gt;&=
+gt;&nbsp;&gt;&nbsp;=E4=B8=BB&nbsp;=E9=A2=98=EF=BC=9A[lttng-dev]&nbsp;shm&nb=
+sp;leak&nbsp;in&nbsp;traced&nbsp;application?<br><br>&gt;&gt;&nbsp;&gt;&nbs=
+p;Hi,<br>&gt;&gt;&gt;&nbsp;There&nbsp;are&nbsp;many&nbsp;items&nbsp;such&nb=
+sp;as&nbsp;"/dev/shm/ust-shm-consumer-81132&nbsp;(deleted)"&nbsp;exist<br>&=
+gt;&gt;&gt;&nbsp;in&nbsp;lttng-sessiond&nbsp;fd&nbsp;spaces.&nbsp;I&nbsp;kn=
+ow&nbsp;it&nbsp;is&nbsp;the&nbsp;result&nbsp;of&nbsp;shm_open()&nbsp;and<br=
+>&gt;&gt;&nbsp;&gt;&nbsp;shm_unlnik()&nbsp;in&nbsp;create_posix_shm().<br>&=
+gt;&gt;&gt;&nbsp;However,&nbsp;today,&nbsp;I&nbsp;found&nbsp;these&nbsp;ite=
+ms&nbsp;also&nbsp;exist&nbsp;in&nbsp;a&nbsp;traced&nbsp;application&nbsp;wh=
+ich&nbsp;is<br>&gt;&gt;&gt;&nbsp;a&nbsp;long-time&nbsp;running&nbsp;daemon.=
+&nbsp;The&nbsp;most&nbsp;important&nbsp;thing&nbsp;I&nbsp;found&nbsp;is&nbs=
+p;that&nbsp;there<br>&gt;&gt;&nbsp;&gt;&nbsp;seems&nbsp;no&nbsp;reliable&nb=
+sp;way&nbsp;to&nbsp;release&nbsp;share&nbsp;memory.<br>&gt;&gt;&gt;&nbsp;I&=
+nbsp;tried&nbsp;to&nbsp;kill&nbsp;lttng-sessiond&nbsp;but&nbsp;not&nbsp;alw=
+ays&nbsp;release&nbsp;share&nbsp;memory.&nbsp;Sometimes&nbsp;I<br>&gt;&gt;&=
+gt;&nbsp;need&nbsp;to&nbsp;kill&nbsp;the&nbsp;traced&nbsp;application&nbsp;=
+to&nbsp;free&nbsp;share&nbsp;memory....But&nbsp;it&nbsp;is&nbsp;not&nbsp;a<=
+br>&gt;&gt;&nbsp;&gt;&nbsp;good&nbsp;idea&nbsp;to&nbsp;kill&nbsp;these&nbsp=
+;applications.<br>&gt;&gt;&nbsp;&gt;&nbsp;My&nbsp;questions&nbsp;are:<br>&g=
+t;&gt;&gt;&nbsp;1.&nbsp;Is&nbsp;there&nbsp;any&nbsp;way&nbsp;to&nbsp;releas=
+e&nbsp;share&nbsp;memory&nbsp;without&nbsp;killing&nbsp;any&nbsp;traced<br>=
+&gt;&gt;&nbsp;&gt;&nbsp;application?<br>&gt;&gt;&gt;&nbsp;2.&nbsp;Is&nbsp;i=
+t&nbsp;normal&nbsp;that&nbsp;many&nbsp;items&nbsp;such&nbsp;as&nbsp;"/dev/s=
+hm/ust-shm-consumer-81132<br>&gt;&gt;&nbsp;&gt;&nbsp;(deleted)"&nbsp;exist&=
+nbsp;in&nbsp;the&nbsp;traced&nbsp;application?<br><br>&gt;&gt;&nbsp;&gt;&nb=
+sp;Thanks<br>&gt;&gt;&nbsp;&gt;&nbsp;zhenyu.ren<br><br><br><br>&gt;&gt;&nbs=
+p;&gt;&nbsp;_______________________________________________<br>&gt;&gt;&nbs=
+p;&gt;&nbsp;lttng-dev&nbsp;mailing&nbsp;list<br>&gt;&gt;&nbsp;&gt;&nbsp;ltt=
+ng-dev@lists.lttng.org<br>&gt;&gt;&nbsp;&gt;&nbsp;https://lists.lttng.org/c=
+gi-bin/mailman/listinfo/lttng-dev<br><br>&gt;&gt;&nbsp;--<br>&gt;&gt;&nbsp;=
+Jonathan&nbsp;Rajotte-Julien<br>&gt;&gt;&nbsp;EfficiOS<br>&gt;&nbsp;_______=
+________________________________________<br>&gt;&nbsp;lttng-dev&nbsp;mailin=
+g&nbsp;list<br>&gt;&nbsp;lttng-dev@lists.lttng.org<br>&gt;&nbsp;https://lis=
+ts.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br>--&nbsp;<br>Mathieu&nbsp=
+;Desnoyers<br>EfficiOS&nbsp;Inc.<br>http://www.efficios.com</blockquote></d=
+iv><br></blockquote></div><div><br></div><div data-marker=3D"__SIG_POST__">=
+-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios=
+.com</div></div></body></html>
+--=_918eaa43-d5ec-4c71-91d5-a88e8d29ff10--
+
+--===============2971732014250284935==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -356,5 +449,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============6277397542757815510==--
-
+--===============2971732014250284935==--
