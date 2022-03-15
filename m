@@ -4,56 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E253C433F5
-	for <lttng-dev@archiver.kernel.org>; Tue, 15 Mar 2022 15:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0153AC433F5
+	for <lttng-dev@archiver.kernel.org>; Tue, 15 Mar 2022 20:26:42 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4KHyXG70r2zDjv;
-	Tue, 15 Mar 2022 11:49:50 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4KJ4gj274lzDtJ;
+	Tue, 15 Mar 2022 16:26:41 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1647359391;
-	bh=+HA+lSrg4350vIlGVBWvyt+N0X2btGBET5hg7yzB36E=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=HlfDTuPqBtWP8bZacr52wY08VEJvA/oaI/8jVDsevOrsiGTlVyn7Qevvs5yIyhjVz
-	 kw/KVTQwGUwxCdTGQsofBoShS9QwP1qO7PZ01TiQ4z2smEv8IiLfW1RExuZQIAF2pk
-	 GyM/2Qikg7UGnMW0wmSjb7RsLrZNOEqn4UVJzJdFLinBburBZ+lBPkzDeZfw56wzdD
-	 3GDdReIVdX0L+ApvqvFB7hOuBGDtSAZebuIDKXFEIdhOhEr4HFkwnGv8Fmw41tkwMq
-	 g6ae6F+armp1eJ+TczyI2GLnOHc1bLn/n05lJMl6MXlRMhYSAty2xdkYJUhqVk+rKq
-	 4De/yh4whXM3g==
+	s=default; t=1647376001;
+	bh=XrIQMLBuAxAFT5guo7l2W+qO2FPVLbMrEqNs1YAzUJI=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=pVIxehMlMJq8vd5Zw0zoCbfI0Bm30q8M2xbOx7kQz6qdyp20GqJxSiXc1JIEBJ+86
+	 4k4Y/ITbF8gjSXzS0kcp/etH0fIiW5wWMlBC0CXe1yr1HMjei8+ZH0XdncVkHEduU8
+	 C8m7hxjzHKVdGO2Bj27dSOj9SF0ADdCLmOZYngni/VGzXo6gFLSAiwsK0dT/WUp297
+	 4LOCUgZKqOczk6Q17VpwfIlxveiFAHQ6xkFZ9ZIwVPzXtgHcGRWUig5Ue+l0ag+g1A
+	 NnRDAiNRWzp1FCKcdNk/zGMKw6k0PvDHGcfdl/jKuaPqPDwYoswgY/Zxf4S0OgDl0l
+	 zDUlNPSYZClUQ==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4KHyXF1lnnzDqX
- for <lttng-dev@lists.lttng.org>; Tue, 15 Mar 2022 11:49:49 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4KJ4gg2K4CzF2b
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Mar 2022 16:26:39 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id A4CFA3B50E8
- for <lttng-dev@lists.lttng.org>; Tue, 15 Mar 2022 11:49:43 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id B746A3B7176;
+ Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id IuOr4ojxVf08; Tue, 15 Mar 2022 11:49:42 -0400 (EDT)
+ with ESMTP id C7RektU6Ylic; Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 51C1B3B5805;
- Tue, 15 Mar 2022 11:49:42 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 51C1B3B5805
+ by mail.efficios.com (Postfix) with ESMTP id 10FF13B7464;
+ Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 10FF13B7464
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id plwpNE8pAppH; Tue, 15 Mar 2022 11:49:42 -0400 (EDT)
+ with ESMTP id nJ_2nYl-s31R; Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 443FD3B5804;
- Tue, 15 Mar 2022 11:49:42 -0400 (EDT)
-Date: Tue, 15 Mar 2022 11:49:42 -0400 (EDT)
-To: GOLLAMUDI MADHAN MOHAN <madhan.mohan@5g.iith.ac.in>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Message-ID: <795806806.151478.1647359382157.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CAB9=ZW6FEj+zXnVcSaCGCSWF54cZDEv5_25-F0D1SEZHZaZ=rw@mail.gmail.com>
-References: <CAB9=ZW6FEj+zXnVcSaCGCSWF54cZDEv5_25-F0D1SEZHZaZ=rw@mail.gmail.com>
+ by mail.efficios.com (Postfix) with ESMTP id 042153B7463;
+ Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
+Date: Tue, 15 Mar 2022 16:26:32 -0400 (EDT)
+To: =?utf-8?B?5byg5paH6b6Z?= <zhangwenlong@loongson.cn>
+Message-ID: <141633385.152321.1647375992965.JavaMail.zimbra@efficios.com>
+In-Reply-To: <762143656.71334.1643146562410.JavaMail.zimbra@efficios.com>
+References: <22bf2d37.1dde.17e75a7aeb1.Coremail.zhangwenlong@loongson.cn>
+ <945744448.62503.1642694392338.JavaMail.zimbra@efficios.com>
+ <bfd9420.3500.17e8b1b5bb5.Coremail.zhangwenlong@loongson.cn>
+ <1361211440.68286.1643025545546.JavaMail.zimbra@efficios.com>
+ <762143656.71334.1643146562410.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
-Thread-Topic: call trace while using lttng in petalinux 2019.2 (kernel 4.19)
-Thread-Index: /iM6dznc+I24zGeX3o8JjtohSSqzmg==
-Subject: Re: [lttng-dev] call trace while using lttng in petalinux 2019.2
- (kernel 4.19)
+Thread-Topic: Add support for the LOONGARCH architecture
+Thread-Index: pdbSYqQrijeu+Z84cZsr4zcUut9Hu67Haiw1Dm59dPQ=
+Subject: Re: [lttng-dev] Add support for the LOONGARCH architecture
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -67,132 +69,120 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
 Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-
-
------ On Mar 15, 2022, at 2:48 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
-
-> Dear Sir/Madam,
-> I am Madhan , working as an embedded engineer in 5GTB. I am using lttng in
-> petalinux 2019.2(kernel 4.19) .And getting a call Trace error. Refer the below
-> log for more details.
-
-> root@xilinx-zcu111-2019_2:~# lttng create
-> Spawning a session daemon
-> [ 163.902282] lttng_kretprobes: loading out-of-tree module taints kernel.
-> [ 163.987461] Unable to handle kernel paging request at virtual address
-> 00000000000010c0
-> [ 163.995379] Mem abort info:
-> [ 163.998179] ESR = 0x96000005
-> [ 164.001233] Exception class = DABT (current EL), IL = 32 bits
-> [ 164.007149] SET = 0, FnV = 0
-> [ 164.010203] EA = 0, S1PTW = 0
-> [ 164.013333] Data abort info:
-> [ 164.016218] ISV = 0, ISS = 0x00000005
-> [ 164.020054] CM = 0, WnR = 0
-> [ 164.023028] user pgtable: 4k pages, 39-bit VAs, pgdp = 00000000df6dd54e
-> [ 164.029646] [00000000000010c0] pgd=0000000000000000, pud=0000000000000000
-> [ 164.036447] Internal error: Oops: 96000005 [#1] SMP
-> [ 164.041318] Modules linked in: lttng_tracer(O+) lttng_statedump(O)
-> lttng_ftrace(O) lttng_kprobes(O) lttng_clock(O) lttng_lib_ring_buffer(O)
-> lttng_kretprobes(O) uio_pdrv_genirq
-> [ 164.056963] CPU: 1 PID: 4955 Comm: modprobe Tainted: G O 4.19.0-xilinx-v2019.2
-> #1
-> [ 164.065734] Hardware name: ZynqMP ZCU111 RevA (DT)
-> [ 164.070510] pstate: 60000005 (nZCv daif -PAN -UAO)
-> [ 164.075429] pc : lttng_tracepoint_notify+0x188/0x228 [lttng_tracer]
-> [ 164.081767] lr : lttng_tracepoint_notify+0x14c/0x228 [lttng_tracer]
-> [ 164.088016] sp : ffffff8011613a40
-> [ 164.091314] x29: ffffff8011613a40 x28: ffffff801163f000
-> [ 164.096618] x27: 0000000000000100 x26: ffffff800813c958
-> [ 164.101921] x25: ffffff8000e22758 x24: 0000000000000000
-> [ 164.107225] x23: 00000000000010c0 x22: ffffff8000e42ed8
-> [ 164.112528] x21: ffffffc87accc400 x20: ffffff8000e42ef8
-> [ 164.117832] x19: 0000000000000001 x18: 0000000000000000
-> [ 164.123135] x17: 0000000000000000 x16: 0000000000000000
-> [ 164.128439] x15: ffffffffffffffff x14: 0000000000000000
-> [ 164.133742] x13: 0000000000000000 x12: 0000000000000000
-> [ 164.139046] x11: 0000000000000001 x10: 0101010101010101
-> [ 164.144349] x9 : 6d64686b625e6f38 x8 : 706d75645f6c6f63
-> [ 164.149653] x7 : 6f746f72705f7039 x6 : ffffffc8778d5ec1
-> [ 164.154957] x5 : ffffff8009458000 x4 : 0000000000000000
-> [ 164.160260] x3 : ffffff8000db77a0 x2 : ffffffc87828a380
-> [ 164.165563] x1 : 0000000000000007 x0 : ffffff8000d13048
-> [ 164.170869] Process modprobe (pid: 4955, stack limit = 0x00000000e6162018)
-> [ 164.177725] Call trace:
-> [ 164.180235] lttng_tracepoint_notify+0x188/0x228 [lttng_tracer]
-> [ 164.186148] register_tracepoint_module_notifier+0x6c/0x98
-> [ 164.191709] lttng_tracepoint_init+0x54/0xc80 [lttng_tracer]
-> [ 164.197438] lttng_events_init+0x4c/0x1e0 [lttng_tracer]
-> [ 164.202734] do_one_initcall+0x68/0x1ec
-> [ 164.206562] do_init_module+0x60/0x1f0
-> [ 164.210302] load_module+0x1ca0/0x2270
-> [ 164.214035] __se_sys_finit_module+0xc0/0xd0
-> [ 164.218288] __arm64_sys_finit_module+0x24/0x30
-> [ 164.222802] el0_svc_common+0x98/0x100
-> [ 164.226543] el0_svc_handler+0x74/0x90
-> [ 164.230275] el0_svc+0x8/0xc
-> [ 164.233142] Code: 6b18003f 54fffc49 f9415c00 b8b8d817 (f94002f3)
-> [ 164.239226] ---[ end trace c1cc2d1f9d55794a ]---
-> [ 195.613567] lttng_ring_buffer_client_overwrite: gave up waiting for init of
-> module lttng_tracer.
-> [ 195.622371] lttng_ring_buffer_client_overwrite: Unknown symbol
-> lttng_transport_unregister (err -16)
-> ^C
-> root@xilinx-zcu111-2019_2:~# uname -a
-> Linux xilinx-zcu111-2019_2 4.19.0-xilinx-v2019.2 #1 SMP Mon Mar 14 15:09:26 UTC
-> 2022 aarch64 GNU/Linux
-> root@xilinx-zcu111-2019_2:~# uname -a
-> Linux xilinx-zcu111-2019_2 4.19.0-xilinx-v2019.2 #1 SMP Mon Mar 14 15:09:26 UTC
-> 2022 aarch64 GNU/Linux
-> root@xilinx-zcu111-2019_2:~# [ 226.333565] lttng_ring_buffer_client_overwrite:
-> gave up waiting for init of module lttng_tracer.
-> [ 226.342368] lttng_ring_buffer_client_overwrite: Unknown symbol lttng_last_tsc
-> (err -16)
-> [ 257.053564] lttng_ring_buffer_client_overwrite: gave up waiting for init of
-> module lttng_tracer.
-> [ 257.062358] lttng_ring_buffer_client_overwrite: Unknown symbol
-> lttng_transport_register (err -16)
-> [ 287.773562] lttng_ring_buffer_client_overwrite: gave up waiting for init of
-> module lttng_tracer.
-> [ 287.782356] lttng_ring_buffer_client_overwrite: Unknown symbol
-> lttng_transport_unregister (err -16)
-> [ 318.493567] lttng_ring_buffer_client_overwrite: gave up waiting for init of
-> module lttng_tracer.
-> [ 318.502364] lttng_ring_buffer_client_overwrite: Unknown symbol lttng_last_tsc
-> (err -16)
-> [ 349.213564] lttng_ring_buffer_client_overwrite: gave up waiting for init of
-> module lttng_tracer.
-> [ 349.222363] lttng_ring_buffer_client_overwrite: Unknown symbol
-> lttng_transport_register (err -16)
-
-What is the installed lttng-modules version ? 
-
-You can query it with modinfo /lib/modules/$(uname -r)/extra/lttng-tracer.ko
-
-Thanks, 
-
-Mathieu 
-
-> Thank You
-> with regards
-> G Madhan Mohan
-
-> Disclaimer:- This footer text is to convey that this email is sent by one of the
-> users of IITH. So, do not mark it as SPAM.
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+SGksCgpJJ20ganVzdCBjaGVja2luZyBpZiB5b3UgaGF2ZSByZWNlaXZlZCBteSBtZXNzYWdlID8g
+SSB3YW50IHRvIHVuZGVyc3RhbmQgd2hhdCBpcwpnb2luZyBvbiBoZXJlIGJlZm9yZSBtZXJnaW5n
+IHlvdXIgY29udHJpYnV0aW9uIGludG8gbGlidXJjdS4KClRoYW5rcywKCk1hdGhpZXUKCi0tLS0t
+IE9uIEphbiAyNSwgMjAyMiwgYXQgNDozNiBQTSwgTWF0aGlldSBEZXNub3llcnMgbWF0aGlldS5k
+ZXNub3llcnNAZWZmaWNpb3MuY29tIHdyb3RlOgoKPiBIaSwKPiAKPiBJIG5vdGljZSB0aGF0IHRo
+ZSBsb29uZ2FyY2ggZW5hYmxlbWVudCBwYXRjaCBkZWZpbmVzOgo+IAo+ICNkZWZpbmUgVUFUT01J
+Q19IQVNfQVRPTUlDX0JZVEUKPiAjZGVmaW5lIFVBVE9NSUNfSEFTX0FUT01JQ19TSE9SVAo+IAo+
+IEkgdHJpZWQgbG9va2luZyBpbnRvCj4gCj4gIGh0dHBzOi8vbG9vbmdzb24uZ2l0aHViLmlvL0xv
+b25nQXJjaC1Eb2N1bWVudGF0aW9uL0xvb25nQXJjaC1Wb2wxLUVOLmh0bWwjYXRvbWljLW1lbW9y
+eS1hY2Nlc3MtaW5zdHJ1Y3Rpb25zCj4gCj4gdG8gZmlndXJlIG91dCB3aGljaCBhdG9taWMgaW5z
+dHJ1Y3Rpb25zIG9yIExML1NDIHdvdWxkIGJlIHVzZWQgdG8gdGFyZ2V0IDEgYW5kIDIKPiBieXRl
+Cj4gdmFyaWFibGVzIGF0b21pY2FsbHksIGJ1dCBjb3VsZCBvbmx5IGZpbmQgaW5zdHJ1Y3Rpb25z
+IGZvciB3b3JkIGFuZCBkb3VibGUtd29yZDoKPiAKPiAyLjIuNy4xLiBBTXtTV0FQL0FERC9BTkQv
+T1IvWE9SL01BWC9NSU59W0RCXS57Vy9EfSwgQU17TUFYL01JTn1bX0RCXS57V1UvRFV9Cj4gMi4y
+LjcuMi4gTEwue1cvRH0sIFNDLntXL0R9Cj4gCj4gV2hhdCBhbSBJIG1pc3NpbmcgaGVyZSA/Cj4g
+Cj4gVGhhbmtzLAo+IAo+IE1hdGhpZXUKPiAKPiAtLS0tLSBPbiBKYW4gMjQsIDIwMjIsIGF0IDY6
+NTkgQU0sIGx0dG5nLWRldiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIHdyb3RlOgo+IAo+PiBV
+bmZvcnR1bmF0ZWx5LCB0aGUgcWVtdSBhcHByb2FjaCBkb2VzIG5vdCBoZWxwIG11Y2ggaW4gdGVz
+dGluZyB0aGF0IHRoZQo+PiBsaWJ1cmN1IGltcGxlbWVudGF0aW9uIHdvcmtzIGNvcnJlY3RseSBv
+biBhIGdpdmVuIGFyY2hpdGVjdHVyZSdzCj4+IHNwZWNpZmljIG1lbW9yeSBtb2RlbC4KPj4gCj4+
+IGxpYnVyY3UgcmVsaWVzIGhlYXZpbHkgb24gbWVtb3J5IG9yZGVyaW5nLCBhbmQgbGlidXJjdS1j
+ZHMgcmVsaWVzIG9uCj4+IGJvdGggbWVtb3J5IG9yZGVyaW5nIGFuZCBhdG9taWMgb3BlcmF0aW9u
+cyBhbmQgdGhlIG1lbW9yeSBvcmRlcmluZwo+PiBndWFyYW50ZWVzIGFzc29jaWF0ZWQgd2l0aCB0
+aGVtLgo+PiAKPj4gU28gaWYgdGhlcmUgaXMgYW55IHdheSB3ZSBjb3VsZCBnZXQgb3VyIGhhbmRz
+IG9uIHJlYWwgaGFyZHdhcmUsIGl0Cj4+IHdvdWxkIGJlIHZlcnkgbXVjaCByZWxldmFudCBmb3Ig
+bGlidXJjdSB0ZXN0aW5nLgo+PiAKPj4gVGhhbmtzLAo+PiAKPj4gTWF0aGlldQo+PiAKPj4gLS0t
+LS0gT24gSmFuIDI0LCAyMDIyLCBhdCAzOjAyIEFNLCDlvKDmlofpvpkgemhhbmd3ZW5sb25nQGxv
+b25nc29uLmNuIHdyb3RlOgo+PiAKPj4+IEknbSBnbGFkIHRoZSBuZXcgYXJjaGl0ZWN0dXJlIGNh
+biBiZSBhY2NlcHRlZO+8jEF0IHByZXNlbnQsIG91ciBtYWNoaW5lcyBhcmUgaW4KPj4+IHNob3J0
+IHN1cHBseS5JIG5lZWQgdG8gZ28gdGhyb3VnaCBhIHZlcnkgY29tcGxpY2F0ZWQgcHJvY2VzcyB0
+byBwcm92aWRlCj4+PiBtYWNoaW5lcywgQ2FuIHFlbXUgZW11bGF0b3Igd29yaz8KPj4+IAo+Pj4g
+Cj4+PiAmZ3Q7IC0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0KPj4+ICZndDsg5Y+R5Lu25Lq6OiAiTWF0
+aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4+PiAmZ3Q7
+IOWPkemAgeaXtumXtDogMjAyMi0wMS0yMCAyMzo1OTo1MiAo5pif5pyf5ZubKQo+Pj4gJmd0OyDm
+lLbku7bkuro6ICLlvKDmlofpvpkiIDx6aGFuZ3dlbmxvbmdAbG9vbmdzb24uY24+Cj4+PiAmZ3Q7
+IOaKhOmAgTogbHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+Pj4gJmd0OyDk
+uLvpopg6IFJlOiBbbHR0bmctZGV2XSBBZGQgc3VwcG9ydCBmb3IgdGhlIExPT05HQVJDSCBhcmNo
+aXRlY3R1cmUKPj4+ICZndDsKPj4+ICZndDsgLS0tLS0gT24gSmFuIDE5LCAyMDIyLCBhdCAxMTow
+MyBQTSwgbHR0bmctZGV2IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+IHdyb3RlOgo+Pj4g
+Jmd0Owo+Pj4gJmd0OyAmZ3Q7IEhlbGxvLCBJJ20gZXhjaXRlZCB0byBjb250cmlidXRlIHRvIHVz
+ZXJzcGFjZS1yY3UsIEkgYWRkZWQgbG9vbmdhcmNoCj4+PiAmZ3Q7ICZndDsgYXJjaGl0ZWN0dXJl
+IGZvciB1c2Vyc3BhY2UtcmN177yIIFRoZSBwYXRjaCBmaWxlIGlzCj4+PiAmZ3Q7ICZndDsgMDAw
+MS1BZGQtc3VwcG9ydC1mb3ItdGhlLUxPT05HQVJDSC1hcmNoaXRlY3R1cmUucGF0Y2ggKQo+Pj4g
+Jmd0Owo+Pj4gJmd0OyAmZ3Q7IEkgaGF2ZSBjb21waWxlZCBhbmQgdmVyaWZpZWQgbG9jYWxseSAo
+dGhlIGJ1aWxkIGxvZyBpcyBidWlsZF9sb2cudHh0Cj4+PiApLGFuZCB0aGVuCj4+PiAmZ3Q7ICZn
+dDsgaSBydW5lZCBtYWtlIGNoZWNr77yIIHRoZSBtYWtlIGNoZWNrIGxvZyBpcyBtYWtlX2NoZWNr
+X2xvZy50eHQg77yJ77yMIG1ha2UKPj4+ICZndDsgJmd0OyByZWd0ZXN077yIdGhlIG1ha2UgcmVn
+dGVzdCBsb2cgaXMgbWFrZV9yZWd0ZXN0X2xvZy50eHQg77yJIO+8jCBtYWtlCj4+PiBzaG9ydF9i
+ZW5jaCAodGhlCj4+PiAmZ3Q7ICZndDsgbWFrZSBzaG9ydF9iZW5jaCBsb2cgaXMgbWFrZV9zaG9y
+dF9iZW5jaF9sb2cudHh0ICksbWFrZSBsb25nX2JlbmNoKHRoZQo+Pj4gbWFrZQo+Pj4gJmd0OyAm
+Z3Q7IGxvbmdfYmVuY2ggbG9nIGlzIG1ha2VfbG9uZ19iZW5jaF9sb2cudHh0ICkKPj4+ICZndDsK
+Pj4+ICZndDsgVGhpcyBpcyBncmVhdCwgdGhhbmtzICEKPj4+ICZndDsKPj4+ICZndDsgQnkgdGhl
+IHdheSwgaXMgdGhlcmUgYW55IHdheSBFZmZpY2lPUyBjb3VsZCBhZGQgdHdvIGxvb25nYXJjaCB0
+ZXN0IGJvYXJkcwo+Pj4gaW50bwo+Pj4gJmd0OyBvdXIgdGVzdCByYWNrIGZvciBhdXRvbWF0ZWQg
+Q0kgdGVzdGluZyA/IFNlZSBodHRwczovL2NpLmx0dG5nLm9yZwo+Pj4gJmd0Owo+Pj4gJmd0OyBX
+ZSB0eXBpY2FsbHkgZGVwbG95IGF0IGxlYXN0IHR3byBib2FyZHMgZm9yIGVhY2ggZ2l2ZW4gYXJj
+aGl0ZWN0dXJlIGZvcgo+Pj4gcmVkdW5kYW5jeQo+Pj4gJmd0OyBhbmQgYXZhaWxhYmlsaXR5IGZv
+ciBib3RoIENJIGFuZCBkZXZlbG9wbWVudCB1c2UuCj4+PiAmZ3Q7Cj4+PiAmZ3Q7IFRoaXMgd291
+bGQgaGVscCBlbnN1cmluZyB3ZSBjYXRjaCBsaWJ1cmN1IHJlZ3Jlc3Npb25zIGluIHRoZSBsb29u
+Z2FyY2gKPj4+IGFyY2hpdGVjdHVyZQo+Pj4gJmd0OyBpbiB0aGUgZnV0dXJlLgo+Pj4gJmd0Owo+
+Pj4gJmd0OyBUaGFua3MsCj4+PiAmZ3Q7Cj4+PiAmZ3Q7IE1hdGhpZXUKPj4+ICZndDsKPj4+ICZn
+dDsKPj4+ICZndDsgJmd0OyDmnKzpgq7ku7blj4rlhbbpmYTku7blkKvmnInpvpnoiq/kuK3np5Hn
+moTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5HpgIHnu5nkuIrpnaLlnLDlnYDkuK3l
+iJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXlhbbku5bkurrku6Xku7vkvZXl
+vaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jmiJbpg6gKPj4+ICZndDsgJmd0
+OyDliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbpmYTku7bk
+uK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vljbPnlLXo
+r53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIKPj4+ICZndDsg
+Jmd0OyBUaGlzIGVtYWlsIGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBjb25maWRlbnRpYWwg
+aW5mb3JtYXRpb24gZnJvbQo+Pj4gTG9vbmdzb24KPj4+ICZndDsgJmd0OyBUZWNobm9sb2d5ICwg
+d2hpY2ggaXMgaW50ZW5kZWQgb25seSBmb3IgdGhlIHBlcnNvbiBvciBlbnRpdHkgd2hvc2UKPj4+
+IGFkZHJlc3MgaXMKPj4+ICZndDsgJmd0OyBsaXN0ZWQgYWJvdmUuIEFueSB1c2Ugb2YgdGhlIGlu
+Zm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdheQo+Pj4gJmd0OyAmZ3Q7IChpbmNs
+dWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3IgcGFydGlhbCBkaXNjbG9zdXJlLAo+
+Pj4gcmVwcm9kdWN0aW9uIG9yCj4+PiAmZ3Q7ICZndDsgZGlzc2VtaW5hdGlvbikgYnkgcGVyc29u
+cyBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMKPj4+IHByb2hpYml0ZWQu
+Cj4+PiAmZ3Q7ICZndDsgSWYgeW91IHJlY2VpdmUgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNl
+IG5vdGlmeSB0aGUgc2VuZGVyIGJ5IHBob25lCj4+PiBvciBlbWFpbAo+Pj4gJmd0OyAmZ3Q7IGlt
+bWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuCj4+PiAmZ3Q7ICZndDsgX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+ICZndDsgJmd0OyBsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cj4+PiAmZ3Q7ICZndDsgbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+Pj4gJmd0
+OyAmZ3Q7IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
+dHRuZy1kZXYKPj4+ICZndDsgLS0KPj4+ICZndDsgTWF0aGlldSBEZXNub3llcnMKPj4+ICZndDsg
+RWZmaWNpT1MgSW5jLgo+Pj4gJmd0OyBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQo+Pj4gPC9sdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnPjwvemhhbmd3ZW5sb25nQGxvb25nc29uLmNuPjwvbWF0aGll
+dS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+Pj4gCj4+PiDmnKzpgq7ku7blj4rlhbbpmYTku7bl
+kKvmnInpvpnoiq/kuK3np5HnmoTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5HpgIHn
+u5nkuIrpnaLlnLDlnYDkuK3liJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXl
+hbbku5bkurrku6Xku7vkvZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jm
+iJbpg6jliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbpmYTk
+u7bkuK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vljbPn
+lLXor53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIKPj4+IFRo
+aXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1h
+dGlvbiBmcm9tIExvb25nc29uCj4+PiBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5kZWQgb25s
+eSBmb3IgdGhlIHBlcnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcwo+Pj4gbGlzdGVkIGFi
+b3ZlLiBBbnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaGVyZWluIGluIGFueSB3
+YXkKPj4+IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3IgcGFydGlhbCBk
+aXNjbG9zdXJlLCByZXByb2R1Y3Rpb24gb3IKPj4+IGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMg
+b3RoZXIgdGhhbiB0aGUgaW50ZW5kZWQgcmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuCj4+PiBJ
+ZiB5b3UgcmVjZWl2ZSB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5k
+ZXIgYnkgcGhvbmUgb3IgZW1haWwKPj4+IGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuCj4+IAo+
+PiAtLQo+PiBNYXRoaWV1IERlc25veWVycwo+PiBFZmZpY2lPUyBJbmMuCj4+IGh0dHA6Ly93d3cu
+ZWZmaWNpb3MuY29tCj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwo+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cj4gCj4gLS0KPiBNYXRoaWV1IERlc25veWVycwo+IEVmZmljaU9TIEluYy4KPiBo
+dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIElu
+Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
