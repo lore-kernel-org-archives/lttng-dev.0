@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0153AC433F5
-	for <lttng-dev@archiver.kernel.org>; Tue, 15 Mar 2022 20:26:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E69B8C433EF
+	for <lttng-dev@archiver.kernel.org>; Wed, 16 Mar 2022 13:25:19 +0000 (UTC)
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4KJ4gj274lzDtJ;
-	Tue, 15 Mar 2022 16:26:41 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4KJWH2143zzDvv;
+	Wed, 16 Mar 2022 09:25:18 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1647376001;
-	bh=XrIQMLBuAxAFT5guo7l2W+qO2FPVLbMrEqNs1YAzUJI=;
-	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=pVIxehMlMJq8vd5Zw0zoCbfI0Bm30q8M2xbOx7kQz6qdyp20GqJxSiXc1JIEBJ+86
-	 4k4Y/ITbF8gjSXzS0kcp/etH0fIiW5wWMlBC0CXe1yr1HMjei8+ZH0XdncVkHEduU8
-	 C8m7hxjzHKVdGO2Bj27dSOj9SF0ADdCLmOZYngni/VGzXo6gFLSAiwsK0dT/WUp297
-	 4LOCUgZKqOczk6Q17VpwfIlxveiFAHQ6xkFZ9ZIwVPzXtgHcGRWUig5Ue+l0ag+g1A
-	 NnRDAiNRWzp1FCKcdNk/zGMKw6k0PvDHGcfdl/jKuaPqPDwYoswgY/Zxf4S0OgDl0l
-	 zDUlNPSYZClUQ==
+	s=default; t=1647437118;
+	bh=IJXrK4HTIt3KYnYQa0ezkHck6GIzM33byifvte5K8Fo=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=QU35WFBNmDSkhfAsqbe7nIPUIqGbvzNgHPwJK10Gh12z4didM2Qvkw+mRECx51lqB
+	 w61x6C2HNvKTs/KlFATSCeBJ16defM0hPjghrE8VfxN3GhAiYgAM77hpcVF70XY1G8
+	 awsh2XZ8Ehc/BtW3rg6v69MDraCP5Y8khB4dOw5iPjvw9RGyQnZKTVsfA7/zaG4R9r
+	 p4qhsvq31fmHA62ex++IPIniwRX1BVoHTuZgsO6vPkbsQvuGmwqPYKZuD03GJZAhTe
+	 ioE8DY4rYzl9cjAQBh+jFF3CoxEMVgzjMwz9lrIN4J4TfX0L/UjjNwlyqJ+ClSBPXL
+	 F45AN7dPArxFA==
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4KJ4gg2K4CzF2b
- for <lttng-dev@lists.lttng.org>; Tue, 15 Mar 2022 16:26:39 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4KJWH01W7czF59
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Mar 2022 09:25:15 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id B746A3B7176;
- Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id A6B793E5D95
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Mar 2022 09:25:09 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id C7RektU6Ylic; Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
+ with ESMTP id m09M1nEzaVlb; Wed, 16 Mar 2022 09:25:08 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 10FF13B7464;
- Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 10FF13B7464
+ by mail.efficios.com (Postfix) with ESMTP id C04803E5AD7;
+ Wed, 16 Mar 2022 09:25:08 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C04803E5AD7
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id nJ_2nYl-s31R; Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
+ with ESMTP id 08tw3yb_q0Pc; Wed, 16 Mar 2022 09:25:08 -0400 (EDT)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 042153B7463;
- Tue, 15 Mar 2022 16:26:33 -0400 (EDT)
-Date: Tue, 15 Mar 2022 16:26:32 -0400 (EDT)
-To: =?utf-8?B?5byg5paH6b6Z?= <zhangwenlong@loongson.cn>
-Message-ID: <141633385.152321.1647375992965.JavaMail.zimbra@efficios.com>
-In-Reply-To: <762143656.71334.1643146562410.JavaMail.zimbra@efficios.com>
-References: <22bf2d37.1dde.17e75a7aeb1.Coremail.zhangwenlong@loongson.cn>
- <945744448.62503.1642694392338.JavaMail.zimbra@efficios.com>
- <bfd9420.3500.17e8b1b5bb5.Coremail.zhangwenlong@loongson.cn>
- <1361211440.68286.1643025545546.JavaMail.zimbra@efficios.com>
- <762143656.71334.1643146562410.JavaMail.zimbra@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id B1F063E5BF7;
+ Wed, 16 Mar 2022 09:25:08 -0400 (EDT)
+Date: Wed, 16 Mar 2022 09:25:08 -0400 (EDT)
+To: GOLLAMUDI MADHAN MOHAN <madhan.mohan@5g.iith.ac.in>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Message-ID: <239772948.153082.1647437108628.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CAB9=ZW6nDGJ+xv+6h4FHL2-63J9YE5P1KoAyvB+yWAx0rr46wA@mail.gmail.com>
+References: <CAB9=ZW6FEj+zXnVcSaCGCSWF54cZDEv5_25-F0D1SEZHZaZ=rw@mail.gmail.com>
+ <795806806.151478.1647359382157.JavaMail.zimbra@efficios.com>
+ <CAB9=ZW6nDGJ+xv+6h4FHL2-63J9YE5P1KoAyvB+yWAx0rr46wA@mail.gmail.com>
 MIME-Version: 1.0
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
-Thread-Topic: Add support for the LOONGARCH architecture
-Thread-Index: pdbSYqQrijeu+Z84cZsr4zcUut9Hu67Haiw1Dm59dPQ=
-Subject: Re: [lttng-dev] Add support for the LOONGARCH architecture
+Thread-Topic: call trace while using lttng in petalinux 2019.2 (kernel 4.19)
+Thread-Index: xfWBSDPQScJfooyP4oiuZ8X3XIi3aQ==
+Subject: Re: [lttng-dev] call trace while using lttng in petalinux 2019.2
+ (kernel 4.19)
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -69,120 +69,431 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
 Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, paulmck <paulmck@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4404688676320869315=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGksCgpJJ20ganVzdCBjaGVja2luZyBpZiB5b3UgaGF2ZSByZWNlaXZlZCBteSBtZXNzYWdlID8g
-SSB3YW50IHRvIHVuZGVyc3RhbmQgd2hhdCBpcwpnb2luZyBvbiBoZXJlIGJlZm9yZSBtZXJnaW5n
-IHlvdXIgY29udHJpYnV0aW9uIGludG8gbGlidXJjdS4KClRoYW5rcywKCk1hdGhpZXUKCi0tLS0t
-IE9uIEphbiAyNSwgMjAyMiwgYXQgNDozNiBQTSwgTWF0aGlldSBEZXNub3llcnMgbWF0aGlldS5k
-ZXNub3llcnNAZWZmaWNpb3MuY29tIHdyb3RlOgoKPiBIaSwKPiAKPiBJIG5vdGljZSB0aGF0IHRo
-ZSBsb29uZ2FyY2ggZW5hYmxlbWVudCBwYXRjaCBkZWZpbmVzOgo+IAo+ICNkZWZpbmUgVUFUT01J
-Q19IQVNfQVRPTUlDX0JZVEUKPiAjZGVmaW5lIFVBVE9NSUNfSEFTX0FUT01JQ19TSE9SVAo+IAo+
-IEkgdHJpZWQgbG9va2luZyBpbnRvCj4gCj4gIGh0dHBzOi8vbG9vbmdzb24uZ2l0aHViLmlvL0xv
-b25nQXJjaC1Eb2N1bWVudGF0aW9uL0xvb25nQXJjaC1Wb2wxLUVOLmh0bWwjYXRvbWljLW1lbW9y
-eS1hY2Nlc3MtaW5zdHJ1Y3Rpb25zCj4gCj4gdG8gZmlndXJlIG91dCB3aGljaCBhdG9taWMgaW5z
-dHJ1Y3Rpb25zIG9yIExML1NDIHdvdWxkIGJlIHVzZWQgdG8gdGFyZ2V0IDEgYW5kIDIKPiBieXRl
-Cj4gdmFyaWFibGVzIGF0b21pY2FsbHksIGJ1dCBjb3VsZCBvbmx5IGZpbmQgaW5zdHJ1Y3Rpb25z
-IGZvciB3b3JkIGFuZCBkb3VibGUtd29yZDoKPiAKPiAyLjIuNy4xLiBBTXtTV0FQL0FERC9BTkQv
-T1IvWE9SL01BWC9NSU59W0RCXS57Vy9EfSwgQU17TUFYL01JTn1bX0RCXS57V1UvRFV9Cj4gMi4y
-LjcuMi4gTEwue1cvRH0sIFNDLntXL0R9Cj4gCj4gV2hhdCBhbSBJIG1pc3NpbmcgaGVyZSA/Cj4g
-Cj4gVGhhbmtzLAo+IAo+IE1hdGhpZXUKPiAKPiAtLS0tLSBPbiBKYW4gMjQsIDIwMjIsIGF0IDY6
-NTkgQU0sIGx0dG5nLWRldiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIHdyb3RlOgo+IAo+PiBV
-bmZvcnR1bmF0ZWx5LCB0aGUgcWVtdSBhcHByb2FjaCBkb2VzIG5vdCBoZWxwIG11Y2ggaW4gdGVz
-dGluZyB0aGF0IHRoZQo+PiBsaWJ1cmN1IGltcGxlbWVudGF0aW9uIHdvcmtzIGNvcnJlY3RseSBv
-biBhIGdpdmVuIGFyY2hpdGVjdHVyZSdzCj4+IHNwZWNpZmljIG1lbW9yeSBtb2RlbC4KPj4gCj4+
-IGxpYnVyY3UgcmVsaWVzIGhlYXZpbHkgb24gbWVtb3J5IG9yZGVyaW5nLCBhbmQgbGlidXJjdS1j
-ZHMgcmVsaWVzIG9uCj4+IGJvdGggbWVtb3J5IG9yZGVyaW5nIGFuZCBhdG9taWMgb3BlcmF0aW9u
-cyBhbmQgdGhlIG1lbW9yeSBvcmRlcmluZwo+PiBndWFyYW50ZWVzIGFzc29jaWF0ZWQgd2l0aCB0
-aGVtLgo+PiAKPj4gU28gaWYgdGhlcmUgaXMgYW55IHdheSB3ZSBjb3VsZCBnZXQgb3VyIGhhbmRz
-IG9uIHJlYWwgaGFyZHdhcmUsIGl0Cj4+IHdvdWxkIGJlIHZlcnkgbXVjaCByZWxldmFudCBmb3Ig
-bGlidXJjdSB0ZXN0aW5nLgo+PiAKPj4gVGhhbmtzLAo+PiAKPj4gTWF0aGlldQo+PiAKPj4gLS0t
-LS0gT24gSmFuIDI0LCAyMDIyLCBhdCAzOjAyIEFNLCDlvKDmlofpvpkgemhhbmd3ZW5sb25nQGxv
-b25nc29uLmNuIHdyb3RlOgo+PiAKPj4+IEknbSBnbGFkIHRoZSBuZXcgYXJjaGl0ZWN0dXJlIGNh
-biBiZSBhY2NlcHRlZO+8jEF0IHByZXNlbnQsIG91ciBtYWNoaW5lcyBhcmUgaW4KPj4+IHNob3J0
-IHN1cHBseS5JIG5lZWQgdG8gZ28gdGhyb3VnaCBhIHZlcnkgY29tcGxpY2F0ZWQgcHJvY2VzcyB0
-byBwcm92aWRlCj4+PiBtYWNoaW5lcywgQ2FuIHFlbXUgZW11bGF0b3Igd29yaz8KPj4+IAo+Pj4g
-Cj4+PiAmZ3Q7IC0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0KPj4+ICZndDsg5Y+R5Lu25Lq6OiAiTWF0
-aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4+PiAmZ3Q7
-IOWPkemAgeaXtumXtDogMjAyMi0wMS0yMCAyMzo1OTo1MiAo5pif5pyf5ZubKQo+Pj4gJmd0OyDm
-lLbku7bkuro6ICLlvKDmlofpvpkiIDx6aGFuZ3dlbmxvbmdAbG9vbmdzb24uY24+Cj4+PiAmZ3Q7
-IOaKhOmAgTogbHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+Pj4gJmd0OyDk
-uLvpopg6IFJlOiBbbHR0bmctZGV2XSBBZGQgc3VwcG9ydCBmb3IgdGhlIExPT05HQVJDSCBhcmNo
-aXRlY3R1cmUKPj4+ICZndDsKPj4+ICZndDsgLS0tLS0gT24gSmFuIDE5LCAyMDIyLCBhdCAxMTow
-MyBQTSwgbHR0bmctZGV2IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+IHdyb3RlOgo+Pj4g
-Jmd0Owo+Pj4gJmd0OyAmZ3Q7IEhlbGxvLCBJJ20gZXhjaXRlZCB0byBjb250cmlidXRlIHRvIHVz
-ZXJzcGFjZS1yY3UsIEkgYWRkZWQgbG9vbmdhcmNoCj4+PiAmZ3Q7ICZndDsgYXJjaGl0ZWN0dXJl
-IGZvciB1c2Vyc3BhY2UtcmN177yIIFRoZSBwYXRjaCBmaWxlIGlzCj4+PiAmZ3Q7ICZndDsgMDAw
-MS1BZGQtc3VwcG9ydC1mb3ItdGhlLUxPT05HQVJDSC1hcmNoaXRlY3R1cmUucGF0Y2ggKQo+Pj4g
-Jmd0Owo+Pj4gJmd0OyAmZ3Q7IEkgaGF2ZSBjb21waWxlZCBhbmQgdmVyaWZpZWQgbG9jYWxseSAo
-dGhlIGJ1aWxkIGxvZyBpcyBidWlsZF9sb2cudHh0Cj4+PiApLGFuZCB0aGVuCj4+PiAmZ3Q7ICZn
-dDsgaSBydW5lZCBtYWtlIGNoZWNr77yIIHRoZSBtYWtlIGNoZWNrIGxvZyBpcyBtYWtlX2NoZWNr
-X2xvZy50eHQg77yJ77yMIG1ha2UKPj4+ICZndDsgJmd0OyByZWd0ZXN077yIdGhlIG1ha2UgcmVn
-dGVzdCBsb2cgaXMgbWFrZV9yZWd0ZXN0X2xvZy50eHQg77yJIO+8jCBtYWtlCj4+PiBzaG9ydF9i
-ZW5jaCAodGhlCj4+PiAmZ3Q7ICZndDsgbWFrZSBzaG9ydF9iZW5jaCBsb2cgaXMgbWFrZV9zaG9y
-dF9iZW5jaF9sb2cudHh0ICksbWFrZSBsb25nX2JlbmNoKHRoZQo+Pj4gbWFrZQo+Pj4gJmd0OyAm
-Z3Q7IGxvbmdfYmVuY2ggbG9nIGlzIG1ha2VfbG9uZ19iZW5jaF9sb2cudHh0ICkKPj4+ICZndDsK
-Pj4+ICZndDsgVGhpcyBpcyBncmVhdCwgdGhhbmtzICEKPj4+ICZndDsKPj4+ICZndDsgQnkgdGhl
-IHdheSwgaXMgdGhlcmUgYW55IHdheSBFZmZpY2lPUyBjb3VsZCBhZGQgdHdvIGxvb25nYXJjaCB0
-ZXN0IGJvYXJkcwo+Pj4gaW50bwo+Pj4gJmd0OyBvdXIgdGVzdCByYWNrIGZvciBhdXRvbWF0ZWQg
-Q0kgdGVzdGluZyA/IFNlZSBodHRwczovL2NpLmx0dG5nLm9yZwo+Pj4gJmd0Owo+Pj4gJmd0OyBX
-ZSB0eXBpY2FsbHkgZGVwbG95IGF0IGxlYXN0IHR3byBib2FyZHMgZm9yIGVhY2ggZ2l2ZW4gYXJj
-aGl0ZWN0dXJlIGZvcgo+Pj4gcmVkdW5kYW5jeQo+Pj4gJmd0OyBhbmQgYXZhaWxhYmlsaXR5IGZv
-ciBib3RoIENJIGFuZCBkZXZlbG9wbWVudCB1c2UuCj4+PiAmZ3Q7Cj4+PiAmZ3Q7IFRoaXMgd291
-bGQgaGVscCBlbnN1cmluZyB3ZSBjYXRjaCBsaWJ1cmN1IHJlZ3Jlc3Npb25zIGluIHRoZSBsb29u
-Z2FyY2gKPj4+IGFyY2hpdGVjdHVyZQo+Pj4gJmd0OyBpbiB0aGUgZnV0dXJlLgo+Pj4gJmd0Owo+
-Pj4gJmd0OyBUaGFua3MsCj4+PiAmZ3Q7Cj4+PiAmZ3Q7IE1hdGhpZXUKPj4+ICZndDsKPj4+ICZn
-dDsKPj4+ICZndDsgJmd0OyDmnKzpgq7ku7blj4rlhbbpmYTku7blkKvmnInpvpnoiq/kuK3np5Hn
-moTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5HpgIHnu5nkuIrpnaLlnLDlnYDkuK3l
-iJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXlhbbku5bkurrku6Xku7vkvZXl
-vaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jmiJbpg6gKPj4+ICZndDsgJmd0
-OyDliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbpmYTku7bk
-uK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vljbPnlLXo
-r53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIKPj4+ICZndDsg
-Jmd0OyBUaGlzIGVtYWlsIGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBjb25maWRlbnRpYWwg
-aW5mb3JtYXRpb24gZnJvbQo+Pj4gTG9vbmdzb24KPj4+ICZndDsgJmd0OyBUZWNobm9sb2d5ICwg
-d2hpY2ggaXMgaW50ZW5kZWQgb25seSBmb3IgdGhlIHBlcnNvbiBvciBlbnRpdHkgd2hvc2UKPj4+
-IGFkZHJlc3MgaXMKPj4+ICZndDsgJmd0OyBsaXN0ZWQgYWJvdmUuIEFueSB1c2Ugb2YgdGhlIGlu
-Zm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdheQo+Pj4gJmd0OyAmZ3Q7IChpbmNs
-dWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3IgcGFydGlhbCBkaXNjbG9zdXJlLAo+
-Pj4gcmVwcm9kdWN0aW9uIG9yCj4+PiAmZ3Q7ICZndDsgZGlzc2VtaW5hdGlvbikgYnkgcGVyc29u
-cyBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQocykgaXMKPj4+IHByb2hpYml0ZWQu
-Cj4+PiAmZ3Q7ICZndDsgSWYgeW91IHJlY2VpdmUgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxlYXNl
-IG5vdGlmeSB0aGUgc2VuZGVyIGJ5IHBob25lCj4+PiBvciBlbWFpbAo+Pj4gJmd0OyAmZ3Q7IGlt
-bWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuCj4+PiAmZ3Q7ICZndDsgX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+ICZndDsgJmd0OyBsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cj4+PiAmZ3Q7ICZndDsgbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+Pj4gJmd0
-OyAmZ3Q7IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
-dHRuZy1kZXYKPj4+ICZndDsgLS0KPj4+ICZndDsgTWF0aGlldSBEZXNub3llcnMKPj4+ICZndDsg
-RWZmaWNpT1MgSW5jLgo+Pj4gJmd0OyBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQo+Pj4gPC9sdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnPjwvemhhbmd3ZW5sb25nQGxvb25nc29uLmNuPjwvbWF0aGll
-dS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+Pj4gCj4+PiDmnKzpgq7ku7blj4rlhbbpmYTku7bl
-kKvmnInpvpnoiq/kuK3np5HnmoTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5HpgIHn
-u5nkuIrpnaLlnLDlnYDkuK3liJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXl
-hbbku5bkurrku6Xku7vkvZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jm
-iJbpg6jliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbpmYTk
-u7bkuK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vljbPn
-lLXor53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIKPj4+IFRo
-aXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1h
-dGlvbiBmcm9tIExvb25nc29uCj4+PiBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5kZWQgb25s
-eSBmb3IgdGhlIHBlcnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcwo+Pj4gbGlzdGVkIGFi
-b3ZlLiBBbnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaGVyZWluIGluIGFueSB3
-YXkKPj4+IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90YWwgb3IgcGFydGlhbCBk
-aXNjbG9zdXJlLCByZXByb2R1Y3Rpb24gb3IKPj4+IGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMg
-b3RoZXIgdGhhbiB0aGUgaW50ZW5kZWQgcmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuCj4+PiBJ
-ZiB5b3UgcmVjZWl2ZSB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5k
-ZXIgYnkgcGhvbmUgb3IgZW1haWwKPj4+IGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQuCj4+IAo+
-PiAtLQo+PiBNYXRoaWV1IERlc25veWVycwo+PiBFZmZpY2lPUyBJbmMuCj4+IGh0dHA6Ly93d3cu
-ZWZmaWNpb3MuY29tCj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2QGxpc3RzLmx0dG5n
-Lm9yZwo+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2Cj4gCj4gLS0KPiBNYXRoaWV1IERlc25veWVycwo+IEVmZmljaU9TIEluYy4KPiBo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIElu
-Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+--===============4404688676320869315==
+Content-Type: multipart/alternative; 
+	boundary="=_ab51642b-f666-4612-892d-490cf9664c7a"
+
+--=_ab51642b-f666-4612-892d-490cf9664c7a
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+----- On Mar 16, 2022, at 8:17 AM, GOLLAMUDI MADHAN MOHAN <madhan.mohan@5g.=
+iith.ac.in> wrote:=20
+
+> hi sir,
+> lttng version 2.9.5 - Joann=C3=A8s
+> modinfo command is not available used $ lttng version command
+
+Hi,=20
+
+Please keep the lttng-dev mailing list in CC, as this discussion started th=
+ere. The=20
+answers we come up with can be useful to others.=20
+
+The version you provided here is the version of lttng-tools installed on yo=
+ur system,=20
+which is not relevant to investigate your issue.=20
+
+What is needed here is the version of lttng-modules: the Linux kernel modul=
+es implementing=20
+the kernel tracing feature of LTTng. Those are different packages altogethe=
+r.=20
+
+May I recommend that you install the package containing the "modinfo" tool =
+on your system=20
+to query the lttng-modules version ?=20
+
+An alternative to query the lttng-modules version, if you really cannot ins=
+tall modinfo, would=20
+be:=20
+
+strings /lib/modules/$(uname -r)/extra/lttng-tracer.ko | grep "^version=3D"=
+=20
+
+Thank you,=20
+
+Mathieu=20
+
+> Thank You
+> with regards
+> G Madhan Mohan
+
+> On Tue, Mar 15, 2022 at 9:19 PM Mathieu Desnoyers < [
+> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] =
+>
+> wrote:
+
+>> ----- On Mar 15, 2022, at 2:48 AM, lttng-dev [ mailto:lttng-dev@lists.lt=
+tng.org
+>> | lttng-dev@lists.lttng.org ] wrote:
+
+>> > Dear Sir/Madam,
+>> > I am Madhan , working as an embedded engineer in 5GTB. I am using lttn=
+g in
+>> > petalinux 2019.2(kernel 4.19) .And getting a call Trace error. Refer t=
+he below
+>> > log for more details.
+
+>> > root@xilinx-zcu111-2019_2:~# lttng create
+>> > Spawning a session daemon
+>> > [ 163.902282] lttng_kretprobes: loading out-of-tree module taints kern=
+el.
+>> > [ 163.987461] Unable to handle kernel paging request at virtual addres=
+s
+>> > 00000000000010c0
+>> > [ 163.995379] Mem abort info:
+>> > [ 163.998179] ESR =3D 0x96000005
+>> > [ 164.001233] Exception class =3D DABT (current EL), IL =3D 32 bits
+>> > [ 164.007149] SET =3D 0, FnV =3D 0
+>> > [ 164.010203] EA =3D 0, S1PTW =3D 0
+>> > [ 164.013333] Data abort info:
+>> > [ 164.016218] ISV =3D 0, ISS =3D 0x00000005
+>> > [ 164.020054] CM =3D 0, WnR =3D 0
+>> > [ 164.023028] user pgtable: 4k pages, 39-bit VAs, pgdp =3D 00000000df6=
+dd54e
+>> > [ 164.029646] [00000000000010c0] pgd=3D0000000000000000, pud=3D0000000=
+000000000
+>> > [ 164.036447] Internal error: Oops: 96000005 [#1] SMP
+>> > [ 164.041318] Modules linked in: lttng_tracer(O+) lttng_statedump(O)
+>> > lttng_ftrace(O) lttng_kprobes(O) lttng_clock(O) lttng_lib_ring_buffer(=
+O)
+>> > lttng_kretprobes(O) uio_pdrv_genirq
+>> > [ 164.056963] CPU: 1 PID: 4955 Comm: modprobe Tainted: G O 4.19.0-xili=
+nx-v2019.2
+>> > #1
+>> > [ 164.065734] Hardware name: ZynqMP ZCU111 RevA (DT)
+>> > [ 164.070510] pstate: 60000005 (nZCv daif -PAN -UAO)
+>> > [ 164.075429] pc : lttng_tracepoint_notify+0x188/0x228 [lttng_tracer]
+>> > [ 164.081767] lr : lttng_tracepoint_notify+0x14c/0x228 [lttng_tracer]
+>> > [ 164.088016] sp : ffffff8011613a40
+>> > [ 164.091314] x29: ffffff8011613a40 x28: ffffff801163f000
+>> > [ 164.096618] x27: 0000000000000100 x26: ffffff800813c958
+>> > [ 164.101921] x25: ffffff8000e22758 x24: 0000000000000000
+>> > [ 164.107225] x23: 00000000000010c0 x22: ffffff8000e42ed8
+>> > [ 164.112528] x21: ffffffc87accc400 x20: ffffff8000e42ef8
+>> > [ 164.117832] x19: 0000000000000001 x18: 0000000000000000
+>> > [ 164.123135] x17: 0000000000000000 x16: 0000000000000000
+>> > [ 164.128439] x15: ffffffffffffffff x14: 0000000000000000
+>> > [ 164.133742] x13: 0000000000000000 x12: 0000000000000000
+>> > [ 164.139046] x11: 0000000000000001 x10: 0101010101010101
+>> > [ 164.144349] x9 : 6d64686b625e6f38 x8 : 706d75645f6c6f63
+>> > [ 164.149653] x7 : 6f746f72705f7039 x6 : ffffffc8778d5ec1
+>> > [ 164.154957] x5 : ffffff8009458000 x4 : 0000000000000000
+>> > [ 164.160260] x3 : ffffff8000db77a0 x2 : ffffffc87828a380
+>> > [ 164.165563] x1 : 0000000000000007 x0 : ffffff8000d13048
+>> > [ 164.170869] Process modprobe (pid: 4955, stack limit =3D 0x00000000e=
+6162018)
+>> > [ 164.177725] Call trace:
+>> > [ 164.180235] lttng_tracepoint_notify+0x188/0x228 [lttng_tracer]
+>> > [ 164.186148] register_tracepoint_module_notifier+0x6c/0x98
+>> > [ 164.191709] lttng_tracepoint_init+0x54/0xc80 [lttng_tracer]
+>> > [ 164.197438] lttng_events_init+0x4c/0x1e0 [lttng_tracer]
+>> > [ 164.202734] do_one_initcall+0x68/0x1ec
+>> > [ 164.206562] do_init_module+0x60/0x1f0
+>> > [ 164.210302] load_module+0x1ca0/0x2270
+>> > [ 164.214035] __se_sys_finit_module+0xc0/0xd0
+>> > [ 164.218288] __arm64_sys_finit_module+0x24/0x30
+>> > [ 164.222802] el0_svc_common+0x98/0x100
+>> > [ 164.226543] el0_svc_handler+0x74/0x90
+>> > [ 164.230275] el0_svc+0x8/0xc
+>> > [ 164.233142] Code: 6b18003f 54fffc49 f9415c00 b8b8d817 (f94002f3)
+>> > [ 164.239226] ---[ end trace c1cc2d1f9d55794a ]---
+>> > [ 195.613567] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of
+>> > module lttng_tracer.
+>> > [ 195.622371] lttng_ring_buffer_client_overwrite: Unknown symbol
+>> > lttng_transport_unregister (err -16)
+>> > ^C
+>> > root@xilinx-zcu111-2019_2:~# uname -a
+>> > Linux xilinx-zcu111-2019_2 4.19.0-xilinx-v2019.2 #1 SMP Mon Mar 14 15:=
+09:26 UTC
+>> > 2022 aarch64 GNU/Linux
+>> > root@xilinx-zcu111-2019_2:~# uname -a
+>> > Linux xilinx-zcu111-2019_2 4.19.0-xilinx-v2019.2 #1 SMP Mon Mar 14 15:=
+09:26 UTC
+>> > 2022 aarch64 GNU/Linux
+>> > root@xilinx-zcu111-2019_2:~# [ 226.333565] lttng_ring_buffer_client_ov=
+erwrite:
+>> > gave up waiting for init of module lttng_tracer.
+>> > [ 226.342368] lttng_ring_buffer_client_overwrite: Unknown symbol lttng=
+_last_tsc
+>> > (err -16)
+>> > [ 257.053564] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of
+>> > module lttng_tracer.
+>> > [ 257.062358] lttng_ring_buffer_client_overwrite: Unknown symbol
+>> > lttng_transport_register (err -16)
+>> > [ 287.773562] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of
+>> > module lttng_tracer.
+>> > [ 287.782356] lttng_ring_buffer_client_overwrite: Unknown symbol
+>> > lttng_transport_unregister (err -16)
+>> > [ 318.493567] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of
+>> > module lttng_tracer.
+>> > [ 318.502364] lttng_ring_buffer_client_overwrite: Unknown symbol lttng=
+_last_tsc
+>> > (err -16)
+>> > [ 349.213564] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of
+>> > module lttng_tracer.
+>> > [ 349.222363] lttng_ring_buffer_client_overwrite: Unknown symbol
+>> > lttng_transport_register (err -16)
+
+>> What is the installed lttng-modules version ?
+
+>> You can query it with modinfo /lib/modules/$(uname -r)/extra/lttng-trace=
+r.ko
+
+>> Thanks,
+
+>> Mathieu
+
+>> > Thank You
+>> > with regards
+>> > G Madhan Mohan
+
+>> > Disclaimer:- This footer text is to convey that this email is sent by =
+one of the
+>> > users of IITH. So, do not mark it as SPAM.
+>> > _______________________________________________
+>> > lttng-dev mailing list
+>> > [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
+>>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
+>> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> [ http://www.efficios.com/ | http://www.efficios.com ]
+
+> Disclaimer:- This footer text is to convey that this email is sent by one=
+ of the
+> users of IITH. So, do not mark it as SPAM.
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+--=_ab51642b-f666-4612-892d-490cf9664c7a
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
+__">----- On Mar 16, 2022, at 8:17 AM, GOLLAMUDI MADHAN MOHAN &lt;madhan.mo=
+han@5g.iith.ac.in&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_T=
+EXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;p=
+adding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decora=
+tion:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=
+=3D"ltr">hi sir,<div>&nbsp; &nbsp; &nbsp; &nbsp;lttng version 2.9.5 - Joann=
+=C3=A8s&nbsp;</div><div>modinfo command&nbsp;is not available used&nbsp; $&=
+nbsp;lttng version command</div></div></blockquote><div><br></div><div><div=
+>Hi,<br></div><div><br></div><div>Please keep the lttng-dev mailing list in=
+ CC, as this discussion started there. The</div><div>answers we come up wit=
+h can be useful to others.</div><div><br></div><div>The version you provide=
+d here is the version of lttng-tools installed on your system,</div><div>wh=
+ich is not relevant to investigate your issue.</div><div><br></div><div>Wha=
+t is needed here is the version of lttng-modules: the Linux kernel modules =
+implementing</div><div>the kernel tracing feature of LTTng. Those are diffe=
+rent packages altogether.</div><div><br></div><div>May I recommend that you=
+ install the package containing the "modinfo" tool on your system</div><div=
+>to query the lttng-modules version ?</div><div><br></div><div>An alternati=
+ve to query the lttng-modules version, if you really cannot install modinfo=
+, would</div><div>be:</div><div><br></div><div>strings /lib/modules/$(uname=
+ -r)/extra/lttng-tracer.ko | grep "^version=3D"<br></div><div><br></div><di=
+v>Thank you,</div><div><br></div><div>Mathieu</div></div><div><br data-mce-=
+bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;margin=
+-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;=
+text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;=
+"><div dir=3D"ltr"><div><br></div><br><br>Thank You<div>&nbsp;with regards<=
+br>G Madhan Mohan<br></div></div><br><div class=3D"gmail_quote"><div dir=3D=
+"ltr" class=3D"gmail_attr">On Tue, Mar 15, 2022 at 9:19 PM Mathieu Desnoyer=
+s &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank" r=
+el=3D"nofollow noopener noreferrer">mathieu.desnoyers@efficios.com</a>&gt; =
+wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
+px 0.8ex;border-left:1px solid rgb( 204 , 204 , 204 );padding-left:1ex"><br=
+>
+<br>
+----- On Mar 15, 2022, at 2:48 AM, lttng-dev <a href=3D"mailto:lttng-dev@li=
+sts.lttng.org" target=3D"_blank" rel=3D"nofollow noopener noreferrer">lttng=
+-dev@lists.lttng.org</a> wrote:<br>
+<br>
+&gt; Dear Sir/Madam,<br>
+&gt; I am Madhan , working as an embedded engineer in 5GTB. I am using lttn=
+g in<br>
+&gt; petalinux 2019.2(kernel 4.19) .And getting a call Trace error. Refer t=
+he below<br>
+&gt; log for more details.<br>
+<br>
+&gt; root@xilinx-zcu111-2019_2:~# lttng create<br>
+&gt; Spawning a session daemon<br>
+&gt; [ 163.902282] lttng_kretprobes: loading out-of-tree module taints kern=
+el.<br>
+&gt; [ 163.987461] Unable to handle kernel paging request at virtual addres=
+s<br>
+&gt; 00000000000010c0<br>
+&gt; [ 163.995379] Mem abort info:<br>
+&gt; [ 163.998179] ESR =3D 0x96000005<br>
+&gt; [ 164.001233] Exception class =3D DABT (current EL), IL =3D 32 bits<br=
+>
+&gt; [ 164.007149] SET =3D 0, FnV =3D 0<br>
+&gt; [ 164.010203] EA =3D 0, S1PTW =3D 0<br>
+&gt; [ 164.013333] Data abort info:<br>
+&gt; [ 164.016218] ISV =3D 0, ISS =3D 0x00000005<br>
+&gt; [ 164.020054] CM =3D 0, WnR =3D 0<br>
+&gt; [ 164.023028] user pgtable: 4k pages, 39-bit VAs, pgdp =3D 00000000df6=
+dd54e<br>
+&gt; [ 164.029646] [00000000000010c0] pgd=3D0000000000000000, pud=3D0000000=
+000000000<br>
+&gt; [ 164.036447] Internal error: Oops: 96000005 [#1] SMP<br>
+&gt; [ 164.041318] Modules linked in: lttng_tracer(O+) lttng_statedump(O)<b=
+r>
+&gt; lttng_ftrace(O) lttng_kprobes(O) lttng_clock(O) lttng_lib_ring_buffer(=
+O)<br>
+&gt; lttng_kretprobes(O) uio_pdrv_genirq<br>
+&gt; [ 164.056963] CPU: 1 PID: 4955 Comm: modprobe Tainted: G O 4.19.0-xili=
+nx-v2019.2<br>
+&gt; #1<br>
+&gt; [ 164.065734] Hardware name: ZynqMP ZCU111 RevA (DT)<br>
+&gt; [ 164.070510] pstate: 60000005 (nZCv daif -PAN -UAO)<br>
+&gt; [ 164.075429] pc : lttng_tracepoint_notify+0x188/0x228 [lttng_tracer]<=
+br>
+&gt; [ 164.081767] lr : lttng_tracepoint_notify+0x14c/0x228 [lttng_tracer]<=
+br>
+&gt; [ 164.088016] sp : ffffff8011613a40<br>
+&gt; [ 164.091314] x29: ffffff8011613a40 x28: ffffff801163f000<br>
+&gt; [ 164.096618] x27: 0000000000000100 x26: ffffff800813c958<br>
+&gt; [ 164.101921] x25: ffffff8000e22758 x24: 0000000000000000<br>
+&gt; [ 164.107225] x23: 00000000000010c0 x22: ffffff8000e42ed8<br>
+&gt; [ 164.112528] x21: ffffffc87accc400 x20: ffffff8000e42ef8<br>
+&gt; [ 164.117832] x19: 0000000000000001 x18: 0000000000000000<br>
+&gt; [ 164.123135] x17: 0000000000000000 x16: 0000000000000000<br>
+&gt; [ 164.128439] x15: ffffffffffffffff x14: 0000000000000000<br>
+&gt; [ 164.133742] x13: 0000000000000000 x12: 0000000000000000<br>
+&gt; [ 164.139046] x11: 0000000000000001 x10: 0101010101010101<br>
+&gt; [ 164.144349] x9 : 6d64686b625e6f38 x8 : 706d75645f6c6f63<br>
+&gt; [ 164.149653] x7 : 6f746f72705f7039 x6 : ffffffc8778d5ec1<br>
+&gt; [ 164.154957] x5 : ffffff8009458000 x4 : 0000000000000000<br>
+&gt; [ 164.160260] x3 : ffffff8000db77a0 x2 : ffffffc87828a380<br>
+&gt; [ 164.165563] x1 : 0000000000000007 x0 : ffffff8000d13048<br>
+&gt; [ 164.170869] Process modprobe (pid: 4955, stack limit =3D 0x00000000e=
+6162018)<br>
+&gt; [ 164.177725] Call trace:<br>
+&gt; [ 164.180235] lttng_tracepoint_notify+0x188/0x228 [lttng_tracer]<br>
+&gt; [ 164.186148] register_tracepoint_module_notifier+0x6c/0x98<br>
+&gt; [ 164.191709] lttng_tracepoint_init+0x54/0xc80 [lttng_tracer]<br>
+&gt; [ 164.197438] lttng_events_init+0x4c/0x1e0 [lttng_tracer]<br>
+&gt; [ 164.202734] do_one_initcall+0x68/0x1ec<br>
+&gt; [ 164.206562] do_init_module+0x60/0x1f0<br>
+&gt; [ 164.210302] load_module+0x1ca0/0x2270<br>
+&gt; [ 164.214035] __se_sys_finit_module+0xc0/0xd0<br>
+&gt; [ 164.218288] __arm64_sys_finit_module+0x24/0x30<br>
+&gt; [ 164.222802] el0_svc_common+0x98/0x100<br>
+&gt; [ 164.226543] el0_svc_handler+0x74/0x90<br>
+&gt; [ 164.230275] el0_svc+0x8/0xc<br>
+&gt; [ 164.233142] Code: 6b18003f 54fffc49 f9415c00 b8b8d817 (f94002f3)<br>
+&gt; [ 164.239226] ---[ end trace c1cc2d1f9d55794a ]---<br>
+&gt; [ 195.613567] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of<br>
+&gt; module lttng_tracer.<br>
+&gt; [ 195.622371] lttng_ring_buffer_client_overwrite: Unknown symbol<br>
+&gt; lttng_transport_unregister (err -16)<br>
+&gt; ^C<br>
+&gt; root@xilinx-zcu111-2019_2:~# uname -a<br>
+&gt; Linux xilinx-zcu111-2019_2 4.19.0-xilinx-v2019.2 #1 SMP Mon Mar 14 15:=
+09:26 UTC<br>
+&gt; 2022 aarch64 GNU/Linux<br>
+&gt; root@xilinx-zcu111-2019_2:~# uname -a<br>
+&gt; Linux xilinx-zcu111-2019_2 4.19.0-xilinx-v2019.2 #1 SMP Mon Mar 14 15:=
+09:26 UTC<br>
+&gt; 2022 aarch64 GNU/Linux<br>
+&gt; root@xilinx-zcu111-2019_2:~# [ 226.333565] lttng_ring_buffer_client_ov=
+erwrite:<br>
+&gt; gave up waiting for init of module lttng_tracer.<br>
+&gt; [ 226.342368] lttng_ring_buffer_client_overwrite: Unknown symbol lttng=
+_last_tsc<br>
+&gt; (err -16)<br>
+&gt; [ 257.053564] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of<br>
+&gt; module lttng_tracer.<br>
+&gt; [ 257.062358] lttng_ring_buffer_client_overwrite: Unknown symbol<br>
+&gt; lttng_transport_register (err -16)<br>
+&gt; [ 287.773562] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of<br>
+&gt; module lttng_tracer.<br>
+&gt; [ 287.782356] lttng_ring_buffer_client_overwrite: Unknown symbol<br>
+&gt; lttng_transport_unregister (err -16)<br>
+&gt; [ 318.493567] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of<br>
+&gt; module lttng_tracer.<br>
+&gt; [ 318.502364] lttng_ring_buffer_client_overwrite: Unknown symbol lttng=
+_last_tsc<br>
+&gt; (err -16)<br>
+&gt; [ 349.213564] lttng_ring_buffer_client_overwrite: gave up waiting for =
+init of<br>
+&gt; module lttng_tracer.<br>
+&gt; [ 349.222363] lttng_ring_buffer_client_overwrite: Unknown symbol<br>
+&gt; lttng_transport_register (err -16)<br>
+<br>
+What is the installed lttng-modules version ? <br>
+<br>
+You can query it with modinfo /lib/modules/$(uname -r)/extra/lttng-tracer.k=
+o<br>
+<br>
+Thanks, <br>
+<br>
+Mathieu <br>
+<br>
+&gt; Thank You<br>
+&gt; with regards<br>
+&gt; G Madhan Mohan<br>
+<br>
+&gt; Disclaimer:- This footer text is to convey that this email is sent by =
+one of the<br>
+&gt; users of IITH. So, do not mark it as SPAM.<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank" rel=3D"=
+nofollow noopener noreferrer">lttng-dev@lists.lttng.org</a><br>
+&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
+ rel=3D"noreferrer nofollow noopener noreferrer" target=3D"_blank">https://=
+lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
+-- <br>
+Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" rel=3D"noreferrer nofollow noopener nor=
+eferrer" target=3D"_blank">http://www.efficios.com</a><br>
+</blockquote></div>
+
+<br>
+<p dir=3D"ltr" style=3D"line-height:1.38;margin-top:0pt;margin-bottom:0pt">=
+<span style=3D"font-size:11pt;font-family:'arial';color:rgb( 34 , 34 , 34 )=
+;vertical-align:baseline;white-space:pre-wrap;background-color:yellow">Disc=
+laimer:- </span><span style=3D"background-color:rgb( 255 , 255 , 255 );colo=
+r:rgb( 34 , 34 , 34 );font-size:small">This&nbsp;</span><span style=3D"back=
+ground-color:rgb( 255 , 255 , 255 );color:rgb( 34 , 34 , 34 );font-size:sma=
+ll">footer text is to convey that this email is sent by one of the&nbsp;</s=
+pan><span style=3D"background-color:rgb( 255 , 255 , 255 );color:rgb( 34 , =
+34 , 34 );font-size:small">users of IITH. So, do not mark it as SPAM.</span=
+></p><br></blockquote></div><div><br></div><div data-marker=3D"__SIG_POST__=
+">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.effici=
+os.com</div></div></body></html>
+--=_ab51642b-f666-4612-892d-490cf9664c7a--
+
+--===============4404688676320869315==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============4404688676320869315==--
