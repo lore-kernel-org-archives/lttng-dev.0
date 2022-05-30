@@ -4,56 +4,127 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF9A5C433F5
-	for <lttng-dev@archiver.kernel.org>; Thu, 19 May 2022 16:01:57 +0000 (UTC)
-Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4L3vkD2x6bz1PrT;
-	Thu, 19 May 2022 12:01:56 -0400 (EDT)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50C50C4332F
+	for <lttng-dev@archiver.kernel.org>; Mon, 30 May 2022 14:21:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1652976117;
-	bh=CBvZf583TxYsnUXAlWNA/hyGLrrv5E1Ls1sQk9ZQU0Y=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=M1EKjzl2Cd5tt4S4z8sif39+dd7q9ks73Bi+HSZoGokGfYgYobhGFbspkMNHI1tTe
-	 t8NxzjB5Fw1byPgMSn5XpN3D7n4qywfhjXMOlg7qdR+0kDiElIEGPJRccfqO1iuVa/
-	 LFm1VGAbCxwwPO6TWSdidGck+j3+DRJAN8MDsD3rl6j1V+9gvYhaCG+UWgM7+pLixH
-	 268x7RS1iTi6jX1w9QOmhrdYfHTYZw7mkj7LnNUEKJrX+yitkY3gx6AAqqMWCkQ+Xj
-	 1HTIneY3Eu2x2mC1JZvja7PeBCDg088ZnbIbPAdjYf6QQNKWzC6MyAmoKzKBlB5PK8
-	 0Gh1rsyvAgbDA==
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
- [IPv6:2a00:1450:4864:20::22d])
- by lists.lttng.org (Postfix) with ESMTPS id 4L3vkB5TW8z1PjL
- for <lttng-dev@lists.lttng.org>; Thu, 19 May 2022 12:01:54 -0400 (EDT)
-Received: by mail-lj1-x22d.google.com with SMTP id q130so6773529ljb.5
- for <lttng-dev@lists.lttng.org>; Thu, 19 May 2022 09:01:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=1G9DKLHjN6OyMUZAJC+0+WDy241HshuGLUiIp0Ca/Wc=;
- b=OYSKXN5YZ5jXlBqFoA5w69qoeZoWC7JLdEy0zkTLRsyyqUrREcjVsI/86GqF8xZs+f
- QGv7Wx8QbPDu7sD14GCzsMSXxHpUi/mrIdqnPBdQ9aYpaNXAvwjgyqAKoQuaWSoxjG2K
- ujPc7BHM4BPsKZrCsWWyce28ex3Ji2CH2NmV0kLjZ0Mn2RSSolFYULDwwA1ULWnClrWl
- Y5WHTyqvj5YdJTFMGc7EylCXU7WMOC9AoElFm8T3pBXKy7ZH79b/2VSYmDk4oasZNuPG
- QubGljLRf+RK9D26mIjZujRrg8vVep41gbX4tme3YhtgiL1wSWagPQt2RWbuqoClQYBA
- 1E2A==
-X-Gm-Message-State: AOAM531L8J1WkPQh5SGBZJVPC+oO2Wi7/pU/MhxAU+w7Nw3jxa8vtYaF
- rKvnnvJImqDYO4a/bHrSMr3G+51BLMsj9o2xodqPmDaCFKU=
-X-Google-Smtp-Source: ABdhPJwkNQihpSxBwyd27lLGzq+Gf+JiDs2cjJupxdzDJiP29eYY3FE+iYpVm3JQda5mrjnD8qukTDp6MH4p1xZPNtw=
-X-Received: by 2002:a05:651c:902:b0:253:db4b:8f34 with SMTP id
- e2-20020a05651c090200b00253db4b8f34mr214064ljq.46.1652976112902; Thu, 19 May
- 2022 09:01:52 -0700 (PDT)
+	s=default; t=1653920478;
+	bh=ts2AdWdDseOtg3/9iuY/GrrgCiZaQtCCio0YkbeWHvw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=IXLmeXgiGA3xM5+XxV9A3BMavZ3KYx2ngdlOBYKBa9XVDtms02iOcYXbcMEAEga8C
+	 vqGMsmSZRIhhgEoXCAdGm1PW3QVbwWxDaH+S0c83q2VzXc++S6Kddrphndlo4PJco9
+	 Uo3DUp1m+9S2xfkLvjv0wZrVPffrPBKC1xjvKV7VXK6hUZ1gDNRHgxRmVI46hAN3b6
+	 4MW6mpTy+onJX5Xd3wd1Jc2bWSxVH7Abx4YHS+phs0trgQQ3KmffGtLRxoxhinQcUo
+	 0xUsp2ljsFhj/GrqpX8muKofDb6qn8Xw4Z6pSJRInmY3GEgak4TG2sLxtVfPRbnGCj
+	 qHK67XbhhOiSQ==
+Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
+	by lists.lttng.org (Postfix) with ESMTP id 4LBcz13b0Dz2wV;
+	Mon, 30 May 2022 10:21:17 -0400 (EDT)
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com
+ [205.220.166.238])
+ by lists.lttng.org (Postfix) with ESMTPS id 4LBcyz1v3wz39Y
+ for <lttng-dev@lists.lttng.org>; Mon, 30 May 2022 10:21:14 -0400 (EDT)
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+ by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24UCRevc015700
+ for <lttng-dev@lists.lttng.org>; Mon, 30 May 2022 07:09:59 -0700
+Received: from nam10-mw2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10lp2104.outbound.protection.outlook.com [104.47.55.104])
+ by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3gbf12996j-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+ for <lttng-dev@lists.lttng.org>; Mon, 30 May 2022 07:09:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LxZ35Zgow3e2LRbkfWf/WKP0cl2XenYl3ZlCV2akGSCEdiugCEwv9d8TbJO2tfVOQJuosXZ8Eu8IQaijBq651mXSNJJzF7TKEzSn7zAXpSU9JsbG3iui3aEok8U30kgXowNk/dEhs9XZiU5iepl+OELZ20YDuTlBMUgPt/R2SdGxStyVWhpuI5lW/t4SrTBA9xZcTtRc4QMSgR1gaiBu9tW1YcJL2skviOOvAnXjSMxIQ/+JD1uPWHe/xQTLvE1IzyLummeKMQB9qc5MTzqWcyzYfjfvtDDMok6HV3DDiSZDrgq21DasOdCQ8+W+z6aFs9FYkpMgkMxBtLfirs405A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aSYd8eWQPdkZoiWsNjhG8GNexA0vOE2y4bHSM2/UdOo=;
+ b=g+NnvJ7vWO+F7IzTTqNP/aDfTGQ9zmTSOexjymF+mcG1WLolO91aFR+bASEBT1Kxl8NIIaJO5O7meqayPF/ipkg9I2nm8ijXrNWJ8Ttbs79QacIsWd34QU/RiBIASjczDcXtwYWL+26IX1Rqq0IoMkmF8NF4JWAP0OD0yUm8RKrav/JOPTG75ePUCM+AN05ia9uab7kFPl6vbZJBmJku2/BXfr+W5qkRGym4iXYBNXo5U1/pU6hBTVP6bTqfTdoqmu03VKBp59WI0f4Lb7UzUPxjQLQDSFgfXcziP2EaF2+x4Vhu0gbPWP/FbaivPT+sTlVM0kB01Es1ivbY9yQ+nA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from CO6PR11MB5617.namprd11.prod.outlook.com (2603:10b6:5:35c::14)
+ by PH0PR11MB5045.namprd11.prod.outlook.com (2603:10b6:510:3f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Mon, 30 May
+ 2022 14:09:57 +0000
+Received: from CO6PR11MB5617.namprd11.prod.outlook.com
+ ([fe80::f9a6:f09b:36b5:46f8]) by CO6PR11MB5617.namprd11.prod.outlook.com
+ ([fe80::f9a6:f09b:36b5:46f8%7]) with mapi id 15.20.5293.019; Mon, 30 May 2022
+ 14:09:57 +0000
+To: lttng-dev@lists.lttng.org
+Date: Mon, 30 May 2022 16:10:21 +0200
+Message-Id: <20220530141021.267219-1-marcel.hamer@windriver.com>
+X-Mailer: git-send-email 2.25.1
+X-ClientProxiedBy: SJ0PR03CA0240.namprd03.prod.outlook.com
+ (2603:10b6:a03:39f::35) To CO6PR11MB5617.namprd11.prod.outlook.com
+ (2603:10b6:5:35c::14)
 MIME-Version: 1.0
-References: <20220519150257.26136-1-bruce.ashfield@gmail.com>
- <1908357724.62379.1652974262072.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1908357724.62379.1652974262072.JavaMail.zimbra@efficios.com>
-Date: Thu, 19 May 2022 12:01:41 -0400
-Message-ID: <CADkTA4NeZgm-5wac8tZVs-QrAzafcHNWdfAnL0bkJDQjuUHQoA@mail.gmail.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] [PATCH] sched/tracing: fix
- __trace_sched_switch_state (5.18-rc7+)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6ec8494a-5bdd-4448-11f0-08da42461363
+X-MS-TrafficTypeDiagnostic: PH0PR11MB5045:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR11MB50452F8A6215A0962F100F4292DD9@PH0PR11MB5045.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uRGncHMtVDnM+SjDIeX9yomlkFLGYUEPx8N5sat/CfhyA0l6ZlZjCofO2/Y8Cuw/rgsXFgVNDK6NM9aMxPNUwT9WlSoM2j38Ft39sMiXCRTywby/ia2WkHrsOXcjeNvwMbAWFXXGKpdlswnPCF1vQukCtsNjMykhl1iD6PAzAokcULWwqhbRCNU/REcluoCUZjCbB8jax+ePMc81AvPwGtculKO6zf1x3CEGn92nkPlGylVuUH7agXxhDTzGCeH1c2kLOcvRD8gKLRc7OMjPcrAK4Qp25pn4HEc227U/vs3e1vzOg4HVW8g08i5dASnwtUWvK+5yvMpcAc0uULj1qPhTsekp+k3UjeTL/HiBd2r7t4cE3Vio1j7aacgtfuhq/re486eU2t0aOJUL8+ehRT+z5I04OT3Fu7FdDduIah2NTUOaW/ZAKzm/n4xHGRY6gDUHT4TEteC8MpwDDNsWytEK0ujmW+qpxwVL7aiNrdrlhWMf7FlFbpHSKdwpKAuNOpHsb335kzHj1tat7O6IjUEScowZt8OYaul4xvmvgtbw0riX+RIkSsqyPo/IdGvdFsmVshHtf/q0j5cqEap/SHwx3nPkimbEzl4vF3OjeOAlE1nLjmvByrTrPcR9yRteAXTpIgy7mPyYrv16BZIl1Jsgzzfp9Ot8gkVNst05Jk4nhsA9jUZWNgJejuOV5u1Lo6t9iy5pZiNH2oorfe9zyQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CO6PR11MB5617.namprd11.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230001)(4636009)(366004)(6666004)(66556008)(66946007)(66476007)(36756003)(86362001)(6512007)(1076003)(2616005)(186003)(6506007)(38100700002)(52116002)(2906002)(8676002)(508600001)(83380400001)(38350700002)(6486002)(316002)(26005)(5660300002)(44832011)(8936002)(6916009);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?t94YiztSEiifIpAWbqSFE1tpsGEcjWrcdarFKBURvrNc8aoZ9Gs9bFxuAexm?=
+ =?us-ascii?Q?Nw63k+hCadgZsmflx6r4t2NkXTgwJkqApEc5S6HO8hswxGEDIQXtIEsGO2mq?=
+ =?us-ascii?Q?eWzwi3MfIlBrIAjZqXOWc3/saBy57OMweW4IgyGtR4B2MuWeGy/JhOyJd4wx?=
+ =?us-ascii?Q?D2meuDvLQ68X8uEsP/b+D+OCE/CrFVmwTzk+WL16LSdz5BDv//OESW1X8psG?=
+ =?us-ascii?Q?3E1GSWD12fNigSLIQmfW5SEDr9QuAPaHn0AR3fxz3zdlvKIV5nSaW/BvViev?=
+ =?us-ascii?Q?YUFdTtqQVNOymUlo+tIhKo50l4x3o3ypB7AHgcbBstHfYLi/9zq++htlWZLe?=
+ =?us-ascii?Q?gXwwu5t+fs/ZhyIhHQqqb2YMIb7vKThe+DkN5FsznCC4D9B4QxKPTPkYkCqZ?=
+ =?us-ascii?Q?2wNd/YpmVJfjuladOFevJ399iZXBqULz4YoUtbdDOSvjjprI0k9SZ1tI+XI2?=
+ =?us-ascii?Q?MOXrT/NJVEVID9viaJabev4BeDtIU4elai922iwDyTxmakwwHWeHcK1l2EMF?=
+ =?us-ascii?Q?OyujNNp4SdxYuq1tq+5+lXmvzACm8fDuQhik6KOv8AQuP+6h64aYlLFiMsk0?=
+ =?us-ascii?Q?xgk4gsG0kiKF+0f29HsY/Bt/Gbm8954H6y1FohoXQVmuusilEZc9FI6L+jbc?=
+ =?us-ascii?Q?GQre1ZPIyGg/K4R5PEgMy8h6F0PDaE0a2yg1QkgQKF0nvrrAqGBQc8ZYS6y8?=
+ =?us-ascii?Q?uCsj6HvBGlheeUUxqF14Z4oc0LGLoMJKlp2QcncCmlD7AdivYGfG7peXi3tQ?=
+ =?us-ascii?Q?XnVf2feB6pNorkYySKYc+fP5erd/0nOM9gupEeBCC6BCyphiAlxXxbaWrv9R?=
+ =?us-ascii?Q?bh5IRzX+/kaONcOPA0yyzq/vzY1R3TGDoK34I2JO1UJQFv1J+0mJrRW3fifi?=
+ =?us-ascii?Q?C3P2oegmqLGFJR59zo96QTkuY68TitPiMO0DE3Yh9Y45VjDTb47h9uPpLUVk?=
+ =?us-ascii?Q?jypeTRzD+gVm7MniZ/TUIvWUj3jM2Gfvi5Mbe3GA8ka1aOAFjzWuX+JYFwjj?=
+ =?us-ascii?Q?ob2x/rZH0hH1l0iJgH0HIS7y/wGzY9M4y1QEynhiTWM58D7huif24RmG5CXX?=
+ =?us-ascii?Q?a1/xRgjvF31C/lArSH+ra0MFWv9RrfBgJc8usMycWWdh7GYwOYqeXI/9x9dg?=
+ =?us-ascii?Q?hkVIf+0QM3yVATr89/L36F3ngn+YRJf6NfdngTg/bSQd9E5P4vjiNtvu+uZJ?=
+ =?us-ascii?Q?GyEfqjCFUhOFGV1ZvOlufFx0xu74NHCsUJernbVdj0iw2kTxdcQJnjHvZK49?=
+ =?us-ascii?Q?iIhU3znVkXws3ppyLOjBp2OO7F9e8qUQK5ebjFBJYVF5V2g1BbzF0Fa9SRGd?=
+ =?us-ascii?Q?vlLasKyKNDZypKlmO/aRLr9MBtIuYjS5TsAsaIJNseUaOwLFCeYnVCQXsiOA?=
+ =?us-ascii?Q?R8yEZlh7UUmE4prcVoDLis6Kzf/Z65BQYCpQm/UtF3714x9HYoxLxedF9/yK?=
+ =?us-ascii?Q?AM/RFv8bmssDiP+7YZnQcvLeBOZdZUBbXTm4RdsITSwKfIFK/hhYt2mIns3N?=
+ =?us-ascii?Q?+m3fImLDaxd50NIOfAdJl8W7N5FiOoyKP/e+wTWGCG5ZuXdboqC8oK03c2AY?=
+ =?us-ascii?Q?gcD4xEZa0n5BhQndvF0JTchHph77b/rMF0PnoDCUGweNM4rQXaTut7X7LWWr?=
+ =?us-ascii?Q?2a12z9gdy4cbnrPZN0kOwZzrBrKvBBZFVbCCiTXSzSmdA3ugrLlNiexTdFsT?=
+ =?us-ascii?Q?CfqYz42QBjEa1wjSOUbJ9Ev/NaDXnknhoFefayhcmziHV4n6FJZSOBj3x//u?=
+ =?us-ascii?Q?B4ZftSi73l4bKjpfrc+7vhTC3ZCNlp4=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ec8494a-5bdd-4448-11f0-08da42461363
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5617.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2022 14:09:56.9874 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CPKxU1j0Jo19w9pXTaiuh5CKQgrrlG6hz+z5pZkrLHu2GavYbc/uSMIQYkFU6+BbK8UKNXks8eC++sK2ahNwzSB5tG8ZZm5tQD4vQQ5rTDY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5045
+X-Proofpoint-GUID: HnUmECM3aaaUQXFSupebHrdUmR6wvJVN
+X-Proofpoint-ORIG-GUID: HnUmECM3aaaUQXFSupebHrdUmR6wvJVN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-30_05,2022-05-30_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 spamscore=0
+ impostorscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0
+ mlxlogscore=775 priorityscore=1501 adultscore=0 phishscore=0
+ malwarescore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2205300074
+Subject: [lttng-dev] [PATCH lttng-tools] Fix: cleanup stream on snapshot
+ failure
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -65,165 +136,76 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Bruce Ashfield via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Bruce Ashfield <bruce.ashfield@gmail.com>
+From: Marcel Hamer via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Marcel Hamer <marcel.hamer@windriver.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On Thu, May 19, 2022 at 11:31 AM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
->
-> ----- On May 19, 2022, at 11:02 AM, Bruce Ashfield via lttng-dev lttng-dev@lists.lttng.org wrote:
->
-> > From: Bruce Ashfield <bruce.ashfield@gmail.com>
-> >
-> > The commit [fix: sched/tracing: Don't re-read p->state when emitting
-> > sched_switch event (v5.18)] was correct, but the kernel changed their
-> > mind with the following commit:
-> >
-> >   commit 9c2136be0878c88c53dea26943ce40bb03ad8d8d
-> >   Author: Delyan Kratunov <delyank@fb.com>
-> >   Date:   Wed May 11 18:28:36 2022 +0000
-> >
-> >       sched/tracing: Append prev_state to tp args instead
-> >
-> >       Commit fa2c3254d7cf (sched/tracing: Don't re-read p->state when emitting
-> >       sched_switch event, 2022-01-20) added a new prev_state argument to the
-> >       sched_switch tracepoint, before the prev task_struct pointer.
-> >
-> >       This reordering of arguments broke BPF programs that use the raw
-> >       tracepoint (e.g. tp_btf programs). The type of the second argument has
-> >       changed and existing programs that assume a task_struct* argument
-> >       (e.g. for bpf_task_storage access) will now fail to verify.
-> >
-> >       If we instead append the new argument to the end, all existing programs
-> >       would continue to work and can conditionally extract the prev_state
-> >       argument on supported kernel versions.
-> >
-> >       Fixes: fa2c3254d7cf (sched/tracing: Don't re-read p->state when emitting
-> >       sched_switch event, 2022-01-20)
-> >       Signed-off-by: Delyan Kratunov <delyank@fb.com>
-> >       Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> >       Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> >       Link:
-> >       https://lkml.kernel.org/r/c8a6930dfdd58a4a5755fc01732675472979732b.camel@fb.com
-> >
-> > By reordering the parameters (again) we can get back up and building.
-> >
-> > Signed-off-by: Bruce Ashfield <bruce.ashfield@gmail.com>
-> > ---
-> >
-> > Hi all,
-> >
-> > This is more than likely NOT a correct fix, but while working on the
-> > yocto -dev reference kernel, I ran into this build failure against
-> > 5.18-rc7.
-> >
-> > I didn't see any sign of another fix on the mailing list, so I wanted
-> > to send this in case anyone else runs into the failure and to check
-> > to see if there's a better fix in progress.
->
-> Hi Bruce,
->
-> Please see: https://review.lttng.org/c/lttng-modules/+/8045
->
-> I was planning to merge it today, unless you have objections.
->
-> I notice that in your own patch, you modify the arguments passed to
-> __trace_sched_switch_state(), althrough I don't see them changing in
-> the upstream kernel. Am I missing something ?
+When a channel snapshot creation fails the stream should be cleaned up
+properly. If the stream is not closed and cleaned properly on a failure,
+the next time a snapshot is created an assert is triggered for:
 
-No objects here. That is obviously better than mine :) I swear I saw
-the order of the arguments changing when I looked at the kernel, and
-had a secondary compile error in those calls .. but I very easily could
-have been mistaken.
+	assert(!stream->trace_chunk);
 
-Bruce
+inside the snapshot_channel function. Since the stream->trace_chunk was
+not reset to NULL. The reset to NULL happens inside the
+consumer_stream_close function.
 
->
-> Thanks,
->
-> Mathieu
->
-> >
-> > Cheers,
-> >
-> > Bruce
-> >
-> >
-> > include/instrumentation/events/sched.h | 15 ++++++++-------
-> > 1 file changed, 8 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/include/instrumentation/events/sched.h
-> > b/include/instrumentation/events/sched.h
-> > index 339bec9..f9e9c38 100644
-> > --- a/include/instrumentation/events/sched.h
-> > +++ b/include/instrumentation/events/sched.h
-> > @@ -23,8 +23,9 @@
-> > #if (LTTNG_LINUX_VERSION_CODE >= LTTNG_KERNEL_VERSION(5,18,0))
-> >
-> > static inline long __trace_sched_switch_state(bool preempt,
-> > -             unsigned int prev_state,
-> > -             struct task_struct *p)
-> > +             struct task_struct *p,
-> > +             struct task_struct *n,
-> > +             unsigned int prev_state )
-> > {
-> >         unsigned int state;
-> >
-> > @@ -356,20 +357,20 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE(sched_wakeup_template,
-> > sched_wakeup_new,
-> > LTTNG_TRACEPOINT_EVENT(sched_switch,
-> >
-> >       TP_PROTO(bool preempt,
-> > -             unsigned int prev_state,
-> >               struct task_struct *prev,
-> > -             struct task_struct *next),
-> > +             struct task_struct *next,
-> > +             unsigned int prev_state),
-> >
-> > -     TP_ARGS(preempt, prev_state, prev, next),
-> > +     TP_ARGS(preempt, prev, next, prev_state),
-> >
-> >       TP_FIELDS(
-> >               ctf_array_text(char, prev_comm, prev->comm, TASK_COMM_LEN)
-> >               ctf_integer(pid_t, prev_tid, prev->pid)
-> >               ctf_integer(int, prev_prio, prev->prio - MAX_RT_PRIO)
-> > #ifdef CONFIG_LTTNG_EXPERIMENTAL_BITWISE_ENUM
-> > -             ctf_enum(task_state, long, prev_state, __trace_sched_switch_state(preempt,
-> > prev_state, prev))
-> > +             ctf_enum(task_state, long, prev_state, __trace_sched_switch_state(preempt,
-> > prev, next, prev_state))
-> > #else
-> > -             ctf_integer(long, prev_state, __trace_sched_switch_state(preempt, prev_state,
-> > prev))
-> > +             ctf_integer(long, prev_state, __trace_sched_switch_state(preempt, prev, next,
-> > prev_state))
-> > #endif
-> >               ctf_array_text(char, next_comm, next->comm, TASK_COMM_LEN)
-> >               ctf_integer(pid_t, next_tid, next->pid)
-> > --
-> > 2.19.1
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+Fixes #1352
 
+Signed-off-by: Marcel Hamer <marcel.hamer@windriver.com>
+---
+ src/common/ust-consumer/ust-consumer.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-
+diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consumer/ust-consumer.c
+index f176ca40a..f43216829 100644
+--- a/src/common/ust-consumer/ust-consumer.c
++++ b/src/common/ust-consumer/ust-consumer.c
+@@ -1147,13 +1147,13 @@ static int snapshot_channel(struct lttng_consumer_channel *channel,
+ 		if (use_relayd) {
+ 			ret = consumer_send_relayd_stream(stream, path);
+ 			if (ret < 0) {
+-				goto error_unlock;
++				goto error_close_stream;
+ 			}
+ 		} else {
+ 			ret = consumer_stream_create_output_files(stream,
+ 					false);
+ 			if (ret < 0) {
+-				goto error_unlock;
++				goto error_close_stream;
+ 			}
+ 			DBG("UST consumer snapshot stream (%" PRIu64 ")",
+ 					stream->key);
+@@ -1170,19 +1170,19 @@ static int snapshot_channel(struct lttng_consumer_channel *channel,
+ 		ret = lttng_ustconsumer_take_snapshot(stream);
+ 		if (ret < 0) {
+ 			ERR("Taking UST snapshot");
+-			goto error_unlock;
++			goto error_close_stream;
+ 		}
+ 
+ 		ret = lttng_ustconsumer_get_produced_snapshot(stream, &produced_pos);
+ 		if (ret < 0) {
+ 			ERR("Produced UST snapshot position");
+-			goto error_unlock;
++			goto error_close_stream;
+ 		}
+ 
+ 		ret = lttng_ustconsumer_get_consumed_snapshot(stream, &consumed_pos);
+ 		if (ret < 0) {
+ 			ERR("Consumerd UST snapshot position");
+-			goto error_unlock;
++			goto error_close_stream;
+ 		}
+ 
+ 		/*
 -- 
-- Thou shalt not follow the NULL pointer, for chaos and madness await
-thee at its end
-- "Use the force Harry" - Gandalf, Star Trek II
+2.25.1
+
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
