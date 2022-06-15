@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5137EC43334
-	for <lttng-dev@archiver.kernel.org>; Wed, 15 Jun 2022 13:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 157A5C433EF
+	for <lttng-dev@archiver.kernel.org>; Wed, 15 Jun 2022 14:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1655300122;
-	bh=I2Ytdm8kx88JqN9ek/hDjQX2Vlc6d4LuaRUDSocj+i4=;
+	s=default; t=1655302563;
+	bh=09ZgoX2hYtRZtxPckXwvL43r1G641LjCLyGK6CXk+SQ=;
 	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YBeuWRlao8rTw4oKwhzCD/SU2VKlp5nGU2WXNdUhlRVUyHSF+1q3KQzYH490AU4RS
-	 856aU6a5ZxOuHgAnr9InoQkvKWSNxaaNpuGzSw3eJjNz2TXLKeZvbqXswxCo9yAN+c
-	 3A/5XDNZTb22Y6eMfHhld57yK1KBhVde94MkIWt33Kt1k6lODCpiO4kuKeC4VNzSem
-	 26xtin5Bhx3zT1M31PYbSJgkA0/r1RxkQl5BagoId6TuNNrab8ZHPKMW1PjM8woSG4
-	 7xgTcMbszJYKrr/lx9xfw+gCufHrxG1R0ljP3fSBZouXA6FltYk+6FZBi9soqCl7Ve
-	 IUrpVwz1mm+6g==
+	b=KoZt0Cpk4LfBfjA0Iu+sY255Bg66mQxHy5H4tky7YvrORIIuO+fkCq4MUz+0pytwW
+	 tGHuOuLPp4m9w73sR3hUbJf/n/y8o+KvBbIkoqtOLg5vB7jYES1VeMmusg0ewlAbqK
+	 kql+5VebC5DBo/hQyH138XUekzKK/UwgJolOoSJFlScP4WcwzogPsqv+HUU+7Wmp6M
+	 zCQXa/8OKsnB3zlMQXRBWwMOFLOCwQ0S7Dpe7M0L0Fu43KN4IkP7mFzencmr/yAumK
+	 FknOCWPmKEJwACNvdx4IX2UXpju2vj44P/SOFfANl+aNv9ZAbcnw48fcGz3+bUB/Y0
+	 2AylgGCyT2nYg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4LNRBd3kZPz8RZ;
-	Wed, 15 Jun 2022 09:35:21 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4LNS5Z2btZz8th;
+	Wed, 15 Jun 2022 10:16:02 -0400 (EDT)
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4LNRBb2pSGz8RX
- for <lttng-dev@lists.lttng.org>; Wed, 15 Jun 2022 09:35:19 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4LNS5X2nmhz8X6
+ for <lttng-dev@lists.lttng.org>; Wed, 15 Jun 2022 10:16:00 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C39E140991A
- for <lttng-dev@lists.lttng.org>; Wed, 15 Jun 2022 09:35:18 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id ABB5D409EA9
+ for <lttng-dev@lists.lttng.org>; Wed, 15 Jun 2022 10:15:58 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id 0tpHqtC9JZdz; Wed, 15 Jun 2022 09:35:18 -0400 (EDT)
+ with ESMTP id dFUAsVKch22G; Wed, 15 Jun 2022 10:15:58 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 0D72A4091E1;
- Wed, 15 Jun 2022 09:35:18 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 0D72A4091E1
+ by mail.efficios.com (Postfix) with ESMTP id 4B5E3409EA8;
+ Wed, 15 Jun 2022 10:15:58 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4B5E3409EA8
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id 0L5728rTrUWW; Wed, 15 Jun 2022 09:35:18 -0400 (EDT)
+ with ESMTP id knOj5b3fsyr8; Wed, 15 Jun 2022 10:15:58 -0400 (EDT)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 02B0C40973C;
- Wed, 15 Jun 2022 09:35:18 -0400 (EDT)
-Date: Wed, 15 Jun 2022 09:35:17 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 41CB4409E19;
+ Wed, 15 Jun 2022 10:15:58 -0400 (EDT)
+Date: Wed, 15 Jun 2022 10:15:58 -0400 (EDT)
 To: Minlan Wang <wangminlan@szsandstone.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Message-ID: <1314631804.61859.1655300117898.JavaMail.zimbra@efficios.com>
+Message-ID: <396090936.61897.1655302558168.JavaMail.zimbra@efficios.com>
 In-Reply-To: <20220615034900.GA187807@localhost.localdomain>+5075995E84B158A6>
 References: <20220614035533.GA174967@localhost.localdomain>
  <765519142.60031.1655221996546.JavaMail.zimbra@efficios.com>
@@ -54,7 +54,7 @@ X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4272 (ZimbraWebClient - FF100
  (Linux)/8.8.15_GA_4257)
 Thread-Topic: urcu workqueue thread uses 99% of cpu while workqueue is empty
-Thread-Index: vfakGoFUjUR5ACAPT7S/Ymeqm+T9qQ==
+Thread-Index: qESOu78Fq/8Ruep1pSS6IoI/2YqI1g==
 Subject: Re: [lttng-dev] urcu workqueue thread uses 99% of cpu while
  workqueue is empty
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -93,22 +93,15 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 > The OS we are using is CentOS Linux release 7.9.2009 (Core), not CentOS 8.2
 > as mentioned before. And the kernel version is: 3.10.0-1160.el7.x86_64.
 
-Can you reproduce with an up-to-date kernel ? AFAIU, kernel version
-3.10.0-1160.el7.x86_64 was built on Mon Oct 19 18:34:26 2020 [1], whereas
-3.10.0-1160.66.1.el7 was built on Wed May 18 18:19:46 2022 [2].
+One more thing: did you apply any changes on top of the v0.12.1 userspace rcu tag ?
 
-[1] https://rpmfind.net/linux/RPM/centos/7.9.2009/x86_64/Packages/kernel-3.10.0-1160.el7.x86_64.html
-[2] https://rpmfind.net/linux/RPM/centos/updates/7.9.2009/x86_64/Packages/kernel-3.10.0-1160.66.1.el7.x86_64.html
-
-I just want to make sure we are not hitting a bug in the futex system call.
-
-Can you also try to reproduce with an up-to-date Linux kernel ? (5.18.4)
-
-Can you provide a reproducer I could try on my own system ?
+Also, can you provide the output of "./configure" on your system ? I'm also interested
+in knowing the contents of include/urcu/config.h after building liburcu.
 
 Thanks,
 
 Mathieu
+
 
 > 
 > On Tue, Jun 14, 2022 at 11:53:16AM -0400, Mathieu Desnoyers wrote:
