@@ -4,59 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00F0EC43334
-	for <lttng-dev@archiver.kernel.org>; Thu, 14 Jul 2022 13:10:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E64B1C43334
+	for <lttng-dev@archiver.kernel.org>; Fri, 15 Jul 2022 14:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1657804245;
-	bh=e69TSrCq7cfKo3ZWXkcEVbH9xPMU9mR1sGt4cbtrqUs=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Ujpjoa71F4xISKGlX6VRtsWUG/YAgKe81ETTUj5XYxMuwqtaNpNLDkpBJVhPP+Ys6
-	 Vmi0bJ7PFRdSaO+loVqd7xtqZUGIjhu4YoNieO1kZVlnDIuUnMnbdvo5NRmU1ewrgb
-	 x1sM+2eZpwzrBPE2N5G2PUu/al8l0QkiSYYOlt7JscFwvqzOJczxmi1ihH0afsMQQE
-	 UBB3wLvIfkBWiqrAPqzRjpLW8lKtT2SgK8ZGno8eiJAsJfhQeWRn0hx/yoJEITjzhZ
-	 O0ua/NkgUL6FNGszgLyAQT1Od0FFmyNqvDvAVDfPZUX7y2Mxd7kFYAqmOXUyyU2Q8k
-	 rTe7cwGinV6kQ==
+	s=default; t=1657895413;
+	bh=945fnN5dS5gJX+FjHEdnBT4yi5v+SCZFPOUHBlN692Q=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=zyCuNu72i21DecoL2IybFB/FNZEiWutKXHBIQJXV1TKggB2fLBGu+9fQFhGsPOuVd
+	 kwEsQEzSnLQLa7xz+MAZto1mWSSxWzhvoJwHuFFP2OD/YUqC6CuBEejsDsMzSDZTda
+	 N7s8hp+VeqaZKDBFbfkW4kZpE/a8SyRGGl+Hmy3qBDljwkfpCf8AiXH4j5Crbfk4g+
+	 K8w6AUf+PGHx7WXNf4hXUvYo19fhVKqrL7N5di+g9FnAygeN7kQr7MhkT3uS+2b8Md
+	 OHFUEbnc4RniRAdc7VHbV4GNnwurDvAm/rwlvWM9CftwZnrNcbvapj/yJJXB1QAvja
+	 sX+oKIHa/ZpNw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4LkFGs0GbgzMp4;
-	Thu, 14 Jul 2022 09:10:45 -0400 (EDT)
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com
- [IPv6:2607:f8b0:4864:20::a31])
- by lists.lttng.org (Postfix) with ESMTPS id 4LkFGq2gmSzN3f
- for <lttng-dev@lists.lttng.org>; Thu, 14 Jul 2022 09:10:43 -0400 (EDT)
-Received: by mail-vk1-xa31.google.com with SMTP id g25so765389vkm.13
- for <lttng-dev@lists.lttng.org>; Thu, 14 Jul 2022 06:10:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to:cc;
- bh=saD3EmM1px1CZSMUWWD6jBJVtknxkV8oJx++7848E/E=;
- b=MW4dRS9oM4qMDr4nUy2kMBCrnwglpCuP2NADeLSWtFj/gOtmHDOE0dugR3Ics0hMRE
- oWmzDp8g3NzHMQzxmbfZGJbwZJ6xp2u3bh6Ggtc7Qy+7PNIy5+ycRRrLtGKqy4yRcBeV
- i8GlJyMWJkxlvu2zKEboi/4+LrnGUBRAPId6vJrHFRfUJR6y/gypnk4iE+4vi0uaUj29
- HS538Byz2PsUZxHc/XlWkG2I+EEW85d2LKoplO7FLgGTuQhm+4M/sqEtuplulJA7cxCh
- lu8ipLePRDGj4Lyxlc1zR6bbJppKrlLiIrIuh9h/lOq9LHZnKU81jkM2VOYjgWbEvLuW
- OmfA==
-X-Gm-Message-State: AJIora8exGq8ozN9nnvpky9L0axdOybMv58b9bTzGyOkDz9MKDFKxcDo
- ACQsKEH1Tb+Yr09V9/m6MwWCeEEpW7wm+gb6y4I=
-X-Google-Smtp-Source: AGRyM1sxfbMtRG8mLFp5CTWYXClCPOP/mJsws0GyN1hTbR67mmzxOdRe8HEqdQovXXTXe8LTwbm4MjJMhGbV7ncS/IA=
-X-Received: by 2002:a1f:294c:0:b0:374:834f:366b with SMTP id
- p73-20020a1f294c000000b00374834f366bmr3385828vkp.21.1657804242552; Thu, 14
- Jul 2022 06:10:42 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Lkv045rt9zNhn;
+	Fri, 15 Jul 2022 10:30:12 -0400 (EDT)
+Received: from l00301c001954.leonardo.com (l00301c001954.leonardo.com
+ [185.51.13.85])
+ by lists.lttng.org (Postfix) with ESMTPS id 4LksWy3kTpzNcM
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Jul 2022 09:24:14 -0400 (EDT)
+Received: from l00301c001944.leonardocompany.com (unknown [10.87.23.4])
+ by l00301c001954.leonardo.com (Postfix) with ESMTPS id 4LksQ03Q0fzhW
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Jul 2022 15:19:04 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 l00301c001954.leonardo.com 4LksQ03Q0fzhW
+Received: from L00324C001910.nocleonardo.local (unknown [10.87.23.39])
+ by l00301c001944.leonardocompany.com (Postfix) with ESMTPS id 4LksPz6KlGzHb
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Jul 2022 15:19:03 +0200 (CEST)
+Received: from l00301c002053.leonardocompany.com (unknown [10.87.22.86])
+ by Forcepoint Email with ESMTPS id F1E10976C088DBE51115
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Jul 2022 15:19:04 +0200 (CEST)
+Received: from L00300C001665.ocr.priv (unknown [10.87.22.18])
+ by l00301c002053.leonardocompany.com (Postfix) with ESMTPS id 4LksQ06ZpmzPG
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Jul 2022 15:19:04 +0200 (CEST)
+Received: from L00300C001655.ocr.priv (10.87.22.8) by L00300C001665.ocr.priv
+ (10.87.22.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Fri, 15 Jul
+ 2022 15:19:04 +0200
+Received: from L00300C001655.ocr.priv ([fe80::7505:743d:5220:8b95]) by
+ L00300C001655.ocr.priv ([fe80::7505:743d:5220:8b95%19]) with mapi id
+ 15.02.0986.014; Fri, 15 Jul 2022 15:19:04 +0200
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Thread-Topic: LTTng on RHEL 7.9 with real time kernel patch
+Thread-Index: AdiYTTrdh6Eu3U95S9aYfchNDPwHdQ==
+Date: Fri, 15 Jul 2022 13:19:04 +0000
+Message-ID: <e1e5a7797fa044e6a9010c494a451be7@leonardo.com>
+Accept-Language: it-IT, en-US
+Content-Language: it-IT
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_dfbae739-7e05-4265-80d7-c73ef6dc7a63_Enabled=true;
+ MSIP_Label_dfbae739-7e05-4265-80d7-c73ef6dc7a63_SetDate=2022-07-15T13:19:01Z; 
+ MSIP_Label_dfbae739-7e05-4265-80d7-c73ef6dc7a63_Method=Privileged;
+ MSIP_Label_dfbae739-7e05-4265-80d7-c73ef6dc7a63_Name=dfbae739-7e05-4265-80d7-c73ef6dc7a63;
+ MSIP_Label_dfbae739-7e05-4265-80d7-c73ef6dc7a63_SiteId=31ae1cef-2393-4eb1-8962-4e4bbfccd663;
+ MSIP_Label_dfbae739-7e05-4265-80d7-c73ef6dc7a63_ActionId=a32c5481-5e2b-404b-8f42-621fff8586e7;
+ MSIP_Label_dfbae739-7e05-4265-80d7-c73ef6dc7a63_ContentBits=0
+x-originating-ip: [10.17.33.147]
+x-exclaimer-md-config: 754212a9-fa6d-43ee-bac7-18c556c985d7
 MIME-Version: 1.0
-References: <CADYdroN3=pAe66crtsVT9aHE4T+bT61-tvHFKCuwZYkHhuyFjw@mail.gmail.com>
- <217443874.51651.1621450365666.JavaMail.zimbra@efficios.com>
- <CADYdroMVaMq6wdySyV-JGDyJaFpaLO1cHd2=hEb=WMpBHUz0Jg@mail.gmail.com>
- <1519877397.52210.1621517299822.JavaMail.zimbra@efficios.com>
- <CADYdroNEtUen6OiVSXeP7EgRrPGv6wW3FtV1-i0php5DoJQUFg@mail.gmail.com>
- <1054776587.52332.1621520134754.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1054776587.52332.1621520134754.JavaMail.zimbra@efficios.com>
-Date: Thu, 14 Jul 2022 15:10:31 +0200
-Message-ID: <CADYdroN9STUUxYZAYx2R-X2MjuGGF8kVOXEHG156ZTmnoiY9wQ@mail.gmail.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] reading context fields causes syscalls
+X-Mailman-Approved-At: Fri, 15 Jul 2022 10:30:11 -0400
+Subject: [lttng-dev] LTTng on RHEL 7.9 with real time kernel patch
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -68,74 +76,203 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Norbert Lange via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Norbert Lange <nolange79@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Pennese Marco via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Pennese Marco <marco.pennese@leonardo.com>
+Content-Type: multipart/mixed; boundary="===============5358068233399150186=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hello Mathieu,
+--===============5358068233399150186==
+Content-Language: it-IT
+Content-Type: multipart/alternative;
+	boundary="_000_e1e5a7797fa044e6a9010c494a451be7leonardocom_"
 
-Am Do., 20. Mai 2021 um 16:16 Uhr schrieb Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com>:
->
-> ----- On May 20, 2021, at 9:42 AM, Norbert Lange nolange79@gmail.com wrote:
->
-> > Am Do., 20. Mai 2021 um 15:28 Uhr schrieb Mathieu Desnoyers
-> > <mathieu.desnoyers@efficios.com>:
-> >>
-> >> ----- On May 20, 2021, at 8:46 AM, Norbert Lange nolange79@gmail.com wrote:
-> >>
-> >> > Am Mi., 19. Mai 2021 um 20:52 Uhr schrieb Mathieu Desnoyers
-> >> > <mathieu.desnoyers@efficios.com>:
-> >> >>
-> >> >> ----- On May 19, 2021, at 8:11 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
-> >> >>
-> >> >> > Hello,
-> >> >> >
-> >> >> > Several context fields will cause a syscall atleast the first time a
-> >> >> > tracepoint is
-> >> >> > recorded. For example all of the following:
-> >> >> >
-> >> >> > `lttng add-context -c chan --userspace --type=vpid --type=vtid --type=procname`
-> >> >> >
-> >> >> > Each of them seems cached in TLS however, and most should never change
-> >> >> > after startup.
-> >> >> >
-> >> >> > As I am using Lttng over Xenomai, syscalls are strictly forbidden, I
-> >> >> > would like to have some function that prepares all data, which I can
-> >> >> > call on each thread before it switches to realtime work.
-> >> >> >
-> >> >> > Kinda similar to urcu_bp_register_thread, I'd like to have some
-> >> >> > `lttng_ust_warmup_thread` function that fetches the context values
-> >> >> > that can be cached. (urcu_bp_register_thread should be called there
-> >> >> > aswell)
-> >> >> > I considered just doing a tracepoint, but AFAIK the channel can be
-> >> >> > changed/configured after the process is running. So this is not robust
-> >> >> > enough.
-> >> >>
-> >> >> The new lttng_ust_init_thread() API in lttng-ust 2.13 would be the right
-> >> >> place to do this I think:
-> >> >>
-> >> >> /*
-> >> >>  * Initialize this thread's LTTng-UST data structures. There is
-> >> >>  * typically no need to call this, because LTTng-UST initializes its
-> >> >>  * per-thread data structures lazily, but it should be called explicitly
-> >> >>  * upon creation of each thread before signal handlers nesting over
-> >> >>  * those threads use LTTng-UST tracepoints.
-> >> >>  */
-> >> >>
-> >> >> It would make sense that this new initialization helper also initializes
-> >> >> all contexts which cache the result of a system call. Considering that
-> >> >> contexts can be used from the filter and capture bytecode interpreter, as
-> >> >> well as contexts added to channels, I think we'd need to simply initialize
-> >> >> them all.
+--_000_e1e5a7797fa044e6a9010c494a451be7leonardocom_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Any update on that, is there an list of open points/features for lttng?
+SGksDQoNCknigJltIHRyeWluZyB0byB1c2UgTFRUbmcgb24gYSBSZWQgSGF0IEVudGVycHJpc2Ug
+TGludXggNy45ICh3aXRoIHRoZSByZWFsIHRpbWUga2VybmVsIHBhdGNoKS4NCkkgaW5zdGFsbGVk
+IExUVG5nIG9uIHRoZSBtYWNoaW5lIGZvbGxvd2luZyB0aGUgRWZmaWNpT1MgZ3VpZGUgbGlua2Vk
+IGJ5IGx0dG5nIG9mZmljaWFsIHdlYnNpdGUuDQoNCkluIG15IGNvbmZpZ3VyYXRpb24sIGx0dG5n
+IG1hbmFnZXMgdG8gcmVjb3JkIHVzZXIgc3BhY2UgZXZlbnRzLg0KSeKAmWQgbGlrZSB0byByZWNv
+cmQgYWxzbyBrZXJuZWwgc3BhY2UgZXZlbnRzLCBzbyBJ4oCZbSBmb2xsb3dpbmcgdGhlIHF1aWNr
+c3RhcnQgZ3VpZGUgb24gdGhlIHdlYnNpdGUuDQoNCkFzIHNvb24gYXMgSSBydW4g4oCcbHR0bmcg
+bGlzdCDigJMta2VybmVs4oCdLCBJIG9idGFpbiB0aGUgZXJyb3I6DQoNCg0KDQpFcnJvcjogVW5h
+YmxlIHRvIGxpc3Qga2VybmVsIGV2ZW50czogS2VybmVsIHRyYWNlciBub3QgYXZhaWxhYmxlDQoN
+CkVycm9yOiBDb21tYW5kIGVycm9yDQoNCklmIEkgcmVwZWF0IHRoZSBwcm9jZWR1cmUgb24gYSBt
+YWNoaW5lIHdpdGhvdXQgdGhlIHJlYWwgdGltZSBrZXJuZWwgcGF0Y2gsIGl0IHdvcmtzIGFzIGl0
+IHNob3VsZC4NClRoZSByZWFsIHRpbWUga2VybmVsIEnigJltIHVzaW5nIGlzIHRoZSBmb2xsb3dp
+bmcNCjMuMTAuMC0xMTYwLjYyLjEucnQ1Ni4xMjAzLmVsNy54ODZfNjQNCg0KRG8geW91IHRoaW5r
+IHRoZSBlcnJvciBpcyBkdWUgdG8gdGhlIHJlYWwgdGltZSBwYXRjaD8gQ2FuIExUVG5nIHdvcmsg
+d2l0aCBhIHJlYWwgdGltZSBrZXJuZWw/DQpEbyBJIG5lZWQgdG8gZm9sbG93IGEgZGlmZmVyZW50
+IHByb2NlZHVyZSBmb3IgaW5zdGFsbGluZyBMVFRuZyBvbiBhIFJIRUwgNy45IHJlYWwgdGltZSBt
+YWNoaW5lPw0KDQpUaGFuayB5b3UsDQpNYXJjbw0KDQpJbCBwcmVzZW50ZSBtZXNzYWdnaW8gZS1t
+YWlsIGUgb2duaSBzdW8gYWxsZWdhdG8gZGV2b25vIGludGVuZGVyc2kgaW5kaXJpenphdGkgZXNj
+bHVzaXZhbWVudGUgYWwgZGVzdGluYXRhcmlvIGluZGljYXRvIGUgY29uc2lkZXJhcnNpIGRhbCBj
+b250ZW51dG8gc3RyZXR0YW1lbnRlIHJpc2VydmF0byBlIGNvbmZpZGVuemlhbGUuIFNlIG5vbiBz
+aWV0ZSBsJ2VmZmV0dGl2byBkZXN0aW5hdGFyaW8gbyBhdmV0ZSByaWNldnV0byBpbCBtZXNzYWdn
+aW8gZS1tYWlsIHBlciBlcnJvcmUsIHNpZXRlIHByZWdhdGkgZGkgYXZ2ZXJ0aXJlIGltbWVkaWF0
+YW1lbnRlIGlsIG1pdHRlbnRlIGUgZGkgY2FuY2VsbGFyZSBpbCBzdWRkZXR0byBtZXNzYWdnaW8g
+ZSBvZ25pIHN1byBhbGxlZ2F0byBkYWwgdm9zdHJvIHNpc3RlbWEgaW5mb3JtYXRpY28uIFF1YWxz
+aWFzaSB1dGlsaXp6bywgZGlmZnVzaW9uZSwgY29waWEgbyBhcmNoaXZpYXppb25lIGRlbCBwcmVz
+ZW50ZSBtZXNzYWdnaW8gZGEgcGFydGUgZGkgY2hpIG5vbiBuZSDDqCBpbCBkZXN0aW5hdGFyaW8g
+w6ggc3RyZXR0YW1lbnRlIHByb2liaXRvIGUgcHXDsiBkYXIgbHVvZ28gYSByZXNwb25zYWJpbGl0
+w6AgZGkgY2FyYXR0ZXJlIGNpdmlsZSBlIHBlbmFsZSBwdW5pYmlsaSBhaSBzZW5zaSBkaSBsZWdn
+ZS4NClF1ZXN0YSBlLW1haWwgaGEgdmFsb3JlIGxlZ2FsZSBzb2xvIHNlIGZpcm1hdGEgZGlnaXRh
+bG1lbnRlIGFpIHNlbnNpIGRlbGxhIG5vcm1hdGl2YSB2aWdlbnRlLg0KX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18NClRoZSBjb250ZW50cyBvZiB0aGlzIGVtYWlsIG1lc3NhZ2UgYW5k
+IGFueSBhdHRhY2htZW50cyBhcmUgaW50ZW5kZWQgc29sZWx5IGZvciB0aGUgYWRkcmVzc2VlKHMp
+IGFuZCBjb250YWluIGNvbmZpZGVudGlhbCBhbmQvb3IgcHJpdmlsZWdlZCBpbmZvcm1hdGlvbi4N
+CklmIHlvdSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQgb2YgdGhpcyBtZXNzYWdlLCBv
+ciBpZiB0aGlzIG1lc3NhZ2UgaGFzIGJlZW4gYWRkcmVzc2VkIHRvIHlvdSBpbiBlcnJvciwgcGxl
+YXNlIGltbWVkaWF0ZWx5IG5vdGlmeSB0aGUgc2VuZGVyIGFuZCB0aGVuIGRlbGV0ZSB0aGlzIG1l
+c3NhZ2UgYW5kIGFueSBhdHRhY2htZW50cyBmcm9tIHlvdXIgc3lzdGVtLiBJZiB5b3UgYXJlIG5v
+dCB0aGUgaW50ZW5kZWQgcmVjaXBpZW50LCB5b3UgYXJlIGhlcmVieSBub3RpZmllZCB0aGF0IGFu
+eSB1c2UsIGRpc3NlbWluYXRpb24sIGNvcHlpbmcsIG9yIHN0b3JhZ2Ugb2YgdGhpcyBtZXNzYWdl
+IG9yIGl0cyBhdHRhY2htZW50cyBpcyBzdHJpY3RseSBwcm9oaWJpdGVkLiBVbmF1dGhvcml6ZWQg
+ZGlzY2xvc3VyZSBhbmQvb3IgdXNlIG9mIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBpbiB0aGlzIGVt
+YWlsIG1lc3NhZ2UgbWF5IHJlc3VsdCBpbiBjaXZpbCBhbmQgY3JpbWluYWwgbGlhYmlsaXR5LiDi
+gJwNClRoaXMgZS1tYWlsIGhhcyBsZWdhbCB2YWx1ZSBhY2NvcmRpbmcgdG8gdGhlIGFwcGxpY2Fi
+bGUgbGF3cyBvbmx5IGlmIGl0IGlzIGRpZ2l0YWxseSBzaWduZWQgYnkgdGhlIHNlbmRlcg0K
 
-Norbert
+--_000_e1e5a7797fa044e6a9010c494a451be7leonardocom_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
+bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
+YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
+cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
+VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjwhLS0gVGVtcGxhdGUgZ2VuZXJhdGVkIGJ5IEV4Y2xh
+aW1lciBTaWduYXR1cmUgTWFuYWdlciBFeGNoYW5nZSBFZGl0aW9uIG9uIDAzOjE5OjA0IEZyaWRh
+eSwgMTUgSnVseSAyMDIyIC0tPg0KPG1ldGEgaHR0cC1lcXVpdj0iQ29udGVudC1UeXBlIiBjb250
+ZW50PSJ0ZXh0L2h0bWw7IGNoYXJzZXQ9dXRmLTgiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj5Q
+LkltcHJpbnRVbmlxdWVJRCB7DQoJTUFSR0lOOiAwY20gMGNtIDBwdA0KfQ0KTEkuSW1wcmludFVu
+aXF1ZUlEIHsNCglNQVJHSU46IDBjbSAwY20gMHB0DQp9DQpESVYuSW1wcmludFVuaXF1ZUlEIHsN
+CglNQVJHSU46IDBjbSAwY20gMHB0DQp9DQpUQUJMRS5JbXByaW50VW5pcXVlSURUYWJsZSB7DQoJ
+TUFSR0lOOiAwY20gMGNtIDBwdA0KfQ0KRElWLlNlY3Rpb24xIHsNCglwYWdlOiBTZWN0aW9uMQ0K
+fQ0KPC9zdHlsZT4NCjxtZXRhIG5hbWU9IkdlbmVyYXRvciIgY29udGVudD0iTWljcm9zb2Z0IFdv
+cmQgMTUgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxlPjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlv
+bnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6IkNhbWJyaWEgTWF0aCI7DQoJcGFub3Nl
+LTE6MiA0IDUgMyA1IDQgNiAzIDIgNDt9DQpAZm9udC1mYWNlDQoJe2ZvbnQtZmFtaWx5OkNhbGli
+cmk7DQoJcGFub3NlLTE6MiAxNSA1IDIgMiAyIDQgMyAyIDQ7fQ0KQGZvbnQtZmFjZQ0KCXtmb250
+LWZhbWlseTpDb25zb2xhczsNCglwYW5vc2UtMToyIDExIDYgOSAyIDIgNCAzIDIgNDt9DQovKiBT
+dHlsZSBEZWZpbml0aW9ucyAqLw0KcC5Nc29Ob3JtYWwsIGxpLk1zb05vcm1hbCwgZGl2Lk1zb05v
+cm1hbA0KCXttYXJnaW46MGNtOw0KCWZvbnQtc2l6ZToxMS4wcHQ7DQoJZm9udC1mYW1pbHk6IkNh
+bGlicmkiLHNhbnMtc2VyaWY7DQoJbXNvLWZhcmVhc3QtbGFuZ3VhZ2U6RU4tVVM7fQ0KcHJlDQoJ
+e21zby1zdHlsZS1wcmlvcml0eTo5OTsNCgltc28tc3R5bGUtbGluazoiUHJlZm9ybWF0dGF0byBI
+VE1MIENhcmF0dGVyZSI7DQoJbWFyZ2luOjBjbTsNCgltYXJnaW4tYm90dG9tOi4wMDAxcHQ7DQoJ
+Zm9udC1zaXplOjEwLjBwdDsNCglmb250LWZhbWlseToiQ291cmllciBOZXciO30NCnNwYW4uU3Rp
+bGVNZXNzYWdnaW9EaVBvc3RhRWxldHRyb25pY2ExNw0KCXttc28tc3R5bGUtdHlwZTpwZXJzb25h
+bC1jb21wb3NlOw0KCWZvbnQtZmFtaWx5OiJDYWxpYnJpIixzYW5zLXNlcmlmOw0KCWNvbG9yOndp
+bmRvd3RleHQ7fQ0Kc3Bhbi5QcmVmb3JtYXR0YXRvSFRNTENhcmF0dGVyZQ0KCXttc28tc3R5bGUt
+bmFtZToiUHJlZm9ybWF0dGF0byBIVE1MIENhcmF0dGVyZSI7DQoJbXNvLXN0eWxlLXByaW9yaXR5
+Ojk5Ow0KCW1zby1zdHlsZS1saW5rOiJQcmVmb3JtYXR0YXRvIEhUTUwiOw0KCWZvbnQtZmFtaWx5
+OiJDb3VyaWVyIE5ldyI7DQoJbXNvLWZhcmVhc3QtbGFuZ3VhZ2U6SVQ7fQ0KLk1zb0NocERlZmF1
+bHQNCgl7bXNvLXN0eWxlLXR5cGU6ZXhwb3J0LW9ubHk7DQoJbXNvLWZhcmVhc3QtbGFuZ3VhZ2U6
+RU4tVVM7fQ0KQHBhZ2UgV29yZFNlY3Rpb24xDQoJe3NpemU6NjEyLjBwdCA3OTIuMHB0Ow0KCW1h
+cmdpbjo3MC44NXB0IDIuMGNtIDIuMGNtIDIuMGNtO30NCmRpdi5Xb3JkU2VjdGlvbjENCgl7cGFn
+ZTpXb3JkU2VjdGlvbjE7fQ0KLS0+PC9zdHlsZT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCjxv
+OnNoYXBlZGVmYXVsdHMgdjpleHQ9ImVkaXQiIHNwaWRtYXg9IjEwMjYiIC8+DQo8L3htbD48IVtl
+bmRpZl0tLT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCjxvOnNoYXBlbGF5b3V0IHY6ZXh0PSJl
+ZGl0Ij4NCjxvOmlkbWFwIHY6ZXh0PSJlZGl0IiBkYXRhPSIxIiAvPg0KPC9vOnNoYXBlbGF5b3V0
+PjwveG1sPjwhW2VuZGlmXS0tPg0KPC9oZWFkPg0KPGJvZHkgbGFuZz0iSVQiIGxpbms9IiMwNTYz
+QzEiIHZsaW5rPSIjOTU0RjcyIiBzdHlsZT0id29yZC13cmFwOmJyZWFrLXdvcmQiPg0KPGRpdiBj
+bGFzcz0iV29yZFNlY3Rpb24xIj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPkhpLDxvOnA+PC9vOnA+
+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PG86cD4mbmJzcDs8L286cD48L3A+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+SeKAmW0gdHJ5aW5nIHRvIHVzZSBMVFRu
+ZyBvbiBhIFJlZCBIYXQgRW50ZXJwcmlzZSBMaW51eCA3LjkgKHdpdGggdGhlIHJlYWwgdGltZSBr
+ZXJuZWwgcGF0Y2gpLjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwi
+PjxzcGFuIGxhbmc9IkVOLVVTIj5JIGluc3RhbGxlZCBMVFRuZyBvbiB0aGUgbWFjaGluZSBmb2xs
+b3dpbmcgdGhlIEVmZmljaU9TIGd1aWRlIGxpbmtlZCBieSBsdHRuZyBvZmZpY2lhbCB3ZWJzaXRl
+LjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9
+IkVOLVVTIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFs
+Ij48c3BhbiBsYW5nPSJFTi1VUyI+SW4gbXkgY29uZmlndXJhdGlvbiwgbHR0bmcgbWFuYWdlcyB0
+byByZWNvcmQgdXNlciBzcGFjZSBldmVudHMuDQo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBj
+bGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+SeKAmWQgbGlrZSB0byByZWNvcmQg
+YWxzbyBrZXJuZWwgc3BhY2UgZXZlbnRzLCBzbyBJ4oCZbSBmb2xsb3dpbmcgdGhlIHF1aWNrc3Rh
+cnQgZ3VpZGUgb24gdGhlIHdlYnNpdGUuPG86cD48L286cD48L3NwYW4+PC9wPg0KPHByZSBzdHls
+ZT0ibGluZS1oZWlnaHQ6MTEuMjVwdDt2ZXJ0aWNhbC1hbGlnbjpiYXNlbGluZSI+PHNwYW4gbGFu
+Zz0iRU4tVVMiIHN0eWxlPSJmb250LXNpemU6MTEuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0NhbGli
+cmkmcXVvdDssc2Fucy1zZXJpZiI+QXMgc29vbiBhcyBJIHJ1bjwvc3Bhbj48c3BhbiBsYW5nPSJF
+Ti1VUyI+IDwvc3Bhbj48c3BhbiBsYW5nPSJFTi1VUyIgc3R5bGU9ImZvbnQtZmFtaWx5OkNvbnNv
+bGFzIj7igJw8L3NwYW4+PHNwYW4gbGFuZz0iRU4tVVMiIHN0eWxlPSJmb250LXNpemU6OS4wcHQ7
+Zm9udC1mYW1pbHk6Q29uc29sYXMiPmx0dG5nIGxpc3Qg4oCTLWtlcm5lbOKAnTwvc3Bhbj48c3Bh
+biBsYW5nPSJFTi1VUyIgc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7
+Q2FsaWJyaSZxdW90OyxzYW5zLXNlcmlmIj4sIEkgb2J0YWluIHRoZSBlcnJvcjo8bzpwPjwvbzpw
+Pjwvc3Bhbj48L3ByZT4NCjxwcmUgc3R5bGU9ImxpbmUtaGVpZ2h0OjExLjI1cHQ7dmVydGljYWwt
+YWxpZ246YmFzZWxpbmUiPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1zaXplOjkuMHB0
+O2ZvbnQtZmFtaWx5OkNvbnNvbGFzIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3ByZT4NCjxw
+cmUgc3R5bGU9ImxpbmUtaGVpZ2h0OjExLjI1cHQ7dmVydGljYWwtYWxpZ246YmFzZWxpbmUiPjxz
+cGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1zaXplOjkuMHB0O2ZvbnQtZmFtaWx5OkNvbnNv
+bGFzIj5FcnJvcjogVW5hYmxlIHRvIGxpc3Qga2VybmVsIGV2ZW50czogS2VybmVsIHRyYWNlciBu
+b3QgYXZhaWxhYmxlPG86cD48L286cD48L3NwYW4+PC9wcmU+DQo8cHJlIHN0eWxlPSJsaW5lLWhl
+aWdodDoxMS4yNXB0O3ZlcnRpY2FsLWFsaWduOmJhc2VsaW5lIj48c3BhbiBsYW5nPSJFTi1VUyIg
+c3R5bGU9ImZvbnQtc2l6ZTo5LjBwdDtmb250LWZhbWlseTpDb25zb2xhcyI+RXJyb3I6IENvbW1h
+bmQgZXJyb3I8L3NwYW4+PHNwYW4gbGFuZz0iRU4tVVMiIHN0eWxlPSJmb250LXNpemU6OS4wcHQ7
+Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZxdW90OyxzYW5zLXNlcmlmIj48bzpwPjwvbzpwPjwv
+c3Bhbj48L3ByZT4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIj48bzpw
+PiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5n
+PSJFTi1VUyI+SWYgSSByZXBlYXQgdGhlIHByb2NlZHVyZSBvbiBhIG1hY2hpbmUgd2l0aG91dCB0
+aGUgcmVhbCB0aW1lIGtlcm5lbCBwYXRjaCwgaXQgd29ya3MgYXMgaXQgc2hvdWxkLjxvOnA+PC9v
+OnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIj5U
+aGUgcmVhbCB0aW1lIGtlcm5lbCBJ4oCZbSB1c2luZyBpcyB0aGUgZm9sbG93aW5nPG86cD48L286
+cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiPjMu
+MTAuMC0xMTYwLjYyLjEucnQ1Ni4xMjAzLmVsNy54ODZfNjQ8bzpwPjwvbzpwPjwvc3Bhbj48L3A+
+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+PG86cD4mbmJzcDs8L286
+cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiPkRv
+IHlvdSB0aGluayB0aGUgZXJyb3IgaXMgZHVlIHRvIHRoZSByZWFsIHRpbWUgcGF0Y2g/IENhbiBM
+VFRuZyB3b3JrIHdpdGggYSByZWFsIHRpbWUga2VybmVsPzxvOnA+PC9vOnA+PC9zcGFuPjwvcD4N
+CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIj5EbyBJIG5lZWQgdG8gZm9s
+bG93IGEgZGlmZmVyZW50IHByb2NlZHVyZSBmb3IgaW5zdGFsbGluZyBMVFRuZyBvbiBhIFJIRUwg
+Ny45IHJlYWwgdGltZSBtYWNoaW5lPzxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJN
+c29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+
+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+VGhhbmsgeW91LDxvOnA+
+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVT
+Ij5NYXJjbzxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGJyPg0KPGZvbnQgY29sb3I9
+ImJsdWUiIHNpemU9IjEiIGZhY2U9IkFyaWFsIj5JbCBwcmVzZW50ZSBtZXNzYWdnaW8gZS1tYWls
+IGUgb2duaSBzdW8gYWxsZWdhdG8gZGV2b25vIGludGVuZGVyc2kgaW5kaXJpenphdGkgZXNjbHVz
+aXZhbWVudGUgYWwgZGVzdGluYXRhcmlvIGluZGljYXRvIGUgY29uc2lkZXJhcnNpIGRhbCBjb250
+ZW51dG8gc3RyZXR0YW1lbnRlIHJpc2VydmF0byBlIGNvbmZpZGVuemlhbGUuIFNlIG5vbiBzaWV0
+ZSBsJ2VmZmV0dGl2byBkZXN0aW5hdGFyaW8NCiBvIGF2ZXRlIHJpY2V2dXRvIGlsIG1lc3NhZ2dp
+byBlLW1haWwgcGVyIGVycm9yZSwgc2lldGUgcHJlZ2F0aSBkaSBhdnZlcnRpcmUgaW1tZWRpYXRh
+bWVudGUgaWwgbWl0dGVudGUgZSBkaSBjYW5jZWxsYXJlIGlsIHN1ZGRldHRvIG1lc3NhZ2dpbyBl
+IG9nbmkgc3VvIGFsbGVnYXRvIGRhbCB2b3N0cm8gc2lzdGVtYSBpbmZvcm1hdGljby4gUXVhbHNp
+YXNpIHV0aWxpenpvLCBkaWZmdXNpb25lLCBjb3BpYSBvIGFyY2hpdmlhemlvbmUgZGVsIHByZXNl
+bnRlDQogbWVzc2FnZ2lvIGRhIHBhcnRlIGRpIGNoaSBub24gbmUgw6ggaWwgZGVzdGluYXRhcmlv
+IMOoIHN0cmV0dGFtZW50ZSBwcm9pYml0byBlIHB1w7IgZGFyIGx1b2dvIGEgcmVzcG9uc2FiaWxp
+dMOgIGRpIGNhcmF0dGVyZSBjaXZpbGUgZSBwZW5hbGUgcHVuaWJpbGkgYWkgc2Vuc2kgZGkgbGVn
+Z2UuPGJyPg0KUXVlc3RhIGUtbWFpbCBoYSB2YWxvcmUgbGVnYWxlIHNvbG8gc2UgZmlybWF0YSBk
+aWdpdGFsbWVudGUgYWkgc2Vuc2kgZGVsbGEgbm9ybWF0aXZhIHZpZ2VudGUuPGJyPg0KPC9mb250
+Pjxmb250IGNvbG9yPSJibHVlIiBzaXplPSIxIiBmYWNlPSJBcmlhbCI+DQo8aHIgYWxpZ249Imxl
+ZnQiIGNvbG9yPSJibHVlIj4NClRoZSBjb250ZW50cyBvZiB0aGlzIGVtYWlsIG1lc3NhZ2UgYW5k
+IGFueSBhdHRhY2htZW50cyBhcmUgaW50ZW5kZWQgc29sZWx5IGZvciB0aGUgYWRkcmVzc2VlKHMp
+IGFuZCBjb250YWluIGNvbmZpZGVudGlhbCBhbmQvb3IgcHJpdmlsZWdlZCBpbmZvcm1hdGlvbi48
+YnI+DQpJZiB5b3UgYXJlIG5vdCB0aGUgaW50ZW5kZWQgcmVjaXBpZW50IG9mIHRoaXMgbWVzc2Fn
+ZSwgb3IgaWYgdGhpcyBtZXNzYWdlIGhhcyBiZWVuIGFkZHJlc3NlZCB0byB5b3UgaW4gZXJyb3Is
+IHBsZWFzZSBpbW1lZGlhdGVseSBub3RpZnkgdGhlIHNlbmRlciBhbmQgdGhlbiBkZWxldGUgdGhp
+cyBtZXNzYWdlIGFuZCBhbnkgYXR0YWNobWVudHMgZnJvbSB5b3VyIHN5c3RlbS4gSWYgeW91IGFy
+ZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudCwgeW91DQogYXJlIGhlcmVieSBub3RpZmllZCB0
+aGF0IGFueSB1c2UsIGRpc3NlbWluYXRpb24sIGNvcHlpbmcsIG9yIHN0b3JhZ2Ugb2YgdGhpcyBt
+ZXNzYWdlIG9yIGl0cyBhdHRhY2htZW50cyBpcyBzdHJpY3RseSBwcm9oaWJpdGVkLiBVbmF1dGhv
+cml6ZWQgZGlzY2xvc3VyZSBhbmQvb3IgdXNlIG9mIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBpbiB0
+aGlzIGVtYWlsIG1lc3NhZ2UgbWF5IHJlc3VsdCBpbiBjaXZpbCBhbmQgY3JpbWluYWwgbGlhYmls
+aXR5LiDigJw8YnI+DQpUaGlzIGUtbWFpbCBoYXMgbGVnYWwgdmFsdWUgYWNjb3JkaW5nIHRvIHRo
+ZSBhcHBsaWNhYmxlIGxhd3Mgb25seSBpZiBpdCBpcyBkaWdpdGFsbHkgc2lnbmVkIGJ5IHRoZSBz
+ZW5kZXI8YnI+DQo8L2ZvbnQ+DQo8L2JvZHk+DQo8L2h0bWw+DQo=
+
+--_000_e1e5a7797fa044e6a9010c494a451be7leonardocom_--
+
+--===============5358068233399150186==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============5358068233399150186==--
