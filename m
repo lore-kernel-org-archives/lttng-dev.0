@@ -4,58 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9D6C43334
-	for <lttng-dev@archiver.kernel.org>; Tue, 19 Jul 2022 19:40:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF313C43334
+	for <lttng-dev@archiver.kernel.org>; Wed, 20 Jul 2022 20:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1658259624;
-	bh=gu/x+ZU6YpHj5grSjYQsAEenYMw9C5bnij2QFj+5ue4=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1658347214;
+	bh=Zg/TFjxJGz69adDeMwaDrC6yyqw0a5MhdJ8loJ1tkW4=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=NGLKFm8gyqIe0ksstiy81eZKzjQrf2trlh4P7c5BTSzSHgWEDV6F1sT8GY2bA6R0V
-	 00IQyrNg52tfnfRc2OQD15oCr2Ru4pgCYAEs3UheaTtB/iKXAu/0ZyS2ZajPRD7oy5
-	 gZh4uwUkICHqNzHtfHUYXZpoz9STjhTmp9M0qbW/rmpi/f1qhzdPJ73rEtZdmxPjyG
-	 /DpOmI39W1GMq0TWRRI6PoovMUvXtU+62XthStz0fkotpq/G/+1WIVBH5ds9Y1nC0Q
-	 qaINefDoQjV/nrDFnGhQQCU4Q4tSuzqjif4or0ZsmZyapusvZi9LkBghsJzS9M08Ym
-	 4sZOrABcOiYng==
+	b=oqXepRTiJsiD9KnQBom6XTYVbOnXYB2kq9DijA0pSWovhYuhvGpJsxXPmRZAIvwGJ
+	 6IQ6qMpgPx4TSVNV4DfOvZVN6Slvr62Zm9MFr9yo8EJFj3WyHVEOaWN6CYnOkxwO9/
+	 1jWOcHMDG/ok9MvKVXZNiGFN5uaZO5R61fgYgJY9ldAaq6B+K5xrGPoG8FgLVOmBY3
+	 QGPm/3r16VAZE5NryJB4sGoEkr2A8dAnDN5X2zSVh5sWpy8wcnCE/Cw5RfpEZEF8Oc
+	 iF9nF/gKBe6wIAPGgp7LuXBV5T3BNEzbXAtO2d5l4u7FHTNUv50YJcPobznejyjjgf
+	 tiH3YqI3nMjBQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4LnTh81tT9zPjQ;
-	Tue, 19 Jul 2022 15:40:24 -0400 (EDT)
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4LnTh66QsqzPlY
- for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2022 15:40:22 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id D70CE43138F
- for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2022 15:40:22 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id XJK6VFUUge8w; Tue, 19 Jul 2022 15:40:22 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 78E25430FDA;
- Tue, 19 Jul 2022 15:40:22 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 78E25430FDA
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id TL6yr2qzXmY9; Tue, 19 Jul 2022 15:40:22 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
- by mail.efficios.com (Postfix) with ESMTP id 6FEEE431400;
- Tue, 19 Jul 2022 15:40:22 -0400 (EDT)
-Date: Tue, 19 Jul 2022 15:40:22 -0400 (EDT)
-To: Norbert Lange <nolange79@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
-Message-ID: <1308824469.74177.1658259622444.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220718215955.124991-2-nolange79@gmail.com>
-References: <20220718215955.124991-1-nolange79@gmail.com>
- <20220718215955.124991-2-nolange79@gmail.com>
+	by lists.lttng.org (Postfix) with ESMTP id 4Lp64Y5cQWzQCD;
+	Wed, 20 Jul 2022 16:00:13 -0400 (EDT)
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com
+ [IPv6:2607:f8b0:4864:20::a30])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Lp64X4YcVzQCC
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Jul 2022 16:00:12 -0400 (EDT)
+Received: by mail-vk1-xa30.google.com with SMTP id o10so2310406vkl.3
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Jul 2022 13:00:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+ :message-id:subject:to:cc;
+ bh=z+9HnkSs0d3NSoz5LBZ3SPAhZmqlSBX1N5g2o1rw+Ic=;
+ b=hXkWZie8Sm4V8Tb2wQE0MB0K33W2bFSmDSXRd2gbgBH5anzwqafbciOKwEm2wP0+RB
+ wdk2++jHsLAkTLOhq1tkTOiYOwJAkabBMPxySy6fgXzoBlY/4VoJHLZjhJvEMObCO/07
+ bOQHlLNi+Zg3rWJzt05UUhB9F/0SvRRxSTLzJqcXJE0k/eeSXugxVMEcwBKOB3INh+jc
+ y/Rr0sdu5YDXoPH6Ar/Tcg/6kssAeM0MOJ8XlcvJiaw/3CTOWQpixINRZPgXvIv7kBNs
+ i3IboP5a6DSu2Ud5NqKqsQ1cFY+nbN0jxFk/UJ9UbtKzXzfv4LmdJY2zKLGRtBLKi0mp
+ iTrw==
+X-Gm-Message-State: AJIora9AsKcssrFhFXdAvwrFeN8017Fcoy4y9IioYihDDH4dXFd8nsiw
+ feV51paYLGMt79C3m84POl2wpP3qSaP6PKcWl40=
+X-Google-Smtp-Source: AGRyM1ufMUr3fVQ4UxyAVGMQ0KpW6QPwbNmvs6oj1BLfldpEPR8KTyW8ducPR3wRtz0ELWLcwAAdTH4l2AMtZh9OYj4=
+X-Received: by 2002:a1f:948f:0:b0:374:b54b:d917 with SMTP id
+ w137-20020a1f948f000000b00374b54bd917mr14580260vkd.14.1658347211749; Wed, 20
+ Jul 2022 13:00:11 -0700 (PDT)
 MIME-Version: 1.0
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4304 (ZimbraWebClient - FF100
- (Linux)/8.8.15_GA_4304)
-Thread-Topic: lttng_ust_init_thread: call urcu_register_thread
-Thread-Index: wJ/Oo57altjncr6y343E0vAP0mLtaA==
-Subject: Re: [lttng-dev] [PATCH 2/2] lttng_ust_init_thread: call
- urcu_register_thread
+References: <20220718215955.124991-1-nolange79@gmail.com>
+ <1399876011.74159.1658259573115.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1399876011.74159.1658259573115.JavaMail.zimbra@efficios.com>
+Date: Wed, 20 Jul 2022 22:00:00 +0200
+Message-ID: <CADYdroOM93P9HyxZQAuEhZZNFWXoDobh3XTwCdCO0j0BG5rANQ@mail.gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: [lttng-dev] [PATCH 1/2] lttng_ust_init_thread: initialise
+ cached context values
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -67,56 +65,50 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Norbert Lange via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Norbert Lange <nolange79@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
------ On Jul 18, 2022, at 5:59 PM, Norbert Lange via lttng-dev lttng-dev@lists.lttng.org wrote:
+Am Di., 19. Juli 2022 um 21:39 Uhr schrieb Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com>:
+>
+> ----- On Jul 18, 2022, at 5:59 PM, Norbert Lange via lttng-dev lttng-dev@lists.lttng.org wrote:
+>
+> > Modify all relevant *_alloc_tls functions so that they take an
+> > argument for 'init'. Setting this to 'true' will read
+> > the actual context value and store it into a thread local
+> > cache.
+> >
+> > The function 'lttng_ust_init_thread' will use this to
+> > precalculate context values. Tracepoints can then avoid
+> > systemcalls.
+>
+> Rather than integrating two unrelated things within "alloc_tls"
+> functions, I would prefer that we split things like this, e.g.:
+>
+> keep lttng_cgroup_ns_alloc_tls() as is.
+>
+> Introduce lttng_ust_cgroup_init_thread() which would
+> call (void)get_cgroup_ns().
+>
+> Likewise for all other contexts.
+>
+> Thoughts ?
 
-> Eagerly register the thread, and avoid taking mutex during the
-> first tracepoint.
+is this just a matter of the function name? The "things" are
+related as they both prepare the same thread local cache.
 
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ie.
+rename lttng_cgroup_ns_alloc_tls(bool init) to
+lttng_ust_cgroup_init_thread(bool initcache)?
 
-Please resubmit with the next round with my acked-by tag.
+Don't care much either way,I  just usually try to limit symbols.
 
-Mathieu
-
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
-> src/lib/lttng-ust/lttng-ust-comm.c | 2 ++
-> 1 file changed, 2 insertions(+)
-> 
-> diff --git a/src/lib/lttng-ust/lttng-ust-comm.c
-> b/src/lib/lttng-ust/lttng-ust-comm.c
-> index ba0bd985..3ff6b086 100644
-> --- a/src/lib/lttng-ust/lttng-ust-comm.c
-> +++ b/src/lib/lttng-ust/lttng-ust-comm.c
-> @@ -447,6 +447,8 @@ void lttng_ust_init_thread(void)
-> 	 * this thread attempts to use them.
-> 	 */
-> 	lttng_ust_alloc_tls(true);
-> +
-> +	lttng_ust_urcu_register_thread();
-> }
-> 
-> int lttng_get_notify_socket(void *owner)
-> --
-> 2.35.1
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Regards,
+Norbert
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
