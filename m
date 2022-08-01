@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFDE7C19F2B
-	for <lttng-dev@archiver.kernel.org>; Mon,  1 Aug 2022 14:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E48CCC00144
+	for <lttng-dev@archiver.kernel.org>; Mon,  1 Aug 2022 14:37:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1659364541;
-	bh=7cLGrMPelo0V51IF+rAsAS1sJ7gmos/tFs8HNO7+5hs=;
+	s=default; t=1659364635;
+	bh=wmsBzpxgsVYwGcOsDNuFI4b0u+MhKadqbFC9GGSb+hc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DgSp52XVQTCWQbsWnuVk9Hqmqa0BNPkI3nJ/tuZRUKlrCOGWvCY+4zQ+nO3mKdtR9
-	 /VQ/Si/yePHE/MAhA6MO6tnkAyb9bzh+liuyuJvuF++hJ6WnsBTtAtfVeB1089blIK
-	 M3nd7Q3JPkxcXNb7I6RrcRc9JGrZFoF1wqA5rBOVSDiQaDbyquR2mxcQcM3sC7l+rN
-	 FIfxaiOX7Jit7ZFnwNKcGjiJNH7vXGken5V4RWvfsMbg8yPDa71FA3stBjn+djb9Wd
-	 xh0n+RcmPimO/4kDZ9Vt1GfjChf2Ktk+Q13l4cxIVmAQvthd2by+pnQrEUeD9HuyEQ
-	 piVd5b0kls1jQ==
+	b=pG+q+N1dzlPPLIeFvmhtKx95rz/GGjWP2W/mH5/uMsaYGLwGGZfF1rBwoZyB+2fSS
+	 z8JdQurAPpYVo5wPYuTKHx1GEy278g7Sq3xzg/tJvPtcSjOpplIqbHma6raeTR9LI3
+	 coJD+oicNA6ljOcz7Dy0ifCTFDyAd5yAP1aam0kfLMaaO+F3ARJz62sSfyliyFvesA
+	 yJVRLtFw0BmjRMRqdEMVtyA6w4fpmgK0+rozv3HCFq4v/K514td8yPy6z/6FvV+UwC
+	 FWhY3c+ot+U76UTWEuyewUbjLmWoeg/Te7F4FXCEiZA7UcT2iL3JB1BDFL3gST7eDg
+	 oJDRtREnedgPA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4LxLJX6Jktz117L;
-	Mon,  1 Aug 2022 10:35:40 -0400 (EDT)
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by lists.lttng.org (Postfix) with ESMTPS id 4LxLJV2wBVz11G8
- for <lttng-dev@lists.lttng.org>; Mon,  1 Aug 2022 10:35:38 -0400 (EDT)
-Received: by mail-wr1-x430.google.com with SMTP id v3so13457515wrp.0
- for <lttng-dev@lists.lttng.org>; Mon, 01 Aug 2022 07:35:38 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4LxLLM2VBdz11CW;
+	Mon,  1 Aug 2022 10:37:15 -0400 (EDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by lists.lttng.org (Postfix) with ESMTPS id 4LxLLK6bYsz11GB
+ for <lttng-dev@lists.lttng.org>; Mon,  1 Aug 2022 10:37:13 -0400 (EDT)
+Received: by mail-wr1-x431.google.com with SMTP id q30so9964877wra.11
+ for <lttng-dev@lists.lttng.org>; Mon, 01 Aug 2022 07:37:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20210112;
  h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
  :content-transfer-encoding;
- bh=tSwtoqD/RHGWVHZLMEPnvy9Fqx94VE99yDdIBdnQQho=;
- b=qNkGK3ytVvVyxPKNUwEfzRpdJ+zd7VTMwq2880sDtWf61fwiExP8WmANcEFoC7VNra
- D5jdym/MVtGKRd4BgLXcYTjk4oKlScJnzFkbdy9jRVaDTCVfHZ/9NdqmEsC0t9HUt0oq
- 0a9uG+VY/EeO/JG43thG0W+UWX0afX0GCWq+3y3pZxHFc8n1wPLLMxFYhOTjH+YupRyC
- 9v5OiZCYp/dSw3mOi9YTbA5ErZHWnQ7r/lE62CK4wU5Gh57gBuWM+jl/LWt6rL10G1zS
- FacuaEgnl8bESfDl2j9jR5AT3Vo1u7awp/4fsSUBqcIWE9SyDAWi8ddiZVC1r4FUHrow
- MoOA==
-X-Gm-Message-State: ACgBeo3qZwLYYAgooVHB9hDrIlir732zcyV0xKamhRkzxD9+h5Wl/AP1
- xveArIi1FPYuSg5C5KV8LIsm286ZtUY=
-X-Google-Smtp-Source: AA6agR7x+bWdYbaeC1XELVvmxi81WTn117ZeWZsyedUB0IlSGcJKUCJFbcBsc7RjIFxreqJKRYAYcw==
-X-Received: by 2002:adf:e4c1:0:b0:21e:b883:1295 with SMTP id
- v1-20020adfe4c1000000b0021eb8831295mr9913877wrm.205.1659364536909; 
- Mon, 01 Aug 2022 07:35:36 -0700 (PDT)
+ bh=tU7WW2WpwAASn5QtLmbwC8jmGL+V1qKBKhPzj0QMxdI=;
+ b=Rp2CyiN5yxPrVeTnsV0WozbyCQr/YUp4qkIKVXsVA7WVHm4oDKRgvrS9nrKmeCjvJR
+ 0asyLuGkojK7yCZ/KnVBDwfe/ExLK2pUS0Tfr8cdACEbKv0OICFJMRdeapYDvoQyBp74
+ dYAtO7CjYhyFlvEw+TdMyvAoC9aVnh6gpzO0Cd/p4EK/Bdr0DanN2/NNq3tyicGkvytx
+ wFquEMGA9+o6BIjLNzhm4oALoY7883exz1Jdbr2MatwgsJIujlEpXuNeWSfCukZhBWV3
+ JM9yBxzqnEbbShRyRKckqIAHCPSsuWO68VoaeFdPvEjFdYxcgazYtWgajBx5qv3eadzL
+ hpDw==
+X-Gm-Message-State: ACgBeo1WOV9N84F0pA//rtKsGWdVISRw8stmV180XZATt4IxLSrRJS9s
+ gtxYp7M/1bMrOUtfU8wT5f5zqdbuJQA=
+X-Google-Smtp-Source: AA6agR7ltVD2eeugWIZxMprlaK+RKWZ/d9F8YB9kufNkLpjX/Qx3sluGy+pfMoiMXsH6gZJPOeFJFQ==
+X-Received: by 2002:a05:6000:1686:b0:220:66b1:d897 with SMTP id
+ y6-20020a056000168600b0022066b1d897mr2181048wrd.653.1659364632499; 
+ Mon, 01 Aug 2022 07:37:12 -0700 (PDT)
 Received: from lano-work.. ([80.120.136.76]) by smtp.gmail.com with ESMTPSA id
- o5-20020a05600c510500b003a2d6c623f3sm20861260wms.19.2022.08.01.07.35.36
+ p18-20020a5d4592000000b0021f73c66198sm7912500wrq.1.2022.08.01.07.37.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 01 Aug 2022 07:35:36 -0700 (PDT)
+ Mon, 01 Aug 2022 07:37:12 -0700 (PDT)
 X-Google-Original-From: Norbert Lange <norbert.lange@andritz.com>
 To: lttng-dev@lists.lttng.org
-Date: Mon,  1 Aug 2022 16:35:24 +0200
-Message-Id: <20220801143524.160208-1-norbert.lange@andritz.com>
+Date: Mon,  1 Aug 2022 16:36:59 +0200
+Message-Id: <20220801143700.160380-1-norbert.lange@andritz.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Subject: [lttng-dev] [PATCH v2] Improve tracef/tracelog to use the stack for
- small strings
+Subject: [lttng-dev] [PATCH v2 1/2] lttng_ust_init_thread: initialise cached
+ context values
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -75,283 +75,384 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
 From: Norbert Lange <nolange79@gmail.com>
 
-Support two common cases, one being that the resulting message is
-small enough to fit into a on-stack buffer.
-The seconds being the common 'printf("%s", "Message")' scheme.
+Modify all relevant *_alloc_tls functions so that they take
+flags for 'init'. Rename them to init_thread for consistency.
 
-Unfortunately, iterating a va_list is destructive,
-so it has to be copied before calling vprintf.
+So far define one flag LTTNG_UST_INIT_THREAD_CONTEXT_CACHE,
+this will warm up cached values so less is done during
+the first tracepoint.
 
-The implementation was moved to a separate file,
-used by both tracef.c and tracelog.c.
+The function 'lttng_ust_init_thread' will use all available
+flags, software can opt-in to do work early instead
+of lazily during tracepoints.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
-v2 -> v3:
+v1 -> v2:
 
-*   Wrap macro in do/while
-*   drop loop
-*   other changes in response to feedback
+*   instead of a bool, use a flag variable
+*   try to improve consistency for some funciton names
 
-v2:
--   move define into src/common/tracer.h
-    see https://lists.lttng.org/pipermail/lttng-dev/2021-May/029977.html
--   moved macro magic into common tracelog-internal.h header
--   rebased onto master
+v1:
+
+*   see https://lore.kernel.org/all/CADYdroN3=pAe66crtsVT9aHE4T+bT61-tvHFKCuwZYkHhuyFjw@mail.gmail.com/
+*   Will update docs after review, and do some more tests
+    during the week
 ---
- src/common/tracer.h                   |  2 +
- src/lib/lttng-ust/tracef.c            | 32 +++------
- src/lib/lttng-ust/tracelog-internal.h | 95 +++++++++++++++++++++++++++
- src/lib/lttng-ust/tracelog.c          | 40 +++--------
- 4 files changed, 114 insertions(+), 55 deletions(-)
- create mode 100644 src/lib/lttng-ust/tracelog-internal.h
+ src/lib/lttng-ust/lttng-context-cgroup-ns.c   |  4 ++-
+ src/lib/lttng-ust/lttng-context-ipc-ns.c      |  4 ++-
+ src/lib/lttng-ust/lttng-context-net-ns.c      |  4 ++-
+ .../lttng-ust/lttng-context-perf-counters.c   |  3 +-
+ src/lib/lttng-ust/lttng-context-procname.c    |  4 ++-
+ src/lib/lttng-ust/lttng-context-provider.c    |  4 +--
+ src/lib/lttng-ust/lttng-context-time-ns.c     |  4 ++-
+ src/lib/lttng-ust/lttng-context-uts-ns.c      |  4 ++-
+ src/lib/lttng-ust/lttng-context-vtid.c        |  4 ++-
+ src/lib/lttng-ust/lttng-probes.c              |  4 +--
+ src/lib/lttng-ust/lttng-tracer-core.h         | 26 ++++++++------
+ src/lib/lttng-ust/lttng-ust-comm.c            | 34 +++++++++----------
+ src/lib/lttng-ust/lttng-ust-statedump.c       |  2 +-
+ 13 files changed, 61 insertions(+), 40 deletions(-)
 
-diff --git a/src/common/tracer.h b/src/common/tracer.h
-index 2affd6ab..8e18c9b5 100644
---- a/src/common/tracer.h
-+++ b/src/common/tracer.h
-@@ -26,6 +26,8 @@
- #define LTTNG_RFLAG_EXTENDED		RING_BUFFER_RFLAG_END
- #define LTTNG_RFLAG_END			(LTTNG_RFLAG_EXTENDED << 1)
- 
-+#define LTTNG_TRACE_PRINTF_BUFSIZE	512
-+
+diff --git a/src/lib/lttng-ust/lttng-context-cgroup-ns.c b/src/lib/lttng-ust/lttng-context-cgroup-ns.c
+index 34523ea1..5accd2df 100644
+--- a/src/lib/lttng-ust/lttng-context-cgroup-ns.c
++++ b/src/lib/lttng-ust/lttng-context-cgroup-ns.c
+@@ -155,7 +155,9 @@ error_find_context:
  /*
-  * LTTng client type enumeration. Used by the consumer to map the
-  * callbacks from its own address space.
-diff --git a/src/lib/lttng-ust/tracef.c b/src/lib/lttng-ust/tracef.c
-index c05c7811..92911e1d 100644
---- a/src/lib/lttng-ust/tracef.c
-+++ b/src/lib/lttng-ust/tracef.c
-@@ -7,6 +7,7 @@
- #define _LGPL_SOURCE
- #include <stdio.h>
- #include "common/macros.h"
-+#include "common/tracer.h"
- 
- /* The tracepoint definition is public, but the provider definition is hidden. */
- #define LTTNG_UST_TRACEPOINT_PROVIDER_HIDDEN_DEFINITION
-@@ -15,39 +16,22 @@
- #define LTTNG_UST_TRACEPOINT_DEFINE
- #include "lttng-ust-tracef-provider.h"
- 
--static inline
--void lttng_ust___vtracef(const char *fmt, va_list ap)
--	__attribute__((always_inline, format(printf, 1, 0)));
--static inline
--void lttng_ust___vtracef(const char *fmt, va_list ap)
--{
--	char *msg;
--	const int len = vasprintf(&msg, fmt, ap);
--
--	/* len does not include the final \0 */
--	if (len < 0)
--		goto end;
--	lttng_ust_tracepoint_cb_lttng_ust_tracef___event(msg, len,
--		LTTNG_UST_CALLER_IP());
--	free(msg);
--end:
--	return;
--}
-+#include "tracelog-internal.h"
- 
- void lttng_ust__vtracef(const char *fmt, va_list ap)
- 	__attribute__((format(printf, 1, 0)));
- void lttng_ust__vtracef(const char *fmt, va_list ap)
+  * Force a read (imply TLS allocation for dlopen) of TLS variables.
+  */
+-void lttng_cgroup_ns_alloc_tls(void)
++void lttng_ust_cgroup_ns_init_thread(int flags)
  {
--	lttng_ust___vtracef(fmt, ap);
-+	LTTNG_UST_TRACELOG_VALIST(fmt, ap,
-+		lttng_ust_tracepoint_cb_lttng_ust_tracef___event,
-+		msg, len, LTTNG_UST_CALLER_IP());
+ 	asm volatile ("" : : "m" (URCU_TLS(cached_cgroup_ns)));
++	if (flags & LTTNG_UST_INIT_THREAD_CONTEXT_CACHE)
++		(void)get_cgroup_ns();
+ }
+diff --git a/src/lib/lttng-ust/lttng-context-ipc-ns.c b/src/lib/lttng-ust/lttng-context-ipc-ns.c
+index 63401e8d..078e6461 100644
+--- a/src/lib/lttng-ust/lttng-context-ipc-ns.c
++++ b/src/lib/lttng-ust/lttng-context-ipc-ns.c
+@@ -153,7 +153,9 @@ error_find_context:
+ /*
+  * Force a read (imply TLS allocation for dlopen) of TLS variables.
+  */
+-void lttng_ipc_ns_alloc_tls(void)
++void lttng_ust_ipc_ns_init_thread(int flags)
+ {
+ 	asm volatile ("" : : "m" (URCU_TLS(cached_ipc_ns)));
++	if (flags & LTTNG_UST_INIT_THREAD_CONTEXT_CACHE)
++		(void)get_ipc_ns();
+ }
+diff --git a/src/lib/lttng-ust/lttng-context-net-ns.c b/src/lib/lttng-ust/lttng-context-net-ns.c
+index 960591c2..66fcb045 100644
+--- a/src/lib/lttng-ust/lttng-context-net-ns.c
++++ b/src/lib/lttng-ust/lttng-context-net-ns.c
+@@ -153,7 +153,9 @@ error_find_context:
+ /*
+  * Force a read (imply TLS allocation for dlopen) of TLS variables.
+  */
+-void lttng_net_ns_alloc_tls(void)
++void lttng_ust_net_ns_init_thread(int flags)
+ {
+ 	asm volatile ("" : : "m" (URCU_TLS(cached_net_ns)));
++	if (flags & LTTNG_UST_INIT_THREAD_CONTEXT_CACHE)
++		(void)get_net_ns();
+ }
+diff --git a/src/lib/lttng-ust/lttng-context-perf-counters.c b/src/lib/lttng-ust/lttng-context-perf-counters.c
+index 2db11436..52371a0d 100644
+--- a/src/lib/lttng-ust/lttng-context-perf-counters.c
++++ b/src/lib/lttng-ust/lttng-context-perf-counters.c
+@@ -87,9 +87,10 @@ static DEFINE_URCU_TLS(int, ust_perf_mutex_nest);
+ /*
+  * Force a read (imply TLS allocation for dlopen) of TLS variables.
+  */
+-void lttng_ust_perf_counter_alloc_tls(void)
++void lttng_ust_perf_counter_init_thread(int flags)
+ {
+ 	asm volatile ("" : : "m" (URCU_TLS(ust_perf_mutex_nest)));
++	(void)flags;
  }
  
- void lttng_ust__tracef(const char *fmt, ...)
- 	__attribute__((format(printf, 1, 2)));
- void lttng_ust__tracef(const char *fmt, ...)
+ void lttng_perf_lock(void)
+diff --git a/src/lib/lttng-ust/lttng-context-procname.c b/src/lib/lttng-ust/lttng-context-procname.c
+index b5bf77be..16f34c46 100644
+--- a/src/lib/lttng-ust/lttng-context-procname.c
++++ b/src/lib/lttng-ust/lttng-context-procname.c
+@@ -122,7 +122,9 @@ error_find_context:
+ /*
+  * Force a read (imply TLS allocation for dlopen) of TLS variables.
+  */
+-void lttng_procname_alloc_tls(void)
++void lttng_ust_procname_init_thread(int flags)
  {
--	va_list ap;
--
--	va_start(ap, fmt);
--	lttng_ust___vtracef(fmt, ap);
--	va_end(ap);
-+	LTTNG_UST_TRACELOG_VARARG(fmt,
-+		lttng_ust_tracepoint_cb_lttng_ust_tracef___event,
-+		msg, len, LTTNG_UST_CALLER_IP());
+ 	asm volatile ("" : : "m" (URCU_TLS(cached_procname)[0]));
++	if (flags & LTTNG_UST_INIT_THREAD_CONTEXT_CACHE)
++		(void)wrapper_getprocname();
  }
-diff --git a/src/lib/lttng-ust/tracelog-internal.h b/src/lib/lttng-ust/tracelog-internal.h
-new file mode 100644
-index 00000000..34537023
---- /dev/null
-+++ b/src/lib/lttng-ust/tracelog-internal.h
-@@ -0,0 +1,95 @@
-+/*
-+ * SPDX-License-Identifier: MIT
-+ *
-+ * Copyright (C) 2013-2014 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ * Copyright (C) 2021 Norbert Lange <nolange79@gmail.com>
-+ *
-+ * Shared helper macro for tracelog and tracef.
-+ */
-+
-+#define LTTNG_UST_TRACELOG_VARARG(fmt, callback, ...) \
-+	do { \
-+		va_list ap; \
-+		char local_buf[LTTNG_TRACE_PRINTF_BUFSIZE]; \
-+		size_t len = 0; \
-+		char *msg = local_buf; \
-+		char *alloc_buff = NULL; \
-+\
-+		if (caa_unlikely(fmt[0] == '%' && fmt[1] == 's' && fmt[2] == '\0')) { \
-+			va_start(ap, fmt); \
-+			msg = va_arg(ap, char *); \
-+			va_end(ap); \
-+			len = strlen(msg); \
-+		} else { \
-+			int ret; \
-+			size_t buflen = sizeof(local_buf); \
-+\
-+			/* On-stack buffer attempt */ \
-+			va_start(ap, fmt); \
-+			ret = vsnprintf(msg, buflen, fmt, ap); \
-+			va_end(ap); \
-+			if (caa_unlikely(ret < 0)) \
-+				break; \
-+			len = (size_t)ret; \
-+\
-+			if (caa_unlikely(len >= sizeof(local_buf))) { \
-+				buflen = len + 1; \
-+				alloc_buff = (char *)malloc(buflen); \
-+				if (!alloc_buff) \
-+					goto end; \
-+				msg = alloc_buff; \
-+				va_start(ap, fmt); \
-+				ret = vsnprintf(msg, buflen, fmt, ap); \
-+				va_end(ap); \
-+				lttng_ust_runtime_bug_on(ret < 0 || (size_t)ret != buflen - 1); \
-+				len = (size_t)ret; \
-+			} \
-+		} \
-+\
-+		callback(__VA_ARGS__); \
-+end: \
-+		/* Don't call a potentially instrumented forbidden free needlessly. */ \
-+		if (caa_unlikely(alloc_buff)) \
-+			free(alloc_buff); \
-+	} while(0)
-+
-+#define LTTNG_UST_TRACELOG_VALIST(fmt, ap, callback, ...) \
-+	do { \
-+		char local_buf[LTTNG_TRACE_PRINTF_BUFSIZE]; \
-+		size_t len = 0; \
-+		char *msg = local_buf; \
-+		char *alloc_buff = NULL; \
-+\
-+		if (caa_unlikely(fmt[0] == '%' && fmt[1] == 's' && fmt[2] == '\0')) { \
-+			msg = va_arg(ap, char *); \
-+			len = strlen(msg); \
-+		} else { \
-+			va_list ap2; \
-+			int ret; \
-+			size_t buflen = sizeof(local_buf); \
-+\
-+			va_copy(ap2, ap); \
-+			ret = vsnprintf(msg, buflen, fmt, ap2); \
-+			va_end(ap2); \
-+			if (caa_unlikely(ret < 0)) \
-+				break; \
-+			len = (size_t)ret; \
-+\
-+			if (caa_unlikely(len >= sizeof(local_buf))) { \
-+				buflen = len + 1; \
-+				alloc_buff = (char *)malloc(buflen); \
-+				if (!alloc_buff) \
-+					goto end; \
-+				msg = alloc_buff; \
-+				ret = vsnprintf(msg, buflen, fmt, ap); \
-+				lttng_ust_runtime_bug_on(ret < 0 || (size_t)ret != buflen - 1); \
-+				len = (size_t)ret; \
-+			} \
-+		} \
-+\
-+		callback(__VA_ARGS__); \
-+end: \
-+		/* Don't call a potentially instrumented forbidden free needlessly. */ \
-+		if (caa_unlikely(alloc_buff)) \
-+			free(alloc_buff); \
-+	} while (0)
-diff --git a/src/lib/lttng-ust/tracelog.c b/src/lib/lttng-ust/tracelog.c
-index 8147d7a3..bd38032c 100644
---- a/src/lib/lttng-ust/tracelog.c
-+++ b/src/lib/lttng-ust/tracelog.c
-@@ -7,6 +7,7 @@
- #define _LGPL_SOURCE
- #include <stdio.h>
- #include "common/macros.h"
-+#include "common/tracer.h"
+diff --git a/src/lib/lttng-ust/lttng-context-provider.c b/src/lib/lttng-ust/lttng-context-provider.c
+index 4e7e429f..5000657d 100644
+--- a/src/lib/lttng-ust/lttng-context-provider.c
++++ b/src/lib/lttng-ust/lttng-context-provider.c
+@@ -67,7 +67,7 @@ struct lttng_ust_registered_context_provider *lttng_ust_context_provider_registe
+ 	size_t name_len = strlen(provider->name);
+ 	uint32_t hash;
  
- /* The tracepoint definition is public, but the provider definition is hidden. */
- #define LTTNG_UST_TRACEPOINT_PROVIDER_HIDDEN_DEFINITION
-@@ -15,32 +16,9 @@
- #define LTTNG_UST_TRACEPOINT_DEFINE
- #include "lttng-ust-tracelog-provider.h"
+-	lttng_ust_alloc_tls();
++	lttng_ust_common_init_thread(0);
  
-+#include "tracelog-internal.h"
+ 	/* Provider name starts with "$app.". */
+ 	if (strncmp("$app.", provider->name, strlen("$app.")) != 0)
+@@ -101,7 +101,7 @@ end:
+ 
+ void lttng_ust_context_provider_unregister(struct lttng_ust_registered_context_provider *reg_provider)
+ {
+-	lttng_ust_alloc_tls();
++	lttng_ust_common_init_thread(0);
+ 
+ 	if (ust_lock())
+ 		goto end;
+diff --git a/src/lib/lttng-ust/lttng-context-time-ns.c b/src/lib/lttng-ust/lttng-context-time-ns.c
+index ec32a1de..e84b7048 100644
+--- a/src/lib/lttng-ust/lttng-context-time-ns.c
++++ b/src/lib/lttng-ust/lttng-context-time-ns.c
+@@ -152,7 +152,9 @@ error_find_context:
+ /*
+  * Force a read (imply TLS allocation for dlopen) of TLS variables.
+  */
+-void lttng_time_ns_alloc_tls(void)
++void lttng_ust_time_ns_init_thread(int flags)
+ {
+ 	asm volatile ("" : : "m" (URCU_TLS(cached_time_ns)));
++	if (flags & LTTNG_UST_INIT_THREAD_CONTEXT_CACHE)
++		(void)get_time_ns();
+ }
+diff --git a/src/lib/lttng-ust/lttng-context-uts-ns.c b/src/lib/lttng-ust/lttng-context-uts-ns.c
+index 06a978fd..51d6092e 100644
+--- a/src/lib/lttng-ust/lttng-context-uts-ns.c
++++ b/src/lib/lttng-ust/lttng-context-uts-ns.c
+@@ -154,7 +154,9 @@ error_find_context:
+ /*
+  * Force a read (imply TLS allocation for dlopen) of TLS variables.
+  */
+-void lttng_uts_ns_alloc_tls(void)
++void lttng_ust_uts_ns_init_thread(int flags)
+ {
+ 	asm volatile ("" : : "m" (URCU_TLS(cached_uts_ns)));
++	if (flags & LTTNG_UST_INIT_THREAD_CONTEXT_CACHE)
++		(void)get_uts_ns();
+ }
+diff --git a/src/lib/lttng-ust/lttng-context-vtid.c b/src/lib/lttng-ust/lttng-context-vtid.c
+index 880e34b9..e9bbbf85 100644
+--- a/src/lib/lttng-ust/lttng-context-vtid.c
++++ b/src/lib/lttng-ust/lttng-context-vtid.c
+@@ -112,7 +112,9 @@ error_find_context:
+ /*
+  * Force a read (imply TLS allocation for dlopen) of TLS variables.
+  */
+-void lttng_vtid_alloc_tls(void)
++void lttng_ust_vtid_init_thread(int flags)
+ {
+ 	asm volatile ("" : : "m" (URCU_TLS(cached_vtid)));
++	if (flags & LTTNG_UST_INIT_THREAD_CONTEXT_CACHE)
++		(void)wrapper_getvtid();
+ }
+diff --git a/src/lib/lttng-ust/lttng-probes.c b/src/lib/lttng-ust/lttng-probes.c
+index e8e08ff1..2d47bf19 100644
+--- a/src/lib/lttng-ust/lttng-probes.c
++++ b/src/lib/lttng-ust/lttng-probes.c
+@@ -231,7 +231,7 @@ struct lttng_ust_registered_probe *lttng_ust_probe_register(const struct lttng_u
+ {
+ 	struct lttng_ust_registered_probe *reg_probe = NULL;
+ 
+-	lttng_ust_alloc_tls();
++	lttng_ust_common_init_thread(0);
+ 
+ 	/*
+ 	 * If version mismatch, don't register, but don't trigger assert
+@@ -269,7 +269,7 @@ end:
+ 
+ void lttng_ust_probe_unregister(struct lttng_ust_registered_probe *reg_probe)
+ {
+-	lttng_ust_alloc_tls();
++	lttng_ust_common_init_thread(0);
+ 
+ 	if (!reg_probe)
+ 		return;
+diff --git a/src/lib/lttng-ust/lttng-tracer-core.h b/src/lib/lttng-ust/lttng-tracer-core.h
+index eadc43ed..dd83a323 100644
+--- a/src/lib/lttng-ust/lttng-tracer-core.h
++++ b/src/lib/lttng-ust/lttng-tracer-core.h
+@@ -16,6 +16,11 @@
+ #include <lttng/ust-ringbuffer-context.h>
+ #include "common/logging.h"
+ 
++enum lttng_ust_init_thread_flags {
++	LTTNG_UST_INIT_THREAD_CONTEXT_CACHE = (1 << 0),
++	LTTNG_UST_INIT_THREAD_MASK = (LTTNG_UST_INIT_THREAD_CONTEXT_CACHE << 1) - 1,
++};
 +
- #define LTTNG_UST_TRACELOG_CB(level) \
--	static inline \
--	void lttng_ust___vtracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, va_list ap) \
--		__attribute__((always_inline, format(printf, 4, 0))); \
--	\
--	static inline \
--	void lttng_ust___vtracelog_##level(const char *file, \
--			int line, const char *func, \
--			const char *fmt, va_list ap) \
--	{ \
--		char *msg; \
--		const int len = vasprintf(&msg, fmt, ap); \
--		\
--		/* len does not include the final \0 */ \
--		if (len < 0) \
--			goto end; \
--		lttng_ust_tracepoint_cb_lttng_ust_tracelog___##level(file, \
--			line, func, msg, len, \
--			LTTNG_UST_CALLER_IP()); \
--		free(msg); \
--	end: \
--		return; \
--	} \
--	\
- 	void lttng_ust__vtracelog_##level(const char *file, \
- 			int line, const char *func, \
- 			const char *fmt, va_list ap) \
-@@ -53,7 +31,9 @@
- 			int line, const char *func, \
- 			const char *fmt, va_list ap) \
- 	{ \
--		lttng_ust___vtracelog_##level(file, line, func, fmt, ap); \
-+		LTTNG_UST_TRACELOG_VALIST(fmt, ap, \
-+			lttng_ust_tracepoint_cb_lttng_ust_tracelog___##level, \
-+			file, line, func, msg, len, LTTNG_UST_CALLER_IP()); \
- 	} \
- 	\
- 	void lttng_ust__tracelog_##level(const char *file, \
-@@ -68,11 +48,9 @@
- 			int line, const char *func, \
- 			const char *fmt, ...) \
- 	{ \
--		va_list ap; \
--		\
--		va_start(ap, fmt); \
--		lttng_ust___vtracelog_##level(file, line, func, fmt, ap); \
--		va_end(ap); \
-+		LTTNG_UST_TRACELOG_VARARG(fmt, \
-+			lttng_ust_tracepoint_cb_lttng_ust_tracelog___##level, \
-+			file, line, func, msg, len, LTTNG_UST_CALLER_IP()); \
- 	}
+ struct lttng_ust_session;
+ struct lttng_ust_channel_buffer;
+ struct lttng_ust_ctx_field;
+@@ -34,28 +39,28 @@ void ust_lock_nocheck(void)
+ void ust_unlock(void)
+ 	__attribute__((visibility("hidden")));
  
- LTTNG_UST_TRACELOG_CB(LTTNG_UST_TRACEPOINT_LOGLEVEL_EMERG)
+-void lttng_ust_alloc_tls(void)
++void lttng_ust_common_init_thread(int flags)
+ 	__attribute__((visibility("hidden")));
+ 
+-void lttng_vtid_alloc_tls(void)
++void lttng_ust_vtid_init_thread(int flags)
+ 	__attribute__((visibility("hidden")));
+ 
+-void lttng_procname_alloc_tls(void)
++void lttng_ust_procname_init_thread(int flags)
+ 	__attribute__((visibility("hidden")));
+ 
+-void lttng_cgroup_ns_alloc_tls(void)
++void lttng_ust_cgroup_ns_init_thread(int flags)
+ 	__attribute__((visibility("hidden")));
+ 
+-void lttng_ipc_ns_alloc_tls(void)
++void lttng_ust_ipc_ns_init_thread(int flags)
+ 	__attribute__((visibility("hidden")));
+ 
+-void lttng_net_ns_alloc_tls(void)
++void lttng_ust_net_ns_init_thread(int flags)
+ 	__attribute__((visibility("hidden")));
+ 
+-void lttng_time_ns_alloc_tls(void)
++void lttng_ust_time_ns_init_thread(int flags)
+ 	__attribute__((visibility("hidden")));
+ 
+-void lttng_uts_ns_alloc_tls(void)
++void lttng_ust_uts_ns_init_thread(int flags)
+ 	__attribute__((visibility("hidden")));
+ 
+ const char *lttng_ust_obj_get_name(int id)
+@@ -78,7 +83,7 @@ void lttng_event_notifier_notification_send(
+ 	__attribute__((visibility("hidden")));
+ 
+ #ifdef HAVE_LINUX_PERF_EVENT_H
+-void lttng_ust_perf_counter_alloc_tls(void)
++void lttng_ust_perf_counter_init_thread(int flags)
+ 	__attribute__((visibility("hidden")));
+ 
+ void lttng_perf_lock(void)
+@@ -88,8 +93,9 @@ void lttng_perf_unlock(void)
+ 	__attribute__((visibility("hidden")));
+ #else /* #ifdef HAVE_LINUX_PERF_EVENT_H */
+ static inline
+-void lttng_ust_perf_counter_alloc_tls(void)
++void lttng_ust_perf_counter_init_thread(int flags)
+ {
++	(void)flags;
+ }
+ static inline
+ void lttng_perf_lock(void)
+diff --git a/src/lib/lttng-ust/lttng-ust-comm.c b/src/lib/lttng-ust/lttng-ust-comm.c
+index 7f34efe7..0a039fef 100644
+--- a/src/lib/lttng-ust/lttng-ust-comm.c
++++ b/src/lib/lttng-ust/lttng-ust-comm.c
+@@ -387,7 +387,7 @@ const char *get_lttng_home_dir(void)
+  * Force a read (imply TLS allocation for dlopen) of TLS variables.
+  */
+ static
+-void lttng_nest_count_alloc_tls(void)
++void lttng_ust_nest_count_alloc_tls(void)
+ {
+ 	asm volatile ("" : : "m" (URCU_TLS(lttng_ust_nest_count)));
+ }
+@@ -402,26 +402,26 @@ void lttng_ust_mutex_nest_alloc_tls(void)
+  * Allocate lttng-ust urcu TLS.
+  */
+ static
+-void lttng_lttng_ust_urcu_alloc_tls(void)
++void lttng_ust_urcu_alloc_tls(void)
+ {
+ 	(void) lttng_ust_urcu_read_ongoing();
+ }
+ 
+-void lttng_ust_alloc_tls(void)
++void lttng_ust_common_init_thread(int flags)
+ {
+-	lttng_lttng_ust_urcu_alloc_tls();
++	lttng_ust_urcu_alloc_tls();
+ 	lttng_ringbuffer_alloc_tls();
+-	lttng_vtid_alloc_tls();
+-	lttng_nest_count_alloc_tls();
+-	lttng_procname_alloc_tls();
++	lttng_ust_vtid_init_thread(flags);
++	lttng_ust_nest_count_alloc_tls();
++	lttng_ust_procname_init_thread(flags);
+ 	lttng_ust_mutex_nest_alloc_tls();
+-	lttng_ust_perf_counter_alloc_tls();
++	lttng_ust_perf_counter_init_thread(flags);
+ 	lttng_ust_common_alloc_tls();
+-	lttng_cgroup_ns_alloc_tls();
+-	lttng_ipc_ns_alloc_tls();
+-	lttng_net_ns_alloc_tls();
+-	lttng_time_ns_alloc_tls();
+-	lttng_uts_ns_alloc_tls();
++	lttng_ust_cgroup_ns_init_thread(flags);
++	lttng_ust_ipc_ns_init_thread(flags);
++	lttng_ust_net_ns_init_thread(flags);
++	lttng_ust_time_ns_init_thread(flags);
++	lttng_ust_uts_ns_init_thread(flags);
+ 	lttng_ust_ring_buffer_client_discard_alloc_tls();
+ 	lttng_ust_ring_buffer_client_discard_rt_alloc_tls();
+ 	lttng_ust_ring_buffer_client_overwrite_alloc_tls();
+@@ -446,7 +446,7 @@ void lttng_ust_init_thread(void)
+ 	 * ensure those are initialized before a signal handler nesting over
+ 	 * this thread attempts to use them.
+ 	 */
+-	lttng_ust_alloc_tls();
++	lttng_ust_common_init_thread(LTTNG_UST_INIT_THREAD_MASK);
+ }
+ 
+ int lttng_get_notify_socket(void *owner)
+@@ -1815,7 +1815,7 @@ void *ust_listener_thread(void *arg)
+ 	int sock, ret, prev_connect_failed = 0, has_waited = 0, fd;
+ 	long timeout;
+ 
+-	lttng_ust_alloc_tls();
++	lttng_ust_common_init_thread(0);
+ 	/*
+ 	 * If available, add '-ust' to the end of this thread's
+ 	 * process name
+@@ -2183,7 +2183,7 @@ void lttng_ust_ctor(void)
+ 	 * to be the dynamic linker mutex) and ust_lock, taken within
+ 	 * the ust lock.
+ 	 */
+-	lttng_ust_alloc_tls();
++	lttng_ust_common_init_thread(0);
+ 
+ 	lttng_ust_loaded = 1;
+ 
+@@ -2497,7 +2497,7 @@ void lttng_ust_before_fork(sigset_t *save_sigset)
+ 	int ret;
+ 
+ 	/* Allocate lttng-ust TLS. */
+-	lttng_ust_alloc_tls();
++	lttng_ust_common_init_thread(0);
+ 
+ 	if (URCU_TLS(lttng_ust_nest_count))
+ 		return;
+diff --git a/src/lib/lttng-ust/lttng-ust-statedump.c b/src/lib/lttng-ust/lttng-ust-statedump.c
+index 309a98fa..bd95c043 100644
+--- a/src/lib/lttng-ust/lttng-ust-statedump.c
++++ b/src/lib/lttng-ust/lttng-ust-statedump.c
+@@ -557,7 +557,7 @@ void lttng_ust_dl_update(void *ip)
+ 	 * Force the allocation of lttng-ust TLS variables when called from
+ 	 * dlopen/dlclose instrumentation.
+ 	 */
+-	lttng_ust_alloc_tls();
++	lttng_ust_common_init_thread(0);
+ 
+ 	data.exec_found = 0;
+ 	data.first = true;
 -- 
 2.35.1
 
