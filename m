@@ -4,58 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E0BFC19F28
-	for <lttng-dev@archiver.kernel.org>; Wed,  3 Aug 2022 19:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C707C25B0E
+	for <lttng-dev@archiver.kernel.org>; Tue,  9 Aug 2022 18:28:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1659554623;
-	bh=CRqrpkXaIoNPyulUwrBJIv7sixrJTDVO433w4Y5GZLs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=USdsK8KIDGZ7Mh2kz4p2gKMAEEUJu7+b7FfzomefAcyhYOvstqfvvCYBWJTFMdPsy
-	 5gDNi/cuUDEoNwwN5zwqMgeIlR2vQo4IapFqBZ4N/k+gP2fHrMRuLXl5TtzuVkb603
-	 wHZCGDv+zV8sD5OLXOZyMuM2Pcrgk0LpNRz+kXHOi0CMX02Ubpm5xnyMb1tdgAejLi
-	 6ENKPYlL3cR4UKVponI8PIF1SW+6bXgo4sTLxJnbJMRcmQvPDBwz28l6kIzZvnGptn
-	 0s5haB6s+ofjzWJ7SsJNnXpPwMJ9Dn6PS85r/Sp4gzlQN5C1xVrgv3A6OI0BSk3Bwn
-	 g4Xh+0zSGgU8A==
+	s=default; t=1660069725;
+	bh=tdNYeCv/N0B3FgdZvYUMpro7u2Wj/JHlpxRG9FEhX40=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=taD9A2n15QNMjENY90W8D7+vmQenN9N4FHk1swzJOY7mr6dlqDMWpIj6dckae35Di
+	 oRDvU6ZEEkqLYstLg2KXZLvid7vS/8m0/GhU+q727bSYmJdQBN+Rv0GfgM5Kckatgj
+	 0FBBR6rz9IXOeRVVxLreHpCTk3XeRXGUoo1ZEN6sp9kK+6wTd2CF9zciiwehHbMI1m
+	 JAUMmwf4XS01xZBHoWgKdWhsvf8DoD9b83YIkx/5fVbREHIvTFUArZBHyEJsNfj3EH
+	 OlUuouHnxaipXyY58P+22qjQ2S5oZMCUAUfa+BRDbHywdr5ZsDA5q7I5Z67HHyUW2+
+	 YV4pbjHB5lleg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Lyhby3sPVz11yS;
-	Wed,  3 Aug 2022 15:23:42 -0400 (EDT)
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com
- [IPv6:2607:f8b0:4864:20::72f])
- by lists.lttng.org (Postfix) with ESMTPS id 4Lyhbw4q2gz121d
- for <lttng-dev@lists.lttng.org>; Wed,  3 Aug 2022 15:23:30 -0400 (EDT)
-Received: by mail-qk1-x72f.google.com with SMTP id w6so3563589qkf.3
- for <lttng-dev@lists.lttng.org>; Wed, 03 Aug 2022 12:23:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=x-gm-message-state:from:to:subject:date:message-id:mime-version
- :content-transfer-encoding;
- bh=xR5winCx2WHg9p/im3K33BrRrpjbQS7xCQpEvbSaD/4=;
- b=pvqlSBnoYzh7karjKXetMMKVPWEiJqAyWJvSkGZXtUIgCE3dEXXWElCTOjr1lob2sC
- Rb1N1a3/HfiMcoEy890dulDh2sFhi+M4VPfoPPtdJ8E49E+ZKuhUXj7Q+JR2h+dmZxYV
- AWPlgSidv4Cywys4oV+J8jF7xZUGHjplc/f4SrvuOng9lb3swJRMlyQlPVWnDqzZ/+Mq
- 8j5xeVN8t5kxeAdVBTF78kBdoLsUBJIbbLHohTKsm4rhyCcfpVWUvABKd/1tO17YEkLJ
- 7fJxXgB9+HLf9n0sVPgRXGFaDtRHqu7OaBqltsd7BDujn0Ta11WJtC9jhRUi0rGsVjh1
- tr/A==
-X-Gm-Message-State: AJIora+1c5aJtoGzXD3b2k6b8ovSNa/OssWUQjUF5MD1Kdy/0YBqTYtJ
- 6ElvlUvk/XiqoaZ6YCGaVJOkt+Iqz/83Gw==
-X-Google-Smtp-Source: AGRyM1smzBfX7Fn0xTDWQFeFOzTzoxNDUkazTEH5zXa7lgl1QSMRQp+C5Wj3OF6eg/Dy9k7nf1Q7Sg==
-X-Received: by 2002:a05:620a:29d6:b0:6b5:bd2a:7d6c with SMTP id
- s22-20020a05620a29d600b006b5bd2a7d6cmr19066707qkp.322.1659554609164; 
- Wed, 03 Aug 2022 12:23:29 -0700 (PDT)
-Received: from localhost.localdomain ([173.34.88.218])
- by smtp.gmail.com with ESMTPSA id
- bj3-20020a05620a190300b006b5ee4de4fbsm7791783qkb.37.2022.08.03.12.23.27
- for <lttng-dev@lists.lttng.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 03 Aug 2022 12:23:28 -0700 (PDT)
-To: lttng-dev@lists.lttng.org
-Date: Wed,  3 Aug 2022 15:23:27 -0400
-Message-Id: <20220803192327.3726094-1-bruce.ashfield@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	by lists.lttng.org (Postfix) with ESMTP id 4M2M5m3czmz148W;
+	Tue,  9 Aug 2022 14:28:44 -0400 (EDT)
+Received: from dcvr.yhbt.net (dcvr.yhbt.net [173.255.242.215])
+ by lists.lttng.org (Postfix) with ESMTPS id 4M2M5l2SJRz13fH
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Aug 2022 14:28:43 -0400 (EDT)
+Received: from localhost (dcvr.yhbt.net [127.0.0.1])
+ by dcvr.yhbt.net (Postfix) with ESMTP id 5A64A1F54E;
+ Tue,  9 Aug 2022 18:19:27 +0000 (UTC)
+Date: Tue, 9 Aug 2022 18:19:27 +0000
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: Sam Saffron <sam.saffron@gmail.com>,
+ Simon Marchi <simon.marchi@efficios.com>
+Message-ID: <20220809181927.GA3718@dcvr>
 MIME-Version: 1.0
-Subject: [lttng-dev] [PATCH] compaction: make tracepoints condtional on
- CONFIG_COMPACTION
+Content-Disposition: inline
+Subject: [lttng-dev] urcu 7ca7fe9c03 + _LGPL_SOURCE regression?
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -67,133 +45,55 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Bruce Ashfield via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: bruce.ashfield@gmail.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Eric Wong via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Eric Wong <normalperson@yhbt.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-From: Bruce Ashfield <bruce.ashfield@gmail.com>
-
-When building against a v5.19 mips kernel, the following errors
-were triggered:
-
-  | lttng-modules-2.13.4/src/probes/../../include/instrumentation/events/compaction.h:105:42: note: expected 'struct compact_control *' but argument is of type 'struct compact_control *'
-  |   105 |         TP_PROTO(struct compact_control *cc,
-  |       |                  ~~~~~~~~~~~~~~~~~~~~~~~~^~
-  | lttng-modules-2.13.4/src/probes/../../include/lttng/tracepoint-event-impl.h:779:68: note: in definition of macro 'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'
-  |   779 | static inline size_t __event_get_align__##_name(void *__tp_locvar, _proto)    \
-  |       |                                                                    ^~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/lttng/tracepoint-event-impl.h:106:50: note: in expansion of macro 'PARAMS'
-  |   106 |         LTTNG_TRACEPOINT_EVENT_CLASS_CODE(_name, PARAMS(_proto), PARAMS(_args), , , \
-  |       |                                                  ^~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/lttng/tracepoint-event-impl.h:41:9: note: in expansion of macro 'LTTNG_TRACEPOINT_EVENT_CLASS'
-  |    41 |         LTTNG_TRACEPOINT_EVENT_CLASS(map,                               \
-  |       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/lttng/tracepoint-event-impl.h:42:30: note: in expansion of macro 'PARAMS'
-  |    42 |                              PARAMS(proto),                             \
-  |       |                              ^~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/instrumentation/events/compaction.h:101:1: note: in expansion of macro 'LTTNG_TRACEPOINT_EVENT_MAP'
-  |   101 | LTTNG_TRACEPOINT_EVENT_MAP(mm_compaction_migratepages,
-  |       | ^~~~~~~~~~~~~~~~~~~~~~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/instrumentation/events/compaction.h:105:9: note: in expansion of macro 'TP_PROTO'
-  |   105 |         TP_PROTO(struct compact_control *cc,
-  |       |         ^~~~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/instrumentation/events/compaction.h:112:57: error: invalid use of undefined type 'struct compact_control'
-
-...
-
-  | lttng-modules-2.13.4/src/probes/../../include/instrumentation/events/compaction.h:108:25: warning: 'struct compact_control' declared inside parameter list will not be visible outside of this definition or declaration
-  |   108 |         TP_PROTO(struct compact_control *cc,
-  |       |                         ^~~~~~~~~~~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/lttng/tracepoint-event-impl.h:159:43: note: in definition of macro 'LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP'
-  |   159 | void __event_template_proto___##_template(_proto);
-  |       |                                           ^~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/lttng/tracepoint-event-impl.h:45:61: note: in expansion of macro 'PARAMS'
-  |    45 |         LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP(map, name, map, PARAMS(proto), PARAMS(args))
-  |       |                                                             ^~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/instrumentation/events/compaction.h:104:1: note: in expansion of macro 'LTTNG_TRACEPOINT_EVENT_MAP'
-  |   104 | LTTNG_TRACEPOINT_EVENT_MAP(mm_compaction_migratepages,
-  |       | ^~~~~~~~~~~~~~~~~~~~~~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/instrumentation/events/compaction.h:108:9: note: in expansion of macro 'TP_PROTO'
-  |   108 |         TP_PROTO(struct compact_control *cc,
-  |       |         ^~~~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/lttng/tracepoint-event-impl.h:159:6: error: conflicting types for '__event_template_proto___compaction_migratepages'; have 'void(struct compact_control *, unsigned int)'
-  |   159 | void __event_template_proto___##_template(_proto);
-  |       |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-  | lttng-modules-2.13.4/src/probes/../../include/lttng/tracepoint-event-impl.h:45:9: note: in expansion of macro 'LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP'
-  |    45 |         LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP(map, name, map, PARAMS(proto), PARAMS(args))
-  |       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The root cause appears to be that this particular mips kernel does not
-have CONFIG_COMPACTION avaiable, and hence we end up with the struct
-declaration within this tracepoint, and then conflicting types.
-
-While putting the conditional around only compaction_migratepages seemed
-sufficient to get the build working, it doesn't look like any of the
-tracepoints should be valid, so we extend it to all definitions.
-
-Signed-off-by: Bruce Ashfield <bruce.ashfield@gmail.com>
----
-
-Hi all,
-
-This was found during the update of the yocto project reference
-kernel to 5.19. Out of all the supported architectures, only
-mips failed during the build of lttng-modules.
-
-Specifically, it seems like the lack of CONFIG_COMPACTION being
-enabled in the kernel was the significant issue. Only one of the
-tracepoints blew up, but I can't see how any of them would be
-valid in this scenario, or why it would be limited to mips.
-
-While I don't think this is the right fix, this is what got me
-up and passing sanity testing, so I wanted to send the change
-and see what the actual, correct fix would be :)
-
-Cheers,
-
-Bruce
-
-
- include/instrumentation/events/compaction.h | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/include/instrumentation/events/compaction.h b/include/instrumentation/events/compaction.h
-index ecae39a..155804a 100644
---- a/include/instrumentation/events/compaction.h
-+++ b/include/instrumentation/events/compaction.h
-@@ -9,6 +9,8 @@
- #include <linux/types.h>
- #include <lttng/kernel-version.h>
- 
-+#ifdef CONFIG_COMPACTION
-+
- #if LTTNG_LINUX_VERSION_CODE >= LTTNG_KERNEL_VERSION(4,0,0)
- 
- LTTNG_TRACEPOINT_EVENT_CLASS(compaction_isolate_template,
-@@ -97,6 +99,7 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP(compaction_isolate_template,
- 
- #endif /* #else #if LTTNG_LINUX_VERSION_CODE >= LTTNG_KERNEL_VERSION(4,0,0) */
- 
-+
- #if (LTTNG_LINUX_VERSION_CODE >= LTTNG_KERNEL_VERSION(5,18,0))
- LTTNG_TRACEPOINT_EVENT_MAP(mm_compaction_migratepages,
- 
-@@ -182,6 +185,8 @@ LTTNG_TRACEPOINT_EVENT_MAP(mm_compaction_migratepages,
- )
- #endif /* #else #if (LTTNG_LINUX_VERSION_CODE >= LTTNG_KERNEL_VERSION(3,16,0)) */
- 
-+#endif /* CONFIG_COMPACTION */
-+
- #endif /* LTTNG_TRACE_COMPACTION_H */
- 
- /* This part must be outside protection */
--- 
-2.25.1
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+SGVsbG8sIEkndmUgbm90aWNlZCBsaWJ1cmN1IHYwLjExLjQrIGFuZCBsYXRlciBmYWlscyB3aXRo
+IHRoZQoibXdyYXAiIExEX1BSRUxPQUQgbWFsbG9jIHdyYXBwZXIgd2hpY2ggaW5pdGlhbGl6ZXMg
+YW4gcmN1bGZoYXNoCmluIGEgY29uc3RydWN0b3IuCgpUaGUgcHJvYmxlbSBoYXBwZW5zIHdoZW4g
+dXNpbmcgX0xHUExfU09VUkNFICsgcmN1X2RlcmVmZXJlbmNlIG9uCmEgY2RzX2xmaHQgcG9pbnRl
+cjoKCiAgSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC90bXAvYi9pbmNsdWRlL3VyY3UvcG9pbnRlci5o
+OjM5LAogICAgICAgICAgICAgICAgICAgZnJvbSAvdG1wL2IvaW5jbHVkZS91cmN1L3VyY3UtYnAu
+aDo1OCwKICAgICAgICAgICAgICAgICAgIGZyb20gL3RtcC9iL2luY2x1ZGUvdXJjdS1icC5oOjIs
+CiAgICAgICAgICAgICAgICAgICBmcm9tIC4uLzdjYTdmZTljX3JlZ3Jlc3Npb24uYzoxMDoKICAu
+Li83Y2E3ZmU5Y19yZWdyZXNzaW9uLmM6IEluIGZ1bmN0aW9uIOKAmG1haW7igJk6CiAgL3RtcC9i
+L2luY2x1ZGUvdXJjdS9zdGF0aWMvcG9pbnRlci5oOjEwMToxODogZXJyb3I6IGludmFsaWQgdXNl
+IG9mIHVuZGVmaW5lZCB0eXBlIOKAmHN0cnVjdCBjZHNfbGZodOKAmQogICAgMTAxIHwgICAgIF9f
+dHlwZW9mX18ocCArIDApIF9fX19fX19fX3AxOyAgICBcCiAgICAgICAgfCAgICAgICAgICAgICAg
+ICAgIF4KICAvdG1wL2IvaW5jbHVkZS91cmN1L3BvaW50ZXIuaDo0NzoyNjogbm90ZTogaW4gZXhw
+YW5zaW9uIG9mIG1hY3JvIOKAmF9yY3VfZGVyZWZlcmVuY2XigJkKICAgICA0NyB8ICNkZWZpbmUg
+cmN1X2RlcmVmZXJlbmNlICBfcmN1X2RlcmVmZXJlbmNlCiAgICAgICAgfCAgICAgICAgICAgICAg
+ICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fgogIC4uLzdjYTdmZTljX3JlZ3Jlc3Npb24uYzoy
+NjoyMzogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKAmHJjdV9kZXJlZmVyZW5jZeKAmQog
+ICAgIDI2IHwgIHN0cnVjdCBjZHNfbGZodCAqdCA9IHJjdV9kZXJlZmVyZW5jZSh0b3RhbHMpOwog
+ICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fgoKUmVtb3Zpbmcg
+X0xHUExfU09VUkNFIGF2b2lkcyB0aGUgcHJvYmxlbSwgYnV0IEknZCByYXRoZXIgbm90CmludHJv
+ZHVjZSBwZXJmb3JtYW5jZSByZWdyZXNzaW9ucy4KCkluIHJldHJvc3BlY3QsIG15IHVzZSBvZiBy
+Y3VfZGVyZWZlcmVuY2Ugc2VlbXMgdW5uZWNlc3Nhcnkgc2luY2UKY29uc3RydWN0b3IgZnVuY3Rp
+b25zIHNob3VsZCBhbHdheXMgZmlyZSBiZWZvcmUgYW55IHRocmVhZHMgYXJlCmNyZWF0ZWQuCgpU
+aGF0IG1lYW5zIEkgY2FuIHNhZmVseSByZXBsYWNlIHRoZSBhc3NpZ25tZW50IHcvIENNTV9TVE9S
+RV9TSEFSRUQsCmFuZCByY3VfZGVyZWZlcmVuY2Ugd2l0aCBDTU1fTE9BRF9TSEFSRUQsIGNvcnJl
+Y3Q/CgpTYW1wbGUgY29kZToKLyoKICogc2hvd3MgYSByZWdyZXNzaW9uIHdpdGggX0xHUExfU09V
+UkNFICsgdXJjdSB2MC4xMS40LCBjb21taXQ6CiAqIDdjYTdmZTljMDMyMTc4MTMgKE1ha2UgdGVt
+cG9yYXJ5IHZhcmlhYmxlIGluIF9yY3VfZGVyZWZlcmVuY2Ugbm9uLWNvbnN0LCAyMDIxLTA3LTI5
+KQogKiAkKENDKSAtbyB4IC1JL3BhdGgvdG8vaW5jbHVkZS8gLUwvcGF0aC90by9saWIvIF9fRklM
+RV9fIC1sdXJjdS1icCAtbHVyY3UtY2RzCiAqCiAqIE9yaWdpbmFsbHkgbm90aWNlZCBpbiBhbiBM
+RF9QUkVMT0FEIG1hbGxvYyB3cmFwcGVyOgogKiBodHRwczovLzgweDI0Lm9yZy9td3JhcC5naXQg
+KFJ1YnkgMi42KykKICogaHR0cHM6Ly84MHgyNC5vcmcvbXdyYXAtcGVybC5naXQgKFBlcmw1KQog
+Ki8KI2RlZmluZSBfTEdQTF9TT1VSQ0UKI2luY2x1ZGUgPHVyY3UtYnAuaD4KI2luY2x1ZGUgPHVy
+Y3UvcmN1bGZoYXNoLmg+CnN0YXRpYyBzdHJ1Y3QgY2RzX2xmaHQgKnRvdGFsczsgLyogaW1tb3J0
+YWwgKi8KCl9fYXR0cmlidXRlX18oKGNvbnN0cnVjdG9yKSkgc3RhdGljIHZvaWQgaW5pdF9sZmh0
+KHZvaWQpCnsKCS8qIFhYWCByZXBsYWNlIHdpdGggQ01NX1NUT1JFX1NIQVJFRD8gKi8KCXRvdGFs
+cyA9IGNkc19sZmh0X25ldygxNjM4NCwgMSwgMCwgQ0RTX0xGSFRfQVVUT19SRVNJWkUsIDApOwp9
+CgppbnQgbWFpbih2b2lkKSAvKiB0aGlzIGlzIG1lYW50IHRvIGJlIGEgbWFsbG9jLWZhbWlseSBm
+dW5jdGlvbiBpbiBtd3JhcCAqLwp7CgkvKiBYWFggcmVwbGFjZSByY3VfZGVyZWZlcmVuY2Ugd2l0
+aCBDTU1fTE9BRF9TSEFSRUQ/ICovCglzdHJ1Y3QgY2RzX2xmaHQgKnQgPSByY3VfZGVyZWZlcmVu
+Y2UodG90YWxzKTsKCXJldHVybiB0ID8gMCA6IDE7Cn0KLS0tClRoYW5rcyBmb3IgbWFueSB5ZWFy
+cyBvZiB1cmN1ICsgY2RzIQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
