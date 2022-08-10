@@ -4,36 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C707C25B0E
-	for <lttng-dev@archiver.kernel.org>; Tue,  9 Aug 2022 18:28:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCDFDC00140
+	for <lttng-dev@archiver.kernel.org>; Wed, 10 Aug 2022 13:54:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1660069725;
-	bh=tdNYeCv/N0B3FgdZvYUMpro7u2Wj/JHlpxRG9FEhX40=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=taD9A2n15QNMjENY90W8D7+vmQenN9N4FHk1swzJOY7mr6dlqDMWpIj6dckae35Di
-	 oRDvU6ZEEkqLYstLg2KXZLvid7vS/8m0/GhU+q727bSYmJdQBN+Rv0GfgM5Kckatgj
-	 0FBBR6rz9IXOeRVVxLreHpCTk3XeRXGUoo1ZEN6sp9kK+6wTd2CF9zciiwehHbMI1m
-	 JAUMmwf4XS01xZBHoWgKdWhsvf8DoD9b83YIkx/5fVbREHIvTFUArZBHyEJsNfj3EH
-	 OlUuouHnxaipXyY58P+22qjQ2S5oZMCUAUfa+BRDbHywdr5ZsDA5q7I5Z67HHyUW2+
-	 YV4pbjHB5lleg==
+	s=default; t=1660139685;
+	bh=ZrXTUWlnXFH6WttUHQ6kguUHW1d3YUgooMUAxL+LPtw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ABoTGVJGeH3uTlcTn+jbhcYo/38+VNP2KJa33wweCaOZadr+8w3WUrsoHQJZN8iED
+	 Y4/ZRjI6X9R/iWP3NgI5N40n9ixm8lqHsXkeJXLfyWoYB69W4QDNDa+Cd43Ir23Pqi
+	 /GWBHk+2XYuhnWvt5Ta0Lp5GqdqAV1cLteqVUP8QoYurmqX5q0GOwPMJMRqCyyZceU
+	 JfFJu6hsOs6R98JkIb7Y7z/eD973zJSYB9WjRrLdYOGKd04jkSM6sonTB1AwBcpvLy
+	 fc0vIvWx2WIaMNKVmP2mDtKDdsO/w+Zt9xEUXehjFpa7MGnxr4noyrYBVuCRyzdAzf
+	 SowDqSIXKz5Rw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4M2M5m3czmz148W;
-	Tue,  9 Aug 2022 14:28:44 -0400 (EDT)
-Received: from dcvr.yhbt.net (dcvr.yhbt.net [173.255.242.215])
- by lists.lttng.org (Postfix) with ESMTPS id 4M2M5l2SJRz13fH
- for <lttng-dev@lists.lttng.org>; Tue,  9 Aug 2022 14:28:43 -0400 (EDT)
-Received: from localhost (dcvr.yhbt.net [127.0.0.1])
- by dcvr.yhbt.net (Postfix) with ESMTP id 5A64A1F54E;
- Tue,  9 Aug 2022 18:19:27 +0000 (UTC)
-Date: Tue, 9 Aug 2022 18:19:27 +0000
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Cc: Sam Saffron <sam.saffron@gmail.com>,
- Simon Marchi <simon.marchi@efficios.com>
-Message-ID: <20220809181927.GA3718@dcvr>
+	by lists.lttng.org (Postfix) with ESMTP id 4M2rz86b8yz1CtV;
+	Wed, 10 Aug 2022 09:54:44 -0400 (EDT)
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+ by lists.lttng.org (Postfix) with ESMTP id 4M2h8V2N3zz1Bym
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Aug 2022 03:17:14 -0400 (EDT)
+Received: from [IPv6:::ffff:192.168.0.112] (unknown [27.18.122.44])
+ by smtp7 (Coremail) with SMTP id C8CowADnYYneV_Ni56_vTQ--.53892S2;
+ Wed, 10 Aug 2022 15:01:51 +0800 (CST)
 MIME-Version: 1.0
-Content-Disposition: inline
-Subject: [lttng-dev] urcu 7ca7fe9c03 + _LGPL_SOURCE regression?
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Date: Wed, 10 Aug 2022 15:01:51 +0800
+Importance: normal
+X-Priority: 3
+X-CM-TRANSID: C8CowADnYYneV_Ni56_vTQ--.53892S2
+Message-Id: <62F357DF.2973D3.13514@m12-11.163.com>
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+ VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvj4RqXd8UUUUU
+X-Originating-IP: [27.18.122.44]
+X-CM-SenderInfo: xgdq3vdixziiqr6rljoofrz/1tbiUR9ZhGDEO2k2cgAAsh
+X-Mailman-Approved-At: Wed, 10 Aug 2022 09:54:42 -0400
+Subject: [lttng-dev] babeltrace2 python api related question
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -45,55 +50,105 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Eric Wong via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Eric Wong <normalperson@yhbt.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: zenan via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: zenan <dantefu9001@163.com>
+Content-Type: multipart/mixed; boundary="===============7392528702799242094=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGVsbG8sIEkndmUgbm90aWNlZCBsaWJ1cmN1IHYwLjExLjQrIGFuZCBsYXRlciBmYWlscyB3aXRo
-IHRoZQoibXdyYXAiIExEX1BSRUxPQUQgbWFsbG9jIHdyYXBwZXIgd2hpY2ggaW5pdGlhbGl6ZXMg
-YW4gcmN1bGZoYXNoCmluIGEgY29uc3RydWN0b3IuCgpUaGUgcHJvYmxlbSBoYXBwZW5zIHdoZW4g
-dXNpbmcgX0xHUExfU09VUkNFICsgcmN1X2RlcmVmZXJlbmNlIG9uCmEgY2RzX2xmaHQgcG9pbnRl
-cjoKCiAgSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC90bXAvYi9pbmNsdWRlL3VyY3UvcG9pbnRlci5o
-OjM5LAogICAgICAgICAgICAgICAgICAgZnJvbSAvdG1wL2IvaW5jbHVkZS91cmN1L3VyY3UtYnAu
-aDo1OCwKICAgICAgICAgICAgICAgICAgIGZyb20gL3RtcC9iL2luY2x1ZGUvdXJjdS1icC5oOjIs
-CiAgICAgICAgICAgICAgICAgICBmcm9tIC4uLzdjYTdmZTljX3JlZ3Jlc3Npb24uYzoxMDoKICAu
-Li83Y2E3ZmU5Y19yZWdyZXNzaW9uLmM6IEluIGZ1bmN0aW9uIOKAmG1haW7igJk6CiAgL3RtcC9i
-L2luY2x1ZGUvdXJjdS9zdGF0aWMvcG9pbnRlci5oOjEwMToxODogZXJyb3I6IGludmFsaWQgdXNl
-IG9mIHVuZGVmaW5lZCB0eXBlIOKAmHN0cnVjdCBjZHNfbGZodOKAmQogICAgMTAxIHwgICAgIF9f
-dHlwZW9mX18ocCArIDApIF9fX19fX19fX3AxOyAgICBcCiAgICAgICAgfCAgICAgICAgICAgICAg
-ICAgIF4KICAvdG1wL2IvaW5jbHVkZS91cmN1L3BvaW50ZXIuaDo0NzoyNjogbm90ZTogaW4gZXhw
-YW5zaW9uIG9mIG1hY3JvIOKAmF9yY3VfZGVyZWZlcmVuY2XigJkKICAgICA0NyB8ICNkZWZpbmUg
-cmN1X2RlcmVmZXJlbmNlICBfcmN1X2RlcmVmZXJlbmNlCiAgICAgICAgfCAgICAgICAgICAgICAg
-ICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fgogIC4uLzdjYTdmZTljX3JlZ3Jlc3Npb24uYzoy
-NjoyMzogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKAmHJjdV9kZXJlZmVyZW5jZeKAmQog
-ICAgIDI2IHwgIHN0cnVjdCBjZHNfbGZodCAqdCA9IHJjdV9kZXJlZmVyZW5jZSh0b3RhbHMpOwog
-ICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fgoKUmVtb3Zpbmcg
-X0xHUExfU09VUkNFIGF2b2lkcyB0aGUgcHJvYmxlbSwgYnV0IEknZCByYXRoZXIgbm90CmludHJv
-ZHVjZSBwZXJmb3JtYW5jZSByZWdyZXNzaW9ucy4KCkluIHJldHJvc3BlY3QsIG15IHVzZSBvZiBy
-Y3VfZGVyZWZlcmVuY2Ugc2VlbXMgdW5uZWNlc3Nhcnkgc2luY2UKY29uc3RydWN0b3IgZnVuY3Rp
-b25zIHNob3VsZCBhbHdheXMgZmlyZSBiZWZvcmUgYW55IHRocmVhZHMgYXJlCmNyZWF0ZWQuCgpU
-aGF0IG1lYW5zIEkgY2FuIHNhZmVseSByZXBsYWNlIHRoZSBhc3NpZ25tZW50IHcvIENNTV9TVE9S
-RV9TSEFSRUQsCmFuZCByY3VfZGVyZWZlcmVuY2Ugd2l0aCBDTU1fTE9BRF9TSEFSRUQsIGNvcnJl
-Y3Q/CgpTYW1wbGUgY29kZToKLyoKICogc2hvd3MgYSByZWdyZXNzaW9uIHdpdGggX0xHUExfU09V
-UkNFICsgdXJjdSB2MC4xMS40LCBjb21taXQ6CiAqIDdjYTdmZTljMDMyMTc4MTMgKE1ha2UgdGVt
-cG9yYXJ5IHZhcmlhYmxlIGluIF9yY3VfZGVyZWZlcmVuY2Ugbm9uLWNvbnN0LCAyMDIxLTA3LTI5
-KQogKiAkKENDKSAtbyB4IC1JL3BhdGgvdG8vaW5jbHVkZS8gLUwvcGF0aC90by9saWIvIF9fRklM
-RV9fIC1sdXJjdS1icCAtbHVyY3UtY2RzCiAqCiAqIE9yaWdpbmFsbHkgbm90aWNlZCBpbiBhbiBM
-RF9QUkVMT0FEIG1hbGxvYyB3cmFwcGVyOgogKiBodHRwczovLzgweDI0Lm9yZy9td3JhcC5naXQg
-KFJ1YnkgMi42KykKICogaHR0cHM6Ly84MHgyNC5vcmcvbXdyYXAtcGVybC5naXQgKFBlcmw1KQog
-Ki8KI2RlZmluZSBfTEdQTF9TT1VSQ0UKI2luY2x1ZGUgPHVyY3UtYnAuaD4KI2luY2x1ZGUgPHVy
-Y3UvcmN1bGZoYXNoLmg+CnN0YXRpYyBzdHJ1Y3QgY2RzX2xmaHQgKnRvdGFsczsgLyogaW1tb3J0
-YWwgKi8KCl9fYXR0cmlidXRlX18oKGNvbnN0cnVjdG9yKSkgc3RhdGljIHZvaWQgaW5pdF9sZmh0
-KHZvaWQpCnsKCS8qIFhYWCByZXBsYWNlIHdpdGggQ01NX1NUT1JFX1NIQVJFRD8gKi8KCXRvdGFs
-cyA9IGNkc19sZmh0X25ldygxNjM4NCwgMSwgMCwgQ0RTX0xGSFRfQVVUT19SRVNJWkUsIDApOwp9
-CgppbnQgbWFpbih2b2lkKSAvKiB0aGlzIGlzIG1lYW50IHRvIGJlIGEgbWFsbG9jLWZhbWlseSBm
-dW5jdGlvbiBpbiBtd3JhcCAqLwp7CgkvKiBYWFggcmVwbGFjZSByY3VfZGVyZWZlcmVuY2Ugd2l0
-aCBDTU1fTE9BRF9TSEFSRUQ/ICovCglzdHJ1Y3QgY2RzX2xmaHQgKnQgPSByY3VfZGVyZWZlcmVu
-Y2UodG90YWxzKTsKCXJldHVybiB0ID8gMCA6IDE7Cn0KLS0tClRoYW5rcyBmb3IgbWFueSB5ZWFy
-cyBvZiB1cmN1ICsgY2RzIQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo=
+--===============7392528702799242094==
+Content-Type: multipart/alternative;
+	boundary="_4D0103B6-3135-4E6D-B50A-1BF1E17833F7_"
+
+--_4D0103B6-3135-4E6D-B50A-1BF1E17833F7_
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+
+
+Hi there,=20
+I=E2=80=99m trying to use babeltrace2 python bindings to track live lttng t=
+race, as shown in some examples in the documents, I tried to use ctf.lttng-=
+live( ctf.fs in the documents) plugin as source, and use text.pretty as sin=
+k, but it didn=E2=80=99t work out as I expected.  So does the api support t=
+racking live lttng trace and print them out yet?
+
+
+Yours sincerely=20
+
+--_4D0103B6-3135-4E6D-B50A-1BF1E17833F7_
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="utf-8"
+
+<html xmlns:o=3D"urn:schemas-microsoft-com:office:office" xmlns:w=3D"urn:sc=
+hemas-microsoft-com:office:word" xmlns:m=3D"http://schemas.microsoft.com/of=
+fice/2004/12/omml" xmlns=3D"http://www.w3.org/TR/REC-html40"><head><meta ht=
+tp-equiv=3DContent-Type content=3D"text/html; charset=3Dutf-8"><meta name=
+=3DGenerator content=3D"Microsoft Word 15 (filtered medium)"><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:SimSun;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:DengXian;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:DengXian;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:SimSun;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	font-size:10.5pt;
+	font-family:DengXian;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+.MsoChpDefault
+	{mso-style-type:export-only;}
+/* Page Definitions */
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style></head><body lang=3DZH-CN link=3Dblue vlink=3D"#954F72" style=3D=
+'word-wrap:break-word'><div class=3DWordSection1><p class=3DMsoNormal><span=
+ lang=3DEN-US style=3D'font-size:12.0pt'><o:p>&nbsp;</o:p></span></p><p cla=
+ss=3DMsoNormal><span lang=3DEN-US>Hi there, </span></p><p class=3DMsoNormal=
+><span lang=3DEN-US>I=E2=80=99m trying to use babeltrace2 python bindings t=
+o track live lttng trace, as shown in some examples in the <a href=3D"https=
+://babeltrace.org/docs/v2.0/python/bt2/examples.html#build-and-run-a-trace-=
+processing-graph">documents</a>, I tried to use ctf.lttng-live( ctf.fs in t=
+he documents) plugin as source, and use text.pretty as sink, but it didn=E2=
+=80=99t work out as I expected. =C2=A0So does the api support tracking live=
+ lttng trace and print them out yet?</span></p><p class=3DMsoNormal><span l=
+ang=3DEN-US style=3D'font-size:12.0pt;font-family:SimSun'><o:p>&nbsp;</o:p>=
+</span></p><p class=3DMsoNormal><span lang=3DEN-US style=3D'font-size:12.0p=
+t;font-family:SimSun'><o:p>&nbsp;</o:p></span></p><p class=3DMsoNormal><spa=
+n lang=3DEN-US style=3D'font-size:12.0pt;font-family:SimSun'>Yours sincerel=
+y </span></p></div></body></html>=
+
+--_4D0103B6-3135-4E6D-B50A-1BF1E17833F7_--
+
+
+--===============7392528702799242094==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============7392528702799242094==--
+
