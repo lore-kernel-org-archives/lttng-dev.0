@@ -4,56 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 951A1C00140
-	for <lttng-dev@archiver.kernel.org>; Mon, 15 Aug 2022 16:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1D56C00140
+	for <lttng-dev@archiver.kernel.org>; Mon, 15 Aug 2022 17:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1660582600;
-	bh=mpfp+IgKUHLdc1VyrKcnl2firoMftgB0mBZGGLlDqKc=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	s=default; t=1660585162;
+	bh=KurqCQ4HjxrZ7CaRaTCosSc/A48NKmjNHutXOpyV8ig=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=TaBKzMsfJw/EZiWWf7qQV9CHB7zRDEThcGct3tjpBvOTbkqPHktx0eHMeoRJXBphF
-	 PUYl138AvP1If3AzGsrF4OHKZFIK1Hde5s4VHR7XiKPEB1VeqBWfHiDjahCldqMP0P
-	 Y+izV9ufKHrcD1ZmEhX6WX4eyJUwXjTYIcaHMvKsmpWvTn2ENjDBDFLoX/8x3dceXG
-	 WwqFZlBIetPhB/sNetAT1afn2fT374BdlAaH8H/NVc9twy3irR1bd28vAGcn1TukvE
-	 VOg4L7+F6q5nOKGGPSLLYnHtF6PzX30mJI7tUxRJf2JckFxlMIwcqzyjjFopj7+jDT
-	 0DM6RqFICgDNw==
+	b=NrdLBiNJPGaCOXfN6+RV0x4/GPfVhS1KlZcp0B+t7hYcaLXMHVOAlx6CGdDiKRBww
+	 grljWrt2XvGJOe+njUdfBzDf/wgmlP542slbOAAVgj2rsJxC61LQg+Qub26Y4UYJLN
+	 5vFLvCeSz7Y0TFqJ0bp5XKoyBncQpw7Jf0nD3hzJqnwqU3ryYYR5DeS6nHdWUuArA8
+	 T6YIbp9ZahHwO1MVMi3oDP4ge8980PvVhf+92N0Twk60GH4CB19JY4CfWmSgRiMIyX
+	 NspFO81oEWlh5Bg6G0RCBkinn3yh3SCtxbXYmLV+j5wi+3Z4+7rOncc9ovBm4n76qF
+	 V304/siAjUAZw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4M60ml4Ksqz1Ghx;
-	Mon, 15 Aug 2022 12:56:39 -0400 (EDT)
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by lists.lttng.org (Postfix) with ESMTPS id 4M60mk1ccXz1Ghw
- for <lttng-dev@lists.lttng.org>; Mon, 15 Aug 2022 12:56:29 -0400 (EDT)
-Received: by mail-ej1-x630.google.com with SMTP id a7so14550743ejp.2
- for <lttng-dev@lists.lttng.org>; Mon, 15 Aug 2022 09:56:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc;
- bh=gbeaFqZ8O5rSILboJxbhLeYfqlJJwiGC2Knd4rUxMIc=;
- b=dh7FgLZH8yx2NZdq+BcIHOj+g5gWeWNIxWwDe7pSQUJ8m/f4FU2bfsrRrjO7GW8uZV
- em06mqVGBrc30sEBUZwc1tCLAyv67wBdZCld2gv5qc/G/+Veu79ZSbq9wUYdlgJu6Yoo
- Spl7eYQ/ikHBjuqmCbfImamXBg+B7c5f/txNipNM5QcaKF6bjqFEQlaRlLwqFjP9Uo2p
- BWM9YSsAL1vGlBrWgg4hCV2emT50OYIrMqYqkEbZtQNKerIyXefZFCaHrmMjha7DGSn7
- +fEO/e73ZOBmgDtUjO37XQ+P7TkT8bmQJnzug7ao/VvYIeh5JGc/r9toO8wyfGtRsjgg
- xRNg==
-X-Gm-Message-State: ACgBeo0UV64squTmt30uICuHyRE7S3IurJtaPd8eDNEaS3OkBXrh+S6U
- lyyATec1Tl6OBzGLTgekvsp52V46Mkc4zH3PUDWWrxmndPO5Ug==
-X-Google-Smtp-Source: AA6agR4FSaY0aQzllK1/N/GQ9KBBbLb7gYpSWnFGccwk2a5jgjXbs0IyUEk2PT8tkX+DgMNLO5JdCBsTPSxlPnfWhHM=
-X-Received: by 2002:a17:906:93ef:b0:731:1478:b774 with SMTP id
- yl15-20020a17090693ef00b007311478b774mr10418192ejb.531.1660582587992; Mon, 15
- Aug 2022 09:56:27 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4M61k21bFCz1Gf0;
+	Mon, 15 Aug 2022 13:39:22 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4M61k10qmsz1Gkr
+ for <lttng-dev@lists.lttng.org>; Mon, 15 Aug 2022 13:39:20 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id B038E327AD5
+ for <lttng-dev@lists.lttng.org>; Mon, 15 Aug 2022 13:39:20 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id oH81_aF3u2Tw; Mon, 15 Aug 2022 13:39:20 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 30C59327AD3;
+ Mon, 15 Aug 2022 13:39:20 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 30C59327AD3
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id b_w6h_JN82AT; Mon, 15 Aug 2022 13:39:20 -0400 (EDT)
+Received: from [10.10.0.55] (unknown [38.141.136.237])
+ by mail.efficios.com (Postfix) with ESMTPSA id 0A85C327AD1;
+ Mon, 15 Aug 2022 13:39:20 -0400 (EDT)
+Message-ID: <a5f31003-9cc9-33e3-5c23-e4360fe7edbf@efficios.com>
+Date: Mon, 15 Aug 2022 13:39:19 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To: Elad Lahav <e2lahav@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 References: <CAJbg=FUXDnq0cSLCzhOAO4W44+monQF4s73t_sT4dAPGWt8fPg@mail.gmail.com>
  <dd0df1d0-12ed-a568-839e-7d2ff1fbcff7@efficios.com>
  <CAJbg=FWjjBT1RbGxvCcx1+6qgJfhqtF3h3WpLB11cGSb1Efzqw@mail.gmail.com>
  <7e3f4047-101e-d8d4-93ed-370c8eaf7494@efficios.com>
-In-Reply-To: <7e3f4047-101e-d8d4-93ed-370c8eaf7494@efficios.com>
-Date: Mon, 15 Aug 2022 12:56:16 -0400
-Message-ID: <CAJbg=FVMKPrZ+s2UdMN57R_rwDMF6ZH7BkpfMZ-Waf_AQXh9Dw@mail.gmail.com>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+ <CAJbg=FVMKPrZ+s2UdMN57R_rwDMF6ZH7BkpfMZ-Waf_AQXh9Dw@mail.gmail.com>
+In-Reply-To: <CAJbg=FVMKPrZ+s2UdMN57R_rwDMF6ZH7BkpfMZ-Waf_AQXh9Dw@mail.gmail.com>
 Subject: Re: [lttng-dev] Change to CPU number detection breaks QNX
  compilation
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -67,42 +68,31 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Elad Lahav via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Elad Lahav <e2lahav@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Michael Jeanson via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Michael Jeanson <mjeanson@efficios.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-That fixes the build, thanks.
+On 2022-08-15 12 h 56, Elad Lahav wrote:
+> That fixes the build, thanks.
+> 
+> I see some errors coming out of "make check", though:
+> 
+> ERROR: test_get_cpu_mask_from_sysfs - missing test plan
+> ERROR: test_get_cpu_mask_from_sysfs - exited with status 1
+> 
+> --Elad
 
-I see some errors coming out of "make check", though:
+I tested on Freebsd (as a non-linux target) and I get the expected :
 
-ERROR: test_get_cpu_mask_from_sysfs - missing test plan
-ERROR: test_get_cpu_mask_from_sysfs - exited with status 1
+SKIP: test_get_cpu_mask_from_sysfs - Skip Linux specific tests.
 
---Elad
+I wonder what might differ here, it might have to do with the version of 
+bash on QNX, I'm not familiar with this platform.
 
-On Mon, 15 Aug 2022 at 11:55, Michael Jeanson <mjeanson@efficios.com> wrote:
->
-> On 2022-08-15 10 h 04, Elad Lahav wrote:
-> > The problem is the use of d_type as a member of the dirent structure.
-> > POSIX does not define such a member.
-> > I can provide the necessary code for getting the file type in a
-> > readdir() loop on QNX, but it seems unnecessary given that there is no
-> > /sys file system with CPU information. The method for getting
-> > information on processors is different, and I suspect that is true for
-> > *BSDs and other non-Linux OSs.
-> >
-> > --Elad
->
-> Can you try this patch [1] to see if it fixes the build on QNX? Can you
-> also run 'make check' in 'tests/unit', the linux specific tests should
-> be skipped.
->
-> Michael
->
-> [1] https://review.lttng.org/c/userspace-rcu/+/8664
+Michael
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
