@@ -4,61 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 159EDC25B0E
-	for <lttng-dev@archiver.kernel.org>; Tue, 16 Aug 2022 15:21:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6F17C25B08
+	for <lttng-dev@archiver.kernel.org>; Wed, 17 Aug 2022 15:27:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1660663261;
-	bh=qqQxcal7t9G9xD8LUxz4S+L+WGYuhkLVbXY28f4BmMw=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=dyzDGiHEb0e2K9JZI6PSnkTrM5OChl6JsPSRZ7F8gH8wMGqlxGei3w9vnDlCr9qx0
-	 QuWSe/zYdEcrFiMEUwGr3jZncqEnaiqr2Pp/RweG182GtmiXWA1fhEV2Kri65kyzVw
-	 uv5zwvj6eoE44D7CgyzpQzYmxk/Pt83JF1N2Ob7ivNeawdlhDEDLEwP5vUUk9rxFRo
-	 W1uJ3AUprXkfxofEjl05HkQ9iT04crdll85Z7LFT1s8PR6LczwzojfxkqG4ZUzr7j9
-	 cFGTVWAVmNrogpmSx3eDVAeq+MY9ll15Rvp3uksTY7usF3769puIW+1G1ZhzazSjBf
-	 2L93xTeVyUP9A==
+	s=default; t=1660750068;
+	bh=mkOXQC+JELfem9s8hcBC46OaL8j5l0vNxQpxozWLyEw=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=ypjgayB4TRbXuUQ8Zq28tdL2F3XYfPTBlNTU3QuQDiPm186BSgGOIUBhqzrvwRW8H
+	 FfssrYpJA06Vk+Rf90gHC1+uUefgM/RDBEWFJ1NDzaPouxec2OSbvwpLNdcjPbSSpW
+	 CuqjCF5i/+hdR2XdplpI1L9OdEZxxoxfQkYUU6zSwFkaN97PWIkSNSfAQtpN9PV5sY
+	 ds8Uv7Iuts9CVxyM6CNxgTjKeAr8ADUZPP5FApwc3HtA0xpHDOfRtmCGNf0/joDh+u
+	 1nDcmCx0czXuqa1og5bt3LtBKN55znxSmN7hocp6p/GGMVg7jTpjIcmjm3mRVEnoHo
+	 Bo69qedAmXqWw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4M6Zbx651sz1Gy4;
-	Tue, 16 Aug 2022 11:21:01 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4M7BjH4s06z1HdT;
+	Wed, 17 Aug 2022 11:27:47 -0400 (EDT)
 Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
- by lists.lttng.org (Postfix) with ESMTPS id 4M6Zbq4Zj3z1GrT
- for <lttng-dev@lists.lttng.org>; Tue, 16 Aug 2022 11:20:55 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4M7BjF6Fk4z1Hjj
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Aug 2022 11:27:35 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 04BE033ADD2
- for <lttng-dev@lists.lttng.org>; Tue, 16 Aug 2022 11:20:49 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 709623668F3;
+ Wed, 17 Aug 2022 11:27:29 -0400 (EDT)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id uV3qOqCpi0I0; Tue, 16 Aug 2022 11:20:44 -0400 (EDT)
+ with ESMTP id gJsYAOZlWGUE; Wed, 17 Aug 2022 11:27:29 -0400 (EDT)
 Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id ADE0333AB7E;
- Tue, 16 Aug 2022 11:20:44 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com ADE0333AB7E
+ by mail.efficios.com (Postfix) with ESMTP id 1940B366AE0;
+ Wed, 17 Aug 2022 11:27:29 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1940B366AE0
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id GkWtQPJry6bK; Tue, 16 Aug 2022 11:20:44 -0400 (EDT)
-Received: from [10.10.0.55] (unknown [38.141.136.237])
- by mail.efficios.com (Postfix) with ESMTPSA id 9AB0633ACC0;
- Tue, 16 Aug 2022 11:20:44 -0400 (EDT)
-Message-ID: <c20ae630-466f-c9ca-78c8-7de8a86ff1d6@efficios.com>
-Date: Tue, 16 Aug 2022 11:20:44 -0400
+ with ESMTP id IdRnTRvNcE0W; Wed, 17 Aug 2022 11:27:29 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 0F8C83668F2;
+ Wed, 17 Aug 2022 11:27:29 -0400 (EDT)
+Date: Wed, 17 Aug 2022 11:27:28 -0400 (EDT)
+To: bruce ashfield <bruce.ashfield@gmail.com>
+Message-ID: <1671185103.10716.1660750048986.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CADkTA4NkNEE=kmsiBeJ_UQ7bOZ07CtAEumy8Qfs5cvG=AA1X5Q@mail.gmail.com>
+References: <20220803192327.3726094-1-bruce.ashfield@gmail.com>
+ <65c3cadc-9053-ba31-67b3-30bb9294642d@efficios.com>
+ <CADkTA4NkNEE=kmsiBeJ_UQ7bOZ07CtAEumy8Qfs5cvG=AA1X5Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To: Elad Lahav <e2lahav@gmail.com>
-Cc: lttng-dev@lists.lttng.org
-References: <CAJbg=FUXDnq0cSLCzhOAO4W44+monQF4s73t_sT4dAPGWt8fPg@mail.gmail.com>
- <dd0df1d0-12ed-a568-839e-7d2ff1fbcff7@efficios.com>
- <CAJbg=FWjjBT1RbGxvCcx1+6qgJfhqtF3h3WpLB11cGSb1Efzqw@mail.gmail.com>
- <7e3f4047-101e-d8d4-93ed-370c8eaf7494@efficios.com>
- <CAJbg=FVMKPrZ+s2UdMN57R_rwDMF6ZH7BkpfMZ-Waf_AQXh9Dw@mail.gmail.com>
- <a5f31003-9cc9-33e3-5c23-e4360fe7edbf@efficios.com>
- <CAJbg=FUVVfNkDM4xvmMtVtw+GCs2nXmbCT02BXoA+3Jd1Nc2cQ@mail.gmail.com>
-In-Reply-To: <CAJbg=FUVVfNkDM4xvmMtVtw+GCs2nXmbCT02BXoA+3Jd1Nc2cQ@mail.gmail.com>
-Subject: Re: [lttng-dev] Change to CPU number detection breaks QNX
- compilation
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103
+ (Linux)/8.8.15_GA_4372)
+Thread-Topic: compaction: make tracepoints condtional on CONFIG_COMPACTION
+Thread-Index: gWxrDZ4X6fCQWpMM1aNezpNBq1CjOw==
+Subject: Re: [lttng-dev] [PATCH] compaction: make tracepoints condtional on
+ CONFIG_COMPACTION
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -70,26 +67,77 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Michael Jeanson via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Michael Jeanson <mjeanson@efficios.com>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On 2022-08-15 13 h 52, Elad Lahav wrote:
-> /bin/sh on QNX is (by default) ksh, not bash, so perhaps that's the issue.
+----- On Aug 10, 2022, at 1:48 PM, Bruce Ashfield via lttng-dev lttng-dev@lists.lttng.org wrote:
+
+> On Wed, Aug 10, 2022 at 11:20 AM Michael Jeanson <mjeanson@efficios.com> wrote:
+>>
+>> On 2022-08-03 15 h 23, Bruce Ashfield via lttng-dev wrote:
+>> > Hi all,
+>> >
+>> > This was found during the update of the yocto project reference
+>> > kernel to 5.19. Out of all the supported architectures, only
+>> > mips failed during the build of lttng-modules.
+>> >
+>> > Specifically, it seems like the lack of CONFIG_COMPACTION being
+>> > enabled in the kernel was the significant issue. Only one of the
+>> > tracepoints blew up, but I can't see how any of them would be
+>> > valid in this scenario, or why it would be limited to mips.
+>> >
+>> > While I don't think this is the right fix, this is what got me
+>> > up and passing sanity testing, so I wanted to send the change
+>> > and see what the actual, correct fix would be :)
+>> >
+>> > Cheers,
+>> >
+>> > Bruce
+>>
+>> Hi Bruce,
+>>
+>> Thanks for reporting this issue, I propose a simpler fix [1] of just
+>> disabling the build of the compaction probe module when
+>> CONFIG_COMPACTION is disabled in the kernel configuration.
+>>
+>> Can you confirm this patch fixes the issue on your side?
 > 
-> Shouldn't block you from submitting that change. +1 from me, if that matters ;-)
+> confirmed, it fixes the issue on my side.
+
+Merged into lttng-modules master, stable-2.13, stable-2.12, thanks!
+
+Mathieu
+
 > 
-> --Elad
+> Bruce
+> 
+>>
+>> Thanks,
+>>
+>> Michael
+>>
+>> [1] https://review.lttng.org/c/lttng-modules/+/8660
+> 
+> 
+> 
+> --
+> - Thou shalt not follow the NULL pointer, for chaos and madness await
+> thee at its end
+> - "Use the force Harry" - Gandalf, Star Trek II
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-I'll get this merged.
-
-Thanks,
-
-Michael
-
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
