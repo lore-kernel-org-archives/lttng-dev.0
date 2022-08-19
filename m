@@ -4,43 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C32DC32771
-	for <lttng-dev@archiver.kernel.org>; Fri, 19 Aug 2022 15:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 410F7C32771
+	for <lttng-dev@archiver.kernel.org>; Fri, 19 Aug 2022 18:57:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1660921752;
-	bh=0fz9FvP5vHykXo6T5/KqzoXGQYvzBpRWjEcXRT5hKHg=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=VBCCbVYkEM6ITTQRzNNJq/p9smcGtihpK/yNsMgSmaKrMp0sOIhVp5fc15NAG+/ZK
-	 KLh7R4pZwP25aVL+Xnu8qOxO1Et6YXzm3r+D2yf3Rrqf6e+ZMZjCV5eZYuE8o+cwfz
-	 hjHrl3qQYMN8FhQP37bPbI2tgfBDtOwjvdToBKN4XcyIvOYZ08yurIGDSeKScjSP2H
-	 jPhF3gTi6IpLr9hoCgshsNE1vNT7wBCJ96h0eXZ1P6zyzA1eq6LdPcf6vsKZyRwqsf
-	 1fvhI2evNBoG91eKjFgr+qyQ5ukiIEdXHJqgE86drTc1Mwpq7vSrYrqSMV/kRrOsZW
-	 yCLQqrUP46NzA==
+	s=default; t=1660935433;
+	bh=1QyCnN5c4h3CIsxdMpZlev5SNFHYvoIYDDveZODzxP8=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=NOm55AOyjJTPwlNizQstAuHZzprhM6xoPhlW2xPE+CqzuWhc28hW34dIbEnCSRb/u
+	 Fezi+AFlYzvTdRDqu3/0dTG/dcHAXEbRX0n27Ham3ivfCqd2uHwMN5MJRUaqzjxppz
+	 2iBzr3G9uwRaK802ZKus4WmNNcYJ/SHjzXUfPpLGpvYMBjER0IMvy56w7p/yA7Czdz
+	 Bmcu0F5CdJ5KnfGMeoWPNKBR4z5jjw3M78/vbhetfxN7DH+9dHR9duh8XznQt4VKis
+	 FnbRa7gAUwPmLcUA4rwrVEb+GrwZAhCu4XQkkfewoR8SQqfSZvtsaCFdQn4DbwHJq+
+	 L5MlYWnQmFfOQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4M8QBv6sqfz1JdZ;
-	Fri, 19 Aug 2022 11:09:11 -0400 (EDT)
-Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 4M8QBs5RQcz1Jqh
- for <lttng-dev@lists.lttng.org>; Fri, 19 Aug 2022 11:09:09 -0400 (EDT)
-Received: from [172.16.0.95] (192-222-180-24.qc.cable.ebox.net
- [192.222.180.24])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by simark.ca (Postfix) with ESMTPSA id 8BD471E13B;
- Fri, 19 Aug 2022 11:00:19 -0400 (EDT)
-Message-ID: <87a1bad5-9942-3d6a-9726-1e4e74bea4d2@simark.ca>
-Date: Fri, 19 Aug 2022 11:00:19 -0400
+	by lists.lttng.org (Postfix) with ESMTP id 4M8WG01SC4z1KFX;
+	Fri, 19 Aug 2022 14:57:12 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4M8WFy3CcLz1Jn6
+ for <lttng-dev@lists.lttng.org>; Fri, 19 Aug 2022 14:57:10 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 0D5B93B7A75
+ for <lttng-dev@lists.lttng.org>; Fri, 19 Aug 2022 14:57:10 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id 3lZMkGODt-IH; Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 874613B78F5;
+ Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 874613B78F5
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id fiECbDsY4bAE; Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+ by mail.efficios.com (Postfix) with ESMTP id 7961A3B7FA6;
+ Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+Date: Fri, 19 Aug 2022 14:57:09 -0400 (EDT)
+To: lttng-dev <lttng-dev@lists.lttng.org>, 
+ Diamon discuss <diamon-discuss@lists.linuxfoundation.org>, 
+ linux-trace-users <linux-trace-users@vger.kernel.org>, 
+ lwn <lwn@lwn.net>, linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1273091514.17599.1660935429453.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: fr
-To: Maksim Khmelevskiy <mk.void.mail@gmail.com>, lttng-dev@lists.lttng.org
-References: <CACXehJBBkAm-7U2fwOd-qaGE5OgbsAZEci5v57XkmUp=7vtKNA@mail.gmail.com>
-In-Reply-To: <CACXehJBBkAm-7U2fwOd-qaGE5OgbsAZEci5v57XkmUp=7vtKNA@mail.gmail.com>
-Subject: Re: [lttng-dev] C API message iterator example for libbabeltrace2
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103
+ (Linux)/8.8.15_GA_4372)
+Thread-Index: njpMKIkDnXU7Voqt9NfXwqumSfFwyQ==
+Thread-Topic: LTTng-modules 2.12.10 and 2.13.5 (Linux kernel tracer)
+Subject: [lttng-dev] [RELEASE] LTTng-modules 2.12.10 and 2.13.5 (Linux
+ kernel tracer)
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -52,74 +65,42 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Simon Marchi via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Simon Marchi <simark@simark.ca>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On 8/12/22 09:19, Maksim Khmelevskiy via lttng-dev wrote:
-> Hi,
->
+Hi,
 
-> there is a nice py message iterator example
-> <https://babeltrace.org/docs/v2.0/python/bt2/examples.html> but for C
-> API only plugins are covered with examples, do you think it would make
-> sense to create an example of a standalone application which simply
-> uses `source.ctf.fs` as source and iterates over all messages? It
-> would be nice hint for those who want to see an example of graph
-> creation with all the code in one file.
+This is a release announcement for the two currently maintained stable branches
+of the LTTng kernel tracer.
 
-Hi Maksim,
+* New in these releases:
 
-I'm not sure which example you are referring to exactly.  But in Python,
-we have the high-level TraceCollectionMessageIterator object, which does
-roughly:
+Version 2.12.10 and 2.13.5 fix tracepoint instrumentation to support stable kernels in the
+version range v5.15.58 to 5.16. They also fix incorrect stub prototypes for
+CONFIG_HAVE_SYSCALL_TRACEPOINTS=n. A minor fix to tie compaction probe build to
+CONFIG_COMPACTION has also been added.
 
- - Instantiate source and filter components according to the provided
-   specs, including automatic source discovery
- - Instantiate a flt.utils.muxer component to merge the streams from all
-   sources ports
- - Instantiate a sink component that presents the events as a Python
-   iterable
- - Connect the ports of all these components
- - More things that are irrelevant here
+Version 2.13.5 updates the tracepoint instrumentation to support Linux kernel
+v5.19, and v6.0-rc1.
 
-There is no such high-level object in the C interface, so you have
-to do all this by hand, it will necessarily be much more verbose.  It
-would be nice to have the equivalent of TraceCollectionMessageIterator
-in the C API, it is just not done yet due to lack of resources.
+Feedback is welcome,
 
-I did search in the documentation for an example program that uses the C
-API to create and run a graph, and I haven't found one.  I agree that
-adding one would be nice.  I'll look into writing one.
+Thanks,
 
-Regarding your use case:
+Mathieu
 
-> I'm interested in that example because I want to transform CTF file
-> into list of C structures representing messages.
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
 
-I have some questions:
-
- - Is the data you want to convert found in the metadata of the traces
-   (description of event types) of in the payload of events?
- - Why do you want to write this in C instead of Python?  It sounds like
-   it would be much faster to write in Python (with
-   TraceCollectionMessageIterator), and it doesn't sound like something
-   where the performance is critical (but of course I don't have the
-   full context).
- - Why do you need to write an application where you create and run the
-   graph yourself?  Could you instead just write your sink component
-   class (which reads the messages and writes your output files),
-   packaged in a plugin and use it through the babeltrace2 command-line:
-
-     $ babeltrace2 /path/to/ctf/trace -c sink.foo.bar -p 'output="out.h"'
-
-   ?  This way, you just have to care about writing your component
-   class, which does the conversion you need.
-
-Simon
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
