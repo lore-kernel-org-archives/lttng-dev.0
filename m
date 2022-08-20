@@ -4,40 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1961DC25B08
-	for <lttng-dev@archiver.kernel.org>; Sat, 20 Aug 2022 18:59:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79897C25B08
+	for <lttng-dev@archiver.kernel.org>; Sat, 20 Aug 2022 19:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1661021953;
-	bh=agamXiubXBsxnwK549BbIAZjeKlgzwuAdMU7gohjzQk=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=eyt+/bZBCylb0AIzEx6C11mUCU1mmDhengROO2y1UYNKNJTCOmTIDuJYuBcb/o7SW
-	 3H9jEfovu49K6LoKEk73THf/0sxFzx1hl+h9psk7Xg5aF3AWnhD2rsHodIGV7zAfuT
-	 AjaDa/7X34dwcN+YeerkwYPr86rVUJ+adwVddKDpgySKPd0ZYn9+7SofUKEOd7SgDL
-	 Afsv6cCRn6/f1fwTqe7lQb0Jc0TmwgBI8SbyL3ZTK4EPR7f8T5pKF/58shB6ytuqfx
-	 qMwYaZSZXW1dKFzMDeGMvuyE3BOZ48XOwT5X0n9xWwTQJEoxGlMViXopMtzOLiNWJU
-	 fB3Sr8IXe3+3g==
+	s=default; t=1661022831;
+	bh=Li8Lol3F3H0qfYbCPPukQeOuHu4koezoUFNIw8LFj4U=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=qWUAWRnuwNDBL//irtdurVnSP3GHz1SjYMtCENxSPurH2VOo7x50CFFGfvNv4P9g8
+	 p0SLsjmiBkiqdY7zG+w2FTCc0lnMoPPm69CvKLgA4MfkyanAIG4V3/FGMmmAs2rNxo
+	 b4Md9iB6EhJBZ6XKErMXrLo2TEa7oa+Hcv1GBeVOoiZ2nORvu8o0OBrcuViPqarfYT
+	 ar1IJ+45zfQYuH/zyTyjlRx8ZDMGEohZv5pCxknMmEmWmtVt7t7XQqK5kKJC4qBo28
+	 AQ4SXGqxoAILIHyfWR2qoo82NenOCxeFviel4UtaHVZj3Xpzy97E1BoIZ1DV3CWvnz
+	 KEWEws6Kse+RQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4M97Fs2lzHz1Kf0;
-	Sat, 20 Aug 2022 14:59:13 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4M97Zk4F19z1KwF;
+	Sat, 20 Aug 2022 15:13:50 -0400 (EDT)
 Received: from dcvr.yhbt.net (dcvr.yhbt.net [173.255.242.215])
- by lists.lttng.org (Postfix) with ESMTPS id 4M97Fq6JWXz1Kdx
- for <lttng-dev@lists.lttng.org>; Sat, 20 Aug 2022 14:59:11 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4M97Zj26YPz1KkW
+ for <lttng-dev@lists.lttng.org>; Sat, 20 Aug 2022 15:13:49 -0400 (EDT)
 Received: from localhost (dcvr.yhbt.net [127.0.0.1])
- by dcvr.yhbt.net (Postfix) with ESMTP id 343331F54E;
- Sat, 20 Aug 2022 18:51:43 +0000 (UTC)
-Date: Sat, 20 Aug 2022 18:51:43 +0000
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Sam Saffron <sam.saffron@gmail.com>,
- Simon Marchi <simon.marchi@efficios.com>
-Message-ID: <20220820185143.GA5248@dcvr>
-References: <20220809181927.GA3718@dcvr>
- <2040534742.15368.1660848925552.JavaMail.zimbra@efficios.com>
+ by dcvr.yhbt.net (Postfix) with ESMTP id 4D2CA1F54E;
+ Sat, 20 Aug 2022 19:13:48 +0000 (UTC)
+Date: Sat, 20 Aug 2022 19:13:48 +0000
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Message-ID: <20220820191348.GC5248@dcvr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <2040534742.15368.1660848925552.JavaMail.zimbra@efficios.com>
-Subject: Re: [lttng-dev] urcu 7ca7fe9c03 + _LGPL_SOURCE regression?
+Subject: [lttng-dev] efficios MX problems? (was: urcu 7ca7fe9c03 +
+ _LGPL_SOURCE regression?)
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -51,69 +46,43 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: Eric Wong via lttng-dev <lttng-dev@lists.lttng.org>
 Reply-To: Eric Wong <normalperson@yhbt.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-TWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6
-Cj4gLS0tLS0gT24gQXVnIDksIDIwMjIsIGF0IDI6MTkgUE0sIEVyaWMgV29uZyB2aWEgbHR0bmct
-ZGV2IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcgd3JvdGU6Cj4gCj4gPiBIZWxsbywgSSd2ZSBu
-b3RpY2VkIGxpYnVyY3UgdjAuMTEuNCsgYW5kIGxhdGVyIGZhaWxzIHdpdGggdGhlCj4gPiAibXdy
-YXAiIExEX1BSRUxPQUQgbWFsbG9jIHdyYXBwZXIgd2hpY2ggaW5pdGlhbGl6ZXMgYW4gcmN1bGZo
-YXNoCj4gPiBpbiBhIGNvbnN0cnVjdG9yLgo+ID4gCj4gPiBUaGUgcHJvYmxlbSBoYXBwZW5zIHdo
-ZW4gdXNpbmcgX0xHUExfU09VUkNFICsgcmN1X2RlcmVmZXJlbmNlIG9uCj4gPiBhIGNkc19sZmh0
-IHBvaW50ZXI6Cj4gPiAKPiA+ICBJbiBmaWxlIGluY2x1ZGVkIGZyb20gL3RtcC9iL2luY2x1ZGUv
-dXJjdS9wb2ludGVyLmg6MzksCj4gPiAgICAgICAgICAgICAgICAgICBmcm9tIC90bXAvYi9pbmNs
-dWRlL3VyY3UvdXJjdS1icC5oOjU4LAo+ID4gICAgICAgICAgICAgICAgICAgZnJvbSAvdG1wL2Iv
-aW5jbHVkZS91cmN1LWJwLmg6MiwKPiA+ICAgICAgICAgICAgICAgICAgIGZyb20gLi4vN2NhN2Zl
-OWNfcmVncmVzc2lvbi5jOjEwOgo+ID4gIC4uLzdjYTdmZTljX3JlZ3Jlc3Npb24uYzogSW4gZnVu
-Y3Rpb24g4oCYbWFpbuKAmToKPiA+ICAvdG1wL2IvaW5jbHVkZS91cmN1L3N0YXRpYy9wb2ludGVy
-Lmg6MTAxOjE4OiBlcnJvcjogaW52YWxpZCB1c2Ugb2YgdW5kZWZpbmVkCj4gPiAgdHlwZSDigJhz
-dHJ1Y3QgY2RzX2xmaHTigJkKPiA+ICAgIDEwMSB8ICAgICBfX3R5cGVvZl9fKHAgKyAwKSBfX19f
-X19fX19wMTsgICAgXAo+ID4gICAgICAgIHwgICAgICAgICAgICAgICAgICBeCj4gPiAgL3RtcC9i
-L2luY2x1ZGUvdXJjdS9wb2ludGVyLmg6NDc6MjY6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNy
-bwo+ID4gIOKAmF9yY3VfZGVyZWZlcmVuY2XigJkKPiA+ICAgICA0NyB8ICNkZWZpbmUgcmN1X2Rl
-cmVmZXJlbmNlICBfcmN1X2RlcmVmZXJlbmNlCj4gPiAgICAgICAgfCAgICAgICAgICAgICAgICAg
-ICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fgo+ID4gIC4uLzdjYTdmZTljX3JlZ3Jlc3Npb24uYzoy
-NjoyMzogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKAmHJjdV9kZXJlZmVyZW5jZeKAmQo+
-ID4gICAgIDI2IHwgIHN0cnVjdCBjZHNfbGZodCAqdCA9IHJjdV9kZXJlZmVyZW5jZSh0b3RhbHMp
-Owo+ID4gICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fgo+ID4g
-Cj4gPiBSZW1vdmluZyBfTEdQTF9TT1VSQ0UgYXZvaWRzIHRoZSBwcm9ibGVtLCBidXQgSSdkIHJh
-dGhlciBub3QKPiA+IGludHJvZHVjZSBwZXJmb3JtYW5jZSByZWdyZXNzaW9ucy4KPiAKPiBGaXhl
-ZCBieSBjb21taXRzOgo+IAo+IGNvbW1pdCAyZDQ2NmE2Mzk3ZGJjN2FmMzk3ZDBmYzEwZTMyN2Nj
-NmNhYzc2YTVhCj4gQXV0aG9yOiBTaW1vbiBNYXJjaGkgPHNpbW9uLm1hcmNoaUBlZmZpY2lvcy5j
-b20+Cj4gRGF0ZTogICBXZWQgQXVnIDE3IDExOjI0OjI1IDIwMjIgLTA0MDAKPiAKPiAgICAgRml4
-OiBjaGFuZ2UgbWV0aG9kIHVzZWQgYnkgX3JjdV9kZXJlZmVyZW5jZSB0byBzdHJpcCB0eXBlIGNv
-bnN0bmVzcwo+IAo+IGFuZAo+IAo+IGNvbW1pdCBmYWRhNjgyZjBkNmU2ODBmMThlMzI0M2FhMGFm
-NjA3ZGZhZmNiZDMyIChyZXZpZXcvbWFzdGVyKQo+IEF1dGhvcjogTWF0aGlldSBEZXNub3llcnMg
-PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBEYXRlOiAgIFdlZCBBdWcgMTcgMTU6
-MzI6MzggMjAyMiAtMDQwMAo+IAo+ICAgICBGaXg6IGFkZCBtaXNzaW5nIHVudXNlZCBhdHRyaWJ1
-dGUgdG8gX3JjdV9kZXJlZmVyZW5jZQo+IAo+IFRob3NlIHdpbGwgYmUgcmVsZWFzZWQgaW4gdGhl
-IDAuMTIgYW5kIDAuMTMgc3RhYmxlIGJyYW5jaGVzIG9mIGxpYnVyY3UuCgpUaGFua3MuCgo+IE5v
-dGUgdGhhdCB0aGUgMC4xMSBsaWJ1cmN1IGJyYW5jaCBpcyBlbmQgb2YgbGlmZSBhbmQgd2lsbCBu
-b3QgaGF2ZSBhbnkKPiBmdXJ0aGVyIHJlbGVhc2UsIHNvIHlvdSBtYXkgd2FudCB0byB1cGdyYWRl
-IGlmIHlvdSBzdGlsbCB1c2UgaXQuCgpVbmZvcnR1bmF0ZWx5LCBlbnRlcnByaXNlIGRpc3RybyB1
-c2VycyBhcmUgbGlrZWx5IHRvIGJlIHN0dWNrCm9uIDAuMTEgKG9yIGV2ZW4gb2xkZXIpIGZvciBh
-IGxvbmcgdGltZSA6PAoKPiA+IAo+ID4gSW4gcmV0cm9zcGVjdCwgbXkgdXNlIG9mIHJjdV9kZXJl
-ZmVyZW5jZSBzZWVtcyB1bm5lY2Vzc2FyeSBzaW5jZQo+ID4gY29uc3RydWN0b3IgZnVuY3Rpb25z
-IHNob3VsZCBhbHdheXMgZmlyZSBiZWZvcmUgYW55IHRocmVhZHMgYXJlCj4gPiBjcmVhdGVkLgo+
-ID4gCj4gPiBUaGF0IG1lYW5zIEkgY2FuIHNhZmVseSByZXBsYWNlIHRoZSBhc3NpZ25tZW50IHcv
-IENNTV9TVE9SRV9TSEFSRUQsCj4gPiBhbmQgcmN1X2RlcmVmZXJlbmNlIHdpdGggQ01NX0xPQURf
-U0hBUkVELCBjb3JyZWN0Pwo+IAo+IEkgd291bGQgbm90IHJlY29tbWVuZCBpdC4gTm90ZSB0aGF0
-IGNkc19sZmh0X25ldygpIHN0YXJ0cyBhIHdvcmtlcgo+IHRocmVhZCAoZnJvbSBhIGNvbnN0cnVj
-dG9yKSBpbiB5b3VyIGNvZGUuIFNvIHRoZXJlIGlzIGNvbmN1cnJlbnQKPiBhY2Nlc3MgYWZ0ZXIg
-dGhhdCBoYXNoIHRhYmxlIGNyZWF0aW9uLCBldmVuIGlmIHlvdSBhY2Nlc3MgaXQgZnJvbQo+IGNv
-bnN0cnVjdG9yIGNvZGUuCgpOb3RlZC4gIEhvd2V2ZXIsIEknbSBub3QgZXhhY3RseSB3b3JyaWVk
-IGFib3V0IGxvc2luZyByZXBvcnRpbmcKZm9yIGEgZmV3IGFsbG9jYXRpb25zIGluIHRoZSBlYXJs
-eSBib290IHByb2Nlc3MsIGl0J3MgaW5ldml0YWJsZS4KQWxsb2NhdGlvbnMgZG9uZSBieSBjZHMg
-YXJlIHRoZSBsZWFzdCBvZiBhIFJ1Ynlpc3QncyBwcm9ibGVtcy4KClRoZSBvcmlnaW5hbCBjb2Rl
-IGRpZG4ndCBldmVuIGJvdGhlciB1c2luZyByY3VfYXNzaWduX3BvaW50ZXIKaW5zaWRlIHRoZSBy
-ZXNvbHZlX21hbGxvYyBjb25zdHJ1Y3RvciA6eAoKaHR0cHM6Ly84MHgyNC5vcmcvbXdyYXAtcHVi
-bGljLzIwMjIwODE1MjEyMjE3LkdBMTEyMzdAZGN2ci8KCnBvc3RpbWFnZSB3LyBwYXRjaCBhcHBs
-aWVkOgogIGh0dHBzOi8vODB4MjQub3JnL213cmFwLXB1YmxpYy80NzdiMWNiL3MvP2I9ZXh0L213
-cmFwL213cmFwLmMjbjEzOQoKQWxsIHRoZSBtYWxsb2Mgd3JhcHBlcnMgdGhlbXNlbHZlcyBhcmUg
-aW1tdW5lIHRvIGNkc19sZmh0IHRvdGFscwpwb2ludGVyIGJlaW5nIE5VTEwuCgpUaGFua3MuCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
-YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
-Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+I'm not sure why b.barracudacentral.org doesn't like my MTA.
+I got something similar in my initial message to Simon but
+brushed it off thinking it was a fluke, but I just got this
+again with Mathieu in the recipient list, as well.
+
+dcvr.yhbt.net was recently forced to get a new IP address,
+but DKIM + SPF are set up and it manages to deliver fine to
+at least one major email provider:
+
+> Reporting-MTA: dns; dcvr.yhbt.net
+> X-Postfix-Queue-ID: 343331F54E
+> X-Postfix-Sender: rfc822; normalperson@yhbt.net
+> Arrival-Date: Sat, 20 Aug 2022 18:51:43 +0000 (UTC)
+> 
+> Final-Recipient: rfc822; mathieu.desnoyers@efficios.com
+> Original-Recipient: rfc822;mathieu.desnoyers@efficios.com
+> Action: failed
+> Status: 5.7.1
+> Remote-MTA: dns; mail.efficios.com
+> Diagnostic-Code: smtp; 550 5.7.1 Service unavailable; client [173.255.242.215]
+>     blocked using b.barracudacentral.org
+> 
+> Final-Recipient: rfc822; simon.marchi@efficios.com
+> Original-Recipient: rfc822;simon.marchi@efficios.com
+> Action: failed
+> Status: 5.7.1
+> Remote-MTA: dns; mail.efficios.com
+> Diagnostic-Code: smtp; 550 5.7.1 Service unavailable; client [173.255.242.215]
+>     blocked using b.barracudacentral.org
+
+I wonder if any other self-hosters are hitting this problem...
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
