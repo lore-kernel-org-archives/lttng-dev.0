@@ -4,40 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31458C433F5
-	for <lttng-dev@archiver.kernel.org>; Mon,  3 Oct 2022 14:40:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E25EC433FE
+	for <lttng-dev@archiver.kernel.org>; Fri,  7 Oct 2022 06:26:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1664808040;
-	bh=mKr4CTc4oAsEAlBVruO/VQnBnKIaqjrP6v3CS98xMXg=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=EPi4BiA53pn527b7GjHSwiQ5hKqj8qMK4KYM8BFdgyDVmkzA/OmJGRlj/L/IPMcAR
-	 pjjYI28GzlOCMRiq3AWMRnf/aHCBSqgGkQsEYvoWVwsbmF2U1GiuktDul5fetDLtEz
-	 6DGCqVpetNT+lxC2amsYrflZTAUtZTTQu7XeV3kHq2esrImNrQTxzZPh2TfIyDB/mD
-	 UQv/YkDjbwFn6U8lujdIEV+Zs8i7rUHkUOQoHkBzzDkPPNWG99s/C4OA1V4SkowWCk
-	 bR93rdeahltFmdZ4dCVFMrH1EzorfTpJ+cE79ngzNYplB4zrJPntte8tKg8EGXaa12
-	 2H1Z6V1CDn9Pw==
+	s=default; t=1665124007;
+	bh=iaKd8y4ee+TZ0IquP5AeVyHb8RKpC+N1IqkDMdIPJVY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=vpT7ESwyfG+9NV8EGQF/+O4+Hd1igSDPHtBC/22w05q4hhTMyDLnLW38pXbXp8Ywq
+	 MuXzycy5PSdo5pYkQ8YgHmTxR+dR8AdCB/VFI7v+Pt7+hwh9pGEUWm9wz/JpyhxmcE
+	 gap4AvRIjCrtAKK0AoJS0n3DETFo2SxFRj2cnRH95coXkV0TM3jyrP3M187kjzkLfp
+	 X//TG7bBeKUitOsJYEc5+MLxXt1iXmQsF+PpHt9HBuoKj30Xp7l6rtlVpl9QxxbYuE
+	 qDoeVc1sj2ROdsSIt9CYoz1f2+5Tx6DEl3PhhUK4AqACOPU1fKvVWZAyxNTeiwCVQV
+	 N4GoIF4kX02Hg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Mh3RD0rM2z28fg;
-	Mon,  3 Oct 2022 10:40:40 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com
- [IPv6:2607:5300:203:5aae::31e5])
- by lists.lttng.org (Postfix) with ESMTPS id 4Mh3RB6LlRz28R9
- for <lttng-dev@lists.lttng.org>; Mon,  3 Oct 2022 10:40:38 -0400 (EDT)
-Received: from [10.1.0.219] (192-222-188-69.qc.cable.ebox.net [192.222.188.69])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4Mh3R96GtqzPBG;
- Mon,  3 Oct 2022 10:40:37 -0400 (EDT)
-Message-ID: <f2f8bc4a-c788-bab2-433a-546ca5459d4d@efficios.com>
-Date: Mon, 3 Oct 2022 10:41:29 -0400
+	by lists.lttng.org (Postfix) with ESMTP id 4MkJHW0pYHz29Np;
+	Fri,  7 Oct 2022 02:26:47 -0400 (EDT)
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Mk8c330xYz29C1
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Oct 2022 20:40:35 -0400 (EDT)
+X-IronPort-AV: E=Sophos;i="5.95,164,1661788800"; d="scan'208";a="211532199"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com)
+ ([199.255.45.14])
+ by ob1.hgst.iphmx.com with ESMTP; 07 Oct 2022 08:39:25 +0800
+IronPort-SDR: uaxOi3R449b8yvtO259zkgs7b1eBApY5WvB2BMwelg1GFvkhsJYF52wUo64HMcqcoe5TOpNzTo
+ /9dygZJaDJVArSmXvqaNqOlOl5acwoEI1lDEn2AvkY7qradwwWMXBizvzDLYNh72kvBNkWLq3z
+ n3DlbyBlYs2TL/Frex32hgi3kURy2PZam4Y/UYT59J06asFntzxGVCMpHlJLRPUbXdX59f43k9
+ ND0DcaCdEuTRBVqWcoJJZP8wSYjzr6LqZtoA5VOSqIzCu/V4Zlt84/X7yV3KxlwTpOdAQ6R0NC
+ duOS/vDfV2mMkyL/TEoUzr3a
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+ by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 06 Oct 2022 16:59:10 -0700
+IronPort-SDR: j6OLOosYhQzL24Q3Db0VwtAhPc6mhD0HVnPUd1WSa1MImNT5920mEe13Qbhdz8X8LX8xCsspAH
+ P3P/DUh54MJiMRaV5YDAdqNc6Wxkwgw7sEv/13MJTJzAmn0YKvKOG8iZgiWJw0mLSExLmLKueu
+ x4ANn6HZru7GVEF5laxkw/uubiwR3JJ8OmrKY+M2ysjpVbHCjdkd0emXC2kgfz1JajzvMBZ1uF
+ zeS0krkciq5uqPCdERI/n4mubfpUdAKrn5dIUWi9DRd3Zz62tx0srYoymTvFSX7t3I1gc9VlKe
+ IwI=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+ by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 06 Oct 2022 17:39:25 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mk8Zh6bLpz1RwqL
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Oct 2022 17:39:24 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+ by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new,
+ port 10026)
+ with ESMTP id TZAWKfu_fcin for <lttng-dev@lists.lttng.org>;
+ Thu,  6 Oct 2022 17:39:24 -0700 (PDT)
+Received: from toolbox.wdc.com (unknown [10.225.167.15])
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mk8Zf6ZNRz1RvLy;
+ Thu,  6 Oct 2022 17:39:22 -0700 (PDT)
+To: lttng-dev@lists.lttng.org
+Date: Fri,  7 Oct 2022 10:39:17 +1000
+Message-Id: <20221007003918.344922-1-alistair.francis@opensource.wdc.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Content-Language: en-US
-To: Eric Wong <normalperson@yhbt.net>, lttng-dev@lists.lttng.org
-References: <20221002161343.854582-1-normalperson@yhbt.net>
-In-Reply-To: <20221002161343.854582-1-normalperson@yhbt.net>
-Subject: Re: [lttng-dev] [PATCH] always check pthread_create for failures
+X-Mailman-Approved-At: Fri, 07 Oct 2022 02:26:46 -0400
+Subject: [lttng-dev] [PATCH lttng-tools 1/2] README: Update the Userspace
+ RCU requirements
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -49,52 +75,27 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Alistair Francis via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Alistair Francis <alistair.francis@opensource.wdc.com>
+Cc: alistair23@gmail.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On 2022-10-02 12:13, Eric Wong via lttng-dev wrote:
-> pthread_create may fail with EAGAIN (which is no fault of the
-> programmer), so don't allow the check to be compiled out.
-
-Merged into master, stable-0.13, stable-0.12, thanks!
-
-Mathieu
-
-> 
-> Signed-off-by: Eric Wong <normalperson@yhbt.net>
-> ---
->   src/urcu-defer-impl.h | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/src/urcu-defer-impl.h b/src/urcu-defer-impl.h
-> index 1c96287..cbb0ca8 100644
-> --- a/src/urcu-defer-impl.h
-> +++ b/src/urcu-defer-impl.h
-> @@ -417,7 +417,8 @@ static void start_defer_thread(void)
->   	urcu_posix_assert(!ret);
->   
->   	ret = pthread_create(&tid_defer, NULL, thr_defer, NULL);
-> -	urcu_posix_assert(!ret);
-> +	if (ret)
-> +		urcu_die(ret);
->   
->   	ret = pthread_sigmask(SIG_SETMASK, &oldmask, NULL);
->   	urcu_posix_assert(!ret);
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+RnJvbTogQWxpc3RhaXIgRnJhbmNpcyA8YWxpc3RhaXIuZnJhbmNpc0B3ZGMuY29tPgoKQ29tbWl0
+IGNjMjJkZTk4NWZiZCAiQnVtcCBVUkNVIGRlcGVuZGVuY3kgdG8gMC4xNCIgaW5jcmVhc2UgdGhl
+ClVzZXJzcGFjZSBSQ1UgcmVxdWlyZW1lbnRzIGJ1dCBkaWRuJ3QgdXBkYXRlIHRoZSBSRUFETUUu
+IExldCdzIGVuc3VyZQp0aGUgUkVBRE1FIGhhcyB0aGUgY29ycmVjdCBpbmZvcm1hdGlvbi4KClNp
+Z25lZC1vZmYtYnk6IEFsaXN0YWlyIEZyYW5jaXMgPGFsaXN0YWlyLmZyYW5jaXNAd2RjLmNvbT4K
+LS0tCiBSRUFETUUuYWRvYyB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
+MSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL1JFQURNRS5hZG9jIGIvUkVBRE1FLmFkb2MKaW5k
+ZXggODMwZGQ5MzNlLi4xOTFiMGUwYTIgMTAwNjQ0Ci0tLSBhL1JFQURNRS5hZG9jCisrKyBiL1JF
+QURNRS5hZG9jCkBAIC01NCw3ICs1NCw3IEBAIGNvbXBvbmVudHM6CiAKICogKipMaW51eCBrZXJu
+ZWx7bmJzcH3iiaV7bmJzcH0yLjYuMzAqKgogCi0qICoqaHR0cDovL3d3dy5saWJ1cmN1Lm9yZy9b
+VXNlcnNwYWNle25ic3B9UkNVXXtuYnNwfeKJpXtuYnNwfTAuMTEuMCoqLgorKiAqKmh0dHA6Ly93
+d3cubGlidXJjdS5vcmcvW1VzZXJzcGFjZXtuYnNwfVJDVV17bmJzcH3iiaV7bmJzcH0wLjE0LjAq
+Ki4KICsKIERlYmlhbi9VYnVudHUgcGFja2FnZTogYGxpYnVyY3V7bmJofWRldmAuCiAKLS0gCjIu
+MzcuMwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
+bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
