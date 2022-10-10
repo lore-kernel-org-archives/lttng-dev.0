@@ -4,69 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A6BBC4332F
-	for <lttng-dev@archiver.kernel.org>; Fri,  7 Oct 2022 06:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE63CC433F5
+	for <lttng-dev@archiver.kernel.org>; Tue, 11 Oct 2022 12:37:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1665124013;
-	bh=y5rD2oYPge09fKzJCljhl0tCeNiB5+oPJ798X0xaJ74=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=BCDfxxKTdCm2ZTHSEUTaUG8MQCOvp+/uJqZV/AUIjOSwvHJyCYOX0KsySHS4WzRRB
-	 xOj9nCJFS1APivOSkQCRzL71urFW4C/g4O0gZHIuohgQJXZ7rp6mKny1nLtz5IsVAo
-	 dg/wEPJOTs/XTtusDfEDG1gAbf4RWlYt9Ddoq5tkbM8WJDKB/sv9c4CYXem7hrt3Rf
-	 XSLv9HZmTiE/bUXu86fAs2MqhQOnkGTfb8SPqCZX7IWdwJsZwlR/AoM7yoogOrrRtE
-	 f819OUfnKyFefR8OPxf4k/4i1F+gY25JUj1we0ZiYwDvJr428BS5k9ssGRrcJYRy1a
-	 YCb4n1JMh6+fw==
+	s=default; t=1665491872;
+	bh=mm7zIq1ix40CtE0ZP165/HX+O+lULytX2r7vl699XGk=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=ChSnlL9D8F5w/qbwHP3XRUdPjhbxRF6gtktCAakr8gMsh39IibjUMFR5h1nsHgUFc
+	 k//lehaqZVKwtX5iS0VzgXKljzrqff5M7e8z0aLdrpb5dvf2ci10l9x7KzOt3CJkQ5
+	 gpqMzpPVrhe5eg7Pg+yqSV9X34BOnxnTLWUwPsDHhtSclJzVOBgzg4CnH79FFGOKao
+	 k88jg0xos+mbHpGkibEPeMTJi31QawuZ7423e9xRiXz1xB65lYRJl8EGMWbtusfuWO
+	 yB06HSpnCLX2TWo3EPuDYTpRNE3pC3zCr2neh5+4Yx0NZhKFJj67gB0GVS5il77o/T
+	 P8nNyrOp3qxPA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4MkJHd2Ds2z29Nq;
-	Fri,  7 Oct 2022 02:26:53 -0400 (EDT)
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
- by lists.lttng.org (Postfix) with ESMTPS id 4Mk8c35fVZz29WL
- for <lttng-dev@lists.lttng.org>; Thu,  6 Oct 2022 20:40:35 -0400 (EDT)
-X-IronPort-AV: E=Sophos;i="5.95,164,1661788800"; d="scan'208";a="211532204"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com)
- ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 07 Oct 2022 08:39:26 +0800
-IronPort-SDR: epaKoUhGtJ1+xFwisljEKhvMO3YTvlVdo7iNUarHF0CzWJ13tzTfHZk5B/amdorAlOyK5RpBBX
- t+hJQlBSHuBKDfFQvjK3PwEwEmRssaY4kms6CGjOW08FXYVV6SNW470UFsWKYFUUPhw0H4VRdD
- tLzELysm0U20GFYbnX0tJ88D0whcVmd5r8Vgv+FyYKx077CRFLp52jIxMiAr6NxyI1/X86Myj/
- 7RQ/Cr8Fkkrdryj2vYCylKJV5JlChPp7vcVDUSKhm5knbVH8Pa5PpHs+BxG8qpfS6eA3bhoc2E
- Jj4aMBvIFk6Urc6DtkdGr8Ma
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
- by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 06 Oct 2022 16:59:11 -0700
-IronPort-SDR: HVlrtQ1v6gXk5U3kznyj4RcJdm8LRhwz3BiOmlFj2ptjpczpnkLrux8agOi5mBN3bwdCr5xLS4
- k6LAlAFutm+xVEqCQt1mXOLX7S1U97sO0wPoNUyZOJBJioOUbhdgqgWYI+/8tY6n6g8UK1jVdh
- 0ItAJMjT41igTtgIPurY9DQpIQTPBt+NUUbSzGIRqPR5BZSQ9r5GHPHvhNtm+C1Ll6L5JB+mYX
- MpNux5AZ+XmOUhQVuJhgwhbFvAlsnL/XzTVKEJE2+VtANUKqL4zmFDkmi9xkSkMuOXw/00qoDl
- 4Zc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
- by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 06 Oct 2022 17:39:26 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Mk8Zj6X1jz1RvLy
- for <lttng-dev@lists.lttng.org>; Thu,  6 Oct 2022 17:39:25 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
- by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new,
- port 10026)
- with ESMTP id MOPWP6Ij_Xy3 for <lttng-dev@lists.lttng.org>;
- Thu,  6 Oct 2022 17:39:25 -0700 (PDT)
-Received: from toolbox.wdc.com (unknown [10.225.167.15])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Mk8Zh2Y2kz1RvTp;
- Thu,  6 Oct 2022 17:39:24 -0700 (PDT)
-To: lttng-dev@lists.lttng.org
-Date: Fri,  7 Oct 2022 10:39:18 +1000
-Message-Id: <20221007003918.344922-2-alistair.francis@opensource.wdc.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221007003918.344922-1-alistair.francis@opensource.wdc.com>
-References: <20221007003918.344922-1-alistair.francis@opensource.wdc.com>
+	by lists.lttng.org (Postfix) with ESMTP id 4MmwKr0Dwwz2CD6;
+	Tue, 11 Oct 2022 08:37:52 -0400 (EDT)
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com
+ [IPv6:2607:f8b0:4864:20::235])
+ by lists.lttng.org (Postfix) with ESMTPS id 4MmP8b5djBz2BZH
+ for <lttng-dev@lists.lttng.org>; Mon, 10 Oct 2022 12:13:03 -0400 (EDT)
+Received: by mail-oi1-x235.google.com with SMTP id y72so6450989oia.3
+ for <lttng-dev@lists.lttng.org>; Mon, 10 Oct 2022 09:13:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=w8V1uBpM/6WNyDtiHyUtdSDhRDnEf0UsjupUDG3HKFw=;
+ b=tqNipVI+lDrMH9i/mG+Wo6USqZZqGnh9P5bYRd4wZJlgMSWDhboRHWbFIgwxYoqY86
+ i2xT8nKrGqtBa3tukwkMbANCRfPB+VeawmWBP/Va9TQVxkIDCE/lEnLNIsNco72JeLqz
+ sNOhfsltHZYOzHfype+cddXeiwGPzAIUJXfXzHC1/GgqDxeclHyOlHmGXiKJGGbmbdCf
+ x0JAMdN9XHJUD814tCjnd+4jLhPYRCqDR/k81LzGgRG1jSu7s0dykEp0eIfKaRGtsZde
+ vEJMyjPTOHUVPouExl8abT3QX7f1G8qxeGgfx6glKp3+9iIcJcf2OLfZDoSZgpi6ztWc
+ t00A==
+X-Gm-Message-State: ACrzQf0GXNmCywsdN7O6k44bBS4jYsFDuUp+eQigc9w4WxW3wKfBpQ5g
+ ZcOXAnHH8LSdgd6jLrHCbl7QcFAW4kBOFNRyLNGPuLdX
+X-Google-Smtp-Source: AMsMyM4iic6zYhmQqMwMDzjp3r7MlgUl2dqimQ8RGu6r+bGjoLhR86bxeCBA6lfHE0SvVECiZYEL8PY0dxqfmOKJmWE=
+X-Received: by 2002:aca:1018:0:b0:354:7635:19fe with SMTP id
+ 24-20020aca1018000000b00354763519femr3983552oiq.240.1665418382490; Mon, 10
+ Oct 2022 09:13:02 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Approved-At: Fri, 07 Oct 2022 02:26:46 -0400
-Subject: [lttng-dev] [PATCH lttng-tools 2/2] Tests: select_poll_epoll: Add
- support for _time64
+Date: Mon, 10 Oct 2022 18:12:51 +0200
+Message-ID: <CACXehJBSQAmFSKRzSPp9Cg2ZNjmF1UaujnSPeDQvyJBTW0L4Qw@mail.gmail.com>
+To: lttng-dev@lists.lttng.org
+X-Mailman-Approved-At: Tue, 11 Oct 2022 08:37:50 -0400
+Subject: [lttng-dev] LTTng and containers.
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -78,131 +60,69 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Alistair Francis via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Alistair Francis <alistair.francis@opensource.wdc.com>
-Cc: alistair23@gmail.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Maksim Khmelevskiy via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Maksim Khmelevskiy <mk.void.mail@gmail.com>
+Content-Type: multipart/mixed; boundary="===============5424045138605352333=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-From: Alistair Francis <alistair.francis@wdc.com>
+--===============5424045138605352333==
+Content-Type: multipart/alternative; boundary="00000000000017459605eab06f9a"
 
-Add support for the  64-bit time_t syscalls SYS_ppoll_time64
-and SYS_pselect6_time64.
+--00000000000017459605eab06f9a
+Content-Type: text/plain; charset="UTF-8"
 
-These are the syscalls that exist 32-bit platforms since the 5.1 kernel.
-32-bit platforms with a 64-bit time_t only have these and don't have the
-original syscalls (such as 32-bit RISC-V).
+Hi,
 
-Fixes: https://github.com/lttng/lttng-tools/pull/162
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
----
- tests/regression/kernel/select_poll_epoll.cpp | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
+I would like to ask regarding the hot topic - container tracing. I've seen
+a youtube video <https://www.youtube.com/watch?v=hra-eu6EOpY>, have read a
+message <https://lists.lttng.org/pipermail/lttng-dev/2021-May/029952.html>
+from LTTng mailing list and tried to google more about this topic but
+didn't find much of info. Could you please direct me where should I
+continue digging?
+My problem:
+I would like to have multiple containers where traces are generated by apps
+with compiled-in tracepoints. Traces could be stored in these containers as
+well.
+Besides these containers I would have a trace processor container, a master
+container which could address a container(or a trace session) and fetch
+traces from it and read with babeltrace or similar tool.
+So far, intuitively, remote tracing comes to my mind but before continuing
+with the task I would be happy to hear an advice from LTTng devs.
 
-diff --git a/tests/regression/kernel/select_poll_epoll.cpp b/tests/regression/kernel/select_poll_epoll.cpp
-index c0b688217..4a6d394f4 100644
---- a/tests/regression/kernel/select_poll_epoll.cpp
-+++ b/tests/regression/kernel/select_poll_epoll.cpp
-@@ -5,6 +5,7 @@
-  *
-  */
- 
-+#include <errno.h>
- #include <fcntl.h>
- #include <limits.h>
- #include <poll.h>
-@@ -456,8 +457,22 @@ void ppoll_fds_buffer_overflow(
- 	ufds[0].fd = wait_fd;
- 	ufds[0].events = POLLIN|POLLPRI;
- 
-+#ifdef SYS_ppoll_time64
-+	/*
-+	 * As there is no timeout value, we don't convert to/from
-+	 * 64/32-bit time_t.
-+	 */
-+	ret = syscall(SYS_ppoll_time64, ufds, 100, NULL, NULL);
-+	if (ret == 0 || errno != ENOSYS) {
-+		goto ppoll_fds_buffer_overflow_done;
-+	}
-+#endif
-+
-+#ifdef SYS_ppoll
- 	ret = syscall(SYS_ppoll, ufds, 100, NULL, NULL);
-+#endif
- 
-+ppoll_fds_buffer_overflow_done:
- 	if (ret < 0) {
- 		PERROR("ppoll");
- 	} else if (ret > 0) {
-@@ -483,7 +498,22 @@ void ppoll_fds_ulong_max(FILE *validation_output_file __attribute__((unused)))
- 	ufds[0].fd = wait_fd;
- 	ufds[0].events = POLLIN|POLLPRI;
- 
-+#ifdef SYS_ppoll_time64
-+	/*
-+	 * As there is no timeout value, we don't convert to/from
-+	 * 64/32-bit time_t.
-+	 */
-+	ret = syscall(SYS_ppoll_time64, ufds, ULONG_MAX, NULL, NULL);
-+	if (ret == 0 || errno != ENOSYS) {
-+		goto ppoll_fds_ulong_max_done;
-+	}
-+#endif
-+
-+#ifdef SYS_ppoll
- 	ret = syscall(SYS_ppoll, ufds, ULONG_MAX, NULL, NULL);
-+#endif
-+
-+ppoll_fds_ulong_max_done:
- 	if (ret < 0) {
- 		/* Expected error. */
- 	} else if (ret > 0) {
-@@ -524,7 +554,18 @@ void pselect_invalid_fd(FILE *validation_output_file __attribute__((unused)))
- 	FD_ZERO(&rfds);
- 	FD_SET(fd, &rfds);
- 
-+#ifdef SYS_pselect6_time64
-+	ret = syscall(SYS_pselect6_time64, fd + 1, &rfds, NULL, NULL, NULL, NULL);
-+	if (ret == 0 || errno != ENOSYS) {
-+		goto pselect_invalid_fd_done;
-+	}
-+#endif
-+
-+#ifdef SYS_pselect6
- 	ret = syscall(SYS_pselect6, fd + 1, &rfds, NULL, NULL, NULL, NULL);
-+#endif
-+
-+pselect_invalid_fd_done:
- 	if (ret == -1) {
- 		/* Expected error. */
- 	} else if (ret) {
-@@ -553,8 +594,20 @@ void pselect_invalid_pointer(
- 	FD_ZERO(&rfds);
- 	FD_SET(wait_fd, &rfds);
- 
-+#ifdef SYS_pselect6_time64
-+	ret = syscall(SYS_pselect6_time64, 1, &rfds, (fd_set *) invalid, NULL, NULL,
-+			NULL);
-+	if (ret == 0 || errno != ENOSYS) {
-+		goto pselect_invalid_pointer_done;
-+	}
-+#endif
-+
-+#ifdef SYS_pselect6
- 	ret = syscall(SYS_pselect6, 1, &rfds, (fd_set *) invalid, NULL, NULL,
- 			NULL);
-+#endif
-+
-+pselect_invalid_pointer_done:
- 	if (ret == -1) {
- 		/* Expected error. */
- 	} else if (ret) {
--- 
-2.37.3
+Thank you!
+
+--00000000000017459605eab06f9a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div>I would like to ask regarding the h=
+ot topic - container tracing. I&#39;ve seen a <a href=3D"https://www.youtub=
+e.com/watch?v=3Dhra-eu6EOpY">youtube video</a>, have read a <a href=3D"http=
+s://lists.lttng.org/pipermail/lttng-dev/2021-May/029952.html">message</a> f=
+rom LTTng mailing list and tried to google more about this topic but didn&#=
+39;t find much of info. Could you please direct me where should I continue =
+digging?</div><div>My problem:=C2=A0</div><div>I would like to have multipl=
+e containers where traces are generated by apps with compiled-in tracepoint=
+s. Traces could be stored in these containers as well.</div><div>Besides th=
+ese containers I would have a trace processor container, a master container=
+ which could address a container(or a trace session) and fetch traces from =
+it and read with babeltrace or similar tool.</div><div>So far, intuitively,=
+ remote tracing comes to my mind but before continuing with the task I woul=
+d be happy to hear an advice from LTTng devs.</div><div><br></div><div>Than=
+k you!</div></div>
+
+--00000000000017459605eab06f9a--
+
+--===============5424045138605352333==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============5424045138605352333==--
