@@ -4,142 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADC0FC38A2D
-	for <lttng-dev@archiver.kernel.org>; Mon, 24 Oct 2022 14:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A6EDECAAA1
+	for <lttng-dev@archiver.kernel.org>; Thu, 27 Oct 2022 14:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1666622361;
-	bh=1r9A/g2PcFQYgEfFoJv9E+dwXDXrGb1jy1fp13Nydpg=;
-	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=trZY/jzi9P3P1SSKRUxBZKcZOByeAMZyfecro0vcsthC529TVMeqkxlieVxAHPbAU
-	 lGMHBwBok1hmEVZgSZUHdOlhH1S0CB7mRaz23gNylnjfVBfDGi/nwdrzOyjZiWGeAC
-	 qmevnaooqGbnmPXU0ho83AlytaQfXhlY3o7TOYpZXYyfnFLvW80355hqZAyO4GrKOA
-	 2HwdHvN9IY1T15l1d1adYmH9POY8XgqsoMpXUZjU1xQqHXaoVnmResDgyi/7C7uC4j
-	 yTkeHBiELTXqpMQyA/bxUn7GwOzM9t2xwn8aFyEMFxYok1jTTzOwyqDqFST3fnZDAl
-	 69/FoXwiVw82A==
+	s=default; t=1666880355;
+	bh=N9CKQbZKYlXATUTqf+UTw3CNjIRbV/4+b8i9GNxlsy8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=ih0NCOsMLZqx5WChWpzUiRfcRUoMXn+Gk350ZVGJG61rbZS7iMEEY0E85meldhPm2
+	 B1UAj5R0G/zCGGCu38GmXTZ9ryp+DhIlwF58V7udqHj8o7DXG7jT7aCuSqQlxaLPit
+	 I4k8Dei37Djztl1q8sdQ6xV+G5Dby3xIGBGwsy/LUT5j02SWl0F1s3XTuukkVwAbg9
+	 ZUC2MdZQg4q8pF37c9woHegH8ngahlQDAam1JKPwLaKCFNxqq2nXPN22d3ITljPgyc
+	 PJuONEuyhG6Ks4G6CF4ECqxNUx75xgYzKnELOxe4TfCEQ8iCxLkRcFPxgIrCpDsT0O
+	 02YAVtxY02Y6w==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4MwyQ05lzWzDKb;
-	Mon, 24 Oct 2022 10:39:20 -0400 (EDT)
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com
- [205.220.166.238])
- by lists.lttng.org (Postfix) with ESMTP id 4Mwnkw4PHDzDWL
- for <lttng-dev@lists.lttng.org>; Mon, 24 Oct 2022 04:08:24 -0400 (EDT)
-Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
- by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 29O7mYv4031240; Mon, 24 Oct 2022 01:08:14 -0700
-Received: from nam11-dm6-obe.outbound.protection.outlook.com
- (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
- by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3kcbt51vm2-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Mon, 24 Oct 2022 01:08:14 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mUrpVKgnUAIgPQgxdPm/xZi8AVeGnQ2zJkw+kGWiZvyPMEBZjIjt32aNGdg8f25w0AG+oeTXb44VbXsOld6A/17iv7kDEOTe1FJzsf+bb4yd8SSS+f3jfOFlGlJQPhYi1roauNIIGht1TRiI4bSILwqtP9MiTcRjK3ESRj5eMyzfpoP3j4bXLwAx9kMYpvfv21nLKcgDlIJrhjAdfWQmOAb0uMz3VtqzkDBTfeelsL5S5/axgF2tffCBkdbF920blwUOQj0zNIQgoyCwBjocgIiNNvqN9LsrKKEHr3Ve7n4b4jhcHpZYw40CmtpGXPRfZOm5mN7eGewxjTBPs3D9hQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EcH21+X4r1uiR4aAo+LLTu+/dwEyRwXMcRKYTSI4XXQ=;
- b=fSAX58iGogG/rKcVm2l8YeERppq+spKT03sZtyd53cE9AxFu7sIoGrQiy8IB2pa6IIys7zHjlB9ydoL+3Y17YZdePnPu5CeL/yYWatjwkwctOfX4S11HQG/Gx3GVbBOoPMAq3zERakro1yEMOD73dHNRdNbPamSZVBtRZk19kYWU6iPdCgaMnVl6vK9D5JQUBalqItcAHT3gdwSWkX7SzjtML1DTi5HmavVA2xgCf3UjlMwKbYMywpncKBQoW6BD7D5vfFVkDWnlqkViuLpGUYR+Kdnkpvlboxk2Ox06Rt8Xp4jTI+HhDih1jilXCkm8kgzILFE9tM2J45li0VUUJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from PH0PR11MB4904.namprd11.prod.outlook.com (2603:10b6:510:40::10)
- by DM4PR11MB6549.namprd11.prod.outlook.com (2603:10b6:8:8e::9) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.21; Mon, 24 Oct 2022 08:08:12 +0000
-Received: from PH0PR11MB4904.namprd11.prod.outlook.com
- ([fe80::8776:b48b:15e7:7e11]) by PH0PR11MB4904.namprd11.prod.outlook.com
- ([fe80::8776:b48b:15e7:7e11%4]) with mapi id 15.20.5746.025; Mon, 24 Oct 2022
- 08:08:12 +0000
-To: =?utf-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
-CC: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Thread-Topic: [lttng-dev] [PATCH] Fix incorrect number of tests in
- test_callstack
-Thread-Index: AQHY5KcqlYT62PqnqEeRjY1kGeRtk64ZL2YAgAP77u0=
-Date: Mon, 24 Oct 2022 08:08:12 +0000
-Message-ID: <PH0PR11MB490435B372F8E8506D47DA95922E9@PH0PR11MB4904.namprd11.prod.outlook.com>
-References: <20221020171226.3450-1-mikael.beckius@windriver.com>
- <Y1LnNp1U0CafT2eS@efficios.com>
-In-Reply-To: <Y1LnNp1U0CafT2eS@efficios.com>
-Accept-Language: sv-SE, en-US
-Content-Language: sv-SE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB4904:EE_|DM4PR11MB6549:EE_
-x-ms-office365-filtering-correlation-id: 8786a9d1-32b3-4347-32dc-08dab596e53b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jOCzI1Bfugt2tQEKCZiiYTadffC0jnE2nkwzAH8Xjm2KNLtPU24RjhJurQI/FW4xDDWYNdwvF/ZEIAkmzVnGU3WUIazlgTy3z9k8awDlDyl7z2QdeV5W8LsI4EtIKKQjasf7Fk3V8MYKZv9jjff6Q0fbzlvSLmlKpiM/L4T+90lYWsK3IB/qUNNmA9DRA09G9h1FsjlZyxY7Ck4dHlfFgs2mrtl+MrtkYcsiP3pWETSZAzndyDVGlh01OSmNG8rXEWgul41LmatxGm8gKzYWbEf1UcfPXhowKJsYtzgNc2s60Akrorl99i+kldim+eQA18KmZie1pMh9igIVZi/yWG+4jm6bopMZ+20D+LW8vCYro33jnKx77nRK6iyxx+s5ifhCBN9w27mESLXc5sHUDhYQvbILLc7FjMFQ+NCd5f9cza/QcYG8QHN2Ouvka99zHiJBsSEsuJ3G7QO679nfCTwWKED2ieuHXmbijL1iV/W0p2aClJWXOVLdy5lCTS0525llnDghRBskzML2uqFoOmWh5Tz5T2Mi3NehASfyiZXbPsf/FvMKoQUI6ntGMY9UwQLchxl35sYAfzhQ+q7VGxi4clkMMZwT+py1GlIhFxdhV47XD0z0eWdrIr8q+MvjPSy7atG2hW/yVk2dhnIBfabK0w+CGKa0x3r9CdIYSzQHR8Uc5O+QmPWMKIuDF6yuT05BkFzd1WgkxZ03cvD+UGQ3fS9Y94Xi9El4tT49Uc5TWkSFE7v0p7T341wSXClOmM+8i70K8frrqGhWVUFA+wPlYs9wqGW1ho+XsfS/xFg=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PH0PR11MB4904.namprd11.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230022)(4636009)(376002)(396003)(39850400004)(346002)(366004)(136003)(451199015)(966005)(478600001)(86362001)(71200400001)(83380400001)(19627405001)(66946007)(66476007)(6916009)(91956017)(66556008)(64756008)(8676002)(66446008)(76116006)(4326008)(7696005)(6506007)(52536014)(9686003)(8936002)(41300700001)(26005)(5660300002)(38100700002)(66574015)(122000001)(55016003)(33656002)(186003)(2906002)(316002)(38070700005)(166002);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dk11UUlQTFhHcFExT3Nzd3pPZWR3SGFEbndIdmtMUXhKUFJSU0JXL0J3d3lH?=
- =?utf-8?B?eHZxb0tzcWowaW56SWJIY0llWHVrcXBINVFrQTBndjJpUEVKZ2xIckV5Lzl4?=
- =?utf-8?B?NlZHcHErWTBYbVptby9uK204TFlwbzh6RXhvMlNkd0t1WXZJSjVOaDMvUExz?=
- =?utf-8?B?aml0ZTFHOU1jYUVsa09pWDVkcmRGSS9Ga1FLWGtxbXVST3l3YzN3dEJKUm55?=
- =?utf-8?B?TS9JUEdwR2JtYURJOG02bWFxRGl2QTIyT3RERWlYT3FIT1BCV21vQytFNktT?=
- =?utf-8?B?OHZLV1ZaRkk2SkNEMW02WjR2TTE4bmZacGtyT2N0WGZBWmM0RUZTQnVjdVVl?=
- =?utf-8?B?TzdkV3dFT2NNZlBaS3VzSUNCeEt5NzdEb21YTC9laTFjd0srY2hzQlFSTEV5?=
- =?utf-8?B?dm8wdS9MbTFlbGpwWk14SjJaUVZyUDhzeHJEODF1RGdPSzNSNHZNM3ltRWJ3?=
- =?utf-8?B?bEIyR0pHWTdOS1ZFbUFzbDZYdWVCRVFJdDdMVk1WVlBVWUJQNTRzRjk4UWcx?=
- =?utf-8?B?YUhsQzZSM0RoZnlLaGdZYW5qL09QTVlnVUczWXgwR25FRFBwMWhLUzB2TlZt?=
- =?utf-8?B?NmNWcmpUV0FZVUdYU2FtNTc0bU00Z1JPTmpuWTNGaW9IYlJHRlUwL1dIZnp3?=
- =?utf-8?B?TUgzQ1M1eThZcmJjdHpHSUVidTRMbkJsWjc4eCtKY21raDMzUkZuZWdxVjg5?=
- =?utf-8?B?QTB3dGVEMmU3RVNHS0VLODJuYXF2RkxEdkpwK1NxVUV4TS8wdi9BYXlwWWM1?=
- =?utf-8?B?MkhwYkZSTnFqY2laSm5aeFZ0bzlzdGxkZDVoZjByd3lwU1RTWWozVWVub0sx?=
- =?utf-8?B?bVNFNXVPM1JPNElkZTlEMzdieFRERDY4NkZhTkFuVVpjekFYdmQzeXFrMDNB?=
- =?utf-8?B?ZWpmVXJUUTRROCtaRFRVbDRtdGhzM2cxRytReHhNVUUxcW4xZEF6dkRxNDBO?=
- =?utf-8?B?QVRiRDZPWU5sUTdNcWxQalpjbDEyV0xQUU00czZEZmVOczQ1bzNDMzVWM1N4?=
- =?utf-8?B?R2dzZkM0azdzY3JLTmlRamMxUmh6NGZRSGJPdjYvS00ycmNUaHB2OHRjZ2dp?=
- =?utf-8?B?R05lMDZJOE5BLzg1UmJSblc4dGpoV1pXNEZwSUR1VVdJVFZHZUpFcUV0L0Zh?=
- =?utf-8?B?WFI3djJNbkFuM2Vya2Q4ZU5tejFHYXVFL2w0V1A4OVJEcVBnY2UveW4vV0dr?=
- =?utf-8?B?RW9iVU9CWElUMkRtcmtzbmUvRHhlcnprelk4M01KMVJ4SE9MaEg2Kzh1dmRm?=
- =?utf-8?B?bmpiWUNXT1hUeXpQN1RIWE1uK2FkVkxVa043Y2hUU1Z3Rmdkb2NyWGVtVlhm?=
- =?utf-8?B?VHJWaEZoeFQwY0hSanBYcmRrUGVWZ05XbEdpU0VocmU4SHAxWTNNVkxaZUNS?=
- =?utf-8?B?TUZQOUJKak1LbGVoSlk1VmE5bUF2QVk4b3o5T2ZFdndXL2J2SG1RNkphQnlH?=
- =?utf-8?B?NDl4ZDdUREt0K3pmTUdwL1ZOWHRFSFl3aW02bDZxOHBsd1hXT285NEp0QWFU?=
- =?utf-8?B?WWoxaDhkWUIvSXphcmllSlZRUHo5NTlVVnhCcG1RS0ZtZzF0VDZxVWY3QzVX?=
- =?utf-8?B?RXdMRTVNNzJhbnBqWFNreTcxMjJ2b3lTODIvTytRS292TG9SSnlZRWl1eWgz?=
- =?utf-8?B?SkRoS1FTQVA3YU1iWWN2bnVlb1ovb1lmZHgvTW84UFhsbUg1Rzk4bURkTHJa?=
- =?utf-8?B?Rlp0eGxCWWMvSlE3dTFLbkkrRmxYVDV3bTZBVGNFRTNLZjRUdmlvakR4M292?=
- =?utf-8?B?ampDYUFlV1hSRXNuVllmam5yTGozRkZtelYrZGQ5WXpBbEFlMnRRK2JXRk1O?=
- =?utf-8?B?cld1ajcyckFUWGpTazZnNkt0QVJlcG5wMTdkN3ZQbXFmdy83L3lMVXg3R2s4?=
- =?utf-8?B?M01BVC9VaUVuWFYzRWNaYWFvM0l5Nmd3aUZyRjh5RVArYjFOL3BXWCs1MUZv?=
- =?utf-8?B?cVZ5aTZmUk5ydC9MaDFDcDAwNkNHTzQ5SkVKMjE2Ums4b1NiblU4KzFvaWJO?=
- =?utf-8?B?WTYwTW41WjM0SXN2alorbWw2WDdCVlkyOVFvV1pOakdNZlFqdkFmc1FDeENR?=
- =?utf-8?B?RXBGRjFuV0hEMlV3c2pUVUVnYlpZT3ZsNEZWdkZ4SVBEZHdnNWs5T0NoMEhF?=
- =?utf-8?Q?+WQc5fGpfHEUBKw0Bfl1Ftz21?=
+	by lists.lttng.org (Postfix) with ESMTP id 4MynqQ28XSzG0H;
+	Thu, 27 Oct 2022 10:19:14 -0400 (EDT)
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+ by lists.lttng.org (Postfix) with ESMTPS id 4MyZfg2yWFzFyK
+ for <lttng-dev@lists.lttng.org>; Thu, 27 Oct 2022 01:55:55 -0400 (EDT)
+X-IronPort-AV: E=Sophos;i="5.95,215,1661788800"; d="scan'208";a="213144348"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com)
+ ([199.255.45.15])
+ by ob1.hgst.iphmx.com with ESMTP; 27 Oct 2022 13:54:44 +0800
+IronPort-SDR: tf+PGyYNJ/QXHNy31wGapbUunoi8a1or4AYR1SSMw/ntMO5FYdl5Vnb1GvKCe9kp1uRqWEPviS
+ qiT2sGL3WML/rKBBylge+FL9njQueHisvMvfVgiHcuDTRnoU0CJlrJqs4BwQFAKE3EbX6bSJoS
+ DJ/jkvv/e/De58l1ALR3vigbN7kUgGMeZxxhSH3VggJu+9LMWU4zxfBE9xy60RFAqitW6+ft0h
+ 1BXWKGrMQ5IjWgaL5vB//XbqRR/mm5W0z8f66CYE1Xr2LhCZiueP+cxMiAVhbgLBMqZNdBNiMM
+ gcxQGUR94zsCCuHH9de10nnV
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+ by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 26 Oct 2022 22:08:22 -0700
+IronPort-SDR: FpCcqmMAWS9CRV4v0c4Hezi1qFUy5Y5/zrrgpN7W1qtkoXoxQXlz97pjZUr9zFch7MEq0byGqd
+ mqtwdiYfmxqhYq3VtJAy95and/5eImDeYza59p2GBcOsEv40bgyuZVl9bDC/7XsogR/Y9lhJdJ
+ fVDcKcLjHTl3g9pculRxASx60+R3H6NowI1fwxOZ3hO32TlJQ3cOPpPm1MyPUpc/m82e0Jj4YW
+ U/EBs76x7XggddIAIz7a4MjCHc027MDu6GwcOYyuJUNmDF691stt2uXP3qmpIrwQYKayDAAfFP
+ hD8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+ by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 26 Oct 2022 22:54:44 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MyZdH1Y7Jz1RvTr
+ for <lttng-dev@lists.lttng.org>; Wed, 26 Oct 2022 22:54:43 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+ by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new,
+ port 10026)
+ with ESMTP id NtvtQT-QHu-p for <lttng-dev@lists.lttng.org>;
+ Wed, 26 Oct 2022 22:54:42 -0700 (PDT)
+Received: from toolbox.alistair23.me (unknown [10.225.167.45])
+ by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MyZdB6WPYz1RvLy;
+ Wed, 26 Oct 2022 22:54:38 -0700 (PDT)
+To: lttng-dev@lists.lttng.org
+Date: Thu, 27 Oct 2022 15:54:28 +1000
+Message-Id: <20221027055428.406908-1-alistair.francis@opensource.wdc.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4904.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8786a9d1-32b3-4347-32dc-08dab596e53b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2022 08:08:12.1461 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FdJL6J9+k0G+0U78i9xWhzQwkyAha9ASMlwpcxTyffKqN0as3bKrLcQcN80yXRni8W1GBk4dhkcxiwOmFQ8mTtuxTtb+2eRanrx0WNVOJJI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6549
-X-Proofpoint-ORIG-GUID: Eyc2tfRCK1i78Io1coKCtLUsdteQZfDt
-X-Proofpoint-GUID: Eyc2tfRCK1i78Io1coKCtLUsdteQZfDt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_02,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0
- lowpriorityscore=0 clxscore=1011 adultscore=0 phishscore=0 bulkscore=0
- mlxscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210240051
-X-Mailman-Approved-At: Mon, 24 Oct 2022 10:39:18 -0400
-Subject: Re: [lttng-dev] [PATCH] Fix incorrect number of tests in
- test_callstack
+X-Mailman-Approved-At: Thu, 27 Oct 2022 10:19:12 -0400
+Subject: [lttng-dev] [PATCH v2] Tests: select_poll_epoll: Add support for
+ _time64
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -151,262 +75,326 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "Beckius, Mikael via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "Beckius, Mikael" <mikael.beckius@windriver.com>
-Content-Type: multipart/mixed; boundary="===============9056167429245801059=="
+From: Alistair Francis via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Alistair Francis <alistair.francis@opensource.wdc.com>
+Cc: alistair23@gmail.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============9056167429245801059==
-Content-Language: sv-SE
-Content-Type: multipart/alternative;
-	boundary="_000_PH0PR11MB490435B372F8E8506D47DA95922E9PH0PR11MB4904namp_"
+From: Alistair Francis <alistair.francis@wdc.com>
 
---_000_PH0PR11MB490435B372F8E8506D47DA95922E9PH0PR11MB4904namp_
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Add support for the  64-bit time_t syscalls SYS_ppoll_time64
+and SYS_pselect6_time64.
 
-SGVsbG8gSsOpcsOpbWllIQ0KDQpJIHRoaW5rIHRoZSBrZXkgaGVyZSBpcyB0byBydW4gdGhlIHRl
-c3Qgb24gYXJtLiBJIGRvbid0IHNlZSB0aGUgaXNzdWUgb24geDg2IGFuZCB0aGVyZSB0aGUgdG90
-YWwgbnVtYmVyIG9mIHRlc3RzIGlzIHRoZSBzYW1lIHdpdGggYW5kIHdpdGhvdXQgdGhlIHBhdGNo
-Lg0KDQpCZWxvdyBpcyB0aGUgb3V0cHV0IGZyb20gcnVubmluZyBvbiBhcm0gd2l0aCBhbmQgd2l0
-aG91dCB0aGUgcGF0Y2g6DQojIGdyZXAgTlVNX1RFU1RTPSByZWdyZXNzaW9uL2tlcm5lbC90ZXN0
-X2NhbGxzdGFjay5vbGQNCk5VTV9URVNUUz0xMQ0K4oCC4oCC4oCC4oCC4oCC4oCCTlVNX1RFU1RT
-PSQoKE5VTV9URVNUUysxMSkpDQoNCiMgcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9jYWxsc3RhY2su
-b2xkDQoxLi4xMQ0KIyBLZXJuZWwgdHJhY2VyIC0gQ2FsbHN0YWNrIGNvbnRleHQNCm9rIDEgLSBT
-dGFydCBzZXNzaW9uIGRhZW1vbg0KIyBLZXJuZWwgY2FsbHN0YWNrIHRlc3QNCm9rIDIgLSBDcmVh
-dGUgc2Vzc2lvbiBjYWxsc3RhY2sgaW4gLW8gL3RtcC90bXAuU01BSndBVEhmQw0Kb2sgMyAtIEVu
-YWJsZSBjaGFubmVsIGNoYW4wIGZvciBzZXNzaW9uIGNhbGxzdGFjaw0Kb2sgNCAtIEVuYWJsZSBr
-ZXJuZWwgc3lzY2FsbCByZWFkIGZvciBzZXNzaW9uIGNhbGxzdGFjayBvbiBjaGFubmVsIGNoYW4w
-DQpvayA1IC0gQWRkIGNvbnRleHQgY29tbWFuZCBmb3IgdHlwZTogY2FsbHN0YWNrLWtlcm5lbA0K
-b2sgNiAtIFVudHJhY2sgY29tbWFuZCB3aXRoIG9wdHM6IC1zIGNhbGxzdGFjayAtLWFsbCAtLXBp
-ZCAtaw0Kb2sgNyAtIFRyYWNrIGNvbW1hbmQgd2l0aCBvcHRzOiAtcyBjYWxsc3RhY2sgLWsgLS1w
-aWQ9MjIwOA0Kb2sgOCAtIFN0YXJ0IHRyYWNpbmcgZm9yIHNlc3Npb24NCm9rIDkgLSBTdG9wIGx0
-dG5nIHRyYWNpbmcgZm9yIHNlc3Npb24NCm9rIDEwIC0gRGVzdHJveSBzZXNzaW9uIGNhbGxzdGFj
-aw0Kb2sgMTEgLSBWYWxpZGF0ZSBrZXJuZWwgY2FsbHN0YWNrDQojIEtpbGxpbmcgKHNpZ25hbCBT
-SUdURVJNKSBsdHRuZy1zZXNzaW9uZCBhbmQgbHQtbHR0bmctc2Vzc2lvbmQgcGlkczogMjE3MiAy
-MTczIDIxOTUNCm9rIDEyIC0gV2FpdCBhZnRlciBraWxsIHNlc3Npb24gZGFlbW9uDQojIExvb2tz
-IGxpa2UgeW91IHBsYW5uZWQgMTEgdGVzdHMgYnV0IHJhbiAxIGV4dHJhLg0KDQojIGdyZXAgTlVN
-X1RFU1RTPSByZWdyZXNzaW9uL2tlcm5lbC90ZXN0X2NhbGxzdGFjaw0KTlVNX1RFU1RTPTEyDQri
-gILigILigILigILigILigIJOVU1fVEVTVFM9JCgoTlVNX1RFU1RTKzEwKSkNCg0KIyByZWdyZXNz
-aW9uL2tlcm5lbC90ZXN0X2NhbGxzdGFjaw0KMS4uMTINCiMgS2VybmVsIHRyYWNlciAtIENhbGxz
-dGFjayBjb250ZXh0DQpvayAxIC0gU3RhcnQgc2Vzc2lvbiBkYWVtb24NCiMgS2VybmVsIGNhbGxz
-dGFjayB0ZXN0DQpvayAyIC0gQ3JlYXRlIHNlc3Npb24gY2FsbHN0YWNrIGluIC1vIC90bXAvdG1w
-LmRkY3lSdUdMelgNCm9rIDMgLSBFbmFibGUgY2hhbm5lbCBjaGFuMCBmb3Igc2Vzc2lvbiBjYWxs
-c3RhY2sNCm9rIDQgLSBFbmFibGUga2VybmVsIHN5c2NhbGwgcmVhZCBmb3Igc2Vzc2lvbiBjYWxs
-c3RhY2sgb24gY2hhbm5lbCBjaGFuMA0Kb2sgNSAtIEFkZCBjb250ZXh0IGNvbW1hbmQgZm9yIHR5
-cGU6IGNhbGxzdGFjay1rZXJuZWwNCm9rIDYgLSBVbnRyYWNrIGNvbW1hbmQgd2l0aCBvcHRzOiAt
-cyBjYWxsc3RhY2sgLS1hbGwgLS1waWQgLWsNCm9rIDcgLSBUcmFjayBjb21tYW5kIHdpdGggb3B0
-czogLXMgY2FsbHN0YWNrIC1rIC0tcGlkPTIyOTINCm9rIDggLSBTdGFydCB0cmFjaW5nIGZvciBz
-ZXNzaW9uDQpvayA5IC0gU3RvcCBsdHRuZyB0cmFjaW5nIGZvciBzZXNzaW9uDQpvayAxMCAtIERl
-c3Ryb3kgc2Vzc2lvbiBjYWxsc3RhY2sNCm9rIDExIC0gVmFsaWRhdGUga2VybmVsIGNhbGxzdGFj
-aw0KIyBLaWxsaW5nIChzaWduYWwgU0lHVEVSTSkgbHR0bmctc2Vzc2lvbmQgYW5kIGx0LWx0dG5n
-LXNlc3Npb25kIHBpZHM6IDIyNTYgMjI1NyAyMjc5DQpvayAxMiAtIFdhaXQgYWZ0ZXIga2lsbCBz
-ZXNzaW9uIGRhZW1vbg0KDQojIHVuYW1lIC1hDQpMaW51eCAjMSBTTVAgUFJFRU1QVCBUaHUgT2N0
-IDIwIDEwOjI4OjIzIENFU1QgMjAyMiBhcm12N2wgYXJtdjdsIGFybXY3bCBHTlUvTGludXgNCg0K
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCkZyw6VuOiBKw6lyw6ltaWUgR2FsYXJu
-ZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+DQpTa2lja2F0OiBkZW4gMjEgb2t0
-b2JlciAyMDIyIDIwOjM4DQpUaWxsOiBCZWNraXVzLCBNaWthZWwgPG1pa2FlbC5iZWNraXVzQHdp
-bmRyaXZlci5jb20+DQpLb3BpYTogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyA8bHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZz4NCsOEbW5lOiBSZTogW2x0dG5nLWRldl0gW1BBVENIXSBGaXggaW5j
-b3JyZWN0IG51bWJlciBvZiB0ZXN0cyBpbiB0ZXN0X2NhbGxzdGFjaw0KDQpbUGxlYXNlIG5vdGU6
-IFRoaXMgZS1tYWlsIGlzIGZyb20gYW4gRVhURVJOQUwgZS1tYWlsIGFkZHJlc3NdDQoNCkhpIE1p
-a2FlbCwNCg0KSSdtIGdldHRpbmcgdGhlIGNvcnJlY3QgbnVtYmVyIG9mIHRlc3RzIGhlcmUuDQpD
-YW4geW91IHByb3ZpZGUgdGhlIGZ1bGwgb3V0cHV0IG9mIHRoZSB0ZXN0Pw0KDQpUaGFua3MsDQpK
-w6lyw6ltaWUNCg0KT24gVGh1LCBPY3QgMjAsIDIwMjIgYXQgMDc6MTI6MjZQTSArMDIwMCwgTWlr
-YWVsIEJlY2tpdXMgdmlhIGx0dG5nLWRldiB3cm90ZToNCj4gcmVncmVzc2lvbi9rZXJuZWwvdGVz
-dF9jYWxsc3RhY2sgICAgICAgICAgICAgICAgICAgICAgICAgKFdzdGF0OiAyNTYgVGVzdHM6IDEy
-IEZhaWxlZDogMSkNCj4gICBGYWlsZWQgdGVzdDogIDEyDQo+ICAgTm9uLXplcm8gZXhpdCBzdGF0
-dXM6IDENCj4gICBQYXJzZSBlcnJvcnM6IEJhZCBwbGFuLiAgWW91IHBsYW5uZWQgMTEgdGVzdHMg
-YnV0IHJhbiAxMi4NCj4NCj4gU2lnbmVkLW9mZi1ieTogTWlrYWVsIEJlY2tpdXMgPG1pa2FlbC5i
-ZWNraXVzQHdpbmRyaXZlci5jb20+DQo+IC0tLQ0KPiAgdGVzdHMvcmVncmVzc2lvbi9rZXJuZWwv
-dGVzdF9jYWxsc3RhY2sgfCA0ICsrLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMo
-KyksIDIgZGVsZXRpb25zKC0pDQo+DQo+IGRpZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL2tl
-cm5lbC90ZXN0X2NhbGxzdGFjayBiL3Rlc3RzL3JlZ3Jlc3Npb24va2VybmVsL3Rlc3RfY2FsbHN0
-YWNrDQo+IGluZGV4IGE0NDc3ZmQ3Yy4uYjVkNjA0NTM1IDEwMDc1NQ0KPiAtLS0gYS90ZXN0cy9y
-ZWdyZXNzaW9uL2tlcm5lbC90ZXN0X2NhbGxzdGFjaw0KPiArKysgYi90ZXN0cy9yZWdyZXNzaW9u
-L2tlcm5lbC90ZXN0X2NhbGxzdGFjaw0KPiBAQCAtOSw3ICs5LDcgQEAgVEVTVF9ERVNDPSJLZXJu
-ZWwgdHJhY2VyIC0gQ2FsbHN0YWNrIGNvbnRleHQiDQo+DQo+ICBDVVJESVI9JChkaXJuYW1lICIk
-MCIpLw0KPiAgVEVTVERJUj0kQ1VSRElSLy4uLy4uDQo+IC1OVU1fVEVTVFM9MTENCj4gK05VTV9U
-RVNUUz0xMg0KPiAgVEVTVF9BUFBfVVNFUlNQQUNFPSIkVEVTVERJUi91dGlscy90ZXN0YXBwL2dl
-bi1zeXNjYWxsLWV2ZW50cy1jYWxsc3RhY2svZ2VuLXN5c2NhbGwtZXZlbnRzLWNhbGxzdGFjayIN
-Cj4gIFRFU1RfQVBQX0tFUk5FTFNQQUNFPSIkVEVTVERJUi91dGlscy90ZXN0YXBwL2dlbi1zeXNj
-YWxsLWV2ZW50cy9nZW4tc3lzY2FsbC1ldmVudHMiDQo+ICBQQVJTRV9DQUxMU1RBQ0s9IiRURVNU
-RElSL3V0aWxzL3BhcnNlLWNhbGxzdGFjay5weSINCj4gQEAgLTEyMyw3ICsxMjMsNyBAQCBmdW5j
-dGlvbiB0ZXN0X2tlcm5lbF9jYWxsc3RhY2soKQ0KPiAgIyBPbmx5IHJ1biB1c2Vyc3BhY2UgY2Fs
-bHN0YWNrIHRlc3Qgb24geDg2DQo+ICB1bmFtZSAtbSB8IGdyZXAgLUUgIng4NiIgPi9kZXYvbnVs
-bCAyPiYxDQo+ICBpZiB0ZXN0ICQ/ID09IDA7IHRoZW4NCj4gLSAgICAgTlVNX1RFU1RTPSQoKE5V
-TV9URVNUUysxMSkpDQo+ICsgICAgIE5VTV9URVNUUz0kKChOVU1fVEVTVFMrMTApKQ0KPiAgICAg
-ICBSVU5fVVNFUlNQQUNFX1RFU1Q9MQ0KPiAgZWxzZQ0KPiAgICAgICBSVU5fVVNFUlNQQUNFX1RF
-U1Q9MA0KPiAtLQ0KPiAyLjM0LjENCj4NCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18NCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdA0KPiBsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnDQo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYNCg==
+These are the syscalls that exist 32-bit platforms since the 5.1 kernel.
+32-bit platforms with a 64-bit time_t only have these and don't have the
+original syscalls (such as 32-bit RISC-V).
 
---_000_PH0PR11MB490435B372F8E8506D47DA95922E9PH0PR11MB4904namp_
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
+Fixes: https://github.com/lttng/lttng-tools/pull/162
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+---
+To keep the test_cases[] array clean I have implemented the functions
+for all builds, but the functions are a no-op if the syscall is missing.
 
-PGh0bWw+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0i
-dGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyIgc3R5bGU9
-ImRpc3BsYXk6bm9uZTsiPiBQIHttYXJnaW4tdG9wOjA7bWFyZ2luLWJvdHRvbTowO30gPC9zdHls
-ZT4NCjwvaGVhZD4NCjxib2R5IGRpcj0ibHRyIj4NCjxkaXYgc3R5bGU9ImZvbnQtZmFtaWx5OiBD
-YWxpYnJpLCBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHQ7IGNv
-bG9yOiByZ2IoMCwgMCwgMCk7IGJhY2tncm91bmQtY29sb3I6IHJnYigyNTUsIDI1NSwgMjU1KTsi
-IGNsYXNzPSJlbGVtZW50VG9Qcm9vZiI+DQpIZWxsbyBKw6lyw6ltaWUhPC9kaXY+DQo8ZGl2IHN0
-eWxlPSJmb250LWZhbWlseTogQ2FsaWJyaSwgQXJpYWwsIEhlbHZldGljYSwgc2Fucy1zZXJpZjsg
-Zm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyBiYWNrZ3JvdW5kLWNvbG9yOiBy
-Z2IoMjU1LCAyNTUsIDI1NSk7IiBjbGFzcz0iZWxlbWVudFRvUHJvb2YiPg0KPGJyPg0KPC9kaXY+
-DQo8ZGl2IHN0eWxlPSJmb250LWZhbWlseTogQ2FsaWJyaSwgQXJpYWwsIEhlbHZldGljYSwgc2Fu
-cy1zZXJpZjsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyBiYWNrZ3JvdW5k
-LWNvbG9yOiByZ2IoMjU1LCAyNTUsIDI1NSk7IiBjbGFzcz0iZWxlbWVudFRvUHJvb2YiPg0KSSB0
-aGluayB0aGUga2V5IGhlcmUgaXMgdG8gcnVuIHRoZSB0ZXN0IG9uIGFybS4gSSBkb24ndCBzZWUg
-dGhlIGlzc3VlIG9uIHg4NiBhbmQgdGhlcmUgdGhlIHRvdGFsIG51bWJlciBvZiB0ZXN0cyBpcyB0
-aGUgc2FtZSB3aXRoIGFuZCB3aXRob3V0IHRoZSBwYXRjaC48L2Rpdj4NCjxkaXYgc3R5bGU9ImZv
-bnQtZmFtaWx5OiBDYWxpYnJpLCBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNp
-emU6IDEycHQ7IGNvbG9yOiByZ2IoMCwgMCwgMCk7IGJhY2tncm91bmQtY29sb3I6IHJnYigyNTUs
-IDI1NSwgMjU1KTsiIGNsYXNzPSJlbGVtZW50VG9Qcm9vZiI+DQo8YnI+DQo8L2Rpdj4NCjxkaXYg
-c3R5bGU9ImZvbnQtZmFtaWx5OiBDYWxpYnJpLCBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlm
-OyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiByZ2IoMCwgMCwgMCk7IGJhY2tncm91bmQtY29sb3I6
-IHJnYigyNTUsIDI1NSwgMjU1KTsiIGNsYXNzPSJlbGVtZW50VG9Qcm9vZiI+DQpCZWxvdyBpcyB0
-aGUgb3V0cHV0IGZyb20gcnVubmluZyBvbiBhcm0gd2l0aCBhbmQgd2l0aG91dCB0aGUgcGF0Y2g6
-PC9kaXY+DQo8ZGl2IHN0eWxlPSJmb250LWZhbWlseTogQ2FsaWJyaSwgQXJpYWwsIEhlbHZldGlj
-YSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyBiYWNr
-Z3JvdW5kLWNvbG9yOiByZ2IoMjU1LCAyNTUsIDI1NSk7IiBjbGFzcz0iZWxlbWVudFRvUHJvb2Yg
-Q29udGVudFBhc3RlZDAiPg0KIyBncmVwIE5VTV9URVNUUz0gcmVncmVzc2lvbi9rZXJuZWwvdGVz
-dF9jYWxsc3RhY2sub2xkDQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+TlVNX1RFU1RTPTEx
-PC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+4oCC4oCC4oCC4oCC4oCC4oCCTlVN
-X1RFU1RTPSQoKE5VTV9URVNUUysxMSkpPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVk
-MCI+PGJyPg0KPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+IyByZWdyZXNzaW9u
-L2tlcm5lbC90ZXN0X2NhbGxzdGFjay5vbGQ8L2Rpdj4NCjxkaXYgY2xhc3M9IkNvbnRlbnRQYXN0
-ZWQwIj4xLi4xMTwvZGl2Pg0KPGRpdiBjbGFzcz0iQ29udGVudFBhc3RlZDAiPiMgS2VybmVsIHRy
-YWNlciAtIENhbGxzdGFjayBjb250ZXh0PC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVk
-MCI+b2sgMSAtIFN0YXJ0IHNlc3Npb24gZGFlbW9uPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50
-UGFzdGVkMCI+IyBLZXJuZWwgY2FsbHN0YWNrIHRlc3Q8L2Rpdj4NCjxkaXYgY2xhc3M9IkNvbnRl
-bnRQYXN0ZWQwIj5vayAyIC0gQ3JlYXRlIHNlc3Npb24gY2FsbHN0YWNrIGluIC1vIC90bXAvdG1w
-LlNNQUp3QVRIZkM8L2Rpdj4NCjxkaXYgY2xhc3M9IkNvbnRlbnRQYXN0ZWQwIj5vayAzIC0gRW5h
-YmxlIGNoYW5uZWwgY2hhbjAgZm9yIHNlc3Npb24gY2FsbHN0YWNrPC9kaXY+DQo8ZGl2IGNsYXNz
-PSJDb250ZW50UGFzdGVkMCI+b2sgNCAtIEVuYWJsZSBrZXJuZWwgc3lzY2FsbCByZWFkIGZvciBz
-ZXNzaW9uIGNhbGxzdGFjayBvbiBjaGFubmVsIGNoYW4wPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250
-ZW50UGFzdGVkMCI+b2sgNSAtIEFkZCBjb250ZXh0IGNvbW1hbmQgZm9yIHR5cGU6IGNhbGxzdGFj
-ay1rZXJuZWw8L2Rpdj4NCjxkaXYgY2xhc3M9IkNvbnRlbnRQYXN0ZWQwIj5vayA2IC0gVW50cmFj
-ayBjb21tYW5kIHdpdGggb3B0czogLXMgY2FsbHN0YWNrIC0tYWxsIC0tcGlkIC1rPC9kaXY+DQo8
-ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+b2sgNyAtIFRyYWNrIGNvbW1hbmQgd2l0aCBvcHRz
-OiAtcyBjYWxsc3RhY2sgLWsgLS1waWQ9MjIwODwvZGl2Pg0KPGRpdiBjbGFzcz0iQ29udGVudFBh
-c3RlZDAiPm9rIDggLSBTdGFydCB0cmFjaW5nIGZvciBzZXNzaW9uIDwvZGl2Pg0KPGRpdiBjbGFz
-cz0iQ29udGVudFBhc3RlZDAiPm9rIDkgLSBTdG9wIGx0dG5nIHRyYWNpbmcgZm9yIHNlc3Npb24g
-PC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+b2sgMTAgLSBEZXN0cm95IHNlc3Np
-b24gY2FsbHN0YWNrPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+b2sgMTEgLSBW
-YWxpZGF0ZSBrZXJuZWwgY2FsbHN0YWNrPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVk
-MCI+IyBLaWxsaW5nIChzaWduYWwgU0lHVEVSTSkgbHR0bmctc2Vzc2lvbmQgYW5kIGx0LWx0dG5n
-LXNlc3Npb25kIHBpZHM6IDIxNzIgMjE3MyAyMTk1DQo8L2Rpdj4NCjxkaXYgY2xhc3M9IkNvbnRl
-bnRQYXN0ZWQwIj5vayAxMiAtIFdhaXQgYWZ0ZXIga2lsbCBzZXNzaW9uIGRhZW1vbjwvZGl2Pg0K
-PGRpdiBjbGFzcz0iQ29udGVudFBhc3RlZDAiPiMgTG9va3MgbGlrZSB5b3UgcGxhbm5lZCAxMSB0
-ZXN0cyBidXQgcmFuIDEgZXh0cmEuPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+
-PGJyPg0KPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+IyBncmVwIE5VTV9URVNU
-Uz0gcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9jYWxsc3RhY2sgJm5ic3A7ICZuYnNwOw0KPC9kaXY+
-DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+TlVNX1RFU1RTPTEyPC9kaXY+DQo8ZGl2IGNs
-YXNzPSJDb250ZW50UGFzdGVkMCI+4oCC4oCC4oCC4oCC4oCC4oCCTlVNX1RFU1RTPSQoKE5VTV9U
-RVNUUysxMCkpPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+PGJyPg0KPC9kaXY+
-DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+IyByZWdyZXNzaW9uL2tlcm5lbC90ZXN0X2Nh
-bGxzdGFjayAmbmJzcDsgJm5ic3A7PC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+
-MS4uMTI8L2Rpdj4NCjxkaXYgY2xhc3M9IkNvbnRlbnRQYXN0ZWQwIj4jIEtlcm5lbCB0cmFjZXIg
-LSBDYWxsc3RhY2sgY29udGV4dDwvZGl2Pg0KPGRpdiBjbGFzcz0iQ29udGVudFBhc3RlZDAiPm9r
-IDEgLSBTdGFydCBzZXNzaW9uIGRhZW1vbjwvZGl2Pg0KPGRpdiBjbGFzcz0iQ29udGVudFBhc3Rl
-ZDAiPiMgS2VybmVsIGNhbGxzdGFjayB0ZXN0PC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFz
-dGVkMCI+b2sgMiAtIENyZWF0ZSBzZXNzaW9uIGNhbGxzdGFjayBpbiAtbyAvdG1wL3RtcC5kZGN5
-UnVHTHpYPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+b2sgMyAtIEVuYWJsZSBj
-aGFubmVsIGNoYW4wIGZvciBzZXNzaW9uIGNhbGxzdGFjazwvZGl2Pg0KPGRpdiBjbGFzcz0iQ29u
-dGVudFBhc3RlZDAiPm9rIDQgLSBFbmFibGUga2VybmVsIHN5c2NhbGwgcmVhZCBmb3Igc2Vzc2lv
-biBjYWxsc3RhY2sgb24gY2hhbm5lbCBjaGFuMDwvZGl2Pg0KPGRpdiBjbGFzcz0iQ29udGVudFBh
-c3RlZDAiPm9rIDUgLSBBZGQgY29udGV4dCBjb21tYW5kIGZvciB0eXBlOiBjYWxsc3RhY2sta2Vy
-bmVsPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+b2sgNiAtIFVudHJhY2sgY29t
-bWFuZCB3aXRoIG9wdHM6IC1zIGNhbGxzdGFjayAtLWFsbCAtLXBpZCAtazwvZGl2Pg0KPGRpdiBj
-bGFzcz0iQ29udGVudFBhc3RlZDAiPm9rIDcgLSBUcmFjayBjb21tYW5kIHdpdGggb3B0czogLXMg
-Y2FsbHN0YWNrIC1rIC0tcGlkPTIyOTI8L2Rpdj4NCjxkaXYgY2xhc3M9IkNvbnRlbnRQYXN0ZWQw
-Ij5vayA4IC0gU3RhcnQgdHJhY2luZyBmb3Igc2Vzc2lvbiA8L2Rpdj4NCjxkaXYgY2xhc3M9IkNv
-bnRlbnRQYXN0ZWQwIj5vayA5IC0gU3RvcCBsdHRuZyB0cmFjaW5nIGZvciBzZXNzaW9uIDwvZGl2
-Pg0KPGRpdiBjbGFzcz0iQ29udGVudFBhc3RlZDAiPm9rIDEwIC0gRGVzdHJveSBzZXNzaW9uIGNh
-bGxzdGFjazwvZGl2Pg0KPGRpdiBjbGFzcz0iQ29udGVudFBhc3RlZDAiPm9rIDExIC0gVmFsaWRh
-dGUga2VybmVsIGNhbGxzdGFjazwvZGl2Pg0KPGRpdiBjbGFzcz0iQ29udGVudFBhc3RlZDAiPiMg
-S2lsbGluZyAoc2lnbmFsIFNJR1RFUk0pIGx0dG5nLXNlc3Npb25kIGFuZCBsdC1sdHRuZy1zZXNz
-aW9uZCBwaWRzOiAyMjU2IDIyNTcgMjI3OQ0KPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFz
-dGVkMCI+b2sgMTIgLSBXYWl0IGFmdGVyIGtpbGwgc2Vzc2lvbiBkYWVtb248L2Rpdj4NCjxkaXYg
-Y2xhc3M9IkNvbnRlbnRQYXN0ZWQwIj48YnI+DQo8L2Rpdj4NCjxkaXYgY2xhc3M9IkNvbnRlbnRQ
-YXN0ZWQwIj4jIHVuYW1lIC1hPC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+TGlu
-dXggIzEgU01QIFBSRUVNUFQgVGh1IE9jdCAyMCAxMDoyODoyMyBDRVNUIDIwMjIgYXJtdjdsIGFy
-bXY3bCBhcm12N2wgR05VL0xpbnV4PC9kaXY+DQo8ZGl2IGNsYXNzPSJDb250ZW50UGFzdGVkMCI+
-PGJyPg0KPC9kaXY+DQo8L2Rpdj4NCjxkaXYgaWQ9ImFwcGVuZG9uc2VuZCI+PC9kaXY+DQo8aHIg
-c3R5bGU9ImRpc3BsYXk6aW5saW5lLWJsb2NrO3dpZHRoOjk4JSIgdGFiaW5kZXg9Ii0xIj4NCjxk
-aXYgaWQ9ImRpdlJwbHlGd2RNc2ciIGRpcj0ibHRyIj48Zm9udCBmYWNlPSJDYWxpYnJpLCBzYW5z
-LXNlcmlmIiBzdHlsZT0iZm9udC1zaXplOjExcHQiIGNvbG9yPSIjMDAwMDAwIj48Yj5GcsOlbjo8
-L2I+IErDqXLDqW1pZSBHYWxhcm5lYXUgJmx0O2plcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNv
-bSZndDs8YnI+DQo8Yj5Ta2lja2F0OjwvYj4gZGVuIDIxIG9rdG9iZXIgMjAyMiAyMDozODxicj4N
-CjxiPlRpbGw6PC9iPiBCZWNraXVzLCBNaWthZWwgJmx0O21pa2FlbC5iZWNraXVzQHdpbmRyaXZl
-ci5jb20mZ3Q7PGJyPg0KPGI+S29waWE6PC9iPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnICZs
-dDtsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnJmd0Ozxicj4NCjxiPsOEbW5lOjwvYj4gUmU6IFts
-dHRuZy1kZXZdIFtQQVRDSF0gRml4IGluY29ycmVjdCBudW1iZXIgb2YgdGVzdHMgaW4gdGVzdF9j
-YWxsc3RhY2s8L2ZvbnQ+DQo8ZGl2PiZuYnNwOzwvZGl2Pg0KPC9kaXY+DQo8ZGl2IGNsYXNzPSJC
-b2R5RnJhZ21lbnQiPjxmb250IHNpemU9IjIiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTFwdDsi
-Pg0KPGRpdiBjbGFzcz0iUGxhaW5UZXh0Ij5bUGxlYXNlIG5vdGU6IFRoaXMgZS1tYWlsIGlzIGZy
-b20gYW4gRVhURVJOQUwgZS1tYWlsIGFkZHJlc3NdPGJyPg0KPGJyPg0KSGkgTWlrYWVsLDxicj4N
-Cjxicj4NCkknbSBnZXR0aW5nIHRoZSBjb3JyZWN0IG51bWJlciBvZiB0ZXN0cyBoZXJlLjxicj4N
-CkNhbiB5b3UgcHJvdmlkZSB0aGUgZnVsbCBvdXRwdXQgb2YgdGhlIHRlc3Q/PGJyPg0KPGJyPg0K
-VGhhbmtzLDxicj4NCkrDqXLDqW1pZTxicj4NCjxicj4NCk9uIFRodSwgT2N0IDIwLCAyMDIyIGF0
-IDA3OjEyOjI2UE0gKzAyMDAsIE1pa2FlbCBCZWNraXVzIHZpYSBsdHRuZy1kZXYgd3JvdGU6PGJy
-Pg0KJmd0OyByZWdyZXNzaW9uL2tlcm5lbC90ZXN0X2NhbGxzdGFjayZuYnNwOyZuYnNwOyZuYnNw
-OyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZu
-YnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNw
-OyZuYnNwOyZuYnNwOyAoV3N0YXQ6IDI1NiBUZXN0czogMTIgRmFpbGVkOiAxKTxicj4NCiZndDsm
-bmJzcDsmbmJzcDsgRmFpbGVkIHRlc3Q6Jm5ic3A7IDEyPGJyPg0KJmd0OyZuYnNwOyZuYnNwOyBO
-b24temVybyBleGl0IHN0YXR1czogMTxicj4NCiZndDsmbmJzcDsmbmJzcDsgUGFyc2UgZXJyb3Jz
-OiBCYWQgcGxhbi4mbmJzcDsgWW91IHBsYW5uZWQgMTEgdGVzdHMgYnV0IHJhbiAxMi48YnI+DQom
-Z3Q7PGJyPg0KJmd0OyBTaWduZWQtb2ZmLWJ5OiBNaWthZWwgQmVja2l1cyAmbHQ7bWlrYWVsLmJl
-Y2tpdXNAd2luZHJpdmVyLmNvbSZndDs8YnI+DQomZ3Q7IC0tLTxicj4NCiZndDsmbmJzcDsgdGVz
-dHMvcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9jYWxsc3RhY2sgfCA0ICsrLS08YnI+DQomZ3Q7Jm5i
-c3A7IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pPGJyPg0K
-Jmd0Ozxicj4NCiZndDsgZGlmZiAtLWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24va2VybmVsL3Rlc3Rf
-Y2FsbHN0YWNrIGIvdGVzdHMvcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9jYWxsc3RhY2s8YnI+DQom
-Z3Q7IGluZGV4IGE0NDc3ZmQ3Yy4uYjVkNjA0NTM1IDEwMDc1NTxicj4NCiZndDsgLS0tIGEvdGVz
-dHMvcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9jYWxsc3RhY2s8YnI+DQomZ3Q7ICsrKyBiL3Rlc3Rz
-L3JlZ3Jlc3Npb24va2VybmVsL3Rlc3RfY2FsbHN0YWNrPGJyPg0KJmd0OyBAQCAtOSw3ICs5LDcg
-QEAgVEVTVF9ERVNDPSZxdW90O0tlcm5lbCB0cmFjZXIgLSBDYWxsc3RhY2sgY29udGV4dCZxdW90
-Ozxicj4NCiZndDs8YnI+DQomZ3Q7Jm5ic3A7IENVUkRJUj0kKGRpcm5hbWUgJnF1b3Q7JDAmcXVv
-dDspLzxicj4NCiZndDsmbmJzcDsgVEVTVERJUj0kQ1VSRElSLy4uLy4uPGJyPg0KJmd0OyAtTlVN
-X1RFU1RTPTExPGJyPg0KJmd0OyArTlVNX1RFU1RTPTEyPGJyPg0KJmd0OyZuYnNwOyBURVNUX0FQ
-UF9VU0VSU1BBQ0U9JnF1b3Q7JFRFU1RESVIvdXRpbHMvdGVzdGFwcC9nZW4tc3lzY2FsbC1ldmVu
-dHMtY2FsbHN0YWNrL2dlbi1zeXNjYWxsLWV2ZW50cy1jYWxsc3RhY2smcXVvdDs8YnI+DQomZ3Q7
-Jm5ic3A7IFRFU1RfQVBQX0tFUk5FTFNQQUNFPSZxdW90OyRURVNURElSL3V0aWxzL3Rlc3RhcHAv
-Z2VuLXN5c2NhbGwtZXZlbnRzL2dlbi1zeXNjYWxsLWV2ZW50cyZxdW90Ozxicj4NCiZndDsmbmJz
-cDsgUEFSU0VfQ0FMTFNUQUNLPSZxdW90OyRURVNURElSL3V0aWxzL3BhcnNlLWNhbGxzdGFjay5w
-eSZxdW90Ozxicj4NCiZndDsgQEAgLTEyMyw3ICsxMjMsNyBAQCBmdW5jdGlvbiB0ZXN0X2tlcm5l
-bF9jYWxsc3RhY2soKTxicj4NCiZndDsmbmJzcDsgIyBPbmx5IHJ1biB1c2Vyc3BhY2UgY2FsbHN0
-YWNrIHRlc3Qgb24geDg2PGJyPg0KJmd0OyZuYnNwOyB1bmFtZSAtbSB8IGdyZXAgLUUgJnF1b3Q7
-eDg2JnF1b3Q7ICZndDsvZGV2L251bGwgMiZndDsmYW1wOzE8YnI+DQomZ3Q7Jm5ic3A7IGlmIHRl
-c3QgJD8gPT0gMDsgdGhlbjxicj4NCiZndDsgLSZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyBOVU1f
-VEVTVFM9JCgoTlVNX1RFU1RTKzExKSk8YnI+DQomZ3Q7ICsmbmJzcDsmbmJzcDsmbmJzcDsmbmJz
-cDsgTlVNX1RFU1RTPSQoKE5VTV9URVNUUysxMCkpPGJyPg0KJmd0OyZuYnNwOyZuYnNwOyZuYnNw
-OyZuYnNwOyZuYnNwOyZuYnNwOyBSVU5fVVNFUlNQQUNFX1RFU1Q9MTxicj4NCiZndDsmbmJzcDsg
-ZWxzZTxicj4NCiZndDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsgUlVOX1VT
-RVJTUEFDRV9URVNUPTA8YnI+DQomZ3Q7IC0tPGJyPg0KJmd0OyAyLjM0LjE8YnI+DQomZ3Q7PGJy
-Pg0KJmd0OyBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXzxi
-cj4NCiZndDsgbHR0bmctZGV2IG1haWxpbmcgbGlzdDxicj4NCiZndDsgbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZzxicj4NCiZndDsgPGEgaHJlZj0iaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldiI+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldjwvYT48YnI+DQo8L2Rpdj4NCjwvc3Bh
-bj48L2ZvbnQ+PC9kaXY+DQo8L2JvZHk+DQo8L2h0bWw+DQo=
+v2:
+ - Split out a seperate _time64 test
 
---_000_PH0PR11MB490435B372F8E8506D47DA95922E9PH0PR11MB4904namp_--
+ tests/regression/kernel/select_poll_epoll.cpp | 184 ++++++++++++++++++
+ 1 file changed, 184 insertions(+)
 
---===============9056167429245801059==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/tests/regression/kernel/select_poll_epoll.cpp b/tests/regression/kernel/select_poll_epoll.cpp
+index c0b688217..dfaab52c8 100644
+--- a/tests/regression/kernel/select_poll_epoll.cpp
++++ b/tests/regression/kernel/select_poll_epoll.cpp
+@@ -5,6 +5,7 @@
+  *
+  */
+ 
++#include <errno.h>
+ #include <fcntl.h>
+ #include <limits.h>
+ #include <poll.h>
+@@ -48,10 +49,14 @@ int lttng_opt_quiet, lttng_opt_verbose, lttng_opt_mi;
+ 
+ static void run_working_cases(FILE *validation_output_file);
+ static void pselect_invalid_fd(FILE *validation_output_file);
++static void pselect_time64_invalid_fd(FILE *validation_output_file);
+ static void test_ppoll_big(FILE *validation_output_file);
+ static void ppoll_fds_buffer_overflow(FILE *validation_output_file);
++static void ppoll_time64_fds_buffer_overflow(FILE *validation_output_file);
+ static void pselect_invalid_pointer(FILE *validation_output_file);
++static void pselect_time64_invalid_pointer(FILE *validation_output_file);
+ static void ppoll_fds_ulong_max(FILE *validation_output_file);
++static void ppoll_time64_fds_ulong_max(FILE *validation_output_file);
+ static void epoll_pwait_invalid_pointer(FILE *validation_output_file);
+ static void epoll_pwait_int_max(FILE *validation_output_file);
+ static void ppoll_concurrent_write(FILE *validation_output_file);
+@@ -69,10 +74,14 @@ const struct test_case {
+ 	{ .run = run_working_cases, .produces_validation_info = true, .timeout = -1 },
+ 	{ .run = run_working_cases, .produces_validation_info = true, .timeout = 1 },
+ 	{ .run = pselect_invalid_fd, .produces_validation_info = false, .timeout = 0 },
++	{ .run = pselect_time64_invalid_fd, .produces_validation_info = false, .timeout = 0 },
+ 	{ .run = test_ppoll_big, .produces_validation_info = false, .timeout = 0 },
+ 	{ .run = ppoll_fds_buffer_overflow, .produces_validation_info = false, .timeout = 0 },
++	{ .run = ppoll_time64_fds_buffer_overflow, .produces_validation_info = false, .timeout = 0 },
+ 	{ .run = pselect_invalid_pointer, .produces_validation_info = false, .timeout = 0 },
++	{ .run = pselect_time64_invalid_pointer, .produces_validation_info = false, .timeout = 0 },
+ 	{ .run = ppoll_fds_ulong_max, .produces_validation_info = false, .timeout = 0 },
++	{ .run = ppoll_time64_fds_ulong_max, .produces_validation_info = false, .timeout = 0 },
+ 	{ .run = epoll_pwait_invalid_pointer, .produces_validation_info = true, .timeout = 0 },
+ 	{ .run = epoll_pwait_int_max, .produces_validation_info = true, .timeout = 0 },
+ 	{ .run = ppoll_concurrent_write, .produces_validation_info = false, .timeout = 0 },
+@@ -440,6 +449,44 @@ end:
+ 	return;
+ }
+ 
++/*
++ * Ask for 100 FDs in a buffer for allocated for only 1 FD, should
++ * segfault (eventually with a "*** stack smashing detected ***" message).
++ * The event should contain an array of 100 FDs filled with garbage.
++ */
++static
++void ppoll_time64_fds_buffer_overflow(
++		FILE *validation_output_file __attribute__((unused)))
++{
++#ifdef SYS_ppoll_time64
++	struct pollfd ufds[NB_FD];
++	char buf[BUF_SIZE];
++	int ret;
++
++	ufds[0].fd = wait_fd;
++	ufds[0].events = POLLIN|POLLPRI;
++
++	/*
++	 * As there is no timeout value, we don't convert to/from
++	 * 64/32-bit time_t.
++	 */
++	ret = syscall(SYS_ppoll_time64, ufds, 100, NULL, NULL);
++	/*
++	 * There is no fallback to SYS_ppoll, we expect SYS_ppoll_time64
++	 * to work and if it doesn't we fail.
++	 */
++
++	if (ret < 0) {
++		PERROR("ppoll_time64");
++	} else if (ret > 0) {
++		ret = read(wait_fd, buf, BUF_SIZE);
++		if (ret < 0) {
++			PERROR("[ppoll_time64] read");
++		}
++	}
++#endif
++}
++
+ /*
+  * Ask for 100 FDs in a buffer for allocated for only 1 FD, should
+  * segfault (eventually with a "*** stack smashing detected ***" message).
+@@ -449,6 +496,7 @@ static
+ void ppoll_fds_buffer_overflow(
+ 		FILE *validation_output_file __attribute__((unused)))
+ {
++#ifdef SYS_ppoll
+ 	struct pollfd ufds[NB_FD];
+ 	char buf[BUF_SIZE];
+ 	int ret;
+@@ -466,6 +514,46 @@ void ppoll_fds_buffer_overflow(
+ 			PERROR("[ppoll] read");
+ 		}
+ 	}
++#endif
++}
++
++/*
++ * Ask for ULONG_MAX FDs in a buffer for allocated for only 1 FD, should
++ * cleanly fail with a "Invalid argument".
++ * The event should contain an empty array of FDs and overflow = 1.
++ */
++static
++void ppoll_time64_fds_ulong_max(FILE *validation_output_file __attribute__((unused)))
++{
++#ifdef SYS_ppoll_time64
++	struct pollfd ufds[NB_FD];
++	char buf[BUF_SIZE];
++	int ret;
++
++	ufds[0].fd = wait_fd;
++	ufds[0].events = POLLIN|POLLPRI;
++
++	/*
++	 * As there is no timeout value, we don't convert to/from
++	 * 64/32-bit time_t.
++	 */
++	ret = syscall(SYS_ppoll_time64, ufds, ULONG_MAX, NULL, NULL);
++	/*
++	 * There is no fallback to SYS_ppoll, we expect SYS_ppoll_time64
++	 * to work and if it doesn't we fail.
++	 */
++
++	if (ret < 0 && errno != ENOSYS) {
++		/* Expected error. */
++	} else if (errno == ENOSYS) {
++		PERROR("[ppoll_time64] missing syscall");
++	} else if (ret > 0) {
++		ret = read(wait_fd, buf, BUF_SIZE);
++		if (ret < 0) {
++			PERROR("[ppoll_time64] read");
++		}
++	}
++#endif
+ }
+ 
+ /*
+@@ -476,6 +564,7 @@ void ppoll_fds_buffer_overflow(
+ static
+ void ppoll_fds_ulong_max(FILE *validation_output_file __attribute__((unused)))
+ {
++#ifdef SYS_ppoll
+ 	struct pollfd ufds[NB_FD];
+ 	char buf[BUF_SIZE];
+ 	int ret;
+@@ -492,6 +581,59 @@ void ppoll_fds_ulong_max(FILE *validation_output_file __attribute__((unused)))
+ 			PERROR("[ppoll] read");
+ 		}
+ 	}
++#endif
++}
++
++/*
++ * Pass an invalid file descriptor to pselect6(). The syscall should return
++ * -EBADF. The recorded event should contain a "ret = -EBADF (-9)".
++ */
++static
++void pselect_time64_invalid_fd(FILE *validation_output_file __attribute__((unused)))
++{
++#ifdef SYS_pselect6_time64
++	fd_set rfds;
++	int ret;
++	int fd;
++	char buf[BUF_SIZE];
++
++	/*
++	 * Open a file, close it and use the closed FD in the pselect6 call.
++	 */
++	fd = open("/dev/null", O_RDONLY);
++	if (fd == -1) {
++		PERROR("open");
++		goto error;
++	}
++
++	ret = close(fd);
++	if (ret == -1) {
++		PERROR("close");
++		goto error;
++	}
++
++	FD_ZERO(&rfds);
++	FD_SET(fd, &rfds);
++
++	ret = syscall(SYS_pselect6_time64, fd + 1, &rfds, NULL, NULL, NULL, NULL);
++	/*
++	 * There is no fallback to SYS_pselect6, we expect SYS_pselect6_time64
++	 * to work and if it doesn't we fail.
++	 */
++
++	if (ret == -1 && errno != ENOSYS) {
++		/* Expected error. */
++	} else if (errno == ENOSYS) {
++		PERROR("[pselect_time64] missing syscall");
++	} else if (ret) {
++		ret = read(wait_fd, buf, BUF_SIZE);
++		if (ret < 0) {
++			PERROR("[pselect_time64] read");
++		}
++	}
++error:
++	return;
++#endif
+ }
+ 
+ /*
+@@ -501,6 +643,7 @@ void ppoll_fds_ulong_max(FILE *validation_output_file __attribute__((unused)))
+ static
+ void pselect_invalid_fd(FILE *validation_output_file __attribute__((unused)))
+ {
++#ifdef SYS_pselect6
+ 	fd_set rfds;
+ 	int ret;
+ 	int fd;
+@@ -525,6 +668,7 @@ void pselect_invalid_fd(FILE *validation_output_file __attribute__((unused)))
+ 	FD_SET(fd, &rfds);
+ 
+ 	ret = syscall(SYS_pselect6, fd + 1, &rfds, NULL, NULL, NULL, NULL);
++
+ 	if (ret == -1) {
+ 		/* Expected error. */
+ 	} else if (ret) {
+@@ -535,6 +679,44 @@ void pselect_invalid_fd(FILE *validation_output_file __attribute__((unused)))
+ 	}
+ error:
+ 	return;
++#endif
++}
++
++/*
++ * Invalid pointer as writefds, should output a ppoll event
++ * with 0 FDs.
++ */
++static
++void pselect_time64_invalid_pointer(
++		FILE *validation_output_file __attribute__((unused)))
++{
++#ifdef SYS_pselect6_time64
++	fd_set rfds;
++	int ret;
++	char buf[BUF_SIZE];
++	void *invalid = (void *) 0x42;
++
++	FD_ZERO(&rfds);
++	FD_SET(wait_fd, &rfds);
++
++	ret = syscall(SYS_pselect6_time64, 1, &rfds, (fd_set *) invalid, NULL, NULL,
++			NULL);
++	/*
++	 * There is no fallback to SYS_pselect6, we expect SYS_pselect6_time64
++	 * to work and if it doesn't we fail.
++	 */
++
++	if (ret == -1 && errno != ENOSYS) {
++		/* Expected error. */
++	} else if (errno == ENOSYS) {
++		PERROR("[pselect_time64] missing syscall");
++	} else if (ret) {
++		ret = read(wait_fd, buf, BUF_SIZE);
++		if (ret < 0) {
++			PERROR("[pselect_time64] read");
++		}
++	}
++#endif
+ }
+ 
+ /*
+@@ -545,6 +727,7 @@ static
+ void pselect_invalid_pointer(
+ 		FILE *validation_output_file __attribute__((unused)))
+ {
++#ifdef SYS_pselect6
+ 	fd_set rfds;
+ 	int ret;
+ 	char buf[BUF_SIZE];
+@@ -563,6 +746,7 @@ void pselect_invalid_pointer(
+ 			PERROR("[pselect] read");
+ 		}
+ 	}
++#endif
+ }
+ 
+ /*
+-- 
+2.37.3
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============9056167429245801059==--
