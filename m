@@ -4,66 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A6EDECAAA1
-	for <lttng-dev@archiver.kernel.org>; Thu, 27 Oct 2022 14:19:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DC54C433FE
+	for <lttng-dev@archiver.kernel.org>; Wed,  2 Nov 2022 15:23:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1666880355;
-	bh=N9CKQbZKYlXATUTqf+UTw3CNjIRbV/4+b8i9GNxlsy8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=ih0NCOsMLZqx5WChWpzUiRfcRUoMXn+Gk350ZVGJG61rbZS7iMEEY0E85meldhPm2
-	 B1UAj5R0G/zCGGCu38GmXTZ9ryp+DhIlwF58V7udqHj8o7DXG7jT7aCuSqQlxaLPit
-	 I4k8Dei37Djztl1q8sdQ6xV+G5Dby3xIGBGwsy/LUT5j02SWl0F1s3XTuukkVwAbg9
-	 ZUC2MdZQg4q8pF37c9woHegH8ngahlQDAam1JKPwLaKCFNxqq2nXPN22d3ITljPgyc
-	 PJuONEuyhG6Ks4G6CF4ECqxNUx75xgYzKnELOxe4TfCEQ8iCxLkRcFPxgIrCpDsT0O
-	 02YAVtxY02Y6w==
+	s=default; t=1667402604;
+	bh=VvGnq95KH1ow7+qz/FvGqqWkPodj28MzL05w+YH7fws=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=yUMZfRxgILbSiZqZXZMTgJbXNvVbM0J+R/5mRehjtQdmh6TErqRmhDFSpbDiz5Q2/
+	 dPqb3RELUm6d03J4AB1Eg/+dce2t884oKVFCbLY0Wtspn53d20SgW1AkUjlJMturfw
+	 5EMMeBMdfH06SE5ImudfjxwAi6qAAy7d9/qOrUDzHZVeINdeMN9EKKZJ+08U/gnERC
+	 z0SbQfZf5gs0gWeWqc7dOfGB8JeQjWbFhKzuyl3LMb++oo4g0ABrzSYfeU8OS++zSo
+	 CNv2HJfvkG8uEDiZrQWzH03lT+/KXf+mKP9/PujflKIGe1JhGGOwRfsg2deanH6Mf7
+	 WfLRt2f3Tt4VQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4MynqQ28XSzG0H;
-	Thu, 27 Oct 2022 10:19:14 -0400 (EDT)
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
- by lists.lttng.org (Postfix) with ESMTPS id 4MyZfg2yWFzFyK
- for <lttng-dev@lists.lttng.org>; Thu, 27 Oct 2022 01:55:55 -0400 (EDT)
-X-IronPort-AV: E=Sophos;i="5.95,215,1661788800"; d="scan'208";a="213144348"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com)
- ([199.255.45.15])
- by ob1.hgst.iphmx.com with ESMTP; 27 Oct 2022 13:54:44 +0800
-IronPort-SDR: tf+PGyYNJ/QXHNy31wGapbUunoi8a1or4AYR1SSMw/ntMO5FYdl5Vnb1GvKCe9kp1uRqWEPviS
- qiT2sGL3WML/rKBBylge+FL9njQueHisvMvfVgiHcuDTRnoU0CJlrJqs4BwQFAKE3EbX6bSJoS
- DJ/jkvv/e/De58l1ALR3vigbN7kUgGMeZxxhSH3VggJu+9LMWU4zxfBE9xy60RFAqitW6+ft0h
- 1BXWKGrMQ5IjWgaL5vB//XbqRR/mm5W0z8f66CYE1Xr2LhCZiueP+cxMiAVhbgLBMqZNdBNiMM
- gcxQGUR94zsCCuHH9de10nnV
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
- by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 26 Oct 2022 22:08:22 -0700
-IronPort-SDR: FpCcqmMAWS9CRV4v0c4Hezi1qFUy5Y5/zrrgpN7W1qtkoXoxQXlz97pjZUr9zFch7MEq0byGqd
- mqtwdiYfmxqhYq3VtJAy95and/5eImDeYza59p2GBcOsEv40bgyuZVl9bDC/7XsogR/Y9lhJdJ
- fVDcKcLjHTl3g9pculRxASx60+R3H6NowI1fwxOZ3hO32TlJQ3cOPpPm1MyPUpc/m82e0Jj4YW
- U/EBs76x7XggddIAIz7a4MjCHc027MDu6GwcOYyuJUNmDF691stt2uXP3qmpIrwQYKayDAAfFP
- hD8=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
- by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 26 Oct 2022 22:54:44 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MyZdH1Y7Jz1RvTr
- for <lttng-dev@lists.lttng.org>; Wed, 26 Oct 2022 22:54:43 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
- by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new,
- port 10026)
- with ESMTP id NtvtQT-QHu-p for <lttng-dev@lists.lttng.org>;
- Wed, 26 Oct 2022 22:54:42 -0700 (PDT)
-Received: from toolbox.alistair23.me (unknown [10.225.167.45])
- by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MyZdB6WPYz1RvLy;
- Wed, 26 Oct 2022 22:54:38 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4N2Vyg5SXlzDcL;
+	Wed,  2 Nov 2022 11:23:23 -0400 (EDT)
+Received: from CAN01-YQB-obe.outbound.protection.outlook.com
+ (mail-yqbcan01on2057.outbound.protection.outlook.com [40.107.116.57])
+ by lists.lttng.org (Postfix) with ESMTPS id 4N2Vyf1nRTzF1F
+ for <lttng-dev@lists.lttng.org>; Wed,  2 Nov 2022 11:23:21 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NjRHaMuobQ0h99Er9kdGcCgnGeTWQVtMsXs0LZ3QG7IQsMdTQWwBFgBpkc2hAK+XDSnjgxRbcUauE5VpmSz9yRb/mDgYczBcmA4Vq5kxVutQiyJGOhDQMtiJpORERgAmIifTHNTiPDXrFuHmA2GfvIB+Yk7kRvnT3MaMYMb7+Lpeecu9oKCECsdaP/e80cTLusw7sJPFCnLdoIYL8xpxXAE+J3W0sXhDpvT7Y/TTaz0dD86Kp5gQY/2w/ZlkPH+r8aU1WZTM5Nl96vtxBrqPZZEdvhBkQP38RdcmC9AQrCRwA/OD20Ke0+d39/cNWCCgq+5QpOYNbeBe03Gx6LAYHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3QBfxBMdeKIyYp8MqlWmjGmrm8xcg3ATAko08pmIAhg=;
+ b=VXL/KhKXbuZSOn5F0zqzOAb1kWg3diTUpmc6zFNOBiGMzOmG5ouOO5iBT44MKwp4f5HDHKGT4Z/Rn3NCGIjr/syJw8gas+4t7UkWBmCQO1k12EQYxcgxZbRGga2VJbzI3K+EAHni5gbDLkUi/XH/crCV+m2AF0tRF4SneiTLCSsM7c5A8wRlu8LgAddKYyvTVkddGtfGJoWGCzvyYWloK6L4ma79CkbIDVMMB/ajkcrVVxZ8PiR9ilyP8zyTq5mQ+2ezeyBztsif2UkoVNHQJI5UrJefBb2zgvcSCKMam5RhqZ+UCveR7V1t9Njgyk7nNoqdhvuC8s02+bWxPisJ7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:4e::11)
+ by YT3PR01MB8787.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:7c::19)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Wed, 2 Nov
+ 2022 15:23:20 +0000
+Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::421e:2bde:2609:a173]) by YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::421e:2bde:2609:a173%9]) with mapi id 15.20.5769.021; Wed, 2 Nov 2022
+ 15:23:20 +0000
+Date: Wed, 2 Nov 2022 11:23:18 -0400
 To: lttng-dev@lists.lttng.org
-Date: Thu, 27 Oct 2022 15:54:28 +1000
-Message-Id: <20221027055428.406908-1-alistair.francis@opensource.wdc.com>
-X-Mailer: git-send-email 2.37.3
+Cc: diamon-discuss@lists.linuxfoundation.org
+Message-ID: <Y2KLZtoJHrpjd1mr@efficios.com>
+Content-Disposition: inline
+X-ClientProxiedBy: YQXPR0101CA0022.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:15::35) To YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:4e::11)
 MIME-Version: 1.0
-X-Mailman-Approved-At: Thu, 27 Oct 2022 10:19:12 -0400
-Subject: [lttng-dev] [PATCH v2] Tests: select_poll_epoll: Add support for
- _time64
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB5984:EE_|YT3PR01MB8787:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca98681d-c549-49eb-da3f-08dabce62c76
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZIuTILj6u/zwAFPIeaAjjPs/ZVs5gtiFTKjqK1ICHfe/43tt7GWADyAvuI9eaZvrNfwhNFZkh6s/sfGInSp3OJiWc+dr0P9+oYsnPbQH89o3QD+DTMFFoK1ltvU+6yyhPIhvLL9vzOIFvoAcEZVyHZxf15edTNJY/UJAFSUExQNbwZ7OfRmkPwUpuqUgbIbCXNxim3ynyohZ72DM67iOZnVhQh/MleTTI94bqUkWEkkuJklHw4CBJCfhK4sPaLagmTAV1d92kky3DK5tVti6bOybjctCfauCj2oFCoqjVJA4EeHDXvzlKsFD1Ncym5ntduq3t2BTF4iS4GfRbTgtl99DiBVTW6BsQOZqU1/JE6FtoIdIrWGcSx0taOXVc/sW93fjo2OSa2jf526jI3pe0f84uzel2/4iwpcQuNQ0vWKFi/OG+akGimBCd8Z8bCS0QdL41z+mbEFwPaBXWmGmedOoYPO/yyIRsIUDNjVpTr8hb0gFrARWbArEG75UW9KxLvgjEC85ykGGNmBCVMH3Np50s62f4N69EYFZjPCVcngaMLNK1CnvMqC5IqT7i2h9sXmoBknep/6YWpooEDGZQ1UobtOR1L16GVhPsIL/ryRx7sA/rMrNr5gq4Ya6Q5QMEqK2L2TAfJ4a/0RnkUhDDDFWVs9ShMm7ltqHdsY0aZfHHmcLCP4KDIJtcOGs1Jr65VByd4wtlvFCALueKIozXG3+9w6X6aJvmm8frjIRqyQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230022)(39830400003)(136003)(396003)(376002)(346002)(366004)(451199015)(6916009)(316002)(8936002)(36756003)(66476007)(5660300002)(4326008)(8676002)(66946007)(41300700001)(26005)(6512007)(6506007)(66556008)(83380400001)(2616005)(186003)(966005)(38100700002)(478600001)(6486002)(2906002);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PdScki0oDy8LJ3xwTlmyg+KUU8xzfUHUNX6vPh2gmdDnqYeS8OG0Lv56nUhG?=
+ =?us-ascii?Q?jo0qizBnKVqnM6sihHiC/cELkHTdbLeuKEkRDg51Pb9c+i9PMAyFVRz1VL6Z?=
+ =?us-ascii?Q?3MvrxFhk3kTx9HsHyWLzaGvyHGC3QS3nfLGq7VaHJAacdx6eGKSGshIMAkPE?=
+ =?us-ascii?Q?NN2Dm08TACKNgS1YRPraRkRmc0rRLZIsSagi4V44Q+5MApSsDHD48DfqlVzM?=
+ =?us-ascii?Q?3bJSTEVmJLCPjmWriuToE9ykMn9X3KSUqdso0Vb1nVuZfzSwLYkkYVr7oVHj?=
+ =?us-ascii?Q?MzKioW8J4B0hysLQEkZe28gpLSb8i/S0Gz2hivw4o2BJ0M+CDzrBqKuF0Q0P?=
+ =?us-ascii?Q?4STb+FMwjrtn4/WetpS3+QsxF5jOlr3mIUoQww0GP55V/xB7zw4nnpTcBmS/?=
+ =?us-ascii?Q?CB9nLD5kbbVYHBWQzrdkrmzT43LoyDDvK5DnTXNhjvCCFAkPD1pHkcOsTe2u?=
+ =?us-ascii?Q?q6Gf59Ebs/NolM/zwuCMc7Jz6P6g4uuTpHL8YFGO8IgypyhyW831XXbY+mAT?=
+ =?us-ascii?Q?6FE67+p2HCDDtJrQkU3P/myOTbQHA4VCDeeFApUPefxapRWyNsRvU86S95sQ?=
+ =?us-ascii?Q?XgzCJW8+Y1caKVIWb48DZUr47lCKXuL23YadredwN3ZjqbIcVdTh6+oiHL2e?=
+ =?us-ascii?Q?ZyX1T0+fy+l1qsZo0aUJHigNS7QBHHOqhHRF6qyBR0LdJQwWJ6Fao+eFRl4C?=
+ =?us-ascii?Q?7HQHvgmG/vnONsFhzQ2xzDlM+RFZfF4za+xRWzHDMhbpu9WCr7uTjIV6enNx?=
+ =?us-ascii?Q?s10hff2/WcAF25OhPeZEXb5YvyBl4x1kb9DTojVQmzCmAj0xL9Y1FfEnwqft?=
+ =?us-ascii?Q?fl8wd3nNyvj5vpFaEeyZbHV2b8jkZgxOS5CDclMrrgZ8TvXitZuR8jqpLqMi?=
+ =?us-ascii?Q?mbEw1BdbICKWg8kExnBLyYlmntMnjJeQUBYScg7Otr4jwlaudJKhcxRWDZMa?=
+ =?us-ascii?Q?CwmZIf/Bk0SLt0pBKK7Wl063BOZBdSBXnNcbrKAnXPi3bTDES3VjgpY4Z+ge?=
+ =?us-ascii?Q?ETWu8PPuhqn/Nbav0dY7LH2njdu9mywWLN/khLiOiRaLE1Kc5a32UVnvh1GV?=
+ =?us-ascii?Q?76YhLo29GE8EDbAgV29781I7shUSuByjZ8yAooKJaRYZLyZ8N2Xbpl0J+MbV?=
+ =?us-ascii?Q?j89c52VRxTsUR7THl1tmMFLu/y7vuv6tk0C/XDlGRzhhQvwXqYsb0DMVZB2Z?=
+ =?us-ascii?Q?E6rb1h9j0mv7GDNeeU9G45sDrfKfYkRycYfL9wTQKYGmSFVVh988webmTY/9?=
+ =?us-ascii?Q?du//Ik/x78GOOXlOkN7kCyt07DTwgvCzxLWe6E0n+gFCMVarVHQATXuC3ZNP?=
+ =?us-ascii?Q?gLohXRmZ3gU41q4UXugHOAURfFFS3gyWX+O6XKjbCM8looujiqHcaO0gXHVR?=
+ =?us-ascii?Q?mNgK8tWa7A/Q715DaobXt7uUURKhGsDsapdFzeguvnwEt6lkStjuPel+3koK?=
+ =?us-ascii?Q?MxIZvB+Dflba/p6dYLDHh5P/lxCJJVzs0O0XHLD2eHjCae+IJ8phVh9p6ZY0?=
+ =?us-ascii?Q?A2jAP3Y0FLxZdTatKcNLrbbA6QALhAlxcVYi4PdR67z+JS5Q94Xe5fxuLhG9?=
+ =?us-ascii?Q?u5iil8w306+WTK2E9QvyewHTKaxT98rP+dTVtr4g?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca98681d-c549-49eb-da3f-08dabce62c76
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 15:23:20.2239 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NOmzGNilHIXajYKzg1Hk1d+Sr9FgPvdegpZpeXvb78HhCfOTWnBCOqgWmazX8Z9qunj0mwTVXMzU8LLv0jU2QQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB8787
+Subject: [lttng-dev] [RELEASE] Babeltrace 1.5.11
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -75,325 +113,46 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Alistair Francis via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Alistair Francis <alistair.francis@opensource.wdc.com>
-Cc: alistair23@gmail.com
+From: =?utf-8?q?J=C3=A9r=C3=A9mie_Galarneau_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau
+ <jeremie.galarneau@efficios.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-From: Alistair Francis <alistair.francis@wdc.com>
+Hi,
 
-Add support for the  64-bit time_t syscalls SYS_ppoll_time64
-and SYS_pselect6_time64.
+Today we are releasing the eleventh bug-fix release of Babeltrace 1.5. While
+this release series has reached EOL, this update was deemed necessary as the
+latest release of popt (v1.19) introduced a breaking change (changing the
+ownership of left-over command line arguments) that breaks prior babeltrace
+v1.5.x releases.
 
-These are the syscalls that exist 32-bit platforms since the 5.1 kernel.
-32-bit platforms with a 64-bit time_t only have these and don't have the
-original syscalls (such as 32-bit RISC-V).
+Note that memory leak checking tools will report a leak when using popt < 1.19
+when running this release. This leak is benign as it is limited to the command
+line arguments and doesn't grow over time.
 
-Fixes: https://github.com/lttng/lttng-tools/pull/162
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
----
-To keep the test_cases[] array clean I have implemented the functions
-for all builds, but the functions are a no-op if the syscall is missing.
+For more information, see:
+https://src.fedoraproject.org/rpms/babeltrace/c/d48452beff87b145c038f070e7182358db04336c?branch=rawhide
 
-v2:
- - Split out a seperate _time64 test
+Note that the latest announced release of this branch was v1.5.8. The following
+change log includes the changes from all three follow-up releases.
 
- tests/regression/kernel/select_poll_epoll.cpp | 184 ++++++++++++++++++
- 1 file changed, 184 insertions(+)
+2022-11-02 babeltrace 1.5.11 (Broadcast Traffic Professionals Day)
+	* Fix: distutils removed in python 3.12
+	* Fix: use-after-free with popt 1.19
+	* configure.ac: Basic fixes for autoconf 2.70
+	* Add gerrit config for stable-1.5
+	* port: disable debug-info by default on FreeBSD
+	* port: add missing includes for FreeBSD compat
+	* bindings: try importing collections.abc first for forward compatibility
+	* man: fix typo in babeltrace.1
 
-diff --git a/tests/regression/kernel/select_poll_epoll.cpp b/tests/regression/kernel/select_poll_epoll.cpp
-index c0b688217..dfaab52c8 100644
---- a/tests/regression/kernel/select_poll_epoll.cpp
-+++ b/tests/regression/kernel/select_poll_epoll.cpp
-@@ -5,6 +5,7 @@
-  *
-  */
- 
-+#include <errno.h>
- #include <fcntl.h>
- #include <limits.h>
- #include <poll.h>
-@@ -48,10 +49,14 @@ int lttng_opt_quiet, lttng_opt_verbose, lttng_opt_mi;
- 
- static void run_working_cases(FILE *validation_output_file);
- static void pselect_invalid_fd(FILE *validation_output_file);
-+static void pselect_time64_invalid_fd(FILE *validation_output_file);
- static void test_ppoll_big(FILE *validation_output_file);
- static void ppoll_fds_buffer_overflow(FILE *validation_output_file);
-+static void ppoll_time64_fds_buffer_overflow(FILE *validation_output_file);
- static void pselect_invalid_pointer(FILE *validation_output_file);
-+static void pselect_time64_invalid_pointer(FILE *validation_output_file);
- static void ppoll_fds_ulong_max(FILE *validation_output_file);
-+static void ppoll_time64_fds_ulong_max(FILE *validation_output_file);
- static void epoll_pwait_invalid_pointer(FILE *validation_output_file);
- static void epoll_pwait_int_max(FILE *validation_output_file);
- static void ppoll_concurrent_write(FILE *validation_output_file);
-@@ -69,10 +74,14 @@ const struct test_case {
- 	{ .run = run_working_cases, .produces_validation_info = true, .timeout = -1 },
- 	{ .run = run_working_cases, .produces_validation_info = true, .timeout = 1 },
- 	{ .run = pselect_invalid_fd, .produces_validation_info = false, .timeout = 0 },
-+	{ .run = pselect_time64_invalid_fd, .produces_validation_info = false, .timeout = 0 },
- 	{ .run = test_ppoll_big, .produces_validation_info = false, .timeout = 0 },
- 	{ .run = ppoll_fds_buffer_overflow, .produces_validation_info = false, .timeout = 0 },
-+	{ .run = ppoll_time64_fds_buffer_overflow, .produces_validation_info = false, .timeout = 0 },
- 	{ .run = pselect_invalid_pointer, .produces_validation_info = false, .timeout = 0 },
-+	{ .run = pselect_time64_invalid_pointer, .produces_validation_info = false, .timeout = 0 },
- 	{ .run = ppoll_fds_ulong_max, .produces_validation_info = false, .timeout = 0 },
-+	{ .run = ppoll_time64_fds_ulong_max, .produces_validation_info = false, .timeout = 0 },
- 	{ .run = epoll_pwait_invalid_pointer, .produces_validation_info = true, .timeout = 0 },
- 	{ .run = epoll_pwait_int_max, .produces_validation_info = true, .timeout = 0 },
- 	{ .run = ppoll_concurrent_write, .produces_validation_info = false, .timeout = 0 },
-@@ -440,6 +449,44 @@ end:
- 	return;
- }
- 
-+/*
-+ * Ask for 100 FDs in a buffer for allocated for only 1 FD, should
-+ * segfault (eventually with a "*** stack smashing detected ***" message).
-+ * The event should contain an array of 100 FDs filled with garbage.
-+ */
-+static
-+void ppoll_time64_fds_buffer_overflow(
-+		FILE *validation_output_file __attribute__((unused)))
-+{
-+#ifdef SYS_ppoll_time64
-+	struct pollfd ufds[NB_FD];
-+	char buf[BUF_SIZE];
-+	int ret;
-+
-+	ufds[0].fd = wait_fd;
-+	ufds[0].events = POLLIN|POLLPRI;
-+
-+	/*
-+	 * As there is no timeout value, we don't convert to/from
-+	 * 64/32-bit time_t.
-+	 */
-+	ret = syscall(SYS_ppoll_time64, ufds, 100, NULL, NULL);
-+	/*
-+	 * There is no fallback to SYS_ppoll, we expect SYS_ppoll_time64
-+	 * to work and if it doesn't we fail.
-+	 */
-+
-+	if (ret < 0) {
-+		PERROR("ppoll_time64");
-+	} else if (ret > 0) {
-+		ret = read(wait_fd, buf, BUF_SIZE);
-+		if (ret < 0) {
-+			PERROR("[ppoll_time64] read");
-+		}
-+	}
-+#endif
-+}
-+
- /*
-  * Ask for 100 FDs in a buffer for allocated for only 1 FD, should
-  * segfault (eventually with a "*** stack smashing detected ***" message).
-@@ -449,6 +496,7 @@ static
- void ppoll_fds_buffer_overflow(
- 		FILE *validation_output_file __attribute__((unused)))
- {
-+#ifdef SYS_ppoll
- 	struct pollfd ufds[NB_FD];
- 	char buf[BUF_SIZE];
- 	int ret;
-@@ -466,6 +514,46 @@ void ppoll_fds_buffer_overflow(
- 			PERROR("[ppoll] read");
- 		}
- 	}
-+#endif
-+}
-+
-+/*
-+ * Ask for ULONG_MAX FDs in a buffer for allocated for only 1 FD, should
-+ * cleanly fail with a "Invalid argument".
-+ * The event should contain an empty array of FDs and overflow = 1.
-+ */
-+static
-+void ppoll_time64_fds_ulong_max(FILE *validation_output_file __attribute__((unused)))
-+{
-+#ifdef SYS_ppoll_time64
-+	struct pollfd ufds[NB_FD];
-+	char buf[BUF_SIZE];
-+	int ret;
-+
-+	ufds[0].fd = wait_fd;
-+	ufds[0].events = POLLIN|POLLPRI;
-+
-+	/*
-+	 * As there is no timeout value, we don't convert to/from
-+	 * 64/32-bit time_t.
-+	 */
-+	ret = syscall(SYS_ppoll_time64, ufds, ULONG_MAX, NULL, NULL);
-+	/*
-+	 * There is no fallback to SYS_ppoll, we expect SYS_ppoll_time64
-+	 * to work and if it doesn't we fail.
-+	 */
-+
-+	if (ret < 0 && errno != ENOSYS) {
-+		/* Expected error. */
-+	} else if (errno == ENOSYS) {
-+		PERROR("[ppoll_time64] missing syscall");
-+	} else if (ret > 0) {
-+		ret = read(wait_fd, buf, BUF_SIZE);
-+		if (ret < 0) {
-+			PERROR("[ppoll_time64] read");
-+		}
-+	}
-+#endif
- }
- 
- /*
-@@ -476,6 +564,7 @@ void ppoll_fds_buffer_overflow(
- static
- void ppoll_fds_ulong_max(FILE *validation_output_file __attribute__((unused)))
- {
-+#ifdef SYS_ppoll
- 	struct pollfd ufds[NB_FD];
- 	char buf[BUF_SIZE];
- 	int ret;
-@@ -492,6 +581,59 @@ void ppoll_fds_ulong_max(FILE *validation_output_file __attribute__((unused)))
- 			PERROR("[ppoll] read");
- 		}
- 	}
-+#endif
-+}
-+
-+/*
-+ * Pass an invalid file descriptor to pselect6(). The syscall should return
-+ * -EBADF. The recorded event should contain a "ret = -EBADF (-9)".
-+ */
-+static
-+void pselect_time64_invalid_fd(FILE *validation_output_file __attribute__((unused)))
-+{
-+#ifdef SYS_pselect6_time64
-+	fd_set rfds;
-+	int ret;
-+	int fd;
-+	char buf[BUF_SIZE];
-+
-+	/*
-+	 * Open a file, close it and use the closed FD in the pselect6 call.
-+	 */
-+	fd = open("/dev/null", O_RDONLY);
-+	if (fd == -1) {
-+		PERROR("open");
-+		goto error;
-+	}
-+
-+	ret = close(fd);
-+	if (ret == -1) {
-+		PERROR("close");
-+		goto error;
-+	}
-+
-+	FD_ZERO(&rfds);
-+	FD_SET(fd, &rfds);
-+
-+	ret = syscall(SYS_pselect6_time64, fd + 1, &rfds, NULL, NULL, NULL, NULL);
-+	/*
-+	 * There is no fallback to SYS_pselect6, we expect SYS_pselect6_time64
-+	 * to work and if it doesn't we fail.
-+	 */
-+
-+	if (ret == -1 && errno != ENOSYS) {
-+		/* Expected error. */
-+	} else if (errno == ENOSYS) {
-+		PERROR("[pselect_time64] missing syscall");
-+	} else if (ret) {
-+		ret = read(wait_fd, buf, BUF_SIZE);
-+		if (ret < 0) {
-+			PERROR("[pselect_time64] read");
-+		}
-+	}
-+error:
-+	return;
-+#endif
- }
- 
- /*
-@@ -501,6 +643,7 @@ void ppoll_fds_ulong_max(FILE *validation_output_file __attribute__((unused)))
- static
- void pselect_invalid_fd(FILE *validation_output_file __attribute__((unused)))
- {
-+#ifdef SYS_pselect6
- 	fd_set rfds;
- 	int ret;
- 	int fd;
-@@ -525,6 +668,7 @@ void pselect_invalid_fd(FILE *validation_output_file __attribute__((unused)))
- 	FD_SET(fd, &rfds);
- 
- 	ret = syscall(SYS_pselect6, fd + 1, &rfds, NULL, NULL, NULL, NULL);
-+
- 	if (ret == -1) {
- 		/* Expected error. */
- 	} else if (ret) {
-@@ -535,6 +679,44 @@ void pselect_invalid_fd(FILE *validation_output_file __attribute__((unused)))
- 	}
- error:
- 	return;
-+#endif
-+}
-+
-+/*
-+ * Invalid pointer as writefds, should output a ppoll event
-+ * with 0 FDs.
-+ */
-+static
-+void pselect_time64_invalid_pointer(
-+		FILE *validation_output_file __attribute__((unused)))
-+{
-+#ifdef SYS_pselect6_time64
-+	fd_set rfds;
-+	int ret;
-+	char buf[BUF_SIZE];
-+	void *invalid = (void *) 0x42;
-+
-+	FD_ZERO(&rfds);
-+	FD_SET(wait_fd, &rfds);
-+
-+	ret = syscall(SYS_pselect6_time64, 1, &rfds, (fd_set *) invalid, NULL, NULL,
-+			NULL);
-+	/*
-+	 * There is no fallback to SYS_pselect6, we expect SYS_pselect6_time64
-+	 * to work and if it doesn't we fail.
-+	 */
-+
-+	if (ret == -1 && errno != ENOSYS) {
-+		/* Expected error. */
-+	} else if (errno == ENOSYS) {
-+		PERROR("[pselect_time64] missing syscall");
-+	} else if (ret) {
-+		ret = read(wait_fd, buf, BUF_SIZE);
-+		if (ret < 0) {
-+			PERROR("[pselect_time64] read");
-+		}
-+	}
-+#endif
- }
- 
- /*
-@@ -545,6 +727,7 @@ static
- void pselect_invalid_pointer(
- 		FILE *validation_output_file __attribute__((unused)))
- {
-+#ifdef SYS_pselect6
- 	fd_set rfds;
- 	int ret;
- 	char buf[BUF_SIZE];
-@@ -563,6 +746,7 @@ void pselect_invalid_pointer(
- 			PERROR("[pselect] read");
- 		}
- 	}
-+#endif
- }
- 
- /*
--- 
-2.37.3
-
+Project website: https://babeltrace.org
+Download link: https://www.efficios.com/files/babeltrace/babeltrace-1.5.11.tar.bz2
+CTF specification: https://diamon.org/ctf/
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
