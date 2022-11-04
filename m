@@ -4,51 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04980C4332F
-	for <lttng-dev@archiver.kernel.org>; Fri,  4 Nov 2022 14:31:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27569C433FE
+	for <lttng-dev@archiver.kernel.org>; Fri,  4 Nov 2022 15:01:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1667572295;
-	bh=q3saM0CtfgxgdKxkEKTCgkMxaa01iPYb4BLbAZ1/ZFY=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EjnJk5V0M1Utwj7Z948nCk+DR6X7elViALSvdSpEpP6qr90GvH+ODhmDbOD7lKn47
-	 3kFQKZw49XHFqmQn3UHhqxbq0JQPIjrhfEF+MtLjfIrq9Pt6w+gG3spL4QLZQhHyq+
-	 mt1DWsm8DBr/Qh68MBIDGRw58I/Clq3VhD+JIPBRRFV63W8C2PeCbuKtkQudf84PtU
-	 6PDv6A5oXEU0mZJXD2zUN5FtGVXAqKq/1NTYl8pfcqDBq+VawU4HugLcKjOjJ65PBg
-	 Mb/R+wzW1iodadhC2NlJDAkPj8ADVs7rjV0lQWHixp5NnoLAwfGpwW+o+JmSdXeyiq
-	 9av4UGLgDFqlw==
+	s=default; t=1667574067;
+	bh=48M+a3ikxkEF4FO/wpCuo4N1l2QKb9qGjHdF17k6PI0=;
+	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=uuy13SBmCoHp2eLUmvbed0Y5+ynGrOMm0d+jbj2I+sQ2U3PlbJmQXjl0xlJMetRiI
+	 nLV2gwfjyk3R2nFw7NUTTt71E+J4Dpx39QX1lxooFmSHxWUdxCFMdJD3mHOY1lWtFl
+	 6yLKiQGQY/+ocX2OXq2FRFG9yccG5nziCskn0sp9JGNDAevU4rEoYR8+mLr7SGs3LJ
+	 LSZ4BKxjWms5Gk0awY8+UzjVNsG6aPu+qMkCmPiGfy/WNzn7ZTg/RIEZAySdI3gjkP
+	 pvPeD2J3cEazzHnejIOpF/TguAoCqCExOYVcnBAJlCDY3dd+DdK13g3O/MLM870rrt
+	 ekiOIfygIX2iQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4N3jjy5mCZzFCs;
-	Fri,  4 Nov 2022 10:31:34 -0400 (EDT)
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by lists.lttng.org (Postfix) with ESMTPS id 4N3csq07srzFSF
- for <lttng-dev@lists.lttng.org>; Fri,  4 Nov 2022 06:53:02 -0400 (EDT)
-Received: by mail-io1-xd29.google.com with SMTP id e189so3487139iof.1
- for <lttng-dev@lists.lttng.org>; Fri, 04 Nov 2022 03:53:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=ZXFPizTyklA+Fn7xPdcO3GPiumuee9JbIpCEFyDIvL0=;
- b=K/EXzT5NlSI90yjJhBv5TzM/xaGUN/5Yc1OpULkpDYgm2OAuV6V2m5A1wsZA+or0QB
- oS5gpWriz7N5eG0oNyVBKNy3ETZSIrcB+Ji9mz17TmWXBRIybSK+wrqaUQrGDmFZ/yS6
- vKK8LvKZQEGUFSSRdFzJcUxxJugGp5xZyU/wf1mNkm0k0yvH9Evf4mt7h3lHVdX5OKr0
- DewMv550yxgViW/GqVL8DAEfiWKVzT8pfB/kc82J/h/uL7o/x546/2+G/6xJrCult8Nr
- CmVqi/Qb/Z0S20ipbuQdbGfU4UQtFn4SM4kEg6wxFpLwodUB2Mhdr8kkJ6RVcpxCi4tS
- UL5A==
-X-Gm-Message-State: ACrzQf3tyviWwl4O5QwJjHF2iKu0vMqjv29d4zWdQo+ob2iupRW5H7bA
- uaWrRg5mFxvE+eY8KXCT0Su6vxOaSMddTkq/IQHw7EZW2Lylug==
-X-Google-Smtp-Source: AMsMyM6Cf9hcJMG5nC5MNNQr+xX3j/LCxoHulUhASmO0dz9u34bu8iz3kfVTY4GRdOHKZrPNylDKgzUmbuyLRnZA/04=
-X-Received: by 2002:a02:5b08:0:b0:375:6141:1c84 with SMTP id
- g8-20020a025b08000000b0037561411c84mr16126413jab.114.1667559181261; Fri, 04
- Nov 2022 03:53:01 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4N3kN24X1dzFgn;
+	Fri,  4 Nov 2022 11:01:06 -0400 (EDT)
+Received: from CAN01-YQB-obe.outbound.protection.outlook.com
+ (mail-yqbcan01on2070.outbound.protection.outlook.com [40.107.116.70])
+ by lists.lttng.org (Postfix) with ESMTPS id 4N3kN13yJSzFCt
+ for <lttng-dev@lists.lttng.org>; Fri,  4 Nov 2022 11:01:05 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hPDymgyv8MsIzGr3k9DIkCxeLGmXN2X4xaQUmKD7grmMSP4+zACDmdIfU5Sh0qocfTJnp3IJnvwyXZd2wSWXFhtDB1zGz9wFA3cTCU784OPNKytJ6Fwdd9ZLs/bzAZ7ogXJoh0UUJjNHYzs3QJ/dzJwmCNVxiSZF+7q3b8VNYhrzJ71MrYcrHLTBES4yo/7/ZxvoqoJ/K6WLvyFT85YA8GJoTDg8f6mA7Zr7DhCegz5MnpJnraLoZkoLmYzZJXajFUHUm2mNl/Dogga0FJLe15mMUqqy57lm2rr1/0RETzxHwUy73Hz6YMglNCju6GmwVpGjWN3vVqHY5m+awvw+hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FT2FWejvelIotexqkOvlCZPcSpgmY68wDJpfnXmhS/M=;
+ b=LEaybq5Y5Paq8iobxGvAMuIymaxIaphAuln7bfIxNfm9s+FCGgqQp46+aEkVNxx/pd/Ug3wZTbK3DT3hdLEkU4Q9itwNQjK4USKLhAbobWcJQGCBpQpQkJNMPlEXxW9RzEPCz007GI3siQLXFY/Iddp3IlYvGxqao4vYOCOokijzPJpxWa0KTz7Ggf+suNCwfhUJHDkx7NJfBoCUJAZXhSc1zB33FGVhNrZVeLPnxZn0xfF2ENX1vbN/TMKkqhgUdEoBO7GPMeWFmwtUMHLv0YeAsLmLL3Z63Rc7R7RG61Z/FGGuUppN2o3NaxfvsPfIcwyutW+8yAwc74VS5tbWXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:4e::11)
+ by YT3PR01MB6488.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:73::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Fri, 4 Nov
+ 2022 15:01:03 +0000
+Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::421e:2bde:2609:a173]) by YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::421e:2bde:2609:a173%7]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
+ 15:01:03 +0000
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, bule
+ <bulelxq@gmail.com>
+Thread-Topic: [lttng-dev] lttng list --userspace is null
+Thread-Index: AQHY8FonG1Ne64gAvk6zMtSfcchEda4u2pmT
+Date: Fri, 4 Nov 2022 15:01:03 +0000
+Message-ID: <YT2PR01MB5984A9C98DA102FE5A369822BC3B9@YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM>
+References: <CAOZRzSLsdQ0cYrSzp0YJxX=-VSLEogDhqkcSBT9YM02bJ9pDwQ@mail.gmail.com>
+In-Reply-To: <CAOZRzSLsdQ0cYrSzp0YJxX=-VSLEogDhqkcSBT9YM02bJ9pDwQ@mail.gmail.com>
+Accept-Language: en-CA, en-GB, fr-CA, en-US
+Content-Language: en-CA
+X-Hashtags: #NewslettersPlus
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: YT2PR01MB5984:EE_|YT3PR01MB6488:EE_
+x-ms-office365-filtering-correlation-id: 694d95c6-f508-42e1-8f1b-08dabe7564ae
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /H+tNB9LpeQ7sENthBR3PzhuS3SokBr+WfY/xusv8TmAxMzV3VpcFKDXtZ3vT/2UErRug7NUt8DYb2sCCeMaDCofbV6fJy5Km0KPUV2quozbxDxjK/hb20RnASExivzBq5XWQAgWFItme6T7lSyOlLIeJnCHucj4imo8uKmG4tq2Y/tWSzIv/e3ws315B7xYeE/n9OTAv4eT36a1/svlpnwjyPKfel3rfYNdXPAFT1t9VrIep4U2Jdm3zlfcbwO+WBXYgcEoWsoEJLpE1uCy6AmWqTO08WfmLjCKeF/meTFiwMzaDSFzzUN/UN0kjwttcaAIf1pkjD+nvTYBynvreVCzML1nwCHDsqMGSly/FwdJhqY8azdjITK5Tos0mw6I7xE3FGyRQ+IV0aU30HHf6dtAbsQv6dx3UIYwm3xwqnAZekB+XYVaVtziuAuconD/837hEFFtoQC5KaudbD3A4+jKNOGv8M9Cw08UjfHHa0Ba8Uy5HkTLqRLGQvc42Dh5ZV7i6b0oV/4GnEByL2Z5Ji6JusC+7fBdmTOH/UblZUvx2f9NN1tOfwrBTOBQ75Y9el4aDppJjpMjcSknObKApCRw3a9yrML2nDfmmsETbfyk1yW9ArXvLiAlarJIM8zbXwJEHNXi1DDzmxskY4SyS+LrOgOQtRRvmevmn6KQ3cixHxedqFWS3fXJ8A3xzGAA6kuivbW1940AdL+g92dJFRmOnt0qDxiMkTOBfNDsKw0sqwLQ7OD/rpDuWiR/O10BKw2pPv4NPAvfWFU9hh8H9UlC50qgUs83pEAIK2sSXFQ=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230022)(396003)(136003)(39830400003)(376002)(366004)(346002)(451199015)(5660300002)(8676002)(66946007)(71200400001)(41300700001)(66476007)(64756008)(2906002)(53546011)(166002)(76116006)(52536014)(33656002)(122000001)(26005)(9686003)(99936003)(7696005)(38070700005)(86362001)(8936002)(91956017)(38100700002)(6506007)(66556008)(66446008)(186003)(19627405001)(966005)(478600001)(55016003)(316002)(110136005);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?AiFT2oynkLpAmJQFr89lY0LUMIMQO5Q6T9hPh4gvuqwM/OWdEY3vZoZNKd?=
+ =?iso-8859-1?Q?UULV2WEozHoQqiBBVKW7rBK2oo1k+uH05AWZzloHvHC4Yl9/d4oKIaClN4?=
+ =?iso-8859-1?Q?A0Irpr3XrR2ZWsWNvx7iBscMvOpsOl7P9EoV5pyPddrRqXwYd64+wmq3Jj?=
+ =?iso-8859-1?Q?jlDGbIAsWqQrKhu5IRyA7V3j9IOddXNFFcCbxpIKxnK94jG68xxv0FF1Y1?=
+ =?iso-8859-1?Q?71i7K+Jld/od9/hk9Om6WGy6gg9hOLhZnfQX5HleIeVz1KPwnsnKQAdqNi?=
+ =?iso-8859-1?Q?9jfzHl8SxZwfRA5fgOTGRJIxZ2qGq5Je10LqATj0GFJ7Y7v/7Y2xEPGXcl?=
+ =?iso-8859-1?Q?stS9EC5AMtFcpflH3J/Vf8PQJbTd1EBpT6YT5sxtvcg0AKJThgZLbfX+cI?=
+ =?iso-8859-1?Q?dKhUTUcJ2Walay6TrcCgN6xG8yDhJUsggRyb+esHQLiHqOTY4VgQiT+axE?=
+ =?iso-8859-1?Q?vcHuThQurBlg0ChWVCL1EVkyYF+LtsQv3vtz3BwWrSmVLZkA4GVdCxU8+Z?=
+ =?iso-8859-1?Q?W9fbKXnPQ5pH06RzLmQxM00uaKMraHBKSE+ogwbx6kqtAn/IcEukDgcJMb?=
+ =?iso-8859-1?Q?V33rB7YwTmL07LI/c3R8/3OIIV897FMlBZZfjKUpR3RkB6ApfbY4o/IWxz?=
+ =?iso-8859-1?Q?/ANmVjqbZvSF8882cScrGczEvwfh2kmrpKf7C0vrJDDphmcJXOsQKeffUP?=
+ =?iso-8859-1?Q?9r+gm5zgg8VWIKKdPL+8jBt/aSJ0E3rhp0pwsreTbrJB+5cbhf2hkZkAeC?=
+ =?iso-8859-1?Q?FrxIkVwWLlUGqLP4b0nyFO+vys/p0UYZZlDUkWz6Xt7Yfay2uCRdi8/Fm0?=
+ =?iso-8859-1?Q?7ATFGVVdp82Li4bY2AZsYToWCP3KfK29cSp2DKtxu4w/ro04iBMu80nNw8?=
+ =?iso-8859-1?Q?c8O+x5lMYCL1myr89lNBNGeuoiugLUgFIQjQ1j7nSye71bf2QX4b/hifXn?=
+ =?iso-8859-1?Q?sAlGfub+tA8rj5cATOHGiTLyCXF3uFe0X2JvOGnqxODXnXrCTEaJlkdgdi?=
+ =?iso-8859-1?Q?A+SgVuVdwJiOwccAeDyY/zRsBdgF5H1e0z6i9tRuFQH4X+9hlmSch/ESMk?=
+ =?iso-8859-1?Q?6HJ3OlMAaVz4DLbSYIH2kq6x2WsdTiMYFKj5gwYw2Ad+eV+b65koX8yJGy?=
+ =?iso-8859-1?Q?0T2KmrTul+puUd/j0/ASajo6ymRGOmCpQzjzstUjfQwHZ22iFrb8YSrhdv?=
+ =?iso-8859-1?Q?WwITsbSlWMfKP9GIVRMGRU8AhTkFcZmXQmv5msxgEI6H7rMQHin768BGjW?=
+ =?iso-8859-1?Q?icwQglcDU8bbP7LXRu6KPWgojAbl0fzs5UbwGj0KSLDBjhH4WNK9GN/SHm?=
+ =?iso-8859-1?Q?Aar8nrtQat/k7nJYln1QF/iCKDA3ZiVMOJbC7XaCAczl6cbkttaN2iOBZ+?=
+ =?iso-8859-1?Q?gLwBSgITGU7dvkk0+xTvzJLq/3KdhvZ1U9KfyCht6AvaJb/OaaDhVm1Lps?=
+ =?iso-8859-1?Q?8U5W0qth+nf6iBUKHa+kV5BVhhe4J07U4trjiYAIQpLvktPYBCva9DxHv6?=
+ =?iso-8859-1?Q?UbKi1/3T/k00mTaCoYp7i9bt9KKa6Ai2wXFDWq+51NX0U9GREVhEpqtntM?=
+ =?iso-8859-1?Q?0Ggs/ZKAYUWlvzq775CdvtpGWN0yznDL6B7nbZob6kBuud/oMXAygqLhwa?=
+ =?iso-8859-1?Q?UowOd2cZgIwoM=3D?=
 MIME-Version: 1.0
-Date: Fri, 4 Nov 2022 18:52:49 +0800
-Message-ID: <CAOZRzSLsdQ0cYrSzp0YJxX=-VSLEogDhqkcSBT9YM02bJ9pDwQ@mail.gmail.com>
-To: lttng-dev@lists.lttng.org
-X-Mailman-Approved-At: Fri, 04 Nov 2022 10:31:33 -0400
-Subject: [lttng-dev] lttng list --userspace is null
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 694d95c6-f508-42e1-8f1b-08dabe7564ae
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2022 15:01:03.5803 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D9HrDPHRJHAaeghjrMzhr1XQqdnjP2RIykXXnPfsTihz6Iwh3tWcPRKNrI79ssX/rL1lejSzuu+ByMZA6n0xtA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB6488
+Subject: Re: [lttng-dev] lttng list --userspace is null
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -60,58 +121,203 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: bule via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: bule <bulelxq@gmail.com>
-Content-Type: multipart/mixed; boundary="===============2843378418007570744=="
+From: =?utf-8?q?J=C3=A9r=C3=A9mie_Galarneau_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jgalar@efficios.com>
+Content-Type: multipart/mixed; boundary="===============6235787231877128200=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============2843378418007570744==
-Content-Type: multipart/related; boundary="000000000000a4dcc905eca2e091"
+--===============6235787231877128200==
+Content-Language: en-CA
+Content-Type: multipart/related;
+	boundary="_006_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_";
+	type="multipart/alternative"
 
---000000000000a4dcc905eca2e091
-Content-Type: multipart/alternative; boundary="000000000000a4dcc805eca2e090"
+--_006_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_
+Content-Type: multipart/alternative;
+	boundary="_000_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_"
 
---000000000000a4dcc805eca2e090
-Content-Type: text/plain; charset="UTF-8"
+--_000_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+Just to make sure, is your program still running by the time you issue 'ltt=
+ng list --userspace'?
+Also, which versions of LTTng are you running and on what kind of system?
+
+Are the session daemon and application running under the same user?
+
+Please run your application with the LTTNG_UST_DEBUG environment variable s=
+et to '1' and provide the output. This will help understand where things go=
+ wrong.
+
+Thanks,
+J=E9r=E9mie
+
+--
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+https://www.efficios.com
+________________________________
+From: lttng-dev <lttng-dev-bounces@lists.lttng.org> on behalf of bule via l=
+ttng-dev <lttng-dev@lists.lttng.org>
+Sent: November 4, 2022 06:52
+To: lttng-dev@lists.lttng.org <lttng-dev@lists.lttng.org>
+Subject: [lttng-dev] lttng list --userspace is null
 
 hi ,
-   I used lttng-ust in my project, it's a dpdk program. I built and run it
-, and run lttng list --userspace in another terminal ,but the result is
-null.
-[image: image.png]
+   I used lttng-ust in my project, it's a dpdk program. I built and run it =
+, and run lttng list --userspace in another terminal ,but the result is nul=
+l.
+[image.png]
    And gdb disassemble result has lttng_ust_tracepoint.
-[image: image.png]
+[image.png]
 
    Then I used lttng-ust in a demo, it works ok.
-[image: image.png]
+[image.png]
 so ,  how to fix it ?
 
 Best regards
 
---000000000000a4dcc805eca2e090
-Content-Type: text/html; charset="UTF-8"
+--_000_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_
+Content-Type: text/html; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">hi ,<div>=C2=A0 =C2=A0I used lttng-ust in my project, it&#=
-39;s a dpdk program. I built and run it , and run=C2=A0lttng list --userspa=
-ce in another terminal ,but the result is null.</div><div><img src=3D"cid:i=
-i_la2dfng90" alt=3D"image.png" width=3D"542" height=3D"65"><br></div><div>=
-=C2=A0 =C2=A0And gdb=C2=A0disassemble result has lttng_ust_tracepoint.</div=
-><div><img src=3D"cid:ii_la2dim6w1" alt=3D"image.png" width=3D"542" height=
-=3D"308"><br></div><div><br></div><div>=C2=A0 =C2=A0Then I used lttng-ust i=
-n a demo, it works ok.=C2=A0</div><div><img src=3D"cid:ii_la2dkme22" alt=3D=
-"image.png" width=3D"542" height=3D"428"><br></div><div>so ,=C2=A0 how to f=
-ix it ?</div><div><br></div><div>Best regards</div></div>
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
+=3D"elementToProof">
+Hi,</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
+=3D"elementToProof">
+<br>
+</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
+=3D"elementToProof">
+Just to make&nbsp;sure, is your program still running by the time you issue=
+ 'lttng list --userspace'?</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
+=3D"elementToProof">
+<div style=3D"font-size:12pt;margin:0px" class=3D"ContentPasted2">Also, whi=
+ch versions of LTTng are you running and on what kind of system?</div>
+<span style=3D"font-size:12pt;margin:0px"></span></div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
+=3D"elementToProof ContentPasted0 ContentPasted1">
+<br>
+</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
+=3D"elementToProof ContentPasted0 ContentPasted1">
+Are the session daemon and application running under the same user?</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
+=3D"elementToProof ContentPasted0 ContentPasted1">
+<br>
+</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
+=3D"elementToProof ContentPasted0 ContentPasted1">
+Please run your application with the&nbsp;LTTNG_UST_DEBUG environment varia=
+ble set to '1' and provide the output. This will help understand where thin=
+gs go wrong.<br>
+</div>
+<div class=3D"elementToProof">
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0);">
+Thanks,</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0);">
+J=E9r=E9mie</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div id=3D"Signature">
+<div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0);">
+--</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0);">
+J=E9r=E9mie Galarneau</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0);">
+<div>EfficiOS Inc.</div>
+</div>
+<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
+: 12pt; color: rgb(0, 0, 0);">
+<a href=3D"https://www.efficios.com">https://www.efficios.com</a><br>
+</div>
+</div>
+</div>
+</div>
+<div id=3D"appendonsend"></div>
+<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
+<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
+yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> lttng-dev &lt;lttng-d=
+ev-bounces@lists.lttng.org&gt; on behalf of bule via lttng-dev &lt;lttng-de=
+v@lists.lttng.org&gt;<br>
+<b>Sent:</b> November 4, 2022 06:52<br>
+<b>To:</b> lttng-dev@lists.lttng.org &lt;lttng-dev@lists.lttng.org&gt;<br>
+<b>Subject:</b> [lttng-dev] lttng list --userspace is null</font>
+<div>&nbsp;</div>
+</div>
+<div>
+<div dir=3D"ltr">hi ,
+<div>&nbsp; &nbsp;I used lttng-ust in my project, it's a dpdk program. I bu=
+ilt and run it , and run&nbsp;lttng list --userspace in another terminal ,b=
+ut the result is null.</div>
+<div><img alt=3D"image.png" width=3D"542" height=3D"65" data-outlook-trace=
+=3D"F:1|T:1" src=3D"cid:ii_la2dfng90"><br>
+</div>
+<div>&nbsp; &nbsp;And gdb&nbsp;disassemble result has lttng_ust_tracepoint.=
+</div>
+<div><img alt=3D"image.png" width=3D"542" height=3D"308" data-outlook-trace=
+=3D"F:1|T:1" src=3D"cid:ii_la2dim6w1"><br>
+</div>
+<div><br>
+</div>
+<div>&nbsp; &nbsp;Then I used lttng-ust in a demo, it works ok.&nbsp;</div>
+<div><img alt=3D"image.png" width=3D"542" height=3D"428" data-outlook-trace=
+=3D"F:1|T:1" src=3D"cid:ii_la2dkme22"><br>
+</div>
+<div>so ,&nbsp; how to fix it ?</div>
+<div><br>
+</div>
+<div>Best regards</div>
+</div>
+</div>
+</body>
+</html>
 
---000000000000a4dcc805eca2e090--
+--_000_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_--
 
---000000000000a4dcc905eca2e091
+--_006_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_
 Content-Type: image/png; name="image.png"
-Content-Disposition: inline; filename="image.png"
-Content-Transfer-Encoding: base64
+Content-Description: image.png
+Content-Disposition: inline; filename="image.png"; size=4850;
+	creation-date="Fri, 04 Nov 2022 14:31:40 GMT";
+	modification-date="Fri, 04 Nov 2022 14:56:43 GMT"
 Content-ID: <ii_la2dfng90>
-X-Attachment-Id: ii_la2dfng90
+Content-Transfer-Encoding: base64
 
 iVBORw0KGgoAAAANSUhEUgAAAsYAAABVCAYAAABKBSJxAAABR2lDQ1BJQ0MgUHJvZmlsZQAAKJFj
 YGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8bAySDMwMUgx2CcmFxc4BgQ4ANUwgCjUcG3awyMIPqy
@@ -199,12 +405,15 @@ AgggkD4BAuP0WdMSAggggAACCCCAQAYLEBhn8MuhawgggAACCCCAAALpE8hNX1O0hAACCCDw/xb4
 4IMPytSF4uLiMl3HRQgggEBlEmDEuDK9TZ4FAQQQQAABBBBA4IoF4o4Y5+fn2+OPPx5W+vfff9vC
 hQvDfTYQQAABBJIjcNttt1lRUVFY2ZdffmmrVq0K99lAAAEEEEifwP8AY9wAM2TAvOAAAAAASUVO
 RK5CYII=
---000000000000a4dcc905eca2e091
+
+--_006_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_
 Content-Type: image/png; name="image.png"
-Content-Disposition: inline; filename="image.png"
-Content-Transfer-Encoding: base64
+Content-Description: image.png
+Content-Disposition: inline; filename="image.png"; size=144646;
+	creation-date="Fri, 04 Nov 2022 14:31:40 GMT";
+	modification-date="Fri, 04 Nov 2022 14:56:43 GMT"
 Content-ID: <ii_la2dim6w1>
-X-Attachment-Id: ii_la2dim6w1
+Content-Transfer-Encoding: base64
 
 iVBORw0KGgoAAAANSUhEUgAABCIAAAJaCAYAAAD6cObFAAABR2lDQ1BJQ0MgUHJvZmlsZQAAKJFj
 YGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8bAySDMwMUgx2CcmFxc4BgQ4ANUwgCjUcG3awyMIPqy
@@ -2744,12 +2953,15 @@ wVTBWIJH6HgSoRV9Ic7kAUzwywAhuEFNvxzS9ivRhGCHlpDBFbOZuLxxqArJOBcXhntJ4dD+QiME
 849QOBcnECqVftb7aBqgcQCjPWbMGO8zAR8+aKHBzGNiNXz4cK+RoO1XlEEzjhNOxnf6BQ5rKUOU
 RLMh1LoiDGYjCCJwLhuSOLnEyWmU0Eyi30s7oCGBA0q0ctihhPLQ7lkoS3/R4iL5yw5BcWOohLGj
 IWAIGAKGgCFgCBgCTRGB/weCuM3r5PUc2gAAAABJRU5ErkJggg==
---000000000000a4dcc905eca2e091
+
+--_006_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_
 Content-Type: image/png; name="image.png"
-Content-Disposition: inline; filename="image.png"
-Content-Transfer-Encoding: base64
+Content-Description: image.png
+Content-Disposition: inline; filename="image.png"; size=58536;
+	creation-date="Fri, 04 Nov 2022 14:31:40 GMT";
+	modification-date="Fri, 04 Nov 2022 14:56:43 GMT"
 Content-ID: <ii_la2dkme22>
-X-Attachment-Id: ii_la2dkme22
+Content-Transfer-Encoding: base64
 
 iVBORw0KGgoAAAANSUhEUgAAAvYAAAJWCAYAAAAz/cPOAAABR2lDQ1BJQ0MgUHJvZmlsZQAAKJFj
 YGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8bAySDMwMUgx2CcmFxc4BgQ4ANUwgCjUcG3awyMIPqy
@@ -3778,9 +3990,10 @@ BJwTCBjYNzc3i35xtqamRiorK+XUqVN0nHXuWXFlBBBAAAEEEEAAAQT8CkQNHDiwefDgwbTE+yVi
 AwIIIIAAAggggAAC7hcIKsfe/bdBDRFAAAEEEEAAAQQQiGyBgKk4kU3D3SOAAAKRIXDmzJmgbjQ/
 Pz+o/dgJAQQQQMAZAVrsnXHnqggggAACCCCAAAIIdKhA0C32qampUlBQ4L24fqiquLjYu8wMAggg
 gEDHCOTl5UlOTo73ZJcvX5Zbt255l5lBAAEEEECgLYF/AC2Wz8ac+mt6AAAAAElFTkSuQmCC
---000000000000a4dcc905eca2e091--
 
---===============2843378418007570744==
+--_006_YT2PR01MB5984A9C98DA102FE5A369822BC3B9YT2PR01MB5984CANP_--
+
+--===============6235787231877128200==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -3791,4 +4004,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2843378418007570744==--
+--===============6235787231877128200==--
