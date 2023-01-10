@@ -4,41 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67DD4C54EBE
-	for <lttng-dev@archiver.kernel.org>; Mon,  9 Jan 2023 15:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BC07C54EBE
+	for <lttng-dev@archiver.kernel.org>; Tue, 10 Jan 2023 11:01:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1673276560;
-	bh=zkWirOYtcDaYftmsKEEEuscrgNd3Dt7q/p1lNCv83FI=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	s=default; t=1673348473;
+	bh=Bx/m3YDNEPlen9X1m2JHmBOUu6RnHuFG73D6uN25VxI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=A5SY07xSuR1CnPUvcH1PQTD/A0Fg6uN2VW2jZ8hzKiGqyaMdLA7xMkStpOjcy189Z
-	 oaenIMeLePvnEJR3OaxPM9e2KgUxiqePppIpLauwjirpkENtc71derZom9EbtOmcsd
-	 eOmKCjbBMDvryc6vpBpwu4nzyKVaWZbp/V58FGxRjGGwmR+92Yfy198nfBdUAG1eZ8
-	 ceM/B2lvzMA8MybdlcM8CMAD0KM8WAxdDg1vxfmsSjiESeVz1FeQYgStu55QGCenRo
-	 0VH2G8Sbr61M8+ne1oFZKBIUW+36Bhdh2MD0+m5EH/FyeHx1zNezWKDP5A1B/mu3rl
-	 UP8Yl3xVDpQSg==
+	b=v9AMiGl0CkpEBmpDKcfiieCqYMQMxvHVoWzYRy6Tl3GR1+G2hF7xOGsPyDbfgCeeJ
+	 DAaTy6CVH1DyRsJPQzTWSGs6VOeKT8+0LmUu337LfP9C5C3DaIuyuI5X8yWmFdt3z3
+	 mtD91li0xtCtu5AcETeAKNDKzXCJH7dcZSVLg5nrLQnBSlY8q/EfeNSGaASoewtnZy
+	 HC9S6shM/gxYbJKLPdcaI6/Wmu7VECWNtpCYFcn9EiPYSucWvesXH38sF6Bf569OWV
+	 lr7aMpTYvuP4CrvwTlFLd1gkWWy6IDSdSU0mlYJHDB/rypZqLQYsnpdJ7C4eqX+C1H
+	 8jWYto6OQoZhQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4NrHHM3GJBz1Nw8;
-	Mon,  9 Jan 2023 10:02:39 -0500 (EST)
-Received: from smtpfb2-g21.free.fr (smtpfb2-g21.free.fr [212.27.42.10])
- by lists.lttng.org (Postfix) with ESMTP id 4NrFyS3D4Tz1Np7
- for <lttng-dev@lists.lttng.org>; Mon,  9 Jan 2023 09:02:55 -0500 (EST)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtpfb2-g21.free.fr (Postfix) with ESMTP id BCC8B4D98F
- for <lttng-dev@lists.lttng.org>; Mon,  9 Jan 2023 15:02:53 +0100 (CET)
-Received: from webmail.free.fr (unknown [172.20.243.59])
- by smtp5-g21.free.fr (Postfix) with ESMTP id 683A65FF93
- for <lttng-dev@lists.lttng.org>; Mon,  9 Jan 2023 15:02:16 +0100 (CET)
-Received: from [185.105.31.250]
-	by webmail.free.fr
-MIME-Version: 1.0
-Date: Mon, 09 Jan 2023 15:02:16 +0100
+	by lists.lttng.org (Postfix) with ESMTP id 4NrntK18pzz1Pjg;
+	Tue, 10 Jan 2023 06:01:13 -0500 (EST)
+Received: from us-smtp-delivery-124.mimecast.com
+ (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4NrntH5LSNz1PJZ
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Jan 2023 06:01:10 -0500 (EST)
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-674-BjhxAYraMMK0BpVLmR6wFQ-1; Tue, 10 Jan 2023 05:54:24 -0500
+X-MC-Unique: BjhxAYraMMK0BpVLmR6wFQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com
+ [10.11.54.3])
+ (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+ (No client certificate requested)
+ by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99DB438041CF
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Jan 2023 10:54:24 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.44])
+ by smtp.corp.redhat.com (Postfix) with ESMTPS id 3B0851121314
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Jan 2023 10:54:24 +0000 (UTC)
 To: lttng-dev@lists.lttng.org
-Message-ID: <f510dceba69eba9ce6803006b1fa5cd2@free.fr>
-X-Sender: chafraysse@free.fr
-User-Agent: Webmail Free/1.3.3
-X-Mailman-Approved-At: Mon, 09 Jan 2023 10:02:37 -0500
-Subject: [lttng-dev] LTTng UST structure support
+Date: Tue, 10 Jan 2023 11:54:22 +0100
+Message-ID: <87h6wyhd7l.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Subject: [lttng-dev] [PATCH] lttv: C99 compatibility fix
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -50,27 +58,38 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: chafraysse--- via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: chafraysse@free.fr
+From: Florian Weimer via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Florian Weimer <fweimer@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi,
+While rebuilding Fedora with a C99 compiler, we noticed that we need
+this patch to avoid a compilation error:
 
-I'm looking for a CTF writer to serialize instrumentations in an 
-embedded Linux/Rust framework
-LTTng UST looked like a very strong option, but I want to serialize 
-structures as CTF compound type structures and I did not see those 
-supported in the doc or api
-I'd love to have confirmation that I did not just miss something :)
-If LTTng UST is out for me I will probably try to use the ctf-writer 
-module of babeltrace 2 instead
+diff --git a/lttv/lttv/state.c b/lttv/lttv/state.c
+index 513c1bf3bb03ec7a..a1a31df2cbe6be30 100644
+--- a/lttv/lttv/state.c
++++ b/lttv/lttv/state.c
+@@ -271,7 +271,7 @@ gboolean rettrue(gpointer key, gpointer value, gpointer user_data)
+ 	return TRUE;
+ }
+ 
+-static guint check_expand(nb, id)
++static guint check_expand(int nb, int id)
+ {
+ 	if(likely(nb > id))
+ 		return nb;
 
-Best regards,
+Related to:
 
-Charles
+  <https://fedoraproject.org/wiki/Changes/PortingToModernC>
+  <https://fedoraproject.org/wiki/Toolchain/PortingToModernC>
+
+Thanks,
+Florian
+
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
