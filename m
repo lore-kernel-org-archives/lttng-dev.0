@@ -4,43 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9468C46467
-	for <lttng-dev@archiver.kernel.org>; Tue, 10 Jan 2023 19:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7476DC46467
+	for <lttng-dev@archiver.kernel.org>; Wed, 11 Jan 2023 11:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1673379971;
-	bh=ttL9+QmrPqCfM46blT3PwNo7ywSr19JXcD29bF01umI=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	s=default; t=1673434905;
+	bh=7XuE79vFJsL4B1pB8xolky57WAh3D7vaEYKPrHKeG6w=;
+	h=To:References:Date:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=z9+1YyWqBGb0FThGtxdNqKnKOCDC9I7FZ4SFTQUhffOslqboIM+GloksRNfIgX78r
-	 F3gdp304V8ePklHkTDwE9TbCdgVEz296ChZswHrCJ2LDAj6J5qgfzMVfvKm9JsXXHL
-	 lFfhkTo1nYl7YEAOZ6W5zGFf+pROMLjbr6otmzqOLJ9CtJIsYvK28XfE0rCQogHQ5P
-	 KZtAtL/7b68viL4jAOVzhwuHqidqBMrsGBzIpIwf2gcuJb2GHjtWZzp1pmJyCCLDw7
-	 32KdeAK2cytpd+GY8d59PXhVUyjXa5dNq8sQkecQPzO9m3HjXLwoBZbw31IfcfrIiA
-	 IJAALSNEVOVQg==
+	b=j0CDe7YC4qYAT+D1czfwDM9meVyJNwvytD6EqA9t9UUoDA7vYyR1heJ/IPqmtY6xB
+	 UMFW2Pp2H9KT3RNDXUQGYb8wXJGjLPhfghcmjz2J6uDcoYgiERS2HtWxVoAwWlBk/k
+	 gHDgUJeXgLUODMh17nDDYpyDY5m2gadaO5unE4UunjBmQw6tr9nOG6ZB14ROrNSHxP
+	 UDJVDgE+xe8/HyLmK0WHqJFErAMqeSRllxaF9ca/zZ4i7Lx/xtXfjhSeUdACN1X0Hs
+	 2flqOrYYqfYO7Z0Wawn/DdxdMF2U2vgiG6w08yRtyaf2n75A+1RHaBSQGCp+bxVrKE
+	 EZiG/POpvBtkQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Ns1X25fRrz1PsC;
-	Tue, 10 Jan 2023 14:46:10 -0500 (EST)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4Ns1X16bltz1Ph7
- for <lttng-dev@lists.lttng.org>; Tue, 10 Jan 2023 14:46:09 -0500 (EST)
-Received: from [172.16.0.101] (192-222-180-24.qc.cable.ebox.net
- [192.222.180.24])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4Ns1X11cvWzgJ2;
- Tue, 10 Jan 2023 14:46:09 -0500 (EST)
-Message-ID: <d17dbab6-5222-7065-ae0e-144687b2efc6@efficios.com>
-Date: Tue, 10 Jan 2023 14:46:42 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To: Florian Weimer <fweimer@redhat.com>, lttng-dev@lists.lttng.org,
- Yannick Brosseau <yannick.brosseau@gmail.com>,
- Michael Jeanson <mjeanson@efficios.com>,
- Michel Dagenais <michel.dagenais@polymtl.ca>
+	by lists.lttng.org (Postfix) with ESMTP id 4NsPrQ3nFHz1PfT;
+	Wed, 11 Jan 2023 06:01:42 -0500 (EST)
+Received: from us-smtp-delivery-124.mimecast.com
+ (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+ by lists.lttng.org (Postfix) with ESMTPS id 4NsPrP2PYPz1Pkx
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Jan 2023 06:01:41 -0500 (EST)
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-224-awEXka7KNQiMCd1uBM-e-Q-1; Wed, 11 Jan 2023 06:01:31 -0500
+X-MC-Unique: awEXka7KNQiMCd1uBM-e-Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com
+ [10.11.54.7])
+ (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+ (No client certificate requested)
+ by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 256DF3814954;
+ Wed, 11 Jan 2023 11:01:31 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.17])
+ by smtp.corp.redhat.com (Postfix) with ESMTPS id 3C666140EBF4;
+ Wed, 11 Jan 2023 11:01:30 +0000 (UTC)
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 References: <87h6wyhd7l.fsf@oldenburg.str.redhat.com>
-In-Reply-To: <87h6wyhd7l.fsf@oldenburg.str.redhat.com>
-Subject: [lttng-dev] lttv: Document project status as unmaintained
+ <d17dbab6-5222-7065-ae0e-144687b2efc6@efficios.com>
+Date: Wed, 11 Jan 2023 12:01:28 +0100
+In-Reply-To: <d17dbab6-5222-7065-ae0e-144687b2efc6@efficios.com> (Mathieu
+ Desnoyers's message of "Tue, 10 Jan 2023 14:46:42 -0500")
+Message-ID: <87r0w1cp2v.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Subject: Re: [lttng-dev] lttv: Document project status as unmaintained
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -52,72 +63,34 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Florian Weimer via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Florian Weimer <fweimer@redhat.com>
+Cc: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi Florian,
+* Mathieu Desnoyers:
 
-I'll pull your patch into the lttv master branch, but please be aware
-that the LTTV project has not seen activity since 2013, is currently
-unmaintained, and that we do not plan on doing further releases of this
-project. Our efforts were diverted elsewhere on the trace analysis
-front, namely into Trace Compass and Babeltrace.
+> Hi Florian,
+>
+> I'll pull your patch into the lttv master branch, but please be aware
+> that the LTTV project has not seen activity since 2013, is currently
+> unmaintained, and that we do not plan on doing further releases of this
+> project. Our efforts were diverted elsewhere on the trace analysis
+> front, namely into Trace Compass and Babeltrace.
+>
+> In order to clarify the situation, I will introduce a commit into
+> LTTV's master branch which will remove Yannick Brosseau from the
+> maintainer role in the README file, and add this section at the
+> beginning:
 
-In order to clarify the situation, I will introduce a commit into
-LTTV's master branch which will remove Yannick Brosseau from the
-maintainer role in the README file, and add this section at the
-beginning:
-
-PROJECT STATUS
---------------------------------
-
-The LTTV project is currently unmaintained. If you need up-to-date tools
-to view/analyze LTTng traces, please consider the following alternatives:
-
-- Trace Compass (https://www.eclipse.org/tracecompass)
-- Babeltrace (https://babeltrace.org)
-
-
-Thank you Yannick for stepping into the role of maintainer near the
-end of this project lifetime.
-
-Michael Jeanson noticed that the lttv Fedora package was orphaned.
-He just adopted it and is currently investigating the Fedora
-documentation to figure out how to request its removal from Fedora.
-
-For those interested in historical artifacts, I created the lttv
-svn repository back in 2003 when I was sitting at the Decelles building
-at Ecole Polytechnique, working for Prof. Michel Dagenais:
-
-commit bbdf43d6e0e3bd3f9ade420e81915408cbe4fbba
-Author: compudj <compudj@04897980-b3bd-0310-b5e0-8ef037075253>
-Date:   Thu May 15 13:07:17 2003 +0000
-
-     Initial repository layout
-     
-     git-svn-id: http://ltt.polymtl.ca/svn@1 04897980-b3bd-0310-b5e0-8ef037075253
-
-This was the beginning of a fun ride which turned out motivating the
-creation of LTTng, the Linux kernel Tracepoints, the Common Trace Format,
-Trace Compass, Babeltrace, liburcu, the membarrier(2), and the rseq(2)
-system calls.
-
-LTTV had a good 10 years of activity from 2003 to 2013, but it is now high
-time to redirect users to Trace Compass and Babeltrace instead.
+Understood.  Fedora is building a lot of legacy software, and many of
+the C99 fixes are in this area.
 
 Thanks,
-
-Mathieu
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Florian
 
 _______________________________________________
 lttng-dev mailing list
