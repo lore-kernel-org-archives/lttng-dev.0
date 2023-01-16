@@ -4,38 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7241FC6379F
-	for <lttng-dev@archiver.kernel.org>; Fri, 13 Jan 2023 21:20:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99418C46467
+	for <lttng-dev@archiver.kernel.org>; Mon, 16 Jan 2023 15:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1673644827;
-	bh=6C3z/Bom2vjnb7pOy5t+MN1x7JBQrdSRyuZ/d/8NDxw=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=J8gsRNG36y0nZARt2HyyfZ/ebkhc+mPJTWdibmujA8LUkC4XXUihwK73l4yFi8mfu
-	 1oqCTZLtOpnLK3uKiCvZj9GtslgyDg9bNN6wEaN8o4Ely5PPkMvr6mAammlXnjyv0+
-	 toAODdX//0ChYJuel3lv04w9P4e5SY7WDNv7312xhCtUi7Q0rZBz6uxFBJhpXLS5Wp
-	 A/XckGmvLDSf6cERtd8evMxYTXb5xc5r0YzoMpEIyW8Lbt/Bwa9KHweHUxmWRmWdK/
-	 0aYuz/q8EwTJM2z6mUeZ84sLM34fHv8SeIUwWSqseftiA07Z6CtlRnDE4X1QfRrYLN
-	 QDaE54l/nCvHw==
+	s=default; t=1673883501;
+	bh=4k1zegJNMrWdjoNf25Zs6E8ui2tgPdq8Q+XQcaIljPg=;
+	h=Date:To:Cc:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=Q+RaMU8RBWM2tq8AjCrg4jj/vHnarl6bvbX0Vawzd1GaSe8SuMzQ6FzY5UZVcGzQb
+	 vHxB0idmHJwA6X4HVm7Q0/+PwW9N2t05rD0BvnW8I+7jdZNdZtCs4i8g6F/RK/4JWE
+	 B4Q9IiTirmGgwNW3cTsT3UZBB573jwbrQACXClc0FNrhGPYN17ZKBPdqzlKK7N5m1J
+	 xD39SxHNwZ8SxpPEA2vkFZ8H8fUuSKrkB063dilAjGHwyeO5TMocX6xll4RMwyWY0R
+	 fQqJEjiLTvULZrbUccH0tOkwmK5dJFDsJkn0RZWp8tEFsQw0fjDVUhFApD0ZYktVNv
+	 RP16EmQYshn/A==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4NtvTQ3k7Mz1QrD;
-	Fri, 13 Jan 2023 16:20:26 -0500 (EST)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4NtvTL0yFwz1Qdf
- for <lttng-dev@lists.lttng.org>; Fri, 13 Jan 2023 16:20:21 -0500 (EST)
-Received: from [10.1.0.205] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4NtvSk161FzgMN;
- Fri, 13 Jan 2023 16:19:50 -0500 (EST)
-Message-ID: <d8cf45aa-936c-90e7-61c4-cef6f7fe0006@efficios.com>
-Date: Fri, 13 Jan 2023 16:20:23 -0500
+	by lists.lttng.org (Postfix) with ESMTP id 4NwblJ4PQWz1RYp;
+	Mon, 16 Jan 2023 10:38:20 -0500 (EST)
+Received: from smtpfb2-g21.free.fr (smtpfb2-g21.free.fr [212.27.42.10])
+ by lists.lttng.org (Postfix) with ESMTP id 4NwRmr6RYxz1RVS
+ for <lttng-dev@lists.lttng.org>; Mon, 16 Jan 2023 04:39:08 -0500 (EST)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtpfb2-g21.free.fr (Postfix) with ESMTP id F11474280F6
+ for <lttng-dev@lists.lttng.org>; Mon, 16 Jan 2023 10:39:06 +0100 (CET)
+Received: from zimbra43-e7.priv.proxad.net (unknown [172.20.243.193])
+ by smtp2-g21.free.fr (Postfix) with ESMTP id 9B1E32003FC;
+ Mon, 16 Jan 2023 10:38:28 +0100 (CET)
+Date: Mon, 16 Jan 2023 10:38:28 +0100 (CET)
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
+Message-ID: <1512260626.80256142.1673861908243.JavaMail.root@zimbra43-e7.priv.proxad.net>
+In-Reply-To: <79319a2d-0898-0243-1572-26e476cac681@efficios.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org,
- linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [lttng-dev] [RELEASE] LTTng-modules 2.12.12 and 2.13.8 (Linux
- kernel tracer)
+X-Originating-IP: [185.105.31.250]
+X-Mailer: Zimbra 7.2.0-GA2598 (ZimbraWebClient - FF3.0 (Win)/7.2.0-GA2598)
+X-Authenticated-User: chafraysse@free.fr
+X-Mailman-Approved-At: Mon, 16 Jan 2023 10:38:19 -0500
+Subject: Re: [lttng-dev] LTTng UST structure support
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -47,52 +52,45 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: chafraysse--- via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: chafraysse@free.fr
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi,
-
-Those are stable release updates of the LTTng modules project.
-
-The most relevant change is that the 2.13.8 version introduces
-support for the 6.1 Linux kernel, kernel version ranges updates
-for the RHEL kernels, and a kallsyms wrapper fix on ppc64el.
-
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-tracer toolset.
-
-* New in these releases:
-
-2023-01-13 (National Sticker Day) LTTng modules 2.13.8
-         * fix: jbd2: use the correct print format
-         * Fix: in_x32_syscall was introduced in v4.7.0
-         * Explicitly skip tracing x32 system calls
-         * fix: kallsyms wrapper on ppc64el
-         * fix: Adjust ranges for RHEL 8.6 kernels
-         * fix: kvm-x86 requires CONFIG_KALLSYMS_ALL
-         * fix: mm/slab_common: drop kmem_alloc & avoid dereferencing fields when not using (v6.1)
-
-2023-01-13 (National Sticker Day) LTTng modules 2.12.12
-         * fix: jbd2: use the correct print format
-         * Fix: in_x32_syscall was introduced in v4.7.0
-         * Explicitly skip tracing x32 system calls
-         * fix: kallsyms wrapper on ppc64el
-         * fix: Adjust ranges for RHEL 8.6 kernels
-         * fix: kvm-x86 requires CONFIG_KALLSYMS_ALL
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+SGkgTWF0aGlldSwKClRoYW5rcyBmb3IgeW91ciByZXBseSA6KQpJJ2xsIHN0aWNrIHRvIGJ0MiBt
+b2R1bGVzIGluIHRoZSBtZWFudGltZSB0aGVuCkknbGwgYWxyZWFkeSBiZSBzYXZpbmcgYSB0b24g
+b2YgdGltZSB3aXRoIHRob3NlIGFuZCB0aGUgQ1RGIHNwZWMgd2hpY2ggaXMgZ3JlYXQgIQoKQmVz
+dCByZWdhcmRzLAoKQ2hhcmxlcwoKLS0tLS0gTWFpbCBvcmlnaW5hbCAtLS0tLQpEZTogIk1hdGhp
+ZXUgRGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgrDgDogY2hhZnJh
+eXNzZUBmcmVlLmZyLCBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCkVudm95w6k6IEpldWRpIDEy
+IEphbnZpZXIgMjAyMyAyMToxMDo1NwpPYmpldDogUmU6IFtsdHRuZy1kZXZdIExUVG5nIFVTVCBz
+dHJ1Y3R1cmUgc3VwcG9ydAoKT24gMjAyMy0wMS0wOSAwOTowMiwgY2hhZnJheXNzZS0tLSB2aWEg
+bHR0bmctZGV2IHdyb3RlOgo+IEhpLAo+IAo+IEknbSBsb29raW5nIGZvciBhIENURiB3cml0ZXIg
+dG8gc2VyaWFsaXplIGluc3RydW1lbnRhdGlvbnMgaW4gYW4gCj4gZW1iZWRkZWQgTGludXgvUnVz
+dCBmcmFtZXdvcmsKPiBMVFRuZyBVU1QgbG9va2VkIGxpa2UgYSB2ZXJ5IHN0cm9uZyBvcHRpb24s
+IGJ1dCBJIHdhbnQgdG8gc2VyaWFsaXplIAo+IHN0cnVjdHVyZXMgYXMgQ1RGIGNvbXBvdW5kIHR5
+cGUgc3RydWN0dXJlcyBhbmQgSSBkaWQgbm90IHNlZSB0aG9zZSAKPiBzdXBwb3J0ZWQgaW4gdGhl
+IGRvYyBvciBhcGkKClRoaXMgaXMgY29ycmVjdC4gSSBhbSBjdXJyZW50bHkgd29ya2luZyBvbiBh
+IG5ldyBwcm9qZWN0IGNhbGxlZCAKImxpYnNpZGUiIChzZWUgaHR0cHM6Ly9naXQuZWZmaWNpb3Mu
+Y29tLz9wPWxpYnNpZGUuZ2l0O2E9c3VtbWFyeSkgd2hpY2ggCmZlYXR1cmVzIHN1cHBvcnQgZm9y
+IGNvbXBvdW5kIHR5cGVzLgoKSG93ZXZlciwgd2Ugc3RpbGwgbmVlZCB0byBkbyB0aGUgaGVhdnkt
+bGlmdGluZyBpbXBsZW1lbnRhdGlvbiB3b3JrIG9mIAppbnRlZ3JhdGluZyB0aGlzIHdpdGggTFRU
+bmctVVNULiBUaGlzIGlzIHRoZSBwbGFuIHRvd2FyZHMgc3VwcG9ydGluZyAKY29tcG91bmQgdHlw
+ZXMgaW4gTFRUbmctVVNULgoKPiBJJ2QgbG92ZSB0byBoYXZlIGNvbmZpcm1hdGlvbiB0aGF0IEkg
+ZGlkIG5vdCBqdXN0IG1pc3Mgc29tZXRoaW5nIDopCj4gSWYgTFRUbmcgVVNUIGlzIG91dCBmb3Ig
+bWUgSSB3aWxsIHByb2JhYmx5IHRyeSB0byB1c2UgdGhlIGN0Zi13cml0ZXIgCj4gbW9kdWxlIG9m
+IGJhYmVsdHJhY2UgMiBpbnN0ZWFkCgpGb3Igbm93IHRoZSBjdGYtd3JpdGVyIG1vZHVsZXMgb2Yg
+YnQyIHdvdWxkIGJlIGFuIGFsdGVybmF0aXZlIHRvIApjb25zaWRlciwgYnV0IHJlbWVtYmVyIHRo
+YXQgaXQgaXMgbm90IGRlc2lnbmVkIGZvciBsb3ctaW1wYWN0IHRyYWNpbmcgCnN1Y2ggYXMgbHR0
+bmctdXN0LiBTbyBpdCBkZXBlbmRzIG9uIGhvdyBtdWNoIHRyYWNlciBvdmVyaGVhZC9ydW50aW1l
+IAppbXBhY3QgeW91IGNhbiBhZmZvcmQgaW4geW91ciB1c2UtY2FzZS4KClRoYW5rcywKCk1hdGhp
+ZXUKCj4gCj4gQmVzdCByZWdhcmRzLAo+IAo+IENoYXJsZXMKPiBfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBs
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmlj
+aU9TIEluYy4KaHR0cHM6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
+L2xpc3RpbmZvL2x0dG5nLWRldgo=
