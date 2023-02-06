@@ -4,113 +4,137 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12B78C636D3
-	for <lttng-dev@archiver.kernel.org>; Thu,  2 Feb 2023 23:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06CE3C636D3
+	for <lttng-dev@archiver.kernel.org>; Mon,  6 Feb 2023 16:26:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1675379911;
-	bh=03qWaGzSYLxYZd4rD2rNFsg5RDtVPq5I0b4Mt57eZ5U=;
-	h=To:CC:Date:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=J45nfXjqer5/N1GACX3HEBmlebDTAHbvcmlgX1ZgXOYSOeSNlsgBCMzeJNAz/N/HT
-	 W/GAYQ9DIdtd0k9t7h+OlVrNeB9sy0vkro+ta4mObASb3BODPsdvBS6v7mQi2aPio+
-	 /76xwGIdfnDcY3H+36+a1qSJkF4WvQ8xEeLWzPiGbmAC+HhcD1opVBONjAaW6FPXQX
-	 G/7OsvLg3VOfpq8MdXnipPq9slmr0cUjg8ty/sbI0A/H1AEeFCfIv6Awo6+YntZ6Ey
-	 KIh7GWZqk7ApyYoblfFkvJvvY/XS6DYHfGc/gMgZoN62Mo4YzxmUYcVAA9C+YZVd/P
-	 km9mDJYy0Hreg==
+	s=default; t=1675700803;
+	bh=TimRAAeOOj1Yz3rBvcQGJYLQbEG3mwhRgsBHamiYMFc=;
+	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=p5tgcWcxf+qNI1/eNwXfReijQ+yKqftGz/Y7oEb3MtKcdlPJO4kyWxN7YmxPpihei
+	 vOxPpotkwadKCP7BCdAdCtr0pdCMM+tlKuagGSbd3pAixlOPu3C9FLQQYcefsL3v8t
+	 xIuLobjyXvLk8WRcrvstJQ8LZK6/MH2g2uFSHxNuWR6rXu5wiSkXGpBk6d7e9lsfP3
+	 Ou0lsNDXBL7hcM4b0DR4RwIgzL9Efp7gvzdtMzXwRWdj79ys22pdMnc2qIQGniBp8k
+	 ObjIrhTu3yC0B3f+hxwpc9tKoFwWOT4N6CSO9oAmTMBkf7CAh4rS6O2L8aQKDyGp67
+	 plHI++pDoOu5g==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4P7F8R1Pf0z1Y6G;
-	Thu,  2 Feb 2023 18:18:31 -0500 (EST)
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
- by lists.lttng.org (Postfix) with ESMTPS id 4P7F8P355dz1XyG
- for <lttng-dev@lists.lttng.org>; Thu,  2 Feb 2023 18:18:29 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4P9WqR03j9z1Z3j;
+	Mon,  6 Feb 2023 11:26:42 -0500 (EST)
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com
+ [205.220.178.238])
+ by lists.lttng.org (Postfix) with ESMTP id 4P9VNq38wyz1ZTL
+ for <lttng-dev@lists.lttng.org>; Mon,  6 Feb 2023 10:22:02 -0500 (EST)
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+ by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 316BuqmY013560; Mon, 6 Feb 2023 15:21:53 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com
+ (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
+ by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3nhck31wp2-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Mon, 06 Feb 2023 15:21:53 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vug1PgG5rSSxl42a/Oko6mIp3lt88knv4uPLqmP8SX49eDjixNnO2/IxzR+pwnXAhNMrCBAqhQB4GblDwlSo7QtE2BMczW+9+PR3eWwLrNcSmknDVMHTgMMYoD0NOM1fo66TjlP2CDgQJZ2Jkwj1oHCk7RMdG8fC2a7dS9Gm50vWKpB/WEHUIAFzD2GXbjhj04Ha1TkH3oWuTMWorOt3opb15oHgsxeBU2sWB1ZlSTRaG2Jau/cSyBKrLmZdbUwP+JnlS7NQhyPfCDHe7CjQDCQ3i7RTXl1XfpCmbNEC66HfI887lwvvNunbbL+/7cExOfcHMQm69z5xyfBA9Wjo2Q==
+ b=URiK1wDyAgBKf+F2/ZnrFLznFaW6VxpbkOdnHeMDrm9YoqQtdf4fkwZmCmzdU62JDUqQmoNN9URYgVnQ/FDwGHXl1uM1dgDSPBSiXP305XVhz39p1sxnliUQ6CM6M4sUnliSRbfaqVMc8FEgy2/6vBAADjyUzkmrgA9gtrotJoSLupogjXeEHpWz6dFZ004rLa8JYXgbhK0XSZ1S04fWN3MTY/mYIfuLIOZTNehgK/hav6e3MQg+aNhNcjoJPAEC1o+uW6e41h+ES8U9WijQfevvR3w39+MKWtjAHYt3MAyvVLhk2DUpCZDmNuxoguphlzFRPxdhY5O+uta2kr0u+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h5LhN6DXYsgEsYBFBjEUBEBmRw0H/WwHrnyBD6OhUsQ=;
- b=CNMT45DiszkSJxSg50dsz3e0rW0jJ9fVbSnJwzQZy9SNdaXtYcGuJ9I1gVFLFWJdtPrat3VximZICKVXGSRonxwv+WsALSugw7eBMwwdVg2tQzzVy40+9+Pp2VgHoJpPVgJGukmcf2V0fxPlnANbJsKnlmoyzhDT+RhQ39IQpUJK9nzQvIFYxftiI+J89yfOo7oxr7VQlWUR8QHC9IisisFAMijBYm7V58hMwbSHsNX/8K2nOPjKpwtbcrm+kNIaJkCY8Dtk5wMZzpOBzDzUsTjD2ImCsr1Y4EKx3hLIPRrDQOm+/6GzG+zx9pKiHFJWxFtkoAv0bUlLMux2f28fWA==
+ bh=xj8LDzXHqkcmr3PlZLS9ZSTCM5lK4dXTKSMMo5Br2Wk=;
+ b=N4aNya0RbI0wMkSkF/XPTYEOhIwSM9Qoaa2YYPmj5HNNQA58GIzPZxzxAgpjCUsfgrrtDaTbMe2PX73Zs25qWFu5LV52QOt5K4koPK3ZnaOXE4l4xw1MLB4FPeEt6mF4HBEEeavm4xaZt5aNGItxZ+Uuc1ql1s6aZUaLK+YrteSmetVaFRJOTLkgx7MTm3Pqz+lC5krVSaNyjI/s5Z+LRWwGOrPjYfYCfVIHT5BURiDShFALGiaFulWNWwiW/9cOvvGzzOVhuHg3Rcs77ZK3CwAlC3671J8BbuLFryO7DBmxtu3TnUvTvaLZvRrH/ODc6xBWHDbt15TTQ+4pfQm13g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:4e::11)
- by YT3PR01MB9505.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:9f::16)
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from PH0PR11MB4904.namprd11.prod.outlook.com (2603:10b6:510:40::10)
+ by IA0PR11MB7185.namprd11.prod.outlook.com (2603:10b6:208:443::14)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 2 Feb
- 2023 23:18:13 +0000
-Received: from YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::157d:652e:dcc8:1d01]) by YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::157d:652e:dcc8:1d01%6]) with mapi id 15.20.6064.025; Thu, 2 Feb 2023
- 23:18:13 +0000
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "chafraysse@free.fr"
- <chafraysse@free.fr>
-CC: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Thread-Topic: [lttng-dev] LTTng UST structure support
-Thread-Index: AQHZJDttVP/TZI0+4USL3qyzEYzfV66bO3+AgAWYnQCAGyQggIAAbSDi
-Date: Thu, 2 Feb 2023 23:18:13 +0000
-Message-ID: <YT2PR01MB5984548C6294278120154FDEBCD69@YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM>
-References: <1512260626.80256142.1673861908243.JavaMail.root@zimbra43-e7.priv.proxad.net>
- <233483636.139091746.1675354007888.JavaMail.root@zimbra43-e7.priv.proxad.net>
-In-Reply-To: <233483636.139091746.1675354007888.JavaMail.root@zimbra43-e7.priv.proxad.net>
-Accept-Language: en-CA, en-GB, fr-CA, en-US
-Content-Language: en-CA
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 15:21:50 +0000
+Received: from PH0PR11MB4904.namprd11.prod.outlook.com
+ ([fe80::f00d:1df7:18cd:2194]) by PH0PR11MB4904.namprd11.prod.outlook.com
+ ([fe80::f00d:1df7:18cd:2194%2]) with mapi id 15.20.6064.034; Mon, 6 Feb 2023
+ 15:21:49 +0000
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Thread-Topic: [lttng-dev] lttng-consumerd crash on aarch64 due to x86 arch
+ specific optimization
+Thread-Index: AQHZNY5Xd7zW3o4uskqmkE3H94l/2664tByAgAAD3ACAAyMcAIAF0MGQ
+Date: Mon, 6 Feb 2023 15:21:49 +0000
+Message-ID: <PH0PR11MB4904BF8DDA04502FFB89E35892DA9@PH0PR11MB4904.namprd11.prod.outlook.com>
+References: <PH0PR11MB490408B49130B7C9CB661E1A92D39@PH0PR11MB4904.namprd11.prod.outlook.com>
+ <46f36a1a-c748-773b-8f6d-d481c9c8ad1b@efficios.com>
+ <e525c864-a2ee-ef34-b7fd-1c114e70b081@efficios.com>
+ <d1eb23d9-269f-85ea-0b7a-a3b779ffa843@efficios.com>
+ <ea3518a5-e539-1616-432c-b7fe7fcada2f@efficios.com>
+In-Reply-To: <ea3518a5-e539-1616-432c-b7fe7fcada2f@efficios.com>
+Accept-Language: sv-SE, en-US
+Content-Language: sv-SE
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: YT2PR01MB5984:EE_|YT3PR01MB9505:EE_
-x-ms-office365-filtering-correlation-id: 26cc5c30-33df-49e2-4881-08db0573c1c5
+x-ms-traffictypediagnostic: PH0PR11MB4904:EE_|IA0PR11MB7185:EE_
+x-ms-office365-filtering-correlation-id: 09afeb0f-3fc0-4272-25fc-08db0855de26
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J93TEOSoLzruVLao7MqcYgBnqQNfXf0O1HUsMO0B3JBz5SXv50uUTY0+8M+UWdjJJ7AoGSu4AiIBn1sSIEsj7ikBr+dB801XERfEth6GA+Gq6uNOng9fGMXWa67nsIL7SpXOTt7/4+AfsYPzxtckY6jkgC+nTSo5Cb+OlwwTpMURUQtbOan+t2Fx1oIJ1wIpz5QiUzu6LcL9ypejXw79TdTnmXnAYEdrc5s8tX278ROdtsQgDDnHShrvCZ9/p4acfvfj3S/YXgZco15NuBTvHYo2MSxM+g2SI41y7hferr6EntoWsc2x2arfTEK3iRAC6FhEb1QlaeyRW2jZIwkMKPdhJMnYlVBvIF+AGqtBalfRGQ8MUPsz6/yZauxFy0lMVccnPYpf/rcGgsl+Cddy9FbnKSrcCsxe/uTHw93+frGj/GXIfYteW8lPkVxiLH97b5pUU/3xHy4bDgRit0356yHbEySGs+Hy+5RDh9GH5gysc2PyGwq7ciqKC8nd6F1VVo8nv+hMWng0bMbA+4KUw5HW/GRV46B+qBZQtI54Xi0IF/qOA+0EaV7UrXR39dMfMoa97PbwS6lHqbEnRyHZwvZ3hxnGFF4YZmxMT6qeX5q4WbfhqHZBhwoCPsolUkbT5gfpulhcwt91yNuNLYyuKCbT9Upu7lsx3vY7xFoaGQYW4WJJqmGNAwxzN12Wg2nhCs2f8OcjqWh9KK3P4+D2qRJPdXV57qRXbwLmqwT2W2pgG8iI5HOPWH9C3Z04wFJ3rMU010mkSKUwm5uwB+uaKC7QG+SA7souIFS/bMCEjry/XmbcmzxbotVXEfFgNVJUS+8jC1AjN3W71TJ1u8JeWw==
+x-microsoft-antispam-message-info: eQsSId2fPE6nIV9hPE7+FC+jKYYKicG1rcgdU8LD7og0C2UnetSpy0ONWVF5s+DCJo2uq+MrTWBwsDyjOvUgvTJ973nHU+iAzrN4PMPcsgnyrZj98fw+ALWsoIK7mfbCiw99HuSMc/AjUZcVbYtXJTBG8i8EYQy9wbc1KuUpGfZAMMVBKfk40DGC0kcrGo9G/P5jgNGmE9MxHx6+vQmOCQV7UfQzbaXgSHxHXRpBhclLnhalhM4iXZftID3kWSJXNuUiAKCQ+7iWaBN+h507gF5GYyQESevc9Lq+CMdEGGS2usU72fJeCZ8qy7o8gkPvhxE3cBOE8Z8hMhExm4gA+AD119IvYMPq3tr5VL0PRZFSxB82nq7ny8kY/6+1S7RKTA/TUQ6FUHeiUuvFU5a6TPP+BpaJohYRcd9KswXyx4Gn/Av/wJ/fIR+WE3aoukXeh2zxzXVcggk7T3jFJzpgCrvDxSZGpaTMNyrlcgW2mvmfsiyFRDvjxuezxBmO83CE97T3D7jIqkKqdztxXEapBtWvZ5Qph4Wq15pvc7NNcPGjH8oJ0YWl2aSVWs0zszs0TiAAxLzpX4SpB7lBQa5v3fGZGd9DGXyeoXBpq24yuw5zDQaKuHp4dolpHKPtD78npjvVB9+XQgVJ7lMFApsJaDy93r8x9sHyIgaiDys8FeyHdqxqZfLNMMS5/UQv3Gm+C+W1+lYOk2wzsALLqxRHk+cukDlAgl12KYvz+7V+iwI=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230025)(366004)(136003)(396003)(39830400003)(376002)(346002)(451199018)(19627405001)(2906002)(478600001)(91956017)(66574015)(966005)(9686003)(76116006)(186003)(71200400001)(53546011)(26005)(52536014)(8936002)(38070700005)(7696005)(5660300002)(86362001)(41300700001)(55016003)(66476007)(66446008)(83380400001)(66556008)(8676002)(4326008)(38100700002)(64756008)(122000001)(66946007)(6506007)(33656002)(316002)(166002)(110136005)(41080700001)(15866825006);
+ IPV:NLI; SFV:NSPM; H:PH0PR11MB4904.namprd11.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230025)(4636009)(376002)(366004)(39850400004)(396003)(136003)(346002)(451199018)(66476007)(76116006)(83380400001)(122000001)(38070700005)(66946007)(38100700002)(5660300002)(8936002)(41300700001)(8676002)(64756008)(66446008)(2906002)(4744005)(9686003)(66556008)(6506007)(966005)(52536014)(478600001)(186003)(26005)(316002)(33656002)(110136005)(71200400001)(7696005)(55016003)(86362001);
  DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?UzyQ8xB47Vlic3ZKdIs9EXixe624Ddb30Q8Ayq2Am5XdA1jwI4UzRQsmc6?=
- =?iso-8859-1?Q?CYSqmu5ovvlYlCyFjmZEEGxZMYw9R5TS6I4qDG+fY25yv6cxNzoiK9nAZL?=
- =?iso-8859-1?Q?NbrtsgqGj5Fg2g8a18ahe9oIOiz8Bqs/ofoOZAtlv9+ZTZMszk5LRhw1d+?=
- =?iso-8859-1?Q?+/vCBPydSPT9esjbl3iv3NvnMJE4EBktVSR67cPXyAjmUdZvp3kb5WTbw2?=
- =?iso-8859-1?Q?wY2vGy2kBZGGLqhRxOdprklR6JSw/Y6kTZn8+iOdsEsPva+0BIKn+YV9+G?=
- =?iso-8859-1?Q?9OMdtSVUyz7nG6sOFF6Sik8K3yxG9GEPRNj8SJmC3/GKNGtGj/PXNOcC5L?=
- =?iso-8859-1?Q?GUl9/uVsr4Qo+d30aBLzSLX77sBUpMXcrpHJXMW0W6Dof9Wr9wLerUsaNI?=
- =?iso-8859-1?Q?FsdGtC/pJ4OB4Z9AQZTVqIAsJhk1hsr17+lEvlheAXtNGOsELj3Wh9B/DH?=
- =?iso-8859-1?Q?7nWFx7+8eOoQi4DcPLMEtnWNfyGb/PbQCashL/8E0KTvVunU6GcWL0ce7w?=
- =?iso-8859-1?Q?I7/+VVA0E8zEwr5ikvQePCYRbz9q56oFYixbirh2FmRRhmLiGQMz5IEsSG?=
- =?iso-8859-1?Q?PrRPmCzQefvI2AbopbDM3r9pIdT2KbFLrXMHwrXemK3r3+xkOl5g/b/cmY?=
- =?iso-8859-1?Q?T7gJb+7DF5vTWSBnZj6LS3AIIcCuopCmQnyXOAwI4uMmZ1pfVjBb55xNtQ?=
- =?iso-8859-1?Q?DN3++bclF6CsHEcL2DGWJVB2c2enYV9lZ1St8IyrTAjYvYmmOY/LLz+Bjq?=
- =?iso-8859-1?Q?6uTkrsHpGBdlBX5MgnQdJf2VWFBySMKNJbBO+Gy7fw+EYv0GpkKiOR6MGc?=
- =?iso-8859-1?Q?hpmeYs+UQOmYJ+iNlKJgnYnn0wFMptHvPskXX1xY9X3E26+BetKtdCPotI?=
- =?iso-8859-1?Q?bdQXetMtgho03L6mSwqAyDeZBl675tPfnJEI+q7P4UPgv5PM8ov2wam58m?=
- =?iso-8859-1?Q?gMjASIWtDD7h+4cnfPr56Ud6LWUPxVSZGTK3vt9rnUucew+gzPm3LhbVee?=
- =?iso-8859-1?Q?XzC3V1wui0E4fNtbcKd+QH4R/7Aw3nCxZUcMGeDS3WqP/+a24Jdc9nU+xb?=
- =?iso-8859-1?Q?4jnCobx8GkAJtDSq5zPzIcvBTIONJqnRKwWEZScZF7W0lVu3/22IAPjvnK?=
- =?iso-8859-1?Q?ZKvNz5U1/rKWyvayhUBbeykjAKaLG86ORzmbptnzQC6ZxwNleV+397viaF?=
- =?iso-8859-1?Q?0MJro3ZzLQQy16nk2gYr7GU4tMpubyWN83TPFVZDwcUulAAX+K29fli05d?=
- =?iso-8859-1?Q?BCchdfx4rmcX+w+47jDQQMbXKYU86By2T1qPwB37muwu6OyqJwNllt4MuI?=
- =?iso-8859-1?Q?2c/WJjaA2oyVEjviFmidx2OO+pqW7XG1ktzmGkg4BLDoaTD25k7DARatGq?=
- =?iso-8859-1?Q?h0dl5rcLgpD5fvjrjCMIHm5Xj/s2jkhLSgOqNP8r5+dYaFyvMcwjnARAsk?=
- =?iso-8859-1?Q?2I7091nr7pjpMvGWqTi1OjEo+xCyY4jBYyk9zzJuWlBhlz4JUSBKUlP1sR?=
- =?iso-8859-1?Q?PNc7H0/DFmoeXHZqCHvf/ZwHSTeka2/AkZGG2kqgGpVAHHKRBPJYMLoTja?=
- =?iso-8859-1?Q?ugfC9+s+44aaYqyrR/2EHky4s077Q8Fq8F/yk8gbstHA5IDsFcR3c5yDKU?=
- =?iso-8859-1?Q?6ofwgiOQ/2fbgDZzmsJ7w29QCSE8rmQler?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0N6wtGG3zy+KDsy4By/fl7hGk+JeD8Ukl+5mhE40Hag6vLXrwmbH+8s3Hs6F?=
+ =?us-ascii?Q?pdKUCz4cA0He8zKEJbf8oW/+ySjfMVAAlHCSNfAJVoaLwRhETITgjhmU1uXp?=
+ =?us-ascii?Q?cI/ewzsMmJOnM840wJ8W/lTQMJV13OWaykxgvenpkGq3qx/n2UYUdRfuJaH1?=
+ =?us-ascii?Q?ytKkSdv6yCpQOhFB0aqURc3aLAWSIKcBMiupvDmlim5CtGWxafz+6d4Fim59?=
+ =?us-ascii?Q?Qm4X0+/hNVBcnyuam55nBwgNEqBzibAnZYD00pup8MceXPNuuAODwMEQt057?=
+ =?us-ascii?Q?iF6SQOlRS2SshrId5WjUrwQGrmrkjhpmVoKL5/x3ozkIP6z1KsKuCcVciUw8?=
+ =?us-ascii?Q?NZcTs9EGMchqNXMURb+UFQLsd/R/r0d7ZAzL+N0fO4tfS0Brd/lfy/zOhQOw?=
+ =?us-ascii?Q?bkjIKgEhLfGJD+iMsADz/6XYiMLHZ3n5O+9uRgkB6D9c9ND0gYVeo9Hwpfkt?=
+ =?us-ascii?Q?rWaQoPAjEt7ekatqG0RES5oPnheCi3u1axRAI3HrgfnOwwldZG+ppWcMcmpS?=
+ =?us-ascii?Q?gysHIayHb1mtRzvKVZU++Z69m/J1cb6Y2mfZd5n4NtlRwy/8LhNYXVPKsQkl?=
+ =?us-ascii?Q?826IQbH+BJ3Y6xA6m13hJhj4iw+0f+Fu1soS3jCnk6hg1iSyZkReYE2NbGDr?=
+ =?us-ascii?Q?QqaBwVinF0+twCmTcKgt12PgeNh4Z6aCtMlvrRhCuD0vua/1eXLOVDgNNlWy?=
+ =?us-ascii?Q?UJGPTlWBCaZ4zs1bGWIELbT3fpN/P4/4mX+cQLebonQUHQv8f4L1ZHwU/aQw?=
+ =?us-ascii?Q?tHX7MbHbwtwZrH7dlbjdPYUPjY/FpUTPg4xK1kRb/ylCZI0wBrPi2251t2Qu?=
+ =?us-ascii?Q?mVT2zEJU0akfPJxvfWP0KN6eqHflwKKpyUfTO2s9QZQlDMnB57MiETdIViaI?=
+ =?us-ascii?Q?I+kL7IH32e0AkvMp5DJxXnfJg2tv52zEzvPZzGaPMMygORgQdXmW8dbR1dF2?=
+ =?us-ascii?Q?YXZrnPLj4sRQYQXpBHTgeBCi7DENUPiiAY3SZPGFZtTILWPj4nVZX/SjrfKp?=
+ =?us-ascii?Q?N3jzzcaT6Q/v0Mi4fhCKgkxK7ZGjwSW/ZpDfxtOXo+qWLwvxv6obcOx7dX/l?=
+ =?us-ascii?Q?jVD6yXXToJpArTu0l5oh55SZiS5uTBIcIuvtOqFmRRdD3tjJh2qHuwDAQMvr?=
+ =?us-ascii?Q?sxRNZpdycmQvlY74t/PO4IdOUeAZfHNCnY7fjFbcpxwttNGZCn2AJFgk0e8C?=
+ =?us-ascii?Q?jwNyHCZxSWDGr5LpIZKIyL14r2BLBxiOsVq9F73JdGkgOouyN+LLWx3Sq2qI?=
+ =?us-ascii?Q?RGis7uKmpadluvZolTd6qXndLJ/NnOWu1s/a3cwWUypYki/8aPZ68HxyZZfl?=
+ =?us-ascii?Q?0OA+nK0Jk19+O2Q19Hi0hzt4NNONelMvizbMlfP8QEJWN088vx1dhsopyfaN?=
+ =?us-ascii?Q?/OKGypi+EI9/TBFisOy58jcZLfwQDIuiIuByPv41USnput2ll04lTBNz0lLH?=
+ =?us-ascii?Q?EnZAOdI+WsFBL+rIg9WFKJ/3fBNEWvyCX3pC1HG612rRK/bp0bh7aaTytNwN?=
+ =?us-ascii?Q?ToQXE0Z/4DND3XgYOYVFtR/vdOulVmxvuDEm/BtcLNeJ1LeclQWAIEvkH2AM?=
+ =?us-ascii?Q?BpJcvZH1Lx6PwABbu8Q9zIAOCFn9O4XBZuB+RXRK69R1d43i1kOCnA2SGfCe?=
+ =?us-ascii?Q?Zg=3D=3D?=
 MIME-Version: 1.0
-X-OriginatorOrg: efficios.com
+X-OriginatorOrg: windriver.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB5984.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26cc5c30-33df-49e2-4881-08db0573c1c5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2023 23:18:13.2273 (UTC)
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4904.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09afeb0f-3fc0-4272-25fc-08db0855de26
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Feb 2023 15:21:49.5029 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cDxalYjGFScrmTW1GjIOItrSCtD6HFCKcHTqBNwP+ScU3DD1nwcglyqWOxR61gbooHvV1uTSxYCBcBQC2jGaTw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB9505
-Subject: Re: [lttng-dev] LTTng UST structure support
+X-MS-Exchange-CrossTenant-userprincipalname: XBddm5qKRsMLWO0UJm6QrSiMn4QN3oYquBsEvZVTdNGayvUX3Bt/9XMgaE3oEBGbCIZ2LrphgyXyFludZgoEeXn/QJIKLDl0x9S2Phb4NEQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7185
+X-Proofpoint-ORIG-GUID: ASxfI7ooBIn0K_9HIJwl3sDrM0gefOD7
+X-Proofpoint-GUID: ASxfI7ooBIn0K_9HIJwl3sDrM0gefOD7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 phishscore=0
+ adultscore=0 mlxlogscore=563 impostorscore=0 spamscore=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302060133
+X-Mailman-Approved-At: Mon, 06 Feb 2023 11:26:41 -0500
+Subject: Re: [lttng-dev] lttng-consumerd crash on aarch64 due to x86 arch
+ specific optimization
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -122,380 +146,29 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?q?J=C3=A9r=C3=A9mie_Galarneau_via_lttng-dev?=
- <lttng-dev@lists.lttng.org>
-Reply-To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jgalar@efficios.com>
-Content-Type: multipart/mixed; boundary="===============8168235115965073830=="
+From: "Beckius, Mikael via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: "Beckius, Mikael" <mikael.beckius@windriver.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============8168235115965073830==
-Content-Language: en-CA
-Content-Type: multipart/alternative;
-	boundary="_000_YT2PR01MB5984548C6294278120154FDEBCD69YT2PR01MB5984CANP_"
+Hello Mathieu!
 
---_000_YT2PR01MB5984548C6294278120154FDEBCD69YT2PR01MB5984CANP_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Sorry for the late reply. I was away for a few days.
 
-Hi Charles,
+I will have a look at your updated approach and get back to you on your other replies if still relevant, but in short:
+- With __ARM_FEATURE_UNALIGNED defined 32-bit arm appears to support 2 and 4 bytes unaligned access
+- Regarding 8 bytes I found this wording:
+   "__ARM_FEATURE_UNALIGNED is defined if the target supports unaligned access in hardware, at least to the extent of being able
+   to load or store an integer word at any alignment with a single instruction. (There may be restrictions on load-multiple and
+   floating-point accesses.)" on https://developer.arm.com/documentation/101028/0012/5--Feature-test-macros
+   and I think all the crash reports were about 8 bytes unaligned access on arm 32-bit
+- Performance seems to improve for both aligned and unaligned access compared to using memcpy but your are right that a test needs to be carefully constructed
+- 64-bit arm appears to support 2, 4 and 8 bytes unaligned access
 
-I can't really comment on what the packages do, but babeltrace2 provides th=
-ose headers under "include/babeltrace2-ctf-writer" since that library is so=
-mewhat "grafted" to the project. Which distro are you using?
-
-As for where to "plug" your bindings, that library is there to maintain com=
-patibility with the ctf-writer library that was provided by Babeltrace 1.x =
-as it had a number of external users. I don't expect it to keep up with new=
- CTF versions.
-
-A more "future proof" integration point is to write a source component, and=
- instanciate it in a graph configured with the CTF filesystem sink, and fee=
-d your events through the graph.
-
-Let me know if you want more information,
-J=E9r=E9mie
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-https://www.efficios.com
-
-________________________________
-From: lttng-dev <lttng-dev-bounces@lists.lttng.org> on behalf of chafraysse=
---- via lttng-dev <lttng-dev@lists.lttng.org>
-Sent: February 2, 2023 11:06
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org <lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] LTTng UST structure support
-
-Hi,
-
-So I wrote a draft of Rust lib above ctf-writer, using the apis as demonstr=
-ated in the ctf-writer test
-For deployment I wanted to use "libbabeltrace2-ctf-writer.so" in the "libba=
-beltrace2-dev" package but I could not locate the matching includes in ther=
-e or in the other babeltrace 2 packages
-Did I miss them somewhere ? Should I have plugged in at another level in ba=
-beltrace2 ?
-
-Best regards,
-
-Charles
-
------ Mail original -----
-De: chafraysse@free.fr
-=C0: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
-Envoy=E9: Lundi 16 Janvier 2023 10:38:28
-Objet: Re: [lttng-dev] LTTng UST structure support
-
-Hi Mathieu,
-
-Thanks for your reply :)
-I'll stick to bt2 modules in the meantime then
-I'll already be saving a ton of time with those and the CTF spec which is g=
-reat !
-
-Best regards,
-
-Charles
-
------ Mail original -----
-De: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-=C0: chafraysse@free.fr, lttng-dev@lists.lttng.org
-Envoy=E9: Jeudi 12 Janvier 2023 21:10:57
-Objet: Re: [lttng-dev] LTTng UST structure support
-
-On 2023-01-09 09:02, chafraysse--- via lttng-dev wrote:
-> Hi,
->
-> I'm looking for a CTF writer to serialize instrumentations in an
-> embedded Linux/Rust framework
-> LTTng UST looked like a very strong option, but I want to serialize
-> structures as CTF compound type structures and I did not see those
-> supported in the doc or api
-
-This is correct. I am currently working on a new project called
-"libside" (see https://git.efficios.com/?p=3Dlibside.git;a=3Dsummary) which
-features support for compound types.
-
-However, we still need to do the heavy-lifting implementation work of
-integrating this with LTTng-UST. This is the plan towards supporting
-compound types in LTTng-UST.
-
-> I'd love to have confirmation that I did not just miss something :)
-> If LTTng UST is out for me I will probably try to use the ctf-writer
-> module of babeltrace 2 instead
-
-For now the ctf-writer modules of bt2 would be an alternative to
-consider, but remember that it is not designed for low-impact tracing
-such as lttng-ust. So it depends on how much tracer overhead/runtime
-impact you can afford in your use-case.
-
-Thanks,
-
-Mathieu
-
->
-> Best regards,
->
-> Charles
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Micke
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---_000_YT2PR01MB5984548C6294278120154FDEBCD69YT2PR01MB5984CANP_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
-Hi Charles,</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-I can't really comment on what the packages do, but babeltrace2 provides th=
-ose headers under &quot;include/babeltrace2-ctf-writer&quot; since that lib=
-rary is somewhat &quot;grafted&quot; to the project. Which distro are you u=
-sing?</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-<span class=3D"ContentPasted0" style=3D"font-size:12pt;margin:0px;backgroun=
-d-color:rgb(255, 255, 255)"><span style=3D"margin:0px" class=3D"ContentPast=
-ed1">As for where to &quot;plug&quot; your bindings, that library is there&=
-nbsp;<span class=3D"ContentPasted0" style=3D"font-size:12pt;margin:0px;back=
-ground-color:rgb(255, 255, 255)"></span></span></span>to
- maintain compatibility with the ctf-writer library that was provided by Ba=
-beltrace 1.x as it had a number of external users. I don't expect it to kee=
-p up with new CTF versions.</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-<span class=3D"ContentPasted0" style=3D"font-size:12pt;margin:0px;backgroun=
-d-color:rgb(255, 255, 255)"><span style=3D"margin:0px" class=3D"ContentPast=
-ed1"><br>
-</span></span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-<span class=3D"ContentPasted0" style=3D"font-size:12pt;margin:0px;backgroun=
-d-color:rgb(255, 255, 255)"><span style=3D"margin:0px" class=3D"ContentPast=
-ed1">A more &quot;future proof&quot; integration point is to write a source=
- component, and instanciate it in a graph configured
- with the CTF filesystem sink, and feed your events through the graph.</spa=
-n></span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-<span class=3D"ContentPasted0" style=3D"font-size:12pt;margin:0px;backgroun=
-d-color:rgb(255, 255, 255)"><span style=3D"margin:0px" class=3D"ContentPast=
-ed1"><br>
-</span></span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-<span class=3D"ContentPasted0" style=3D"font-size:12pt;margin:0px;backgroun=
-d-color:rgb(255, 255, 255)"><span style=3D"margin:0px" class=3D"ContentPast=
-ed1">Let me know&nbsp;if you want more&nbsp;information,</span></span></div=
->
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-J=E9r=E9mie</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-<div style=3D"margin:0px"><span style=3D"font-size:12pt;margin:0px"></span>=
-</div>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=
-=3D"elementToProof ContentPasted0">
-<br>
-</div>
-<div class=3D"elementToProof">
-<div id=3D"Signature">
-<div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
---</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-J=E9r=E9mie Galarneau</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">
-<div>EfficiOS Inc.</div>
-<a href=3D"https://www.efficios.com" data-loopstyle=3D"link">https://www.ef=
-ficios.com</a><br>
-</div>
-</div>
-</div>
-</div>
-<div id=3D"appendonsend"></div>
-<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12p=
-t; color:rgb(0,0,0)">
-<br>
-</div>
-<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" co=
-lor=3D"#000000" style=3D"font-size:11pt"><b>From:</b> lttng-dev &lt;lttng-d=
-ev-bounces@lists.lttng.org&gt; on behalf of chafraysse--- via lttng-dev &lt=
-;lttng-dev@lists.lttng.org&gt;<br>
-<b>Sent:</b> February 2, 2023 11:06<br>
-<b>To:</b> Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;<br>
-<b>Cc:</b> lttng-dev@lists.lttng.org &lt;lttng-dev@lists.lttng.org&gt;<br>
-<b>Subject:</b> Re: [lttng-dev] LTTng UST structure support</font>
-<div>&nbsp;</div>
-</div>
-<div class=3D"BodyFragment"><font size=3D"2"><span style=3D"font-size:11pt"=
->
-<div class=3D"PlainText elementToProof">Hi,<br>
-<br>
-So I wrote a draft of Rust lib above ctf-writer, using the apis as demonstr=
-ated in the ctf-writer test<br>
-For deployment I wanted to use &quot;libbabeltrace2-ctf-writer.so&quot; in =
-the &quot;libbabeltrace2-dev&quot; package but I could not locate the match=
-ing includes in there or in the other babeltrace 2 packages<br>
-Did I miss them somewhere ? Should I have plugged in at another level in ba=
-beltrace2 ?<br>
-<br>
-Best regards,<br>
-<br>
-Charles<br>
-<br>
------ Mail original -----<br>
-De: chafraysse@free.fr<br>
-=C0: &quot;Mathieu Desnoyers&quot; &lt;mathieu.desnoyers@efficios.com&gt;<b=
-r>
-Cc: lttng-dev@lists.lttng.org<br>
-Envoy=E9: Lundi 16 Janvier 2023 10:38:28<br>
-Objet: Re: [lttng-dev] LTTng UST structure support<br>
-<br>
-Hi Mathieu,<br>
-<br>
-Thanks for your reply :)<br>
-I'll stick to bt2 modules in the meantime then<br>
-I'll already be saving a ton of time with those and the CTF spec which is g=
-reat !<br>
-<br>
-Best regards,<br>
-<br>
-Charles<br>
-<br>
------ Mail original -----<br>
-De: &quot;Mathieu Desnoyers&quot; &lt;mathieu.desnoyers@efficios.com&gt;<br=
->
-=C0: chafraysse@free.fr, lttng-dev@lists.lttng.org<br>
-Envoy=E9: Jeudi 12 Janvier 2023 21:10:57<br>
-Objet: Re: [lttng-dev] LTTng UST structure support<br>
-<br>
-On 2023-01-09 09:02, chafraysse--- via lttng-dev wrote:<br>
-&gt; Hi,<br>
-&gt; <br>
-&gt; I'm looking for a CTF writer to serialize instrumentations in an <br>
-&gt; embedded Linux/Rust framework<br>
-&gt; LTTng UST looked like a very strong option, but I want to serialize <b=
-r>
-&gt; structures as CTF compound type structures and I did not see those <br=
->
-&gt; supported in the doc or api<br>
-<br>
-This is correct. I am currently working on a new project called <br>
-&quot;libside&quot; (see <a href=3D"https://git.efficios.com/?p=3Dlibside.g=
-it;a=3Dsummary)" data-auth=3D"NotApplicable">
-https://git.efficios.com/?p=3Dlibside.git;a=3Dsummary)</a> which <br>
-features support for compound types.<br>
-<br>
-However, we still need to do the heavy-lifting implementation work of <br>
-integrating this with LTTng-UST. This is the plan towards supporting <br>
-compound types in LTTng-UST.<br>
-<br>
-&gt; I'd love to have confirmation that I did not just miss something :)<br=
->
-&gt; If LTTng UST is out for me I will probably try to use the ctf-writer <=
-br>
-&gt; module of babeltrace 2 instead<br>
-<br>
-For now the ctf-writer modules of bt2 would be an alternative to <br>
-consider, but remember that it is not designed for low-impact tracing <br>
-such as lttng-ust. So it depends on how much tracer overhead/runtime <br>
-impact you can afford in your use-case.<br>
-<br>
-Thanks,<br>
-<br>
-Mathieu<br>
-<br>
-&gt; <br>
-&gt; Best regards,<br>
-&gt; <br>
-&gt; Charles<br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; lttng-dev@lists.lttng.org<br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- data-auth=3D"NotApplicable">
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
-<br>
--- <br>
-Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-<a href=3D"https://www.efficios.com" data-auth=3D"NotApplicable" data-loops=
-tyle=3D"link">https://www.efficios.com</a><br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-lttng-dev@lists.lttng.org<br>
-<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" data=
--auth=3D"NotApplicable">https://lists.lttng.org/cgi-bin/mailman/listinfo/lt=
-tng-dev</a><br>
-</div>
-</span></font></div>
-</body>
-</html>
-
---_000_YT2PR01MB5984548C6294278120154FDEBCD69YT2PR01MB5984CANP_--
-
---===============8168235115965073830==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============8168235115965073830==--
