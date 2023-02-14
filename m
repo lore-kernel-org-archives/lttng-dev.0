@@ -4,45 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C3A7C05027
-	for <lttng-dev@archiver.kernel.org>; Fri, 10 Feb 2023 18:39:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DADAC05027
+	for <lttng-dev@archiver.kernel.org>; Tue, 14 Feb 2023 16:45:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1676054352;
-	bh=1jZBtzyEdmcXbNjJBjV7P+w4MJSohBIHtjxDFdzbIx8=;
-	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=mOvpPhDqJnlSLqA7m7pOUssw2mxhsY2hPkk4uBTR+l5wxN/pmmPuLKd2IQZ5s/BpX
-	 jNhNz6XOJzGPmQWQusXhR+nynqFCHNS2ktZwmZnkyxLcPpBTuRfwPgfDkPUv6BKThG
-	 V6AwqeciDNBG1PN2iTfH59Ug0TYe8qUUC14tx1VsyZsIfBoNr6pMOXP7UhAtPfbPpa
-	 3SdrH3wSE757ZjlnmL6gf9rBxrwV15jKsYCJsjcO4iGX2TwfAMeXlq9GdGMzZrY7WH
-	 Hqq1owXJgNfOV78Z/GJANKnXf9+H9ZPtAF9NZ02/NxQ0aKzog5PKcT3H/lu50Qt4Ct
-	 uB4toKF0hjS7Q==
+	s=default; t=1676393133;
+	bh=ZHYFrvcwpctRq5CpCId2/y7iCLzsbq2QlAhQaXJhiNw=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=ofit+ME5I4EBVpqtEFKgMdBDERSCu0ZquoqlfM07nFmtbg5mxkjp0Wm0qEmfYq+Vl
+	 inXuKLqdOmfjanMOthYM2BQ5arcR4IOvHAcS74QgnW8r4A24bwPdADIOz8JS8kNhdo
+	 64TwiJ1pekX8c5K5h+o5UJSBDCj9WwjVqVlhOvbC3wFqR1gkOmGejWaCbSokqW2n5e
+	 conK21fgDasEPDZu7XlIN0K1nRkTwntiIPBdnxt6R8a8+BXLXCPSgiERCwpcwC4Dbb
+	 AtqKyImo4mQMWC4lHTxEpGTTuMHDV1d0C0xXkfi41YtW5D1Rgr2xMIVY/IQNRLq5W9
+	 U9wvmNg2LDt8Q==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4PD2ZR1cgTz1cB1;
-	Fri, 10 Feb 2023 13:39:11 -0500 (EST)
-Received: from smtpfb2-g21.free.fr (smtpfb2-g21.free.fr [212.27.42.10])
- by lists.lttng.org (Postfix) with ESMTP id 4PD20m4mrkz1btX
- for <lttng-dev@lists.lttng.org>; Fri, 10 Feb 2023 13:13:28 -0500 (EST)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtpfb2-g21.free.fr (Postfix) with ESMTP id DCC6D4C8EF
- for <lttng-dev@lists.lttng.org>; Fri, 10 Feb 2023 19:13:26 +0100 (CET)
-Received: from webmail.free.fr (unknown [172.20.243.54])
- by smtp4-g21.free.fr (Postfix) with ESMTP id D7B9D19F553
- for <lttng-dev@lists.lttng.org>; Fri, 10 Feb 2023 19:12:49 +0100 (CET)
-Received: from [185.105.31.250]
-	by webmail.free.fr
+	by lists.lttng.org (Postfix) with ESMTP id 4PGRsT1nZkz1ddl;
+	Tue, 14 Feb 2023 11:45:33 -0500 (EST)
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+ by lists.lttng.org (Postfix) with ESMTPS id 4PGRsP4Pm1z1dkS
+ for <lttng-dev@lists.lttng.org>; Tue, 14 Feb 2023 11:45:29 -0500 (EST)
+Received: from [172.16.0.188] (192-222-180-24.qc.cable.ebox.net
+ [192.222.180.24])
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4PGRsN5946zlKp;
+ Tue, 14 Feb 2023 11:45:28 -0500 (EST)
+Message-ID: <52cf1b10-3dd0-fc20-3cb5-9cbf1f4b72bd@efficios.com>
+Date: Tue, 14 Feb 2023 11:45:28 -0500
 MIME-Version: 1.0
-Date: Fri, 10 Feb 2023 19:12:49 +0100
-To: lttng-dev@lists.lttng.org
-In-Reply-To: <500e3dbe8edfbd0b3369e737288f7409@free.fr>
-References: <233483636.139091746.1675354007888.JavaMail.root@zimbra43-e7.priv.proxad.net>
- <500e3dbe8edfbd0b3369e737288f7409@free.fr>
-Message-ID: <0da5ab4cccfa2d9662809c426b6ddedb@free.fr>
-X-Sender: chafraysse@free.fr
-User-Agent: Webmail Free/1.3.3
-X-Mailman-Approved-At: Fri, 10 Feb 2023 13:39:09 -0500
-Subject: Re: [lttng-dev] LTTng UST structure support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [lttng-dev] [RELEASE] Userspace RCU 0.14.0, 0.13.3, 0.12.5 [EOL]
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -54,103 +49,133 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: chafraysse--- via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: chafraysse@free.fr
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGkgSsOpcsOpbWllLAoKUmlnaHQsIEkgbWlzc2VkIHRoZSBncmFwaCBDIGFwaSwgbXkgYmFkClRo
-YW5rcyBmb3IgdGhlIGV4YW1wbGUgb2ZmZXIgYnV0IEkgZG9uJ3Qgd2FudCB0byB0YWtlIHVwIG1v
-cmUgb2YgeW91ciAKdGltZSA6KQoKQmVzdCByZWdhcmRzLAoKQ2hhcmxlcwoKPiBIaSBDaGFybGVz
-LAo+IAo+IEknbSBub3Qgc3VyZSB3aHkgeW91IGNhbid0IGVtYmVkIGEgZ3JhcGggaW4geW91ciBh
-cHBsaWNhdGlvbi4gVGhlIGlkZWEgCj4gaXMgdG8gbWFrZSBuZXcgZXZlbnRzIHZpc2libGUgdG8g
-eW91ciBzb3VyY2UgY29tcG9uZW50IChvciB0aGUgaXRlcmF0b3IgCj4gaXQgcHJvdmlkZXMpIGJ5
-IGV4cG9zaW5nIHNvbWUgZm9ybSBvZiAidXNlciBkYXRhIiBhcyBhIHNoYXJlZCBjb250ZXh0IAo+
-IFsxXVsyXS4gV2hlbiB0aGUgZXZlbnQgaXMgbWFkZSBhdmFpbGFibGUgdG8gdGhlIHNvdXJjZSB0
-aHJvdWdoIHRoYXQgCj4gY29udGV4dCwgeW91ciAid3JpdGUiIGZ1bmN0aW9uIGNhbiB0aGVuIHBh
-c3MgaXQgZG93biB0aGUgZ3JhcGggYnkgCj4gaW52b2tpbmcgdGhlIGdyYXBoJ3MgInJ1biIgbWV0
-aG9kLgo+IAo+IEknbGwgc2VlIGlmIEkgY2FuIGZpbmQgdGltZSB0byBwcm9kdWNlIGFuIGV4ZW1w
-bGUgaWYgeW91IHRoaW5rIGl0IHdvdWxkIAo+IGJlIGhlbHBmdWwuCj4gCj4gUmVnYXJkcywKPiBK
-w6lyw6ltaWUKPiAKPiBbMV0gCj4gaHR0cHM6Ly9iYWJlbHRyYWNlLm9yZy9kb2NzL3YyLjAvbGli
-YmFiZWx0cmFjZTIvZ3JvdXBfX2FwaS1zZWxmLW1zZy1pdGVyLmh0bWwjZ2FhMDc5NWM5YzE4NzI1
-YTg0NGRmNWI1YzcwNTI1NTk3Nwo+IFsyXSAKPiBodHRwczovL2JhYmVsdHJhY2Uub3JnL2RvY3Mv
-djIuMC9saWJiYWJlbHRyYWNlMi9ncm91cF9fYXBpLXNlbGYtY29tcC5odG1sI2dhZTAxMjgzYjFl
-ZTBjMzk0NWM0ZjU0MjA1YTE1MjgxNjkKPiBbM10gCj4gaHR0cHM6Ly9iYWJlbHRyYWNlLm9yZy9k
-b2NzL3YyLjAvbGliYmFiZWx0cmFjZTIvZ3JvdXBfX2FwaS1ncmFwaC5odG1sI2dhZDJlMWMxYWIy
-MGQxNDAwYWYxYjU1MmU3MGIzZDU2N2MKPiAKPiAtLQo+IErDqXLDqW1pZSBHYWxhcm5lYXUKPiBF
-ZmZpY2lPUyBJbmMuCj4gaHR0cHM6Ly93d3cuZWZmaWNpb3MuY29tCj4gCj4gTGUgMjAyMy0wMi0w
-OSAxMDoxNSwgY2hhZnJheXNzZUBmcmVlLmZyIGEgw6ljcml0wqA6Cj4gSGkgSsOpcsOpbWllLAo+
-IAo+IFRoeCBmb3IgeW91ciByZXBseSwKPiBJJ20gZG9pbmcgYSBtb2NrdXAgb24gYW4gVWJ1bnR1
-IGhvc3QgZm9yIG5vdwo+IE9rIGZvciB0aGUgZ3JhcGgsIEkgY2Fubm90IGVtYmVkIGl0IGluIG15
-IGFwcGxpY2F0aW9uIHRob3VnaAo+IEkgd2FudGVkIHRoYXQgYXBwbGljYXRpb24gdG8gZGlyZWN0
-bHkgb3V0cHV0IENURiAod2l0aCBjb21wb3VuZCB0eXBlcywKPiBleGNsdWRpbmcgTFRUbmcpIGJ1
-dCBJIGd1ZXNzIEknbGwgb3V0cHV0IGl0IGluIG15IGZvcm1hdCBhbmQgdGhlbgo+IHBvc3QtcHJv
-Y2VzcyBpdCBpbiBhIGJ0MiBncmFwaCB3aXRoIGEgY3VzdG9tIHNvdXJjZSBhbmQgdGhlIGN0ZiBz
-aW5rCj4gCj4gQmVzdCByZWdhcmRzLAo+IAo+IENoYXJsZXMKPiAKPj4gSGkgQ2hhcmxlcywKPj4g
-Cj4+IEkgY2FuJ3QgcmVhbGx5IGNvbW1lbnQgb24gd2hhdCB0aGUgcGFja2FnZXMgZG8sIGJ1dCBi
-YWJlbHRyYWNlMiAKPj4gcHJvdmlkZXMgdGhvc2UgaGVhZGVycyB1bmRlciAiaW5jbHVkZS9iYWJl
-bHRyYWNlMi1jdGYtd3JpdGVyIiBzaW5jZSAKPj4gdGhhdCBsaWJyYXJ5IGlzIHNvbWV3aGF0ICJn
-cmFmdGVkIiB0byB0aGUgcHJvamVjdC4gV2hpY2ggZGlzdHJvIGFyZSAKPj4geW91IHVzaW5nPwo+
-PiAKPj4gQXMgZm9yIHdoZXJlIHRvICJwbHVnIiB5b3VyIGJpbmRpbmdzLCB0aGF0IGxpYnJhcnkg
-aXMgdGhlcmUgdG8gCj4+IG1haW50YWluIGNvbXBhdGliaWxpdHkgd2l0aCB0aGUgY3RmLXdyaXRl
-ciBsaWJyYXJ5IHRoYXQgd2FzIHByb3ZpZGVkIAo+PiBieSBCYWJlbHRyYWNlIDEueCBhcyBpdCBo
-YWQgYSBudW1iZXIgb2YgZXh0ZXJuYWwgdXNlcnMuIEkgZG9uJ3QgZXhwZWN0IAo+PiBpdCB0byBr
-ZWVwIHVwIHdpdGggbmV3IENURiB2ZXJzaW9ucy4KPj4gCj4+IEEgbW9yZSAiZnV0dXJlIHByb29m
-IiBpbnRlZ3JhdGlvbiBwb2ludCBpcyB0byB3cml0ZSBhIHNvdXJjZSAKPj4gY29tcG9uZW50LCBh
-bmQgaW5zdGFuY2lhdGUgaXQgaW4gYSBncmFwaCBjb25maWd1cmVkIHdpdGggdGhlIENURiAKPj4g
-ZmlsZXN5c3RlbSBzaW5rLCBhbmQgZmVlZCB5b3VyIGV2ZW50cyB0aHJvdWdoIHRoZSBncmFwaC4K
-Pj4gCj4+IExldCBtZSBrbm93IGlmIHlvdSB3YW50IG1vcmUgaW5mb3JtYXRpb24sCj4+IErDqXLD
-qW1pZQo+PiAKPj4gLS0KPj4gSsOpcsOpbWllIEdhbGFybmVhdQo+PiBFZmZpY2lPUyBJbmMuCj4+
-IGh0dHBzOi8vd3d3LmVmZmljaW9zLmNvbQo+PiAKPj4gTGUgMjAyMy0wMi0wMiAxNzowNiwgY2hh
-ZnJheXNzZUBmcmVlLmZyIGEgw6ljcml0wqA6Cj4+IEhpLAo+PiAKPj4gU28gSSB3cm90ZSBhIGRy
-YWZ0IG9mIFJ1c3QgbGliIGFib3ZlIGN0Zi13cml0ZXIsIHVzaW5nIHRoZSBhcGlzIGFzCj4+IGRl
-bW9uc3RyYXRlZCBpbiB0aGUgY3RmLXdyaXRlciB0ZXN0Cj4+IEZvciBkZXBsb3ltZW50IEkgd2Fu
-dGVkIHRvIHVzZSAibGliYmFiZWx0cmFjZTItY3RmLXdyaXRlci5zbyIgaW4gdGhlCj4+ICJsaWJi
-YWJlbHRyYWNlMi1kZXYiIHBhY2thZ2UgYnV0IEkgY291bGQgbm90IGxvY2F0ZSB0aGUgbWF0Y2hp
-bmcKPj4gaW5jbHVkZXMgaW4gdGhlcmUgb3IgaW4gdGhlIG90aGVyIGJhYmVsdHJhY2UgMiBwYWNr
-YWdlcwo+PiBEaWQgSSBtaXNzIHRoZW0gc29tZXdoZXJlID8gU2hvdWxkIEkgaGF2ZSBwbHVnZ2Vk
-IGluIGF0IGFub3RoZXIgbGV2ZWwKPj4gaW4gYmFiZWx0cmFjZTIgPwo+PiAKPj4gQmVzdCByZWdh
-cmRzLAo+PiAKPj4gQ2hhcmxlcwo+PiAKPj4gLS0tLS0gTWFpbCBvcmlnaW5hbCAtLS0tLQo+PiBE
-ZTogY2hhZnJheXNzZUBmcmVlLmZyCj4+IMOAOiAiTWF0aGlldSBEZXNub3llcnMiIDxtYXRoaWV1
-LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4+IENjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Cj4+IEVudm95w6k6IEx1bmRpIDE2IEphbnZpZXIgMjAyMyAxMDozODoyOAo+PiBPYmpldDogUmU6
-IFtsdHRuZy1kZXZdIExUVG5nIFVTVCBzdHJ1Y3R1cmUgc3VwcG9ydAo+PiAKPj4gSGkgTWF0aGll
-dSwKPj4gCj4+IFRoYW5rcyBmb3IgeW91ciByZXBseSA6KQo+PiBJJ2xsIHN0aWNrIHRvIGJ0MiBt
-b2R1bGVzIGluIHRoZSBtZWFudGltZSB0aGVuCj4+IEknbGwgYWxyZWFkeSBiZSBzYXZpbmcgYSB0
-b24gb2YgdGltZSB3aXRoIHRob3NlIGFuZCB0aGUgQ1RGIHNwZWMgd2hpY2gKPj4gaXMgZ3JlYXQg
-IQo+PiAKPj4gQmVzdCByZWdhcmRzLAo+PiAKPj4gQ2hhcmxlcwo+PiAKPj4gLS0tLS0gTWFpbCBv
-cmlnaW5hbCAtLS0tLQo+PiBEZTogIk1hdGhpZXUgRGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3ll
-cnNAZWZmaWNpb3MuY29tPgo+PiDDgDogY2hhZnJheXNzZUBmcmVlLmZyLCBsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCj4+IEVudm95w6k6IEpldWRpIDEyIEphbnZpZXIgMjAyMyAyMToxMDo1Nwo+
-PiBPYmpldDogUmU6IFtsdHRuZy1kZXZdIExUVG5nIFVTVCBzdHJ1Y3R1cmUgc3VwcG9ydAo+PiAK
-Pj4gT24gMjAyMy0wMS0wOSAwOTowMiwgY2hhZnJheXNzZS0tLSB2aWEgbHR0bmctZGV2IHdyb3Rl
-Ogo+Pj4gSGksCj4+PiAKPj4+IEknbSBsb29raW5nIGZvciBhIENURiB3cml0ZXIgdG8gc2VyaWFs
-aXplIGluc3RydW1lbnRhdGlvbnMgaW4gYW4KPj4+IGVtYmVkZGVkIExpbnV4L1J1c3QgZnJhbWV3
-b3JrCj4+PiBMVFRuZyBVU1QgbG9va2VkIGxpa2UgYSB2ZXJ5IHN0cm9uZyBvcHRpb24sIGJ1dCBJ
-IHdhbnQgdG8gc2VyaWFsaXplCj4+PiBzdHJ1Y3R1cmVzIGFzIENURiBjb21wb3VuZCB0eXBlIHN0
-cnVjdHVyZXMgYW5kIEkgZGlkIG5vdCBzZWUgdGhvc2UKPj4+IHN1cHBvcnRlZCBpbiB0aGUgZG9j
-IG9yIGFwaQo+PiAKPj4gVGhpcyBpcyBjb3JyZWN0LiBJIGFtIGN1cnJlbnRseSB3b3JraW5nIG9u
-IGEgbmV3IHByb2plY3QgY2FsbGVkCj4+ICJsaWJzaWRlIiAoc2VlIGh0dHBzOi8vZ2l0LmVmZmlj
-aW9zLmNvbS8/cD1saWJzaWRlLmdpdDthPXN1bW1hcnkpIAo+PiB3aGljaAo+PiBmZWF0dXJlcyBz
-dXBwb3J0IGZvciBjb21wb3VuZCB0eXBlcy4KPj4gCj4+IEhvd2V2ZXIsIHdlIHN0aWxsIG5lZWQg
-dG8gZG8gdGhlIGhlYXZ5LWxpZnRpbmcgaW1wbGVtZW50YXRpb24gd29yayBvZgo+PiBpbnRlZ3Jh
-dGluZyB0aGlzIHdpdGggTFRUbmctVVNULiBUaGlzIGlzIHRoZSBwbGFuIHRvd2FyZHMgc3VwcG9y
-dGluZwo+PiBjb21wb3VuZCB0eXBlcyBpbiBMVFRuZy1VU1QuCj4+IAo+Pj4gSSdkIGxvdmUgdG8g
-aGF2ZSBjb25maXJtYXRpb24gdGhhdCBJIGRpZCBub3QganVzdCBtaXNzIHNvbWV0aGluZyA6KQo+
-Pj4gSWYgTFRUbmcgVVNUIGlzIG91dCBmb3IgbWUgSSB3aWxsIHByb2JhYmx5IHRyeSB0byB1c2Ug
-dGhlIGN0Zi13cml0ZXIKPj4+IG1vZHVsZSBvZiBiYWJlbHRyYWNlIDIgaW5zdGVhZAo+PiAKPj4g
-Rm9yIG5vdyB0aGUgY3RmLXdyaXRlciBtb2R1bGVzIG9mIGJ0MiB3b3VsZCBiZSBhbiBhbHRlcm5h
-dGl2ZSB0bwo+PiBjb25zaWRlciwgYnV0IHJlbWVtYmVyIHRoYXQgaXQgaXMgbm90IGRlc2lnbmVk
-IGZvciBsb3ctaW1wYWN0IHRyYWNpbmcKPj4gc3VjaCBhcyBsdHRuZy11c3QuIFNvIGl0IGRlcGVu
-ZHMgb24gaG93IG11Y2ggdHJhY2VyIG92ZXJoZWFkL3J1bnRpbWUKPj4gaW1wYWN0IHlvdSBjYW4g
-YWZmb3JkIGluIHlvdXIgdXNlLWNhc2UuCj4+IAo+PiBUaGFua3MsCj4+IAo+PiBNYXRoaWV1Cj4+
-IAo+Pj4gCj4+PiBCZXN0IHJlZ2FyZHMsCj4+PiAKPj4+IENoYXJsZXMKPj4+IF9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+PiBsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cj4+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+PiBodHRwczovL2xpc3RzLmx0
-dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4+IAo+PiAtLQo+PiBN
-YXRoaWV1IERlc25veWVycwo+PiBFZmZpY2lPUyBJbmMuCj4+IGh0dHBzOi8vd3d3LmVmZmljaW9z
-LmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi,
+
+This is a release announcement for the Userspace RCU project.
+
+This is a set of releases, including the new 0.14 branch with the 0.14.0 
+release, and bug fix releases for the 0.13 and 0.12 branches. The 0.12.5 
+release is the last of the 0.12 branch, which reaches end of life with 
+the release of 0.14.
+
+Here are the new features introduced in urcu 0.14.0:
+
+- C99 and C++11 are now the baseline requirements, as documented in
+   README.md.
+
+- Introduce public APIs for C++,
+
+   An important point to consider: urcu/compiler.h needs to include
+   <type_traits> in C++, which prevents including urcu/compiler.h
+   from extern "C" code.
+
+- Introduce new grace period polling APIs in urcu-memb,mb,signal,qsbr,bp
+   flavors:
+
+   struct urcu_gp_poll_state start_poll_synchronize_rcu(void);
+   bool poll_state_synchronize_rcu(struct urcu_gp_poll_state state);
+
+   This allow periodically polling to check if a started grace period has
+   completed, and thus check for grace period completion and some other
+   condition as well.
+
+- rculfhash: introduce cds_lfht_node_init_deleted
+
+   Allow initializing lfht node to "removed" state to allow querying
+   whether the node is published in a hash table before it is added to
+   the hash table and after it has been removed from the hash table.
+
+- Disable signals in URCU background threads
+
+   Applications using signalfd depend on signals being blocked in all
+   threads of the process, otherwise threads with unblocked signals
+   can receive them and starve the signalfd.
+
+   While some threads in URCU do block signals (e.g. workqueue
+   worker for rculfhash), the call_rcu, defer_rcu, and rculfhash
+   partition_resize_helper threads do not.
+
+   Always block all signals before creating threads, and only unblock
+   SIGRCU when registering a urcu-signal thread. Restore the SIGRCU
+   signal to its pre-registration blocked state on unregistration.
+
+   For rculfhash, cds_lfht_worker_init can be removed, because its only
+   effect is to block all signals except SIGRCU. Blocking all signals is
+   already done by the workqueue code, and unbloking SIGRCU is now done
+   by the urcu signal flavor thread regisration.
+
+- Always use '__thread' for Thread local storage except on MSVC
+
+   Use the GCC extension '__thread' [1] for Thread local storage on all C
+   and C++ compilers except MSVC.
+
+   While C11 and C++11 respectively offer '_Thread_local' and
+   'thread_local' as potentialy faster implementations, they offer no
+   guarantees of compatibility when used in a library interface which
+   might be used by both C and C++ client code.
+
+- Various test framework improvements.
+
+- Wire up membarrier system call on Alpha. The only missing architecture
+   without membarrier wired up is MIPS. https://bugs.lttng.org/issues/940
+
+
+Here are the fixes introduced in urcu 0.14.0, 0.13.3 and 0.12.5:
+
+- Fix: auto-resize hash table destroy deadlock
+
+   Fix a deadlock for auto-resize hash tables when cds_lfht_destroy
+   is called with RCU read-side lock held.
+
+- Join call_rcu worker thread in call_rcu_data_free (eliminate leaks)
+
+- Teardown default call_rcu worker on application exit
+
+   Teardown the default call_rcu worker thread if there are no queued
+   callbacks on process exit. This prevents leaking memory.
+
+   Here is how an application can ensure graceful teardown of this
+   worker thread:
+
+   - An application queuing call_rcu callbacks should invoke
+     rcu_barrier() before it exits.
+   - When chaining call_rcu callbacks, the number of calls to
+     rcu_barrier() on application exit must match at least the maximum
+     number of chained callbacks.
+   - If an application chains callbacks endlessly, it would have to be
+     modified to stop chaining callbacks when it detects an application
+     exit (e.g. with a flag), and wait for quiescence with rcu_barrier()
+     after setting that flag.
+   - The statements above apply to a library which queues call_rcu
+     callbacks, only it needs to invoke rcu_barrier in its library
+     destructor.
+
+- Allow building on MSYS2
+
+   Update cygwin libtool config in `configure.ac` to match MSYS2 build
+   environments as well. MSYS2 is also a Windows build environment that
+   produces DLLs.
+
+Feedback is welcome!
+
+Mathieu
+
+
+Project website: https://liburcu.org
+Git repository: git://git.liburcu.org/urcu.git
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
