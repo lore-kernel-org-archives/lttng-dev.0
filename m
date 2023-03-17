@@ -4,41 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5550FC74A5B
-	for <lttng-dev@archiver.kernel.org>; Fri, 17 Mar 2023 16:57:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C054BC6FD1D
+	for <lttng-dev@archiver.kernel.org>; Fri, 17 Mar 2023 17:02:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1679072230;
-	bh=0rdEJ/v3AeaQl9Xha0qIB4s3EwcS7B3pj0PBcvd52Bg=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=LoWcfq0QFFF09ZgvGPE0RXgmVuaV9Ahf29XMH02FH+Y2d2SL6VQQ0IJF9Hvd7gXlV
-	 gs/p5ysLFrx38wyPdRLxTg/lWHVNO/AhblWop2zMJOWaV6xvWA/Ghfnv6FchN3OYij
-	 HzAIvS2S56AVL297p8g5OrUl1kqYDjJDBpLLwUzwJ2bpboJquI/M4ESI8suX3tXHzg
-	 phpnqGzI9XWSIZUeh5KGJu7jobUOG3sTAH3Ti1Lmc6Q2gbSCna17KBvqWwyqyFYkWU
-	 dIKFThFJxv8LOobtDY/zpIHeOsHr2ZwfKrGb3xy80nYXrHZSnsFvYfMkmAluZ0QCPO
-	 3XJYcyA/Zlzyw==
+	s=default; t=1679072566;
+	bh=lPyPbrSfNWAk5lAXnPYiYW43av1JLl+mc7oglxSPEzY=;
+	h=In-Reply-To:Date:Cc:References:To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=SaBt0QedRFrTZ0Uvz2/ubPs7R3P4ZFcoXon5KWELDwRdYukRmtBOVbnVIcbVXXCd7
+	 N+FvzQbqm8cKqkUiJagRS9a5o7/+iAq/cKEIihwH7eoXNgRcR7YhSpEEej33WSMEI5
+	 yhdy3NPa/BVA3fok61sA6XAqj9kGlTEEpTCgJqFWjpLq3G+mQW8lFIGoqLeX6s0aja
+	 J8a8Kp5+/t29vAdvh2dPV0M7oxFW3hCdp6azDLKp8FcfQ4oBtMhCkaqdQDJg4gDd+2
+	 z4uzikdcS9LO8+RMKPvoqc6KH76PVdUxs+SCaUb5nEvv4UJE2YP4Oc/+7cioPrL4ap
+	 zdQHuJJY/wD2Q==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4PdVfY3zW4z2CkX;
-	Fri, 17 Mar 2023 12:57:09 -0400 (EDT)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by lists.lttng.org (Postfix) with ESMTPS id 4PdVfX24p4z2CVj
- for <lttng-dev@lists.lttng.org>; Fri, 17 Mar 2023 12:57:07 -0400 (EDT)
-Received: from [IPV6:2a01:e0a:255:1000:c6b:7f65:8d93:a979] (unknown
- [IPv6:2a01:e0a:255:1000:c6b:7f65:8d93:a979])
- (Authenticated sender: duncan.sands@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id E44FA780333
- for <lttng-dev@lists.lttng.org>; Fri, 17 Mar 2023 17:57:05 +0100 (CET)
-Content-Type: multipart/mixed; boundary="------------bY548UJVgry2IfshkFVQC41Y"
-Message-ID: <18a76290-44f2-1969-3c13-3986237f0d41@free.fr>
-Date: Fri, 17 Mar 2023 17:57:05 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Content-Language: en-GB
-To: lttng-dev@lists.lttng.org
+	by lists.lttng.org (Postfix) with ESMTP id 4PdVn16LWSz2CY6;
+	Fri, 17 Mar 2023 13:02:45 -0400 (EDT)
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com
+ [64.147.123.24])
+ by lists.lttng.org (Postfix) with ESMTPS id 4PdVn05tqqz2CvM
+ for <lttng-dev@lists.lttng.org>; Fri, 17 Mar 2023 13:02:44 -0400 (EDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+ by mailout.west.internal (Postfix) with ESMTP id 3EB61320090B;
+ Fri, 17 Mar 2023 13:02:42 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+ by compute3.internal (MEProxy); Fri, 17 Mar 2023 13:02:42 -0400
+X-ME-Sender: <xms:MZ0UZEB1wvIrDeRuiusC7yfOqTLY3ii5C_bc9BOojH_7rg9hbaVjpQ>
+ <xme:MZ0UZGiIGfG7XYbycimql4F9cw02z_7nwS-LjOtkWtOfuu3E5PItZQoas-dspEkCW
+ ZHpvby3sMWJbig4X5o>
+X-ME-Received: <xmr:MZ0UZHncrH_7jWW-JHzqpC0vAAWkUxpybu7LCPQ8EpSrO3XWFvPc6bJ-gqQgUYFYotJCM8HdREi6mM9Hd_6h9S9Ugs0UVcT2hRH_>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefvddgleegucetufdoteggodetrfdotf
+ fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+ uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+ cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpefqnhgu
+ rhgvjhcuufhurhpuuceoohhnughrvghjsehsuhhrhidrohhrgheqnecuggftrfgrthhtvg
+ hrnhepiefgfeetgfehfeduueevheeigeefjeehveevhfffueetgfffgfefkefhudeitdel
+ necuffhomhgrihhnpehishgtrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+ hrrghmpehmrghilhhfrhhomhepohhnughrvghjsehsuhhrhidrohhrgh
+X-ME-Proxy: <xmx:MZ0UZKwBHh1ApySZ-usQ51FgmZnXKNY84hZkLo80opkWHU4ZuhpmWw>
+ <xmx:MZ0UZJQCG0qdA3Qc0qe07qP7OQyRc2Vz2_f6M0F8CLy3GW-llRdwlw>
+ <xmx:MZ0UZFatJwv3X_GUvpuK8MUiyJK4wCtFxszC_qOlMW25mo5EjHeKPw>
+ <xmx:MZ0UZIIWG5F-pfwaGaO804O0SvmrWxQ7EXO76Qrx3xrclz7DDp9YEg>
+Feedback-ID: ida81469e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 17 Mar 2023 13:02:40 -0400 (EDT)
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+In-Reply-To: <3b41f7b2-401f-6455-e6e2-a9bfeeabe93d@efficios.com>
+Date: Fri, 17 Mar 2023 18:02:28 +0100
+Cc: lttng-dev@lists.lttng.org,
+ paulmck <paulmck@kernel.org>
+Message-Id: <F524C7BA-80C2-42C0-A5EA-697833761DA3@sury.org>
 References: <9C7806BF-FD55-45EE-B234-A8274145E19F@sury.org>
-In-Reply-To: <9C7806BF-FD55-45EE-B234-A8274145E19F@sury.org>
+ <3b41f7b2-401f-6455-e6e2-a9bfeeabe93d@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
 Subject: Re: [lttng-dev] userspace-rcu and ThreadSanitizer
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -51,78 +71,28 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Duncan Sands via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Duncan Sands <baldrick@free.fr>
+From: =?utf-8?q?Ond=C5=99ej_Sur=C3=BD_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?utf-8?B?T25kxZllaiBTdXLDvQ==?= <ondrej@sury.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-This is a multi-part message in MIME format.
---------------bY548UJVgry2IfshkFVQC41Y
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-Hi Ondřej,
-
-> I have two questions:
-> 
-> 1. I've tried to help TSAN by replacing the custom atomics with __atomic gcc
->    primitives - that seems to work pretty well.  Note that using C11 stdatomics
->    is frankly not possible here because it would require wrapping everything into
->    _Atomic().
-
-I'm using the attached patch which does much the same.
-
-Ciao, Duncan.
---------------bY548UJVgry2IfshkFVQC41Y
-Content-Type: text/x-patch; charset=UTF-8; name="pacify_tsan.diff"
-Content-Disposition: attachment; filename="pacify_tsan.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL0V4dGVybmFsL1VzZXJzcGFjZVJDVS91c2Vyc3BhY2UtcmN1L2luY2x1
-ZGUvdXJjdS9zeXN0ZW0uaCBiL0V4dGVybmFsL1VzZXJzcGFjZVJDVS91c2Vyc3BhY2UtcmN1
-L2luY2x1ZGUvdXJjdS9zeXN0ZW0uaAppbmRleCBmYWFlMzkwNTU0Li44Mjg5OGQxZGJlIDEw
-MDY0NAotLS0gYS9FeHRlcm5hbC9Vc2Vyc3BhY2VSQ1UvdXNlcnNwYWNlLXJjdS9pbmNsdWRl
-L3VyY3Uvc3lzdGVtLmgKKysrIGIvRXh0ZXJuYWwvVXNlcnNwYWNlUkNVL3VzZXJzcGFjZS1y
-Y3UvaW5jbHVkZS91cmN1L3N5c3RlbS5oCkBAIC0yNiwzNCArMjYsNDUgQEAKICAqIElkZW50
-aWZ5IGEgc2hhcmVkIGxvYWQuIEEgY21tX3NtcF9ybWMoKSBvciBjbW1fc21wX21jKCkgc2hv
-dWxkIGNvbWUKICAqIGJlZm9yZSB0aGUgbG9hZC4KICAqLwotI2RlZmluZSBfQ01NX0xPQURf
-U0hBUkVEKHApCSAgICAgICBDTU1fQUNDRVNTX09OQ0UocCkKKyNkZWZpbmUgX0NNTV9MT0FE
-X1NIQVJFRChwKQkJCQkJXAorCV9fZXh0ZW5zaW9uX18JCQkJCQlcCisJKHsJCQkJCQkJXAor
-CQlfX3R5cGVvZl9fKHApIHY7CQkJCVwKKwkJX19hdG9taWNfbG9hZCgmcCwgJnYsIF9fQVRP
-TUlDX1JFTEFYRUQpOwlcCisJCXY7CQkJCQkJXAorCX0pCiAKIC8qCiAgKiBMb2FkIGEgZGF0
-YSBmcm9tIHNoYXJlZCBtZW1vcnksIGRvaW5nIGEgY2FjaGUgZmx1c2ggaWYgcmVxdWlyZWQu
-CiAgKi8KLSNkZWZpbmUgQ01NX0xPQURfU0hBUkVEKHApCQkJXAotCV9fZXh0ZW5zaW9uX18J
-CQlcCi0JKHsJCQkJXAotCQljbW1fc21wX3JtYygpOwkJXAotCQlfQ01NX0xPQURfU0hBUkVE
-KHApOwlcCisjZGVmaW5lIENNTV9MT0FEX1NIQVJFRChwKQkJCQkJXAorCV9fZXh0ZW5zaW9u
-X18JCQkJCQlcCisJKHsJCQkJCQkJXAorCQlfX3R5cGVvZl9fKHApIHY7CQkJCVwKKwkJX19h
-dG9taWNfbG9hZCgmcCwgJnYsIF9fQVRPTUlDX0FDUVVJUkUpOwlcCisJCXY7CQkJCQkJXAog
-CX0pCiAKIC8qCiAgKiBJZGVudGlmeSBhIHNoYXJlZCBzdG9yZS4gQSBjbW1fc21wX3dtYygp
-IG9yIGNtbV9zbXBfbWMoKSBzaG91bGQKICAqIGZvbGxvdyB0aGUgc3RvcmUuCiAgKi8KLSNk
-ZWZpbmUgX0NNTV9TVE9SRV9TSEFSRUQoeCwgdikJX19leHRlbnNpb25fXyAoeyBDTU1fQUND
-RVNTX09OQ0UoeCkgPSAodik7IH0pCisjZGVmaW5lIF9DTU1fU1RPUkVfU0hBUkVEKHgsIHYp
-CQkJCQlcCisJX19leHRlbnNpb25fXwkJCQkJCVwKKwkoewkJCQkJCQlcCisJCV9fdHlwZW9m
-X18oeCkgdyA9IHY7CQkJCVwKKwkJX19hdG9taWNfc3RvcmUoJngsICZ3LCBfX0FUT01JQ19S
-RUxBWEVEKTsJXAorCX0pCiAKIC8qCiAgKiBTdG9yZSB2IGludG8geCwgd2hlcmUgeCBpcyBs
-b2NhdGVkIGluIHNoYXJlZCBtZW1vcnkuIFBlcmZvcm1zIHRoZQogICogcmVxdWlyZWQgY2Fj
-aGUgZmx1c2ggYWZ0ZXIgd3JpdGluZy4gUmV0dXJucyB2LgogICovCi0jZGVmaW5lIENNTV9T
-VE9SRV9TSEFSRUQoeCwgdikJCQkJCQlcCi0JX19leHRlbnNpb25fXwkJCQkJCQlcCi0JKHsJ
-CQkJCQkJCVwKLQkJX190eXBlb2ZfXyh4KSBfdiA9IF9DTU1fU1RPUkVfU0hBUkVEKHgsIHYp
-OwkJXAotCQljbW1fc21wX3dtYygpOwkJCQkJCVwKLQkJX3YgPSBfdjsJLyogV29yayBhcm91
-bmQgY2xhbmcgInVudXNlZCByZXN1bHQiICovCVwKKyNkZWZpbmUgQ01NX1NUT1JFX1NIQVJF
-RCh4LCB2KQkJCQkJXAorCV9fZXh0ZW5zaW9uX18JCQkJCQlcCisJKHsJCQkJCQkJXAorCQlf
-X3R5cGVvZl9fKHgpIHcgPSB2OwkJCQlcCisJCV9fYXRvbWljX3N0b3JlKCZ4LCAmdywgX19B
-VE9NSUNfUkVMRUFTRSk7CVwKIAl9KQogCiAjZW5kaWYgLyogX1VSQ1VfU1lTVEVNX0ggKi8K
-
-
---------------bY548UJVgry2IfshkFVQC41Y
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---------------bY548UJVgry2IfshkFVQC41Y--
+PiBPbiAxNy4gMy4gMjAyMywgYXQgMTQ6NDQsIE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRl
+c25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+IAo+IEkgd291bGQgaW5kZWVkIGxpa2UgdG8g
+cmVtb3ZlIGFsbCB0aGUgY3VzdG9tIGF0b21pY3MgYXNzZW1ibHkgY29kZSBmcm9tIGxpYnVyY3Ug
+bm93IHRoYXQgdGhlcmUgYXJlIGdvb2QgYXRvbWljcyBzdXBwb3J0IGluIHRoZSBtYWpvciBjb21w
+aWxlcnMgKGdjYyBhbmQgY2xhbmcpLiAKCkhlcmUncyB2ZXJ5IHByZWxpbWluYXJ5IGltcGxlbWVu
+dGF0aW9uOgoKaHR0cHM6Ly9naXRsYWIuaXNjLm9yZy9pc2MtcHJvamVjdHMvdXNlcnNwYWNlLXJj
+dS8tL21lcmdlX3JlcXVlc3RzLzIKCkkganVzdCBkaWQgc29tZXRoaW5nIHdyb25nIHNvbWV3aGVy
+ZSBhbG9uZyB0aGUgcGF0aCBhbmQgaXQgZG9lc24ndCBjb21waWxlIG5vdywKYnV0IGl0IGRpZCBm
+b3IgbWUgbG9jYWxseS4KCkkgYW0gc3VibWl0dGluZyB0aGlzIG5vdyBhcyBpdCdzIDE4OjAwIEZy
+aWRheSBldmVuaW5nIGFuZCBteSBraWRzIGFyZSBzdGFydGluZyB0bwpiZSBhbmdyeSBhdCBtZSA6
+KS4KClRoaXMgd2lsbCBuZWVkIHNvbWUgbW9yZSB3b3JrIC0gSSB0aGluayBzb21lIG9mIHRoZSBj
+bW1fIG1hY3JvcyBtaWdodCBiZSBkcm9wcGVkCm5vdywgYW5kIHNvbWVib2R5IHdobyBkb2VzIHRo
+YXQgbW9yZSBvZnRlbiB0aGFuIEkgc2hvdWxkIHRha2UgYSBsb29rIGF0IHRoZSBtZW1vcnkKb3Jk
+ZXJpbmdzLgoKT25kcmVqCi0tCk9uZMWZZWogU3Vyw70gKEhlL0hpbSkKb25kcmVqQHN1cnkub3Jn
+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
+ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
