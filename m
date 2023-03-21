@@ -4,64 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22CB8C74A5B
-	for <lttng-dev@archiver.kernel.org>; Tue, 21 Mar 2023 10:21:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F554C6FD1D
+	for <lttng-dev@archiver.kernel.org>; Tue, 21 Mar 2023 13:31:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1679394087;
-	bh=WVMd8MaG9tBf9RfjykbeQyO4n6lwNioJ9hP7r3SYg70=;
-	h=In-Reply-To:Date:Cc:References:To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=YDkkOi+yVGbH/CcAZHl0eu4uRY19V2Rd5bS7LD28L4THSNataMwQ23ABnfJgJe7yV
-	 0cfRdrBMBD4qwdmP0tjBTlvrplIUcJlR3/qJNtSsEbiDvOS4LTGkL7qVG43g1tlqW5
-	 lRe7SXp9YmPDn9eBQ7Ye9gTyxjpyw8a3ERQ7iWehQZ0V5/eZcnutsHbHRxo0HnqIQq
-	 SrUk4+axCiJyLCITXP7HzIeW85r+aM+RzFw3QR7/CrkmsNdEuL9YEL7sTwcynfMft/
-	 oYCs+ncnnaxzq9CBLN+pvdJ0V+aZQwoF8AclKkY2TyJxDwn2gZN614gZA5/ljNFou0
-	 cxvaQCv2Q781g==
+	s=default; t=1679405488;
+	bh=guSEmzne4QGjePsMFGQ5/GtN7KBT6ywteWTySGSM95I=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=0pa1ML8Pa3BbgiuPOmZzxfHNX4nZLWe9raJYTt/JP9z7nOhz65Pwld/iNDuCSFlX8
+	 GDxwey+LgLk7sjTNaKLI9S4NzLGPmuKR2zW6qO1LVHTApw8yIjjS4M9Y5UjxUzNHL8
+	 J05c+Z0PUuPjJnxAPuWQ4qxwnLvPnpjMHNs5G783etEByNda/YkV5lezo40gKAzXEf
+	 XgRd8PBq7tg8v0iivCo1P2ubL9LQhIEqKWSUZ0OUgUDzrPqSz17j7oHW9a2zTlogJR
+	 gty2kI9YHBoWmiGQLJpfoUHniI8DKhZ0yrR+nPUbqy/VWZ0Dtk9dRVaxUrpni6fkQk
+	 A8AfDi74ggIbw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Pgnh63k3Rz2H1m;
-	Tue, 21 Mar 2023 06:21:26 -0400 (EDT)
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com
- [64.147.123.19])
- by lists.lttng.org (Postfix) with ESMTPS id 4Pgnh55Dhzz2H6g
- for <lttng-dev@lists.lttng.org>; Tue, 21 Mar 2023 06:21:25 -0400 (EDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
- by mailout.west.internal (Postfix) with ESMTP id 21C21320092D;
- Tue, 21 Mar 2023 06:21:24 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4PgsvM2ms2z2HCf;
+	Tue, 21 Mar 2023 09:31:27 -0400 (EDT)
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com
+ [64.147.123.24])
+ by lists.lttng.org (Postfix) with ESMTPS id 4PgsvK5yxMz2H1y
+ for <lttng-dev@lists.lttng.org>; Tue, 21 Mar 2023 09:31:25 -0400 (EDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+ by mailout.west.internal (Postfix) with ESMTP id 9B65B320070D
+ for <lttng-dev@lists.lttng.org>; Tue, 21 Mar 2023 09:31:18 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
- by compute3.internal (MEProxy); Tue, 21 Mar 2023 06:21:24 -0400
-X-ME-Sender: <xms:I4UZZGwWknmUsezT6yW1Psx0YxhMKOQjcqb73xIRkZS0aiHCcfJKsg>
- <xme:I4UZZCSw3p4UHHtHla_3TnN1-nzskUBwF_29DL1qHhlanABZ3P-DwSWwMk-XXJZqu
- kr8EAw3Y08UjmixGxE>
-X-ME-Received: <xmr:I4UZZIWvoUcOSfm_L7WGPnzv9J0ZU7Z7aGOuVEqBr2MZjoH0o_8nPmHFLc6uJr76261fL43unILbxouXhG0CPf-3OagKtpvJmGZP>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddgudegucetufdoteggodetrfdotf
+ by compute4.internal (MEProxy); Tue, 21 Mar 2023 09:31:18 -0400
+X-ME-Sender: <xms:pbEZZMPcGAl7u9n6VRM7kWvalfJ26dPKhMF7k5DtHLwZhaPAOgYCTQ>
+ <xme:pbEZZC9Npxu8cgXNX4ED2SyxloJcS2HzZvWeWELtOy1DgmC65stNo_ln_0Hp05PQn
+ gNo3gO0ofYM9aP6_vY>
+X-ME-Received: <xmr:pbEZZDRvSPZRoIGuMYECoBEMyz0qJZYywjiF6KT3cWeJMT9wEnKge0vemM_F4vvaljALzjYj96U0C_fDprpncgO03rtfonFFMS5i>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegtddghedvucetufdoteggodetrfdotf
  fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
- uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
- cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpefqnhgu
- rhgvjhcuufhurhpuuceoohhnughrvghjsehsuhhrhidrohhrgheqnecuggftrfgrthhtvg
- hrnhepjedvtddvledufeetueevjeeuheeukeduudfhkeethfeitdefudffkeeffeevkeev
- necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohhnug
- hrvghjsehsuhhrhidrohhrgh
-X-ME-Proxy: <xmx:I4UZZMilCC1m00kCx7fpPKf6KZ3VXAu5pg_vxgjI4ghQpYgT9tafCA>
- <xmx:I4UZZIAKRHIg9rfcpid42P8Ag05ABK0bPIji-YEYFDY67gC0hEH0Bg>
- <xmx:I4UZZNIUTvev-NlO2IL9-w_Awe5DBLfGY3GTSjsStMBiH-cUNf6Ptw>
- <xmx:I4UZZB6iU3bKOqf5atSXPPXJkhY-EuYQNoagV0tz-s1-DPOBckWGsg>
+ uceurghilhhouhhtmecufedttdenucfgmhhpthihuchsuhgsjhgvtghtucdluddtmdenuc
+ fjughrpefhvffufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefqnhgurhgvjhcu
+ ufhurhpuuceoohhnughrvghjsehsuhhrhidrohhrgheqnecuggftrfgrthhtvghrnhepie
+ evieeujeevleffgfekhfekheekveeileduvdevhfelgeegueejvdetkeelfeevnecuvehl
+ uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohhnughrvghjse
+ hsuhhrhidrohhrgh
+X-ME-Proxy: <xmx:pbEZZEt9k9Gd20GaUp5ZHtHkqiI1-gCf161gMKw-iBBrYGmB8Phj0A>
+ <xmx:pbEZZEd_xYWRI-nxnQq1SzSpJ_ub6535hd3ISgXN5FyY4iAwb5LBZg>
+ <xmx:pbEZZI2Xy83BsEq0ywy8YsP88ON9fN9GorPxli0Eec-QnnldinqByA>
+ <xmx:prEZZOpWEEJjDHntISrLMlT3JSdVEZVK06lVHa-DMljxB9UIqhkwzw>
 Feedback-ID: ida81469e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Mar 2023 06:21:22 -0400 (EDT)
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
-In-Reply-To: <e7384cff-06a6-6e1e-9abc-ce7932760964@efficios.com>
-Date: Tue, 21 Mar 2023 11:21:10 +0100
-Cc: lttng-dev@lists.lttng.org,
- paulmck <paulmck@kernel.org>
-Message-Id: <A012AAA8-7E40-40A3-A272-1703EFA26314@sury.org>
-References: <20230317213755.455957-1-ondrej@sury.org>
- <20230317213755.455957-8-ondrej@sury.org>
- <e7384cff-06a6-6e1e-9abc-ce7932760964@efficios.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-X-Mailer: Apple Mail (2.3731.400.51.1.1)
-Subject: Re: [lttng-dev] [PATCH 7/7] Experiment: Add explicit memory barrier
- in free_completion()
+Received: by mail.messagingengine.com (Postfix) with ESMTPA for
+ <lttng-dev@lists.lttng.org>; Tue, 21 Mar 2023 09:31:17 -0400 (EDT)
+To: lttng-dev@lists.lttng.org
+Date: Tue, 21 Mar 2023 14:30:55 +0100
+Message-Id: <20230321133102.1054238-1-ondrej@sury.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Subject: [lttng-dev] (no subject)
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -75,38 +67,45 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: =?utf-8?q?Ond=C5=99ej_Sur=C3=BD_via_lttng-dev?=
  <lttng-dev@lists.lttng.org>
-Reply-To: =?utf-8?B?T25kxZllaiBTdXLDvQ==?= <ondrej@sury.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Reply-To: =?UTF-8?q?Ond=C5=99ej=20Sur=C3=BD?= <ondrej@sury.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-PiBPbiAyMC4gMy4gMjAyMywgYXQgMTk6MzcsIE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRl
-c25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+IAo+IE9uIDIwMjMtMDMtMTcgMTc6MzcsIE9u
-ZMWZZWogU3Vyw70gdmlhIGx0dG5nLWRldiB3cm90ZToKPj4gRklYTUU6IFRoaXMgaXMgZXhwZXJp
-bWVudCB0aGF0IGFkZHMgZXhwbGljaXQgbWVtb3J5IGJhcnJpZXIgaW4gdGhlCj4+IGZyZWVfY29t
-cGxldGlvbiBpbiB0aGUgd29ya3F1ZXVlLmMsIHNvIFRocmVhZFNhbml0aXplciBrbm93cyBpdCdz
-IG9rIHRvCj4+IGZyZWUgdGhlIHJlc291cmNlcy4KPj4gU2lnbmVkLW9mZi1ieTogT25kxZllaiBT
-dXLDvSA8b25kcmVqQHN1cnkub3JnPgo+PiAtLS0KPj4gIHNyYy93b3JrcXVldWUuYyB8IDEgKwo+
-PiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4+IGRpZmYgLS1naXQgYS9zcmMvd29y
-a3F1ZXVlLmMgYi9zcmMvd29ya3F1ZXVlLmMKPj4gaW5kZXggMTAzOWQ3Mi4uZjIxOTA3ZiAxMDA2
-NDQKPj4gLS0tIGEvc3JjL3dvcmtxdWV1ZS5jCj4+ICsrKyBiL3NyYy93b3JrcXVldWUuYwo+PiBA
-QCAtMzc3LDYgKzM3Nyw3IEBAIHZvaWQgZnJlZV9jb21wbGV0aW9uKHN0cnVjdCB1cmN1X3JlZiAq
-cmVmKQo+PiAgIHN0cnVjdCB1cmN1X3dvcmtxdWV1ZV9jb21wbGV0aW9uICpjb21wbGV0aW9uOwo+
-PiAgICAgY29tcGxldGlvbiA9IGNhYV9jb250YWluZXJfb2YocmVmLCBzdHJ1Y3QgdXJjdV93b3Jr
-cXVldWVfY29tcGxldGlvbiwgcmVmKTsKPj4gKyBhc3NlcnQoIXVyY3VfcmVmX2dldF91bmxlc3Nf
-emVybygmY29tcGxldGlvbi0+cmVmKSk7Cj4gCj4gUGVyaGFwcyB3aGF0IHdlIHJlYWxseSB3YW50
-IGhlcmUgaXMgYW4gQU5OT1RBVEVfVU5QVUJMSVNIX01FTU9SWV9SQU5HRSgpIG9mIHNvbWUgc29y
-dCA/CgpJIGd1ZXNzPwoKTXkgZXhwZXJpZW5jZSB3aXRoIFRTQU4gdGVsbHMgbWUsIHRoYXQgeW91
-IG5lZWQgc29tZSBraW5kIG9mIG1lbW9yeSBiYXJyaWVyIHdoZW4gdXNpbmcgYWNxdWlyZS1yZWxl
-YXNlCnNlbWFudGljcyBhbmQgeW91IGRvOgoKaWYgKF9fYXRvbWljX3N1Yl9mZXRjaChvYmotPnJl
-ZiwgX19BVE9NSUNfUkVMRUFTRSkgPT0gMCkgewogIC8qIF9fQVRPTUlDX0FDUVVJUkUgbmVlZGVk
-IGhlcmUgKi8KICAgZnJlZShvYmopOwp9Cgp3ZSBlbmQgdXAgdXNpbmcgZm9sbG93aW5nIGNvZGUg
-aW4gQklORCA5OgoKaWYgKF9fYXRvbWljX3N1Yl9mZXRjaChvYmotPnJlZiwgX19BVE9NSUNfQUNR
-X1JFTCkgPT0gMCkgewogICBmcmVlKG9iaik7Cn0KClNvLCBJIGFtIGd1ZXNzaW5nIGFmdGVyIHRo
-ZSBjaGFuZ2Ugb2YgdWF0b21pY19zdWJfcmV0dXJuKCkgdG8gX19BVE9NSUNfQUNRX1JFTCwKdGhp
-cyBwYXRjaCBzaG91bGQgbm8gbG9uZ2VyIGJlIG5lZWRlZC4KCk9uZHJlagotLQpPbmTFmWVqIFN1
-csO9IChIZS9IaW0pCm9uZHJlakBzdXJ5Lm9yZwoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+This is a second round of the patches after implementing the requested changes
+from the first round.
+
+Ondrej
+
+[PATCH 1/7] Require __atomic builtins to build
+- no changes
+
+[PATCH 2/7] Use gcc __atomic builtis for <urcu/uatomic.h>
+- the non return macros are now __ATOMIC_RELAXED
+- the return macros are now __ATOMIC_SEQ_CST
+- the memory barriers are now
+
+[PATCH 3/7] Use __atomic_signal_fence() for cmm_barrier()
+- this now uses __atomic_signal_fence() instead of __atomic_thread_fence()
+
+[PATCH 4/7] Replace the internal pointer manipulation with __atomic
+- changed the memory ordering to __ATOMIC_SEQ_CST for xchg and cmpxchg 
+
+[PATCH 5/7] Replace the arch-specific memory barriers with __atomic
+- dropped the changes to urcu/arch.h
+- removed all custom cmm_*() macros from urcu/arch/*.h
+- added the generic __atomic implementation to urcu/arch/generic.h
+
+This was it's still possible to override the generics with arch specific macros.
+
+[PATCH 6/7] Use __atomic builtins to implement CMM_{LOAD,STORE}_SHARED
+- _CMM_STORE_SHARED and CMM_STORE_SHARED now returns the stored value
+
+[PATCH 7/7] Fix: uatomic_or() need retyping to uintptr_t in
+- no changes
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
