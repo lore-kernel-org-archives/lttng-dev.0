@@ -4,55 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 640FAC6FD1C
-	for <lttng-dev@archiver.kernel.org>; Wed, 22 Mar 2023 11:08:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC33C6FD1C
+	for <lttng-dev@archiver.kernel.org>; Wed, 22 Mar 2023 13:25:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1679483333;
-	bh=/Xrle5TQ069q+ZlfCAxmicf1fulV5TX4Ss3pamiENRw=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=o+95MLcNDH/3IR4NWIeYbFleNltD1W+6wo6Bj+yMhuen330cN/HCLBp6Bq5mgqKR0
-	 Xx4ZLYNYSgvujYEVGEfJB4f2xGhukGJLbiuEN67ZhNxHrsZ4g5zvmBlc52YGGou9Ll
-	 CiURfevRKmOtwmpR/MDGDwn9WFM9PBbpJFErgmDX3R9K6NLqJIsflGhI+U4bIiBMtu
-	 f0q+JIWNRphuy/Xr7MbiVHlBzlaW+sJR/7xUQn4Zirxfy2tvSG0kic734njp4tQIIY
-	 U0Q5/vYf85wlJbDIAcqysDrb6/ECtnLfwD5MaE3F4DvWuM26K66jLrac/+eQajtuBT
-	 xIXcfzKpVNT4g==
+	s=default; t=1679491546;
+	bh=VaePlXaU80rLCqXXkI/3WtqC0tEERS+Uyj4AYDV6t1c=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=AaJVTOq1orJfNxkKyeRRWmlxg7dEP+HTMKTR6G/kVcWq69+/LFeqQOpWdvW0k9+Tv
+	 IQwZZCS1SX1te4IGKIE/3PaN365+h/Jrs9JWFcX7w1ZsokSq4U/7/HpCCRlL/brW6d
+	 3LQngSS1rXHzJGCM6Z5nBgNdEybwapGUmERc8D3f9uEBERPACM6KZTqpFcAzTRNVKe
+	 wkwQp6CC61aieZ1Kqli1MqSQZZSnk/W09X0xHIUFLjpWUyTam94yFSW2VflQQE5O2Q
+	 6O/LG6jxVLZlCiJs6v6rtQizrh6vybmutr/WC3D9gb2HU7KPAB8ptaGi0NdjATPPyu
+	 f2jaQ0wDfF+3Q==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4PhQhN4ssRz2Hbq;
-	Wed, 22 Mar 2023 07:08:52 -0400 (EDT)
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com
- [64.147.123.25])
- by lists.lttng.org (Postfix) with ESMTPS id 4PhQhL51mMz2Hbn
- for <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 07:08:50 -0400 (EDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
- by mailout.west.internal (Postfix) with ESMTP id 2CD0D32009D2
- for <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 07:08:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
- by compute1.internal (MEProxy); Wed, 22 Mar 2023 07:08:48 -0400
-X-ME-Sender: <xms:v-EaZJx9sXfEwYVAsirN4sdVoi5cTXdBjD1C6Iq56NiF1jMXndtOwQ>
- <xme:v-EaZJS_MsnL2CY3i7Z4tLzA0qf_S9UzTRXPU2FxBMxrp6x3tAkTp6chD9cSo8SPt
- noiM3KBE2J0I50j23s>
-X-ME-Received: <xmr:v-EaZDXiii5sGnHspiYf64ZeLPDBxDCMfge_53q8u3uD7y0ePUUxLcIyJhRIaJ_v9uBmbO_rv5T2C0vfG-gwbwaxZHPNxOlkURQ4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegvddgvdehucetufdoteggodetrfdotf
- fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
- uceurghilhhouhhtmecufedttdenucenucfjughrpefhtgfgggfukfffvffosehtqhhmtd
- hhtdejnecuhfhrohhmpefqnhgurhgvjhcuufhurhpuuceoohhnughrvghjsehsuhhrhidr
- ohhrgheqnecuggftrfgrthhtvghrnhepkeeikefghfehvdetleeffeelieeihfdthfdtue
- elfffftdevueejteeuvdekveejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
- pehmrghilhhfrhhomhepohhnughrvghjsehsuhhrhidrohhrgh
-X-ME-Proxy: <xmx:v-EaZLhaHVyxXJIzPFCck4Mj5AqAdhdwF_8YNhFLt53PfmisD1AXVA>
- <xmx:v-EaZLC05AVlqjRj_dJu0VP7l4VOZouxx1gdh6WNblPIrsL5R9MaJQ>
- <xmx:v-EaZEKr3a-M5-XQvMqoMYylgExFJxSDoLqO4exgjNRcWbOIE8qoZA>
- <xmx:v-EaZO_Qr4Co7DY6MuqFpdbhEqmKlFre4biBMfPjXL2etR1ANTcNZw>
-Feedback-ID: ida81469e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA for
- <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 07:08:47 -0400 (EDT)
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
-Message-Id: <D3F46FB3-2D4B-442D-99A3-F9DEB3918731@sury.org>
-Date: Wed, 22 Mar 2023 12:08:33 +0100
-To: lttng-dev@lists.lttng.org
-X-Mailer: Apple Mail (2.3731.400.51.1.1)
-Subject: [lttng-dev] RCU API usage from call_rcu callbacks?
+	by lists.lttng.org (Postfix) with ESMTP id 4PhTkL2g2dz2HN5;
+	Wed, 22 Mar 2023 09:25:46 -0400 (EDT)
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+ by lists.lttng.org (Postfix) with ESMTPS id 4PhTkK06kqz2HnX
+ for <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 09:25:44 -0400 (EDT)
+Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net
+ [192.222.143.198])
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4PhTjk2Sy5zsdY;
+ Wed, 22 Mar 2023 09:25:14 -0400 (EDT)
+Message-ID: <799cf4da-5f0b-f280-cf79-2b17e644e78d@efficios.com>
+Date: Wed, 22 Mar 2023 09:25:26 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To: Yuan Bin <elf.ggle@gmail.com>, lttng-dev@lists.lttng.org
+References: <CAL_9pdTicspLuNH8UJ6=sSXuhHKLQOcq7GQC-NA0nmqSYENDzA@mail.gmail.com>
+ <CAL_9pdS6dGZ6idu1wAeWrcPrKWdErJ3Rmx5HhdCxNdyy23WAMQ@mail.gmail.com>
+In-Reply-To: <CAL_9pdS6dGZ6idu1wAeWrcPrKWdErJ3Rmx5HhdCxNdyy23WAMQ@mail.gmail.com>
+Subject: Re: [lttng-dev] Fwd: how to disable local file writing in relayd?
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -64,26 +50,21 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?q?Ond=C5=99ej_Sur=C3=BD_via_lttng-dev?=
- <lttng-dev@lists.lttng.org>
-Reply-To: =?utf-8?B?T25kxZllaiBTdXLDvQ==?= <ondrej@sury.org>
-Content-Type: text/plain; charset="utf-8"
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGksCgp0aGUgZG9jdW1lbnRhdGlvbiBpcyBwcmV0dHkgc2lsZW50IG9uIHRoaXMsIGFuZCBhc2tp
-bmcgaGVyZSBpcyBwcm9iYWJseSBnb2luZyB0byBiZSBmYXN0ZXIKdGhhbiBtZSB0cnlpbmcgdG8g
-dXNlIHRoZSBzb3VyY2UgdG8gZmlndXJlIHRoaXMgb3V0LgoKSXMgaXQgbGVnYWwgdG8gY2FsbF9y
-Y3UoKSBmcm9tIHdpdGhpbiB0aGUgY2FsbF9yY3UoKSBjYWxsYmFjaz8KCldoYXQgYWJvdXQgdGhl
-IG90aGVyIFJDVSAoYW5kIENEUykgQVBJIGNhbGxzPwoKSG93IGRvZXMgdGhhdCBpbnRlcmFjdCB3
-aXRoIGNyZWF0ZV9jYWxsX3JjdV9kYXRhKCk/ICBJIGhhdmUgPG4+IGV2ZW50IGxvb3BzIGFuZCBJ
-IGFtCmluaXRpYWxpemluZyA8bj4gMToxIGNhbGxfcmN1IGhlbHBlciB0aHJlYWRzIGFzIEkgbmVl
-ZCB0byBkbyBzb21lIHBlci10aHJlYWQgaW5pdGlhbGl6YXRpb24KYXMgc29tZSBvZiB0aGUgZGVz
-dHJveS1saWtlIGZ1bmN0aW9ucyB1c2UgcmFuZG9tIG51bWJlcnMgKGRvbid0IGFzaykuCgpJZiBp
-dCdzIGxlZ2FsIHRvIGNhbGxfcmN1KCkgZnJvbSBjYWxsX3JjdSB0aHJlYWQsIHdoaWNoIHRocmVh
-ZCBpcyBnb2luZyB0byBiZSB1c2VkPwoKVGhhbmsgeW91LApPbmRyZWoKLS0KT25kxZllaiBTdXLD
-vSAoSGUvSGltKQpvbmRyZWpAc3VyeS5vcmcKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+T24gMjAyMy0wMy0yMiAwMjozOSwgWXVhbiBCaW4gdmlhIGx0dG5nLWRldiB3cm90ZToKPiAKPiAK
+PiAgwqBDYW4gSSBkaXNhYmxlIGxvY2FsLWZpbGUtd3JpdGluZyBpbiBsdHRuZy1yZWxheWQgdG8g
+YXZvaWQgdGhlIGRpc2sgCj4gc3BhY2Ugb3ZlcmhlYWQsIG9ubHkgdXNpbmcgaXQgYXMgYSBsaXZl
+IHZpZXdlcj8KPiAKCkkgYW0gbm90IHN1cmUgd2h5IHlvdSBidW1wIHRoaXMgZW1haWwgdGhyZWFk
+LiBJIGFscmVhZHkgYW5zd2VyZWQgaGVyZS4gClBlcmhhcHMgeW91IGRpZCBub3QgcmVjZWl2ZSBt
+eSByZXBseSA/CgpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9waXBlcm1haWwvbHR0bmctZGV2LzIw
+MjMtTWFyY2gvMDMwMzU4Lmh0bWwKClRoYW5rcywKCk1hdGhpZXUKCgotLSAKTWF0aGlldSBEZXNu
+b3llcnMKRWZmaWNpT1MgSW5jLgpodHRwczovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxp
+c3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
