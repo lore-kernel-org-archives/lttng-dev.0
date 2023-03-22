@@ -4,53 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30912C6FD1F
-	for <lttng-dev@archiver.kernel.org>; Wed, 22 Mar 2023 06:40:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA3C8C7619A
+	for <lttng-dev@archiver.kernel.org>; Wed, 22 Mar 2023 08:11:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1679467218;
-	bh=TnZwNFNewKyzZtKZnZaO0FKnbShqNZDOYSmaq+EU0aI=;
-	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=id/OJeIf1dKqF3i6HiGVIuX9H8n/CGPmrCEjPqC7n2dwQ+TbK5sskZvKeYbP3IHx5
-	 F3o0SyYFyG0dZazMLCNa9LGgCAfGGTBQ7UOfX4R+iRIIUf03K50O4MOIFlzbpD/JrC
-	 U5qF5Q84cdZZeomy4j6N3ni/6DtZhtk22Ck8+y2GgtWYaHoI/d+LzCL2NhlBJR65dQ
-	 9Z8AEnCoktWLqQIj7YUo4Mj73HqJazSgkjIBVfRv2Zq6QSDoSnCLX1dhwO6U2pcG14
-	 1z3GLmuYa/0mOT9bY8uK4xw7WxS36F1Es+93dFsRjK+P1P/0b6XqIB5IF6wAVvw3va
-	 ix9GWqUxQdEKA==
+	s=default; t=1679472672;
+	bh=xtB6fszUvKabfx+wpGYxhdAL8Kt0vCxPO5AGdl9mKX8=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=DKQyaNzGs16fAsO4L3nAJrXcJaX0cf/ksKfr011yAPcpri/OFBLbiJKEuTGW0bLbf
+	 L1V2l39JS6zkpqkMrpTS5wrHhR4LyzEqCKn0JznoimQeiT1n8/L8vSV4vNYyq1ZmZg
+	 PjhlgowAEX6vLf0/9UvLTRf0XohjWAnJ4VeGnQ+ytSS9F03D4klSoVX6eyp0rLJlCv
+	 L6qh9rebuSu2XJ1KliB4MKpX6kKS4WsbPK41ZLi8wLALxV66TumNRPW9ycOs7jGxY4
+	 cGW23oEl+1Oi4PQMfz5oRU5Fosg0hDk3eQCVXNKJfUAQ4IWzVrYyxg4sUiV7mR+ykC
+	 9oMNX66aM1x1g==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4PhJkV0822z2Grd;
-	Wed, 22 Mar 2023 02:40:18 -0400 (EDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com
- [209.85.208.46])
- by lists.lttng.org (Postfix) with ESMTPS id 4PhJkS5z2Jz2HVk
- for <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 02:40:16 -0400 (EDT)
-Received: by mail-ed1-f46.google.com with SMTP id cy23so68565860edb.12
- for <lttng-dev@lists.lttng.org>; Tue, 21 Mar 2023 23:40:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679467155;
- h=to:subject:message-id:date:from:in-reply-to:references:mime-version
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=iwlygwS2jeWdh7JOJdhiJPxRj0faI5Na8tm0h7yv97c=;
- b=aVVLio9XUcJ1PyxlVwwHzlIXHAnyvbnkqNriO/9GiNow838G27LJocu0Jz6Au97h0v
- 3uxtmniBET/oYppFDKbZi0+2zIDu4oMJRAwtFDoSrpKqqb6/vBqTfR/w8LuLLHDm7FUT
- L8ATB3Cu8/sEzzrV1imwWd1Od34y+SDOZRK4wQWm50Mb0BuLlegOsngKSQ9gX/gqZRL6
- rbqqwpmFrIDq/isM3fxayNE6TwMOiTjgaOD2IYy11ir23PkqnJNoV3o38fjt7s85V5Nk
- iB3KcBrxMDhLM5k8zFklY7f/TZQXmXgzgOclTanGhO4ANcY3yQBgWGlmAenNolYPufFI
- 1ReA==
-X-Gm-Message-State: AO0yUKVT18fX4yjCOoanQMSufd7bcVcPE5QBKQKAuBaBNV5FeniKe7BS
- +Ee/3iqCMnB/gVPeJf2UGDwWVc/mBI/t1P0dy2B4aOSoMFM=
-X-Google-Smtp-Source: AK7set8vIDgt9yKU5NtWHXPJ6Ub4hp0eaIuGoCUF2nibUDr12qM2VzINqNd9Mn9bYpnn3lvELt/MKkZrdidjyRdGRa4=
-X-Received: by 2002:a17:906:d555:b0:931:ecdc:14dd with SMTP id
- cr21-20020a170906d55500b00931ecdc14ddmr2991840ejc.4.1679467155237; Tue, 21
- Mar 2023 23:39:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAL_9pdTicspLuNH8UJ6=sSXuhHKLQOcq7GQC-NA0nmqSYENDzA@mail.gmail.com>
-In-Reply-To: <CAL_9pdTicspLuNH8UJ6=sSXuhHKLQOcq7GQC-NA0nmqSYENDzA@mail.gmail.com>
-Date: Wed, 22 Mar 2023 14:39:04 +0800
-Message-ID: <CAL_9pdS6dGZ6idu1wAeWrcPrKWdErJ3Rmx5HhdCxNdyy23WAMQ@mail.gmail.com>
+	by lists.lttng.org (Postfix) with ESMTP id 4PhLlN1Zc1z2GxW;
+	Wed, 22 Mar 2023 04:11:12 -0400 (EDT)
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com
+ [64.147.123.21])
+ by lists.lttng.org (Postfix) with ESMTPS id 4PhLlM13GDz2GxV
+ for <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 04:11:11 -0400 (EDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+ by mailout.west.internal (Postfix) with ESMTP id 259533200A6F
+ for <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 04:03:09 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+ by compute2.internal (MEProxy); Wed, 22 Mar 2023 04:03:09 -0400
+X-ME-Sender: <xms:ObYaZKP1vc88ps4rdl2FXW_ao9EcbaPQ0PdbLGKWi2qFxdU-26fI4w>
+ <xme:ObYaZI8kzDIT96okUAeOkHbLAIdbN-mnTuw9QBF4rLWx5TWwOmtlcscUjFP-ephIN
+ 6XOD9bHb3M6pXDPhVI>
+X-ME-Received: <xmr:ObYaZBRj-La7KWSNKVoX0WWsE6qezny4Y5OZf9pU85BpCcA3dtMxqPPu8t-p1IXsyWExDOqj8ggir1D0ZyAGtER_3BfPHbyLAwgu>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeguddguddulecutefuodetggdotefrod
+ ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+ necuuegrihhlohhuthemuceftddtnecuogfuuhhsphgvtghtffhomhgrihhnucdlgeelmd
+ enucfjughrpefhtgfgggfukfffvffosehtqhhmtdhhtdejnecuhfhrohhmpefqnhgurhgv
+ jhcuufhurhpuuceoohhnughrvghjsehsuhhrhidrohhrgheqnecuggftrfgrthhtvghrnh
+ epfefhvdfhjeefkedtffetgffgkedtvefhtdekffevteetlefhjeekuefghfduuefgnecu
+ ffhomhgrihhnpeduvddquggvvhdrshhopdhgohhoghhlvgdrtghomhenucevlhhushhtvg
+ hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehonhgurhgvjhesshhurhih
+ rdhorhhg
+X-ME-Proxy: <xmx:ObYaZKuTGQSgqBamI6pgnO0Gr6KiMp5FtSvfXxmQe1uVCtlvReuqYA>
+ <xmx:ObYaZCdGd2FzPAtimPfqqYfuY15XXWUT-2zpG6kB-RubbtPck0wgDw>
+ <xmx:ObYaZO2Eqqfc4OnSpp-66f85NqM9e3r1CjYGLqZTBS5gAYAiIzaODw>
+ <xmx:PLYaZEq6dOB2B6N0A-OWyfiSSzh10zUd1ewQzfrpZbCbU_HGUeNIPw>
+Feedback-ID: ida81469e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA for
+ <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 04:03:05 -0400 (EDT)
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Message-Id: <1EB650B0-8D3C-481E-833C-C56D93C202EB@sury.org>
+Date: Wed, 22 Mar 2023 09:02:53 +0100
 To: lttng-dev@lists.lttng.org
-Subject: [lttng-dev] Fwd: how to disable local file writing in relayd?
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+Subject: [lttng-dev] ThreadSanitizer: data race between
+ urcu_mb_synchronize_rcu and urcu_adaptative_wake_up
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -62,41 +67,92 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Yuan Bin via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Yuan Bin <elf.ggle@gmail.com>
-Content-Type: multipart/mixed; boundary="===============0000074800812862370=="
+From: =?utf-8?q?Ond=C5=99ej_Sur=C3=BD_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?utf-8?B?T25kxZllaiBTdXLDvQ==?= <ondrej@sury.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============0000074800812862370==
-Content-Type: multipart/alternative; boundary="000000000000332f8c05f7776b81"
-
---000000000000332f8c05f7776b81
-Content-Type: text/plain; charset="UTF-8"
-
- Can I disable local-file-writing in lttng-relayd to avoid the disk space
-overhead, only using it as a live viewer?
-
---000000000000332f8c05f7776b81
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div class=3D"gmail_quote"><br><br><div dir=3D"ltr">=C2=A0=
-Can I disable local-file-writing in lttng-relayd to avoid the disk space ov=
-erhead, only using it as a live viewer?<br></div>
-</div></div>
-
---000000000000332f8c05f7776b81--
-
---===============0000074800812862370==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0000074800812862370==--
+SGksCgp0aGlzIGhhcHBlbnMgd2l0aCBhbGwgdGhlIHBhdGNoZXMgZnVsbHkgYXBwbGllZCBhbmQg
+ZG9lc24ndCBzZWVtIHRvIGJlIGNhdXNlZCBieSBhbnl0aGluZyBJIGFtIGRvaW5nIDopCgpXQVJO
+SU5HOiBUaHJlYWRTYW5pdGl6ZXI6IGRhdGEgcmFjZSAocGlkPTM5OTUyOTYpCiAgV3JpdGUgb2Yg
+c2l6ZSA4IGF0IDB4N2ZiNTFlNWZkMDQ4IGJ5IHRocmVhZCBUMjk2OgogICAgIzAgX190c2FuX21l
+bXNldCA8bnVsbD4gKGJhZGNhY2hlX3Rlc3QrMHg0OTI1N2QpIChCdWlsZElkOiAxNjZkZWE5M2Iy
+ZGNhMjgyNjRmYzg1Yzc5YjU2ZDExNmNkNDkxZWQ3KQogICAgIzEgdXJjdV9tYl9zeW5jaHJvbml6
+ZV9yY3UgL2hvbWUvb25kcmVqL1Byb2plY3RzL3VzZXJzcGFjZS1yY3Uvc3JjL3VyY3UuYzo0MTI6
+MiAobGlidXJjdS1tYi5zby44KzB4MzVlMCkgKEJ1aWxkSWQ6IGM2MTNmNTI5MGNiMWMyMjMzZmM4
+MDcxNGFlYzRiZDc0MmM0MTg4MjMpCiAgICAjMiBjYWxsX3JjdV90aHJlYWQgL2hvbWUvb25kcmVq
+L1Byb2plY3RzL3VzZXJzcGFjZS1yY3Uvc3JjLy4uL3NyYy91cmN1LWNhbGwtcmN1LWltcGwuaDoz
+ODE6NCAobGlidXJjdS1tYi5zby44KzB4OWMzOCkgKEJ1aWxkSWQ6IGM2MTNmNTI5MGNiMWMyMjMz
+ZmM4MDcxNGFlYzRiZDc0MmM0MTg4MjMpCgogIFByZXZpb3VzIGF0b21pYyB3cml0ZSBvZiBzaXpl
+IDQgYXQgMHg3ZmI1MWU1ZmQwNDggYnkgdGhyZWFkIFQyOTU6CiAgICAjMCB1cmN1X2FkYXB0YXRp
+dmVfd2FrZV91cCAvaG9tZS9vbmRyZWovUHJvamVjdHMvdXNlcnNwYWNlLXJjdS9zcmMvLi4vc3Jj
+L3VyY3Utd2FpdC5oOjEzODoyIChsaWJ1cmN1LW1iLnNvLjgrMHg4Y2I5KSAoQnVpbGRJZDogYzYx
+M2Y1MjkwY2IxYzIyMzNmYzgwNzE0YWVjNGJkNzQyYzQxODgyMykKICAgICMxIHVyY3Vfd2FrZV9h
+bGxfd2FpdGVycyAvaG9tZS9vbmRyZWovUHJvamVjdHMvdXNlcnNwYWNlLXJjdS9zcmMvLi4vc3Jj
+L3VyY3Utd2FpdC5oOjIxNDozIChsaWJ1cmN1LW1iLnNvLjgrMHg0MWRlKSAoQnVpbGRJZDogYzYx
+M2Y1MjkwY2IxYzIyMzNmYzgwNzE0YWVjNGJkNzQyYzQxODgyMykKICAgICMyIHVyY3VfbWJfc3lu
+Y2hyb25pemVfcmN1IC9ob21lL29uZHJlai9Qcm9qZWN0cy91c2Vyc3BhY2UtcmN1L3NyYy91cmN1
+LmM6NTIyOjIgKGxpYnVyY3UtbWIuc28uOCsweDM3NjYpIChCdWlsZElkOiBjNjEzZjUyOTBjYjFj
+MjIzM2ZjODA3MTRhZWM0YmQ3NDJjNDE4ODIzKQogICAgIzMgY2FsbF9yY3VfdGhyZWFkIC9ob21l
+L29uZHJlai9Qcm9qZWN0cy91c2Vyc3BhY2UtcmN1L3NyYy8uLi9zcmMvdXJjdS1jYWxsLXJjdS1p
+bXBsLmg6MzgxOjQgKGxpYnVyY3UtbWIuc28uOCsweDljMzgpIChCdWlsZElkOiBjNjEzZjUyOTBj
+YjFjMjIzM2ZjODA3MTRhZWM0YmQ3NDJjNDE4ODIzKQoKICBMb2NhdGlvbiBpcyBzdGFjayBvZiB0
+aHJlYWQgVDI5Ni4KCiAgVGhyZWFkIFQyOTYgKHRpZD0zOTk1NjA2LCBydW5uaW5nKSBjcmVhdGVk
+IGJ5IHRocmVhZCBUMjcyIGF0OgogICAgIzAgcHRocmVhZF9jcmVhdGUgPG51bGw+IChiYWRjYWNo
+ZV90ZXN0KzB4NDRkNWZiKSAoQnVpbGRJZDogMTY2ZGVhOTNiMmRjYTI4MjY0ZmM4NWM3OWI1NmQx
+MTZjZDQ5MWVkNykKICAgICMxIGNhbGxfcmN1X2RhdGFfaW5pdCAvaG9tZS9vbmRyZWovUHJvamVj
+dHMvdXNlcnNwYWNlLXJjdS9zcmMvLi4vc3JjL3VyY3UtY2FsbC1yY3UtaW1wbC5oOjQ2MDo4IChs
+aWJ1cmN1LW1iLnNvLjgrMHg1YjI2KSAoQnVpbGRJZDogYzYxM2Y1MjkwY2IxYzIyMzNmYzgwNzE0
+YWVjNGJkNzQyYzQxODgyMykKICAgICMyIF9fY3JlYXRlX2NhbGxfcmN1X2RhdGEgL2hvbWUvb25k
+cmVqL1Byb2plY3RzL3VzZXJzcGFjZS1yY3Uvc3JjLy4uL3NyYy91cmN1LWNhbGwtcmN1LWltcGwu
+aDo1MTQ6MiAobGlidXJjdS1tYi5zby44KzB4NTNiNSkgKEJ1aWxkSWQ6IGM2MTNmNTI5MGNiMWMy
+MjMzZmM4MDcxNGFlYzRiZDc0MmM0MTg4MjMpCiAgICAjMyB1cmN1X21iX2NyZWF0ZV9jYWxsX3Jj
+dV9kYXRhIC9ob21lL29uZHJlai9Qcm9qZWN0cy91c2Vyc3BhY2UtcmN1L3NyYy8uLi9zcmMvdXJj
+dS1jYWxsLXJjdS1pbXBsLmg6NTI0OjkgKGxpYnVyY3UtbWIuc28uOCsweDUyYmQpIChCdWlsZElk
+OiBjNjEzZjUyOTBjYjFjMjIzM2ZjODA3MTRhZWM0YmQ3NDJjNDE4ODIzKQogICAgIzQgbG9vcF9y
+dW4gL2hvbWUvb25kcmVqL1Byb2plY3RzL2JpbmQ5L2xpYi9pc2MvbG9vcC5jOjI5MzozMSAobGli
+aXNjLTkuMTkuMTItZGV2LnNvKzB4N2EwYTApIChCdWlsZElkOiBhMzNjZDI2ZTQ4M2I3MzY4NDky
+OGI0NzgyNjI3ZjEyNzhjMDAxNjA1KQogICAgIzUgbG9vcF90aHJlYWQgL2hvbWUvb25kcmVqL1By
+b2plY3RzL2JpbmQ5L2xpYi9pc2MvbG9vcC5jOjMyNzoyIChsaWJpc2MtOS4xOS4xMi1kZXYuc28r
+MHg3Nzg5MCkgKEJ1aWxkSWQ6IGEzM2NkMjZlNDgzYjczNjg0OTI4YjQ3ODI2MjdmMTI3OGMwMDE2
+MDUpCiAgICAjNiBpc2NfX3RyYW1wb2xpbmVfcnVuIC9ob21lL29uZHJlai9Qcm9qZWN0cy9iaW5k
+OS9saWIvaXNjL3RyYW1wb2xpbmUuYzoyMDI6MTEgKGxpYmlzYy05LjE5LjEyLWRldi5zbysweGFh
+NmJlKSAoQnVpbGRJZDogYTMzY2QyNmU0ODNiNzM2ODQ5MjhiNDc4MjYyN2YxMjc4YzAwMTYwNSkK
+CiAgVGhyZWFkIFQyOTUgKHRpZD0zOTk1NjA1LCBydW5uaW5nKSBjcmVhdGVkIGJ5IHRocmVhZCBU
+MjYxIGF0OgogICAgIzAgcHRocmVhZF9jcmVhdGUgPG51bGw+IChiYWRjYWNoZV90ZXN0KzB4NDRk
+NWZiKSAoQnVpbGRJZDogMTY2ZGVhOTNiMmRjYTI4MjY0ZmM4NWM3OWI1NmQxMTZjZDQ5MWVkNykK
+ICAgICMxIGNhbGxfcmN1X2RhdGFfaW5pdCAvaG9tZS9vbmRyZWovUHJvamVjdHMvdXNlcnNwYWNl
+LXJjdS9zcmMvLi4vc3JjL3VyY3UtY2FsbC1yY3UtaW1wbC5oOjQ2MDo4IChsaWJ1cmN1LW1iLnNv
+LjgrMHg1YjI2KSAoQnVpbGRJZDogYzYxM2Y1MjkwY2IxYzIyMzNmYzgwNzE0YWVjNGJkNzQyYzQx
+ODgyMykKICAgICMyIF9fY3JlYXRlX2NhbGxfcmN1X2RhdGEgL2hvbWUvb25kcmVqL1Byb2plY3Rz
+L3VzZXJzcGFjZS1yY3Uvc3JjLy4uL3NyYy91cmN1LWNhbGwtcmN1LWltcGwuaDo1MTQ6MiAobGli
+dXJjdS1tYi5zby44KzB4NTNiNSkgKEJ1aWxkSWQ6IGM2MTNmNTI5MGNiMWMyMjMzZmM4MDcxNGFl
+YzRiZDc0MmM0MTg4MjMpCiAgICAjMyB1cmN1X21iX2NyZWF0ZV9jYWxsX3JjdV9kYXRhIC9ob21l
+L29uZHJlai9Qcm9qZWN0cy91c2Vyc3BhY2UtcmN1L3NyYy8uLi9zcmMvdXJjdS1jYWxsLXJjdS1p
+bXBsLmg6NTI0OjkgKGxpYnVyY3UtbWIuc28uOCsweDUyYmQpIChCdWlsZElkOiBjNjEzZjUyOTBj
+YjFjMjIzM2ZjODA3MTRhZWM0YmQ3NDJjNDE4ODIzKQogICAgIzQgbG9vcF9ydW4gL2hvbWUvb25k
+cmVqL1Byb2plY3RzL2JpbmQ5L2xpYi9pc2MvbG9vcC5jOjI5MzozMSAobGliaXNjLTkuMTkuMTIt
+ZGV2LnNvKzB4N2EwYTApIChCdWlsZElkOiBhMzNjZDI2ZTQ4M2I3MzY4NDkyOGI0NzgyNjI3ZjEy
+NzhjMDAxNjA1KQogICAgIzUgbG9vcF90aHJlYWQgL2hvbWUvb25kcmVqL1Byb2plY3RzL2JpbmQ5
+L2xpYi9pc2MvbG9vcC5jOjMyNzoyIChsaWJpc2MtOS4xOS4xMi1kZXYuc28rMHg3Nzg5MCkgKEJ1
+aWxkSWQ6IGEzM2NkMjZlNDgzYjczNjg0OTI4YjQ3ODI2MjdmMTI3OGMwMDE2MDUpCiAgICAjNiBp
+c2NfX3RyYW1wb2xpbmVfcnVuIC9ob21lL29uZHJlai9Qcm9qZWN0cy9iaW5kOS9saWIvaXNjL3Ry
+YW1wb2xpbmUuYzoyMDI6MTEgKGxpYmlzYy05LjE5LjEyLWRldi5zbysweGFhNmJlKSAoQnVpbGRJ
+ZDogYTMzY2QyNmU0ODNiNzM2ODQ5MjhiNDc4MjYyN2YxMjc4YzAwMTYwNSkKClNVTU1BUlk6IFRo
+cmVhZFNhbml0aXplcjogZGF0YSByYWNlICgvaG9tZS9vbmRyZWovUHJvamVjdHMvYmluZDkvdGVz
+dHMvZG5zLy5saWJzL2JhZGNhY2hlX3Rlc3QrMHg0OTI1N2QpIChCdWlsZElkOiAxNjZkZWE5M2Iy
+ZGNhMjgyNjRmYzg1Yzc5YjU2ZDExNmNkNDkxZWQ3KSBpbiBfX3RzYW5fbWVtc2V0CgpUaGlzIGlz
+IGJldHdlZW46Ci0gREVGSU5FX1VSQ1VfV0FJVF9OT0RFKHdhaXQsIFVSQ1VfV0FJVF9XQUlUSU5H
+KTsKYW5kCi0gdWF0b21pY19vcigmd2FpdC0+c3RhdGUsIFVSQ1VfV0FJVF9URUFSRE9XTik7CgpU
+aGF0J3MgcHJldHR5IG11Y2ggd2VpcmQgYmVjYXVzZSB0aGUgIldyaXRlIiBoYXBwZW5zIG9uIHN0
+YWNrIGxvY2FsIHZhcmlhYmxlLAp3aGlsZSB0aGUgIlByZXZpb3VzIHdyaXRlIiBoYXBwZW5zIGFm
+dGVyIGZ1dGV4LCB3aGljaCBsZWFkIG1lIHRvIHRoZSBmYWN0IHRoYXQKVGhyZWFkU2FuaXRpemVy
+IGRvZXNuJ3QgaW50ZXJjZXB0IGZ1dGV4LCBidXQgd2UgY2FuIGFubm90YXRlIHRoZSBmdXRleGVz
+OgoKaHR0cHM6Ly9ncm91cHMuZ29vZ2xlLmNvbS9nL3RocmVhZC1zYW5pdGl6ZXIvYy9UMEdfTnl5
+WjNzNAoKT2ggYm95Li4uCgpPbmRyZWoKLS0KT25kxZllaiBTdXLDvSAoSGUvSGltKQpvbmRyZWpA
+c3VyeS5vcmcKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
