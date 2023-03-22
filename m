@@ -4,44 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20CE9C6FD20
-	for <lttng-dev@archiver.kernel.org>; Tue, 21 Mar 2023 20:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30912C6FD1F
+	for <lttng-dev@archiver.kernel.org>; Wed, 22 Mar 2023 06:40:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1679430411;
-	bh=QxQxC7JAnTDVoIEjyMNi1yjicdRop5rC1TBP6rIfs5w=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1679467218;
+	bh=TnZwNFNewKyzZtKZnZaO0FKnbShqNZDOYSmaq+EU0aI=;
+	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=X/6ayF2bYBWrgI2REpDfsQ/ESblBCdb+7AklxY/jk8wgxk6O+c+OtQ3YJUdw8rCwv
-	 aZCwFZikCzsG94fGSD0JtnJOHqvs8D72qJNW0taZQLcVGA/K5MqJ3JZstIwXqFM5gu
-	 3YCrPZiHM1RfFV/K0puy5RmhkOQdD+tHcf7ycqWjlhF2Xdk9dOf4eWUfDm66KZw8Da
-	 dJwZV4yo9Vrw03zMYwjVzscDkp1F8Df+kD3gen85MeMLdjefECt6IsiQJP5VosWbAN
-	 WHa0hO3G2x0681mYblpEE6NJxVHTSkMlV7IkSAVXY0WKAZgsfIC67YWQ2KSAIJL9Ni
-	 Zhdwqsjxr7E+A==
+	b=id/OJeIf1dKqF3i6HiGVIuX9H8n/CGPmrCEjPqC7n2dwQ+TbK5sskZvKeYbP3IHx5
+	 F3o0SyYFyG0dZazMLCNa9LGgCAfGGTBQ7UOfX4R+iRIIUf03K50O4MOIFlzbpD/JrC
+	 U5qF5Q84cdZZeomy4j6N3ni/6DtZhtk22Ck8+y2GgtWYaHoI/d+LzCL2NhlBJR65dQ
+	 9Z8AEnCoktWLqQIj7YUo4Mj73HqJazSgkjIBVfRv2Zq6QSDoSnCLX1dhwO6U2pcG14
+	 1z3GLmuYa/0mOT9bY8uK4xw7WxS36F1Es+93dFsRjK+P1P/0b6XqIB5IF6wAVvw3va
+	 ix9GWqUxQdEKA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Ph36f4BYTz2Gtd;
-	Tue, 21 Mar 2023 16:26:50 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4Ph36c6TXlz2Gtb
- for <lttng-dev@lists.lttng.org>; Tue, 21 Mar 2023 16:26:48 -0400 (EDT)
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4Ph36223lPzs9q;
- Tue, 21 Mar 2023 16:26:18 -0400 (EDT)
-Message-ID: <86858b96-5b88-7e1c-2be2-6157e864c8db@efficios.com>
-Date: Tue, 21 Mar 2023 16:26:29 -0400
+	by lists.lttng.org (Postfix) with ESMTP id 4PhJkV0822z2Grd;
+	Wed, 22 Mar 2023 02:40:18 -0400 (EDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com
+ [209.85.208.46])
+ by lists.lttng.org (Postfix) with ESMTPS id 4PhJkS5z2Jz2HVk
+ for <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 02:40:16 -0400 (EDT)
+Received: by mail-ed1-f46.google.com with SMTP id cy23so68565860edb.12
+ for <lttng-dev@lists.lttng.org>; Tue, 21 Mar 2023 23:40:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1679467155;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=iwlygwS2jeWdh7JOJdhiJPxRj0faI5Na8tm0h7yv97c=;
+ b=aVVLio9XUcJ1PyxlVwwHzlIXHAnyvbnkqNriO/9GiNow838G27LJocu0Jz6Au97h0v
+ 3uxtmniBET/oYppFDKbZi0+2zIDu4oMJRAwtFDoSrpKqqb6/vBqTfR/w8LuLLHDm7FUT
+ L8ATB3Cu8/sEzzrV1imwWd1Od34y+SDOZRK4wQWm50Mb0BuLlegOsngKSQ9gX/gqZRL6
+ rbqqwpmFrIDq/isM3fxayNE6TwMOiTjgaOD2IYy11ir23PkqnJNoV3o38fjt7s85V5Nk
+ iB3KcBrxMDhLM5k8zFklY7f/TZQXmXgzgOclTanGhO4ANcY3yQBgWGlmAenNolYPufFI
+ 1ReA==
+X-Gm-Message-State: AO0yUKVT18fX4yjCOoanQMSufd7bcVcPE5QBKQKAuBaBNV5FeniKe7BS
+ +Ee/3iqCMnB/gVPeJf2UGDwWVc/mBI/t1P0dy2B4aOSoMFM=
+X-Google-Smtp-Source: AK7set8vIDgt9yKU5NtWHXPJ6Ub4hp0eaIuGoCUF2nibUDr12qM2VzINqNd9Mn9bYpnn3lvELt/MKkZrdidjyRdGRa4=
+X-Received: by 2002:a17:906:d555:b0:931:ecdc:14dd with SMTP id
+ cr21-20020a170906d55500b00931ecdc14ddmr2991840ejc.4.1679467155237; Tue, 21
+ Mar 2023 23:39:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To: Duncan Sands <baldrick@free.fr>, lttng-dev@lists.lttng.org
-References: <20230317213755.455957-1-ondrej@sury.org>
- <20230317213755.455957-3-ondrej@sury.org>
- <6d73ed33-f3fc-2459-a7e9-142b8908ad4f@efficios.com>
- <dbe6e604-6ae9-1790-718f-bc69686442d1@free.fr>
-In-Reply-To: <dbe6e604-6ae9-1790-718f-bc69686442d1@free.fr>
-Subject: Re: [lttng-dev] [PATCH 2/7] Use gcc __atomic builtis for
- <urcu/uatomic.h> implementation
+References: <CAL_9pdTicspLuNH8UJ6=sSXuhHKLQOcq7GQC-NA0nmqSYENDzA@mail.gmail.com>
+In-Reply-To: <CAL_9pdTicspLuNH8UJ6=sSXuhHKLQOcq7GQC-NA0nmqSYENDzA@mail.gmail.com>
+Date: Wed, 22 Mar 2023 14:39:04 +0800
+Message-ID: <CAL_9pdS6dGZ6idu1wAeWrcPrKWdErJ3Rmx5HhdCxNdyy23WAMQ@mail.gmail.com>
+To: lttng-dev@lists.lttng.org
+Subject: [lttng-dev] Fwd: how to disable local file writing in relayd?
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -53,36 +62,41 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Yuan Bin via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Yuan Bin <elf.ggle@gmail.com>
+Content-Type: multipart/mixed; boundary="===============0000074800812862370=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-T24gMjAyMy0wMy0yMCAxNTozOCwgRHVuY2FuIFNhbmRzIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4g
-SGkgTWF0aGlldSwKPiAKPj4gV2hpbGUgT0sgZm9yIHRoZSBnZW5lcmFsIGNhc2UsIEkgd291bGQg
-cmVjb21tZW5kIHRoYXQgd2UgaW1tZWRpYXRlbHkgCj4+IGltcGxlbWVudCBzb21ldGhpbmcgbW9y
-ZSBlZmZpY2llbnQgb24geDg2IDMyLzY0IHdoaWNoIHRha2VzIGludG8gCj4+IGFjY291bnQgdGhh
-dCBfX0FUT01JQ19BQ1FfUkVMIGF0b21pYyBvcGVyYXRpb25zIGFyZSBpbXBsZW1lbnRlZCB3aXRo
-IAo+PiBMT0NLIHByZWZpeGVkIGF0b21pYyBvcHMsIHdoaWNoIGltcGx5IHRoZSBiYXJyaWVyIGFs
-cmVhZHksIGxlYXZpbmcgdGhlIAo+PiBiZWZvcmUvYWZ0ZXJfdWF0b21pY18qKCkgYXMgbm8tb3Bz
-Lgo+IAo+IG1heWJlIGZpcnN0IGNoZWNrIHdoZXRoZXIgdGhlIEdDQyBvcHRpbWl6ZXJzIG1lcmdl
-IHRoZW0uwqAgSSBiZWxpZXZlIHNvbWUgCj4gb3B0aW1pemF0aW9ucyBvZiBhdG9taWMgcHJpbWl0
-aXZlcyBhcmUgYWxsb3dlZCBhbmQgaW1wbGVtZW50ZWQsIGJ1dCBJIAo+IGNvdWxkbid0IHNheSB3
-aGljaCBvbmVzLgo+IAo+IEJlc3Qgd2lzaGVzLCBEdW5jYW4uCgpUZXN0ZWQgb24gZ29kYm9sdC5v
-cmcgd2l0aDoKCmludCBhOwoKdm9pZCBmY3Qodm9pZCkKewogICAgICh2b2lkKSBfX2F0b21pY19h
-ZGRfZmV0Y2goJmEsIDEsIF9fQVRPTUlDX1JFTEFYRUQpOwogICAgIF9fYXRvbWljX3RocmVhZF9m
-ZW5jZShfX0FUT01JQ19TRVFfQ1NUKTsKfQoKeDg2LTY0IGdjYyAxMi4yIC1PMiAtc3RkPWMxMToK
-CmZjdDoKICAgICAgICAgbG9jayBhZGQgICAgICAgIERXT1JEIFBUUiBhW3JpcF0sIDEKICAgICAg
-ICAgbG9jayBvciBRV09SRCBQVFIgW3JzcF0sIDAKICAgICAgICAgcmV0CmE6CiAgICAgICAgIC56
-ZXJvICAgNAoKeDg2LTY0IGNsYW5nIDE2LjAuMCAtTzIgLXN0ZD1jMTE6CgpmY3Q6ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIyBAZmN0CiAgICAgICAgIGxvY2sgICAgICAgICAg
-ICBpbmMgICAgIGR3b3JkIHB0ciBbcmlwICsgYV0KICAgICAgICAgbWZlbmNlCiAgICAgICAgIHJl
-dAphOgogICAgICAgICAubG9uZyAgIDAKClNvIG5vbmUgb2YgZ2NjL2NsYW5nIG9wdGltaXplIHRo
-aXMgdG9kYXksIGhlbmNlIHRoZSBuZWVkIGZvciBhbiAKeDg2LXNwZWNpZmljIGltcGxlbWVudGF0
-aW9uLgoKVGhhbmtzLAoKTWF0aGlldQoKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJ
-bmMuCmh0dHBzOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+--===============0000074800812862370==
+Content-Type: multipart/alternative; boundary="000000000000332f8c05f7776b81"
+
+--000000000000332f8c05f7776b81
+Content-Type: text/plain; charset="UTF-8"
+
+ Can I disable local-file-writing in lttng-relayd to avoid the disk space
+overhead, only using it as a live viewer?
+
+--000000000000332f8c05f7776b81
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_quote"><br><br><div dir=3D"ltr">=C2=A0=
+Can I disable local-file-writing in lttng-relayd to avoid the disk space ov=
+erhead, only using it as a live viewer?<br></div>
+</div></div>
+
+--000000000000332f8c05f7776b81--
+
+--===============0000074800812862370==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0000074800812862370==--
