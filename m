@@ -4,43 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37DF2C6FD1F
-	for <lttng-dev@archiver.kernel.org>; Wed, 22 Mar 2023 14:57:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85C62C6FD20
+	for <lttng-dev@archiver.kernel.org>; Fri, 24 Mar 2023 10:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1679497068;
-	bh=hPvtNZJhWc6KvC7w4KEuB1S3STyHbproZSKU2ZH0Jo4=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=I1zOF5mXC/8vVBchBKUD5b4hNP2SwZYjZNAPBAwfvsobxJro878HS1LN2jn73c71i
-	 IyWrBB2vtg0IbCZzTGUpcn4qy92RZB6s8AeYXOqAHLoQdOp0j7EfTyQf2Tgwu5zDy3
-	 6ohx64RP2ixTxHPf+k+I4o+2DQb6lWzJjb+ABau9Y7nfmPOhTj4lu1oC2Wins75Fy5
-	 Q8c8fAlQWtFnA4eoUvBSn5nl4dGuYHrckokptyzos2vBTWbtCfDFLiEEvStAZdwYz6
-	 PoE7GMwCetWY/RJKsezQY6RTlcg6T6nsrc6AOAq3BXgeDx55GaSIiGrR+Qk97R7im+
-	 9kPaxUKf+C/Sw==
+	s=default; t=1679654717;
+	bh=+ISEY2UMiwjHuTRIF9q/bgpwwN0Lint+FMZeKSG1X+M=;
+	h=References:In-Reply-To:Date:Cc:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=jeaxpWaBHsso+aXDdNgxic//lhORw+BP+TcFB7ncDPlYQdw54jV3v22lubYNY3P08
+	 awIzQhK7A8Vb5r5CzUdLAoL4ZIvZ/dqjlj3MyHrSOmM+MspIUSpH3echCvvD+5+SXk
+	 UnECPKBdHMgNA6K8rBhUR3gy8MHmumrAQL8GXQ/awhWyAax1fxNApWKYR8Qow+r2rm
+	 PZxBRDyU4gGQmPkjo5dHyx31ImP7OFmF2RkGWDb0/pd9utMLId1055Uq/CaEcnRxTK
+	 4IF/cJMyKYz8GNZR5N1vPv2YuIMKS/YgLJjRZF60iCOmNUEHwUHE0XomxiXchZR1CT
+	 WtZO/+ocWsfSA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4PhWmW5BMxz2HFk;
-	Wed, 22 Mar 2023 10:57:47 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4PhWmV2lMnz2HFh
- for <lttng-dev@lists.lttng.org>; Wed, 22 Mar 2023 10:57:46 -0400 (EDT)
-Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4PhWmT5n8qzr9K;
- Wed, 22 Mar 2023 10:57:45 -0400 (EDT)
-Message-ID: <af592f04-f2fc-f31a-87a7-bd5d4504ee12@efficios.com>
-Date: Wed, 22 Mar 2023 10:57:58 -0400
+	by lists.lttng.org (Postfix) with ESMTP id 4Pjf4D2tBWz2JNw;
+	Fri, 24 Mar 2023 06:45:16 -0400 (EDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com
+ [209.85.208.48])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Pjf4B5n3Xz2J9Q
+ for <lttng-dev@lists.lttng.org>; Fri, 24 Mar 2023 06:45:13 -0400 (EDT)
+Received: by mail-ed1-f48.google.com with SMTP id b20so6253759edd.1
+ for <lttng-dev@lists.lttng.org>; Fri, 24 Mar 2023 03:45:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20210112; t=1679654652;
+ h=cc:subject:message-id:date:from:in-reply-to:references:mime-version
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=XaxWFENJFRSXlS+xR3LAd//IA2jP0L7waHBugwyZbxY=;
+ b=USLfME4JKT+7y04YFraZtp+tYKTYZPTfJ6IC9NT0YO+/SvtKHS1cXFMNswFXnv8g4g
+ 16ev777ny/LFiql33jQ3t9b4BUnWUD+6Ryc4Fcki0cLKTjoGAzW/Zk+14d7VCxw3x0CH
+ eQjSvQJAz2zOe7/jIc4BPZjIfY45/WG3etNxPAORSMFGrg01QgYQcQeRtArCly143X9/
+ hkiPJnlE5XSj4VZpf8xJEXIM1n2p59155d0rKrCQXqF+7qNUXBmqeMuI4wo0+WL9fbG0
+ eAGK70xjJj9kPlEJTHJHmaWZmCYxIGGeQMypDFFUKI1avCmEPbS/3CFHxYzaRdOvpD4p
+ fpZw==
+X-Gm-Message-State: AAQBX9eaPeL+b6l9F+xcGzVm2EkjFt2/Ja+xgsLNDsJzzhXzpsPMuqIg
+ z1qwj/aMYSOHwBwphcgK++zOwpBt5Dx7sSw+X0ZdBWpns5c=
+X-Google-Smtp-Source: AKy350Y1+B5PtF39Jmfu7DpK4LMrH8OHD5ONMezorF4/6/Lx7YpmNdNr+XGOgGnf2U7f0+mALt8u5jBiz8fkenZ7xcY=
+X-Received: by 2002:a17:906:4f1a:b0:930:528b:91e5 with SMTP id
+ t26-20020a1709064f1a00b00930528b91e5mr1164837eju.4.1679654651927; Fri, 24 Mar
+ 2023 03:44:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To: =?UTF-8?B?T25kxZllaiBTdXLDvQ==?= <ondrej@sury.org>
-Cc: lttng-dev@lists.lttng.org, paulmck <paulmck@kernel.org>
-References: <1EB650B0-8D3C-481E-833C-C56D93C202EB@sury.org>
- <A572CB91-9DB3-4EE7-B33C-024FC2090D9A@sury.org>
-In-Reply-To: <A572CB91-9DB3-4EE7-B33C-024FC2090D9A@sury.org>
-Subject: Re: [lttng-dev] ThreadSanitizer: data race between
- urcu_mb_synchronize_rcu and urcu_adaptative_wake_up
+References: <CAL_9pdTicspLuNH8UJ6=sSXuhHKLQOcq7GQC-NA0nmqSYENDzA@mail.gmail.com>
+ <CAL_9pdS6dGZ6idu1wAeWrcPrKWdErJ3Rmx5HhdCxNdyy23WAMQ@mail.gmail.com>
+ <799cf4da-5f0b-f280-cf79-2b17e644e78d@efficios.com>
+In-Reply-To: <799cf4da-5f0b-f280-cf79-2b17e644e78d@efficios.com>
+Date: Fri, 24 Mar 2023 18:44:00 +0800
+Message-ID: <CAL_9pdTYXaGOuB_nYRheAXV61+yGH5AYm9HVxMPGk3tD-K-gLg@mail.gmail.com>
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] Fwd: how to disable local file writing in relayd?
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -52,127 +64,100 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Yuan Bin via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Yuan Bin <elf.ggle@gmail.com>
+Content-Type: multipart/mixed; boundary="===============6316493648593829195=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-T24gMjAyMy0wMy0yMiAwNzowMSwgT25kxZllaiBTdXLDvSB2aWEgbHR0bmctZGV2IHdyb3RlOgo+
-PiBPbiAyMi4gMy4gMjAyMywgYXQgOTowMiwgT25kxZllaiBTdXLDvSB2aWEgbHR0bmctZGV2IDxs
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPiB3cm90ZToKPj4KPj4gVGhhdCdzIHByZXR0eSBtdWNo
-IHdlaXJkIGJlY2F1c2UgdGhlICJXcml0ZSIgaGFwcGVucyBvbiBzdGFjayBsb2NhbCB2YXJpYWJs
-ZSwKPj4gd2hpbGUgdGhlICJQcmV2aW91cyB3cml0ZSIgaGFwcGVucyBhZnRlciBmdXRleCwgd2hp
-Y2ggbGVhZCBtZSB0byB0aGUgZmFjdCB0aGF0Cj4+IFRocmVhZFNhbml0aXplciBkb2Vzbid0IGlu
-dGVyY2VwdCBmdXRleCwgYnV0IHdlIGNhbiBhbm5vdGF0ZSB0aGUgZnV0ZXhlczoKPj4KPj4gaHR0
-cHM6Ly9ncm91cHMuZ29vZ2xlLmNvbS9nL3RocmVhZC1zYW5pdGl6ZXIvYy9UMEdfTnl5WjNzNAo+
-IAo+IEZUUiBuZWl0aGVyIGFubm90YXRpbmcgdGhlIGZ1dGV4IHdpdGggX190c2FuX2FjcXVpcmUo
-YWRkcikgYW5kIF9fdHNhbl9yZWxlYXNlKGFkZHIpCj4gbm9yIGZhbGxpbmcgYmFjayB0byBjb21w
-YXRfZnV0ZXhfYXN5bmMoKSBmb3IgVGhyZWFkU2FuaXRpemVyIGhhcyBoZWxwZWQuCj4gCj4gSXQg
-c2VlbXMgdG8gbWUgdGhhdCBUU0FOIHN0aWxsIGRvZXNuJ3QgdW5kZXJzdGFuZCB0aGUgc3luY2hy
-b25pemF0aW9uIGJldHdlZW4KPiBSQ1UgcmVhZC1jcml0aWNhbCBzZWN0aW9ucyBhbmQgY2FsbF9y
-Y3Uvc3luY2hyb25pemVfcmN1KCkgYXMgSSBhbSBhbHNvIGdldHRpbmcKPiBmb2xsb3dpbmcgcmVw
-b3J0czoKPiAKPiAgICBXcml0ZSBvZiBzaXplIDggYXQgMHg3YjU0MDAwMDA5YzAgYnkgdGhyZWFk
-IFQxMDI6Cj4gICAgICAjMCBfX3RzYW5fbWVtc2V0IDxudWxsPiAoYmFkY2FjaGVfdGVzdCsweDQ5
-MjU3ZCkgKEJ1aWxkSWQ6IGE3YzE1OTVkNjFlM2VlNDExMjc2Y2Y4OWE1MzZhOGRhZWZhOTU5YTMp
-Cj4gICAgICAjMSBtZW1fcHV0IC9ob21lL29uZHJlai9Qcm9qZWN0cy9iaW5kOS9saWIvaXNjL21l
-bS5jOjMyNDozIChsaWJpc2MtOS4xOS4xMi1kZXYuc28rMHg3ZDEzNikgKEJ1aWxkSWQ6IGEzM2Nk
-MjZlNDgzYjczNjg0OTI4YjQ3ODI2MjdmMTI3OGMwMDE2MDUpCj4gICAgICAjMiBpc2NfX21lbV9w
-dXQgL2hvbWUvb25kcmVqL1Byb2plY3RzL2JpbmQ5L2xpYi9pc2MvbWVtLmM6Njg0OjIgKGxpYmlz
-Yy05LjE5LjEyLWRldi5zbysweDdlMGMzKSAoQnVpbGRJZDogYTMzY2QyNmU0ODNiNzM2ODQ5Mjhi
-NDc4MjYyN2YxMjc4YzAwMTYwNSkKPiAgICAgICMzIGJjZW50cnlfZGVzdHJveV9yY3UgL2hvbWUv
-b25kcmVqL1Byb2plY3RzL2JpbmQ5L2xpYi9kbnMvYmFkY2FjaGUuYzoxNjM6MiAobGliZG5zLTku
-MTkuMTItZGV2LnNvKzB4NGUwNzEpIChCdWlsZElkOiA4YTU1MGI3OTUwMDNjZDEwNzVmZjI5NTkw
-NzM0YzgwNmQ4NGU3NmU2KQo+ICAgICAgIzQgY2FsbF9yY3VfdGhyZWFkIC9ob21lL29uZHJlai9Q
-cm9qZWN0cy91c2Vyc3BhY2UtcmN1L3NyYy8uLi9zcmMvdXJjdS1jYWxsLXJjdS1pbXBsLmg6Mzg5
-OjUgKGxpYnVyY3UtbWIuc28uOCsweDlkNmIpIChCdWlsZElkOiBkNGY1ZWE5ZDk2NjI1YzdiN2Qy
-YjJlZmI1OTBiMjA4ZjdiODNjYjZmKQo+IAo+ICAgIFByZXZpb3VzIGF0b21pYyB3cml0ZSBvZiBz
-aXplIDggYXQgMHg3YjU0MDAwMDA5YzAgYnkgbWFpbiB0aHJlYWQgKG11dGV4ZXM6IHdyaXRlIE0w
-KToKPiAgICAgICMwIF9fX2Nkc193ZmNxX2FwcGVuZCAvaG9tZS9vbmRyZWovUHJvamVjdHMvdXNl
-cnNwYWNlLXJjdS9zcmMvLi4vaW5jbHVkZS91cmN1L3N0YXRpYy93ZmNxdWV1ZS5oOjIwMjoyIChs
-aWJ1cmN1LW1iLnNvLjgrMHhhOGFlKSAoQnVpbGRJZDogZDRmNWVhOWQ5NjYyNWM3YjdkMmIyZWZi
-NTkwYjIwOGY3YjgzY2I2ZikKPiAgICAgICMxIF9jZHNfd2ZjcV9lbnF1ZXVlIC9ob21lL29uZHJl
-ai9Qcm9qZWN0cy91c2Vyc3BhY2UtcmN1L3NyYy8uLi9pbmNsdWRlL3VyY3Uvc3RhdGljL3dmY3F1
-ZXVlLmg6MjIzOjkgKGxpYnVyY3UtbWIuc28uOCsweGFjMDkpIChCdWlsZElkOiBkNGY1ZWE5ZDk2
-NjI1YzdiN2QyYjJlZmI1OTBiMjA4ZjdiODNjYjZmKQo+ICAgICAgIzIgX2NhbGxfcmN1IC9ob21l
-L29uZHJlai9Qcm9qZWN0cy91c2Vyc3BhY2UtcmN1L3NyYy8uLi9zcmMvdXJjdS1jYWxsLXJjdS1p
-bXBsLmg6NzE5OjIgKGxpYnVyY3UtbWIuc28uOCsweDYwNGYpIChCdWlsZElkOiBkNGY1ZWE5ZDk2
-NjI1YzdiN2QyYjJlZmI1OTBiMjA4ZjdiODNjYjZmKQo+ICAgICAgIzMgdXJjdV9tYl9iYXJyaWVy
-IC9ob21lL29uZHJlai9Qcm9qZWN0cy91c2Vyc3BhY2UtcmN1L3NyYy8uLi9zcmMvdXJjdS1jYWxs
-LXJjdS1pbXBsLmg6OTMyOjMgKGxpYnVyY3UtbWIuc28uOCsweDRkMWIpIChCdWlsZElkOiBkNGY1
-ZWE5ZDk2NjI1YzdiN2QyYjJlZmI1OTBiMjA4ZjdiODNjYjZmKQo+ICAgICAgIzQgYmFkY2FjaGVf
-Zmx1c2ggL2hvbWUvb25kcmVqL1Byb2plY3RzL2JpbmQ5L2xpYi9kbnMvYmFkY2FjaGUuYzozMjk6
-MiAobGliZG5zLTkuMTkuMTItZGV2LnNvKzB4NGQ4YjMpIChCdWlsZElkOiA4YTU1MGI3OTUwMDNj
-ZDEwNzVmZjI5NTkwNzM0YzgwNmQ4NGU3NmU2KQo+ICAgICAgWy4uLl0KPiAKPiBFLmcuIFRocmVh
-ZFNhbml0aXplciByZXBvcnRzIGEgcmFjZSBiZXR3ZWVuIGEgcGxhY2Ugd2hlcmUgYmNlbnRyeS0+
-cmN1X2hlYWQgaXMgYWRkZWQgdG8gY2FsbF9yY3UoKSBxdWV1ZQo+IGFuZCB3aGVuIGNhbGxfcmN1
-IGNhbGxiYWNrcyBhcmUgY2FsbGVkLiAgQW5ub3RhdGluZyB0aGUgYmNlbnRyeSB3aXRoIGFjcXVp
-cmUvcmVsZWFzZSBoZXJlIGhlbHBzIHdpdGggdGhpcwo+IHBhcnRpY3VsYXIgZGF0YSByYWNlLCBi
-dXQgaXQgZG9lcyBub3QgZmVlbCByaWdodCB0byBtZSB0byBhZGQgYW5ub3RhdGlvbiBhdCB0aGlz
-IGxldmVsLgo+IAo+IFRoZSBjb2RlIGlzIG5vdCB2ZXJ5IGNvbXBsaWNhdGVkIHRoZXJlOgo+IAo+
-IHN0YXRpYyB2b2lkCj4gYmNlbnRyeV9kZXN0cm95X3JjdShzdHJ1Y3QgcmN1X2hlYWQgKnJjdV9o
-ZWFkKSB7Cj4gICAgICAgICAgZG5zX2JjZW50cnlfdCAqYmFkID0gY2FhX2NvbnRhaW5lcl9vZihy
-Y3VfaGVhZCwgZG5zX2JjZW50cnlfdCwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHJjdV9oZWFkKTsKPiAgICAgICAgICAvKiBfX3RzYW5fcmVsZWFzZShi
-YWQpOyA8LS0gdGhpcyBoZWxwcyAqLwo+ICAgICAgICAgIGRuc19iYWRjYWNoZV90ICpiYyA9IGJh
-ZC0+YmM7Cj4gCj4gICAgICAgICAgaXNjX21lbV9wdXQoYmMtPm1jdHgsIGJhZCwgc2l6ZW9mKCpi
-YWQpKTsKPiAKPiAgICAgICAgICBkbnNfYmFkY2FjaGVfZGV0YWNoKCZiYyk7Cj4gfQo+IAo+IHN0
-YXRpYyB2b2lkCj4gYmNlbnRyeV9ldmljdChzdHJ1Y3QgY2RzX2xmaHQgKmh0LCBkbnNfYmNlbnRy
-eV90ICpiYWQpIHsKPiAgICAgICAgICAvKiBUaGVyZSBjYW4gYmUgbXVsdGlwbGUgZGVsZXRlcnMg
-bm93ICovCj4gICAgICAgICAgaWYgKGNkc19sZmh0X2RlbChodCwgJmJhZC0+aHRfbm9kZSkgPT0g
-MCkgewo+ICAgICAgICAgICAgICAgICAgLyogX190c2FuX2FjcXVpcmUoYmFkKTsgPC0gdGhpcyBo
-ZWxwcyAqLwo+ICAgICAgICAgICAgICAgICAgY2FsbF9yY3UoJmJhZC0+cmN1X2hlYWQsIGJjZW50
-cnlfZGVzdHJveV9yY3UpOwo+ICAgICAgICAgIH0KPiB9Cj4gCj4gc3RhdGljIHZvaWQKPiBiYWRj
-YWNoZV9mbHVzaChkbnNfYmFkY2FjaGVfdCAqYmMsIHN0cnVjdCBjZHNfbGZodCAqaHQpIHsKPiAg
-ICAgICAgICBzdHJ1Y3QgY2RzX2xmaHQgKm9sZGh0ID0gcmN1X3hjaGdfcG9pbnRlcigmYmMtPmh0
-LCBodCk7Cj4gCj4gICAgICAgICAgc3luY2hyb25pemVfcmN1KCk7Cj4gCj4gICAgICAgICAgcmN1
-X3JlYWRfbG9jaygpOwo+ICAgICAgICAgIGRuc19iY2VudHJ5X3QgKmJhZCA9IE5VTEw7Cj4gICAg
-ICAgICAgc3RydWN0IGNkc19sZmh0X2l0ZXIgaXRlcjsKPiAgICAgICAgICBjZHNfbGZodF9mb3Jf
-ZWFjaF9lbnRyeSAob2xkaHQsICZpdGVyLCBiYWQsIGh0X25vZGUpIHsKPiAgICAgICAgICAgICAg
-ICAgIGJjZW50cnlfZXZpY3Qob2xkaHQsIGJhZCk7Cj4gICAgICAgICAgfQo+ICAgICAgICAgIHJj
-dV9yZWFkX3VubG9jaygpOwo+ICAgICAgICAgIHJjdV9iYXJyaWVyKCk7Cj4gICAgICAgICAgUlVO
-VElNRV9DSEVDSyhjZHNfbGZodF9kZXN0cm95KG9sZGh0LCBOVUxMKSA9PSAwKTsKPiB9Cj4gCj4g
-QW55IGlkZWFzPwoKSSBzdXNwZWN0IHdoYXQgaGFwcGVucyBoZXJlIGlzIHRoYXQgVFNBTiBpcyBj
-b25zaWRlcmluZyB0aGUKCiAgICAgICAgIC8qCiAgICAgICAgICAqIEltcGxpY2l0IG1lbW9yeSBi
-YXJyaWVyIGFmdGVyIHVhdG9taWNfeGNoZygpIG9yZGVycyBzdG9yZSB0bwogICAgICAgICAgKiBx
-LT50YWlsIGJlZm9yZSBzdG9yZSB0byBvbGRfdGFpbC0+bmV4dC4KICAgICAgICAgICoKICAgICAg
-ICAgICogQXQgdGhpcyBwb2ludCwgZGVxdWV1ZXJzIHNlZSBhIE5VTEwgdGFpbC0+cC0+bmV4dCwg
-d2hpY2gKICAgICAgICAgICogaW5kaWNhdGVzIHRoYXQgdGhlIHF1ZXVlIGlzIGJlaW5nIGFwcGVu
-ZGVkIHRvLiBUaGUgZm9sbG93aW5nCiAgICAgICAgICAqIHN0b3JlIHdpbGwgYXBwZW5kICJub2Rl
-IiB0byB0aGUgcXVldWUgZnJvbSBhIGRlcXVldWVyCiAgICAgICAgICAqIHBlcnNwZWN0aXZlLgog
-ICAgICAgICAgKi8KICAgICAgICAgQ01NX1NUT1JFX1NIQVJFRChvbGRfdGFpbC0+bmV4dCwgbmV3
-X2hlYWQpOwoKd2l0aGluIF9fX2Nkc193ZmNxX2FwcGVuZCgpIGFzIHJhY3kuCgpUaGlzIHBhaXJz
-IHdpdGg6CgovKgogICogV2FpdGluZyBmb3IgZW5xdWV1ZXIgdG8gY29tcGxldGUgZW5xdWV1ZSBh
-bmQgcmV0dXJuIHRoZSBuZXh0IG5vZGUuCiAgKi8Kc3RhdGljIGlubGluZSBzdHJ1Y3QgY2RzX3dm
-Y3Ffbm9kZSAqCl9fX2Nkc193ZmNxX25vZGVfc3luY19uZXh0KHN0cnVjdCBjZHNfd2ZjcV9ub2Rl
-ICpub2RlLCBpbnQgYmxvY2tpbmcpCnsKICAgICAgICAgc3RydWN0IGNkc193ZmNxX25vZGUgKm5l
-eHQ7CiAgICAgICAgIGludCBhdHRlbXB0ID0gMDsKCiAgICAgICAgIC8qCiAgICAgICAgICAqIEFk
-YXB0YXRpdmUgYnVzeS1sb29waW5nIHdhaXRpbmcgZm9yIGVucXVldWVyIHRvIGNvbXBsZXRlIGVu
-cXVldWUuCiAgICAgICAgICAqLwogICAgICAgICB3aGlsZSAoKG5leHQgPSBDTU1fTE9BRF9TSEFS
-RUQobm9kZS0+bmV4dCkpID09IE5VTEwpIHsKICAgICAgICAgICAgICAgICBpZiAoX19fY2RzX3dm
-Y3FfYnVzeV93YWl0KCZhdHRlbXB0LCBibG9ja2luZykpCiAgICAgICAgICAgICAgICAgICAgICAg
-ICByZXR1cm4gQ0RTX1dGQ1FfV09VTERCTE9DSzsKICAgICAgICAgfQoKICAgICAgICAgcmV0dXJu
-IG5leHQ7Cn0KClNvIHRoZSByZWxlYXNlIHNlbWFudGljIGlzIHByb3ZpZGVkIGJ5IHRoZSBpbXBs
-aWNpdCBTRVFfQ1NUIGJhcnJpZXIgaW46CgpfX19jZHNfd2ZjcV9hcHBlbmQoKToKICAgb2xkX3Rh
-aWwgPSB1YXRvbWljX3hjaGcoJnRhaWwtPnAsIG5ld190YWlsKTsgKHJlbGVhc2UpCgphbmQgdGhl
-IGFjcXVpcmUgc2VtYW50aWMgaXMgcHJvdmlkZWQgYnkgdGhlIGltcGxpY2l0IFNFUV9DU1QgYmFy
-cmllciBpbjoKCl9fX2Nkc193ZmNxX3NwbGljZSgpOgoKICAgICAgICAgLyoKICAgICAgICAgICog
-TWVtb3J5IGJhcnJpZXIgaW1wbGllZCBiZWZvcmUgdWF0b21pY194Y2hnKCkgb3JkZXJzIHN0b3Jl
-IHRvCiAgICAgICAgICAqIHNyY19xLT5oZWFkIGJlZm9yZSBzdG9yZSB0byBzcmNfcS0+dGFpbC4g
-VGhpcyBpcyByZXF1aXJlZCBieQogICAgICAgICAgKiBjb25jdXJyZW50IGVucXVldWUgb24gc3Jj
-X3EsIHdoaWNoIGV4Y2hhbmdlcyB0aGUgdGFpbCBiZWZvcmUKICAgICAgICAgICogdXBkYXRpbmcg
-dGhlIHByZXZpb3VzIHRhaWwncyBuZXh0IHBvaW50ZXIuCiAgICAgICAgICAqLwogICAgICAgICB0
-YWlsID0gdWF0b21pY194Y2hnKCZzcmNfcV90YWlsLT5wLCAmc3JjX3FfaGVhZC0+bm9kZSk7CgpO
-b3RpY2UgaG93IHRoZSByZWxlYXNlL2FjcXVpcmUgc2VtYW50aWMgaXMgcHJvdmlkZWQgYnkgdGFp
-bC0+cCwgd2hpY2ggaXMgYXRvbWljYWxseSBtb2RpZmllZCBfYmVmb3JlXyB3ZSBzZXQgdGhlIG5v
-ZGUtPm5leHQgcG9pbnRlci4KCldpdGggdGhpcyBpbmZvcm1hdGlvbiwgaXMgdGhlcmUgYSBzcGVj
-aWZpYyBhbm5vdGF0aW9uIHRoYXQgd291bGQgbWFrZSBzZW5zZSA/CgpUaGFua3MsCgpNYXRoaWV1
-CgoKPiAKPiBPbmRyZWoKPiAtLQo+IE9uZMWZZWogU3Vyw70gKEhlL0hpbSkKPiBvbmRyZWpAc3Vy
-eS5vcmcKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Xwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4g
-aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cHM6Ly93d3cuZWZmaWNp
-b3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============6316493648593829195==
+Content-Type: multipart/alternative; boundary="000000000000dfa0be05f7a312f3"
+
+--000000000000dfa0be05f7a312f3
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Yeah, i haven't received the  reply before.
+
+Thanks for your answer !
+
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> =E4=BA=8E2023=E5=B9=B43=
+=E6=9C=8822=E6=97=A5=E5=91=A8=E4=B8=89 21:25=E5=86=99=E9=81=93=EF=BC=9A
+
+> On 2023-03-22 02:39, Yuan Bin via lttng-dev wrote:
+> >
+> >
+> >   Can I disable local-file-writing in lttng-relayd to avoid the disk
+> > space overhead, only using it as a live viewer?
+> >
+>
+> I am not sure why you bump this email thread. I already answered here.
+> Perhaps you did not receive my reply ?
+>
+> https://lists.lttng.org/pipermail/lttng-dev/2023-March/030358.html
+>
+> Thanks,
+>
+> Mathieu
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
+>
+>
+
+--000000000000dfa0be05f7a312f3
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Yeah, i haven&#39;t received=C2=A0the=C2=A0 reply=C2=A0bef=
+ore.<div><br>Thanks for your answer !=C2=A0</div></div><br><div class=3D"gm=
+ail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Mathieu Desnoyers &lt;<a h=
+ref=3D"mailto:mathieu.desnoyers@efficios.com">mathieu.desnoyers@efficios.co=
+m</a>&gt; =E4=BA=8E2023=E5=B9=B43=E6=9C=8822=E6=97=A5=E5=91=A8=E4=B8=89 21:=
+25=E5=86=99=E9=81=93=EF=BC=9A<br></div><blockquote class=3D"gmail_quote" st=
+yle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padd=
+ing-left:1ex">On 2023-03-22 02:39, Yuan Bin via lttng-dev wrote:<br>
+&gt; <br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0Can I disable local-file-writing in lttng-relayd to avoid =
+the disk <br>
+&gt; space overhead, only using it as a live viewer?<br>
+&gt; <br>
+<br>
+I am not sure why you bump this email thread. I already answered here. <br>
+Perhaps you did not receive my reply ?<br>
+<br>
+<a href=3D"https://lists.lttng.org/pipermail/lttng-dev/2023-March/030358.ht=
+ml" rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/pipermail/=
+lttng-dev/2023-March/030358.html</a><br>
+<br>
+Thanks,<br>
+<br>
+Mathieu<br>
+<br>
+<br>
+-- <br>
+Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"https://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">h=
+ttps://www.efficios.com</a><br>
+<br>
+</blockquote></div>
+
+--000000000000dfa0be05f7a312f3--
+
+--===============6316493648593829195==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============6316493648593829195==--
