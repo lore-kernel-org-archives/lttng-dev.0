@@ -4,52 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E284DC6FD20
-	for <lttng-dev@archiver.kernel.org>; Fri, 24 Mar 2023 11:35:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 890AFC76195
+	for <lttng-dev@archiver.kernel.org>; Mon, 27 Mar 2023 12:26:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1679657758;
-	bh=hD4Z4xHuMuqRd1DsyCNEDfGfENQjpk4RzdMvnAWor1g=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Jb+2pVBGIbNzHJiF0bCbd2+qtJOVTMcB6KjKxgfz9QhtwGEink6+SaPJZCKtHU93s
-	 CeEZyqw1iyOGggI6K6GnTZbGUc+T9L47Mk4ma3NAT6KBN8PHuSHSSQMHgJd6wiXsA6
-	 9+Joio435whm5vhmnLdXZQ7m9sez8XaqDL7YSqSH1HVdEKuwlTTjLXvcz8fEZpdZbR
-	 lxxvsjatUBscnZa7VGbOje5kTzULroiApUPMpZsyBk/tCqSBpXYUA6dsmgGsQ/EM+C
-	 +CEbHTUOSbeWkv8j2ZlZjldtadyOlnC8jDD5l5G2sY35RGASYCEBmTwpWIdzWmzFhM
-	 /i9oadClBmD+Q==
+	s=default; t=1679920011;
+	bh=2tnBhIHSwDlUE/EOUiJlKzFrEPa6FlRGtezZspbDgLE=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=wAYLYSG/PvINW8Yn36aEHfllrTsBoSJ5j87QBsh3nkFWaIB6Wc02F+OjK+fkroJKY
+	 kCybqpVZjb6laBZP4KVWkl68kZxxl5l0HiRYayuYXWt9KbOGDtKqQ3T6Hb3M/fug1V
+	 cJJR3AWGCDbXU6joFrHHcj/YQQwnEDJGrLrt9oyvbgWLsHfdpSSkTfN/prATKL/wij
+	 yI/8Lg7sn5LR5ZX4QfUD9WjikYmhQ++d2tyi/0vJfLHJK4oe8Fm9p3eH+g7TPWW3sI
+	 64j9a0vIdyuQg2oQW7yN6QVs/a712gqfDJmGkos7spYVZWul8DQj9jb7vH0sXCaabS
+	 KUvnpbqbFJIjg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4PjgBj5MHGz2JP4;
-	Fri, 24 Mar 2023 07:35:57 -0400 (EDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com
- [209.85.208.50])
- by lists.lttng.org (Postfix) with ESMTPS id 4PjgBg5n6Mz2JP2
- for <lttng-dev@lists.lttng.org>; Fri, 24 Mar 2023 07:35:55 -0400 (EDT)
-Received: by mail-ed1-f50.google.com with SMTP id eg48so6617885edb.13
- for <lttng-dev@lists.lttng.org>; Fri, 24 Mar 2023 04:35:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1679657694;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=ws4fbMoGp0apCQ+1Z11qt4Ges249LOdhdlp/zx7Z62I=;
- b=V/bmcjLnKaQnmzDqKqySlQ4bLWaYd5XtG89QnHBz2zfsqQ/XO3OvOq9HbD4tUnTOhj
- qL4iPVA/d0W8WKwUYlD4to02fKk+bJ7vg1B+hwv8LAGGqIOBbCscxdvFAVXICa8ckLcn
- Nfx+ytmk8s0HIp9yjU3jWmqkwaOnMK+GCKgmKmwS9OplG+4Y32LbWCM7tR+8y73fNPqn
- fxvpLlmuZgb+UUiPjnVSkJVvo9PvhsO575MKTkYQZpmfnR52oUVZSxDndnDVeTOYRkcY
- 8PNGWWu1FwoDdvphFLj0/fFK0S2ChTEHghrzEEoHSMRM5swJoGVRlNL1YK6/4BrtaPfY
- r/6w==
-X-Gm-Message-State: AAQBX9eTvPpO2WxfRW9NhNyPKxZiuxMvDbp7a3HaloHzRnZcmBvaEm9+
- HX/IiSTRvWqhn1z3aDPyab5x2zwShz9ulBWa+V+LukOgrouaBg==
-X-Google-Smtp-Source: AKy350bKSyqBYg01yBwFZLvVgv3Lzt+jW1a/36RYkmcl4cjKpjvKVPX4y5D3tHdnthzkCRkepNLsmIrdDuh9pRxrdzU=
-X-Received: by 2002:a50:d69a:0:b0:4fb:2593:844 with SMTP id
- r26-20020a50d69a000000b004fb25930844mr1296499edi.2.1679657694327; Fri, 24 Mar
- 2023 04:34:54 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4PlXB22pm1z2K83;
+	Mon, 27 Mar 2023 08:26:50 -0400 (EDT)
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+ by lists.lttng.org (Postfix) with ESMTPS id 4PlXB02Ppsz2K1Q
+ for <lttng-dev@lists.lttng.org>; Mon, 27 Mar 2023 08:26:48 -0400 (EDT)
+Received: from [172.16.0.188] (192-222-143-198.qc.cable.ebox.net
+ [192.222.143.198])
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4PlX9z4H7Gzt7L;
+ Mon, 27 Mar 2023 08:26:47 -0400 (EDT)
+Message-ID: <3056c476-0e3a-8cde-39e4-907602d26d76@efficios.com>
+Date: Mon, 27 Mar 2023 08:27:01 -0400
 MIME-Version: 1.0
-Date: Fri, 24 Mar 2023 19:34:43 +0800
-Message-ID: <CAL_9pdT9tDgj3e2YNsWFn6YkOAVWbcoUKXaE+YveJiFrOeu+NQ@mail.gmail.com>
-To: lttng-dev@lists.lttng.org
-Subject: [lttng-dev] Nano clock value overflows the signed 64-bit integer
- range on the babeltrace2 client side when per-process per-user trace file
- were transfer using lttng live protocol
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To: yashvardhan kukreti <yashvardhankukreti@gmail.com>
+References: <CALx39aqN_YvfcDhhKgURZZU-bWZvuiZptbb-kJDYerEex9Q-7A@mail.gmail.com>
+ <CALx39arqYKMj_M1q_XDBfCSrSruJ5obUuNHeN4Cu7a1sVDwwbw@mail.gmail.com>
+In-Reply-To: <CALx39arqYKMj_M1q_XDBfCSrSruJ5obUuNHeN4Cu7a1sVDwwbw@mail.gmail.com>
+Subject: Re: [lttng-dev]
+ https://lists.lttng.org/pipermail/lttng-dev/2020-May/029631.html
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -61,73 +51,53 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Yuan Bin via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Yuan Bin <elf.ggle@gmail.com>
-Content-Type: multipart/mixed; boundary="===============6170092338617673548=="
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============6170092338617673548==
-Content-Type: multipart/alternative; boundary="00000000000036f77005f7a3c81b"
-
---00000000000036f77005f7a3c81b
-Content-Type: text/plain; charset="UTF-8"
-
-I launched a program producing traces to the lttng consumerd and lttng
-relayd, also launching a babeltrace command as lttng live consumer to show
-the tracing real-timely.
-
-It works well when the channel is set to per user mode. But when it is
-changed to per process per user without no other changes, the babeltrace2
-client crashing showing a overflow error:
-
-The last error message of babeltrace2 exception stack shows :
-
-"Cannot convert cycle to nanoseconds from origin for given clock class:
-value overflows the signed 64-bit integer range: cc-addr=****,
-cc-name="monotonic", cc-freq=1000000000, ....."
-
-What's the difference resulting this crash ? How to solve it since the
-perprocess per user mode is perfered for me.
-
-version info:
-babeltrace2: 2.0.4
-lttng comands: 2.12.12
-
---00000000000036f77005f7a3c81b
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><span style=3D"color:rgb(51,153,102)"><span style=3D"color=
-:rgb(0,0,0)"><span style=3D"color:rgb(34,34,34)">I launched a program produ=
-cing traces to the lttng consumerd and lttng relayd, also launching a babel=
-trace command=C2=A0as lttng live consumer to show the tracing real-timely.=
-=C2=A0</span><br><br><span style=3D"color:rgb(34,34,34)">It works well when=
- the channel is set to per user mode. But when it is changed to per process=
- per user without no other changes, the babeltrace2 client crashing showing=
- a overflow error:</span><br><br><span style=3D"color:rgb(34,34,34)">The la=
-st error message of babeltrace2 exception stack shows :</span><br><br><span=
- style=3D"color:rgb(34,34,34)">&quot;Cannot convert cycle to nanoseconds fr=
-om origin for given clock class: value overflows the signed 64-bit integer =
-range: cc-addr=3D****, cc-name=3D&quot;monotonic&quot;, cc-freq=3D100000000=
-0, .....&quot;</span><br><br><span style=3D"color:rgb(34,34,34)">What&#39;s=
- the difference resulting this crash ? How to solve it since the perprocess=
- per user mode is perfered for me.</span><br><br><span style=3D"color:rgb(3=
-4,34,34)">version info:</span><br><span style=3D"color:rgb(34,34,34)">babel=
-trace2: 2.0.4</span><br><span style=3D"color:rgb(34,34,34)">lttng comands: =
-2.12.12</span></span></span><br><br></div>
-
---00000000000036f77005f7a3c81b--
-
---===============6170092338617673548==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============6170092338617673548==--
+T24gMjAyMy0wMy0yNiAxMTowMCwgeWFzaHZhcmRoYW4ga3VrcmV0aSB3cm90ZToKPiAKPiAgICAg
+SGkgTWF0aGV3LAo+IAo+ICAgICBJIGhhdmUgYSBxdWVzdGlvbiBhYm91dCB0aGlzIHBhdGNoIGZv
+ciBsdHRuZy1tb2R1bGVzIGFuZCB0aGUgdXNlIG9mCj4gICAgIHJlZ2lzdGVyX2twcm9iZSgpIHRv
+IGZldGNoIHRoZSBmdW5jdGlvbiBwdHIuCj4gICAgIFRoZSBxdWVzdGlvbiBpbiB0aGlzIHJlZ2Fy
+ZCBpcyBlc3BlY2lhbGx5IGZyb20gUFBDNjQgRUxGX0FCSV92MQo+ICAgICBwZXJzcGVjdGl2ZS4K
+PiAKPiAgICAgVGhlIGZ1bmN0aW9ucyBvbiBQUEM2NCBhcmUgYWNjZXNzZWQgdmlhIHRoZSBGdW5j
+dGlvbiBkZXNjcmlwdG9yCj4gICAgIHdoaWxlIHdoYXQgcmVnaXN0ZXJfa3Byb2JlcyByZXR1cm5z
+IGlzIHRoZSBlbnRyeSBwb2ludCBvZiB0aGUgZnVuY3Rpb24uCj4gICAgIEhlbmNlIHVzaW5nIHRo
+ZSByZXR1cm4gcG9pbnRlciB0ZW5kcyB0byBpbnRlcnByZXTCoHRoZSBhZGRyIGFzIHRoZQo+ICAg
+ICBhZGRyZXNzIG9mIHRoZSBmdW5jdGlvbiBkZXNjcmlwdG9ywqBhbmQgZGVyZWZlcmVuY2VzIHRo
+ZSBwcGNfaW5zdCBhcwo+ICAgICB0aGUgZnVuY3Rpb24gZW50cnnCoHBvaW50wqBhbmQgY3Jhc2hl
+cwo+IAo+ICAgICBbIDQxNDUuNDgzNTk0XSBrZXJuZWwgdHJpZWQgdG8gZXhlY3V0ZSBleGVjLXBy
+b3RlY3RlZCBwYWdlCj4gICAgICg3YzA4MDJhNmZiODFmZmUwKSAtIGV4cGxvaXQgYXR0ZW1wdD8g
+KHVpZDogMCkKPiAgICAgaGVyZSA3YzA4MDJhNiBpcyB0aGUgbWZzcHIgaW5zdHJ1Y3Rpb24gZnJv
+bSB0aGUgY29kZSB0ZXh0IHNlY3Rpb24gb2YKPiAgICAgdGhlIGthbGxzeW1zX2xvb2t1cF9uYW1l
+KCkKPiAKPiAgICAgbm90ZSBmb3IgUFBDX0VMRl9BQklfdjEgdGhlIHJlZ2lzdGVyX2twcm9iZXMo
+KSBzZWFyY2hlcyBmb3IgdGhlIGRvdAo+ICAgICB2YXJpYW50IG9mIHRoZSBzeW1ib2wgYW5kIG9u
+bHkgaW4gY2FzZSBpZiBjYW5ub3QgZmluZCB0aGUgZG90Cj4gICAgIHZhcmlhbnQgbG9va3MgZm9y
+IHRoZSBub3JtYWwgc3ltYm9sLgo+ICAgICByZWdpc3Rlcl9rcHJvYmUoKSAtPiBrcHJvYmVfYWRk
+cigpIC0+IGtwcm9iZV9sb29rdXBfbmFtZSgpIFthcmNoCj4gICAgIHZhcmlhbnQgcmVwbGFjZXMg
+d2VhayBzeW1ib2xdCj4gICAgIGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y1LjEw
+LjE3NC9DL2lkZW50L2twcm9iZV9sb29rdXBfbmFtZSA8aHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5j
+b20vbGludXgvdjUuMTAuMTc0L0MvaWRlbnQva3Byb2JlX2xvb2t1cF9uYW1lPgo+IAo+ICAgICBQ
+bGVhc2UgbGV0IG1lIGtub3cgaWYgaSBtYWtlIHNlbnNlIG9yIHRoYXQgaSBtYXkgaGF2ZSBtaXNz
+ZWQgc29tZXRoaW5nLgo+IAo+ICAgICBJIGhhdmUgbG9va2VkIGF0IHRoZSBjb2RlIG9mIDIuMTIu
+OCBhcyB3ZWxsIGFuZCAyLjEyLjMgdmVyc3Rpb24gb2YKPiAgICAgbHR0bmctbW9kdWxlcy4KClBs
+ZWFzZSBoYXZlIGEgbG9vayBhdCBjb21taXRzIChmcm9tIHN0YWJsZS0yLjEyIGJyYW5jaCBvZiBs
+dHRuZy1tb2R1bGVzKToKCmNvbW1pdCA1Mzc3MmRiMjRmYWNkODRmMWYzZGRjZjIxYTFlZjVmMTYy
+NjA4NzIxCkF1dGhvcjogSGUgWmhlIDx6aGUuaGVAd2luZHJpdmVyLmNvbT4KRGF0ZTogICBUdWUg
+U2VwIDI3IDE1OjU5OjQyIDIwMjIgKzA4MDAKCiAgICAgd3JhcHBlcjogcG93ZXJwYzY0OiBmaXgg
+a2VybmVsIGNyYXNoIGNhdXNlZCBieSBkb19nZXRfa2FsbHN5bXMKCmNvbW1pdCA4ZmU4ODhkODZj
+Y2FkNDIyNmIwNWE1MzZlZmI3M2Q3MWJiMDkxMDYyCkF1dGhvcjogTWljaGFlbCBKZWFuc29uIDxt
+amVhbnNvbkBlZmZpY2lvcy5jb20+CkRhdGU6ICAgVGh1IE5vdiAyNCAxNDoyNTozMyAyMDIyIC0w
+NTAwCgogICAgIGZpeDoga2FsbHN5bXMgd3JhcHBlciBvbiBwcGM2NGVsCgpJIHN1c3BlY3QgeW91
+J2xsIGFsc28gbmVlZCB0aGlzIGNoYW5nZSBjdXJyZW50bHkgaW4gcmV2aWV3OgoKaHR0cHM6Ly9y
+ZXZpZXcubHR0bmcub3JnL2MvbHR0bmctbW9kdWxlcy8rLzkxMTMKClBsZWFzZSBsZXQgdXMga25v
+dyBpZiBlc3BlY2lhbGx5IHRoaXMgbGFzdCBjaGFuZ2UgZml4ZXMgdGhpbmdzIG9uIHlvdXIgc2lk
+ZS4KClRoYW5rcywKCk1hdGhpZXUKCgo+IAo+ICAgICBSZWdhcmRzLAo+ICAgICBTaGFzaGFuawo+
+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cHM6Ly93d3cuZWZmaWNp
+b3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
