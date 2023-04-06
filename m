@@ -4,59 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB90CC76196
-	for <lttng-dev@archiver.kernel.org>; Tue, 28 Mar 2023 13:35:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29156C7618D
+	for <lttng-dev@archiver.kernel.org>; Thu,  6 Apr 2023 20:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1680010538;
-	bh=3r7reVY+IIlcpnD23lFq0eHEGZe65T4y43GPf0CYP30=;
-	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=eeVQ7eF0GFU8M3n4nZKJfyU1TWRA+v2LjfDlJPDHgMVpsNFXMjiNJ8ztAHtlOFe0e
-	 +xRyrc2sjtuHArttajCunbJBQHZWZeYuXsQOZwmXfspZ//YyvlM7HCH7KNHd+3M1Io
-	 wiarRLU8WCwP/5oMg0rUSNrxpiXF/D8yEaQxhkUA6dDcvpHNGClzcykM9Noe8Kqgrg
-	 DxIgGWXxE9WlOT9h3X+wm5HdnI/+AyNuAe1MtdpnmKhuQQ13lJbLVWZzy8y1dnhDOR
-	 9nPt4H2a6l3qgxW4kRyMJ6f8O32g3N89QPzNhNAlNcjBNZUsgWOooE3JTzFDC61LkZ
-	 xLqGJU9U2mV3g==
+	s=default; t=1680812088;
+	bh=Lw06925XhiDg7BfB2YxIjWDfbw5ZghIs7HrSD6K30P0=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=FVGSJYcfT1ZZEJ/5QetNEOMxKXdee491kn0yU16hw9tMbg7HDe+owMujgq8mBk9cl
+	 YheUY5QViFLWXeJLneC8j35uL92g+yLB3993snIUdAmkZcYhWmLfTZDjmCXfGy0t/c
+	 tnRDZE/Eg3i2StYa858T2l6QutdzLMX5M2IhiTmQPGz5PwY1q1X/gLfQLbkT+uAyw1
+	 iBrcS/VZGxfKqy5YfFFNsRnpIhmhFcb2lPqqug9R8DfD0MeSRT1amORG8nru8qndne
+	 NaApiOTAweEj0lwu98Gz41a8s7VwiNcQr7Shxd9CKi2EbOusGtBOQSO7PyE/fDGI6e
+	 Mcf2ajouVpQkQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Pm9fx5Ftgz2KpP;
-	Tue, 28 Mar 2023 09:35:37 -0400 (EDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com
- [209.85.167.54])
- by lists.lttng.org (Postfix) with ESMTPS id 4Pm9fw366hz2KX8
- for <lttng-dev@lists.lttng.org>; Tue, 28 Mar 2023 09:35:34 -0400 (EDT)
-Received: by mail-lf1-f54.google.com with SMTP id j11so15818612lfg.13
- for <lttng-dev@lists.lttng.org>; Tue, 28 Mar 2023 06:35:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20210112; t=1680010473;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=U7XlZTrqCy5Mc5nGzbv85zYE4vAxkR7uRakMg7FRu+g=;
- b=MIf+g5PJhJvLTE3iU7D/DmKqAjurVh5VI4cVmVUZ+EuSmP6knL1uc1X7V+g2h6+w02
- brO0NI1WexWQ20k1wDU7uy2esiGLawmVE+GLf0P0IwBb6XDJWhC4rSkzyZD1WJQyA6vX
- U9eHv1ekYYpbI0LKIuk8PA/vDxXEw4DfgpbH7gATPl1NqR0phrSrOH98LBhcT+fArsnP
- x+VOKoZIr6/SFB59KzfBuJBRWSdyW0+XuKRfFzCSPnQ25DbKKrM3nOGDa/Jz0T6KluLX
- mXGVuIQsmXqFFxA2gpojtMRb7QVoH+mjYfDQNRvcGX6NOWdL1wR0BRkFPXS5f07kLir+
- RPSw==
-X-Gm-Message-State: AAQBX9ebWPThr8gmwZXelu0UKo5H3H3IfN8xTDTGUa5ipVgMju1DG8Jq
- APtc56UYZ4gmmWrwR8SIxh9t+ktdknHxXwaNF2k7wFVO8R4=
-X-Google-Smtp-Source: AKy350aRqbXWr4+wzcIHxt4v5vww4wQZo5oFo/f0UvNm6EuUVla2NUggsNOYpqZtPhyAANpUGJJrCRw2ngiFb3H0CHE=
-X-Received: by 2002:a19:7419:0:b0:4d8:62e5:4f66 with SMTP id
- v25-20020a197419000000b004d862e54f66mr4504020lfe.7.1680010472369; Tue, 28 Mar
- 2023 06:34:32 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Pst5M2QNMz2NQ5;
+	Thu,  6 Apr 2023 16:14:47 -0400 (EDT)
+Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Pssjv1b2Gz2NKL
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Apr 2023 15:57:55 -0400 (EDT)
+Received: from horde2019.polymtl.ca (www.imp.polymtl.ca [132.207.6.45])
+ by smtp.polymtl.ca (8.14.7/8.14.7) with ESMTP id 336JuVEd021794
+ for <lttng-dev@lists.lttng.org>; Thu, 6 Apr 2023 15:56:31 -0400
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp.polymtl.ca 336JuVEd021794
+Received: from Sansfil-Eduroam-Etudiants-15-40.polymtl.ca
+ (Sansfil-Eduroam-Etudiants-15-40.polymtl.ca [10.200.15.40]) by
+ www.imp.polymtl.ca (Horde Framework) with HTTPS; Thu, 06 Apr 2023 19:56:30
+ +0000
+Date: Thu, 06 Apr 2023 19:56:30 +0000
+Message-ID: <20230406195630.Horde.jhBZfsMqxFud8S3napU7CjJ@www.imp.polymtl.ca>
+To: lttng-dev@lists.lttng.org
+User-Agent: Horde Application Framework 5
 MIME-Version: 1.0
-References: <CALx39aqN_YvfcDhhKgURZZU-bWZvuiZptbb-kJDYerEex9Q-7A@mail.gmail.com>
- <CALx39arqYKMj_M1q_XDBfCSrSruJ5obUuNHeN4Cu7a1sVDwwbw@mail.gmail.com>
- <3056c476-0e3a-8cde-39e4-907602d26d76@efficios.com>
- <CALx39aqPFVKGCv+jqvgdxge6mew0+Wg4cH-PnBB8Z_LhO6rOig@mail.gmail.com>
- <9bf67681-e3c7-0b25-07b7-40c0a85aee67@efficios.com>
-In-Reply-To: <9bf67681-e3c7-0b25-07b7-40c0a85aee67@efficios.com>
-Date: Tue, 28 Mar 2023 19:04:19 +0530
-Message-ID: <CALx39aoCGt97U7HHqj=nrEZ4x_L+_2dZRp10i2qiBgUo0COH5g@mail.gmail.com>
-To: Michael Jeanson <mjeanson@efficios.com>
-Subject: Re: [lttng-dev]
- https://lists.lttng.org/pipermail/lttng-dev/2020-May/029631.html
+Content-Disposition: inline
+X-Poly-FromMTA: (www.imp.polymtl.ca [132.207.6.45]) at Thu,
+ 6 Apr 2023 19:56:31 +0000
+X-Mailman-Approved-At: Thu, 06 Apr 2023 16:14:45 -0400
+Subject: [lttng-dev] Seeking Assistance on LTTng for Kubernetes Performance
+ Research
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -68,170 +53,61 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: yashvardhan kukreti via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: yashvardhan kukreti <yashvardhankukreti@gmail.com>
-Cc: lttng-dev@lists.lttng.org
-Content-Type: multipart/mixed; boundary="===============8924024269074844514=="
+From: Benjamin Saint-Cyr via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Benjamin Saint-Cyr <benjamin.saint-cyr@polymtl.ca>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"; DelSp="Yes"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============8924024269074844514==
-Content-Type: multipart/alternative; boundary="0000000000006cb39205f7f5ebfd"
+Dear LTTng Developers,
 
---0000000000006cb39205f7f5ebfd
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+I am currently conducting performance research on Kubernetes for my  
+master's thesis and am using LTTng for data collection and Trace  
+Compass for analysis. I have a couple of questions and concerns, and I  
+would appreciate your guidance to ensure I am using your tools  
+effectively.
 
-Thanks Michael, the patch is working
+	1. In the Control Flow view, I can see the CPU throttling due to the  
+quota defined in the Cgroup as the pod runs and then waits for the CPU  
+periodically. However, it is unclear whether the pod is waiting due to  
+a full CPU or because of timeshares. I can easily find this  
+information in /sys/fs/cgroup/cpu,cpuacct/kubepods/<burstable or  
+besteffort>/pod<UID>/cpu.stat if the pod is being throttled. Is there  
+a way to extract this information using LTTng or Trace Compass?
 
-[  157.606699]  SK DEBUG look up symbol .kallsyms_lookup_name
-[  157.613527]  SK DEBUG look up symbol get_pfnblock_flags_mask
-[  157.644191] LTTng: Loaded modules v2.13.8 (Nordicit=C3=A9) -
-devtool-base-1-g1011df74-dirty
+	2. I am attempting to determine which PID is running a specific  
+Container/Pod UID. Currently, I can deduce this by observing the  
+process named runc[*:INIT], as it creates the cgroup and clones the  
+process for the container. However, this approach is fragile and only  
+works due to an implementation detail. It also fails if tracing starts  
+after deployment. This information is easily available in  
+/sys/fs/cgroup/cpu,cpuacct/kubepods/<burstable or  
+besteffort>/pod<UID>/<container ID>/cgroup.procs. Is there an existing  
+method within LTTng to obtain this information that I may not be aware  
+of?
 
-Regards,
-Shahank
+I have been informed that it might be possible to read the information  
+in cpu.stat or cgroup.procs using a state dump at the beginning or  
+end, but the process remains unclear. Alternatively, I could  
+instrument the kernel or the process handling the accounting, but this  
+would be quite challenging. Another option would be to use something  
+similar to cAdvisor, but its efficiency is questionable since it  
+dedicates an entire process to reading a few files.
 
-On Mon, Mar 27, 2023 at 11:59=E2=80=AFPM Michael Jeanson <mjeanson@efficios=
-.com>
-wrote:
+I would greatly appreciate any guidance or suggestions you may have on  
+improving my approach and effectively utilizing LTTng for my research.
 
-> On 2023-03-27 11:52, yashvardhan kukreti wrote:
-> >   62 #ifdef LTTNG_CONFIG_PPC64_ELF_ABI_V2
-> >   63         /* Substract 4 bytes to get what we originally want */
-> >   64         addr =3D (unsigned long)(((char *)probe.addr) - 4);
-> >   65 #elif defined*(LTTNG_*CONFIG_PPC64_ELF_ABI_V1)   << incorrect MACR=
-O
-> to
-> > used in gerrit review. this is the correct one.
-> >   66         /*
-> >   67          * Build a function descriptor from the address of
-> >
-> > /lttng-module-2.13.8/src/wrapper/kallsyms.c:72:32: error: invalid use o=
-f
-> > undefined type 'struct func_desc'
-> > |    72 |  kallsyms_lookup_name_func_desc.addr =3D (unsigned
-> long)probe.addr;
-> > /lttng-module-2.13.8/src/wrapper/kallsyms.c:73:32: error: invalid use o=
-f
-> > undefined type 'struct func_desc'
-> > |    73 |  kallsyms_lookup_name_func_desc.toc =3D ((struct func_desc *)
-> > &sprint_symbol)->toc;
-> >
-> > you either want to use func_descr_t
-> >
-> https://elixir.bootlin.com/linux/v5.15.104/source/arch/powerpc/include/as=
-m/types.h#L30
-> <
-> https://elixir.bootlin.com/linux/v5.15.104/source/arch/powerpc/include/as=
-m/types.h#L30
-> >
-> > or
-> > struct ppc64_opd_entry
-> >
-> https://elixir.bootlin.com/linux/v5.17.15/source/arch/powerpc/include/uap=
-i/asm/elf.h#L293
-> <
-> https://elixir.bootlin.com/linux/v5.17.15/source/arch/powerpc/include/uap=
-i/asm/elf.h#L293
-> >
-> >
-> > both of which are discontinued from 5.18
->
->
-> Hi,
->
-> I updated the patch at https://review.lttng.org/c/lttng-modules/+/9113 to
-> support kernels older than v5.18. It's only build tested on v5.17 and
-> v5.18.
->
-> Michael
->
->
+Thank you for your time and assistance.
 
---0000000000006cb39205f7f5ebfd
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Best regards,
 
-<div dir=3D"ltr">Thanks=C2=A0Michael, the patch is working<div><br></div><d=
-iv>[ =C2=A0157.606699] =C2=A0SK DEBUG look up symbol .kallsyms_lookup_name<=
-br>[ =C2=A0157.613527] =C2=A0SK DEBUG look up symbol get_pfnblock_flags_mas=
-k<br>[ =C2=A0157.644191] LTTng: Loaded modules v2.13.8 (Nordicit=C3=A9) - d=
-evtool-base-1-g1011df74-dirty<br></div><div><br></div><div>Regards,</div><d=
-iv>Shahank=C2=A0</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr"=
- class=3D"gmail_attr">On Mon, Mar 27, 2023 at 11:59=E2=80=AFPM Michael Jean=
-son &lt;<a href=3D"mailto:mjeanson@efficios.com">mjeanson@efficios.com</a>&=
-gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0=
-px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">On 20=
-23-03-27 11:52, yashvardhan kukreti wrote:<br>
-&gt;=C2=A0 =C2=A062 #ifdef LTTNG_CONFIG_PPC64_ELF_ABI_V2<br>
-&gt;=C2=A0 =C2=A063 =C2=A0 =C2=A0 =C2=A0 =C2=A0 /* Substract 4 bytes to get=
- what we originally want */<br>
-&gt;=C2=A0 =C2=A064 =C2=A0 =C2=A0 =C2=A0 =C2=A0 addr =3D (unsigned long)(((=
-char *)probe.addr) - 4);<br>
-&gt;=C2=A0 =C2=A065 #elif defined*(LTTNG_*CONFIG_PPC64_ELF_ABI_V1)=C2=A0 =
-=C2=A0&lt;&lt; incorrect MACRO to <br>
-&gt; used=C2=A0in gerrit review. this is the correct one.<br>
-&gt;=C2=A0 =C2=A066 =C2=A0 =C2=A0 =C2=A0 =C2=A0 /*<br>
-&gt;=C2=A0 =C2=A067 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0* Build a function de=
-scriptor from the address of<br>
-&gt; <br>
-&gt; /lttng-module-2.13.8/src/wrapper/kallsyms.c:72:32: error: invalid use =
-of <br>
-&gt; undefined type &#39;struct func_desc&#39;<br>
-&gt; | =C2=A0 =C2=A072 | =C2=A0kallsyms_lookup_name_func_desc.addr =3D (uns=
-igned long)probe.addr;<br>
-&gt; /lttng-module-2.13.8/src/wrapper/kallsyms.c:73:32: error: invalid use =
-of <br>
-&gt; undefined type &#39;struct func_desc&#39;<br>
-&gt; | =C2=A0 =C2=A073 | =C2=A0kallsyms_lookup_name_func_desc.toc =3D ((str=
-uct func_desc *) <br>
-&gt; &amp;sprint_symbol)-&gt;toc;<br>
-&gt; <br>
-&gt; you either want to use func_descr_t<br>
-&gt; <a href=3D"https://elixir.bootlin.com/linux/v5.15.104/source/arch/powe=
-rpc/include/asm/types.h#L30" rel=3D"noreferrer" target=3D"_blank">https://e=
-lixir.bootlin.com/linux/v5.15.104/source/arch/powerpc/include/asm/types.h#L=
-30</a> &lt;<a href=3D"https://elixir.bootlin.com/linux/v5.15.104/source/arc=
-h/powerpc/include/asm/types.h#L30" rel=3D"noreferrer" target=3D"_blank">htt=
-ps://elixir.bootlin.com/linux/v5.15.104/source/arch/powerpc/include/asm/typ=
-es.h#L30</a>&gt;<br>
-&gt; or<br>
-&gt; struct ppc64_opd_entry<br>
-&gt; <a href=3D"https://elixir.bootlin.com/linux/v5.17.15/source/arch/power=
-pc/include/uapi/asm/elf.h#L293" rel=3D"noreferrer" target=3D"_blank">https:=
-//elixir.bootlin.com/linux/v5.17.15/source/arch/powerpc/include/uapi/asm/el=
-f.h#L293</a> &lt;<a href=3D"https://elixir.bootlin.com/linux/v5.17.15/sourc=
-e/arch/powerpc/include/uapi/asm/elf.h#L293" rel=3D"noreferrer" target=3D"_b=
-lank">https://elixir.bootlin.com/linux/v5.17.15/source/arch/powerpc/include=
-/uapi/asm/elf.h#L293</a>&gt;<br>
-&gt; <br>
-&gt; both of which are discontinued from 5.18<br>
-<br>
-<br>
-Hi,<br>
-<br>
-I updated the patch at <a href=3D"https://review.lttng.org/c/lttng-modules/=
-+/9113" rel=3D"noreferrer" target=3D"_blank">https://review.lttng.org/c/ltt=
-ng-modules/+/9113</a> to <br>
-support kernels older than v5.18. It&#39;s only build tested on v5.17 and v=
-5.18.<br>
-<br>
-Michael<br>
-<br>
-</blockquote></div>
+Benjamin Saint-Cyr
 
---0000000000006cb39205f7f5ebfd--
 
---===============8924024269074844514==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============8924024269074844514==--
