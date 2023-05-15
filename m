@@ -4,47 +4,37 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D902C77B7F
-	for <lttng-dev@archiver.kernel.org>; Fri, 12 May 2023 14:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D172C7EE25
+	for <lttng-dev@archiver.kernel.org>; Mon, 15 May 2023 19:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1683903454;
-	bh=o406Epnw+ituGEjt65B1J2/PmghdEqmCWo0ahI8LrWs=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Tepxjedf6BnePC2ORYWbtlN/7CbZMeA7GL08OGchs53esI1DyVqeVPvEG3m+sx0uw
-	 U3m63mGZj1zl2xugZBgmxcAk0SSDpTAWxI7mOF9NVfK6vCVmAbely2AKqRofju98wQ
-	 YtM/78a8CNfRGr0Zuc2e0Zf4h4hAsraKVLQObCkDWCpQvE5dE0Sf1i66pAjTREDhB7
-	 lDShgfiHdvLEcXhsvJ/Dl+Ry/53XY66/HgCaZTmqCIexhMcDakZ+RowED4ZqTvsH/Q
-	 3x/GKcAqZbkhm3ZQqHGd3Hym8h56y2rOZkJEOUw/sWoqmodiCdMC+SwW4JUABzRPKL
-	 vNxDRb5MYyDFQ==
+	s=default; t=1684178455;
+	bh=37AW8NvzRzhxhZOEN4anCTy34ToFNcsRMGzkIjuSMFk=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=SkxLITP7qPZx1kwakf/J0tDQvq0gffv+NhfouaRDbT4NQxUckNXBGtwTcWTTi3+yx
+	 +Khas2tyP5qd0rm2g+oM+PVLQZHjMbufzCWrEuXAvmou6GZdQLT+Qy+e0wRzVWFgYx
+	 maz03tpH46KnZ2yUhZpNgfUaUpnsRgqM0rcwtMbYoS4dNIgYJYIkS1Z5FobTFbSy75
+	 92vttg3nsDrup2jtNpRDbkhATBOYkyDcLHzA4ChyN7hHSz/pEHa5csrAkh5WmcJ2Em
+	 Xdsn74Zdzy0TZKVeXHE1YmwB9sdrhvdUDJIbSCTRXshSuKJksZbnAL4i6m2btFzitz
+	 XrYJbdC54SOxQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QHsLj50MszSy8;
-	Fri, 12 May 2023 10:57:33 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4QKq3C1qGLz1DS2;
+	Mon, 15 May 2023 15:20:55 -0400 (EDT)
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QHsLg4j4SzSy6
- for <lttng-dev@lists.lttng.org>; Fri, 12 May 2023 10:57:31 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4QKq376F1vz1F43
+ for <lttng-dev@lists.lttng.org>; Mon, 15 May 2023 15:20:50 -0400 (EDT)
 Received: from [172.16.0.99] (192-222-143-198.qc.cable.ebox.net
  [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QHsL46WJkz12TX;
- Fri, 12 May 2023 10:57:00 -0400 (EDT)
-Message-ID: <7d12d606-2d36-7978-0362-550427449109@efficios.com>
-Date: Fri, 12 May 2023 10:57:05 -0400
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4QKq361sNlz12KS
+ for <lttng-dev@lists.lttng.org>; Mon, 15 May 2023 15:20:50 -0400 (EDT)
+Message-ID: <cf6c44a7-70e3-edfd-d728-11cd03b8a91e@efficios.com>
+Date: Mon, 15 May 2023 15:20:56 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
 Content-Language: en-US
-To: Brian Hutchinson <b.hutchman@gmail.com>
-Cc: lttng-dev@lists.lttng.org
-References: <CAFZh4h-Xsf7HGZ6A57BpuWH7CzogwV6D25vg05dOq30_MfxE0A@mail.gmail.com>
- <CAFZh4h8awEpJgAcygRY=1f7A2qK91b31HBnLBPvvueuRnquOjQ@mail.gmail.com>
- <41fa4914-b519-9ff9-3659-7e4cf2d41904@efficios.com>
- <91d1c0ca-af15-2972-da1e-8f07a148158b@efficios.com>
- <CAFZh4h9M0eA1SpHhfquoyrqtwRhHV54f0O4hCkkiojwUmPTC9Q@mail.gmail.com>
- <fdbcfbd9-742d-dc61-3667-48a00130d6aa@efficios.com>
- <CAFZh4h8HC8eGo5Kbvoj9JJs1oCnujZucEmneqQUfy0chvZpBDg@mail.gmail.com>
-In-Reply-To: <CAFZh4h8HC8eGo5Kbvoj9JJs1oCnujZucEmneqQUfy0chvZpBDg@mail.gmail.com>
-Subject: Re: [lttng-dev] I'm still getting empty ust traces using tracef
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Subject: [lttng-dev] Tracing Summit 2023 Announcement and CFP
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -57,146 +47,91 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Reply-To: info@tracingsummit.org
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-T24gMjAyMy0wNS0xMiAxMDo1MiwgQnJpYW4gSHV0Y2hpbnNvbiB3cm90ZToKPiBIaSBNYXRoaWV1
-LAo+IAo+IE9uIEZyaSwgTWF5IDEyLCAyMDIzIGF0IDk6MzPigK9BTSBNYXRoaWV1IERlc25veWVy
-cwo+IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+Pgo+PiBPbiAyMDIz
-LTA1LTEyIDAwOjEwLCBCcmlhbiBIdXRjaGluc29uIHdyb3RlOgo+Pj4gSG1tLCBJIG1pc3NlZCB0
-aGlzIGVhcmxpZXIgc29tZWhvdy4KPj4+Cj4+PiBTbywgSSdtIG5vdCB0aGUgZ3JlYXRlc3QgYXQg
-dXBkYXRpbmcgT0UgYW5kIFlvY3RvIHJlY2lwZXMuICBJJ20KPj4+IGN1cnJlbnRseSB1c2luZyB0
-aGlzIHJlY2lwZToKPj4+IGh0dHA6Ly9jZ2l0Lm9wZW5lbWJlZGRlZC5vcmcvb3BlbmVtYmVkZGVk
-LWNvcmUvdHJlZS9tZXRhL3JlY2lwZXMta2VybmVsL2x0dG5nL2x0dG5nLXVzdF8yLjEzLjUuYmI/
-aD1tYXN0ZXIKPj4+Cj4+PiAuLi4gYW5kIGl0IGxvb2tzIGxpa2UgdGhlIGNvbW1pdCB5b3UgYXJl
-IHRhbGtpbmcgYWJvdXQgaXMgbmV3ZXIuCj4+Pgo+Pj4gSSBhbHdheXMgdGhpbmssIG9oLCBJJ2xs
-IGp1c3QgdXBkYXRlIHRoZSBzb3VyY2UgVVJJIGluIHRoZSByZWNpcGUgYnV0Cj4+PiBpdCdzIG5l
-dmVyIHRoYXQgc2ltcGxlIC4uLiBhbmQgdGhlcmUgYXJlIHBhdGNoZXMgaW4gdGhlIHJlY2lwZSBl
-dGMuCj4+Pgo+Pj4gSSd2ZSBnb3QgYSBzZGsgKGV4dGVybmFsIHRvb2xjaGFpbikgYnVpbHQgZm9y
-IG15IGVtYmVkZGVkIHBsYXRmb3JtLgo+Pj4gV291bGQgaXQgYmUgdG9vIGhhcmQgdG8ganVzdCBk
-b3dubG9hZCBzdGFibGUtMi4xMyBvZiBldmVyeXRoaW5nIGFuZAo+Pj4gY3Jvc3MgY29tcGlsZSBp
-dCBvdXRzaWRlIG9mIFlvY3RvPwo+Pj4KPj4+IFdoYXQgZG8geW91IHN1Z2dlc3Q/Cj4+Pgo+Pj4g
-QW5kIGRvIEkgbmVlZCB0byBkbyBhbnl0aGluZyBiZXNpZGVzIGp1c3QgZ2V0IDIuMTMgc3RhYmxl
-IHdvcmtpbmc/ICBJCj4+PiB3YXMga2luZCBvZiBjb25mdXNlZCBpZiBJIG5lZWQgdG8gcHV0IGEg
-I2RlZmluZQo+Pj4gTFRUTkdfVFJBQ0VQT0lOVF9ERUZJTkUgc29tZXdoZXJlIGluIG15IGNvZGUu
-ICBJJ20gbm90IHVzaW5nIGEKPj4+IHRyYWNlcG9pbnQgcHJvdmlkZXIgcGFja2FnZXMgYXQgdGhp
-cyBwb2ludAo+Pgo+PiBIaSBCcmlhbiwKPj4KPj4gWW91IG1pZ2h0IHdhbnQgdG8gcHJvdmlkZSBh
-IHRyaW1tZWQtZG93biByZXByb2R1Y2VyIG9mIHlvdXIgaXNzdWU6Cj4+IGV4YW1wbGUgLmMgY29t
-cGlsZSB1bml0IGluc3RydW1lbnRlZCB3aXRoIHRyYWNlcG9pbnRzLCBleGFtcGxlIC5jCj4+IGNv
-bXBpbGUgdW5pdCBjb250YWluaW5nIHRoZSB0cmFjZXBvaW50IHByb2JlcywgYW5kIHRoZSBsb2cg
-b2YgdGhlCj4+IGNvbnNvbGUgd2hlbiB0aGlzIGFwcGxpY2F0aW9uIGlzIHJ1biB3aXRoIExUVE5H
-X1VTVF9ERUJVRz0xLgo+IAo+IFRoZSBjb2RlIGhhcyB0d28gZGlmZmVyZW50IGFyZWFzIHdoZXJl
-IEknbSB0cnlpbmcgdG8gdXNlIHRyYWNlZi4gIFRoZQo+IHdheSB0aGUgYXBwIGlzIHB1dCB0b2dl
-dGhlciwgZWFjaCBvZiB0aGVzZSBhcmVhcyBlbmQgdXAgYmVjb21pbmcKPiBzdGF0aWMgbGlicyB0
-aGF0IGFsbCBnZXQgbHVtcGVkIHRvZ2V0aGVyIHRvIG1ha2UgdGhlIGZpbmFsIGV4ZWN1dGFibGUK
-PiAod2hpY2ggaXMgdGhlbiBsaW5rZWQgd2l0aCAtbGx0dG5nLXVzdCBhbmQgLWxkbCkuCj4gCj4g
-SWYgSSdtIHJlYWRpbmcgYmV0d2VlbiB0aGUgbGluZXMgY29ycmVjdGx5IHdpdGggcmVzcGVjdCB0
-byB0aGUgY29tbWl0Cj4geW91IHBvaW50ZWQgb3V0ICh0aGF0IEknbSBtaXNzaW5nKSwgaWYgSSBy
-ZWR1Y2UgdGhlIGluY2x1c2lvbiBvZiBJCj4gI2luY2x1ZGUgPGx0dG5nL3RyYWNlZi5oPiB0byBv
-bmUgaW5zdGFuY2UgKGxpa2Ugd2l0aCB0aGUgaGVsbG8gd29ybGQKPiB0aGF0IHdvcmtlZCksIEkn
-bSB0aGlua2luZyB0aGUgdmVyc2lvbiBJIGhhdmUgbWlnaHQgd29yay4KPiAKPiBJIGRvbid0IGtu
-b3cgaG93IEkgY291bGQgdHJpbSBkb3duIHRoZSBsYXJnZSBtdWx0aSB0aHJlYWRlZCBhcHAgSSdt
-Cj4gdHJ5aW5nIHRvIGRlYnVnIHRvIHNoYXJlLgo+IAo+IEFub3RoZXIgZHluYW1pYyBJIHNob3Vs
-ZCBtZW50aW9uIGluIGZ1bGwgZGlzY2xvc3VyZSwgdGhlIGFwcCBpbgo+IHF1ZXN0aW9uIGhhcyBi
-ZWVuIHBvcnRlZCBmcm9tIGEgZGlmZmVyZW50IE9TIGFuZCB3YXMgb24gYSBzaW5nbGUgY29yZQo+
-IGNwdS4gIFRoZSBuZXcgaG9zdCAoIGlteDgpIGlzIGEgcXVhZCBjb3JlIEE1MyBhbmQgc2luY2Ug
-dGhlIGFwcCB3YXNuJ3QKPiB3cml0dGVuIGZvciBtdWx0aWNvcmUsIHRoZSBjcHUncyBhcmUgaXNv
-bGF0ZWQgYW5kIHN5c3RlbWQgaXMgc3RhcnRpbmcKPiB0aGUgYXBwIG9uIGNwdSAwIGJ1dCBvbmNl
-IGl0J3MgdXAgaXQgc3dpdGNoZXMgaXQncyBhZmZpbml0eSB0byBjcHUgMQo+IHNvIEkgZG9uJ3Qg
-a25vdyBpZiB0aGF0J3MgYSBmYWN0b3IgaGVyZSBvciBub3Qgc28ganVzdCBtZW50aW9uaW5nIGl0
-Lgo+IAo+IEkgZGlkIHRyeSB3aXRoIExUVE5HX1VTVF9ERUJVRz0xIGxhc3QgbmlnaHQgYW5kIGl0
-IGRpZG4ndCBwdXQgb3V0IG11Y2g6Cj4gCj4gZXhwb3J0IExUVE5HX1VTVF9ERUJVRz0xCj4gIyBz
-eXN0ZW1jdGwgc3RhcnQgbXlfYXBwCgpJIHN1c3BlY3QgdGhhdCBiZWNhdXNlIHlvdSBydW4geW91
-ciBhcHBsaWNhdGlvbiB1bmRlciBzeXN0ZW1jdGwsIHdlIGFyZSAKbm90IHNlZWluZyB0aGUgY29u
-c29sZSBvdXRwdXQgZnJvbSB0aGUgYXBwbGljYXRpb24uCgpUaGUgY29uc29sZSBvdXRwdXQgYmVs
-b3cgYXBwZWFycyB0byBjb21lIGZyb20gbGlibHR0bmctdXN0LWN0bC5zbyBsaW5rZWQgCndpdGhp
-biBsdHRuZy1zZXNzaW9uZC9jb25zdW1lcmQsIG5vdCB0aGUgYXBwbGljYXRpb24uCgpDYW4geW91
-IGZpbmQgYSB3YXkgdG8gcnVuIHlvdXIgYXBwbGljYXRpb24gYW5kIGNhcHR1cmUgdGhlIGNvbnNv
-bGUgb3V0cHV0ID8KClRoYW5rcywKCk1hdGhpZXUKCgo+IAo+ICNsdHRuZyBjcmVhdGUgbXlfdGNf
-dHJhY2UgLS1vdXRwdXQ9L3RtcC9teV90Y190cmFjZQo+IFNwYXduaW5nIGEgc2Vzc2lvbiBkYWVt
-b24KPiBsaWJyaW5nYnVmZmVyLWNsaWVudHNbNzExLzcxMV0KPiA6IExUVCA6IGx0dCByaW5nIGJ1
-ZmZlciBjbGllbnQKPiAicmVsYXktbWV0YWRhdGEtbW1hcCIgaW5pdAo+IChpbiBsdHRuZ19yaW5n
-X2J1ZmZlcl9tZXRhZGF0YV9jbGllbnRfaW5pdCgpIGF0Cj4gLi4vLi4vLi4vbHR0bmctdXN0LTIu
-MTMuNS9zcmMvY29tbW9uL3JpbmdidWZmZXItY2xpZW50cy9tZXRhZGF0YS10ZW1wbGF0ZS5oOjM2
-NCkKPiBsaWJyaW5nYnVmZmVyLWNsaWVudHNbNzExLzcxMV06IExUVCA6IGx0dCByaW5nIGJ1ZmZl
-ciBjbGllbnQKPiAicmVsYXktb3ZlcndyaXRlLW1tYXAiIGluaXQKPiAoaW4gbHR0bmdfcmluZ19i
-dWZmZXJfY2xpZW50X292ZXJ3cml0ZV9pbml0KCkgYXQKPiAuLi8uLi8uLi9sdHRuZy11c3QtMi4x
-My41L3NyYy9jb21tb24vcmluZ2J1ZmZlci1jbGllbnRzL3RlbXBsYXRlLmg6ODI2KQo+IGxpYnJp
-bmdidWZmZXItY2xpZW50c1s3MTEvNzExXTogTFRUIDogbHR0IHJpbmcgYnVmZmVyIGNsaWVudAo+
-ICJyZWxheS1vdmVyd3JpdGUtcnQtbW1hcCIgaW5pdAo+IChpbiBsdHRuZ19yaW5nX2J1ZmZlcl9j
-bGllbnRfb3ZlcndyaXRlX3J0X2luaXQoKSBhdAo+IC4uLy4uLy4uL2x0dG5nLXVzdC0yLjEzLjUv
-c3JjL2NvbW1vbi9yaW5nYnVmZmVyLWNsaWVudHMvdGVtcGxhdGUuaDo4MjYpCj4gbGlicmluZ2J1
-ZmZlci1jbGllbnRzWzcxMS83MTFdOiBMVFQgOiBsdHQgcmluZyBidWZmZXIgY2xpZW50Cj4gInJl
-bGF5LWRpc2NhcmQtbW1hcCIgaW5pdAo+IChpbiBsdHRuZ19yaW5nX2J1ZmZlcl9jbGllbnRfZGlz
-Y2FyZF9pbml0KCkgYXQKPiAuLi8uLi8uLi9sdHRuZy11c3QtMi4xMy41L3NyYy9jb21tb24vcmlu
-Z2J1ZmZlci1jbGllbnRzL3RlbXBsYXRlLmg6ODI2KQo+IGxpYnJpbmdidWZmZXItY2xpZW50c1s3
-MTEvNzExXTogTFRUIDogbHR0IHJpbmcgYnVmZmVyIGNsaWVudAo+ICJyZWxheS1kaXNjYXJkLXJ0
-LW1tYXAiIGluaXQKPiAoaW4gbHR0bmdfcmluZ19idWZmZXJfY2xpZW50X2Rpc2NhcmRfcnRfaW5p
-dCgpIGF0Cj4gLi4vLi4vLi4vbHR0bmctdXN0LTIuMTMuNS9zcmMvY29tbW9uL3JpbmdidWZmZXIt
-Y2xpZW50cy90ZW1wbGF0ZS5oOjgyNikKPiBbICAxNzkuMzg0NDU2XSBMVFRuZzogTG9hZGVkIG1v
-ZHVsZXMgdjIuMTMuOSAoTm9yZGljaXTvv73DqSkKPiBbICAxNzkuMzkwMzY2XSBMVFRuZzogRXhw
-ZXJpbWVudGFsIGJpdHdpc2UgZW51bSBlbmFibGVkLgo+IGxpYnJpbmdidWZmZXItY2xpZW50c1s3
-MTEvNzExXTogTFRUIDogbHR0IHJpbmcgYnVmZmVyIGNsaWVudAo+ICJyZWxheS1kaXNjYXJkLXJ0
-LW1tYXAiIGV4aXQKPiAoaW4gbHR0bmdfcmluZ19idWZmZXJfY2xpZW50X2Rpc2NhcmRfcnRfZXhp
-dCgpIGF0Cj4gLi4vLi4vLi4vbHR0bmctdXN0LTIuMTMuNS9zcmMvY29tbW9uL3JpbmdidWZmZXIt
-Y2xpZW50cy90ZW1wbGF0ZS5oOjgzMykKPiBsaWJyaW5nYnVmZmVyLWNsaWVudHNbNzExLzcxMV06
-IExUVCA6IGx0dCByaW5nIGJ1ZmZlciBjbGllbnQKPiAicmVsYXktZGlzY2FyZC1tbWFwIiBleGl0
-Cj4gKGluIGx0dG5nX3JpbmdfYnVmZmVyX2NsaWVudF9kaXNjYXJkX2V4aXQoKSBhdAo+IC4uLy4u
-Ly4uL2x0dG5nLXVzdC0yLjEzLjUvc3JjL2NvbW1vbi9yaW5nYnVmZmVyLWNsaWVudHMvdGVtcGxh
-dGUuaDo4MzMpCj4gbGlicmluZ2J1ZmZlci1jbGllbnRzWzcxMS83MTFdOiBMVFQgOiBsdHQgcmlu
-ZyBidWZmZXIgY2xpZW50Cj4gInJlbGF5LW92ZXJ3cml0ZS1ydC1tbWFwIiBleGl0Cj4gKGluIGx0
-dG5nX3JpbmdfYnVmZmVyX2NsaWVudF9vdmVyd3JpdGVfcnRfZXhpdCgpIGF0Cj4gLi4vLi4vLi4v
-bHR0bmctdXN0LTIuMTMuNS9zcmMvY29tbW9uL3JpbmdidWZmZXItY2xpZW50cy90ZW1wbGF0ZS5o
-OjgzMykKPiBsaWJyaW5nYnVmZmVyLWNsaWVudHNbNzExLzcxMV06IExUVCA6IGx0dCByaW5nIGJ1
-ZmZlciBjbGllbnQKPiAicmVsYXktb3ZlcndyaXRlLW1tYXAiIGV4aXQKPiAoaW4gbHR0bmdfcmlu
-Z19idWZmZXJfY2xpZW50X292ZXJ3cml0ZV9leGl0KCkgYXQKPiAuLi8uLi8uLi9sdHRuZy11c3Qt
-Mi4xMy41L3NyYy9jb21tb24vcmluZ2J1ZmZlci1jbGllbnRzL3RlbXBsYXRlLmg6ODMzKQo+IGxp
-YnJpbmdidWZmZXItY2xpZW50c1s3MTEvNzExXTogTFRUIDogbHR0IHJpbmcgYnVmZmVyIGNsaWVu
-dAo+ICJyZWxheS1tZXRhZGF0YS1tbWFwIiBleGl0Cj4gKGluIGx0dG5nX3JpbmdfYnVmZmVyX21l
-dGFkYXRhX2NsaWVudF9leGl0KCkgYXQKPiAuLi8uLi8uLi9sdHRuZy11c3QtMi4xMy41L3NyYy9j
-b21tb24vcmluZ2J1ZmZlci1jbGllbnRzL21ldGFkYXRhLXRlbXBsYXRlLmg6MzcxKQo+IFNlc3Np
-b24gbXlfdGNfdHJhY2UgY3JlYXRlZC4KPiBUcmFjZXMgd2lsbCBiZSBvdXRwdXQgdG8gL3RtcC9t
-eV90Y190cmFjZQo+IAo+ICMgbHR0bmcgZW5hYmxlLWV2ZW50IC0tdXNlcnNwYWNlICdsdHRuZ191
-c3RfdHJhY2VmOionCj4gdXN0IGV2ZW50IGx0dG5nX3VzdF90cmFjZWY6KiBjcmVhdGVkIGluIGNo
-YW5uZWwgY2hhbm5lbDAKPiAKPiAjIGx0dG5nIHN0YXJ0Cj4gVHJhY2luZyBzdGFydGVkIGZvciBz
-ZXNzaW9uIG15X3RjX3RyYWNlCj4gCj4gIyBsdHRuZyBkZXN0cm95Cj4gRGVzdHJveWluZyBzZXNz
-aW9uIG15X3RjX3RyYWNlLi4KPiBTZXNzaW9uIG15X3RjX3RyYWNlIGRlc3Ryb3llZAo+IAo+IHJv
-b3RAbG9jYWxob3N0Oi90bXAvbXlfdGNfdHJhY2UvdXN0L3VpZC8wIyBjZCA2NC1iaXQvCj4gcm9v
-dEBsb2NhbGhvc3Q6L3RtcC9teV90Y190cmFjZS91c3QvdWlkLzAvNjQtYml0IyBscwo+IGNoYW5u
-ZWwwXzAgIGNoYW5uZWwwXzEgIGNoYW5uZWwwXzIgIGNoYW5uZWwwXzMgIGluZGV4ICBtZXRhZGF0
-YQo+IHJvb3RAbG9jYWxob3N0Oi90bXAvbXlfdGNfdHJhY2UvdXN0L3VpZC8wLzY0LWJpdCMgbHMg
-LWFsCj4gdG90YWwgMjAKPiBkcnd4cnd4LS0tIDMgcm9vdCByb290ICAxNjAgU2VwIDIwIDEwOjQ4
-IC4KPiBkcnd4cnd4LS0tIDMgcm9vdCByb290ICAgNjAgU2VwIDIwIDEwOjQ4IC4uCj4gLXJ3LXJ3
-LS0tLSAxIHJvb3Qgcm9vdCA0MDk2IFNlcCAyMCAxMDo0OCBjaGFubmVsMF8wCj4gLXJ3LXJ3LS0t
-LSAxIHJvb3Qgcm9vdCA0MDk2IFNlcCAyMCAxMDo0OCBjaGFubmVsMF8xCj4gLXJ3LXJ3LS0tLSAx
-IHJvb3Qgcm9vdCA0MDk2IFNlcCAyMCAxMDo0OCBjaGFubmVsMF8yCj4gLXJ3LXJ3LS0tLSAxIHJv
-b3Qgcm9vdCA0MDk2IFNlcCAyMCAxMDo0OCBjaGFubmVsMF8zCj4gZHJ3eHJ3eC0tLSAyIHJvb3Qg
-cm9vdCAgMTIwIFNlcCAyMCAxMDo0OCBpbmRleAo+IC1ydy1ydy0tLS0gMSByb290IHJvb3QgNDA5
-NiBTZXAgMjAgMTA6NDggbWV0YWRhdGEKPiByb290QGxvY2FsaG9zdDovdG1wL215X3RjX3RyYWNl
-L3VzdC91aWQvMC82NC1iaXQjIGNkIGluZGV4Lwo+IHJvb3RAbG9jYWxob3N0Oi90bXAvbXlfdGNf
-dHJhY2UvdXN0L3VpZC8wLzY0LWJpdC9pbmRleCMgbHMKPiBjaGFubmVsMF8wLmlkeCAgY2hhbm5l
-bDBfMS5pZHggIGNoYW5uZWwwXzIuaWR4ICBjaGFubmVsMF8zLmlkeAo+IHJvb3RAbG9jYWxob3N0
-Oi90bXAvbXlfdGNfdHJhY2UvdXN0L3VpZC8wLzY0LWJpdC9pbmRleCMgbHMgLWFsCj4gdG90YWwg
-MTYKPiBkcnd4cnd4LS0tIDIgcm9vdCByb290IDEyMCBTZXAgMjAgMTA6NDggLgo+IGRyd3hyd3gt
-LS0gMyByb290IHJvb3QgMTYwIFNlcCAyMCAxMDo0OCAuLgo+IC1ydy1ydy0tLS0gMSByb290IHJv
-b3QgIDg4IFNlcCAyMCAxMDo0OCBjaGFubmVsMF8wLmlkeAo+IC1ydy1ydy0tLS0gMSByb290IHJv
-b3QgIDg4IFNlcCAyMCAxMDo0OCBjaGFubmVsMF8xLmlkeAo+IC1ydy1ydy0tLS0gMSByb290IHJv
-b3QgIDg4IFNlcCAyMCAxMDo0OCBjaGFubmVsMF8yLmlkeAo+IC1ydy1ydy0tLS0gMSByb290IHJv
-b3QgIDg4IFNlcCAyMCAxMDo0OCBjaGFubmVsMF8zLmlkeAo+IAo+IE5vIGV2ZW50cyBpbiB0aGUg
-bG9ncywgaWYgaXQgd2VyZSB3b3JraW5nIHRoZXJlIHdvdWxkIGJlIHRvbnMgb2Ygc3R1ZmYgaW4g
-dGhlcmUuCj4gCj4gQnV0IGl0IHNvdW5kcyBsaWtlIG15IG1haW4gcHJvYmxlbSBpcyBJIG5lZWQg
-c3RhYmxlLTIuMTMgYW5kIEkgbmVlZCB0bwo+IGZpZ3VyZSBvdXQgdGhlIGJlc3Qgd2F5IHRvIGRv
-IHRoYXQuICBDb21waWxlIGZyb20gbHR0bmcgc291cmNlIG91dHNpZGUKPiBvZiB5b2N0byAocHJv
-YmFibHkgbm90IGEgZ29vZCBpZGVhIHdpdGggYWxsIHRoZSBkZXBlbmRlbmNpZXMgdGhhdAo+IHdv
-dWxkIGFsc28gbmVlZCB0byBiZSBjcm9zcyBjb21waWxlZCkgd2l0aCBteSBnZW5lcmF0ZWQgc2Rr
-IGZvciB0aGUKPiBpbXg4IG9yIHRyeSB0byB1cGRhdGUgdGhlIE9FIHJlY2lwZSB0aGF0IEknbSBj
-dXJyZW50bHkgdXNpbmcuCj4gCj4gUmVnYXJkcywKPiAKPiBCcmlhbgo+IAo+IAo+IAo+IAo+IAo+
-Pgo+PiBUaGFua3MsCj4+Cj4+IE1hdGhpZXUKPj4KPj4gLS0KPj4gTWF0aGlldSBEZXNub3llcnMK
-Pj4gRWZmaWNpT1MgSW5jLgo+PiBodHRwczovL3d3dy5lZmZpY2lvcy5jb20KPj4KCi0tIApNYXRo
-aWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHBzOi8vd3d3LmVmZmljaW9zLmNvbQoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcu
-b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hello all!
+
+This is a Call for Proposals for the Tracing Summit 2023[0] which will be held in Bilbao,
+Spain on the 17th and 18th of September, 2023. This year, the event is co-located with
+Open Source Summit Europe 2023 [1].
+
+- Event dates: Sunday, September 17th - Monday, September 18th
+- Location: Bilbao, Spain and virtually (co-located with Open Source Summit Europe)
+- Registration cost
+     - In person: $80.00 USD (Free for speakers)
+     - Virtual: Free
+- Call for proposals link: [2]
+
+Important dates:
+- Call for proposals close: Friday, June 16th, at 11:59PM EDT
+- Call for proposals notifications: Friday, June 23rd
+- Schedule announcement: Tuesday, June 27th
+- Event dates: Sunday, September 17th - Monday, September 18th
+
+Stand-alone registration is expected to open next week. In the meantime, you can subscribe
+to the mailing list to get the latest information on the event: [3]
+
+The 2023 Tracing Summit is a two-day, single-track conference on the topic of tracing. The
+event focuses on software and hardware tracing, gathering developers and end-users of tracing
+and trace analysis tools. The main goal of the Tracing Summit is to provide space for
+discussion between people of the various areas that benefit from tracing, namely parallel,
+distributed and/or real-time systems, as well as kernel development.
+
+We are welcoming 30 minute presentations from both end users and developers, on topics
+covering, but not limited to:
+
+- Investigation workflow of real-time, latency, and throughput issues,
+- Trace collection and extraction,
+- Trace filtering,
+- Trace aggregation,
+- Trace formats,
+- Tracing multi-core systems,
+- Trace abstraction,
+- Trace modeling,
+- Automated trace analysis (e.g. dependency analysis),
+- Tracing large clusters and distributed systems,
+- Hardware-level tracing (e.g. DSP, GPU, bare-metal),
+- Trace visualization,
+- Interaction between debugging and tracing,
+- Tracing remote control,
+- Analysis of large trace datasets,
+- Cloud trace collection and analysis,
+- Integration between trace tools,
+- Live tracing & monitoring,
+- Dynamic instrumentation,
+- Programmable tracing (e.g. eBPF).
+
+Talks can cover recently available technologies, ongoing work, and yet non-existing
+technologies (that are compelling to end-users). Talks covering interesting or challenging
+tracing use cases are also welcome as they can reveal future directions or tooling needs.
+
+Please understand that this open forum is not the proper place to present sales or marketing
+pitches, nor technologies which are prevented from being freely used in open source.
+
+Please send any questions about this conference to <info@tracingsummit.org>.
+
+This event is organized by EfficiOS on behalf of the Linux Foundation Diagnostic and
+Monitoring Workgroup [4].
+
+The organizers of this event are Mathieu Desnoyers (EfficiOS), Erica Bugden (EfficiOS)
+and Olivier Dion (EfficiOS).
+
+[0]: https://tracingsummit.org
+[1]: https://events.linuxfoundation.org/open-source-summit-europe/
+[2]: https://cfp.tracingsummit.org/ts2023/cfp
+[3]: https://eepurl.com/goakfv
+[4]: https://diamon.org/
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
