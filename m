@@ -4,37 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D172C7EE25
-	for <lttng-dev@archiver.kernel.org>; Mon, 15 May 2023 19:20:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13F0EC77B7D
+	for <lttng-dev@archiver.kernel.org>; Mon, 15 May 2023 20:18:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1684178455;
-	bh=37AW8NvzRzhxhZOEN4anCTy34ToFNcsRMGzkIjuSMFk=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=SkxLITP7qPZx1kwakf/J0tDQvq0gffv+NhfouaRDbT4NQxUckNXBGtwTcWTTi3+yx
-	 +Khas2tyP5qd0rm2g+oM+PVLQZHjMbufzCWrEuXAvmou6GZdQLT+Qy+e0wRzVWFgYx
-	 maz03tpH46KnZ2yUhZpNgfUaUpnsRgqM0rcwtMbYoS4dNIgYJYIkS1Z5FobTFbSy75
-	 92vttg3nsDrup2jtNpRDbkhATBOYkyDcLHzA4ChyN7hHSz/pEHa5csrAkh5WmcJ2Em
-	 Xdsn74Zdzy0TZKVeXHE1YmwB9sdrhvdUDJIbSCTRXshSuKJksZbnAL4i6m2btFzitz
-	 XrYJbdC54SOxQ==
+	s=default; t=1684181900;
+	bh=I5Yci1xhHeUUcfeQOJeFmXD18bXbrnD8K9lcY563sb8=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=iFCuqnR9ouCkVRYvohlZG1DuH0UCK1fnsGJkhbjudPmU32OGiokLLKZU90WRBRLdC
+	 Wbnaz7ymQF0gMIrH8d1nH4NT3X8bkkCvhuZOGN9DMdpg5aOuyh8rW436L+6rKrQpm/
+	 0yiOUoxoFT+/WB+mqPZap2qJ/PyVtEkp0fipe5XFHJefssLMZxZtr287hodIRIEVGr
+	 1Jf5cz7WfD8bpTicC7pdT6C1jbeSorTYLpdE594Rz+P6qgKfhJ2sGNMPtEf6wCpHBb
+	 z+MrgYwH1tdr2H2UZ/Gy3ccxv93izpOrAp3GM1TRGydgTvgtFCJMKVIfhhwKCorA/Q
+	 pphqS+8lMqfsQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QKq3C1qGLz1DS2;
-	Mon, 15 May 2023 15:20:55 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4QKrKR2pbFz1Df5;
+	Mon, 15 May 2023 16:18:19 -0400 (EDT)
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QKq376F1vz1F43
- for <lttng-dev@lists.lttng.org>; Mon, 15 May 2023 15:20:50 -0400 (EDT)
-Received: from [172.16.0.99] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QKq361sNlz12KS
- for <lttng-dev@lists.lttng.org>; Mon, 15 May 2023 15:20:50 -0400 (EDT)
-Message-ID: <cf6c44a7-70e3-edfd-d728-11cd03b8a91e@efficios.com>
-Date: Mon, 15 May 2023 15:20:56 -0400
+ by lists.lttng.org (Postfix) with ESMTPS id 4QKrKM3zpXz1Df0
+ for <lttng-dev@lists.lttng.org>; Mon, 15 May 2023 16:18:15 -0400 (EDT)
+Received: from laura.hitronhub.home (modemcable094.169-200-24.mc.videotron.ca
+ [24.200.169.94])
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4QKrKM0F3Nz12nV;
+ Mon, 15 May 2023 16:18:15 -0400 (EDT)
+To: lttng-dev@lists.lttng.org
+Date: Mon, 15 May 2023 16:17:08 -0400
+Message-Id: <20230515201718.9809-2-odion@efficios.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230515201718.9809-1-odion@efficios.com>
+References: <20230515201718.9809-1-odion@efficios.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [lttng-dev] Tracing Summit 2023 Announcement and CFP
+Subject: [lttng-dev] [PATCH 01/11] configure: Add --disable-atomic-builtins
+ option
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -46,91 +48,105 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: info@tracingsummit.org
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Olivier Dion via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Olivier Dion <odion@efficios.com>
+Cc: Olivier Dion <odion@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hello all!
+By default, if the toolchain supports atomic builtins, use them for the
+uatomic API. This requires that the toolchains used to compile the
+library and the user application supports such builtins.
 
-This is a Call for Proposals for the Tracing Summit 2023[0] which will be held in Bilbao,
-Spain on the 17th and 18th of September, 2023. This year, the event is co-located with
-Open Source Summit Europe 2023 [1].
+The advantage of using these builtins is that they are well known
+synchronization primitives by several tools such as TSAN.
 
-- Event dates: Sunday, September 17th - Monday, September 18th
-- Location: Bilbao, Spain and virtually (co-located with Open Source Summit Europe)
-- Registration cost
-     - In person: $80.00 USD (Free for speakers)
-     - Virtual: Free
-- Call for proposals link: [2]
+Change-Id: Ia8e97112681f744f17816dbc4cbbec805a483331
+Co-authored-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Olivier Dion <odion@efficios.com>
+---
+ README.md    | 11 +++++++++++
+ configure.ac | 26 ++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-Important dates:
-- Call for proposals close: Friday, June 16th, at 11:59PM EDT
-- Call for proposals notifications: Friday, June 23rd
-- Schedule announcement: Tuesday, June 27th
-- Event dates: Sunday, September 17th - Monday, September 18th
-
-Stand-alone registration is expected to open next week. In the meantime, you can subscribe
-to the mailing list to get the latest information on the event: [3]
-
-The 2023 Tracing Summit is a two-day, single-track conference on the topic of tracing. The
-event focuses on software and hardware tracing, gathering developers and end-users of tracing
-and trace analysis tools. The main goal of the Tracing Summit is to provide space for
-discussion between people of the various areas that benefit from tracing, namely parallel,
-distributed and/or real-time systems, as well as kernel development.
-
-We are welcoming 30 minute presentations from both end users and developers, on topics
-covering, but not limited to:
-
-- Investigation workflow of real-time, latency, and throughput issues,
-- Trace collection and extraction,
-- Trace filtering,
-- Trace aggregation,
-- Trace formats,
-- Tracing multi-core systems,
-- Trace abstraction,
-- Trace modeling,
-- Automated trace analysis (e.g. dependency analysis),
-- Tracing large clusters and distributed systems,
-- Hardware-level tracing (e.g. DSP, GPU, bare-metal),
-- Trace visualization,
-- Interaction between debugging and tracing,
-- Tracing remote control,
-- Analysis of large trace datasets,
-- Cloud trace collection and analysis,
-- Integration between trace tools,
-- Live tracing & monitoring,
-- Dynamic instrumentation,
-- Programmable tracing (e.g. eBPF).
-
-Talks can cover recently available technologies, ongoing work, and yet non-existing
-technologies (that are compelling to end-users). Talks covering interesting or challenging
-tracing use cases are also welcome as they can reveal future directions or tooling needs.
-
-Please understand that this open forum is not the proper place to present sales or marketing
-pitches, nor technologies which are prevented from being freely used in open source.
-
-Please send any questions about this conference to <info@tracingsummit.org>.
-
-This event is organized by EfficiOS on behalf of the Linux Foundation Diagnostic and
-Monitoring Workgroup [4].
-
-The organizers of this event are Mathieu Desnoyers (EfficiOS), Erica Bugden (EfficiOS)
-and Olivier Dion (EfficiOS).
-
-[0]: https://tracingsummit.org
-[1]: https://events.linuxfoundation.org/open-source-summit-europe/
-[2]: https://cfp.tracingsummit.org/ts2023/cfp
-[3]: https://eepurl.com/goakfv
-[4]: https://diamon.org/
-
+diff --git a/README.md b/README.md
+index ba5bb08..6ce96c9 100644
+--- a/README.md
++++ b/README.md
+@@ -429,6 +429,17 @@ still being used to iterate on a hash table.
+ This option alters the rculfhash ABI. Make sure to compile both library
+ and application with matching configuration.
+ 
++### Usage of `--disable-atomic-builtins`
++
++By default, the configure script will check if the toolchain supports atomic
++builtins. If so, then the RCU memory model is implemented using the atomic
++builtins of the toolchain.
++
++Building liburcu with `--disable-atomic-builtins` force to use the legacy
++internal implementations for atomic accesses.
++
++This option is useful if for example the atomic builtins for a given toolchain
++version is known to be broken or to be inefficient.
+ 
+ Make targets
+ ------------
+diff --git a/configure.ac b/configure.ac
+index 909cf1d..4450a31 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -230,6 +230,11 @@ AE_FEATURE([rcu-debug], [Enable internal debugging self-checks. Introduces a per
+ AE_FEATURE_DEFAULT_DISABLE
+ AE_FEATURE([cds-lfht-iter-debug], [Enable extra debugging checks for lock-free hash table iterator traversal. Alters the rculfhash ABI. Make sure to compile both library and application with matching configuration.])
+ 
++# toolchain atomic builtins
++# Enabled by default
++AE_FEATURE_DEFAULT_ENABLE
++AE_FEATURE([atomic-builtins], [Disable the usage of toolchain atomic builtins.])
++
+ # When given, add -Werror to WARN_CFLAGS and WARN_CXXFLAGS.
+ # Disabled by default
+ AE_FEATURE_DEFAULT_DISABLE
+@@ -259,6 +264,23 @@ AE_IF_FEATURE_ENABLED([cds-lfht-iter-debug], [
+   AC_DEFINE([CONFIG_CDS_LFHT_ITER_DEBUG], [1], [Enable extra debugging checks for lock-free hash table iterator traversal. Alters the rculfhash ABI. Make sure to compile both library and application with matching configuration.])
+ ])
+ 
++AE_IF_FEATURE_ENABLED([atomic-builtins], [
++  AC_COMPILE_IFELSE(
++	[AC_LANG_PROGRAM(
++		[[int x, y;]],
++		[[__atomic_store_n(&x, 0, __ATOMIC_RELAXED);
++		  __atomic_load_n(&x, __ATOMIC_RELAXED);
++		  y = __atomic_exchange_n(&x, 1, __ATOMIC_RELAXED);
++		  __atomic_compare_exchange_n(&x, &y, 0, 0, __ATOMIC_RELAXED, __ATOMIC_RELAXED);
++		  __atomic_add_fetch(&x, 1, __ATOMIC_RELAXED);
++		  __atomic_sub_fetch(&x, 1, __ATOMIC_RELAXED);
++		  __atomic_and_fetch(&x, 0x01, __ATOMIC_RELAXED);
++		  __atomic_or_fetch(&x, 0x01, __ATOMIC_RELAXED);
++		  __atomic_thread_fence(__ATOMIC_RELAXED);
++		  __atomic_signal_fence(__ATOMIC_RELAXED);]])],
++	[AC_DEFINE([CONFIG_RCU_USE_ATOMIC_BUILTINS], [1], [Use compiler atomic builtins.])],
++	[AE_FEATURE_DISABLE(atomic-builtins)])
++])
+ 
+ ##                                                                          ##
+ ## Set automake variables for optional feature conditionnals in Makefile.am ##
+@@ -361,6 +383,10 @@ PPRINT_PROP_BOOL([Internal debugging], $value)
+ AE_IS_FEATURE_ENABLED([cds-lfht-iter-debug]) && value=1 || value=0
+ PPRINT_PROP_BOOL([Lock-free HT iterator debugging], $value)
+ 
++# atomic builtins enabled/disabled
++AE_IS_FEATURE_ENABLED([atomic-builtins]) && value=1 || value=0
++PPRINT_PROP_BOOL([Use toolchain atomic builtins], $value)
++
+ PPRINT_PROP_BOOL([Multi-flavor support], 1)
+ 
+ report_bindir="`eval eval echo $bindir`"
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+2.39.2
+
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
