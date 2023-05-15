@@ -4,39 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13F0EC77B7D
-	for <lttng-dev@archiver.kernel.org>; Mon, 15 May 2023 20:18:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2C69C77B75
+	for <lttng-dev@archiver.kernel.org>; Mon, 15 May 2023 20:18:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1684181900;
-	bh=I5Yci1xhHeUUcfeQOJeFmXD18bXbrnD8K9lcY563sb8=;
+	s=default; t=1684181904;
+	bh=otcn1ZY6IAyHX6L5YRxoiLTGmYuHhdK92AY6A7cfAdU=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=iFCuqnR9ouCkVRYvohlZG1DuH0UCK1fnsGJkhbjudPmU32OGiokLLKZU90WRBRLdC
-	 Wbnaz7ymQF0gMIrH8d1nH4NT3X8bkkCvhuZOGN9DMdpg5aOuyh8rW436L+6rKrQpm/
-	 0yiOUoxoFT+/WB+mqPZap2qJ/PyVtEkp0fipe5XFHJefssLMZxZtr287hodIRIEVGr
-	 1Jf5cz7WfD8bpTicC7pdT6C1jbeSorTYLpdE594Rz+P6qgKfhJ2sGNMPtEf6wCpHBb
-	 z+MrgYwH1tdr2H2UZ/Gy3ccxv93izpOrAp3GM1TRGydgTvgtFCJMKVIfhhwKCorA/Q
-	 pphqS+8lMqfsQ==
+	b=PXjJ6WF3g7UH57X6mFXKpB/47QpdQ46TII74D3rfThOEoiSzZOxpTjkfoOlaLlcmO
+	 CIPi7Fw5mBNwoBRIys2JAE4YOjbRF3xjDV2g0Relg1hHD1kqpcMae659b2M36CQK47
+	 9d7sfZwFl6gfhJl0ZHs2J93nuynPToYZoZyP2acBs0YIp+qBdb/+xczosZZI/iJZTI
+	 stQw+N8vzl+2ftQU6pF5sYKwZLokw+2ejRt595NhEHQQyfmbALFv1QMoBYrnjleNwD
+	 MMtzwOuhBoxru1cs+f2ybWj30eAdvTdfZM3p3H95pL0jYvW4pxt+nYblq9xR6JrK9O
+	 d1y6EQ1jqK9Kw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QKrKR2pbFz1Df5;
-	Mon, 15 May 2023 16:18:19 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4QKrKX02LSz1DYT;
+	Mon, 15 May 2023 16:18:24 -0400 (EDT)
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QKrKM3zpXz1Df0
+ by lists.lttng.org (Postfix) with ESMTPS id 4QKrKM42Lgz1Dh6
  for <lttng-dev@lists.lttng.org>; Mon, 15 May 2023 16:18:15 -0400 (EDT)
 Received: from laura.hitronhub.home (modemcable094.169-200-24.mc.videotron.ca
  [24.200.169.94])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QKrKM0F3Nz12nV;
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4QKrKM1TcJz12Q1;
  Mon, 15 May 2023 16:18:15 -0400 (EDT)
 To: lttng-dev@lists.lttng.org
-Date: Mon, 15 May 2023 16:17:08 -0400
-Message-Id: <20230515201718.9809-2-odion@efficios.com>
+Date: Mon, 15 May 2023 16:17:09 -0400
+Message-Id: <20230515201718.9809-3-odion@efficios.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230515201718.9809-1-odion@efficios.com>
 References: <20230515201718.9809-1-odion@efficios.com>
 MIME-Version: 1.0
-Subject: [lttng-dev] [PATCH 01/11] configure: Add --disable-atomic-builtins
- option
+Subject: [lttng-dev] [PATCH 02/11] urcu/uatomic: Use atomic builtins if
+ configured
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -56,94 +56,324 @@ Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-By default, if the toolchain supports atomic builtins, use them for the
-uatomic API. This requires that the toolchains used to compile the
-library and the user application supports such builtins.
+Implement uatomic in term of atomic builtins if configured to do so.
 
-The advantage of using these builtins is that they are well known
-synchronization primitives by several tools such as TSAN.
-
-Change-Id: Ia8e97112681f744f17816dbc4cbbec805a483331
+Change-Id: I5814494c62ee507fd5d381c3ba4ccd0a80c4f4e3
 Co-authored-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Olivier Dion <odion@efficios.com>
 ---
- README.md    | 11 +++++++++++
- configure.ac | 26 ++++++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+ include/Makefile.am                     |  3 +
+ include/urcu/uatomic.h                  |  5 +-
+ include/urcu/uatomic/builtins-generic.h | 85 +++++++++++++++++++++++++
+ include/urcu/uatomic/builtins-x86.h     | 85 +++++++++++++++++++++++++
+ include/urcu/uatomic/builtins.h         | 83 ++++++++++++++++++++++++
+ 5 files changed, 260 insertions(+), 1 deletion(-)
+ create mode 100644 include/urcu/uatomic/builtins-generic.h
+ create mode 100644 include/urcu/uatomic/builtins-x86.h
+ create mode 100644 include/urcu/uatomic/builtins.h
 
-diff --git a/README.md b/README.md
-index ba5bb08..6ce96c9 100644
---- a/README.md
-+++ b/README.md
-@@ -429,6 +429,17 @@ still being used to iterate on a hash table.
- This option alters the rculfhash ABI. Make sure to compile both library
- and application with matching configuration.
+diff --git a/include/Makefile.am b/include/Makefile.am
+index ba1fe60..fac941f 100644
+--- a/include/Makefile.am
++++ b/include/Makefile.am
+@@ -63,6 +63,9 @@ nobase_include_HEADERS = \
+ 	urcu/uatomic/alpha.h \
+ 	urcu/uatomic_arch.h \
+ 	urcu/uatomic/arm.h \
++	urcu/uatomic/builtins.h \
++	urcu/uatomic/builtins-generic.h \
++	urcu/uatomic/builtins-x86.h \
+ 	urcu/uatomic/gcc.h \
+ 	urcu/uatomic/generic.h \
+ 	urcu/uatomic.h \
+diff --git a/include/urcu/uatomic.h b/include/urcu/uatomic.h
+index 2fb5fd4..6b57c5f 100644
+--- a/include/urcu/uatomic.h
++++ b/include/urcu/uatomic.h
+@@ -22,8 +22,11 @@
+ #define _URCU_UATOMIC_H
  
-+### Usage of `--disable-atomic-builtins`
+ #include <urcu/arch.h>
++#include <urcu/config.h>
+ 
+-#if defined(URCU_ARCH_X86)
++#if defined(CONFIG_RCU_USE_ATOMIC_BUILTINS)
++#include <urcu/uatomic/builtins.h>
++#elif defined(URCU_ARCH_X86)
+ #include <urcu/uatomic/x86.h>
+ #elif defined(URCU_ARCH_PPC)
+ #include <urcu/uatomic/ppc.h>
+diff --git a/include/urcu/uatomic/builtins-generic.h b/include/urcu/uatomic/builtins-generic.h
+new file mode 100644
+index 0000000..8e6a9b5
+--- /dev/null
++++ b/include/urcu/uatomic/builtins-generic.h
+@@ -0,0 +1,85 @@
++/*
++ * urcu/uatomic/builtins-generic.h
++ *
++ * Copyright (c) 2023 Olivier Dion <odion@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
 +
-+By default, the configure script will check if the toolchain supports atomic
-+builtins. If so, then the RCU memory model is implemented using the atomic
-+builtins of the toolchain.
++#ifndef _URCU_UATOMIC_BUILTINS_GENERIC_H
++#define _URCU_UATOMIC_BUILTINS_GENERIC_H
 +
-+Building liburcu with `--disable-atomic-builtins` force to use the legacy
-+internal implementations for atomic accesses.
++#include <urcu/system.h>
 +
-+This option is useful if for example the atomic builtins for a given toolchain
-+version is known to be broken or to be inefficient.
- 
- Make targets
- ------------
-diff --git a/configure.ac b/configure.ac
-index 909cf1d..4450a31 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -230,6 +230,11 @@ AE_FEATURE([rcu-debug], [Enable internal debugging self-checks. Introduces a per
- AE_FEATURE_DEFAULT_DISABLE
- AE_FEATURE([cds-lfht-iter-debug], [Enable extra debugging checks for lock-free hash table iterator traversal. Alters the rculfhash ABI. Make sure to compile both library and application with matching configuration.])
- 
-+# toolchain atomic builtins
-+# Enabled by default
-+AE_FEATURE_DEFAULT_ENABLE
-+AE_FEATURE([atomic-builtins], [Disable the usage of toolchain atomic builtins.])
++#define uatomic_set(addr, v) __atomic_store_n(addr, v, __ATOMIC_RELAXED)
 +
- # When given, add -Werror to WARN_CFLAGS and WARN_CXXFLAGS.
- # Disabled by default
- AE_FEATURE_DEFAULT_DISABLE
-@@ -259,6 +264,23 @@ AE_IF_FEATURE_ENABLED([cds-lfht-iter-debug], [
-   AC_DEFINE([CONFIG_CDS_LFHT_ITER_DEBUG], [1], [Enable extra debugging checks for lock-free hash table iterator traversal. Alters the rculfhash ABI. Make sure to compile both library and application with matching configuration.])
- ])
- 
-+AE_IF_FEATURE_ENABLED([atomic-builtins], [
-+  AC_COMPILE_IFELSE(
-+	[AC_LANG_PROGRAM(
-+		[[int x, y;]],
-+		[[__atomic_store_n(&x, 0, __ATOMIC_RELAXED);
-+		  __atomic_load_n(&x, __ATOMIC_RELAXED);
-+		  y = __atomic_exchange_n(&x, 1, __ATOMIC_RELAXED);
-+		  __atomic_compare_exchange_n(&x, &y, 0, 0, __ATOMIC_RELAXED, __ATOMIC_RELAXED);
-+		  __atomic_add_fetch(&x, 1, __ATOMIC_RELAXED);
-+		  __atomic_sub_fetch(&x, 1, __ATOMIC_RELAXED);
-+		  __atomic_and_fetch(&x, 0x01, __ATOMIC_RELAXED);
-+		  __atomic_or_fetch(&x, 0x01, __ATOMIC_RELAXED);
-+		  __atomic_thread_fence(__ATOMIC_RELAXED);
-+		  __atomic_signal_fence(__ATOMIC_RELAXED);]])],
-+	[AC_DEFINE([CONFIG_RCU_USE_ATOMIC_BUILTINS], [1], [Use compiler atomic builtins.])],
-+	[AE_FEATURE_DISABLE(atomic-builtins)])
-+])
- 
- ##                                                                          ##
- ## Set automake variables for optional feature conditionnals in Makefile.am ##
-@@ -361,6 +383,10 @@ PPRINT_PROP_BOOL([Internal debugging], $value)
- AE_IS_FEATURE_ENABLED([cds-lfht-iter-debug]) && value=1 || value=0
- PPRINT_PROP_BOOL([Lock-free HT iterator debugging], $value)
- 
-+# atomic builtins enabled/disabled
-+AE_IS_FEATURE_ENABLED([atomic-builtins]) && value=1 || value=0
-+PPRINT_PROP_BOOL([Use toolchain atomic builtins], $value)
++#define uatomic_read(addr) __atomic_load_n(addr, __ATOMIC_RELAXED)
 +
- PPRINT_PROP_BOOL([Multi-flavor support], 1)
- 
- report_bindir="`eval eval echo $bindir`"
++#define uatomic_cmpxchg(addr, old, new)					\
++	__extension__							\
++	({								\
++		__typeof__(*(addr)) _old = (__typeof__(*(addr)))old;	\
++		__atomic_compare_exchange_n(addr, &_old, new, 0,	\
++					    __ATOMIC_SEQ_CST,		\
++					    __ATOMIC_SEQ_CST);		\
++		_old;							\
++	})
++
++#define uatomic_xchg(addr, v)				\
++	__atomic_exchange_n(addr, v, __ATOMIC_SEQ_CST)
++
++#define uatomic_add_return(addr, v)			\
++	__atomic_add_fetch(addr, v, __ATOMIC_SEQ_CST)
++
++#define uatomic_sub_return(addr, v)			\
++	__atomic_sub_fetch(addr, v, __ATOMIC_SEQ_CST)
++
++#define uatomic_and(addr, mask)					\
++	(void)__atomic_and_fetch(addr, mask, __ATOMIC_RELAXED)
++
++#define uatomic_or(addr, mask)					\
++	(void)__atomic_or_fetch(addr, mask, __ATOMIC_RELAXED)
++
++#define uatomic_add(addr, v)					\
++	(void)__atomic_add_fetch(addr, v, __ATOMIC_RELAXED)
++
++#define uatomic_sub(addr, v)					\
++	(void)__atomic_sub_fetch(addr, v, __ATOMIC_RELAXED)
++
++#define uatomic_inc(addr)					\
++	(void)__atomic_add_fetch(addr, 1, __ATOMIC_RELAXED)
++
++#define uatomic_dec(addr)					\
++	(void)__atomic_sub_fetch(addr, 1, __ATOMIC_RELAXED)
++
++#define cmm_smp_mb__before_uatomic_and() cmm_smp_mb()
++#define cmm_smp_mb__after_uatomic_and()  cmm_smp_mb()
++
++#define cmm_smp_mb__before_uatomic_or() cmm_smp_mb()
++#define cmm_smp_mb__after_uatomic_or()  cmm_smp_mb()
++
++#define cmm_smp_mb__before_uatomic_add() cmm_smp_mb()
++#define cmm_smp_mb__after_uatomic_add()  cmm_smp_mb()
++
++#define cmm_smp_mb__before_uatomic_sub() cmm_smp_mb()
++#define cmm_smp_mb__after_uatomic_sub()  cmm_smp_mb()
++
++#define cmm_smp_mb__before_uatomic_inc() cmm_smp_mb()
++#define cmm_smp_mb__after_uatomic_inc() cmm_smp_mb()
++
++#define cmm_smp_mb__before_uatomic_dec() cmm_smp_mb()
++#define cmm_smp_mb__after_uatomic_dec() cmm_smp_mb()
++
++#endif /* _URCU_UATOMIC_BUILTINS_GENERIC_H */
+diff --git a/include/urcu/uatomic/builtins-x86.h b/include/urcu/uatomic/builtins-x86.h
+new file mode 100644
+index 0000000..a70f922
+--- /dev/null
++++ b/include/urcu/uatomic/builtins-x86.h
+@@ -0,0 +1,85 @@
++/*
++ * urcu/uatomic/builtins-x86.h
++ *
++ * Copyright (c) 2023 Olivier Dion <odion@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#ifndef _URCU_UATOMIC_BUILTINS_X86_H
++#define _URCU_UATOMIC_BUILTINS_X86_H
++
++#include <urcu/system.h>
++
++#define uatomic_set(addr, v) __atomic_store_n(addr, v, __ATOMIC_RELAXED)
++
++#define uatomic_read(addr) __atomic_load_n(addr, __ATOMIC_RELAXED)
++
++#define uatomic_cmpxchg(addr, old, new)					\
++	__extension__							\
++	({								\
++		__typeof__(*(addr)) _old = (__typeof__(*(addr)))old;	\
++		__atomic_compare_exchange_n(addr, &_old, new, 0,	\
++					    __ATOMIC_SEQ_CST,		\
++					    __ATOMIC_SEQ_CST);		\
++		_old;							\
++	})
++
++#define uatomic_xchg(addr, v)				\
++	__atomic_exchange_n(addr, v, __ATOMIC_SEQ_CST)
++
++#define uatomic_add_return(addr, v)			\
++	__atomic_add_fetch(addr, v, __ATOMIC_SEQ_CST)
++
++#define uatomic_sub_return(addr, v)			\
++	__atomic_sub_fetch(addr, v, __ATOMIC_SEQ_CST)
++
++#define uatomic_and(addr, mask)					\
++	(void)__atomic_and_fetch(addr, mask, __ATOMIC_SEQ_CST)
++
++#define uatomic_or(addr, mask)					\
++	(void)__atomic_or_fetch(addr, mask, __ATOMIC_SEQ_CST)
++
++#define uatomic_add(addr, v)					\
++	(void)__atomic_add_fetch(addr, v, __ATOMIC_SEQ_CST)
++
++#define uatomic_sub(addr, v)					\
++	(void)__atomic_sub_fetch(addr, v, __ATOMIC_SEQ_CST)
++
++#define uatomic_inc(addr)					\
++	(void)__atomic_add_fetch(addr, 1, __ATOMIC_SEQ_CST)
++
++#define uatomic_dec(addr)					\
++	(void)__atomic_sub_fetch(addr, 1, __ATOMIC_SEQ_CST)
++
++#define cmm_smp_mb__before_uatomic_and() do { } while (0)
++#define cmm_smp_mb__after_uatomic_and()  do { } while (0)
++
++#define cmm_smp_mb__before_uatomic_or() do { } while (0)
++#define cmm_smp_mb__after_uatomic_or()  do { } while (0)
++
++#define cmm_smp_mb__before_uatomic_add() do { } while (0)
++#define cmm_smp_mb__after_uatomic_add()  do { } while (0)
++
++#define cmm_smp_mb__before_uatomic_sub() do { } while (0)
++#define cmm_smp_mb__after_uatomic_sub()  do { } while (0)
++
++#define cmm_smp_mb__before_uatomic_inc() do { } while (0)
++#define cmm_smp_mb__after_uatomic_inc()  do { } while (0)
++
++#define cmm_smp_mb__before_uatomic_dec() do { } while (0)
++#define cmm_smp_mb__after_uatomic_dec()  do { } while (0)
++
++#endif /* _URCU_UATOMIC_BUILTINS_X86_H */
+diff --git a/include/urcu/uatomic/builtins.h b/include/urcu/uatomic/builtins.h
+new file mode 100644
+index 0000000..164201b
+--- /dev/null
++++ b/include/urcu/uatomic/builtins.h
+@@ -0,0 +1,83 @@
++/*
++ * urcu/uatomic/builtins.h
++ *
++ * Copyright (c) 2023 Olivier Dion <odion@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#ifndef _URCU_UATOMIC_BUILTINS_H
++#define _URCU_UATOMIC_BUILTINS_H
++
++#include <urcu/arch.h>
++
++#if defined(__has_builtin)
++#  if !__has_builtin(__atomic_store_n)
++#    error "Toolchain does not support __atomic_store_n."
++#  endif
++#  if !__has_builtin(__atomic_load_n)
++#    error "Toolchain does not support __atomic_load_n."
++#  endif
++#  if !__has_builtin(__atomic_exchange_n)
++#    error "Toolchain does not support __atomic_exchange_n."
++#  endif
++#  if !__has_builtin(__atomic_compare_exchange_n)
++#    error "Toolchain does not support __atomic_compare_exchange_n."
++#  endif
++#  if !__has_builtin(__atomic_add_fetch)
++#    error "Toolchain does not support __atomic_add_fetch."
++#  endif
++#  if !__has_builtin(__atomic_sub_fetch)
++#    error "Toolchain does not support __atomic_sub_fetch."
++#  endif
++#  if !__has_builtin(__atomic_or_fetch)
++#    error "Toolchain does not support __atomic_or_fetch."
++#  endif
++#  if !__has_builtin(__atomic_thread_fence)
++#    error "Toolchain does not support __atomic_thread_fence."
++#  endif
++#  if !__has_builtin(__atomic_signal_fence)
++#    error "Toolchain does not support __atomic_signal_fence."
++#  endif
++#elif defined(__GNUC__)
++#  define GCC_VERSION (__GNUC__       * 10000 + \
++		       __GNUC_MINOR__ * 100   + \
++		       __GNUC_PATCHLEVEL__)
++#  if  GCC_VERSION < 40700
++#    error "GCC version is too old. Version must be 4.7 or greater"
++#  endif
++#  undef  GCC_VERSION
++#else
++#  error "Toolchain is not supported."
++#endif
++
++#if defined(__GNUC__)
++#  define UATOMIC_HAS_ATOMIC_BYTE  __GCC_ATOMIC_CHAR_LOCK_FREE
++#  define UATOMIC_HAS_ATOMIC_SHORT __GCC_ATOMIC_SHORT_LOCK_FREE
++#elif defined(__clang__)
++#  define UATOMIC_HAS_ATOMIC_BYTE  __CLANG_ATOMIC_CHAR_LOCK_FREE
++#  define UATOMIC_HAS_ATOMIC_SHORT __CLANG_ATOMIC_SHORT_LOCK_FREE
++#else
++/* #  define UATOMIC_HAS_ATOMIC_BYTE  */
++/* #  define UATOMIC_HAS_ATOMIC_SHORT */
++#endif
++
++#if defined(URCU_ARCH_X86)
++#  include <urcu/uatomic/builtins-x86.h>
++#else
++#  include <urcu/uatomic/builtins-generic.h>
++#endif
++
++#endif	/* _URCU_UATOMIC_BUILTINS_H */
 -- 
 2.39.2
 
