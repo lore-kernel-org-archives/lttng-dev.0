@@ -4,38 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E47DC7EE25
-	for <lttng-dev@archiver.kernel.org>; Mon, 15 May 2023 20:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61627C77B75
+	for <lttng-dev@archiver.kernel.org>; Mon, 15 May 2023 20:18:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
 	s=default; t=1684181931;
-	bh=srvrWrsyhYPCU4tG74yaWotKG7dL5roRgucGt255zRo=;
+	bh=OWZhJDLyHkQC5/M3PsawhApR60Macb0oGqjG/rAtWAI=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=xNDNLocEX8uVdae8R3KATit3wnJTsgrlgk8IBTjkSOlG4TetAs1yHU5UBTTniOE1h
-	 SpTU7JrB4u4eSPvUCmBdp51NMGzM1z0AVkTRW+yKOlF5aAYOTwXa4GXsCtl38Ei8j3
-	 wFW9+ffp3AB3yOcQS9ocqvPAV4GYbc60tT9NcRdOUMMN2RtsUZ42rkfagkt8KlGC5+
-	 HbfkTkb5v//qOCVcaVxlIq9fVyLmYQXrRmrSlZmvIhJZ4qe2XDpU0L37bfA84pa982
-	 +UcuMDqK5tkutB4+rvXiRFnPslE70Ct+NTSvq8Xtyj/SmkK4VL7ZOozVSpJ81lPnMu
-	 9dXofpZUhxVEQ==
+	b=tH50SGQCepBxc4FFpYgi3NOTSurYmr9a1DkEPvmAVBIVMAnteIePVFv8wUYlDN/b4
+	 C1BrV3DkNviKXa6sXj7dIhterZDJ9b0gbGxEGKhoken2zT26tlmqQk+gdbfcfPgZyc
+	 Hzxx+rBE1wUU5B5og53nklR5CHK9T913DGmpIaCX1OIrYzqNrZWdr9ZO9LUt0eLBun
+	 p3+3pNJWqegnumYB67UozN5UYLkeNkuYXEFOQzEvgwoPZ9FTIY4Z5LRXAFED6KLtQe
+	 QlirbDeGncH+KKn/ve90nGqGYrwHzAfWmzp3lGPzw1tR4ANKbsEdonL7h5HB5UjoKB
+	 DstZTk0IS/7gQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QKrL30jx2z1F1g;
+	by lists.lttng.org (Postfix) with ESMTP id 4QKrL33xltz1Dtc;
 	Mon, 15 May 2023 16:18:51 -0400 (EDT)
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QKrKy0bMhz1Dkd
+ by lists.lttng.org (Postfix) with ESMTPS id 4QKrKy4Lqcz1F1b
  for <lttng-dev@lists.lttng.org>; Mon, 15 May 2023 16:18:46 -0400 (EDT)
 Received: from laura.hitronhub.home (modemcable094.169-200-24.mc.videotron.ca
  [24.200.169.94])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QKrKM69n0z12q1;
- Mon, 15 May 2023 16:18:15 -0400 (EDT)
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4QKrKN2fTXz12nY;
+ Mon, 15 May 2023 16:18:16 -0400 (EDT)
 To: lttng-dev@lists.lttng.org
-Date: Mon, 15 May 2023 16:17:13 -0400
-Message-Id: <20230515201718.9809-7-odion@efficios.com>
+Date: Mon, 15 May 2023 16:17:16 -0400
+Message-Id: <20230515201718.9809-10-odion@efficios.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230515201718.9809-1-odion@efficios.com>
 References: <20230515201718.9809-1-odion@efficios.com>
 MIME-Version: 1.0
-Subject: [lttng-dev] [PATCH 06/11] urcu/uatomic: Add CMM memory model
+Subject: [lttng-dev] [PATCH 09/11] benchmark: Use uatomic for accessing
+ global states
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -55,576 +56,1622 @@ Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Introducing the URCU memory model with the following new primitives:
+Global states accesses were protected via memory barriers. Use the
+uatomic API with the URCU memory model so that TSAN can understand the
+ordering imposed by the synchronization flags.
 
-  - uatomic_load(addr, memory_order)
-
-  - uatomic_store(addr, value, memory_order)
-  - uatomic_and_mo(addr, mask, memory_order)
-  - uatomic_or_mo(addr, mask, memory_order)
-  - uatomic_add_mo(addr, value, memory_order)
-  - uatomic_sub_mo(addr, value, memory_order)
-  - uatomic_inc_mo(addr, memory_order)
-  - uatomic_dec_mo(addr, memory_order)
-
-  - uatomic_add_return_mo(addr, value, memory_order)
-  - uatomic_sub_return_mo(addr, value, memory_order)
-
-  - uatomic_cmpxchg_mo(addr, old, new,
-                       memory_order_success,
-                       memory_order_failure)
-
-  - uatomic_cmpxchg(addr, new, memory_order)
-
-The URCU memory model reflects the C11 memory model. The memory order
-can be selected through the enum rcu_memorder.
-
-If configured with atomic builtins, the correspondence between the URCU
-memory model and the C11 memory model is a one to one. However, if not
-configured with atomic builtins, the following stipulate the memory
-model.
-
-For load operations with uatomic_load(), the memory orders
-CMM_RELAXED, CMM_CONSUME, CMM_ACQUIRE and CMM_SEQ_CST are allowed. A
-barrier is maybe inserted before and after the load from memory
-depending on the memory order:
-
-  - CMM_RELAXED: No barrier
-  - CMM_CONSUME: Memory barrier after read
-  - CMM_ACQUIRE: Memory barrier after read
-  - CMM_SEQ_CST: Memory barriers before and after read
-
-For store operations with uatomic_store(), the memory orders
-CMM_RELAXED, CMM_RELEASE, CMM_SEQ_CST are allowed. A barrier is maybe
-inserted before and after the load from memory depending on the memory
-order:
-
-  - CMM_RELAXED: No barrier
-  - CMM_RELEASE: Memory barrier before operation
-  - CMM_SEQ_CST: Memory barriers before and after operation
-
-For store operations with uatomic_and_mo(), uatomic_or_mo(),
-uatomic_add_mo(), uatomic_sub_mo(), uatomic_inc_mo(), uatomic_dec_mo(),
-uatomic_add_return_mo() and uatomic_sub_return_mo(), all memory orders
-are allowed. A barrier is maybe inserted before and after the store to
-memory depending on the memory order:
-
-  - CMM_RELAXED: No barrier
-  - CMM_ACQUIRE: Memory barrier after operation
-  - CMM_CONSUME: Memory barrier after operation
-  - CMM_RELEASE: Memory barrier before operation
-  - CMM_ACQ_REL: Memory barriers before and after operation
-  - CMM_SEQ_CST: Memory barriers before and after operation
-
-For the compare exchange operation uatomic_cmpxchg_mo(), the success
-memory order can be anything while the failure memory order cannot be
-CMM_RELEASE nor CMM_ACQ_REL and cannot be stronger than the success
-memory order.
-
-For the exchange operation uatomic_xchg_mo(), any memory order is valid.
-
-Change-Id: I213ba19c84e82a63083f00143a3142ffbdab1d52
+Change-Id: I1bf5702c5ac470f308c478effe39e424a3158060
 Co-authored-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Olivier Dion <odion@efficios.com>
 ---
- include/urcu/static/pointer.h           |  40 +++-----
- include/urcu/uatomic.h                  |  20 ++++
- include/urcu/uatomic/builtins-generic.h |  81 +++++++++++----
- include/urcu/uatomic/builtins-x86.h     |  79 +++++++++++----
- include/urcu/uatomic/generic.h          | 128 ++++++++++++++++++++++++
- src/urcu-pointer.c                      |   9 +-
- 6 files changed, 283 insertions(+), 74 deletions(-)
+ tests/benchmark/Makefile.am             | 91 +++++++++++++------------
+ tests/benchmark/common-states.c         |  1 +
+ tests/benchmark/common-states.h         | 51 ++++++++++++++
+ tests/benchmark/test_mutex.c            | 32 +--------
+ tests/benchmark/test_perthreadlock.c    | 32 +--------
+ tests/benchmark/test_rwlock.c           | 32 +--------
+ tests/benchmark/test_urcu.c             | 33 +--------
+ tests/benchmark/test_urcu_assign.c      | 33 +--------
+ tests/benchmark/test_urcu_bp.c          | 33 +--------
+ tests/benchmark/test_urcu_defer.c       | 33 +--------
+ tests/benchmark/test_urcu_gc.c          | 34 ++-------
+ tests/benchmark/test_urcu_hash.c        |  6 +-
+ tests/benchmark/test_urcu_hash.h        | 15 ----
+ tests/benchmark/test_urcu_hash_rw.c     | 10 +--
+ tests/benchmark/test_urcu_hash_unique.c | 10 +--
+ tests/benchmark/test_urcu_lfq.c         | 20 ++----
+ tests/benchmark/test_urcu_lfs.c         | 20 ++----
+ tests/benchmark/test_urcu_lfs_rcu.c     | 20 ++----
+ tests/benchmark/test_urcu_qsbr.c        | 33 +--------
+ tests/benchmark/test_urcu_qsbr_gc.c     | 34 ++-------
+ tests/benchmark/test_urcu_wfcq.c        | 22 +++---
+ tests/benchmark/test_urcu_wfq.c         | 20 ++----
+ tests/benchmark/test_urcu_wfs.c         | 22 +++---
+ 23 files changed, 177 insertions(+), 460 deletions(-)
+ create mode 100644 tests/benchmark/common-states.c
+ create mode 100644 tests/benchmark/common-states.h
 
-diff --git a/include/urcu/static/pointer.h b/include/urcu/static/pointer.h
-index 9e46a57..9da8657 100644
---- a/include/urcu/static/pointer.h
-+++ b/include/urcu/static/pointer.h
-@@ -96,23 +96,8 @@ extern "C" {
-  * -Wincompatible-pointer-types errors.  Using the statement expression
-  * makes it an rvalue and gets rid of the const-ness.
-  */
--#ifdef __URCU_DEREFERENCE_USE_ATOMIC_CONSUME
--# define _rcu_dereference(p) __extension__ ({						\
--				__typeof__(__extension__ ({				\
--					__typeof__(p) __attribute__((unused)) _________p0 = { 0 }; \
--					_________p0;					\
--				})) _________p1;					\
--				__atomic_load(&(p), &_________p1, __ATOMIC_CONSUME);	\
--				(_________p1);						\
--			})
--#else
--# define _rcu_dereference(p) __extension__ ({						\
--				__typeof__(p) _________p1 = CMM_LOAD_SHARED(p);		\
--				cmm_smp_read_barrier_depends();				\
--				(_________p1);						\
--			})
--#endif
+diff --git a/tests/benchmark/Makefile.am b/tests/benchmark/Makefile.am
+index c53e025..a7f91c2 100644
+--- a/tests/benchmark/Makefile.am
++++ b/tests/benchmark/Makefile.am
+@@ -1,4 +1,5 @@
+ AM_CPPFLAGS += -I$(top_srcdir)/src -I$(top_srcdir)/tests/common
++AM_CPPFLAGS += -include $(top_srcdir)/tests/benchmark/common-states.h
+ 
+ TEST_EXTENSIONS = .tap
+ TAP_LOG_DRIVER_FLAGS = --merge --comments
+@@ -7,6 +8,8 @@ TAP_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' \
+ 	URCU_TESTS_BUILDDIR='$(abs_top_builddir)/tests' \
+ 	$(SHELL) $(top_srcdir)/tests/utils/tap-driver.sh
+ 
++noinst_HEADERS = common-states.h
++
+ SCRIPT_LIST = \
+ 	runpaul-phase1.sh \
+ 	runpaul-phase2.sh \
+@@ -61,163 +64,163 @@ URCU_CDS_LIB=$(top_builddir)/src/liburcu-cds.la
+ 
+ DEBUG_YIELD_LIB=$(builddir)/../common/libdebug-yield.la
+ 
+-test_urcu_SOURCES = test_urcu.c
++test_urcu_SOURCES = test_urcu.c common-states.c
+ test_urcu_LDADD = $(URCU_LIB)
+ 
+-test_urcu_dynamic_link_SOURCES = test_urcu.c
++test_urcu_dynamic_link_SOURCES = test_urcu.c common-states.c
+ test_urcu_dynamic_link_LDADD = $(URCU_LIB)
+ test_urcu_dynamic_link_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ 
+-test_urcu_timing_SOURCES = test_urcu_timing.c
++test_urcu_timing_SOURCES = test_urcu_timing.c common-states.c
+ test_urcu_timing_LDADD = $(URCU_LIB)
+ 
+-test_urcu_yield_SOURCES = test_urcu.c
++test_urcu_yield_SOURCES = test_urcu.c common-states.c
+ test_urcu_yield_LDADD = $(URCU_LIB) $(DEBUG_YIELD_LIB)
+ test_urcu_yield_CFLAGS = -DDEBUG_YIELD $(AM_CFLAGS)
+ 
+ 
+-test_urcu_qsbr_SOURCES = test_urcu_qsbr.c
++test_urcu_qsbr_SOURCES = test_urcu_qsbr.c common-states.c
+ test_urcu_qsbr_LDADD = $(URCU_QSBR_LIB)
+ 
+-test_urcu_qsbr_timing_SOURCES = test_urcu_qsbr_timing.c
++test_urcu_qsbr_timing_SOURCES = test_urcu_qsbr_timing.c common-states.c
+ test_urcu_qsbr_timing_LDADD = $(URCU_QSBR_LIB)
+ 
+ 
+-test_urcu_mb_SOURCES = test_urcu.c
++test_urcu_mb_SOURCES = test_urcu.c common-states.c
+ test_urcu_mb_LDADD = $(URCU_MB_LIB)
+ test_urcu_mb_CFLAGS = -DRCU_MB $(AM_CFLAGS)
+ 
+ 
+-test_urcu_signal_SOURCES = test_urcu.c
++test_urcu_signal_SOURCES = test_urcu.c common-states.c
+ test_urcu_signal_LDADD = $(URCU_SIGNAL_LIB)
+ test_urcu_signal_CFLAGS = -DRCU_SIGNAL $(AM_CFLAGS)
+ 
+-test_urcu_signal_dynamic_link_SOURCES = test_urcu.c
++test_urcu_signal_dynamic_link_SOURCES = test_urcu.c common-states.c
+ test_urcu_signal_dynamic_link_LDADD = $(URCU_SIGNAL_LIB)
+ test_urcu_signal_dynamic_link_CFLAGS = -DRCU_SIGNAL -DDYNAMIC_LINK_TEST \
+ 					$(AM_CFLAGS)
+ 
+-test_urcu_signal_timing_SOURCES = test_urcu_timing.c
++test_urcu_signal_timing_SOURCES = test_urcu_timing.c common-states.c
+ test_urcu_signal_timing_LDADD = $(URCU_SIGNAL_LIB)
+ test_urcu_signal_timing_CFLAGS= -DRCU_SIGNAL $(AM_CFLAGS)
+ 
+-test_urcu_signal_yield_SOURCES = test_urcu.c
++test_urcu_signal_yield_SOURCES = test_urcu.c common-states.c
+ test_urcu_signal_yield_LDADD = $(URCU_SIGNAL_LIB) $(DEBUG_YIELD_LIB)
+ test_urcu_signal_yield_CFLAGS = -DRCU_SIGNAL -DDEBUG_YIELD $(AM_CFLAGS)
+ 
+-test_rwlock_timing_SOURCES = test_rwlock_timing.c
++test_rwlock_timing_SOURCES = test_rwlock_timing.c common-states.c
+ test_rwlock_timing_LDADD = $(URCU_SIGNAL_LIB)
+ 
+-test_rwlock_SOURCES = test_rwlock.c
++test_rwlock_SOURCES = test_rwlock.c common-states.c
+ test_rwlock_LDADD = $(URCU_SIGNAL_LIB)
+ 
+-test_perthreadlock_timing_SOURCES = test_perthreadlock_timing.c
++test_perthreadlock_timing_SOURCES = test_perthreadlock_timing.c common-states.c
+ test_perthreadlock_timing_LDADD = $(URCU_SIGNAL_LIB)
+ 
+-test_perthreadlock_SOURCES = test_perthreadlock.c
++test_perthreadlock_SOURCES = test_perthreadlock.c common-states.c
+ test_perthreadlock_LDADD = $(URCU_SIGNAL_LIB)
+ 
+-test_mutex_SOURCES = test_mutex.c
++test_mutex_SOURCES = test_mutex.c common-states.c
+ 
+-test_looplen_SOURCES = test_looplen.c
++test_looplen_SOURCES = test_looplen.c common-states.c
+ 
+-test_urcu_gc_SOURCES = test_urcu_gc.c
++test_urcu_gc_SOURCES = test_urcu_gc.c common-states.c
+ test_urcu_gc_LDADD = $(URCU_LIB)
+ 
+-test_urcu_signal_gc_SOURCES = test_urcu_gc.c
++test_urcu_signal_gc_SOURCES = test_urcu_gc.c common-states.c
+ test_urcu_signal_gc_LDADD = $(URCU_SIGNAL_LIB)
+ test_urcu_signal_gc_CFLAGS = -DRCU_SIGNAL $(AM_CFLAGS)
+ 
+-test_urcu_mb_gc_SOURCES = test_urcu_gc.c
++test_urcu_mb_gc_SOURCES = test_urcu_gc.c common-states.c
+ test_urcu_mb_gc_LDADD = $(URCU_MB_LIB)
+ test_urcu_mb_gc_CFLAGS = -DRCU_MB $(AM_CFLAGS)
+ 
+-test_urcu_qsbr_gc_SOURCES = test_urcu_qsbr_gc.c
++test_urcu_qsbr_gc_SOURCES = test_urcu_qsbr_gc.c common-states.c
+ test_urcu_qsbr_gc_LDADD = $(URCU_QSBR_LIB)
+ 
+-test_urcu_qsbr_lgc_SOURCES = test_urcu_qsbr_gc.c
++test_urcu_qsbr_lgc_SOURCES = test_urcu_qsbr_gc.c common-states.c
+ test_urcu_qsbr_lgc_LDADD = $(URCU_QSBR_LIB)
+ test_urcu_qsbr_lgc_CFLAGS = -DTEST_LOCAL_GC $(AM_CFLAGS)
+ 
+-test_urcu_lgc_SOURCES = test_urcu_gc.c
++test_urcu_lgc_SOURCES = test_urcu_gc.c common-states.c
+ test_urcu_lgc_LDADD = $(URCU_LIB)
+ test_urcu_lgc_CFLAGS = -DTEST_LOCAL_GC $(AM_CFLAGS)
+ 
+-test_urcu_signal_lgc_SOURCES = test_urcu_gc.c
++test_urcu_signal_lgc_SOURCES = test_urcu_gc.c common-states.c
+ test_urcu_signal_lgc_LDADD = $(URCU_SIGNAL_LIB)
+ test_urcu_signal_lgc_CFLAGS = -DRCU_SIGNAL -DTEST_LOCAL_GC $(AM_CFLAGS)
+ 
+-test_urcu_mb_lgc_SOURCES = test_urcu_gc.c
++test_urcu_mb_lgc_SOURCES = test_urcu_gc.c common-states.c
+ test_urcu_mb_lgc_LDADD = $(URCU_MB_LIB)
+ test_urcu_mb_lgc_CFLAGS = -DTEST_LOCAL_GC -DRCU_MB $(AM_CFLAGS)
+ 
+-test_urcu_qsbr_dynamic_link_SOURCES = test_urcu_qsbr.c
++test_urcu_qsbr_dynamic_link_SOURCES = test_urcu_qsbr.c common-states.c
+ test_urcu_qsbr_dynamic_link_LDADD = $(URCU_QSBR_LIB)
+ test_urcu_qsbr_dynamic_link_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ 
+-test_urcu_defer_SOURCES = test_urcu_defer.c
++test_urcu_defer_SOURCES = test_urcu_defer.c common-states.c
+ test_urcu_defer_LDADD = $(URCU_LIB)
+ 
+ test_cycles_per_loop_SOURCES = test_cycles_per_loop.c
+ 
+-test_urcu_assign_SOURCES = test_urcu_assign.c
++test_urcu_assign_SOURCES = test_urcu_assign.c common-states.c
+ test_urcu_assign_LDADD = $(URCU_LIB)
+ 
+-test_urcu_assign_dynamic_link_SOURCES = test_urcu_assign.c
++test_urcu_assign_dynamic_link_SOURCES = test_urcu_assign.c common-states.c
+ test_urcu_assign_dynamic_link_LDADD = $(URCU_LIB)
+ test_urcu_assign_dynamic_link_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ 
+-test_urcu_bp_SOURCES = test_urcu_bp.c
++test_urcu_bp_SOURCES = test_urcu_bp.c common-states.c
+ test_urcu_bp_LDADD = $(URCU_BP_LIB)
+ 
+-test_urcu_bp_dynamic_link_SOURCES = test_urcu_bp.c
++test_urcu_bp_dynamic_link_SOURCES = test_urcu_bp.c common-states.c
+ test_urcu_bp_dynamic_link_LDADD = $(URCU_BP_LIB)
+ test_urcu_bp_dynamic_link_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ 
+-test_urcu_lfq_SOURCES = test_urcu_lfq.c
++test_urcu_lfq_SOURCES = test_urcu_lfq.c common-states.c
+ test_urcu_lfq_LDADD = $(URCU_LIB) $(URCU_CDS_LIB)
+ 
+-test_urcu_lfq_dynlink_SOURCES = test_urcu_lfq.c
++test_urcu_lfq_dynlink_SOURCES = test_urcu_lfq.c common-states.c
+ test_urcu_lfq_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ test_urcu_lfq_dynlink_LDADD = $(URCU_LIB) $(URCU_CDS_LIB)
+ 
+-test_urcu_wfq_SOURCES = test_urcu_wfq.c
++test_urcu_wfq_SOURCES = test_urcu_wfq.c common-states.c
+ test_urcu_wfq_LDADD = $(URCU_COMMON_LIB)
+ 
+-test_urcu_wfq_dynlink_SOURCES = test_urcu_wfq.c
++test_urcu_wfq_dynlink_SOURCES = test_urcu_wfq.c common-states.c
+ test_urcu_wfq_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ test_urcu_wfq_dynlink_LDADD = $(URCU_COMMON_LIB)
+ 
+-test_urcu_wfcq_SOURCES = test_urcu_wfcq.c
++test_urcu_wfcq_SOURCES = test_urcu_wfcq.c common-states.c
+ test_urcu_wfcq_LDADD = $(URCU_COMMON_LIB)
+ 
+-test_urcu_wfcq_dynlink_SOURCES = test_urcu_wfcq.c
++test_urcu_wfcq_dynlink_SOURCES = test_urcu_wfcq.c common-states.c
+ test_urcu_wfcq_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ test_urcu_wfcq_dynlink_LDADD = $(URCU_COMMON_LIB)
+ 
+-test_urcu_lfs_SOURCES = test_urcu_lfs.c
++test_urcu_lfs_SOURCES = test_urcu_lfs.c common-states.c
+ test_urcu_lfs_LDADD = $(URCU_LIB) $(URCU_CDS_LIB)
+ 
+-test_urcu_lfs_rcu_SOURCES = test_urcu_lfs_rcu.c
++test_urcu_lfs_rcu_SOURCES = test_urcu_lfs_rcu.c common-states.c
+ test_urcu_lfs_rcu_LDADD = $(URCU_LIB) $(URCU_CDS_LIB)
+ 
+-test_urcu_lfs_dynlink_SOURCES = test_urcu_lfs.c
++test_urcu_lfs_dynlink_SOURCES = test_urcu_lfs.c common-states.c
+ test_urcu_lfs_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ test_urcu_lfs_dynlink_LDADD = $(URCU_LIB) $(URCU_CDS_LIB)
+ 
+-test_urcu_lfs_rcu_dynlink_SOURCES = test_urcu_lfs_rcu.c
++test_urcu_lfs_rcu_dynlink_SOURCES = test_urcu_lfs_rcu.c common-states.c
+ test_urcu_lfs_rcu_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ test_urcu_lfs_rcu_dynlink_LDADD = $(URCU_LIB) $(URCU_CDS_LIB)
+ 
+-test_urcu_wfs_SOURCES = test_urcu_wfs.c
++test_urcu_wfs_SOURCES = test_urcu_wfs.c common-states.c
+ test_urcu_wfs_LDADD = $(URCU_COMMON_LIB)
+ 
+-test_urcu_wfs_dynlink_SOURCES = test_urcu_wfs.c
++test_urcu_wfs_dynlink_SOURCES = test_urcu_wfs.c common-states.c
+ test_urcu_wfs_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ test_urcu_wfs_dynlink_LDADD = $(URCU_COMMON_LIB)
+ 
+ test_urcu_hash_SOURCES = test_urcu_hash.c test_urcu_hash.h \
+-		test_urcu_hash_rw.c test_urcu_hash_unique.c
++		test_urcu_hash_rw.c test_urcu_hash_unique.c common-states.c
+ test_urcu_hash_CFLAGS = -DRCU_QSBR $(AM_CFLAGS)
+ test_urcu_hash_LDADD = $(URCU_QSBR_LIB) $(URCU_COMMON_LIB) $(URCU_CDS_LIB)
+ 
+diff --git a/tests/benchmark/common-states.c b/tests/benchmark/common-states.c
+new file mode 100644
+index 0000000..6e70351
+--- /dev/null
++++ b/tests/benchmark/common-states.c
+@@ -0,0 +1 @@
++volatile int _test_go = 0, _test_stop = 0;
+diff --git a/tests/benchmark/common-states.h b/tests/benchmark/common-states.h
+new file mode 100644
+index 0000000..dfbbfe5
+--- /dev/null
++++ b/tests/benchmark/common-states.h
+@@ -0,0 +1,51 @@
++/* Common states for benchmarks. */
++
++#include <unistd.h>
++
++#include <urcu/uatomic.h>
++
++extern volatile int _test_go, _test_stop;
++
++static inline void complete_sleep(unsigned int seconds)
++{
++	while (seconds != 0) {
++		seconds = sleep(seconds);
++	}
++}
++
++static inline void begin_test(void)
++{
++	uatomic_store(&_test_go, 1, CMM_RELEASE);
++}
++
++static inline void end_test(void)
++{
++	uatomic_store(&_test_stop, 1, CMM_RELAXED);
++}
++
++static inline void test_for(unsigned int duration)
++{
++	begin_test();
++	complete_sleep(duration);
++	end_test();
++}
++
++static inline void wait_until_go(void)
++{
++	while (!uatomic_load(&_test_go, CMM_ACQUIRE))
++	{
++	}
++}
++
++/*
++ * returns 0 if test should end.
++ */
++static inline int test_duration_write(void)
++{
++	return !uatomic_load(&_test_stop, CMM_RELAXED);
++}
++
++static inline int test_duration_read(void)
++{
++	return !uatomic_load(&_test_stop, CMM_RELAXED);
++}
+diff --git a/tests/benchmark/test_mutex.c b/tests/benchmark/test_mutex.c
+index 55f7c38..145139c 100644
+--- a/tests/benchmark/test_mutex.c
++++ b/tests/benchmark/test_mutex.c
+@@ -49,8 +49,6 @@ struct test_array {
+ 
+ static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+ 
+-static volatile int test_go, test_stop;
 -
-+# define _rcu_dereference(p)			\
-+	uatomic_load(&(p), CMM_CONSUME)
- /**
-  * _rcu_cmpxchg_pointer - same as rcu_assign_pointer, but tests if the pointer
-  * is as expected by "old". If succeeds, returns the previous pointer to the
-@@ -131,8 +116,9 @@ extern "C" {
- 	({								\
- 		__typeof__(*p) _________pold = (old);			\
- 		__typeof__(*p) _________pnew = (_new);			\
--		uatomic_cmpxchg(p, _________pold, _________pnew);	\
--	})
-+		uatomic_cmpxchg_mo(p, _________pold, _________pnew,	\
-+				   CMM_SEQ_CST, CMM_SEQ_CST);		\
-+	});
+ static unsigned long wdelay;
  
- /**
-  * _rcu_xchg_pointer - same as rcu_assign_pointer, but returns the previous
-@@ -149,17 +135,17 @@ extern "C" {
- 	__extension__					\
- 	({						\
- 		__typeof__(*p) _________pv = (v);	\
--		uatomic_xchg(p, _________pv);		\
-+		uatomic_xchg_mo(p, _________pv,		\
-+				CMM_SEQ_CST);		\
- 	})
+ static volatile struct test_array test_array = { 8 };
+@@ -111,19 +109,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
+ }
  
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
  
--#define _rcu_set_pointer(p, v)				\
--	do {						\
--		__typeof__(*p) _________pv = (v);	\
--		if (!__builtin_constant_p(v) || 	\
--		    ((v) != NULL))			\
--			cmm_wmb();				\
--		uatomic_set(p, _________pv);		\
-+#define _rcu_set_pointer(p, v)						\
-+	do {								\
-+		__typeof__(*p) _________pv = (v);			\
-+		uatomic_store(p, _________pv,				\
-+			__builtin_constant_p(v) && (v) == NULL ?	\
-+			CMM_RELAXED : CMM_RELEASE);			\
- 	} while (0)
+@@ -147,9 +132,7 @@ void *thr_reader(void *data)
  
- /**
-diff --git a/include/urcu/uatomic.h b/include/urcu/uatomic.h
-index 6b57c5f..6c0d38f 100644
---- a/include/urcu/uatomic.h
-+++ b/include/urcu/uatomic.h
-@@ -24,6 +24,26 @@
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		int v;
+@@ -182,10 +165,7 @@ void *thr_writer(void *data)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		pthread_mutex_lock(&lock);
+@@ -325,13 +305,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
+ 
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
+ 
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_perthreadlock.c b/tests/benchmark/test_perthreadlock.c
+index 47a512c..bf468eb 100644
+--- a/tests/benchmark/test_perthreadlock.c
++++ b/tests/benchmark/test_perthreadlock.c
+@@ -53,8 +53,6 @@ struct per_thread_lock {
+ 
+ static struct per_thread_lock *per_thread_lock;
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long wdelay;
+ 
+ static volatile struct test_array test_array = { 8 };
+@@ -117,19 +115,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
+ }
+ 
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
+ 
+@@ -175,9 +160,7 @@ void *thr_reader(void *data)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		int v;
+@@ -211,10 +194,7 @@ void *thr_writer(void *data)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		for (tidx = 0; tidx < (long)nr_readers; tidx++) {
+@@ -359,13 +339,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
+ 
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
+ 
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_rwlock.c b/tests/benchmark/test_rwlock.c
+index 6908ea4..f5099e8 100644
+--- a/tests/benchmark/test_rwlock.c
++++ b/tests/benchmark/test_rwlock.c
+@@ -53,8 +53,6 @@ struct test_array {
+  */
+ pthread_rwlock_t lock;
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long wdelay;
+ 
+ static volatile struct test_array test_array = { 8 };
+@@ -116,19 +114,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
+ }
+ 
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
+ 
+@@ -147,9 +132,7 @@ void *thr_reader(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		int a, ret;
+@@ -194,10 +177,7 @@ void *thr_writer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		int ret;
+@@ -355,13 +335,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
+ 
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
+ 
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu.c b/tests/benchmark/test_urcu.c
+index ea849fa..b89513b 100644
+--- a/tests/benchmark/test_urcu.c
++++ b/tests/benchmark/test_urcu.c
+@@ -44,8 +44,6 @@
+ #endif
+ #include <urcu.h>
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long wdelay;
+ 
+ static int *test_rcu_pointer;
+@@ -107,19 +105,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
+ }
+ 
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
+ 
+@@ -142,10 +127,7 @@ void *thr_reader(void *_count)
+ 	rcu_register_thread();
+ 	urcu_posix_assert(!rcu_read_ongoing());
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		rcu_read_lock();
+@@ -186,10 +168,7 @@ void *thr_writer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		new = malloc(sizeof(int));
+@@ -337,13 +316,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
+ 
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
+ 
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_assign.c b/tests/benchmark/test_urcu_assign.c
+index 88889a8..e83b05e 100644
+--- a/tests/benchmark/test_urcu_assign.c
++++ b/tests/benchmark/test_urcu_assign.c
+@@ -48,8 +48,6 @@ struct test_array {
+ 	int a;
+ };
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long wdelay;
+ 
+ static struct test_array *test_rcu_pointer;
+@@ -111,19 +109,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
+ }
+ 
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
+ 
+@@ -201,10 +186,7 @@ void *thr_reader(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		rcu_read_lock();
+@@ -240,10 +222,7 @@ void *thr_writer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		rcu_copy_mutex_lock();
+@@ -394,13 +373,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
+ 
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
+ 
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_bp.c b/tests/benchmark/test_urcu_bp.c
+index 6f8c59d..c3b00f1 100644
+--- a/tests/benchmark/test_urcu_bp.c
++++ b/tests/benchmark/test_urcu_bp.c
+@@ -44,8 +44,6 @@
+ #endif
+ #include <urcu-bp.h>
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long wdelay;
+ 
+ static int *test_rcu_pointer;
+@@ -107,19 +105,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
+ }
+ 
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
+ 
+@@ -142,10 +127,7 @@ void *thr_reader(void *_count)
+ 	rcu_register_thread();
+ 	urcu_posix_assert(!rcu_read_ongoing());
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		rcu_read_lock();
+@@ -182,10 +164,7 @@ void *thr_writer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		new = malloc(sizeof(int));
+@@ -332,13 +311,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
+ 
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
+ 
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_defer.c b/tests/benchmark/test_urcu_defer.c
+index e948ebf..c501f60 100644
+--- a/tests/benchmark/test_urcu_defer.c
++++ b/tests/benchmark/test_urcu_defer.c
+@@ -49,8 +49,6 @@ struct test_array {
+ 	int a;
+ };
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long wdelay;
+ 
+ static struct test_array *test_rcu_pointer;
+@@ -112,19 +110,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
+ }
+ 
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
+ 
+@@ -149,10 +134,7 @@ void *thr_reader(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		rcu_read_lock();
+@@ -203,10 +185,7 @@ void *thr_writer(void *data)
+ 		exit(-1);
+ 	}
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		new = malloc(sizeof(*new));
+@@ -359,13 +338,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
+ 
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
+ 
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_gc.c b/tests/benchmark/test_urcu_gc.c
+index f14f728..1cbee44 100644
+--- a/tests/benchmark/test_urcu_gc.c
++++ b/tests/benchmark/test_urcu_gc.c
+@@ -33,6 +33,7 @@
  #include <urcu/arch.h>
- #include <urcu/config.h>
+ #include <urcu/assert.h>
+ #include <urcu/tls-compat.h>
++#include <urcu/uatomic.h>
+ #include "thread-id.h"
+ #include "../common/debug-yield.h"
  
-+#ifdef CONFIG_RCU_USE_ATOMIC_BUILTINS
-+enum cmm_memorder {
-+	CMM_RELAXED = __ATOMIC_RELAXED,
-+	CMM_CONSUME = __ATOMIC_CONSUME,
-+	CMM_ACQUIRE = __ATOMIC_ACQUIRE,
-+	CMM_RELEASE = __ATOMIC_RELEASE,
-+	CMM_ACQ_REL = __ATOMIC_ACQ_REL,
-+	CMM_SEQ_CST = __ATOMIC_SEQ_CST,
-+};
-+#else
-+enum cmm_memorder {
-+	CMM_RELAXED,
-+	CMM_CONSUME,
-+	CMM_ACQUIRE,
-+	CMM_RELEASE,
-+	CMM_ACQ_REL,
-+	CMM_SEQ_CST,
-+};
-+#endif
-+
- #if defined(CONFIG_RCU_USE_ATOMIC_BUILTINS)
- #include <urcu/uatomic/builtins.h>
- #elif defined(URCU_ARCH_X86)
-diff --git a/include/urcu/uatomic/builtins-generic.h b/include/urcu/uatomic/builtins-generic.h
-index 8e6a9b5..597bd61 100644
---- a/include/urcu/uatomic/builtins-generic.h
-+++ b/include/urcu/uatomic/builtins-generic.h
-@@ -23,46 +23,85 @@
+@@ -48,8 +49,6 @@ struct test_array {
+ 	int a;
+ };
  
- #include <urcu/system.h>
+-static volatile int test_go, test_stop;
+-
+ static unsigned long wdelay;
  
--#define uatomic_set(addr, v) __atomic_store_n(addr, v, __ATOMIC_RELAXED)
-+#define uatomic_store(addr, v, mo)		\
-+	__atomic_store_n(addr, v, mo)
+ static struct test_array *test_rcu_pointer;
+@@ -120,19 +119,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
+ }
  
--#define uatomic_read(addr) __atomic_load_n(addr, __ATOMIC_RELAXED)
-+#define uatomic_set(addr, v)			\
-+	uatomic_store(addr, v, CMM_RELAXED)
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
  
--#define uatomic_cmpxchg(addr, old, new)					\
-+#define uatomic_load(addr, mo)			\
-+	__atomic_load_n(addr, mo)
-+
-+#define uatomic_read(addr)			\
-+	uatomic_load(addr, CMM_RELAXED)
-+
-+
-+#define uatomic_cmpxchg_mo(addr, old, new, mos, mof)			\
- 	__extension__							\
- 	({								\
- 		__typeof__(*(addr)) _old = (__typeof__(*(addr)))old;	\
- 		__atomic_compare_exchange_n(addr, &_old, new, 0,	\
--					    __ATOMIC_SEQ_CST,		\
--					    __ATOMIC_SEQ_CST);		\
-+					    mos,			\
-+					    mof);			\
- 		_old;							\
- 	})
+@@ -157,10 +143,7 @@ void *thr_reader(void *_count)
  
--#define uatomic_xchg(addr, v)				\
--	__atomic_exchange_n(addr, v, __ATOMIC_SEQ_CST)
-+#define uatomic_cmpxchg(addr, old, new)					\
-+	uatomic_cmpxchg_mo(addr, old, new, CMM_SEQ_CST, CMM_SEQ_CST)
-+
-+#define uatomic_xchg_mo(addr, v, mo)		\
-+	__atomic_exchange_n(addr, v, mo)
-+
-+#define uatomic_xchg(addr, v)			\
-+	uatomic_xchg_mo(addr, v, CMM_SEQ_CST)
-+
-+#define uatomic_add_return_mo(addr, v, mo)	\
-+	__atomic_add_fetch(addr, v, mo)
+ 	rcu_register_thread();
  
- #define uatomic_add_return(addr, v)			\
--	__atomic_add_fetch(addr, v, __ATOMIC_SEQ_CST)
-+	uatomic_add_return_mo(addr, v, CMM_SEQ_CST)
-+
-+#define uatomic_sub_return_mo(addr, v, mo)	\
-+	__atomic_sub_fetch(addr, v, mo)
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
  
- #define uatomic_sub_return(addr, v)			\
--	__atomic_sub_fetch(addr, v, __ATOMIC_SEQ_CST)
-+	uatomic_sub_return_mo(addr, v, CMM_SEQ_CST)
+ 	for (;;) {
+ 		rcu_read_lock();
+@@ -231,10 +214,7 @@ void *thr_writer(void *data)
  
--#define uatomic_and(addr, mask)					\
--	(void)__atomic_and_fetch(addr, mask, __ATOMIC_RELAXED)
-+#define uatomic_and_mo(addr, mask, mo)			\
-+	(void ) __atomic_and_fetch(addr, mask, mo)
+ 	set_affinity();
  
--#define uatomic_or(addr, mask)					\
--	(void)__atomic_or_fetch(addr, mask, __ATOMIC_RELAXED)
-+#define uatomic_and(addr, mask)				\
-+	(void) uatomic_and_mo(addr, mask, CMM_RELAXED)
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
  
--#define uatomic_add(addr, v)					\
--	(void)__atomic_add_fetch(addr, v, __ATOMIC_RELAXED)
-+#define uatomic_or_mo(addr, mask, mo)			\
-+	(void) __atomic_or_fetch(addr, mask, mo)
+ 	for (;;) {
+ #ifndef TEST_LOCAL_GC
+@@ -399,13 +379,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
  
--#define uatomic_sub(addr, v)					\
--	(void)__atomic_sub_fetch(addr, v, __ATOMIC_RELAXED)
-+#define uatomic_or(addr, mask)				\
-+	(void) uatomic_or_mo(addr, mask, CMM_RELAXED)
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
  
--#define uatomic_inc(addr)					\
--	(void)__atomic_add_fetch(addr, 1, __ATOMIC_RELAXED)
-+#define uatomic_add_mo(addr, v, mo)		\
-+	(void) __atomic_add_fetch(addr, v, mo)
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_hash.c b/tests/benchmark/test_urcu_hash.c
+index 3574b4c..1a3087e 100644
+--- a/tests/benchmark/test_urcu_hash.c
++++ b/tests/benchmark/test_urcu_hash.c
+@@ -96,8 +96,6 @@ DEFINE_URCU_TLS(unsigned long, lookup_ok);
  
--#define uatomic_dec(addr)					\
--	(void)__atomic_sub_fetch(addr, 1, __ATOMIC_RELAXED)
-+#define uatomic_add(addr, v)				\
-+	(void) uatomic_add_mo(addr, v, CMM_RELAXED)
-+
-+#define uatomic_sub_mo(addr, v, mo)		\
-+	(void) __atomic_sub_fetch(addr, v, mo)
-+
-+#define uatomic_sub(addr, v)				\
-+	(void) uatomic_sub_mo(addr, v, CMM_RELAXED)
-+
-+#define uatomic_inc_mo(addr, mo)		\
-+	(void) __atomic_add_fetch(addr, 1, mo)
-+
-+#define uatomic_inc(addr)				\
-+	(void) uatomic_inc_mo(addr, CMM_RELAXED)
-+
-+#define uatomic_dec_mo(addr, mo)		\
-+	(void) __atomic_sub_fetch(addr, 1, mo)
-+
-+#define uatomic_dec(addr)				\
-+	(void) uatomic_dec_mo(addr, CMM_RELAXED)
+ struct cds_lfht *test_ht;
  
- #define cmm_smp_mb__before_uatomic_and() cmm_smp_mb()
- #define cmm_smp_mb__after_uatomic_and()  cmm_smp_mb()
-diff --git a/include/urcu/uatomic/builtins-x86.h b/include/urcu/uatomic/builtins-x86.h
-index a70f922..c7f3bed 100644
---- a/include/urcu/uatomic/builtins-x86.h
-+++ b/include/urcu/uatomic/builtins-x86.h
-@@ -23,46 +23,85 @@
+-volatile int test_go, test_stop;
+-
+ unsigned long wdelay;
  
- #include <urcu/system.h>
+ unsigned long duration;
+@@ -649,14 +647,14 @@ int main(int argc, char **argv)
  
--#define uatomic_set(addr, v) __atomic_store_n(addr, v, __ATOMIC_RELAXED)
-+#define uatomic_store(addr, v, mo)		\
-+	__atomic_store_n(addr, v, mo)
+ 	cmm_smp_mb();
  
--#define uatomic_read(addr) __atomic_load_n(addr, __ATOMIC_RELAXED)
-+#define uatomic_set(addr, v)			\
-+	uatomic_store(addr, v, CMM_RELAXED)
+-	test_go = 1;
++	begin_test();
  
--#define uatomic_cmpxchg(addr, old, new)					\
-+#define uatomic_load(addr, mo)			\
-+	__atomic_load_n(addr, mo)
-+
-+#define uatomic_read(addr)			\
-+	uatomic_load(addr, CMM_RELAXED)
-+
-+#define uatomic_cmpxchg_mo(addr, old, new, mos, mof)			\
- 	__extension__							\
- 	({								\
- 		__typeof__(*(addr)) _old = (__typeof__(*(addr)))old;	\
- 		__atomic_compare_exchange_n(addr, &_old, new, 0,	\
--					    __ATOMIC_SEQ_CST,		\
--					    __ATOMIC_SEQ_CST);		\
-+					    mos,			\
-+					    mof);			\
- 		_old;							\
- 	})
+ 	remain = duration;
+ 	do {
+ 		remain = sleep(remain);
+ 	} while (remain > 0);
  
-+#define uatomic_cmpxchg(addr, old, new)					\
-+	uatomic_cmpxchg_mo(addr, old, new, CMM_SEQ_CST, CMM_SEQ_CST)
-+
-+
-+#define uatomic_xchg_mo(addr, v, mo)		\
-+	__atomic_exchange_n(addr, v, mo)
-+
- #define uatomic_xchg(addr, v)				\
--	__atomic_exchange_n(addr, v, __ATOMIC_SEQ_CST)
-+	__atomic_exchange_n(addr, v, CMM_SEQ_CST)
-+
-+#define uatomic_add_return_mo(addr, v, mo)	\
-+	__atomic_add_fetch(addr, v, mo)
+-	test_stop = 1;
++	end_test();
  
- #define uatomic_add_return(addr, v)			\
--	__atomic_add_fetch(addr, v, __ATOMIC_SEQ_CST)
-+	uatomic_add_return_mo(addr, v, CMM_SEQ_CST)
-+
-+#define uatomic_sub_return_mo(addr, v, mo)	\
-+	__atomic_sub_fetch(addr, v, mo)
+ end_pthread_join:
+ 	for (i_thr = 0; i_thr < nr_readers_created; i_thr++) {
+diff --git a/tests/benchmark/test_urcu_hash.h b/tests/benchmark/test_urcu_hash.h
+index 47b2ae3..73a0a6d 100644
+--- a/tests/benchmark/test_urcu_hash.h
++++ b/tests/benchmark/test_urcu_hash.h
+@@ -125,8 +125,6 @@ cds_lfht_iter_get_test_node(struct cds_lfht_iter *iter)
+ 	return to_test_node(cds_lfht_iter_get_node(iter));
+ }
  
- #define uatomic_sub_return(addr, v)			\
--	__atomic_sub_fetch(addr, v, __ATOMIC_SEQ_CST)
-+	uatomic_sub_return_mo(addr, v, CMM_SEQ_CST)
+-extern volatile int test_go, test_stop;
+-
+ extern unsigned long wdelay;
  
--#define uatomic_and(addr, mask)					\
--	(void)__atomic_and_fetch(addr, mask, __ATOMIC_SEQ_CST)
-+#define uatomic_and_mo(addr, mask, mo)			\
-+	(void) __atomic_and_fetch(addr, mask, mo)
+ extern unsigned long duration;
+@@ -174,19 +172,6 @@ extern pthread_mutex_t affinity_mutex;
  
--#define uatomic_or(addr, mask)					\
--	(void)__atomic_or_fetch(addr, mask, __ATOMIC_SEQ_CST)
-+#define uatomic_and(addr, mask)				\
-+	(void) uatomic_and_mo(addr, mask, CMM_SEQ_CST)
+ void set_affinity(void);
  
--#define uatomic_add(addr, v)					\
--	(void)__atomic_add_fetch(addr, v, __ATOMIC_SEQ_CST)
-+#define uatomic_or_mo(addr, mask, mo)			\
-+	(void) __atomic_or_fetch(addr, mask, mo)
+-/*
+- * returns 0 if test should end.
+- */
+-static inline int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static inline int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ extern DECLARE_URCU_TLS(unsigned long long, nr_writes);
+ extern DECLARE_URCU_TLS(unsigned long long, nr_reads);
  
--#define uatomic_sub(addr, v)					\
--	(void)__atomic_sub_fetch(addr, v, __ATOMIC_SEQ_CST)
-+#define uatomic_or(addr, mask)				\
-+	(void) uatomic_or_mo(addr, mask, CMM_SEQ_CST)
+diff --git a/tests/benchmark/test_urcu_hash_rw.c b/tests/benchmark/test_urcu_hash_rw.c
+index 862a6f0..087e869 100644
+--- a/tests/benchmark/test_urcu_hash_rw.c
++++ b/tests/benchmark/test_urcu_hash_rw.c
+@@ -73,10 +73,7 @@ void *test_hash_rw_thr_reader(void *_count)
  
--#define uatomic_inc(addr)					\
--	(void)__atomic_add_fetch(addr, 1, __ATOMIC_SEQ_CST)
-+#define uatomic_add_mo(addr, v, mo)		\
-+	(void) __atomic_add_fetch(addr, v, mo)
+ 	rcu_register_thread();
  
--#define uatomic_dec(addr)					\
--	(void)__atomic_sub_fetch(addr, 1, __ATOMIC_SEQ_CST)
-+#define uatomic_add(addr, v)				\
-+	(void) uatomic_add_mo(addr, v, CMM_SEQ_CST)
-+
-+#define uatomic_sub_mo(addr, v, mo)		\
-+	(void) __atomic_sub_fetch(addr, v, mo)
-+
-+#define uatomic_sub(addr, v)				\
-+	(void) uatomic_sub_mo(addr, v, CMM_SEQ_CST)
-+
-+#define uatomic_inc_mo(addr, mo)		\
-+	(void) __atomic_add_fetch(addr, 1, mo)
-+
-+#define uatomic_inc(addr)				\
-+	(void) uatomic_inc_mo(addr, CMM_SEQ_CST)
-+
-+#define uatomic_dec_mo(addr, mo)		\
-+	(void) __atomic_sub_fetch(addr, 1, mo)
-+
-+#define uatomic_dec(addr)				\
-+	(void) uatomic_dec_mo(addr, CMM_SEQ_CST)
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
  
- #define cmm_smp_mb__before_uatomic_and() do { } while (0)
- #define cmm_smp_mb__after_uatomic_and()  do { } while (0)
-diff --git a/include/urcu/uatomic/generic.h b/include/urcu/uatomic/generic.h
-index e31a19b..4ec93c5 100644
---- a/include/urcu/uatomic/generic.h
-+++ b/include/urcu/uatomic/generic.h
-@@ -33,10 +33,138 @@ extern "C" {
- #define uatomic_set(addr, v)	((void) CMM_STORE_SHARED(*(addr), (v)))
+ 	for (;;) {
+ 		rcu_read_lock();
+@@ -133,10 +130,7 @@ void *test_hash_rw_thr_writer(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct cds_lfht_node *ret_node = NULL;
+diff --git a/tests/benchmark/test_urcu_hash_unique.c b/tests/benchmark/test_urcu_hash_unique.c
+index de7c427..90c0e19 100644
+--- a/tests/benchmark/test_urcu_hash_unique.c
++++ b/tests/benchmark/test_urcu_hash_unique.c
+@@ -71,10 +71,7 @@ void *test_hash_unique_thr_reader(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct lfht_test_node *node;
+@@ -136,10 +133,7 @@ void *test_hash_unique_thr_writer(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		/*
+diff --git a/tests/benchmark/test_urcu_lfq.c b/tests/benchmark/test_urcu_lfq.c
+index 490e8b0..50c4211 100644
+--- a/tests/benchmark/test_urcu_lfq.c
++++ b/tests/benchmark/test_urcu_lfq.c
+@@ -47,8 +47,6 @@
+ #include <urcu.h>
+ #include <urcu/cds.h>
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long rduration;
+ 
+ static unsigned long duration;
+@@ -110,12 +108,12 @@ static void set_affinity(void)
+  */
+ static int test_duration_dequeue(void)
+ {
+-	return !test_stop;
++	return test_duration_read();
+ }
+ 
+ static int test_duration_enqueue(void)
+ {
+-	return !test_stop;
++	return test_duration_write();
+ }
+ 
+ static DEFINE_URCU_TLS(unsigned long long, nr_dequeues);
+@@ -146,10 +144,7 @@ void *thr_enqueuer(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct test *node = malloc(sizeof(*node));
+@@ -202,10 +197,7 @@ void *thr_dequeuer(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct cds_lfq_node_rcu *qnode;
+@@ -375,7 +367,7 @@ int main(int argc, char **argv)
+ 
+ 	cmm_smp_mb();
+ 
+-	test_go = 1;
++	begin_test();
+ 
+ 	for (i_thr = 0; i_thr < duration; i_thr++) {
+ 		sleep(1);
+@@ -385,7 +377,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	test_stop = 1;
++	end_test();
+ 
+ 	for (i_thr = 0; i_thr < nr_enqueuers; i_thr++) {
+ 		err = pthread_join(tid_enqueuer[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_lfs.c b/tests/benchmark/test_urcu_lfs.c
+index 52239e0..48b2b23 100644
+--- a/tests/benchmark/test_urcu_lfs.c
++++ b/tests/benchmark/test_urcu_lfs.c
+@@ -59,8 +59,6 @@ enum test_sync {
+ 
+ static enum test_sync test_sync;
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long rduration;
+ 
+ static unsigned long duration;
+@@ -124,12 +122,12 @@ static void set_affinity(void)
+  */
+ static int test_duration_dequeue(void)
+ {
+-	return !test_stop;
++	return test_duration_read();
+ }
+ 
+ static int test_duration_enqueue(void)
+ {
+-	return !test_stop;
++	return test_duration_write();
+ }
+ 
+ static DEFINE_URCU_TLS(unsigned long long, nr_dequeues);
+@@ -159,10 +157,7 @@ static void *thr_enqueuer(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct test *node = malloc(sizeof(*node));
+@@ -261,10 +256,7 @@ static void *thr_dequeuer(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	urcu_posix_assert(test_pop || test_pop_all);
+ 
+@@ -459,7 +451,7 @@ int main(int argc, char **argv)
+ 
+ 	cmm_smp_mb();
+ 
+-	test_go = 1;
++	begin_test();
+ 
+ 	for (i_thr = 0; i_thr < duration; i_thr++) {
+ 		sleep(1);
+@@ -469,7 +461,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	test_stop = 1;
++	end_test();
+ 
+ 	for (i_thr = 0; i_thr < nr_enqueuers; i_thr++) {
+ 		err = pthread_join(tid_enqueuer[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_lfs_rcu.c b/tests/benchmark/test_urcu_lfs_rcu.c
+index 7975faf..ae3dff4 100644
+--- a/tests/benchmark/test_urcu_lfs_rcu.c
++++ b/tests/benchmark/test_urcu_lfs_rcu.c
+@@ -51,8 +51,6 @@
+ 
+ #include <urcu/cds.h>
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long rduration;
+ 
+ static unsigned long duration;
+@@ -114,12 +112,12 @@ static void set_affinity(void)
+  */
+ static int test_duration_dequeue(void)
+ {
+-	return !test_stop;
++	return test_duration_read();
+ }
+ 
+ static int test_duration_enqueue(void)
+ {
+-	return !test_stop;
++	return test_duration_write();
+ }
+ 
+ static DEFINE_URCU_TLS(unsigned long long, nr_dequeues);
+@@ -150,10 +148,7 @@ void *thr_enqueuer(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct test *node = malloc(sizeof(*node));
+@@ -205,10 +200,7 @@ void *thr_dequeuer(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct cds_lfs_node_rcu *snode;
+@@ -377,7 +369,7 @@ int main(int argc, char **argv)
+ 
+ 	cmm_smp_mb();
+ 
+-	test_go = 1;
++	begin_test();
+ 
+ 	for (i_thr = 0; i_thr < duration; i_thr++) {
+ 		sleep(1);
+@@ -387,7 +379,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	test_stop = 1;
++	end_test();
+ 
+ 	for (i_thr = 0; i_thr < nr_enqueuers; i_thr++) {
+ 		err = pthread_join(tid_enqueuer[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_qsbr.c b/tests/benchmark/test_urcu_qsbr.c
+index 1ea369c..295e9db 100644
+--- a/tests/benchmark/test_urcu_qsbr.c
++++ b/tests/benchmark/test_urcu_qsbr.c
+@@ -44,8 +44,6 @@
  #endif
+ #include "urcu-qsbr.h"
  
-+extern void abort(void);
-+
-+#define uatomic_store_op(op, addr, v, mo)	\
-+	({					\
-+		switch (mo) {			\
-+		case CMM_ACQUIRE:		\
-+		case CMM_CONSUME:		\
-+		case CMM_RELAXED:		\
-+			break;			\
-+		case CMM_RELEASE:		\
-+		case CMM_ACQ_REL:		\
-+		case CMM_SEQ_CST:		\
-+			cmm_smp_mb();		\
-+			break;			\
-+		default:			\
-+			abort();		\
-+		}				\
-+						\
-+		op(addr, v);			\
-+						\
-+		switch (mo) {			\
-+		case CMM_ACQUIRE:		\
-+		case CMM_ACQ_REL:		\
-+		case CMM_CONSUME:		\
-+		case CMM_SEQ_CST:		\
-+			cmm_smp_mb();		\
-+			break;			\
-+		case CMM_RELAXED:		\
-+		case CMM_RELEASE:		\
-+			break;			\
-+		default:			\
-+			abort();		\
-+		}				\
-+	})
-+
-+#define uatomic_store(addr, v, mo)			\
-+	({						\
-+		switch (mo) {				\
-+		case CMM_RELAXED:			\
-+			break;				\
-+		case CMM_RELEASE:			\
-+		case CMM_SEQ_CST:			\
-+			cmm_smp_mb();			\
-+			break;				\
-+		default:				\
-+			abort();			\
-+		}					\
-+							\
-+		uatomic_set(addr, v);			\
-+							\
-+		switch (mo) {				\
-+		case CMM_RELAXED:			\
-+		case CMM_RELEASE:			\
-+			break;				\
-+		case CMM_SEQ_CST:			\
-+			cmm_smp_mb();			\
-+			break;				\
-+		default:				\
-+			abort();			\
-+		}					\
-+	})
-+
-+#define uatomic_and_mo(addr, v, mo)			\
-+	uatomic_store_op(uatomic_and, addr, v, mo)
-+
-+#define uatomic_or_mo(addr, v, mo)			\
-+	uatomic_store_op(uatomic_or, addr, v, mo)
-+
-+#define uatomic_add_mo(addr, v, mo)			\
-+	uatomic_store_op(uatomic_add, addr, v, mo)
-+
-+#define uatomic_sub_mo(addr, v, mo)			\
-+	uatomic_store_op(uatomic_sub, addr, v, mo)
-+
-+#define uatomic_inc_mo(addr, mo)			\
-+	uatomic_store_op(uatomic_add, addr, 1, mo)
-+
-+#define uatomic_dec_mo(addr, mo)			\
-+	uatomic_store_op(uatomic_add, addr, -1, mo)
-+
-+#define uatomic_cmpxchg_mo(addr, old, new, mos, mof)	\
-+	uatomic_cmpxchg(addr, old, new)
-+
-+#define uatomic_xchg_mo(addr, v, mo)		\
-+	uatomic_xchg(addr, v)
-+
-+#define uatomic_xchg_mo(addr, v, mo)		\
-+	uatomic_xchg(addr, v)
-+
-+#define uatomic_add_return_mo(addr, v, mo)	\
-+	uatomic_add_return(addr, v)
-+
-+#define uatomic_sub_return_mo(addr, v, mo)	\
-+	uatomic_sub_return(addr, v)
-+
-+
- #ifndef uatomic_read
- #define uatomic_read(addr)	CMM_LOAD_SHARED(*(addr))
- #endif
+-static volatile int test_go, test_stop;
+-
+ static unsigned long wdelay;
  
-+#define uatomic_load(addr, mo)						\
-+	__extension__							\
-+	({								\
-+		switch (mo) {						\
-+		case CMM_ACQUIRE:					\
-+		case CMM_CONSUME:					\
-+		case CMM_RELAXED:					\
-+			break;						\
-+		case CMM_SEQ_CST:					\
-+			cmm_smp_mb();					\
-+			break;						\
-+		default:						\
-+			abort();					\
-+		}							\
-+									\
-+		__typeof__(*(addr)) _rcu_value = uatomic_read(addr);	\
-+									\
-+		switch (mo) {						\
-+		case CMM_RELAXED:					\
-+			break;						\
-+		case CMM_CONSUME:					\
-+		case CMM_ACQUIRE:					\
-+		case CMM_SEQ_CST:					\
-+			cmm_smp_mb();					\
-+			break;						\
-+		default:						\
-+			abort();					\
-+		}							\
-+									\
-+		_rcu_value;						\
-+	})
-+
- #if !defined __OPTIMIZE__  || defined UATOMIC_NO_LINK_ERROR
- #ifdef ILLEGAL_INSTR
- static inline __attribute__((always_inline))
-diff --git a/src/urcu-pointer.c b/src/urcu-pointer.c
-index d0854ac..cea8aeb 100644
---- a/src/urcu-pointer.c
-+++ b/src/urcu-pointer.c
-@@ -39,19 +39,16 @@ void *rcu_dereference_sym(void *p)
- 
- void *rcu_set_pointer_sym(void **p, void *v)
- {
--	cmm_wmb();
--	uatomic_set(p, v);
-+	uatomic_store(p, v, CMM_RELEASE);
- 	return v;
+ static int *test_rcu_pointer;
+@@ -106,19 +104,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
  }
  
- void *rcu_xchg_pointer_sym(void **p, void *v)
- {
--	cmm_wmb();
--	return uatomic_xchg(p, v);
-+	return uatomic_xchg_mo(p, v, CMM_SEQ_CST);
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
+ 
+@@ -145,10 +130,7 @@ void *thr_reader(void *_count)
+ 	urcu_posix_assert(!rcu_read_ongoing());
+ 	rcu_thread_online();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		rcu_read_lock();
+@@ -192,10 +174,7 @@ void *thr_writer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		new = malloc(sizeof(int));
+@@ -343,13 +322,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
+ 
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
+ 
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_qsbr_gc.c b/tests/benchmark/test_urcu_qsbr_gc.c
+index 8877a82..163405d 100644
+--- a/tests/benchmark/test_urcu_qsbr_gc.c
++++ b/tests/benchmark/test_urcu_qsbr_gc.c
+@@ -33,6 +33,7 @@
+ #include <urcu/arch.h>
+ #include <urcu/assert.h>
+ #include <urcu/tls-compat.h>
++#include <urcu/uatomic.h>
+ #include "thread-id.h"
+ #include "../common/debug-yield.h"
+ 
+@@ -46,8 +47,6 @@ struct test_array {
+ 	int a;
+ };
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long wdelay;
+ 
+ static struct test_array *test_rcu_pointer;
+@@ -118,19 +117,6 @@ static void set_affinity(void)
+ #endif /* HAVE_SCHED_SETAFFINITY */
  }
  
- void *rcu_cmpxchg_pointer_sym(void **p, void *old, void *_new)
+-/*
+- * returns 0 if test should end.
+- */
+-static int test_duration_write(void)
+-{
+-	return !test_stop;
+-}
+-
+-static int test_duration_read(void)
+-{
+-	return !test_stop;
+-}
+-
+ static DEFINE_URCU_TLS(unsigned long long, nr_writes);
+ static DEFINE_URCU_TLS(unsigned long long, nr_reads);
+ 
+@@ -154,10 +140,7 @@ void *thr_reader(void *_count)
+ 
+ 	rcu_register_thread();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		_rcu_read_lock();
+@@ -231,10 +214,7 @@ void *thr_writer(void *data)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ #ifndef TEST_LOCAL_GC
+@@ -399,13 +379,7 @@ int main(int argc, char **argv)
+ 			exit(1);
+ 	}
+ 
+-	cmm_smp_mb();
+-
+-	test_go = 1;
+-
+-	sleep(duration);
+-
+-	test_stop = 1;
++	test_for(duration);
+ 
+ 	for (i_thr = 0; i_thr < nr_readers; i_thr++) {
+ 		err = pthread_join(tid_reader[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_wfcq.c b/tests/benchmark/test_urcu_wfcq.c
+index 2c6e0fd..542a13a 100644
+--- a/tests/benchmark/test_urcu_wfcq.c
++++ b/tests/benchmark/test_urcu_wfcq.c
+@@ -56,7 +56,7 @@ static enum test_sync test_sync;
+ 
+ static int test_force_sync;
+ 
+-static volatile int test_go, test_stop_enqueue, test_stop_dequeue;
++static volatile int test_stop_enqueue, test_stop_dequeue;
+ 
+ static unsigned long rduration;
+ 
+@@ -122,12 +122,12 @@ static void set_affinity(void)
+  */
+ static int test_duration_dequeue(void)
  {
--	cmm_wmb();
--	return uatomic_cmpxchg(p, old, _new);
-+	return uatomic_cmpxchg_mo(p, old, _new, CMM_SEQ_CST, CMM_SEQ_CST);
+-	return !test_stop_dequeue;
++	return !uatomic_load(&test_stop_dequeue, CMM_RELAXED);
  }
+ 
+ static int test_duration_enqueue(void)
+ {
+-	return !test_stop_enqueue;
++	return !uatomic_load(&test_stop_enqueue, CMM_RELAXED);
+ }
+ 
+ static DEFINE_URCU_TLS(unsigned long long, nr_dequeues);
+@@ -155,10 +155,7 @@ static void *thr_enqueuer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct cds_wfcq_node *node = malloc(sizeof(*node));
+@@ -266,10 +263,7 @@ static void *thr_dequeuer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		if (test_dequeue && test_splice) {
+@@ -482,7 +476,7 @@ int main(int argc, char **argv)
+ 
+ 	cmm_smp_mb();
+ 
+-	test_go = 1;
++	begin_test();
+ 
+ 	for (i_thr = 0; i_thr < duration; i_thr++) {
+ 		sleep(1);
+@@ -492,7 +486,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	test_stop_enqueue = 1;
++	uatomic_store(&test_stop_enqueue, 1, CMM_RELEASE);
+ 
+ 	if (test_wait_empty) {
+ 		while (nr_enqueuers != uatomic_read(&test_enqueue_stopped)) {
+@@ -503,7 +497,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	test_stop_dequeue = 1;
++	uatomic_store(&test_stop_dequeue, 1, CMM_RELAXED);
+ 
+ 	for (i_thr = 0; i_thr < nr_enqueuers; i_thr++) {
+ 		err = pthread_join(tid_enqueuer[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_wfq.c b/tests/benchmark/test_urcu_wfq.c
+index 8381160..2d8de87 100644
+--- a/tests/benchmark/test_urcu_wfq.c
++++ b/tests/benchmark/test_urcu_wfq.c
+@@ -51,8 +51,6 @@
+ #include <urcu.h>
+ #include <urcu/wfqueue.h>
+ 
+-static volatile int test_go, test_stop;
+-
+ static unsigned long rduration;
+ 
+ static unsigned long duration;
+@@ -114,12 +112,12 @@ static void set_affinity(void)
+  */
+ static int test_duration_dequeue(void)
+ {
+-	return !test_stop;
++	return test_duration_read();
+ }
+ 
+ static int test_duration_enqueue(void)
+ {
+-	return !test_stop;
++	return test_duration_write();
+ }
+ 
+ static DEFINE_URCU_TLS(unsigned long long, nr_dequeues);
+@@ -143,10 +141,7 @@ void *thr_enqueuer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct cds_wfq_node *node = malloc(sizeof(*node));
+@@ -185,10 +180,7 @@ void *thr_dequeuer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct cds_wfq_node *node = cds_wfq_dequeue_blocking(&q);
+@@ -343,7 +335,7 @@ int main(int argc, char **argv)
+ 
+ 	cmm_smp_mb();
+ 
+-	test_go = 1;
++	begin_test();
+ 
+ 	for (i_thr = 0; i_thr < duration; i_thr++) {
+ 		sleep(1);
+@@ -353,7 +345,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	test_stop = 1;
++	end_test();
+ 
+ 	for (i_thr = 0; i_thr < nr_enqueuers; i_thr++) {
+ 		err = pthread_join(tid_enqueuer[i_thr], &tret);
+diff --git a/tests/benchmark/test_urcu_wfs.c b/tests/benchmark/test_urcu_wfs.c
+index c285feb..d1a4afc 100644
+--- a/tests/benchmark/test_urcu_wfs.c
++++ b/tests/benchmark/test_urcu_wfs.c
+@@ -59,7 +59,7 @@ static enum test_sync test_sync;
+ 
+ static int test_force_sync;
+ 
+-static volatile int test_go, test_stop_enqueue, test_stop_dequeue;
++static volatile int test_stop_enqueue, test_stop_dequeue;
+ 
+ static unsigned long rduration;
+ 
+@@ -125,12 +125,12 @@ static void set_affinity(void)
+  */
+ static int test_duration_dequeue(void)
+ {
+-	return !test_stop_dequeue;
++	return !uatomic_load(&test_stop_dequeue, CMM_RELAXED);
+ }
+ 
+ static int test_duration_enqueue(void)
+ {
+-	return !test_stop_enqueue;
++	return !uatomic_load(&test_stop_enqueue, CMM_RELAXED);
+ }
+ 
+ static DEFINE_URCU_TLS(unsigned long long, nr_dequeues);
+@@ -157,10 +157,7 @@ static void *thr_enqueuer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	for (;;) {
+ 		struct cds_wfs_node *node = malloc(sizeof(*node));
+@@ -250,10 +247,7 @@ static void *thr_dequeuer(void *_count)
+ 
+ 	set_affinity();
+ 
+-	while (!test_go)
+-	{
+-	}
+-	cmm_smp_mb();
++	wait_until_go();
+ 
+ 	urcu_posix_assert(test_pop || test_pop_all);
+ 
+@@ -469,7 +463,7 @@ int main(int argc, char **argv)
+ 
+ 	cmm_smp_mb();
+ 
+-	test_go = 1;
++	begin_test();
+ 
+ 	for (i_thr = 0; i_thr < duration; i_thr++) {
+ 		sleep(1);
+@@ -479,7 +473,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	test_stop_enqueue = 1;
++	uatomic_store(&test_stop_enqueue, 1, CMM_RELEASE);
+ 
+ 	if (test_wait_empty) {
+ 		while (nr_enqueuers != uatomic_read(&test_enqueue_stopped)) {
+@@ -490,7 +484,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	test_stop_dequeue = 1;
++	uatomic_store(&test_stop_dequeue, 1, CMM_RELAXED);
+ 
+ 	for (i_thr = 0; i_thr < nr_enqueuers; i_thr++) {
+ 		err = pthread_join(tid_enqueuer[i_thr], &tret);
 -- 
 2.39.2
 
