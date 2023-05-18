@@ -4,38 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FEB8C77B7D
-	for <lttng-dev@archiver.kernel.org>; Thu, 18 May 2023 19:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60D76C77B7A
+	for <lttng-dev@archiver.kernel.org>; Thu, 18 May 2023 19:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1684437432;
-	bh=AZpIv7DawULSDWeW//ktltTGXptYrfsd3p+hEYa6iRw=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1684437677;
+	bh=CNsaoCG7tjA7lHauT4yf1Zx0wVbGluUtD8xUqeQ5tAw=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=XS5hnD+g0Q2Mh6BxAnW/f7VuFNyxVdbDGd7kA7VWauUU5GC7X1kito3ha5UBx8l+t
-	 l/jPfCbAK1CPZRcaRWzNCYTqAWvHgofGVcpx+C2CIaiXhXK5XyV2mwEfJlT23dGvD/
-	 1Bl4U6dDTVGGd4le/XJHaB0ykAUh9LL2HT46sOHGNc7Qm52wTFFKfR6yvuD0qwdo4i
-	 2JIZfYcEJ8tWio9RVNEcK8V84ixQZv0IFbsT60DEWRv+Sj5+Vn9S31++6HtPQJrJXf
-	 i7JL8KZhyiV1ATsXFZiNk6A+oVV2lzouKTLhFA+Nk14cOyt6zxMAJXSI9IVyHFbvQ8
-	 8wnM1s4kGKvbg==
+	b=ift99j063aWMTlo0PnWfCfqJed5y5hZCXt19nycr4ba5F9xoBKmbZfwYgcXlCPR5u
+	 3UVMMsfYjlOg+LuV5o5DjBGKvCD0+GnePETZQk6Kfsitu7g3rl8i+iSYI6mhv/Ox3y
+	 RvtPVMYlCAZpGVSSZAi9RDW9+vuNS6trL4ZOf8BTLnyj+Av4hlR8t9VPIz+QFwf9HO
+	 Z09gx75TwlGEqOrob2VSEBR2iN4aTZ0+Ko8Q2KzFhUn0eBH1bWerasvowYPYR6WXdd
+	 EhNPq4gSqDINxJDoGFbknldezzeVKXRagqWgCCXfF0eSo2UcL7QLaxGkclxsASyP0s
+	 LV7n4IQlYbu8g==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QMfqW2xFdz1G8W;
-	Thu, 18 May 2023 15:17:11 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QMfqT5Wbqz1Fyp
- for <lttng-dev@lists.lttng.org>; Thu, 18 May 2023 15:17:09 -0400 (EDT)
-Received: from [172.16.0.117] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QMfpt6ggwz134x;
- Thu, 18 May 2023 15:16:38 -0400 (EDT)
-Message-ID: <ce391c2f-4aae-413f-bcf3-4f3356499f34@efficios.com>
-Date: Thu, 18 May 2023 15:16:45 -0400
+	by lists.lttng.org (Postfix) with ESMTP id 4QMfwD6Q6Gz1GFS;
+	Thu, 18 May 2023 15:21:16 -0400 (EDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com
+ [209.85.208.47])
+ by lists.lttng.org (Postfix) with ESMTPS id 4QMfwB52GSz1GFQ
+ for <lttng-dev@lists.lttng.org>; Thu, 18 May 2023 15:21:14 -0400 (EDT)
+Received: by mail-ed1-f47.google.com with SMTP id
+ 4fb4d7f45d1cf-510f3db1cd8so343097a12.1
+ for <lttng-dev@lists.lttng.org>; Thu, 18 May 2023 12:21:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1684437613; x=1687029613;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=+IMud/ENsQUhURGUFoVcmxBFR/3+B452Mtfn4GzmraI=;
+ b=LC5BkdsnVCTRbytckqDbdJGrXkjV2wWdr7Tzdi45AAXFyJJ8LqDfrKCr+LLgjOecMD
+ 9fFmPso1uEZ7aqIH1oGta1WPqc4IcUjivYrWawogK2KzDjgngeLw+vmizuzx4ku/NZhC
+ JNLi5FtbFq9l/9Tj7Pl1YYM9cSZp/XtHIdjKKvdpCfytAyeEPKX0EKqCrLU2BjhmvaR7
+ biElXnU8unN9CaQ38VaMo36VM2w6XI4Ugv1RTun8y9w5f1/BBAK/m2kJMKwqXKqA/JtV
+ SJaZA5UlD1uaqdWj0OY/ane3kS8MxFZQj4vH5o3J6eZibS5HwW0pAF9/AfG1h4SW07lc
+ yAiw==
+X-Gm-Message-State: AC+VfDzFSmGLee0hs4cnwXuXSMT29y6Kwtjt8gxB8E9UDDLAgE++oGX1
+ bw/WTgzGt6XvQ9Oz33541A7qCmPYCGrXXT/lLj/niHy2
+X-Google-Smtp-Source: ACHHUZ649JDd2UELRpn5j9eGAQ/oUn97DJMXyUoOVVEtdM6JxVClLHj/+LFYy4+1les3wTb1ZwyEXXrslfPkdkSTU48=
+X-Received: by 2002:a05:6402:31ef:b0:50b:f999:9dee with SMTP id
+ dy15-20020a05640231ef00b0050bf9999deemr5734337edb.8.1684437613417; Thu, 18
+ May 2023 12:20:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To: Brian Hutchinson <b.hutchman@gmail.com>
-Cc: lttng-dev@lists.lttng.org
 References: <CAFZh4h8C5ZVHGWsBW2iaVYi56t=SsmuiSGZPLf0KpQO9LwfeMQ@mail.gmail.com>
  <2d953bd2-6544-3357-1424-fa44731e2bf5@efficios.com>
  <CAFZh4h95d=U6wj6RxR-z3kDMwJD58cC+DLC5O6UNSsKcschr3w@mail.gmail.com>
@@ -46,6 +57,10 @@ References: <CAFZh4h8C5ZVHGWsBW2iaVYi56t=SsmuiSGZPLf0KpQO9LwfeMQ@mail.gmail.com>
  <c6d06421-366d-2464-abd3-06cb43dfddeb@efficios.com>
  <CAFZh4h-aD==niaWF9Y=Z=bNm7vsUCWfaxkTBXAewyFXWVndCTg@mail.gmail.com>
 In-Reply-To: <CAFZh4h-aD==niaWF9Y=Z=bNm7vsUCWfaxkTBXAewyFXWVndCTg@mail.gmail.com>
+Date: Thu, 18 May 2023 15:20:02 -0400
+Message-ID: <CAFZh4h85Ub-dwk7=Pp+T8Jd0HKOtrHUQsYgjGEQSvHnjERa30w@mail.gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 Subject: Re: [lttng-dev] Trying to understand use of lttng enable-event
  --kernel --userspace-probe=
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -59,56 +74,104 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Brian Hutchinson via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Brian Hutchinson <b.hutchman@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On 2023-05-18 15:07, Brian Hutchinson wrote:
-
-[...]
-
->>
->> If you attach to an ELF symbol (function), then there is no USDT in
->> play, so it should not be related to the issue you have.
-> 
-> That is what I was thinking which is why I wanted to try it.
-> 
->>
->> But if your functions happen to be inlined, then there will be nothing
->> to attach to. Perhaps this is what happens there ?
-> 
-> I don't see any evidence of anything being inlined in this module.  I
-> grepped the code to verify.
-> 
-> Back to being stumped/stuck.
-
-Make sure to check the resulting assembler and ELF symbol tables.
-
-The compiler is free to inline various functions unless they are 
-explicitly marked as __attribute__((noinline)). Also, if LTO is enabled, 
-further optimization can be done at link-time.
-
-One purpose of the UST tracepoints is to be less fragile with respect to 
-specific optimizations done by the compiler and linker, thus 
-guaranteeing that whatever is instrumented with a tracepoint is indeed 
-available for tracing.
-
-Also, double-check that the path you pass to --userspace-probe really 
-targets your executable or .so binary file, and is not just a symbolic link.
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+T24gVGh1LCBNYXkgMTgsIDIwMjMgYXQgMzowN+KAr1BNIEJyaWFuIEh1dGNoaW5zb24gPGIuaHV0
+Y2htYW5AZ21haWwuY29tPiB3cm90ZToKPgo+IE9uIFRodSwgTWF5IDE4LCAyMDIzIGF0IDM6MDPi
+gK9QTSBNYXRoaWV1IERlc25veWVycwo+IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+
+IHdyb3RlOgo+ID4KPiA+IE9uIDIwMjMtMDUtMTggMTQ6NTgsIEJyaWFuIEh1dGNoaW5zb24gd3Jv
+dGU6Cj4gPiA+IE9uIFRodSwgTWF5IDE4LCAyMDIzIGF0IDExOjAw4oCvQU0gQnJpYW4gSHV0Y2hp
+bnNvbiA8Yi5odXRjaG1hbkBnbWFpbC5jb20+IHdyb3RlOgo+ID4gPj4KPiA+ID4+IE9uIFRodSwg
+TWF5IDE4LCAyMDIzIGF0IDEwOjQ14oCvQU0gTWF0aGlldSBEZXNub3llcnMKPiA+ID4+IDxtYXRo
+aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+ID4gPj4+Cj4gPiA+Pj4gT24gMjAy
+My0wNS0xOCAxMDoxMCwgQnJpYW4gSHV0Y2hpbnNvbiB3cm90ZToKPiA+ID4+PiBbLi4uXQo+ID4g
+Pj4+PiBJIHVwZGF0ZWQgbXkgaGVsbG8gd29ybGQgdG8gaGF2ZSBhIGZ1bmN0aW9uIEknZCBsaWtl
+IHRvIHVzZSB0aGUKPiA+ID4+Pj4gLS11c2Vyc3BhY2UtcHJvYmUgbWV0aG9kIG9uIHdpdGggdGhl
+IHZlcnkgb3JpZ2luYWwgbmFtZSBvZgo+ID4gPj4+PiAncHJvYmVfZnVuY3Rpb24nOgo+ID4gPj4+
+Pgo+ID4gPj4+PiAjaW5jbHVkZSA8c3RkaW8uaD4KPiA+ID4+Pj4gI2luY2x1ZGUgPGx0dG5nL3Ry
+YWNlZi5oPgo+ID4gPj4+Pgo+ID4gPj4+PiB2b2lkIHByb2JlX2Z1bmN0aW9uKGludCBpKTsKPiA+
+ID4+Pj4KPiA+ID4+Pj4gaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKmFyZ3ZbXSkKPiA+ID4+Pj4g
+ewo+ID4gPj4+PiAgICAgIHVuc2lnbmVkIGludCBpOwo+ID4gPj4+PiAgICAgIHB1dHMoIkhlbGxv
+LCBXb3JsZCFcblByZXNzIEVudGVyIHRvIGNvbnRpbnVlLi4uIik7Cj4gPiA+Pj4+ICAgICAgLyoK
+PiA+ID4+Pj4gICAgICAgKiBUaGUgZm9sbG93aW5nIGdldGNoYXIoKSBjYWxsIG9ubHkgZXhpc3Rz
+IGZvciB0aGUgcHVycG9zZSBvZiB0aGlzCj4gPiA+Pj4+ICAgICAgICogZGVtb25zdHJhdGlvbiwg
+dG8gcGF1c2UgdGhlIGFwcGxpY2F0aW9uIGluIG9yZGVyIGZvciB5b3UgdG8gaGF2ZQo+ID4gPj4+
+PiAgICAgICAqIHRpbWUgdG8gbGlzdCBpdHMgdHJhY2Vwb2ludHMuIFlvdSBkb24ndCBuZWVkIGl0
+IG90aGVyd2lzZS4KPiA+ID4+Pj4gICAgICAgKi8KPiA+ID4+Pj4gICAgICBnZXRjaGFyKCk7Cj4g
+PiA+Pj4+Cj4gPiA+Pj4+ICAgICAgbHR0bmdfdXN0X3RyYWNlZigiTnVtYmVyICVkLCBzdHJpbmcg
+JXMiLCAyMywgImhpIHRoZXJlISIpOwo+ID4gPj4+PiAgICAgIHByaW50ZigiTnVtYmVyICVkLCBz
+dHJpbmcgJXMiLCAyMywgImhpIHRoZXJlISIpOwo+ID4gPj4+Pgo+ID4gPj4+PiAgICAgIGZvciAo
+aSA9IDA7IGkgPCBhcmdjOyBpKyspIHsKPiA+ID4+Pj4gICAgICAgICAgbHR0bmdfdXN0X3RyYWNl
+ZigiTnVtYmVyICVkLCBhcmd2ICVzIiwgaSwgYXJndltpXSk7Cj4gPiA+Pj4+ICAgICAgICAgIHBy
+aW50ZigiTnVtYmVyICVkLCBhcmd2ICVzIiwgaSwgYXJndltpXSk7Cj4gPiA+Pj4+ICAgICAgfQo+
+ID4gPj4+Pgo+ID4gPj4+PiAgICAgIHB1dHMoIlF1aXR0aW5nIG5vdyEiKTsKPiA+ID4+Pj4KPiA+
+ID4+Pj4gICAgICBwcm9iZV9mdW5jdGlvbihpKTsKPiA+ID4+Pj4KPiA+ID4+Pj4gICAgICByZXR1
+cm4gMDsKPiA+ID4+Pj4gfQo+ID4gPj4+Pgo+ID4gPj4+PiB2b2lkIHByb2JlX2Z1bmN0aW9uKGlu
+dCBpKSB7Cj4gPiA+Pj4+Cj4gPiA+Pj4+ICAgICAgbHR0bmdfdXN0X3RyYWNlZigiTnVtYmVyICVk
+LCBzdHJpbmcgJXMiLCBpICogaSwgImleMiIpOwo+ID4gPj4+PiAgICAgIHByaW50ZigiTnVtYmVy
+ICVkLCBzdHJpbmcgJXMiLCBpICogaSwgImleMiIpOwo+ID4gPj4+Pgo+ID4gPj4+PiB9Cj4gPiA+
+Pj4+Cj4gPiA+Pj4+IC4uLiBhbmQgSSBnZXQgdGhlIHNhbWUgZXJyb3IgYXMgYmVmb3JlIHdoZW4g
+SSB0cnkgdG8gZW5hYmxlIHRoZSBwcm9iZToKPiA+ID4+Pj4gIyBsdHRuZyBlbmFibGUtZXZlbnQg
+LS1rZXJuZWwKPiA+ID4+Pj4gLS11c2Vyc3BhY2UtcHJvYmU9L3Vzci9sb2NhbC9iaW4vaGVsbG86
+cHJvYmVfZnVuY3Rpb24KPiA+ID4+Pj4gRXJyb3I6IE1pc3NpbmcgZXZlbnQgbmFtZShzKS4KPiA+
+ID4+Pgo+ID4gPj4+IEFzIHRoZSBlcnJvciBzdGF0ZXMsIHlvdSBhcmUgbWlzc2luZyB0aGUgZXZl
+bnQgbmFtZS4gU2VlCj4gPiA+Pj4KPiA+ID4+PiBtYW4gMSBsdHRuZy1lbmFibGUtZXZlbnQKPiA+
+ID4+Pgo+ID4gPj4+ICAgICAgICAgIGx0dG5nIFtHRU5FUkFMIE9QVElPTlNdIGVuYWJsZS1ldmVu
+dCAtLWtlcm5lbAo+ID4gPj4+ICAgICAgICAgICAgICAgIFstLXByb2JlPVNPVVJDRSB8IC0tZnVu
+Y3Rpb249U09VUkNFIHwgLS1zeXNjYWxsIHwKPiA+ID4+PiAgICAgICAgICAgICAgICAgLS11c2Vy
+c3BhY2UtcHJvYmU9U09VUkNFXQo+ID4gPj4+ICAgICAgICAgICAgICAgIFstLWZpbHRlcj1FWFBS
+XSBbLS1zZXNzaW9uPVNFU1NJT05dCj4gPiA+Pj4gICAgICAgICAgICAgICAgWy0tY2hhbm5lbD1D
+SEFOTkVMXSBFVkVOVFssRVZFTlRdLi4uCj4gPiA+Pj4KPiA+ID4+Pgo+ID4gPj4+IFlvdSB3aWxs
+IHdhbnQgc29tZXRoaW5nIGxpa2U6Cj4gPiA+Pj4KPiA+ID4+PiBsdHRuZyBlbmFibGUtZXZlbnQg
+LS1rZXJuZWwgLS11c2Vyc3BhY2UtcHJvYmU9L3Vzci9sb2NhbC9iaW4vaGVsbG86cHJvYmVfZnVu
+Y3Rpb24gbXlfcHJvYmVfZnVuY3Rpb24KPiA+ID4+Pgo+ID4gPj4+IFdoZXJlICJteV9wcm9iZV9m
+dW5jdGlvbiIgaXMgdGhlIGV2ZW50IG5hbWUgdGhhdCB3aWxsIGFwcGVhciBpbiB0aGUgY29sbGVj
+dGVkIHRyYWNlcy4KPiA+ID4+Cj4gPiA+PiBXb3chICBJIG11c3Qgbm90IGhhdmUgd29rZW4gdXAg
+dGhpcyBtb3JuaW5nIGhhLCBoYS4gIFRoYW5rcyBmb3IgdGhhdCEKPiA+ID4+IFRoZSBldmVudCBp
+cyBlbmFibGVkIG5vdy4gIEhvcGUgdG8gYWN0dWFsbHkgZ2V0IHRyYWNpbmcgZGF0YSBub3cuCj4g
+PiA+Cj4gPiA+IFdlbGwsIEkgZ3Vlc3Mgd2UganVzdCBoYXZlIHRoZSBhcHAgdGhhdCB0aHdhcnRz
+IGFsbCBhdHRlbXB0cyBhdCB0cmFjaW5nLgo+ID4gPgo+ID4gPiBJIGRpZCBhIGR5bmFtaWMgcHJv
+YmUgb24gc2V2ZXJhbCBmdW5jdGlvbnMgdGhhdCBzaG91bGQgYmUgZ2V0dGluZwo+ID4gPiBjYWxs
+ZWQgbGlrZSBjcmF6eSBhbmQgYWdhaW4gSSBnZXQgbm8gdHJhY2luZyBkYXRhLgo+ID4gPgo+ID4g
+PiBUcmllZCBpdCB3aXRoIG15IGhlbGxvIHdvcmxkIGV4YW1wbGUgYWJvdmUgYWZ0ZXIgTWF0aGll
+dSBzZXQgbWUKPiA+ID4gc3RyYWlnaHQgb24gdGhlIGV2ZW50IHN5bnRheCBhbmQgaXQgd29ya3Mu
+Cj4gPiA+Cj4gPiA+IEkgc2F3IHRoaXMgY29tbWVudCBpbiB0aGUgZG9jdW1lbnRhdGlvbiAiQXMg
+b2YgdGhpcyB2ZXJzaW9uLCBvbmx5IFVTRFQKPiA+ID4gcHJvYmVzIHRoYXQgYXJlIG5vdCBzdXJy
+b3VuZGVkIGJ5IGEgcmVmZXJlbmNlIGNvdW50ZXIgKHNlbWFwaG9yZSkgYXJlCj4gPiA+IHN1cHBv
+cnRlZC4iCj4gPiA+Cj4gPiA+IEkgZG9uJ3Qga25vdyB0aGF0IEkgY2FuIHNheSB0aGF0IHRoaXMg
+ZnVuY3Rpb24gSSdtIHByb2JpbmcgaXNuJ3QKPiA+ID4gInN1cnJvdW5kZWQiIGJ5IGEgcmVmZXJl
+bmNlIGNvdW50ZXIsIGl0J3MgaW4gYSBsYXJnZSBtdWx0aS10aHJlYWRlZAo+ID4gPiBhcHBsaWNh
+dGlvbiBzbyBJIGd1ZXNzIGl0J3MgcG9zc2libGUuCj4gPiA+Cj4gPiA+IFNpZ2gsIEknbSBzdHJp
+a2luZyBvdXQgZXZlcnkgd2hpY2ggd2F5Lgo+ID4gPgo+ID4gPiBObyBvZmZlbnNlIChzaW5jZSB0
+aGlzIGlzIGx0dG5nIGxpc3QgLSBwbGVhc2UgZG9uJ3QgZmxhbWUgbWUgLi4uIEkKPiA+ID4gd2Fu
+dC9uZWVkIGx0dG5nKSwgYnV0IEkgdGhpbmsgSSdtIGdvaW5nIHRvIHRyeSBqdXN0IHN0cmFpZ2h0
+IGtwcm9iZXMKPiA+ID4gYW5kIHVwcm9iZXMgYW5kIHNlZSBpZiB0cmFjZSBjb21wYXNzIGNhbiBz
+aG93IHRob3NlIHRyYWNlcyBpbiBhbgo+ID4gPiBhdHRlbXB0IHRvIGdldCAic29tZXRoaW5nL2Fu
+eXRoaW5nIiB3b3JraW5nLgo+ID4KPiA+IElmIHlvdSBhdHRhY2ggdG8gYW4gRUxGIHN5bWJvbCAo
+ZnVuY3Rpb24pLCB0aGVuIHRoZXJlIGlzIG5vIFVTRFQgaW4KPiA+IHBsYXksIHNvIGl0IHNob3Vs
+ZCBub3QgYmUgcmVsYXRlZCB0byB0aGUgaXNzdWUgeW91IGhhdmUuCj4KPiBUaGF0IGlzIHdoYXQg
+SSB3YXMgdGhpbmtpbmcgd2hpY2ggaXMgd2h5IEkgd2FudGVkIHRvIHRyeSBpdC4KPgo+ID4KPiA+
+IEJ1dCBpZiB5b3VyIGZ1bmN0aW9ucyBoYXBwZW4gdG8gYmUgaW5saW5lZCwgdGhlbiB0aGVyZSB3
+aWxsIGJlIG5vdGhpbmcKPiA+IHRvIGF0dGFjaCB0by4gUGVyaGFwcyB0aGlzIGlzIHdoYXQgaGFw
+cGVucyB0aGVyZSA/Cj4KPiBJIGRvbid0IHNlZSBhbnkgZXZpZGVuY2Ugb2YgYW55dGhpbmcgYmVp
+bmcgaW5saW5lZCBpbiB0aGlzIG1vZHVsZS4gIEkKPiBncmVwcGVkIHRoZSBjb2RlIHRvIHZlcmlm
+eS4KPgo+IEJhY2sgdG8gYmVpbmcgc3R1bXBlZC9zdHVjay4KCkkgY2FuIGRvIHRyYWNlLWNtZCBz
+dHVmZiBhbmQgaXQgd29ya3MuICBUaGUgaGVsbG8gd29ybGQgYWJvdmUgd29ya3Mgc28KSSBkb24n
+dCAidGhpbmsiIHRoaXMgaXMgYSBwcm9ibGVtIGJ1dCBhZ2FpbiBpbiBmdWxsIGRpc2Nsb3N1cmUg
+SSdsbAptZW50aW9uL2FzayBhYm91dCBpdC4KCkRvZXMgYW55IG9mIHRoZSBsdHRuZyB0b29scy9s
+aWJzIGRlcGVuZCBvbiBrZXJuZWwgaGVhZGVycz8gIEkgYXNrCmJlY2F1c2Ugb2xkIHlvY3RvIChE
+dW5mZWxsKSBidWlsdCBsdHRuZyBwYWNrYWdlIGFnYWluc3QgYSA0LnNvbWV0aGluZwprZXJuZWwg
+YW5kIHdlJ3JlIHJ1bm5pbmcgYSA1LjEwLjY5IGtlcm5lbCB0aGF0IGx0dG5nIG1vZHVsZXMgd2Vy
+ZQphZGRlZCB0byBpdCB3aXRoIHRoZSAiYnVpbHRpbiIgc2NyaXB0IGFuZCBidWlsdCB0aGF0IHdh
+eS4KClNob3VsZCBwcm9iYWJseSBoYXZlIHlvY3RvIGJ1aWxkIHRoZSBsb2NhbCBrZXJuZWwgdG9v
+LCBidXQga2VybmVsIGlzCmJlaW5nIGJ1aWx0IHN0YW5kIGFsb25lIGR1ZSB0byB2ZW5kb3Igc3R1
+ZmYgdGhhdCBoYXNuJ3QgYmVlbiBtYWlubGluZWQKeWV0LgoKSSdtIHJ1bm5pbmcgb3V0IG9mIHRo
+aW5ncyB0byB0aGluayBhYm91dCB0aGF0IGNvdWxkIGJlIHRoZSBpc3N1ZS4KCkIKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
+bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
