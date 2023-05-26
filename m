@@ -4,38 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF281C7EE23
-	for <lttng-dev@archiver.kernel.org>; Fri, 26 May 2023 14:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 890AFC77B73
+	for <lttng-dev@archiver.kernel.org>; Fri, 26 May 2023 15:15:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1685112942;
-	bh=ys4iUplO571HG5Lf+4I7feC5ICbJXJKEylu7YKUUdwU=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=KdVgRBwZsB9bpv/CRzljLgyLGiZpSqUDEa7rsb/lVCor0lnv46lbIZY0ZEoQ3SK56
-	 lkWVBn92vesgin/092pX8nMzRomnuVxy4l7KhEwIGOQ+QS+JTBKKb0oG8mjgEXBSO9
-	 ZXZxGz3nRqZixy3tjGZ/tvr/3MlOOR5RoW7kmo5mXf/JQTetCflmQscK1bOMKdur1u
-	 jR/UX6uZG8QfL+8uxcvFe2/y7BjRoHJek77BpyvwpGbav1GRIWkQp00RsLnNpPj3S1
-	 MQfDHVQo7PxADcowinSwZJuAMnNJNELu4VgwbLobzEPL0yLcXuTkunyVqrgzRCD2KP
-	 RKW4ReEKRnoMw==
+	s=default; t=1685114156;
+	bh=A+c72/o2uK8mRz8tuuWG+KoY5YgQBj06Tl3j4Xd12Ns=;
+	h=To:In-Reply-To:References:Date:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=Cdu4s0vDoa1dhUkxLlTKyCafADPsVhSWDtEbViacyXTRoZCP91GAU/WSPl3x2Z/QF
+	 A5wN5PhuQIdS7kShXizKvvVqF8DlBOOXVb9NQIVMmatd2hO237Co293My09vju/0BH
+	 GNoiRRLOrjgnrIn4gq+dnbX7Tt27JeawuqEBrcVykctOvzL12akeUkeLhretYI1xHD
+	 UM91OocUI2lZh2JjivrC+Y1OYsZqzq4jQ7lB4Dl/rzxfVn888o0RRw5FD9ujm7bUuJ
+	 oXqLrQDo5tDms6tthYrxbKHJMRFrayFGYWEWkL0opaLCyuOc2tMGvMv+2yDnm702PL
+	 97hTUYZ3y+S6g==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QSSf60gSVz1TGJ;
-	Fri, 26 May 2023 10:55:42 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4QST5S2v7bz1T1R;
+	Fri, 26 May 2023 11:15:56 -0400 (EDT)
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QSSf22h8bz1SlV
- for <lttng-dev@lists.lttng.org>; Fri, 26 May 2023 10:55:38 -0400 (EDT)
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QSSdz42vcz15h7
- for <lttng-dev@lists.lttng.org>; Fri, 26 May 2023 10:55:35 -0400 (EDT)
-Message-ID: <e115cc79-e024-a16d-ece9-23a8a798d5fc@efficios.com>
-Date: Fri, 26 May 2023 10:55:36 -0400
+ by lists.lttng.org (Postfix) with ESMTPS id 4QST5N6VhJz1T1P
+ for <lttng-dev@lists.lttng.org>; Fri, 26 May 2023 11:15:52 -0400 (EDT)
+Received: from localhost (modemcable094.169-200-24.mc.videotron.ca
+ [24.200.169.94])
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4QST5L0L5zz15dv;
+ Fri, 26 May 2023 11:15:50 -0400 (EDT)
+To: Dmitry Vyukov <dvyukov@google.com>, tsan-users <tsan-users@google.com>
+In-Reply-To: <CACT4Y+a22N7gvcePvBazN_=AyeigVaeH-nFX-ZqZbq49mftMPg@mail.gmail.com>
+Organization: EfficiOS
+References: <20230515201718.9809-1-odion@efficios.com>
+ <CACT4Y+b-THcfzGiXxu8Wc79GwiMsQREPnykffj52+sDLcDqHvw@mail.gmail.com>
+ <874jocl1lf.fsf@laura>
+ <CACT4Y+YFNRKTgA=s8+ntiwEsRVq9WAR2pBF3toyiGe08mUQ4Gg@mail.gmail.com>
+ <CACT4Y+Z8c30QQ3KFTaMq1Zgm-5fFCXEpNN3Kc9KWC+xzRkTzRQ@mail.gmail.com>
+ <87ttwbj9uz.fsf@laura> <87v8gj11ak.fsf@laura>
+ <CACT4Y+a22N7gvcePvBazN_=AyeigVaeH-nFX-ZqZbq49mftMPg@mail.gmail.com>
+Date: Fri, 26 May 2023 11:15:49 -0400
+Message-ID: <87a5xr15ui.fsf@laura>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [lttng-dev] Tracing Summit 2023 CFP and Registration (Sept. 17-18,
- 2023)
+Subject: Re: [lttng-dev] [PATCH 00/11] Add support for TSAN to liburcu
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -47,83 +53,35 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Olivier Dion via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Olivier Dion <odion@efficios.com>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hello all,
+On Wed, 24 May 2023, Dmitry Vyukov <dvyukov@google.com> wrote:
+> On Tue, 23 May 2023 at 18:05, Olivier Dion <odion@efficios.com> wrote:
 
-Registration for the 2023 Tracing Summit [0] is now open! This year,
-the event is co-located with Open Source Summit Europe 2023 [1] and
-will be held in Bilbao, Spain on the 17th and 18th of September, 2023.
+> I don't this this is true in the C/C++ memory model:
+> "the preceding atomic exchange with sequential consistency already
+> acts as an implicit release (in term of memory barrier) for the
+> following store".
+>
+> std::atomic_thread_fence does affect all preceding/subsequent
+> operations, but an atomic memory operation only affects ordering on
+> that variable, it doesn't also serve as a standalone memory fence.
 
-There are several options for registration:
-- In-person ($80.00 USD):
-     - Add the Tracing Summit to your Open Source Summit Europe ticket [2]
-     - Register solely for the Tracing Summit [3]
-- Virtual (Free) [4]
+After reading the standard, we concur with you.  We had to revisit the
+memory model used by URCU to understand the conflict.  While doing so,
+we had to adapt some of the algorithms that were assuming implicit full
+memory barriers with operation such as CAS.
 
-Applicant speakers may register now, and accepted speakers will have
-their ticket cost reimbursed.
-
-----
-
-The 2023 Tracing Summit is a two-day, single-track conference on the topic
-of tracing. The event focuses on software and hardware tracing, gathering
-developers and end-users of tracing and trace analysis tools. The main goal
-of the Tracing Summit is to provide space for discussion between people of
-the various areas that benefit from tracing, namely parallel, distributed
-and/or real-time systems, as well as kernel development.
-
-- Event dates: Sunday, September 17th - Monday, September 18th
-- Location: Bilbao, Spain and virtually (co-located with Open Source Summit
-   Europe)
-- Registration cost:
-     - In person: $80.00 USD (Free for speakers)
-     - Virtual: Free
-- Call for proposals link: [5]
-
-
-The Tracing Summit Call for proposals is currently open! We are welcoming
-30 minute presentations from both end users and developers, on topics such
-as live tracing and monitoring, investigation workflow of real-time latency
-issues, and more. Please refer to the CFP page [5] for a full list of topic
-suggestions.
-
-Important dates:
-- Call for proposals close: Friday, June 16th, at 11:59PM EDT
-- Call for proposals notifications: Friday, June 23rd
-- Schedule announcement: Tuesday, June 27th
-- Event dates: Sunday, September 17th - Monday, September 18th
-
-To receive updates about the Tracing Summit, you may subscribe to the event's
-mailing list [6].
-
-Please send any questions about this conference to <info@tracingsummit.org>.
-
-The 2023 Tracing Summit is sponsored by EfficiOS and organized by Erica Bugden
-(EfficiOS), Olivier Dion (EfficiOS), and Mathieu Desnoyers (EfficiOS) on the
-behalf of the Linux Foundation Diagnostic and Monitoring Workgroup [7].
-
-Thanks,
-
-Mathieu
-
-[0]: https://tracingsummit.org
-[1]: https://events.linuxfoundation.org/open-source-summit-europe/
-[2]: https://events.linuxfoundation.org/open-source-summit-europe/features/co-located-events/#tracing-summit
-[3]: https://cvent.me/Gn0nkR (In person)
-[4]: https://cvent.me/xywylX (Virtual)
-[5]: https://cfp.tracingsummit.org/ts2023/cfp
-[6]: https://eepurl.com/goakfv
-[7]: https://diamon.org/
-
+Thank for the insight!
 
 -- 
-Mathieu Desnoyers
+Olivier Dion
 EfficiOS Inc.
 https://www.efficios.com
 _______________________________________________
