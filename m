@@ -4,59 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 194A5C77B73
-	for <lttng-dev@archiver.kernel.org>; Wed, 24 May 2023 08:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57B48C77B7C
+	for <lttng-dev@archiver.kernel.org>; Fri, 26 May 2023 05:33:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1684916109;
-	bh=B/NVeDQpy+ocj983K17EdhO2PZxULh1TaGMH+hFfC4U=;
-	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=Uukwuy1AJx0tgqY5tDRiDJtY2emgzifS1r3JZqPALB9KhgomDuUTh647EgZILt1Th
-	 s93NW4aHCJ2wqQsjjPNSog9LyV59HKogJhiq6/Nl71UnE7NLKnF9/foeMm4Gr2gMcK
-	 vGqYat3HaA6EOdS6LcTMYVbKXGKfBcOauqgtxfrRcZds8wIJmu7LYdYyOnCeCGHnST
-	 x1HF8o2fdiLUAu4Wnx3f2aXWJEpJ2K0ia6ty3R0ptJKJWMu+bF/xYLRwkISn3O0k9K
-	 6RQUGHBJnenvrbZNu+aFk+RlLmV0ftKRcL19/H1cT+ldaYEZgR1BhlaF5996SPd7oq
-	 1UIW00Wh6jkGA==
+	s=default; t=1685079217;
+	bh=xrg5Q8PpZeMnYfsPmfYIQPf8ieETVaq2rC9YqhKQVtI=;
+	h=Date:References:Cc:In-Reply-To:To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=DI9DVfVHK7tlKn2k4Sf+xeHL9SjrS7Vx4z0/3CskZYExN7Hi++fTn+0GF9zGLkNc5
+	 rBTbnqUTdQcvIgAxMs0GWBhjSvld+qxRQDev+2nHkCR/pm5W26Tpjb6PgpCoqVBm7e
+	 8aqkWFJvpCX5u3kif0UWPDWf642YmgxKYuJ2Qcb1jKNc8mm5W5C+j/90Em6G6DPinw
+	 VzrWHk075RjHMfJpWbLXCM2+aom8UehVCuGOMQygV3SQDnfsWAOY4HU+4J/7yaTRT8
+	 MCpvx/nVTN+zsUzErOuHQW474GBToTqiXhSfvFlBEcF+i06DrCvJQvw3a7bFzoYMe3
+	 xi0ksoI65qc0Q==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QR3rs04YXz1HXZ;
-	Wed, 24 May 2023 04:15:08 -0400 (EDT)
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by lists.lttng.org (Postfix) with ESMTPS id 4QR3rp6N0lz1HPZ
- for <lttng-dev@lists.lttng.org>; Wed, 24 May 2023 04:15:06 -0400 (EDT)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-4f14865fcc0so1146e87.0
- for <lttng-dev@lists.lttng.org>; Wed, 24 May 2023 01:15:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1684916105; x=1687508105;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=cDBuuvCVPotqfG3IRbIc5/pr9WBHLxSpdlqlGMXV/4w=;
- b=d0jA0QL0+2uTtvNdkAuvff7Qzn4lUbdsGhMY5dU1gATernKxgLs/kMMAxrVZ5zYIx8
- 9NOcCWuw/QO7gPFClEjyF+OZVP38mvkYBkoQ66DCTOYLsc//75Q3Ed+ZkKbIFKUwnN5C
- cnDLvG0K5tdOc/jcBrBDJsmnBSbTsK38NuEIt624xtVHRNON0SuRz7dNW19EZzuetkZP
- CoxXLAPerK/HUQyjKCw3m3R2G7yXtopehQrVN2C83r7aZmM0qC0zpgMKP48czaRTmCps
- kHFdRMuFhgJi1UwI0PvUXelCumvUCWzlCvx39ftLN+AcKOr4UprlNFjo5QOtmEQa1TH6
- X6kg==
-X-Gm-Message-State: AC+VfDzKbIHks0Ggssc1c+ToTZ5tQGDIbQ6winZNHQUkdnf3O0htNw7N
- mPG8Gr8XPxPPF3ww42f5PmwrfomE7WZ759G8xEMlLg==
-X-Google-Smtp-Source: ACHHUZ4ctLjvJAR1EZMBsiLWghxJPGJDCA/MGDn/xXrdpTEhsZnn5yt5S1L2zClcgbiDEok6pXo7X7pvVQHbSfZLRVY=
-X-Received: by 2002:ac2:5f1c:0:b0:4f3:a7c6:590e with SMTP id
- 28-20020ac25f1c000000b004f3a7c6590emr51852lfq.7.1684916105003; Wed, 24 May
- 2023 01:15:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230515201718.9809-1-odion@efficios.com>
- <CACT4Y+b-THcfzGiXxu8Wc79GwiMsQREPnykffj52+sDLcDqHvw@mail.gmail.com>
- <874jocl1lf.fsf@laura>
- <CACT4Y+YFNRKTgA=s8+ntiwEsRVq9WAR2pBF3toyiGe08mUQ4Gg@mail.gmail.com>
- <CACT4Y+Z8c30QQ3KFTaMq1Zgm-5fFCXEpNN3Kc9KWC+xzRkTzRQ@mail.gmail.com>
- <87ttwbj9uz.fsf@laura> <87v8gj11ak.fsf@laura>
-In-Reply-To: <87v8gj11ak.fsf@laura>
-Date: Wed, 24 May 2023 10:14:51 +0200
-Message-ID: <CACT4Y+a22N7gvcePvBazN_=AyeigVaeH-nFX-ZqZbq49mftMPg@mail.gmail.com>
-To: Olivier Dion <odion@efficios.com>, tsan-users <tsan-users@google.com>
+	by lists.lttng.org (Postfix) with ESMTP id 4QSD9X3Pj2z1T3J;
+	Fri, 26 May 2023 01:33:36 -0400 (EDT)
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com
+ [66.111.4.26])
+ by lists.lttng.org (Postfix) with ESMTPS id 4QSD9W0JdFz1T3B
+ for <lttng-dev@lists.lttng.org>; Fri, 26 May 2023 01:33:34 -0400 (EDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+ by mailout.nyi.internal (Postfix) with ESMTP id E530B5C0093;
+ Fri, 26 May 2023 01:33:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+ by compute5.internal (MEProxy); Fri, 26 May 2023 01:33:33 -0400
+X-ME-Sender: <xms:rURwZEp6LBtDfTzULomqKu2f5Axgw1CC9lTFZMK1kls-snzBtjewLQ>
+ <xme:rURwZKqp_LchFSj8QGfri73YprHBDqG5jXtj3613dCT8dp0CKGTTYoZ_F2BEHWdbr
+ zVP1gzoebe6Ly6Hhp4>
+X-ME-Received: <xmr:rURwZJNRGyMgOw1NTOZFAc-bDBf3IXHNomBG0lparug0ZXqhfuIXuOGo81Q0YOyKVAUuzNNKEgVa9oQVSia9x0Mnl1JnEaVJHzZB>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejkedgleeiucetufdoteggodetrfdotf
+ fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+ uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+ cujfgurheptgfghfggufffkfhfvegjvffosehtqhhmtdhhtdejnecuhfhrohhmpefqnhgu
+ rhgvjhcuufhurhpuuceoohhnughrvghjsehsuhhrhidrohhrgheqnecuggftrfgrthhtvg
+ hrnhepgfehhfduhfduieefjeethffhveduudeffffhfeeitddvtdfhhfehvdekgeehieev
+ necuffhomhgrihhnpehlthhtnhhgrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+ frrghrrghmpehmrghilhhfrhhomhepohhnughrvghjsehsuhhrhidrohhrgh
+X-ME-Proxy: <xmx:rURwZL45U3BIW7wflVRqj4v7zDPlt4kukPZFhoyOt7AOUv_jUMVCgQ>
+ <xmx:rURwZD4OvNQpDj0GyyEMxbh68JxcoCRiRYGTUk7h7P6ukST6u87Z2w>
+ <xmx:rURwZLhg7O4GgkMQgueZ_kC0ZjFiiWVKoFNQzQeO05Thsla-KauAng>
+ <xmx:rURwZG18rMJUdUjeHJmso5J3vf2r7y-xRI6m56s6s43cH2luQmb0cQ>
+Feedback-ID: ida81469e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 26 May 2023 01:33:33 -0400 (EDT)
+Mime-Version: 1.0 (1.0)
+Date: Fri, 26 May 2023 07:33:20 +0200
+Message-Id: <EFA4F8F7-0767-4FEF-8EA5-DDEA05F3296C@sury.org>
+References: <CACT4Y+a22N7gvcePvBazN_=AyeigVaeH-nFX-ZqZbq49mftMPg@mail.gmail.com>
+Cc: Olivier Dion <odion@efficios.com>, tsan-users <tsan-users@google.com>,
+ lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@kernel.org>,
+ Tony Finch <fanf@isc.org>
+In-Reply-To: <CACT4Y+a22N7gvcePvBazN_=AyeigVaeH-nFX-ZqZbq49mftMPg@mail.gmail.com>
+To: Dmitry Vyukov <dvyukov@google.com>
+X-Mailer: iPhone Mail (20G5026e)
 Subject: Re: [lttng-dev] [PATCH 00/11] Add support for TSAN to liburcu
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -69,51 +71,55 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Dmitry Vyukov via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Ond=C5=99ej_Sur=C3=BD_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?utf-8?Q?Ond=C5=99ej_Sur=C3=BD?= <ondrej@sury.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On Tue, 23 May 2023 at 18:05, Olivier Dion <odion@efficios.com> wrote:
->
-> Hi Dmitry,
->
-> We do have a new issue and we think it might be a limitation from TSAN.
->
-> Find attached a test program that we believe is correct.  You can
-> compile it with `gcc -fsanitize=thread test.c -pthread'.
->
->
-> TSAN flags a race condition between the atomic store relaxed at line 36
-> and the free at line 81.
->
-> We can solve the issue by replacing the atomic store relaxed with a
-> atomic store release.  However, the preceding atomic exchange with
-> sequential consistency already acts as an implicit release (in term of
-> memory barrier) for the following store, making the release semantic
-> redundant.
->
-> We've found an alternative to fix this by ignoring the thread during the
-> relaxed store (line 39).  However, what we would like is to annotate the
-> memory stored (line 45).
->
-> My theory (I don't know the internal of TSAN much) is that TSAN thinks
-> for some reason that the atomic store relaxed happen at the same epoch
-> as the free, resulting in a false positive.  If so, m
-
-
-I don't this this is true in the C/C++ memory model:
-"the preceding atomic exchange with sequential consistency already
-acts as an implicit release (in term of memory barrier) for the
-following store".
-
-std::atomic_thread_fence does affect all preceding/subsequent
-operations, but an atomic memory operation only affects ordering on
-that variable, it doesn't also serve as a standalone memory fence.
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+QSBsaXR0bGUgYml0IHJlbGF0ZWQgcXVlc3Rpb24vcHJvYmxlbSAtIHNvbWUgb2Ygb3VyIHN5c3Rl
+bSB0ZXN0IGpvYnMgZ290IHNpZ25pZmljYW50bHkgc2xvd2VyICgzeC01eCkgd2l0aCAqKmNsYW5n
+LTE2KiogVFNBTiBhZnRlciB3ZSBpbnRlZ3JhdGVkIGxpYnVyY3UgdG8gQklORCA5LiBUaGUgR0ND
+ICgxMy4xLjEpIFRTQU4gZG9lc27igJl0IGV4aGliaXQgdGhpcyBiZWhhdmlvci4KClRoZSBsaWJ1
+cmN1IGludGVncmF0aW9uIGluIEJJTkQgOSBpcyB2ZXJ5IGxpZ2h0IGF0IHRoZSBtb21lbnQgLSB3
+ZSB1c2UgbGlidXJjdSBmb3IgcXB0cmllIGFuZCB0aGVyZeKAmXMgc29tZSB1c2FnZSBvZiB3ZmNx
+dWV1ZSBmb3IgcXVldWluZyBqb2JzKGNhbGxiYWNrcykgYmV0d2VlbiB0aHJlYWRzLgoKV2Ugd2Vy
+ZSBub3QgYWJsZSB0byBwdXQgYSBmaW5nZXIgb24gaXQgeWV0LCBidXQgc2F5aW5nIHRoaXMgYWxv
+dWQgbWlnaHQgaGVscCBkaWFnbm9zZSB0aGlzLgoKT25kcmVqCi0tCk9uZMWZZWogU3Vyw70gPG9u
+ZHJlakBzdXJ5Lm9yZz4gKEhlL0hpbSkKCj4gT24gMjQuIDUuIDIwMjMsIGF0IDEwOjE1LCBEbWl0
+cnkgVnl1a292IHZpYSBsdHRuZy1kZXYgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+IHdyb3Rl
+Ogo+IAo+IO+7v09uIFR1ZSwgMjMgTWF5IDIwMjMgYXQgMTg6MDUsIE9saXZpZXIgRGlvbiA8b2Rp
+b25AZWZmaWNpb3MuY29tPiB3cm90ZToKPj4gCj4+IEhpIERtaXRyeSwKPj4gCj4+IFdlIGRvIGhh
+dmUgYSBuZXcgaXNzdWUgYW5kIHdlIHRoaW5rIGl0IG1pZ2h0IGJlIGEgbGltaXRhdGlvbiBmcm9t
+IFRTQU4uCj4+IAo+PiBGaW5kIGF0dGFjaGVkIGEgdGVzdCBwcm9ncmFtIHRoYXQgd2UgYmVsaWV2
+ZSBpcyBjb3JyZWN0LiAgWW91IGNhbgo+PiBjb21waWxlIGl0IHdpdGggYGdjYyAtZnNhbml0aXpl
+PXRocmVhZCB0ZXN0LmMgLXB0aHJlYWQnLgo+PiAKPj4gCj4+IFRTQU4gZmxhZ3MgYSByYWNlIGNv
+bmRpdGlvbiBiZXR3ZWVuIHRoZSBhdG9taWMgc3RvcmUgcmVsYXhlZCBhdCBsaW5lIDM2Cj4+IGFu
+ZCB0aGUgZnJlZSBhdCBsaW5lIDgxLgo+PiAKPj4gV2UgY2FuIHNvbHZlIHRoZSBpc3N1ZSBieSBy
+ZXBsYWNpbmcgdGhlIGF0b21pYyBzdG9yZSByZWxheGVkIHdpdGggYQo+PiBhdG9taWMgc3RvcmUg
+cmVsZWFzZS4gIEhvd2V2ZXIsIHRoZSBwcmVjZWRpbmcgYXRvbWljIGV4Y2hhbmdlIHdpdGgKPj4g
+c2VxdWVudGlhbCBjb25zaXN0ZW5jeSBhbHJlYWR5IGFjdHMgYXMgYW4gaW1wbGljaXQgcmVsZWFz
+ZSAoaW4gdGVybSBvZgo+PiBtZW1vcnkgYmFycmllcikgZm9yIHRoZSBmb2xsb3dpbmcgc3RvcmUs
+IG1ha2luZyB0aGUgcmVsZWFzZSBzZW1hbnRpYwo+PiByZWR1bmRhbnQuCj4+IAo+PiBXZSd2ZSBm
+b3VuZCBhbiBhbHRlcm5hdGl2ZSB0byBmaXggdGhpcyBieSBpZ25vcmluZyB0aGUgdGhyZWFkIGR1
+cmluZyB0aGUKPj4gcmVsYXhlZCBzdG9yZSAobGluZSAzOSkuICBIb3dldmVyLCB3aGF0IHdlIHdv
+dWxkIGxpa2UgaXMgdG8gYW5ub3RhdGUgdGhlCj4+IG1lbW9yeSBzdG9yZWQgKGxpbmUgNDUpLgo+
+PiAKPj4gTXkgdGhlb3J5IChJIGRvbid0IGtub3cgdGhlIGludGVybmFsIG9mIFRTQU4gbXVjaCkg
+aXMgdGhhdCBUU0FOIHRoaW5rcwo+PiBmb3Igc29tZSByZWFzb24gdGhhdCB0aGUgYXRvbWljIHN0
+b3JlIHJlbGF4ZWQgaGFwcGVuIGF0IHRoZSBzYW1lIGVwb2NoCj4+IGFzIHRoZSBmcmVlLCByZXN1
+bHRpbmcgaW4gYSBmYWxzZSBwb3NpdGl2ZS4gIElmIHNvLCBtCj4gCj4gCj4gSSBkb24ndCB0aGlz
+IHRoaXMgaXMgdHJ1ZSBpbiB0aGUgQy9DKysgbWVtb3J5IG1vZGVsOgo+ICJ0aGUgcHJlY2VkaW5n
+IGF0b21pYyBleGNoYW5nZSB3aXRoIHNlcXVlbnRpYWwgY29uc2lzdGVuY3kgYWxyZWFkeQo+IGFj
+dHMgYXMgYW4gaW1wbGljaXQgcmVsZWFzZSAoaW4gdGVybSBvZiBtZW1vcnkgYmFycmllcikgZm9y
+IHRoZQo+IGZvbGxvd2luZyBzdG9yZSIuCj4gCj4gc3RkOjphdG9taWNfdGhyZWFkX2ZlbmNlIGRv
+ZXMgYWZmZWN0IGFsbCBwcmVjZWRpbmcvc3Vic2VxdWVudAo+IG9wZXJhdGlvbnMsIGJ1dCBhbiBh
+dG9taWMgbWVtb3J5IG9wZXJhdGlvbiBvbmx5IGFmZmVjdHMgb3JkZXJpbmcgb24KPiB0aGF0IHZh
+cmlhYmxlLCBpdCBkb2Vzbid0IGFsc28gc2VydmUgYXMgYSBzdGFuZGFsb25lIG1lbW9yeSBmZW5j
+ZS4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
+aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
