@@ -4,38 +4,38 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9EC0C77B7A
-	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jun 2023 18:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA191C7EE23
+	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jun 2023 18:55:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
 	s=default; t=1686164099;
-	bh=V1PK0qMKGp6g+snnSGOcctx+UrAq17tfM3eRn845AGc=;
+	bh=Qghdac1OpH+mSb03rOd1gDi/KV41H1CSRaEtGaFSwdU=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=Rjt/Lxrg1g8sntXgapn6sAK98dc6NHCZAHI/LGe6DCDSvDFYkRkfeqLcMMwJZMEBK
-	 uYku8mF3P8wkMz5YLDBXCc1XMksqZAF+ez4VfkdazdAhrpm2swgVYNpu4dA+QVLEIM
-	 eAXnJ4dhjeOEXIGQTCzCoyMybotfiYQmDZA0iOnsrFFCV2FyxBWWWJiRVTndXlTcRO
-	 BW9NOvwVWLdYzyqMt8XKJg7hQhgOO+2010lFaHP0/wiSpiXpQBtPqC+F9CMGgrciFA
-	 nrtZKVgqGhZMT6qlE3NgYRA8JPkKkVMxA8++7KfK7G7Dl6REmJ2Ra3+jW/P80BgstE
-	 naSyKkg0Cc2QQ==
+	b=tRrIg7l/uVNrjeSaTAwgShfezXzQKVuxcPYmThOjjUxmXasoL5Q8EdaBQv9A6cUGM
+	 uEH4727+K7BRNgqbpBmFDT+X3RBe2DnubJIyrc2TOR/YXQFMBDFKRFXBIyvN8enZub
+	 FM9kdIUmdzU7MOqHsPLFnfmtL4CqPg0QfjA6BOB60+/vnAYy1ea8TgTNgAuh8EeATP
+	 0naAnGUWzQYx8+P/hZgG58mG7kEY6LzmlJO2dD6SvloJqdw0RizgCRkj9eT9Jj/SAW
+	 lPxVTLTihDG3adp7kGLaoDDasR7tMTnr1ONmf23ipkO7D9vGSFR2IatChkMkav67hL
+	 MsHDftHx+h30w==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QbxNf73lXz1XKR;
-	Wed,  7 Jun 2023 14:54:58 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4QbxNg3R4Kz1Xvb;
+	Wed,  7 Jun 2023 14:54:59 -0400 (EDT)
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QbxNW6qhmz1XgD
- for <lttng-dev@lists.lttng.org>; Wed,  7 Jun 2023 14:54:51 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4QbxNX2Sbfz1XJt
+ for <lttng-dev@lists.lttng.org>; Wed,  7 Jun 2023 14:54:52 -0400 (EDT)
 Received: from laura.hitronhub.home (modemcable094.169-200-24.mc.videotron.ca
  [24.200.169.94])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QbxNW4x34z16r1;
- Wed,  7 Jun 2023 14:54:51 -0400 (EDT)
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4QbxNX0Vfyz16yv;
+ Wed,  7 Jun 2023 14:54:52 -0400 (EDT)
 To: lttng-dev@lists.lttng.org
-Date: Wed,  7 Jun 2023 14:53:49 -0400
-Message-Id: <20230607185359.8125-3-odion@efficios.com>
+Date: Wed,  7 Jun 2023 14:53:51 -0400
+Message-Id: <20230607185359.8125-5-odion@efficios.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230515201718.9809-1-odion@efficios.com>
 References: <20230515201718.9809-1-odion@efficios.com>
 MIME-Version: 1.0
-Subject: [lttng-dev] [PATCH v2 02/12] urcu/compiler: Use atomic builtins if
+Subject: [lttng-dev] [PATCH v2 04/12] urcu/system: Use atomic builtins if
  configured
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -57,38 +57,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Use __atomic_signal_fence(__ATOMIC_SEQ_CST) for cmm_barrier() if
-configured to use atomic builtins.
+If configured to use atomic builtins, use them for implementing the
+CMM_LOAD_SHARED and CMM_STORE_SHARED macros.
 
-Change-Id: Ib168b50f1e97a8da861b92d6882c56db230ebb2c
+Change-Id: I3eaaaaf0d26c47aced6e94b40fd59c7b8baa6272
 Co-authored-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Olivier Dion <odion@efficios.com>
 ---
- include/urcu/compiler.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ include/urcu/system.h | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/include/urcu/compiler.h b/include/urcu/compiler.h
-index 2f32b38..3604488 100644
---- a/include/urcu/compiler.h
-+++ b/include/urcu/compiler.h
-@@ -25,10 +25,16 @@
- # include <type_traits>	/* for std::remove_cv */
- #endif
+diff --git a/include/urcu/system.h b/include/urcu/system.h
+index faae390..f184aad 100644
+--- a/include/urcu/system.h
++++ b/include/urcu/system.h
+@@ -19,9 +19,28 @@
+  * all copies or substantial portions of the Software.
+  */
  
 +#include <urcu/config.h>
-+
- #define caa_likely(x)	__builtin_expect(!!(x), 1)
- #define caa_unlikely(x)	__builtin_expect(!!(x), 0)
+ #include <urcu/compiler.h>
+ #include <urcu/arch.h>
  
--#define	cmm_barrier()	__asm__ __volatile__ ("" : : : "memory")
 +#ifdef CONFIG_RCU_USE_ATOMIC_BUILTINS
-+#  define cmm_barrier() __atomic_signal_fence(__ATOMIC_SEQ_CST)
++
++#define CMM_LOAD_SHARED(x)			\
++	__atomic_load_n(&(x), __ATOMIC_RELAXED)
++
++#define _CMM_LOAD_SHARED(x) CMM_LOAD_SHARED(x)
++
++#define CMM_STORE_SHARED(x, v)					\
++	__extension__						\
++	({							\
++		__typeof__(v) _v = (v);				\
++		__atomic_store_n(&(x), _v, __ATOMIC_RELAXED);	\
++		_v;						\
++	})
++
++#define _CMM_STORE_SHARED(x, v) CMM_STORE_SHARED(x, v)
++
 +#else
-+#  define cmm_barrier() asm volatile ("" : : : "memory")
-+#endif
- 
  /*
-  * Instruct the compiler to perform only a single access to a variable
+  * Identify a shared load. A cmm_smp_rmc() or cmm_smp_mc() should come
+  * before the load.
+@@ -56,4 +75,6 @@
+ 		_v = _v;	/* Work around clang "unused result" */	\
+ 	})
+ 
++#endif	/* CONFIG_RCU_USE_ATOMIC_BUILTINS */
++
+ #endif /* _URCU_SYSTEM_H */
 -- 
 2.40.1
 
