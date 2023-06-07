@@ -4,38 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3896C7EE23
-	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jun 2023 18:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC2E5C7EE43
+	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jun 2023 18:55:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
 	s=default; t=1686164100;
-	bh=c7vowpLHfvHbZ6z8I5ONGJ7l5ncHwXzCtRpHn4TQX2o=;
+	bh=UYcUqSXAEjLYeLcjkCChDNAAlg4zdn4bY7nFtVggcEE=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=zGMRmj7Yxul5dp1Lr5hteYBG3EZmVS/6K6K7qUG0QHvJ7MOzlPFjC18rh97JZfdfs
-	 IDh0tymtTf0jH7iR9ReWzR5LUXqEJO0KbsLXkEoLoTpB02LWiAwVmNgsTBucHNFpKd
-	 /1NtawA6QqmOFCkehgRUhWygl7O/TvxZM2fFyNfaA6rrclW6nlSzkRqsXp+qnBAhlo
-	 wwMoLGg+YDxjRG7PZFy+33TQUzDjlZiCw+AaYISqp+ZC3IYwZG4p+p17YN5g+b2EdJ
-	 yEku0C7R9zQ8dJ+tAeLxB4dZBzfpkyEbvYWC8h4HzMCW94Jli6UwSMe1AvBfkagt7a
-	 3Px4CPHAI78Lw==
+	b=K7LZlxpR2fryPZwHH3CR2E/m4QnXaz1lz+OB0W3uHXAJwUJaaAfesLdt02F4R5n3A
+	 FbQbsfZSJHup0aegMKPqNox2NaqFAVvQYJ9gnxdGHN5DRsnIl3HaeY6HgYlRJsuhn8
+	 ohjyao3KLt52h9xKAnuPXM1RqD+Bswf1curHHsuA73g2Q3ASUUXeyuPbzBN6p2siXk
+	 TpHj1EjUaHd+HaapUY5/Y1NGoJOYTkzDgwBtItlQn4p4IXRW98ifPeeDrxYLo3IANW
+	 rsgAGYiX0v1AmGB3EI+jITB4g2CKSyKXbp8KZUB2HjqqB93m8I6V212+3PjzWBNaOe
+	 LNTSEC5FeIahg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QbxNh2cWjz1Xvg;
+	by lists.lttng.org (Postfix) with ESMTP id 4QbxNh60KMz1Xqv;
 	Wed,  7 Jun 2023 14:55:00 -0400 (EDT)
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QbxNX4kgXz1XhW
- for <lttng-dev@lists.lttng.org>; Wed,  7 Jun 2023 14:54:52 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4QbxNY23HYz1XvV
+ for <lttng-dev@lists.lttng.org>; Wed,  7 Jun 2023 14:54:53 -0400 (EDT)
 Received: from laura.hitronhub.home (modemcable094.169-200-24.mc.videotron.ca
  [24.200.169.94])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QbxNX3H1lz16yw;
- Wed,  7 Jun 2023 14:54:52 -0400 (EDT)
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4QbxNY0STDz16yy;
+ Wed,  7 Jun 2023 14:54:53 -0400 (EDT)
 To: lttng-dev@lists.lttng.org
-Date: Wed,  7 Jun 2023 14:53:53 -0400
-Message-Id: <20230607185359.8125-7-odion@efficios.com>
+Date: Wed,  7 Jun 2023 14:53:56 -0400
+Message-Id: <20230607185359.8125-10-odion@efficios.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230515201718.9809-1-odion@efficios.com>
 References: <20230515201718.9809-1-odion@efficios.com>
 MIME-Version: 1.0
-Subject: [lttng-dev] [PATCH v2 06/12] urcu-wait: Fix wait state load/store
+Subject: [lttng-dev] [PATCH v2 09/12] tests/unit/test_build: Quiet unused
+ return value
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -56,49 +57,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-The state of a wait node must be accessed atomically. Also, the action
-of busy loading until the teardown state is seen must follow a
-CMM_ACQUIRE semantic while storing the teardown must follow a
-CMM_RELEASE semantic.
-
-Change-Id: I9cd9cf4cd9ab2081551d7f33c0b1c23c3cf3942f
+Change-Id: Ie5a18e0ccc4b1b5ee85c5bd140561cc2ff9e2fbc
 Co-authored-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Olivier Dion <odion@efficios.com>
 ---
- src/urcu-wait.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tests/unit/test_build.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/src/urcu-wait.h b/src/urcu-wait.h
-index ef5f7ed..4667a13 100644
---- a/src/urcu-wait.h
-+++ b/src/urcu-wait.h
-@@ -135,7 +135,7 @@ void urcu_adaptative_wake_up(struct urcu_wait_node *wait)
- 			urcu_die(errno);
- 	}
- 	/* Allow teardown of struct urcu_wait memory. */
--	uatomic_or(&wait->state, URCU_WAIT_TEARDOWN);
-+	uatomic_or_mo(&wait->state, URCU_WAIT_TEARDOWN, CMM_RELEASE);
+diff --git a/tests/unit/test_build.c b/tests/unit/test_build.c
+index f6b667c..702c1ef 100644
+--- a/tests/unit/test_build.c
++++ b/tests/unit/test_build.c
+@@ -129,10 +129,10 @@ void test_build_rcu_dereference(void)
+ 	static struct a_clear_struct *clear = NULL;
+ 	static struct a_clear_struct *const clear_const = NULL;
+ 
+-	rcu_dereference(opaque);
+-	rcu_dereference(opaque_const);
+-	rcu_dereference(clear);
+-	rcu_dereference(clear_const);
++	(void) rcu_dereference(opaque);
++	(void) rcu_dereference(opaque_const);
++	(void) rcu_dereference(clear);
++	(void) rcu_dereference(clear_const);
  }
  
- /*
-@@ -193,7 +193,7 @@ skip_futex_wait:
- 			break;
- 		caa_cpu_relax();
- 	}
--	while (!(uatomic_read(&wait->state) & URCU_WAIT_TEARDOWN))
-+	while (!(uatomic_load(&wait->state, CMM_ACQUIRE) & URCU_WAIT_TEARDOWN))
- 		poll(NULL, 0, 10);
- 	urcu_posix_assert(uatomic_read(&wait->state) & URCU_WAIT_TEARDOWN);
- }
-@@ -209,7 +209,7 @@ void urcu_wake_all_waiters(struct urcu_waiters *waiters)
- 			caa_container_of(iter, struct urcu_wait_node, node);
- 
- 		/* Don't wake already running threads */
--		if (wait_node->state & URCU_WAIT_RUNNING)
-+		if (uatomic_load(&wait_node->state, CMM_RELAXED) & URCU_WAIT_RUNNING)
- 			continue;
- 		urcu_adaptative_wake_up(wait_node);
- 	}
+ int main(void)
 -- 
 2.40.1
 
