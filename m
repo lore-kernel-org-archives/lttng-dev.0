@@ -4,38 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8017C7EE23
-	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jun 2023 18:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37520C77B7A
+	for <lttng-dev@archiver.kernel.org>; Wed,  7 Jun 2023 19:11:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1686164105;
-	bh=hYn5JScZNQR3nkD+Et5S3H+3s6zKvsbQvaUFSDkNhB4=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=J5+IjEcdfk4cf70GXtKx7ZwJY08t09jwSEscEI928ZcMrqugLQl4evF3YnBt7I/l9
-	 vZAkYVj23fIGg9/FT6sX3z2vIXV3kpReq7yIK7ghAR0PUeVREGDHYs8yld+PQx0dn/
-	 YzpGJKTH1+0/4qOu0DZZoWRo7ZukU099Ivx641ZKylVU2eWMS9bcG/dhX4tPYK93NH
-	 JJtbK741SGZ1GfjjW60YPIrYx4h1pUEPh9AIavOjE0uzktnXcOergWZ0C21l2XlRfD
-	 Czi6BanIYItSjLqZVxhoG/EZQrSRRdSoft7LvvEGxdRtxrVvTjrwIW8OA2piY8u0pa
-	 cEyE2AdBZPxqA==
+	s=default; t=1686165062;
+	bh=c/oGvNEz3ALJBRNaf/1HcrrQrm3xD9SRIpbVPEnJ7IY=;
+	h=Date:References:Cc:In-Reply-To:To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=tGTaiFkSEOeOA6pqdN6ovnipdhZ8CIJ0DYzRE6s4k7JzzSZgUfGkaJJa1RXyhli+d
+	 fuJUKvV1I0+45U+lfvS/pRli5OReIFAC/T/FU/ZZrGZJaoUGHdaYhp3HF5aXxUIze0
+	 dc4WgRv9logaLtA2nrEwxe5QCcncUQTgiB9JDfc8RjZxdAxdZNwJp2i3B+9+sOEqPp
+	 w27mQGPb7WB+dmKOkAMcl/xiQphE99rq4KeKL0O69TXW+xB4A9pp9T4VRes+fdP8vB
+	 qj61fbHnANyEsfrz3CWyHt/lsm3qRfZieGmI8PTdkPyzb7JBz4oft8REu2DDcfzPlE
+	 w8HfotArMJ+9w==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QbxNn4vVrz1XyX;
-	Wed,  7 Jun 2023 14:55:05 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QbxNg411zz1Y3q
- for <lttng-dev@lists.lttng.org>; Wed,  7 Jun 2023 14:54:59 -0400 (EDT)
-Received: from laura.hitronhub.home (modemcable094.169-200-24.mc.videotron.ca
- [24.200.169.94])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QbxNY32fTz179T;
- Wed,  7 Jun 2023 14:54:53 -0400 (EDT)
-To: lttng-dev@lists.lttng.org
-Date: Wed,  7 Jun 2023 14:53:58 -0400
-Message-Id: <20230607185359.8125-12-odion@efficios.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230515201718.9809-1-odion@efficios.com>
-References: <20230515201718.9809-1-odion@efficios.com>
-MIME-Version: 1.0
-Subject: [lttng-dev] [PATCH v2 11/12] Add cmm_emit_legacy_smp_mb()
+	by lists.lttng.org (Postfix) with ESMTP id 4Qbxl95Tkgz1Xyc;
+	Wed,  7 Jun 2023 15:11:01 -0400 (EDT)
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com
+ [66.111.4.27])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Qbxl837h8z1Xml
+ for <lttng-dev@lists.lttng.org>; Wed,  7 Jun 2023 15:10:55 -0400 (EDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+ by mailout.nyi.internal (Postfix) with ESMTP id 12FD25C010C;
+ Wed,  7 Jun 2023 15:04:42 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+ by compute4.internal (MEProxy); Wed, 07 Jun 2023 15:04:42 -0400
+X-ME-Sender: <xms:ydSAZG1hSZ6rGEy8laULnRBKwb8CqD9JLujzWv1ZwD-fE8XplWBXNA>
+ <xme:ydSAZJGFOPHa3sv-SZLYFdIoXjn46S1cD3k5FSWqJigp7ZgxkUFHwIENk4CXSdngC
+ BbhOmJ1rNeTV0GSlnA>
+X-ME-Received: <xmr:ydSAZO58HVTP7-vyA_U_ta2T8OB57ZxiNi-OV0lWJYmYuCa0SVmmyj6ntzpPv7WlDFU_rPkj33-fQuQqQMQPKof0UyYKl9Z5XQxo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedgudeffecutefuodetggdotefrod
+ ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+ necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+ enucfjughrpegtgffhggfufffkfhevjgfvofesthhqmhdthhdtjeenucfhrhhomhepqfhn
+ ughrvghjucfuuhhrupcuoehonhgurhgvjhesshhurhihrdhorhhgqeenucggtffrrghtth
+ gvrhhnpeegleeukedugfekffdtteetveehvefgtdeijeeikedtheegieevhefggeejgfei
+ feenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehonh
+ gurhgvjhesshhurhihrdhorhhg
+X-ME-Proxy: <xmx:ydSAZH1xFyN_Jl-WoINRWFNbbLhsQF3_2VEBRxk9jVwPbXNNu7CUuQ>
+ <xmx:ydSAZJFkcUJLKQdyQ9yUJ8AANdsGs9yQtEAvxo1BVc-XUZpomLQKgw>
+ <xmx:ydSAZA-0NB-KIvc0F-VyulBTw7GrIK1SsfipgNT7SDchXkZ6K6skZA>
+ <xmx:ytSAZHNP6jofl8sKL_nHMBX9jM4Zkw594E_6lZkL-p5NdVReRHLV8Q>
+Feedback-ID: ida81469e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 15:04:41 -0400 (EDT)
+Mime-Version: 1.0 (1.0)
+Date: Wed, 7 Jun 2023 21:04:26 +0200
+Message-Id: <A4AC07B9-DAE5-4063-89D5-C70BFF3A03C9@sury.org>
+References: <20230607185359.8125-1-odion@efficios.com>
+Cc: lttng-dev@lists.lttng.org, Tony Finch <dot@dotat.at>
+In-Reply-To: <20230607185359.8125-1-odion@efficios.com>
+To: Olivier Dion <odion@efficios.com>
+X-Mailer: iPhone Mail (21A5248v)
+Subject: Re: [lttng-dev] [PATCH v2 00/12] Add support for TSAN to liburcu
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -47,613 +69,160 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Olivier Dion via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Olivier Dion <odion@efficios.com>
-Cc: Olivier Dion <odion@efficios.com>, Tony Finch <dot@dotat.at>,
- "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Ond=C5=99ej_Sur=C3=BD_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?utf-8?Q?Ond=C5=99ej_Sur=C3=BD?= <ondrej@sury.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Some public APIs stipulate implicit memory barriers on operations. These
-were coherent with the memory model used at that time. However, with the
-migration to a memory model closer to the C11 memory model, these memory
-barriers are not strictly emitted by the atomic operations in the new
-memory model.
-
-Therefore, introducing the `--disable-legacy-mb' configuration
-option. By default, liburcu is configured to emit these legacy memory
-barriers, thus keeping backward compatibility at the expense of slower
-performances. However, users can opt-out by disabling the legacy memory
-barriers.
-
-This options is publicly exported in the system configuration header
-file and can be overrode manually on a compilation unit basis by
-defining `CONFIG_RCU_EMIT_LEGACY_MB' before including any liburcu files.
-
-The usage of this macro requires to re-write atomic operations in term
-of the CMM memory model. This is done for the queue and stack APIs.
-
-Change-Id: Ia5ce3b3d8cd1955556ce96fa4408a63aa098a1a6
-Signed-off-by: Olivier Dion <odion@efficios.com>
----
- configure.ac                     | 13 ++++++
- include/urcu/arch.h              |  6 +++
- include/urcu/config.h.in         |  3 ++
- include/urcu/static/lfstack.h    | 25 ++++++++----
- include/urcu/static/rculfqueue.h | 14 ++++---
- include/urcu/static/rculfstack.h |  8 +++-
- include/urcu/static/wfcqueue.h   | 68 +++++++++++++++++---------------
- include/urcu/static/wfqueue.h    |  9 +++--
- include/urcu/static/wfstack.h    | 24 +++++++----
- 9 files changed, 114 insertions(+), 56 deletions(-)
-
-diff --git a/configure.ac b/configure.ac
-index 4450a31..ca51b5b 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -235,6 +235,11 @@ AE_FEATURE([cds-lfht-iter-debug], [Enable extra debugging checks for lock-free h
- AE_FEATURE_DEFAULT_ENABLE
- AE_FEATURE([atomic-builtins], [Disable the usage of toolchain atomic builtins.])
- 
-+# emit legacy memory barriers
-+# Enable by default
-+AE_FEATURE_DEFAULT_ENABLE
-+AE_FEATURE([legacy-mb], [Disable legacy memory barriers.])
-+
- # When given, add -Werror to WARN_CFLAGS and WARN_CXXFLAGS.
- # Disabled by default
- AE_FEATURE_DEFAULT_DISABLE
-@@ -282,6 +287,10 @@ AE_IF_FEATURE_ENABLED([atomic-builtins], [
- 	[AE_FEATURE_DISABLE(atomic-builtins)])
- ])
- 
-+AE_IF_FEATURE_ENABLED([legacy-mb], [
-+  AC_DEFINE([CONFIG_RCU_EMIT_LEGACY_MB], [1], [Emit legacy memory barriers that were documented in the APIs.])
-+])
-+
- ##                                                                          ##
- ## Set automake variables for optional feature conditionnals in Makefile.am ##
- ##                                                                          ##
-@@ -387,6 +396,10 @@ PPRINT_PROP_BOOL([Lock-free HT iterator debugging], $value)
- AE_IS_FEATURE_ENABLED([atomic-builtins]) && value=1 || value=0
- PPRINT_PROP_BOOL([Use toolchain atomic builtins], $value)
- 
-+# legacy memory barriers
-+AE_IS_FEATURE_ENABLED([legacy-mb]) && value=1 || value=0
-+PPRINT_PROP_BOOL([Emit legacy memory barriers], $value)
-+
- PPRINT_PROP_BOOL([Multi-flavor support], 1)
- 
- report_bindir="`eval eval echo $bindir`"
-diff --git a/include/urcu/arch.h b/include/urcu/arch.h
-index d3914da..377a0ec 100644
---- a/include/urcu/arch.h
-+++ b/include/urcu/arch.h
-@@ -171,5 +171,11 @@
- #error "Cannot build: unrecognized architecture, see <urcu/arch.h>."
- #endif
- 
-+#ifdef CONFIG_RCU_EMIT_LEGACY_MB
-+# define cmm_emit_legacy_smp_mb() cmm_smp_mb()
-+#else
-+# define cmm_emit_legacy_smp_mb() do { } while (0)
-+#endif
-+
- 
- #endif /* _URCU_ARCH_H */
-diff --git a/include/urcu/config.h.in b/include/urcu/config.h.in
-index 1daaa7e..d2f6c8c 100644
---- a/include/urcu/config.h.in
-+++ b/include/urcu/config.h.in
-@@ -22,6 +22,9 @@
- /* Uatomic API uses atomic builtins? */
- #undef CONFIG_RCU_USE_ATOMIC_BUILTINS
- 
-+/* Emit legacy memory barriers? */
-+#undef CONFIG_RCU_EMIT_LEGACY_MB
-+
- /* Expose multi-flavor support */
- #define CONFIG_RCU_HAVE_MULTIFLAVOR 1
- 
-diff --git a/include/urcu/static/lfstack.h b/include/urcu/static/lfstack.h
-index a05acb4..07604db 100644
---- a/include/urcu/static/lfstack.h
-+++ b/include/urcu/static/lfstack.h
-@@ -114,7 +114,7 @@ bool ___cds_lfs_empty_head(struct cds_lfs_head *head)
- static inline
- bool _cds_lfs_empty(cds_lfs_stack_ptr_t s)
- {
--	return ___cds_lfs_empty_head(CMM_LOAD_SHARED(s._s->head));
-+	return ___cds_lfs_empty_head(uatomic_load(&s._s->head, CMM_RELAXED));
- }
- 
- /*
-@@ -122,6 +122,8 @@ bool _cds_lfs_empty(cds_lfs_stack_ptr_t s)
-  *
-  * Does not require any synchronization with other push nor pop.
-  *
-+ * Operations before push are consistent when observed after associated pop.
-+ *
-  * Lock-free stack push is not subject to ABA problem, so no need to
-  * take the RCU read-side lock. Even if "head" changes between two
-  * uatomic_cmpxchg() invocations here (being popped, and then pushed
-@@ -167,7 +169,9 @@ bool _cds_lfs_push(cds_lfs_stack_ptr_t u_s,
- 		 * uatomic_cmpxchg() implicit memory barrier orders earlier
- 		 * stores to node before publication.
- 		 */
--		head = uatomic_cmpxchg(&s->head, old_head, new_head);
-+		cmm_emit_legacy_smp_mb();
-+		head = uatomic_cmpxchg_mo(&s->head, old_head, new_head,
-+					CMM_SEQ_CST, CMM_SEQ_CST);
- 		if (old_head == head)
- 			break;
- 	}
-@@ -179,6 +183,8 @@ bool _cds_lfs_push(cds_lfs_stack_ptr_t u_s,
-  *
-  * Returns NULL if stack is empty.
-  *
-+ * Operations after pop are consistent when observed before associated push.
-+ *
-  * __cds_lfs_pop needs to be synchronized using one of the following
-  * techniques:
-  *
-@@ -203,7 +209,7 @@ struct cds_lfs_node *___cds_lfs_pop(cds_lfs_stack_ptr_t u_s)
- 		struct cds_lfs_head *head, *next_head;
- 		struct cds_lfs_node *next;
- 
--		head = _CMM_LOAD_SHARED(s->head);
-+		head = uatomic_load(&s->head, CMM_CONSUME);
- 		if (___cds_lfs_empty_head(head))
- 			return NULL;	/* Empty stack */
- 
-@@ -212,12 +218,14 @@ struct cds_lfs_node *___cds_lfs_pop(cds_lfs_stack_ptr_t u_s)
- 		 * memory barrier before uatomic_cmpxchg() in
- 		 * cds_lfs_push.
- 		 */
--		cmm_smp_read_barrier_depends();
--		next = _CMM_LOAD_SHARED(head->node.next);
-+		next = uatomic_load(&head->node.next, CMM_RELAXED);
- 		next_head = caa_container_of(next,
- 				struct cds_lfs_head, node);
--		if (uatomic_cmpxchg(&s->head, head, next_head) == head)
-+		if (uatomic_cmpxchg_mo(&s->head, head, next_head,
-+					CMM_SEQ_CST, CMM_SEQ_CST) == head){
-+			cmm_emit_legacy_smp_mb();
- 			return &head->node;
-+		}
- 		/* busy-loop if head changed under us */
- 	}
- }
-@@ -245,6 +253,7 @@ static inline
- struct cds_lfs_head *___cds_lfs_pop_all(cds_lfs_stack_ptr_t u_s)
- {
- 	struct __cds_lfs_stack *s = u_s._s;
-+	struct cds_lfs_head *head;
- 
- 	/*
- 	 * Implicit memory barrier after uatomic_xchg() matches implicit
-@@ -256,7 +265,9 @@ struct cds_lfs_head *___cds_lfs_pop_all(cds_lfs_stack_ptr_t u_s)
- 	 * taking care to order writes to each node prior to the full
- 	 * memory barrier after this uatomic_xchg().
- 	 */
--	return uatomic_xchg(&s->head, NULL);
-+	head = uatomic_xchg_mo(&s->head, NULL, CMM_SEQ_CST);
-+	cmm_emit_legacy_smp_mb();
-+	return head;
- }
- 
- /*
-diff --git a/include/urcu/static/rculfqueue.h b/include/urcu/static/rculfqueue.h
-index ad73454..25a4ec8 100644
---- a/include/urcu/static/rculfqueue.h
-+++ b/include/urcu/static/rculfqueue.h
-@@ -148,26 +148,29 @@ void _cds_lfq_enqueue_rcu(struct cds_lfq_queue_rcu *q,
- 	 * uatomic_cmpxchg() implicit memory barrier orders earlier stores to
- 	 * node before publication.
- 	 */
--
- 	for (;;) {
- 		struct cds_lfq_node_rcu *tail, *next;
- 
- 		tail = rcu_dereference(q->tail);
--		next = uatomic_cmpxchg(&tail->next, NULL, node);
-+		cmm_emit_legacy_smp_mb();
-+		next = uatomic_cmpxchg_mo(&tail->next, NULL, node,
-+					CMM_SEQ_CST, CMM_SEQ_CST);
- 		if (next == NULL) {
- 			/*
- 			 * Tail was at the end of queue, we successfully
- 			 * appended to it. Now move tail (another
- 			 * enqueue might beat us to it, that's fine).
- 			 */
--			(void) uatomic_cmpxchg(&q->tail, tail, node);
-+			(void) uatomic_cmpxchg_mo(&q->tail, tail, node,
-+						CMM_SEQ_CST, CMM_SEQ_CST);
- 			return;
- 		} else {
- 			/*
- 			 * Failure to append to current tail.
- 			 * Help moving tail further and retry.
- 			 */
--			(void) uatomic_cmpxchg(&q->tail, tail, next);
-+			(void) uatomic_cmpxchg_mo(&q->tail, tail, next,
-+						CMM_SEQ_CST, CMM_SEQ_CST);
- 			continue;
- 		}
- 	}
-@@ -211,7 +214,8 @@ struct cds_lfq_node_rcu *_cds_lfq_dequeue_rcu(struct cds_lfq_queue_rcu *q)
- 			enqueue_dummy(q);
- 			next = rcu_dereference(head->next);
- 		}
--		if (uatomic_cmpxchg(&q->head, head, next) != head)
-+		if (uatomic_cmpxchg_mo(&q->head, head, next,
-+					CMM_SEQ_CST, CMM_SEQ_CST) != head)
- 			continue;	/* Concurrently pushed. */
- 		if (head->dummy) {
- 			/* Free dummy after grace period. */
-diff --git a/include/urcu/static/rculfstack.h b/include/urcu/static/rculfstack.h
-index 54ff377..2befb2a 100644
---- a/include/urcu/static/rculfstack.h
-+++ b/include/urcu/static/rculfstack.h
-@@ -83,7 +83,9 @@ int _cds_lfs_push_rcu(struct cds_lfs_stack_rcu *s,
- 		 * uatomic_cmpxchg() implicit memory barrier orders earlier
- 		 * stores to node before publication.
- 		 */
--		head = uatomic_cmpxchg(&s->head, old_head, node);
-+		cmm_emit_legacy_smp_mb();
-+		head = uatomic_cmpxchg_mo(&s->head, old_head, node,
-+					CMM_SEQ_CST, CMM_SEQ_CST);
- 		if (old_head == head)
- 			break;
- 	}
-@@ -108,7 +110,9 @@ _cds_lfs_pop_rcu(struct cds_lfs_stack_rcu *s)
- 		if (head) {
- 			struct cds_lfs_node_rcu *next = rcu_dereference(head->next);
- 
--			if (uatomic_cmpxchg(&s->head, head, next) == head) {
-+			if (uatomic_cmpxchg_mo(&s->head, head, next,
-+						CMM_SEQ_CST, CMM_SEQ_CST) == head) {
-+				cmm_emit_legacy_smp_mb();
- 				return head;
- 			} else {
- 				/* Concurrent modification. Retry. */
-diff --git a/include/urcu/static/wfcqueue.h b/include/urcu/static/wfcqueue.h
-index 478e859..043b18a 100644
---- a/include/urcu/static/wfcqueue.h
-+++ b/include/urcu/static/wfcqueue.h
-@@ -91,6 +91,11 @@ static inline void _cds_wfcq_node_init(struct cds_wfcq_node *node)
- 	node->next = NULL;
- }
- 
-+static inline void _cds_wfcq_node_init_atomic(struct cds_wfcq_node *node)
-+{
-+	uatomic_store(&node->next, NULL, CMM_RELAXED);
-+}
-+
- /*
-  * cds_wfcq_init: initialize wait-free queue (with lock). Pair with
-  * cds_wfcq_destroy().
-@@ -153,8 +158,8 @@ static inline bool _cds_wfcq_empty(cds_wfcq_head_ptr_t u_head,
- 	 * common case to ensure that dequeuers do not frequently access
- 	 * enqueuer's tail->p cache line.
- 	 */
--	return CMM_LOAD_SHARED(head->node.next) == NULL
--		&& CMM_LOAD_SHARED(tail->p) == &head->node;
-+	return uatomic_load(&head->node.next, CMM_CONSUME) == NULL
-+		&& uatomic_load(&tail->p, CMM_CONSUME) == &head->node;
- }
- 
- static inline void _cds_wfcq_dequeue_lock(struct cds_wfcq_head *head,
-@@ -188,7 +193,7 @@ static inline bool ___cds_wfcq_append(cds_wfcq_head_ptr_t u_head,
- 	 * stores to data structure containing node and setting
- 	 * node->next to NULL before publication.
- 	 */
--	old_tail = uatomic_xchg(&tail->p, new_tail);
-+	old_tail = uatomic_xchg_mo(&tail->p, new_tail, CMM_SEQ_CST);
- 
- 	/*
- 	 * Implicit memory barrier after uatomic_xchg() orders store to
-@@ -199,7 +204,8 @@ static inline bool ___cds_wfcq_append(cds_wfcq_head_ptr_t u_head,
- 	 * store will append "node" to the queue from a dequeuer
- 	 * perspective.
- 	 */
--	CMM_STORE_SHARED(old_tail->next, new_head);
-+	uatomic_store(&old_tail->next, new_head, CMM_RELEASE);
-+
- 	/*
- 	 * Return false if queue was empty prior to adding the node,
- 	 * else return true.
-@@ -210,8 +216,8 @@ static inline bool ___cds_wfcq_append(cds_wfcq_head_ptr_t u_head,
- /*
-  * cds_wfcq_enqueue: enqueue a node into a wait-free queue.
-  *
-- * Issues a full memory barrier before enqueue. No mutual exclusion is
-- * required.
-+ * Operations prior to enqueue are consistant with respect to dequeuing or
-+ * splicing and iterating.
-  *
-  * Returns false if the queue was empty prior to adding the node.
-  * Returns true otherwise.
-@@ -220,6 +226,8 @@ static inline bool _cds_wfcq_enqueue(cds_wfcq_head_ptr_t head,
- 		struct cds_wfcq_tail *tail,
- 		struct cds_wfcq_node *new_tail)
- {
-+	cmm_emit_legacy_smp_mb();
-+
- 	return ___cds_wfcq_append(head, tail, new_tail, new_tail);
- }
- 
-@@ -270,8 +278,10 @@ ___cds_wfcq_node_sync_next(struct cds_wfcq_node *node, int blocking)
- 
- 	/*
- 	 * Adaptative busy-looping waiting for enqueuer to complete enqueue.
-+	 *
-+	 * Load node.next before loading node's content
- 	 */
--	while ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
-+	while ((next = uatomic_load(&node->next, CMM_CONSUME)) == NULL) {
- 		if (___cds_wfcq_busy_wait(&attempt, blocking))
- 			return CDS_WFCQ_WOULDBLOCK;
- 	}
-@@ -290,8 +300,7 @@ ___cds_wfcq_first(cds_wfcq_head_ptr_t u_head,
- 	if (_cds_wfcq_empty(__cds_wfcq_head_cast(head), tail))
- 		return NULL;
- 	node = ___cds_wfcq_node_sync_next(&head->node, blocking);
--	/* Load head->node.next before loading node's content */
--	cmm_smp_read_barrier_depends();
-+
- 	return node;
- }
- 
-@@ -343,16 +352,15 @@ ___cds_wfcq_next(cds_wfcq_head_ptr_t head __attribute__((unused)),
- 	 * out if we reached the end of the queue, we first check
- 	 * node->next as a common case to ensure that iteration on nodes
- 	 * do not frequently access enqueuer's tail->p cache line.
-+	 *
-+	 * Load node->next before loading next's content
- 	 */
--	if ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
--		/* Load node->next before tail->p */
--		cmm_smp_rmb();
--		if (CMM_LOAD_SHARED(tail->p) == node)
-+	if ((next = uatomic_load(&node->next, CMM_CONSUME)) == NULL) {
-+		if (uatomic_load(&tail->p, CMM_RELAXED) == node)
- 			return NULL;
- 		next = ___cds_wfcq_node_sync_next(node, blocking);
- 	}
--	/* Load node->next before loading next's content */
--	cmm_smp_read_barrier_depends();
-+
- 	return next;
- }
- 
-@@ -414,7 +422,7 @@ ___cds_wfcq_dequeue_with_state(cds_wfcq_head_ptr_t u_head,
- 		return CDS_WFCQ_WOULDBLOCK;
- 	}
- 
--	if ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
-+	if ((next = uatomic_load(&node->next, CMM_CONSUME)) == NULL) {
- 		/*
- 		 * @node is probably the only node in the queue.
- 		 * Try to move the tail to &q->head.
-@@ -422,17 +430,13 @@ ___cds_wfcq_dequeue_with_state(cds_wfcq_head_ptr_t u_head,
- 		 * NULL if the cmpxchg succeeds. Should the
- 		 * cmpxchg fail due to a concurrent enqueue, the
- 		 * q->head.next will be set to the next node.
--		 * The implicit memory barrier before
--		 * uatomic_cmpxchg() orders load node->next
--		 * before loading q->tail.
--		 * The implicit memory barrier before uatomic_cmpxchg
--		 * orders load q->head.next before loading node's
--		 * content.
- 		 */
--		_cds_wfcq_node_init(&head->node);
--		if (uatomic_cmpxchg(&tail->p, node, &head->node) == node) {
-+		_cds_wfcq_node_init_atomic(&head->node);
-+		if (uatomic_cmpxchg_mo(&tail->p, node, &head->node,
-+					CMM_SEQ_CST, CMM_SEQ_CST) == node) {
- 			if (state)
- 				*state |= CDS_WFCQ_STATE_LAST;
-+			cmm_emit_legacy_smp_mb();
- 			return node;
- 		}
- 		next = ___cds_wfcq_node_sync_next(node, blocking);
-@@ -442,7 +446,7 @@ ___cds_wfcq_dequeue_with_state(cds_wfcq_head_ptr_t u_head,
- 		 * (currently NULL) back to its original value.
- 		 */
- 		if (!blocking && next == CDS_WFCQ_WOULDBLOCK) {
--			head->node.next = node;
-+			uatomic_store(&head->node.next, node, CMM_RELAXED);
- 			return CDS_WFCQ_WOULDBLOCK;
- 		}
- 	}
-@@ -450,10 +454,9 @@ ___cds_wfcq_dequeue_with_state(cds_wfcq_head_ptr_t u_head,
- 	/*
- 	 * Move queue head forward.
- 	 */
--	head->node.next = next;
-+	uatomic_store(&head->node.next, next, CMM_RELAXED);
-+	cmm_emit_legacy_smp_mb();
- 
--	/* Load q->head.next before loading node's content */
--	cmm_smp_read_barrier_depends();
- 	return node;
- }
- 
-@@ -515,6 +518,8 @@ ___cds_wfcq_dequeue_nonblocking(cds_wfcq_head_ptr_t head,
- /*
-  * __cds_wfcq_splice: enqueue all src_q nodes at the end of dest_q.
-  *
-+ * Operations after splice are consistant with respect to enqueue.
-+ *
-  * Dequeue all nodes from src_q.
-  * dest_q must be already initialized.
-  * Mutual exclusion for src_q should be ensured by the caller as
-@@ -548,10 +553,10 @@ ___cds_wfcq_splice(
- 		 * uatomic_xchg, as well as tail pointer vs head node
- 		 * address.
- 		 */
--		head = uatomic_xchg(&src_q_head->node.next, NULL);
-+		head = uatomic_xchg_mo(&src_q_head->node.next, NULL, CMM_SEQ_CST);
- 		if (head)
- 			break;	/* non-empty */
--		if (CMM_LOAD_SHARED(src_q_tail->p) == &src_q_head->node)
-+		if (uatomic_load(&src_q_tail->p, CMM_CONSUME) == &src_q_head->node)
- 			return CDS_WFCQ_RET_SRC_EMPTY;
- 		if (___cds_wfcq_busy_wait(&attempt, blocking))
- 			return CDS_WFCQ_RET_WOULDBLOCK;
-@@ -563,7 +568,8 @@ ___cds_wfcq_splice(
- 	 * concurrent enqueue on src_q, which exchanges the tail before
- 	 * updating the previous tail's next pointer.
- 	 */
--	tail = uatomic_xchg(&src_q_tail->p, &src_q_head->node);
-+	cmm_emit_legacy_smp_mb();
-+	tail = uatomic_xchg_mo(&src_q_tail->p, &src_q_head->node, CMM_SEQ_CST);
- 
- 	/*
- 	 * Append the spliced content of src_q into dest_q. Does not
-diff --git a/include/urcu/static/wfqueue.h b/include/urcu/static/wfqueue.h
-index d04f66f..290fe0a 100644
---- a/include/urcu/static/wfqueue.h
-+++ b/include/urcu/static/wfqueue.h
-@@ -81,13 +81,14 @@ static inline void _cds_wfq_enqueue(struct cds_wfq_queue *q,
- 	 * structure containing node and setting node->next to NULL before
- 	 * publication.
- 	 */
--	old_tail = uatomic_xchg(&q->tail, &node->next);
-+	cmm_emit_legacy_smp_mb();
-+	old_tail = uatomic_xchg_mo(&q->tail, &node->next, CMM_SEQ_CST);
- 	/*
- 	 * At this point, dequeuers see a NULL old_tail->next, which indicates
- 	 * that the queue is being appended to. The following store will append
- 	 * "node" to the queue from a dequeuer perspective.
- 	 */
--	CMM_STORE_SHARED(*old_tail, node);
-+	uatomic_store(old_tail, node, CMM_RELEASE);
- }
- 
- /*
-@@ -102,7 +103,7 @@ ___cds_wfq_node_sync_next(struct cds_wfq_node *node)
- 	/*
- 	 * Adaptative busy-looping waiting for enqueuer to complete enqueue.
- 	 */
--	while ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
-+	while ((next = uatomic_load(&node->next, CMM_CONSUME)) == NULL) {
- 		if (++attempt >= WFQ_ADAPT_ATTEMPTS) {
- 			(void) poll(NULL, 0, WFQ_WAIT);	/* Wait for 10ms */
- 			attempt = 0;
-@@ -129,7 +130,7 @@ ___cds_wfq_dequeue_blocking(struct cds_wfq_queue *q)
- 	/*
- 	 * Queue is empty if it only contains the dummy node.
- 	 */
--	if (q->head == &q->dummy && CMM_LOAD_SHARED(q->tail) == &q->dummy.next)
-+	if (q->head == &q->dummy && uatomic_load(&q->tail, CMM_CONSUME) == &q->dummy.next)
- 		return NULL;
- 	node = q->head;
- 
-diff --git a/include/urcu/static/wfstack.h b/include/urcu/static/wfstack.h
-index 088e6e3..cfaf675 100644
---- a/include/urcu/static/wfstack.h
-+++ b/include/urcu/static/wfstack.h
-@@ -124,7 +124,7 @@ static inline bool _cds_wfs_empty(cds_wfs_stack_ptr_t u_stack)
- {
- 	struct __cds_wfs_stack *s = u_stack._s;
- 
--	return ___cds_wfs_end(CMM_LOAD_SHARED(s->head));
-+	return ___cds_wfs_end(uatomic_load(&s->head, CMM_RELAXED));
- }
- 
- /*
-@@ -133,6 +133,8 @@ static inline bool _cds_wfs_empty(cds_wfs_stack_ptr_t u_stack)
-  * Issues a full memory barrier before push. No mutual exclusion is
-  * required.
-  *
-+ * Operations before push are consistent when observed after associated pop.
-+ *
-  * Returns 0 if the stack was empty prior to adding the node.
-  * Returns non-zero otherwise.
-  */
-@@ -148,12 +150,13 @@ int _cds_wfs_push(cds_wfs_stack_ptr_t u_stack, struct cds_wfs_node *node)
- 	 * uatomic_xchg() implicit memory barrier orders earlier stores
- 	 * to node (setting it to NULL) before publication.
- 	 */
--	old_head = uatomic_xchg(&s->head, new_head);
-+	cmm_emit_legacy_smp_mb();
-+	old_head = uatomic_xchg_mo(&s->head, new_head, CMM_SEQ_CST);
- 	/*
- 	 * At this point, dequeuers see a NULL node->next, they should
- 	 * busy-wait until node->next is set to old_head.
- 	 */
--	CMM_STORE_SHARED(node->next, &old_head->node);
-+	uatomic_store(&node->next, &old_head->node, CMM_RELEASE);
- 	return !___cds_wfs_end(old_head);
- }
- 
-@@ -169,7 +172,7 @@ ___cds_wfs_node_sync_next(struct cds_wfs_node *node, int blocking)
- 	/*
- 	 * Adaptative busy-looping waiting for push to complete.
- 	 */
--	while ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
-+	while ((next = uatomic_load(&node->next, CMM_CONSUME)) == NULL) {
- 		if (!blocking)
- 			return CDS_WFS_WOULDBLOCK;
- 		if (++attempt >= CDS_WFS_ADAPT_ATTEMPTS) {
-@@ -194,7 +197,7 @@ ___cds_wfs_pop(cds_wfs_stack_ptr_t u_stack, int *state, int blocking)
- 	if (state)
- 		*state = 0;
- 	for (;;) {
--		head = CMM_LOAD_SHARED(s->head);
-+		head = uatomic_load(&s->head, CMM_CONSUME);
- 		if (___cds_wfs_end(head)) {
- 			return NULL;
- 		}
-@@ -203,9 +206,11 @@ ___cds_wfs_pop(cds_wfs_stack_ptr_t u_stack, int *state, int blocking)
- 			return CDS_WFS_WOULDBLOCK;
- 		}
- 		new_head = caa_container_of(next, struct cds_wfs_head, node);
--		if (uatomic_cmpxchg(&s->head, head, new_head) == head) {
-+		if (uatomic_cmpxchg_mo(&s->head, head, new_head,
-+					CMM_SEQ_CST, CMM_SEQ_CST) == head) {
- 			if (state && ___cds_wfs_end(new_head))
- 				*state |= CDS_WFS_STATE_LAST;
-+			cmm_emit_legacy_smp_mb();
- 			return &head->node;
- 		}
- 		if (!blocking) {
-@@ -220,6 +225,8 @@ ___cds_wfs_pop(cds_wfs_stack_ptr_t u_stack, int *state, int blocking)
-  *
-  * Returns NULL if stack is empty.
-  *
-+ * Operations after pop push are consistent when observed before associated push.
-+ *
-  * __cds_wfs_pop_blocking needs to be synchronized using one of the
-  * following techniques:
-  *
-@@ -278,6 +285,8 @@ ___cds_wfs_pop_nonblocking(cds_wfs_stack_ptr_t u_stack)
- /*
-  * __cds_wfs_pop_all: pop all nodes from a stack.
-  *
-+ * Operations after pop push are consistent when observed before associated push.
-+ *
-  * __cds_wfs_pop_all does not require any synchronization with other
-  * push, nor with other __cds_wfs_pop_all, but requires synchronization
-  * matching the technique used to synchronize __cds_wfs_pop_blocking:
-@@ -309,7 +318,8 @@ ___cds_wfs_pop_all(cds_wfs_stack_ptr_t u_stack)
- 	 * taking care to order writes to each node prior to the full
- 	 * memory barrier after this uatomic_xchg().
- 	 */
--	head = uatomic_xchg(&s->head, CDS_WFS_END);
-+	head = uatomic_xchg_mo(&s->head, CDS_WFS_END, CMM_SEQ_CST);
-+	cmm_emit_legacy_smp_mb();
- 	if (___cds_wfs_end(head))
- 		return NULL;
- 	return head;
--- 
-2.40.1
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+T2xpdmllciwKCmlzIHRoaXMgc29tZXdoZXJlIGluIEdlcnJpdCBhZ2FpbiwgcGxlYXNlPyBJdOKA
+mXMgbXVjaCBlYXNpZXIgZm9yIHVzIHRvIHB1bGwgdGhlIGNoYW5nZXMgZnJvbSBnaXQgdGhhbiBj
+aGVycnktcGljayBwYXRjaGVzIGZyb20gdGhlIG1haWxpbmcgbGlzdC4KCk9uZMWZZWoKLS0KT25k
+xZllaiBTdXLDvSA8b25kcmVqQHN1cnkub3JnPiAoSGUvSGltKQoKPiBPbiA3LiA2LiAyMDIzLCBh
+dCAyMDo1NCwgT2xpdmllciBEaW9uIDxvZGlvbkBlZmZpY2lvcy5jb20+IHdyb3RlOgo+IAo+IO+7
+v1RoaXMgcGF0Y2ggc2V0IGFkZHMgc3VwcG9ydCBmb3IgVFNBTiBpbiBsaWJ1cmN1Lgo+IAo+ICog
+Q2hhbmdlIHNpbmNlIHYxCj4gCj4gKiogQWRkaW5nIENNTV9TRVFfQ1NUX0ZFTkNFIG1lbW9yeSBv
+cmRlciB0byB0aGUgQ01NIG1lbW9yeSBtb2RlbAo+IAo+ICAgVGhlIEMxMSBtZW1vcnkgbW9kZWwg
+aXMgaW5jb21wYXRpYmxlIHdpdGggdGhlIG1lbW9yeSBtb2RlbCB1c2VkIGJ5IGxpYnVyY3UsCj4g
+ICBzaW5jZSB0aGUgc2VtYW50aWMgb2YgdGhlIEMxMSBtZW1vcnkgbW9kZWwgaXMgYmFzZWQgb24g
+YSBoYXBwZW4tYmVmb3JlCj4gICAoYWNxdWlyZS9yZWxlYXNlKSByZWxhdGlvbnNoaXAgb2YgbWVt
+b3J5IGFjY2Vzc2VzLCB3aGlsZSBsaWJ1cmN1IGlzIGJhc2VkIG9uCj4gICBtZW1vcnkgYmFycmll
+cnMgYW5kIHJlbGF4ZWQgbWVtb3J5IGFjY2Vzc2VzLgo+IAo+ICAgVG8gY2lyY3VtdmVudCB0aGlz
+LCBhIG5ldyBtZW1vcnkgb3JkZXIgY2FsbGVkIENNTV9TRVFfQ1NUX0ZFTkNFIGlzCj4gICBpbnRy
+b2R1Y2VkLiAgSXQgaW1wbGllcyBhIENNTV9TRVFfQ1NUIHdoaWxlIGVtaXR0aW5nIGEgdGhyZWFk
+IGZlbmNlIGFmdGVyIHRoZQo+ICAgb3BlcmF0aW9uLiAgT3BlcmF0aW9ucyB0aGF0IHdlcmUgZG9j
+dW1lbnRlZCBhcyBlbWl0dGluZyBtZW1vcnkgYmFycmllcnMKPiAgIGJlZm9yZSBhbmQgYWZ0ZXIg
+dGhlIG9wZXJhdGlvbiBhcmUgaW1wbGVtZW50ZWQgbm93IGluIHRlcm0gb2YgdGhpcyBuZXcgbWVt
+b3J5Cj4gICBvcmRlciB0byBrZWVwIGNvbXBhdGliaWxpdHkuCj4gCj4gICBIb3dldmVyLCB0aGlz
+IG1vZGVsIGlzIHJlZHVuZGFudCBpbiBzb21lIGNhc2VzIGFuZCB0aGUgbWVtb3J5IG9yZGVycyB3
+ZXJlCj4gICBjaGFuZ2VkIGludGVybmFsbHkgaW4gbGlidXJjdSB0byBzaW1wbHkgdXNlIHRoZSBD
+TU1fU0VRX0NTVC4KPiAKPiAqKiBBZGRpbmcgY21tX2VtaXRfbGVnYWN5X3NtcF9tYigpIHRvIHF1
+ZXVlL3N0YWNrIEFQSXMKPiAKPiAgIFRoZSBxdWV1ZS9zdGFjayBBUElzIGRvY3VtZW50IGltcGxp
+Y2l0IG1lbW9yeSBiYXJyaWVycyBiZWZvcmUgb3IgYWZ0ZXIKPiAgIG9wZXJhdGlvbi4gIFRoZXNl
+IGFyZSBub3cgb3B0aW9uYWxseSBlbWl0dGVkIG9ubHkgaWYKPiAgIENPTkZJR19SQ1VfRU1JVF9M
+RUdBQ1lfTUIgaXMgZGVmaW5lZCBpbiB1cmN1L2NvbmZpZy5oIG9yIG1hbnVhbGx5IGRlZmluZWQg
+YnkKPiAgIHRoZSB1c2VyIGJlZm9yZSBpbmNsdWRpbmcgbGlidXJjdS4gIFRoYXQgd2F5LCB1c2Vy
+cyBjYW4gb3B0LWluIGV2ZW4gaWYgdGhlCj4gICBzeXN0ZW0gaGVhZGVycyB3ZXJlIGNvbmZpZ3Vy
+ZWQgd2l0aG91dCB0aGlzIGZlYXR1cmUuCj4gCj4gICBIb3dldmVyLCB1c2VycyBjYW4gbm90IG9w
+dC1vdXQgb2YgdGhhdCBmZWF0dXJlIGlmIGNvbmZpZ3VyZWQgYnkgdGhlIHN5c3RlbS4KPiAKPiAq
+IHYxCj4gCj4gKiogSGVyZSBhcmUgdGhlIG1ham9yIGNoYW5nZXMKPiAKPiAgLSBVc2FnZSBvZiBj
+b21waWxlciBhdG9taWMgYnVpbHRpbnMgaXMgYWRkZWQgdG8gdGhlIHVhdG9taWMgQVBJLiAgVGhp
+cyBpcwo+ICAgIHJlcXVpcmVkIGZvciBUU0FOIHRvIHVuZGVyc3RhbmQgYXRvbWljIG1lbW9yeSBh
+Y2Nlc3Nlcy4gIElmIHRoZSBjb21waWxlcgo+ICAgIHN1cHBvcnRzIHN1Y2ggYnVpbHRpbnMsIHRo
+ZXkgYXJlIHVzZWQgYnkgZGVmYXVsdC4gIFVzZXIgY2FuIG9wdC1vdXQgYW5kIHVzZQo+ICAgIHRo
+ZSBsZWdhY3kgaW1wbGVtZW50YXRpb24gb2YgdGhlIHVhdG9taWMgQVBJIGJ5IHVzaW5nIHRoZQo+
+ICAgIGAtLWRpc2FibGUtYXRvbWljLWJ1aWx0aW5zJyBjb25maWd1cmF0aW9uIG9wdGlvbi4KPiAK
+PiAgLSBUaGUgQ01NIG1lbW9yeSBtb2RlbCBpcyBpbnRyb2R1Y2VkIGJ1dCB5ZXQgZm9ybWFsaXpl
+ZC4gSXQgdHJpZXMgdG8gYmUgYXMKPiAgICBjbG9zZSBhcyBwb3NzaWJsZSB0byB0aGUgQzExIG1l
+bW9yeSBtb2RlbCB3aGlsZSBvZmZlcmluZyBwcmltaXRpdmVzIHN1Y2ggYXMKPiAgICBjbW1fc21w
+X3dtYigpLCBjbW1fc21wX3JtYigpIGFuZCBjbW1fbWIoKSB0aGF0IGNhbid0IGJlIGV4cHJlc3Nl
+ZCBpbiBpdC4KPiAgICBGb3IgZXhhbXBsZSwgY21tX21iKCkgY2FuIGJlIHVzZWQgZm9yIG9yZGVy
+aW5nIG1lbW9yeSBhY2Nlc3NlcyB0byBNTUlPCj4gICAgZGV2aWNlcywgd2hpY2ggaXMgb3V0IG9m
+IHRoZSBzY29wZSBvZiB0aGUgQzExIG1lbW9yeSBtb2RlbC4KPiAKPiAgLSBUaGUgQ01NIGFubm90
+YXRpb24gbGF5ZXIgaXMgYSBuZXcgcHVibGljIEFQSSB0aGF0IGlzIGhpZ2hseSBleHBlcmltZW50
+YWwgYW5kCj4gICAgbm90IGd1YXJhbnRlZWQgdG8gYmUgc3RhYmxlIGF0IHRoaXMgc3RhZ2UuICBJ
+dCBzZXJ2ZXMgdGhlIGR1YWwgcHVycG9zZSBvZgo+ICAgIHZlcmlmeWluZyBsb2NhbCAoaW50cmEt
+dGhyZWFkKSByZWxheGVkIGF0b21pYyBhY2Nlc3NlcyBvcmRlcmluZyB3aXRoIGEKPiAgICBtZW1v
+cnkgYmFycmllciBhbmQgZ2xvYmFsIChpbnRlci10aHJlYWQpIHJlbGF4ZWQgYXRvbWljIGFjY2Vz
+c2VzIHdpdGggYQo+ICAgIHNoYXJlZCBzdGF0ZS4gIFRoZSBzZWNvbmQgcHVycG9zZSBpcyBuZWNl
+c3NhcnkgZm9yIFRTQU4gdG8gdW5kZXJzdGFuZCBtZW1vcnkKPiAgICBhY2Nlc3NlcyBvcmRlcmlu
+ZyBzaW5jZSBpdCBkb2VzIG5vdCBmdWxseSBzdXBwb3J0IHRocmVhZCBmZW5jZSB5ZXQuCj4gCj4g
+KiogQ01NIGFubm90YXRpb24gZXhhbXBsZQo+IAo+ICBDb25zaWRlciB0aGUgZm9sbG93aW5nIHBz
+ZXVkby1jb2RlIG9mIHdyaXRlciBzaWRlIGluIHN5bmNocm9uaXplX3JjdSgpLiAgQW4KPiAgYWNx
+dWlyZSBncm91cCBpcyBkZWZpbmVkIG9uIHRoZSBzdGFjayBvZiB0aGUgd3JpdGVyLiAgQW5ub3Rh
+dGlvbnMgYXJlIG1hZGUKPiAgb250byB0aGUgZ3JvdXAgdG8gZW5zdXJlIG9yZGVyaW5nIG9mIHJl
+bGF4ZWQgbWVtb3J5IGFjY2Vzc2VzIGluIHJlYWRlcl9zdGF0ZSgpCj4gIGJlZm9yZSB0aGUgbWVt
+b3J5IGJhcnJpZXIgYXQgdGhlIGVuZCBvZiBzeW5jaHJvbml6ZV9yY3UoKS4gIEl0IGFsc28gaGVs
+cHMgVFNBTgo+ICB0byB1bmRlcnN0YW5kIHRoYXQgdGhlIHJlbGF4ZWQgYWNjZXNzZXMgaW4gcmVh
+ZGVyX3N0YXRlKCkgYWN0IGxpa2UgYWNxdWlyZQo+ICBhY2Nlc3NlcyBiZWNhdXNlIG9mIHRoZSBt
+ZW1vcnkgYmFycmllciBpbiBzeW5jaHJvbml6ZV9yY3UoKS4KPiAKPiAgSW4gb3RoZXIgd29yZHMs
+IHRoZSBwdXJwb3NlIG9mIHRoaXMgYW5ub3RhdGlvbiBpcyB0byBjb252ZXJ0IGEgZ3JvdXAgb2YK
+PiAgbG9hZC1hY3F1aXJlIG1lbW9yeSBvcGVyYXRpb25zIGludG8gbG9hZC1yZWxheGVkIG1lbW9y
+eSBvcGVyYXRpb25zIGZvbGxvd2VkIGJ5Cj4gIGEgc2luZ2xlIG1lbW9yeSBiYXJyaWVyLiAgVGhp
+cyBoaWdobHkgYmVuZWZpdHMgd2Vha2x5IG9yZGVyZWQgYXJjaGl0ZWN0dXJlcyBieQo+ICBoYXZp
+bmcgYSBjb25zdGFudCBudW1iZXIgb2YgbWVtb3J5IGJhcnJpZXJzIGluc3RlYWQgb2YgYmVpbmcg
+bGluZWFybHkKPiAgcHJvcG9ydGlvbmFsIHRvIHRoZSBudW1iZXIgb2YgbG9hZHMuICBUaGlzIGRv
+ZXMgbm90IGJlbmVmaXQgVFNPCj4gIGFyY2hpdGVjdHVyZXMuICAKPiAKPiAKPiBPbGl2aWVyIERp
+b24gKDEyKToKPiAgY29uZmlndXJlOiBBZGQgLS1kaXNhYmxlLWF0b21pYy1idWlsdGlucyBvcHRp
+b24KPiAgdXJjdS9jb21waWxlcjogVXNlIGF0b21pYyBidWlsdGlucyBpZiBjb25maWd1cmVkCj4g
+IHVyY3UvYXJjaC9nZW5lcmljOiBVc2UgYXRvbWljIGJ1aWx0aW5zIGlmIGNvbmZpZ3VyZWQKPiAg
+dXJjdS9zeXN0ZW06IFVzZSBhdG9taWMgYnVpbHRpbnMgaWYgY29uZmlndXJlZAo+ICB1cmN1L3Vh
+dG9taWM6IEFkZCBDTU0gbWVtb3J5IG1vZGVsCj4gIHVyY3Utd2FpdDogRml4IHdhaXQgc3RhdGUg
+bG9hZC9zdG9yZQo+ICB0ZXN0czogVXNlIHVhdG9taWMgZm9yIGFjY2Vzc2luZyBnbG9iYWwgc3Rh
+dGVzCj4gIGJlbmNobWFyazogVXNlIHVhdG9taWMgZm9yIGFjY2Vzc2luZyBnbG9iYWwgc3RhdGVz
+Cj4gIHRlc3RzL3VuaXQvdGVzdF9idWlsZDogUXVpZXQgdW51c2VkIHJldHVybiB2YWx1ZQo+ICB1
+cmN1L2Fubm90YXRlOiBBZGQgQ01NIGFubm90YXRpb24KPiAgQWRkIGNtbV9lbWl0X2xlZ2FjeV9z
+bXBfbWIoKQo+ICB0ZXN0czogQWRkIHRlc3RzIGZvciBjaGVja2luZyByYWNlIGNvbmRpdGlvbnMK
+PiAKPiBSRUFETUUubWQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMTEgKysKPiBj
+b25maWd1cmUuYWMgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMzkgKysrKwo+IGRvYy91
+YXRvbWljLWFwaS5tZCAgICAgICAgICAgICAgICAgICAgICB8ICAgMyArLQo+IGluY2x1ZGUvTWFr
+ZWZpbGUuYW0gICAgICAgICAgICAgICAgICAgICB8ICAgMyArCj4gaW5jbHVkZS91cmN1L2Fubm90
+YXRlLmggICAgICAgICAgICAgICAgIHwgMTc0ICsrKysrKysrKysrKysrKysrKwo+IGluY2x1ZGUv
+dXJjdS9hcmNoLmggICAgICAgICAgICAgICAgICAgICB8ICAgNiArCj4gaW5jbHVkZS91cmN1L2Fy
+Y2gvZ2VuZXJpYy5oICAgICAgICAgICAgIHwgIDM3ICsrKysKPiBpbmNsdWRlL3VyY3UvY29tcGls
+ZXIuaCAgICAgICAgICAgICAgICAgfCAgMjIgKystCj4gaW5jbHVkZS91cmN1L2NvbmZpZy5oLmlu
+ICAgICAgICAgICAgICAgIHwgICA2ICsKPiBpbmNsdWRlL3VyY3Uvc3RhdGljL2xmc3RhY2suaCAg
+ICAgICAgICAgfCAgMjUgKystCj4gaW5jbHVkZS91cmN1L3N0YXRpYy9wb2ludGVyLmggICAgICAg
+ICAgIHwgIDQwICsrLS0KPiBpbmNsdWRlL3VyY3Uvc3RhdGljL3JjdWxmcXVldWUuaCAgICAgICAg
+fCAgMTQgKy0KPiBpbmNsdWRlL3VyY3Uvc3RhdGljL3JjdWxmc3RhY2suaCAgICAgICAgfCAgIDgg
+Ky0KPiBpbmNsdWRlL3VyY3Uvc3RhdGljL3VyY3UtYnAuaCAgICAgICAgICAgfCAgMTIgKy0KPiBp
+bmNsdWRlL3VyY3Uvc3RhdGljL3VyY3UtY29tbW9uLmggICAgICAgfCAgIDggKy0KPiBpbmNsdWRl
+L3VyY3Uvc3RhdGljL3VyY3UtbWIuaCAgICAgICAgICAgfCAgMTEgKy0KPiBpbmNsdWRlL3VyY3Uv
+c3RhdGljL3VyY3UtbWVtYi5oICAgICAgICAgfCAgMjYgKystCj4gaW5jbHVkZS91cmN1L3N0YXRp
+Yy91cmN1LXFzYnIuaCAgICAgICAgIHwgIDI5ICsrLQo+IGluY2x1ZGUvdXJjdS9zdGF0aWMvd2Zj
+cXVldWUuaCAgICAgICAgICB8ICA2OCArKystLS0tCj4gaW5jbHVkZS91cmN1L3N0YXRpYy93ZnF1
+ZXVlLmggICAgICAgICAgIHwgICA5ICstCj4gaW5jbHVkZS91cmN1L3N0YXRpYy93ZnN0YWNrLmgg
+ICAgICAgICAgIHwgIDI0ICsrLQo+IGluY2x1ZGUvdXJjdS9zeXN0ZW0uaCAgICAgICAgICAgICAg
+ICAgICB8ICAyMSArKysKPiBpbmNsdWRlL3VyY3UvdWF0b21pYy5oICAgICAgICAgICAgICAgICAg
+fCAgNjMgKysrKysrLQo+IGluY2x1ZGUvdXJjdS91YXRvbWljL2J1aWx0aW5zLWdlbmVyaWMuaCB8
+IDE3MCArKysrKysrKysrKysrKysrKwo+IGluY2x1ZGUvdXJjdS91YXRvbWljL2J1aWx0aW5zLmgg
+ICAgICAgICB8ICA3OSArKysrKysrKwo+IGluY2x1ZGUvdXJjdS91YXRvbWljL2dlbmVyaWMuaCAg
+ICAgICAgICB8IDIzNCArKysrKysrKysrKysrKysrKysrKysrKysKPiBzcmMvcmN1bGZoYXNoLmMg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCAgOTIgKysrKysrLS0tLQo+IHNyYy91cmN1LWJwLmMg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxNyArLQo+IHNyYy91cmN1LXBvaW50ZXIuYyAg
+ICAgICAgICAgICAgICAgICAgICB8ICAgOSArLQo+IHNyYy91cmN1LXFzYnIuYyAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAzMSArKystCj4gc3JjL3VyY3Utd2FpdC5oICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDE1ICstCj4gc3JjL3VyY3UuYyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDI0ICsrLQo+IHRlc3RzL2JlbmNobWFyay9NYWtlZmlsZS5hbSAgICAgICAgICAgICB8
+ICA5MSArKysrLS0tLS0KPiB0ZXN0cy9iZW5jaG1hcmsvY29tbW9uLXN0YXRlcy5jICAgICAgICAg
+fCAgIDEgKwo+IHRlc3RzL2JlbmNobWFyay9jb21tb24tc3RhdGVzLmggICAgICAgICB8ICA1MSAr
+KysrKysKPiB0ZXN0cy9iZW5jaG1hcmsvdGVzdF9tdXRleC5jICAgICAgICAgICAgfCAgMzIgKy0t
+LQo+IHRlc3RzL2JlbmNobWFyay90ZXN0X3BlcnRocmVhZGxvY2suYyAgICB8ICAzMiArLS0tCj4g
+dGVzdHMvYmVuY2htYXJrL3Rlc3Rfcndsb2NrLmMgICAgICAgICAgIHwgIDMyICstLS0KPiB0ZXN0
+cy9iZW5jaG1hcmsvdGVzdF91cmN1LmMgICAgICAgICAgICAgfCAgMzMgKy0tLQo+IHRlc3RzL2Jl
+bmNobWFyay90ZXN0X3VyY3VfYXNzaWduLmMgICAgICB8ICAzMyArLS0tCj4gdGVzdHMvYmVuY2ht
+YXJrL3Rlc3RfdXJjdV9icC5jICAgICAgICAgIHwgIDMzICstLS0KPiB0ZXN0cy9iZW5jaG1hcmsv
+dGVzdF91cmN1X2RlZmVyLmMgICAgICAgfCAgMzMgKy0tLQo+IHRlc3RzL2JlbmNobWFyay90ZXN0
+X3VyY3VfZ2MuYyAgICAgICAgICB8ICAzNCArLS0tCj4gdGVzdHMvYmVuY2htYXJrL3Rlc3RfdXJj
+dV9oYXNoLmMgICAgICAgIHwgICA2ICstCj4gdGVzdHMvYmVuY2htYXJrL3Rlc3RfdXJjdV9oYXNo
+LmggICAgICAgIHwgIDE1IC0tCj4gdGVzdHMvYmVuY2htYXJrL3Rlc3RfdXJjdV9oYXNoX3J3LmMg
+ICAgIHwgIDEwICstCj4gdGVzdHMvYmVuY2htYXJrL3Rlc3RfdXJjdV9oYXNoX3VuaXF1ZS5jIHwg
+IDEwICstCj4gdGVzdHMvYmVuY2htYXJrL3Rlc3RfdXJjdV9sZnEuYyAgICAgICAgIHwgIDIwICst
+Cj4gdGVzdHMvYmVuY2htYXJrL3Rlc3RfdXJjdV9sZnMuYyAgICAgICAgIHwgIDIwICstCj4gdGVz
+dHMvYmVuY2htYXJrL3Rlc3RfdXJjdV9sZnNfcmN1LmMgICAgIHwgIDIwICstCj4gdGVzdHMvYmVu
+Y2htYXJrL3Rlc3RfdXJjdV9xc2JyLmMgICAgICAgIHwgIDMzICstLS0KPiB0ZXN0cy9iZW5jaG1h
+cmsvdGVzdF91cmN1X3FzYnJfZ2MuYyAgICAgfCAgMzQgKy0tLQo+IHRlc3RzL2JlbmNobWFyay90
+ZXN0X3VyY3Vfd2ZjcS5jICAgICAgICB8ICAyMiArLS0KPiB0ZXN0cy9iZW5jaG1hcmsvdGVzdF91
+cmN1X3dmcS5jICAgICAgICAgfCAgMjAgKy0KPiB0ZXN0cy9iZW5jaG1hcmsvdGVzdF91cmN1X3dm
+cy5jICAgICAgICAgfCAgMjIgKy0tCj4gdGVzdHMvY29tbW9uL2FwaS5oICAgICAgICAgICAgICAg
+ICAgICAgIHwgIDEyICstCj4gdGVzdHMvcmVncmVzc2lvbi9yY3V0b3J0dXJlLmggICAgICAgICAg
+IHwgMTA2ICsrKysrKystLS0tCj4gdGVzdHMvdW5pdC90ZXN0X2J1aWxkLmMgICAgICAgICAgICAg
+ICAgIHwgICA4ICstCj4gdGVzdHMvdW5pdC90ZXN0X2xmc3RhY2suYyAgICAgICAgICAgICAgIHwg
+IDkwICsrKysrKysrKwo+IHRlc3RzL3VuaXQvdGVzdF93ZmNxdWV1ZS5jICAgICAgICAgICAgICB8
+IDExOSArKysrKysrKysrKysKPiB0ZXN0cy91bml0L3Rlc3Rfd2ZxdWV1ZS5jICAgICAgICAgICAg
+ICAgfCAgOTEgKysrKysrKysrCj4gdGVzdHMvdW5pdC90ZXN0X3dmc3RhY2suYyAgICAgICAgICAg
+ICAgIHwgIDkwICsrKysrKysrKwo+IDYyIGZpbGVzIGNoYW5nZWQsIDE3OTkgaW5zZXJ0aW9ucygr
+KSwgNjg0IGRlbGV0aW9ucygtKQo+IGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL3VyY3UvYW5u
+b3RhdGUuaAo+IGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL3VyY3UvdWF0b21pYy9idWlsdGlu
+cy1nZW5lcmljLmgKPiBjcmVhdGUgbW9kZSAxMDA2NDQgaW5jbHVkZS91cmN1L3VhdG9taWMvYnVp
+bHRpbnMuaAo+IGNyZWF0ZSBtb2RlIDEwMDY0NCB0ZXN0cy9iZW5jaG1hcmsvY29tbW9uLXN0YXRl
+cy5jCj4gY3JlYXRlIG1vZGUgMTAwNjQ0IHRlc3RzL2JlbmNobWFyay9jb21tb24tc3RhdGVzLmgK
+PiBjcmVhdGUgbW9kZSAxMDA2NDQgdGVzdHMvdW5pdC90ZXN0X2xmc3RhY2suYwo+IGNyZWF0ZSBt
+b2RlIDEwMDY0NCB0ZXN0cy91bml0L3Rlc3Rfd2ZjcXVldWUuYwo+IGNyZWF0ZSBtb2RlIDEwMDY0
+NCB0ZXN0cy91bml0L3Rlc3Rfd2ZxdWV1ZS5jCj4gY3JlYXRlIG1vZGUgMTAwNjQ0IHRlc3RzL3Vu
+aXQvdGVzdF93ZnN0YWNrLmMKPiAKPiAtLSAKPiAyLjQwLjEKPiAKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
