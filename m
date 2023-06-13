@@ -4,42 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E687C7EE25
-	for <lttng-dev@archiver.kernel.org>; Fri,  9 Jun 2023 17:21:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE23EB64D0
+	for <lttng-dev@archiver.kernel.org>; Tue, 13 Jun 2023 15:45:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1686331263;
-	bh=beB6+z56erc80o6aDPJwW6ufleWFREjqXbLzY32P714=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	s=default; t=1686671152;
+	bh=SwyP9RtDGTMpDUzCnqvlzWP5hpKmkzNjSgRtalFIhVU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cys1M6aMsE2oClxzpw/JOtDycYGlofl3EI8NdGYWRuxhP82l7Ce5aP8zBEF0oF2a/
-	 rIrYmlVc+wVnpYixEcOSRr1E5XvGUoFMYhdjt3RWAiTNdv8P1kOGh/y21QLD3Tj97E
-	 rT8Epr9OF7YdMhLVJWjwWtnk8U4GkAXXQYYun6mi9HTYj4ikHk84UCP78WGo7p1mA8
-	 agmdEeVBdNpNcBPo8DyfFSj4sM8H9CQ5jFRQ/WxRtaTGkaajsvFePtCaCzDlZb2eb5
-	 RQK7lqmGVUmIr9wodl/rWK1PIPLryRmrCha/5CKEP0miYpuFmiYcBSRlOiPrJUSa5S
-	 sz6huqlIaoyTg==
+	b=dHd0pv+IXWWNY9BaENZaKbh7FTUY1IUxkozCxxziD8h6JXP/m+erQemirvAnciNeT
+	 3rkJ5sWYDgnT6anfTPrd+VAW7FlZmDBUcvbD1YCj6BL8dVEB2V4Lrub3Bs0o6myGGW
+	 MHrQe4t2w7mTenBpMMZv93Zz+4RxpJpVWH7i0UPe2C7AQlo+OyYSDmN2Zl+IDzWRer
+	 6J3h5rVN0/Xl4iC3++kyKi5RSsYgDR3ZS1NdHiXkjxTjy5HhG6X6z6oTnRwN8OTFST
+	 v52qIaDKA6Ek12cN2b1C6fALh67zZ3lqwSSKdukKKYlNPx6B8ScDWEKDCGW/sCw7qv
+	 DNl0mQqgpuHow==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Qd7CL1SP5z1ds8;
-	Fri,  9 Jun 2023 13:21:02 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4Qd7CG4x7hz1ds0
- for <lttng-dev@lists.lttng.org>; Fri,  9 Jun 2023 13:20:58 -0400 (EDT)
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4Qd7C25Hp3z173L;
- Fri,  9 Jun 2023 13:20:46 -0400 (EDT)
-Message-ID: <ea7e251e-2514-8f81-28e5-3c78317581c6@efficios.com>
-Date: Fri, 9 Jun 2023 13:20:59 -0400
+	by lists.lttng.org (Postfix) with ESMTP id 4QgXvg1sz2z1gLy;
+	Tue, 13 Jun 2023 11:45:51 -0400 (EDT)
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com
+ [IPv6:2607:f8b0:4864:20::430])
+ by lists.lttng.org (Postfix) with ESMTPS id 4QgXvd6qC7z1gLw
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Jun 2023 11:45:44 -0400 (EDT)
+Received: by mail-pf1-x430.google.com with SMTP id
+ d2e1a72fcca58-662b85f4640so4732414b3a.0
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Jun 2023 08:45:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1686671143; x=1689263143;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Ki14TB10SKX139FaSaE6XkR4DBu8UltYOccjvXinh4s=;
+ b=SfnP2aot9nMqux8KBzFD6+7EHriReG/q0xmw0+mVX2cNH3IS061cKB4dlwkKeObdFs
+ WRzd0PUXLz16joIGGWChjJwGs0Ex5FPJE+ldbx7UKHDlfVVUL8CN9pukPX/ReNqtyNeS
+ K1qq9WYrO6M3VTXiz7PJqJE62CgvsppV11Y6tWbr/7ICTCwIIRFFMC2KkzgH1J8iQF3J
+ l31aq5Wuc+Y5JnozOhc3mee5M0jnMhc98ARBk04XPCJe9HQFFXvbtS1cPOiobPaUwEBW
+ r8XpTCfA2opTsAkQPBfVn46jvzFU/iUoFeuDcZ41QM4isiXt5LXNQ+ma+v8IEcEI+MyI
+ 43Nw==
+X-Gm-Message-State: AC+VfDyFUgDXK6bFg6OOaA0VX3OUNZIDdpHh0urF9PXUzajVrRopWBPc
+ vDl8xvWjQfIajVt24EDGpoU3199VaQ==
+X-Google-Smtp-Source: ACHHUZ6yC7BDIhZS2p++AVkXTwNlNGE4pAvHKMzpL4493qD3oREqwXsQHLNHl3mGgkha7bUfFYPshQ==
+X-Received: by 2002:a05:6a21:99a5:b0:10c:62b3:7dc4 with SMTP id
+ ve37-20020a056a2199a500b0010c62b37dc4mr13550856pzb.55.1686671143114; 
+ Tue, 13 Jun 2023 08:45:43 -0700 (PDT)
+Received: from korin-ASUS-TUF-Gaming-F15-FX507ZM-FX507ZM.. ([140.116.136.92])
+ by smtp.gmail.com with ESMTPSA id
+ t1-20020aa79381000000b0064381853bfcsm8804775pfe.89.2023.06.13.08.45.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 13 Jun 2023 08:45:42 -0700 (PDT)
+To: lttng-dev@lists.lttng.org
+Date: Tue, 13 Jun 2023 23:45:23 +0800
+Message-Id: <20230613154523.17184-1-k777k777tw@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To: tracecompass-dev@eclipse.org, lwn@lwn.net,
- lttng-dev <lttng-dev@lists.lttng.org>,
- linux-kernel <linux-kernel@vger.kernel.org>, linuxtools-dev@eclipse.org,
- Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
- linux-trace-users <linux-trace-users@vger.kernel.org>
-Subject: [lttng-dev] Tracing Summit - Last year's 2022 talk recordings are
- available online!
+Subject: [lttng-dev] [PATCH] Fix: revise urcu_read_lock_update() comment
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -51,41 +67,88 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Li-Kuan Ou via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Li-Kuan Ou <k777k777tw@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGVsbG8gYWxsLAoKVGhlIHJlY29yZGluZ3MgZm9yIGxhc3QgeWVhcuKAmXMgMjAyMiBUcmFjaW5n
-IFN1bW1pdCB0YWxrcyB3ZXJlIGp1c3QKcG9zdGVkIHRvIHRoZSBEaWFNb24gV29ya2dyb3VwIGNo
-YW5uZWwhCgoyMDIyIFRyYWNpbmcgU3VtbWl0IFRhbGtzOgpodHRwczovL3d3dy55b3V0dWJlLmNv
-bS9wbGF5bGlzdD9saXN0PVBMdW80RTQ3cDVfN1lidnlCcFNIaC13TzNLVVZRODFCUVIKCklmIHlv
-dSBkaWQgbm90IGdldCB0aGUgY2hhbmNlIHRvIGF0dGVuZCBsYXN0IHllYXIsIHdlIGludml0ZSB5
-b3UgdG8gdGFrZQphIGxvb2sgYXQgdGhlIGRpdmVyc2UgdHJhY2luZyB0YWxrcyB0aGF0IGluY2x1
-ZGVkIGVCUEYgYW5kIFBlcmZldHRvCmRldmVsb3BtZW50cyBhcyB3ZWxsIGFzIHVwZGF0ZXMgZm9y
-IHRoZSBjb3JlIExpbnV4IGtlcm5lbCB0cmFjZXJzLgoKClRoaXMgeWVhciwgd2XigJlyZSBsb29r
-aW5nIGZvcndhcmQgdG8gaGVhcmluZyBhYm91dCB5b3VyIG5ldyB0cmFjaW5nCmRldmVsb3BtZW50
-cyBhbmQgY2hhbGxlbmdpbmcgdXNlIGNhc2VzIGF0IHRoZSAyMDIzIFRyYWNpbmcgU3VtbWl0ISBJ
-Zgp5b3XigJlyZSBpbnRlcmVzdGVkIGluIGV4Y2hhbmdpbmcgaWRlYXMgd2l0aCBleHBlcnRzIGlu
-IHN0YXRlLW9mLXRoZS1hcnQKdHJhY2luZywgd2UgaW52aXRlIHlvdSB0byBzdWJtaXQgYSB0YWxr
-IHByb3Bvc2FsIHNvb24gYXMgdGhlIGRlYWRsaW5lIGlzCmNvbWluZyB1cCBuZXh0IHdlZWsgKEp1
-bmUgMTZ0aCkuCgpZb3UgY2FuIHN1Ym1pdCB5b3VyIDIwMjMgVHJhY2luZyBTdW1taXQgdGFsayBh
-YnN0cmFjdCBoZXJlOgpodHRwczovL2NmcC50cmFjaW5nc3VtbWl0Lm9yZy90czIwMjMvY2ZwCgpC
-ZXN0IHJlZ2FyZHMsCgpNYXRoaWV1CgotLS0tCgpUaGUgMjAyMyBUcmFjaW5nIFN1bW1pdCB3aWxs
-IGJlIGhlbGQgaW4gQmlsYmFvLCBTcGFpbiBvbiBTZXB0ZW1iZXIgMTd0aAphbmQgMTh0aCwgYXQg
-dGhlIEV1c2thbGR1bmEgQ29uZmVyZW5jZSBDZW50cmUsIGNvLWxvY2F0ZWQgd2l0aCBPcGVuClNv
-dXJjZSBTdW1taXQgRXVyb3BlLgoKVG8gcmVnaXN0ZXIsIHlvdSBjYW4gaW5jbHVkZSB0aGUgVHJh
-Y2luZyBTdW1taXQgYXMgYW4gYWRkLW9uIHRvIHlvdXIKT3BlbiBTb3VyY2UgU3VtbWl0IHRpY2tl
-dCBvciB1c2UgdGhlc2UgbGlua3MgdG8gcmVnaXN0ZXIgc29sZWx5IGZvciB0aGUKVHJhY2luZyBT
-dW1taXQ6IGh0dHBzOi8vY3ZlbnQubWUvR24wbmtSIChpbi1wZXJzb24sIDgwJCksCmh0dHBzOi8v
-Y3ZlbnQubWUveHl3eWxYICh2aXJ0dWFsKS4KCkZvciBtb3JlIGluZm86IGh0dHBzOi8vdHJhY2lu
-Z3N1bW1pdC5vcmcvCgpUaGUgMjAyMyBUcmFjaW5nIFN1bW1pdCBpcyBzcG9uc29yZWQgYnkgRWZm
-aWNpT1MgYW5kIG9yZ2FuaXplZCBieSBFcmljYQpCdWdkZW4gKEVmZmljaU9TKSwgT2xpdmllciBE
-aW9uIChFZmZpY2lPUyksIGFuZCBNYXRoaWV1IERlc25veWVycwooRWZmaWNpT1MpIG9uIGJlaGFs
-ZiBvZiB0aGUgTGludXggRm91bmRhdGlvbiBEaWFnbm9zdGljIGFuZCBNb25pdG9yaW5nCldvcmtn
-cm91cC4KCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHBzOi8vd3d3LmVm
-ZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Read-side critical section nesting is tracked in lower-order bits
+and grace-period phase number use a single high-order bit
+
+Signed-off-by: Li-Kuan Ou <k777k777tw@gmail.com>
+---
+ include/urcu/static/urcu-bp.h     | 4 ++--
+ include/urcu/static/urcu-mb.h     | 4 ++--
+ include/urcu/static/urcu-memb.h   | 4 ++--
+ include/urcu/static/urcu-signal.h | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/include/urcu/static/urcu-bp.h b/include/urcu/static/urcu-bp.h
+index 8ba3830..c90c9f1 100644
+--- a/include/urcu/static/urcu-bp.h
++++ b/include/urcu/static/urcu-bp.h
+@@ -137,8 +137,8 @@ static inline enum urcu_bp_state urcu_bp_reader_state(unsigned long *ctr)
+ 
+ /*
+  * Helper for _urcu_bp_read_lock().  The format of urcu_bp_gp.ctr (as well as
+- * the per-thread rcu_reader.ctr) has the upper bits containing a count of
+- * _urcu_bp_read_lock() nesting, and a lower-order bit that contains either zero
++ * the per-thread rcu_reader.ctr) has the lower-order bits containing a count of
++ * _urcu_bp_read_lock() nesting, and a single high-order bit that contains either zero
+  * or URCU_BP_GP_CTR_PHASE.  The smp_mb_slave() ensures that the accesses in
+  * _urcu_bp_read_lock() happen before the subsequent read-side critical section.
+  */
+diff --git a/include/urcu/static/urcu-mb.h b/include/urcu/static/urcu-mb.h
+index b97e42a..218e2f3 100644
+--- a/include/urcu/static/urcu-mb.h
++++ b/include/urcu/static/urcu-mb.h
+@@ -63,8 +63,8 @@ extern DECLARE_URCU_TLS(struct urcu_reader, urcu_mb_reader);
+ 
+ /*
+  * Helper for _urcu_mb_read_lock().  The format of urcu_mb_gp.ctr (as well as
+- * the per-thread rcu_reader.ctr) has the upper bits containing a count of
+- * _urcu_mb_read_lock() nesting, and a lower-order bit that contains either zero
++ * the per-thread rcu_reader.ctr) has the lower-order bits containing a count of
++ * _urcu_mb_read_lock() nesting, and a single high-order bit that contains either zero
+  * or URCU_GP_CTR_PHASE.  The cmm_smp_mb() ensures that the accesses in
+  * _urcu_mb_read_lock() happen before the subsequent read-side critical section.
+  */
+diff --git a/include/urcu/static/urcu-memb.h b/include/urcu/static/urcu-memb.h
+index c8d102f..b923f73 100644
+--- a/include/urcu/static/urcu-memb.h
++++ b/include/urcu/static/urcu-memb.h
+@@ -86,8 +86,8 @@ extern DECLARE_URCU_TLS(struct urcu_reader, urcu_memb_reader);
+ 
+ /*
+  * Helper for _rcu_read_lock().  The format of urcu_memb_gp.ctr (as well as
+- * the per-thread rcu_reader.ctr) has the upper bits containing a count of
+- * _rcu_read_lock() nesting, and a lower-order bit that contains either zero
++ * the per-thread rcu_reader.ctr) has the lower-order bits containing a count of
++ * _rcu_read_lock() nesting, and a single high-order bit that contains either zero
+  * or URCU_GP_CTR_PHASE.  The smp_mb_slave() ensures that the accesses in
+  * _rcu_read_lock() happen before the subsequent read-side critical section.
+  */
+diff --git a/include/urcu/static/urcu-signal.h b/include/urcu/static/urcu-signal.h
+index c7577d3..00588b8 100644
+--- a/include/urcu/static/urcu-signal.h
++++ b/include/urcu/static/urcu-signal.h
+@@ -64,8 +64,8 @@ extern DECLARE_URCU_TLS(struct urcu_reader, urcu_signal_reader);
+ 
+ /*
+  * Helper for _rcu_read_lock().  The format of urcu_signal_gp.ctr (as well as
+- * the per-thread rcu_reader.ctr) has the upper bits containing a count of
+- * _rcu_read_lock() nesting, and a lower-order bit that contains either zero
++ * the per-thread rcu_reader.ctr) has the lower-order bits containing a count of
++ * _rcu_read_lock() nesting, and a single high-order bit that contains either zero
+  * or URCU_GP_CTR_PHASE.  The cmm_barrier() ensures that the accesses in
+  * _rcu_read_lock() happen before the subsequent read-side critical section.
+  */
+-- 
+2.34.1
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
