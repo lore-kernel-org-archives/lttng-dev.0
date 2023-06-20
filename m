@@ -4,55 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7D5EEB64DB
-	for <lttng-dev@archiver.kernel.org>; Tue, 20 Jun 2023 10:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 248F6EB64DB
+	for <lttng-dev@archiver.kernel.org>; Tue, 20 Jun 2023 10:27:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1687256479;
-	bh=otGtXNlyqQdfo+sr2IORUS+TbEs/OYMvTT756qJsh/A=;
+	s=default; t=1687256843;
+	bh=05b3joueBY2thvZgshYp3qzHJ5jSvNObySgRjkVC05g=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aQE6wBQpv1gdRRXOfz3xF+z8K8cIIeOV8GsaaoTyANhDB8dTEF67asj+nVQCjATmU
-	 uDe1LW2WhGh23jC8WOwf/nMZwVadzkviDueEu0o5ZRCMiVm0kEVbDxx8kcgQpvWsen
-	 fSt20StuXapd9+uuigBCFpDGPdDGSovXyRcTbYJmex9/uRg/gP4ZGL0BFYLQXgYps7
-	 mzx3gRk+JwRim33xsuItSV5JW9neZMK0aurtRRenAqPr0kvqANM3iysQjGn0yQl9gU
-	 7+pBs301+dAYp9kZkpiLL96msZ4cBROQ3TlXTchNqZ4pYUC5ENPk3m3v8/xsk0KqXF
-	 tQv4IMOjynQHA==
+	b=mZ+0kqGIkanAPLI+m5pggCNrFnPQiendplj1FBInPhaA2TvhgMy787qSGLxUrC5jO
+	 g1CMy11uPme3vku+PHsoJRbzZEMyZMWhwGmS9eC5KtPw/ld/riRAAETaU4oDtcS2bV
+	 zJ6c0G+uBKAWFF7YxDRsZiJt43I1T+FkCOVovwZL/U0moBusKvPg/0Vh/iStL+81gO
+	 B65ZUx1ST7+qIEhE5A1EA3lSh3ZnqQGCq84wJdSdFzflnQe9UfDA+gm6b4PTMijCi9
+	 QvT6a8Pj6qtrMyAm+4HDd7aezoloN2y9v3CfSnax94qFsr91V2bp9Zbg/PYURWL+UV
+	 jvdfmYMQI/Gxw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QljMy3cSGz1yBx;
-	Tue, 20 Jun 2023 06:21:18 -0400 (EDT)
-Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com
- [52.119.213.150])
- by lists.lttng.org (Postfix) with ESMTPS id 4QljMw3qclz1yDM
- for <lttng-dev@lists.lttng.org>; Tue, 20 Jun 2023 06:21:16 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4QljVy3tbhz1y1V;
+	Tue, 20 Jun 2023 06:27:22 -0400 (EDT)
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com
+ [207.171.188.200])
+ by lists.lttng.org (Postfix) with ESMTPS id 4QljVw59zjz1yKP
+ for <lttng-dev@lists.lttng.org>; Tue, 20 Jun 2023 06:27:20 -0400 (EDT)
 X-IronPort-AV: E=Sophos;i="6.00,256,1681171200"; 
- d="scan'208,217";a="567554695"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO
- email-inbound-relay-pdx-2b-m6i4x-a893d89c.us-west-2.amazon.com) ([10.43.8.6])
- by smtp-border-fw-52002.iad7.amazon.com with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 10:21:13 +0000
+ d="scan'208,217";a="1138494247"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO
+ email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com)
+ ([10.25.36.214]) by smtp-border-fw-9103.sea19.amazon.com with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 10:27:11 +0000
 Received: from EX19D008EUC001.ant.amazon.com
- (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
- by email-inbound-relay-pdx-2b-m6i4x-a893d89c.us-west-2.amazon.com (Postfix)
- with ESMTPS id 88B3140D4C
- for <lttng-dev@lists.lttng.org>; Tue, 20 Jun 2023 10:21:11 +0000 (UTC)
+ (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+ by email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com (Postfix)
+ with ESMTPS id B089D80456
+ for <lttng-dev@lists.lttng.org>; Tue, 20 Jun 2023 10:27:10 +0000 (UTC)
 Received: from EX19D008EUC001.ant.amazon.com (10.252.51.165) by
  EX19D008EUC001.ant.amazon.com (10.252.51.165) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
- Tue, 20 Jun 2023 10:21:10 +0000
+ Tue, 20 Jun 2023 10:27:09 +0000
 Received: from EX19D008EUC001.ant.amazon.com ([fe80::9611:c62b:a7ba:aee1]) by
  EX19D008EUC001.ant.amazon.com ([fe80::9611:c62b:a7ba:aee1%3]) with
- mapi id 15.02.1118.026; Tue, 20 Jun 2023 10:21:10 +0000
+ mapi id 15.02.1118.026; Tue, 20 Jun 2023 10:27:09 +0000
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Thread-Index: AQHZo1of9E6kcCAeVUyScQoTVjxCgw==
-Date: Tue, 20 Jun 2023 10:21:10 +0000
-Message-ID: <1255477015ae4da8a6523b5d204334da@amazon.com>
+Thread-Topic: Profiling LTTng tracepoint latency on different arm platforms
+Thread-Index: AQHZo2HEplRT2zY9N0ijivZSO5DOOA==
+Date: Tue, 20 Jun 2023 10:27:09 +0000
+Message-ID: <6e06b605ec9f446da5dc8948c8621518@amazon.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [10.85.143.172]
 MIME-Version: 1.0
-Subject: [lttng-dev] (no subject)
+Subject: [lttng-dev] Profiling LTTng tracepoint latency on different arm
+ platforms
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -66,24 +68,28 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: "Mousa, Anas via lttng-dev" <lttng-dev@lists.lttng.org>
 Reply-To: "Mousa, Anas" <anasmous@amazon.com>
-Content-Type: multipart/mixed; boundary="===============0369875271704751774=="
+Content-Type: multipart/mixed; boundary="===============6493914625085299052=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============0369875271704751774==
+--===============6493914625085299052==
 Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="_000_1255477015ae4da8a6523b5d204334daamazoncom_"
+	boundary="_000_6e06b605ec9f446da5dc8948c8621518amazoncom_"
 
---_000_1255477015ae4da8a6523b5d204334daamazoncom_
+--_000_6e06b605ec9f446da5dc8948c8621518amazoncom_
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
 Hello,
 
+
+
 I've recently profiled the latency of LTTng tracepoints on arm platforms,
 
 using the follow sample program:
+
+
 
 ---------------------------------------------------------------------------=
 ---------------------------------------------------------------------------=
@@ -94,6 +100,8 @@ static inline uint64_t get_time_nsec(void)
 {
 
         struct timespec ts;
+
+
 
         if (caa_unlikely(clock_gettime(CLOCK_MONOTONIC, &ts))) {
 
@@ -108,6 +116,10 @@ static inline uint64_t get_time_nsec(void)
 }
 
 
+
+
+
+
 int main(int argc, char *argv[])
 
 {
@@ -119,6 +131,8 @@ int main(int argc, char *argv[])
     uint64_t total_time =3D 0;
 
     uint64_t now, nowz;
+
+
 
     if (argc > 1) {
 
@@ -140,6 +154,8 @@ int main(int argc, char *argv[])
 
     }
 
+
+
     if (tp_num) {
 
         printf("---------------------------Average TP time is %"PRIu64"----=
@@ -154,48 +170,66 @@ int main(int argc, char *argv[])
 ----------------------------
 
 
+
+
+
+
 I observed a big average latency variance on different platforms when traci=
 ng a high number (many thousands to millions) of tracepoints:
 
+
+
   *   [platform 1] with CPU info running a linux kernel based on Buildroot =
 (4.19.273 aarch64 GNU/Linux):
+
+
 
 BogoMIPS        : 187.50
 
 Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
 
-CPU implementer : 0x41
+CPU implementer   : 0x41
 
 CPU architecture: 8
 
-CPU variant     : 0x0
+CPU variant       : 0x0
 
-CPU part        : 0xd08
+CPU part  : 0xd08
 
-CPU revision    : 3
+CPU revision      : 3
 
-  *    Saw an average latency of 2-3usec
+
+
+     *    Saw an average latency of 2-3usec
 
 
   *   [platform 2] with CPU info running a linux kernel based on Amazon Lin=
 ux (4.14.294-220.533.amzn2.aarch64 aarch64 GNU/Linux):
+
+
 
 BogoMIPS        : 243.75
 
 Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp a=
 simdhp cpuid asimdrdm lrcpc dcpop asimddp ssbs
 
-CPU implementer : 0x41
+CPU implementer   : 0x41
 
 CPU architecture: 8
 
-CPU variant     : 0x3
+CPU variant       : 0x3
 
-CPU part        : 0xd0c
+CPU part  : 0xd0c
 
-CPU revision    : 1
+CPU revision      : 1
 
-  *   Saw an average latency of ~0.5usec
+
+
+     *   Saw an average latency of ~0.5usec
+
+
+
+
 
 
 
@@ -203,12 +237,13 @@ Are there any suggestions to root cause the high latency and potentially im=
 prove it on platform 1?
 
 
+
 Thanks and best regards,
 
 Anas.
 
 
---_000_1255477015ae4da8a6523b5d204334daamazoncom_
+--_000_6e06b605ec9f446da5dc8948c8621518amazoncom_
 Content-Type: text/html; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
@@ -222,1513 +257,1595 @@ n-bottom:0;} --></style>
 <body dir=3D"ltr">
 <div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
 -family:Calibri,Helvetica,sans-serif;" dir=3D"ltr">
-<div id=3D"divtagdefaultwrapper" dir=3D"ltr" style=3D"font-size: 12pt; colo=
-r: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif, EmojiFont, &q=
-uot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &q=
-uot;Segoe UI Symbol&quot;, &quot;Android Emoji&quot;, EmojiSymbols;">
-<p></p>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">Hello</span><span style=3D"font-fa=
-mily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">,</spa=
-n></pre>
+<p><span id=3D"ms-rterangepaste-start"></span></p>
+<div id=3D"divtagdefaultwrapper" style=3D"font-family: Calibri, Helvetica, =
+sans-serif, serif, EmojiFont; font-size: 16px;">
+<font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji,Sego=
+e UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" size=
+=3D"3" color=3D"black"><span id=3D"divtagdefaultwrapper" style=3D"font-size=
+: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">Hello</span></font><font size=3D"4" color=3D"black" style=3D"font-fam=
+ily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font=
+-size: 14pt;">,</span></font></font></pre>
 </div>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"></span></pre>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
 </div>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">I</span><span class=3D"cm-string" =
-style=3D"color:rgb(0,0,0); font-family:Calibri,Helvetica,sans-serif; font-s=
-ize:14pt">'ve recently profiled the latency of LTTng tracepoints on arm pla=
-tforms,</span></pre>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">I</span></font><font size=3D"4" color=3D"black" style=3D"font-family:=
+ Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-siz=
+e: 14pt;">'ve recently profiled the latency of LTTng tracepoints on arm pla=
+tforms,</span></font></font></pre>
 </div>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-keyword" style=3D"color:rgb(0,0,0); font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt">using</span><span style=3D"font-fam=
-ily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span=
-><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-se=
-rif; font-size:14pt; color:rgb(0,0,0)">the</span><span style=3D"font-family=
-:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><s=
-pan class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif=
-; font-size:14pt; color:rgb(0,0,0)">follow</span><span style=3D"font-family=
-:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><s=
-pan class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif=
-; font-size:14pt; color:rgb(0,0,0)">sample</span><span style=3D"font-family=
-:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><s=
-pan class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif=
-; font-size:14pt; color:rgb(0,0,0)">program</span><span style=3D"font-famil=
-y:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">:</span><=
-/pre>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 1=
-2pt; color: rgb(0, 0, 0);"></span></pre>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">using</span></font><font size=3D"4" color=3D"black" style=3D"font-fam=
+ily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font=
+-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font=
+-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"=
+font-size: 14pt;">the</span></font><font size=3D"4" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">follow</span></font><font size=3D"4" color=3D=
+"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiF=
+ont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" colo=
+r=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Em=
+ojiFont;"><span style=3D"font-size: 14pt;">sample</span></font><font size=
+=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font =
+size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-s=
+erif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">program</span></f=
+ont><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helveti=
+ca, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">:</span=
+></font></font></pre>
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
 </div>
-<div style=3D"counter-increment: snippet 1; margin-left: 32px; padding: 0px=
- 8px;">
-<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; font-s=
-ize: inherit; line-height: inherit; tab-size: 4; word-break: normal; font-f=
-amily: inherit; border-width: 0px; border-radius: 0px; color: inherit; over=
-flow: visible;"><span style=3D"font-size: 12pt;">--------------------------=
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3"><span style=3D"font-size: 12pt;">--------=
 ---------------------------------------------------------------------------=
 ---------------------------------------------------------------------------=
---</span></pre>
+--------------------</span></font></font></pre>
 </div>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span class=3D"cm-keyword" style=3D"color: rgb(0, 0, 0); font-family:=
- Calibri, Helvetica, sans-serif; font-size: 12pt;">static</span><span style=
-=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rg=
-b(0, 0, 0);"> </span><span class=3D"cm-keyword" style=3D"color: rgb(0, 0, 0=
-); font-family: Calibri, Helvetica, sans-serif; font-size: 12pt;">inline</s=
-pan><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: =
-12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-type" style=3D"color:=
- rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-size: 12pt=
-;">uint64_t</span><span style=3D"font-family: Calibri, Helvetica, sans-seri=
-f; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-def" st=
-yle=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; fo=
-nt-size: 12pt;">get_time_nsec</span><span style=3D"font-family: Calibri, He=
-lvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">(</span><span c=
-lass=3D"cm-type" style=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvet=
-ica, sans-serif; font-size: 12pt;">void</span><span style=3D"font-family: C=
-alibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">)</sp=
-an></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b><span style=3D"font-size: 12pt;">{</span></b></span><=
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>static</b></span></font><font size=3D"3" color=3D"black" style=3D"=
+font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b> </b></span></font><font size=3D"3" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 12pt;"><b>inline</b></span></font><font size=3D"3=
+" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, ser=
+if, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><fon=
+t size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans=
+-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>uint64_t</b>=
+</span></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibr=
+i, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt=
+;"><b> </b></span></font><font size=3D"3" color=3D"black" style=3D"font-fam=
+ily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font=
+-size: 12pt;"><b>get_time_nsec</b></span></font><font size=3D"3" color=3D"b=
+lack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFon=
+t;"><span style=3D"font-size: 12pt;"><b>(</b></span></font><font size=3D"3"=
+ color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, seri=
+f, EmojiFont;"><span style=3D"font-size: 12pt;"><b>void</b></span></font><f=
+ont size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sa=
+ns-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>)</b></spa=
+n></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>{</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>struct</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>timespec</b></span=
+></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Hel=
+vetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>=
+ </b></span></font><font size=3D"3" color=3D"black" style=3D"font-family: C=
+alibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size:=
+ 12pt;"><b>ts</b></span></font><font size=3D"3" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>;</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>if</b></span></font><font size=3D"3" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 12pt;"><b> (</b></span></font><font size=3D"=
+3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, se=
+rif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>caa_unlikely</b></span=
+></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Hel=
+vetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>=
+(</b></span></font><font size=3D"3" color=3D"black" style=3D"font-family: C=
+alibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size:=
+ 12pt;"><b>clock_gettime</b></span></font><font size=3D"3" color=3D"black" =
+style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><s=
+pan style=3D"font-size: 12pt;"><b>(</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b>CLOCK_MONOTONIC</b></span></fo=
+nt><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetic=
+a, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>, </b=
+></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Calib=
+ri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12p=
+t;"><b>&amp;</b></span></font><font size=3D"3" color=3D"black" style=3D"fon=
+t-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D=
+"font-size: 12pt;"><b>ts</b></span></font><font size=3D"3" color=3D"black" =
+style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><s=
+pan style=3D"font-size: 12pt;"><b>))) {</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>                </b></span></font><font size=3D"3" color=3D"black"=
+ style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><=
+span style=3D"font-size: 12pt;"><b>ts</b></span></font><font size=3D"3" col=
+or=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, E=
+mojiFont;"><span style=3D"font-size: 12pt;"><b>.</b></span></font><font siz=
+e=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-seri=
+f, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>tv_sec</b></span>=
+</font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> =
+</b></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Ca=
+libri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: =
+12pt;"><b>=3D</b></span></font><font size=3D"3" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b> </b></span></font><font size=3D"3" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 12pt;"><b>0</b></span></font><font size=3D"3" col=
+or=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, E=
+mojiFont;"><span style=3D"font-size: 12pt;"><b>;</b></span></font></font></=
+pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>                </b></span></font><font size=3D"3" color=3D"black"=
+ style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><=
+span style=3D"font-size: 12pt;"><b>ts</b></span></font><font size=3D"3" col=
+or=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, E=
+mojiFont;"><span style=3D"font-size: 12pt;"><b>.</b></span></font><font siz=
+e=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-seri=
+f, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>tv_nsec</b></span=
+></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Hel=
+vetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>=
+ </b></span></font><font size=3D"3" color=3D"black" style=3D"font-family: C=
+alibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size:=
+ 12pt;"><b>=3D</b></span></font><font size=3D"3" color=3D"black" style=3D"f=
+ont-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b> </b></span></font><font size=3D"3" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 12pt;"><b>0</b></span></font><font size=3D"3" col=
+or=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, E=
+mojiFont;"><span style=3D"font-size: 12pt;"><b>;</b></span></font></font></=
+pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        }</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>return</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b> ((</b></span></font><font siz=
+e=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-seri=
+f, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>uint64_t</b></spa=
+n></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, He=
+lvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b=
+>) </b></span></font><font size=3D"3" color=3D"black" style=3D"font-family:=
+ Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-siz=
+e: 12pt;"><b>ts</b></span></font><font size=3D"3" color=3D"black" style=3D"=
+font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>.</b></span></font><font size=3D"3" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 12pt;"><b>tv_sec</b></span></font><font size=3D"3=
+" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, ser=
+if, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><fon=
+t size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans=
+-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>*</b></span>=
+</font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> =
+</b></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Ca=
+libri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: =
+12pt;"><b>1000000000ULL</b></span></font><font size=3D"3" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 12pt;"><b>) </b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b>&#43;</b></span></font><font s=
+ize=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-se=
+rif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></f=
+ont><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helveti=
+ca, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>ts</=
+b></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Cali=
+bri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12=
+pt;"><b>.</b></span></font><font size=3D"3" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 12pt;"><b>tv_nsec</b></span></font><font size=3D"3" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 12pt;"><b>;</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>}</b></span></font></font></pre>
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>=0A=
+</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>int</b></span></font><font size=3D"3" color=3D"black" style=3D"fon=
+t-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D=
+"font-size: 12pt;"><b> </b></span></font><font size=3D"3" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 12pt;"><b>main</b></span></font><font size=3D"3" col=
+or=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, E=
+mojiFont;"><span style=3D"font-size: 12pt;"><b>(</b></span></font><font siz=
+e=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-seri=
+f, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>int</b></span></f=
+ont><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helveti=
+ca, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b=
+></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Calib=
+ri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12p=
+t;"><b>argc</b></span></font><font size=3D"3" color=3D"black" style=3D"font=
+-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"=
+font-size: 12pt;"><b>, </b></span></font><font size=3D"3" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 12pt;"><b>char</b></span></font><font size=3D"3" col=
+or=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, E=
+mojiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><font siz=
+e=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-seri=
+f, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>*</b></span></fon=
+t><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica=
+, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>argv</=
+b></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Cali=
+bri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12=
+pt;"><b>[])</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>{</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    </b></span></font><font size=3D"3" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>unsigned</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>int</b></span></fo=
+nt><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetic=
+a, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b>=
+</span></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibr=
+i, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt=
+;"><b>i</b></span></font><font size=3D"3" color=3D"black" style=3D"font-fam=
+ily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font=
+-size: 12pt;"><b>;</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    </b></span></font><font size=3D"3" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>int</b></span></font><font size=3D"3" color=3D"bla=
+ck" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;=
+"><span style=3D"font-size: 12pt;"><b> </b></span></font><font size=3D"3" c=
+olor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif,=
+ EmojiFont;"><span style=3D"font-size: 12pt;"><b>tp_num</b></span></font><f=
+ont size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sa=
+ns-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></spa=
+n></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, He=
+lvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b=
+>=3D</b></span></font><font size=3D"3" color=3D"black" style=3D"font-family=
+: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-si=
+ze: 12pt;"><b> </b></span></font><font size=3D"3" color=3D"black" style=3D"=
+font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>0</b></span></font><font size=3D"3" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 12pt;"><b>;</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    </b></span></font><font size=3D"3" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>uint64_t</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>total_time</b></sp=
+an></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, H=
+elvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><=
+b> </b></span></font><font size=3D"3" color=3D"black" style=3D"font-family:=
+ Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-siz=
+e: 12pt;"><b>=3D</b></span></font><font size=3D"3" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 12pt;"><b> </b></span></font><font size=3D"3" color=3D"blac=
+k" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"=
+><span style=3D"font-size: 12pt;"><b>0</b></span></font><font size=3D"3" co=
+lor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, =
+EmojiFont;"><span style=3D"font-size: 12pt;"><b>;</b></span></font></font><=
 /pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">	</span><span class=3D"cm-keyword" style=3D"c=
-olor: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-size:=
- 12pt;">struct</span><span style=3D"font-family: Calibri, Helvetica, sans-s=
-erif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-def"=
- style=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif;=
- font-size: 12pt;">timespec</span><span style=3D"font-family: Calibri, Helv=
-etica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span cla=
-ss=3D"cm-def" style=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica=
-, sans-serif; font-size: 12pt;">ts</span><span style=3D"font-family: Calibr=
-i, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">;</span></=
-b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b></b></span></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">	</span><span class=3D"cm-keyword" style=3D"c=
-olor: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-size:=
- 12pt;">if</span><span style=3D"font-family: Calibri, Helvetica, sans-serif=
-; font-size: 12pt; color: rgb(0, 0, 0);"> (</span><span class=3D"cm-variabl=
-e" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">caa_unlikely</span><span style=3D"font-family: Calibri=
-, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">(</span><sp=
-an class=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-ser=
-if; font-size: 12pt; color: rgb(0, 0, 0);">clock_gettime</span><span style=
-=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rg=
-b(0, 0, 0);">(</span><span class=3D"cm-variable" style=3D"font-family: Cali=
-bri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">CLOCK_MO=
-NOTONIC</span><span style=3D"font-family: Calibri, Helvetica, sans-serif; f=
-ont-size: 12pt; color: rgb(0, 0, 0);">, </span><span class=3D"cm-operator" =
-style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; colo=
-r: rgb(0, 0, 0);">&amp;</span><span class=3D"cm-variable" style=3D"font-fam=
-ily: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"=
->ts</span><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-=
-size: 12pt; color: rgb(0, 0, 0);">))) {</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">		</span><span class=3D"cm-variable" style=3D=
-"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0=
-, 0, 0);">ts</span><span style=3D"font-family: Calibri, Helvetica, sans-ser=
-if; font-size: 12pt; color: rgb(0, 0, 0);">.</span><span class=3D"cm-variab=
-le" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; =
-color: rgb(0, 0, 0);">tv_sec</span><span style=3D"font-family: Calibri, Hel=
-vetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span cl=
-ass=3D"cm-operator" style=3D"font-family: Calibri, Helvetica, sans-serif; f=
-ont-size: 12pt; color: rgb(0, 0, 0);">=3D</span><span style=3D"font-family:=
- Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </=
-span><span class=3D"cm-number" style=3D"color: rgb(0, 0, 0); font-family: C=
-alibri, Helvetica, sans-serif; font-size: 12pt;">0</span><span style=3D"fon=
-t-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0,=
- 0);">;</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">		</span><span class=3D"cm-variable" style=3D=
-"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0=
-, 0, 0);">ts</span><span style=3D"font-family: Calibri, Helvetica, sans-ser=
-if; font-size: 12pt; color: rgb(0, 0, 0);">.</span><span class=3D"cm-variab=
-le" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; =
-color: rgb(0, 0, 0);">tv_nsec</span><span style=3D"font-family: Calibri, He=
-lvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span c=
-lass=3D"cm-operator" style=3D"font-family: Calibri, Helvetica, sans-serif; =
-font-size: 12pt; color: rgb(0, 0, 0);">=3D</span><span style=3D"font-family=
-: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> <=
-/span><span class=3D"cm-number" style=3D"color: rgb(0, 0, 0); font-family: =
-Calibri, Helvetica, sans-serif; font-size: 12pt;">0</span><span style=3D"fo=
-nt-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0=
-, 0);">;</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b><span style=3D"font-size: 12pt;">	}</span></b></span>=
-</pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">	</span><span class=3D"cm-keyword" style=3D"c=
-olor: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-size:=
- 12pt;">return</span><span style=3D"font-family: Calibri, Helvetica, sans-s=
-erif; font-size: 12pt; color: rgb(0, 0, 0);"> ((</span><span class=3D"cm-ty=
-pe" style=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-ser=
-if; font-size: 12pt;">uint64_t</span><span style=3D"font-family: Calibri, H=
-elvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">) </span><span=
- class=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-serif=
-; font-size: 12pt; color: rgb(0, 0, 0);">ts</span><span style=3D"font-famil=
-y: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">.=
-</span><span class=3D"cm-variable" style=3D"font-family: Calibri, Helvetica=
-, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">tv_sec</span><span sty=
-le=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: =
-rgb(0, 0, 0);"> </span><span class=3D"cm-operator" style=3D"font-family: Ca=
-libri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">*</spa=
-n><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12=
-pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-number" style=3D"color:=
- rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-size: 12pt=
-;">1000000000ULL</span><span style=3D"font-family: Calibri, Helvetica, sans=
--serif; font-size: 12pt; color: rgb(0, 0, 0);">) </span><span class=3D"cm-o=
-perator" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 1=
-2pt; color: rgb(0, 0, 0);">&#43;</span><span style=3D"font-family: Calibri,=
- Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><spa=
-n class=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-seri=
-f; font-size: 12pt; color: rgb(0, 0, 0);">ts</span><span style=3D"font-fami=
-ly: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">=
-.</span><span class=3D"cm-variable" style=3D"font-family: Calibri, Helvetic=
-a, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">tv_nsec</span><span s=
-tyle=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color=
-: rgb(0, 0, 0);">;</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b><span style=3D"font-size: 12pt;">}</span></b></span><=
-/pre>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b><span style=3D"font-size: 12pt;"><br></span></b></spa=
-n></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b></b></span></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span class=3D"cm-type" style=3D"color: rgb(0, 0, 0); font-family: Ca=
-libri, Helvetica, sans-serif; font-size: 12pt;">int</span><span style=3D"fo=
-nt-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0=
-, 0);"> </span><span class=3D"cm-def" style=3D"color: rgb(0, 0, 0); font-fa=
-mily: Calibri, Helvetica, sans-serif; font-size: 12pt;">main</span><span st=
-yle=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color:=
- rgb(0, 0, 0);">(</span><span class=3D"cm-type" style=3D"color: rgb(0, 0, 0=
-); font-family: Calibri, Helvetica, sans-serif; font-size: 12pt;">int</span=
-><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12p=
-t; color: rgb(0, 0, 0);"> </span><span class=3D"cm-variable" style=3D"font-=
-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0=
-);">argc</span><span style=3D"font-family: Calibri, Helvetica, sans-serif; =
-font-size: 12pt; color: rgb(0, 0, 0);">, </span><span class=3D"cm-type" sty=
-le=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; fon=
-t-size: 12pt;">char</span><span style=3D"font-family: Calibri, Helvetica, s=
-ans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm=
--type" style=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-=
-serif; font-size: 12pt;">*</span><span class=3D"cm-variable" style=3D"font-=
-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0=
-);">argv</span><span style=3D"font-family: Calibri, Helvetica, sans-serif; =
-font-size: 12pt; color: rgb(0, 0, 0);">[])</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b><span style=3D"font-size: 12pt;">{</span></b></span><=
-/pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">    </span><span class=3D"cm-type" style=3D"c=
-olor: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-size:=
- 12pt;">unsigned</span><span style=3D"font-family: Calibri, Helvetica, sans=
--serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-ty=
-pe" style=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-ser=
-if; font-size: 12pt;">int</span><span style=3D"font-family: Calibri, Helvet=
-ica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=
-=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-serif; font=
--size: 12pt; color: rgb(0, 0, 0);">i</span><span style=3D"font-family: Cali=
-bri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">;</span>=
-</b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">    </span><span class=3D"cm-type" style=3D"c=
-olor: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-size:=
- 12pt;">int</span><span style=3D"font-family: Calibri, Helvetica, sans-seri=
-f; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-variabl=
-e" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">tp_num</span><span style=3D"font-family: Calibri, Helv=
-etica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span cla=
-ss=3D"cm-operator" style=3D"font-family: Calibri, Helvetica, sans-serif; fo=
-nt-size: 12pt; color: rgb(0, 0, 0);">=3D</span><span style=3D"font-family: =
-Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </s=
-pan><span class=3D"cm-number" style=3D"color: rgb(0, 0, 0); font-family: Ca=
-libri, Helvetica, sans-serif; font-size: 12pt;">0</span><span style=3D"font=
--family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, =
-0);">;</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">    </span><span class=3D"cm-type" style=3D"c=
-olor: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-size:=
- 12pt;">uint64_t</span><span style=3D"font-family: Calibri, Helvetica, sans=
--serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-va=
-riable" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12=
-pt; color: rgb(0, 0, 0);">total_time</span><span style=3D"font-family: Cali=
-bri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span>=
-<span class=3D"cm-operator" style=3D"font-family: Calibri, Helvetica, sans-=
-serif; font-size: 12pt; color: rgb(0, 0, 0);">=3D</span><span style=3D"font=
--family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, =
-0);"> </span><span class=3D"cm-number" style=3D"color: rgb(0, 0, 0); font-f=
-amily: Calibri, Helvetica, sans-serif; font-size: 12pt;">0</span><span styl=
-e=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: r=
-gb(0, 0, 0);">;</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">    </span><span class=3D"cm-type" style=3D"c=
-olor: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-size:=
- 12pt;">uint64_t</span><span style=3D"font-family: Calibri, Helvetica, sans=
--serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-va=
-riable" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12=
-pt; color: rgb(0, 0, 0);">now</span><span style=3D"font-family: Calibri, He=
-lvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">, </span><span =
-class=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-serif;=
- font-size: 12pt; color: rgb(0, 0, 0);">nowz</span><span style=3D"font-fami=
-ly: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">=
-;</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b></b></span></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">    </span><span class=3D"cm-keyword" style=
-=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-=
-size: 12pt;">if</span><span style=3D"font-family: Calibri, Helvetica, sans-=
-serif; font-size: 12pt; color: rgb(0, 0, 0);"> (</span><span class=3D"cm-va=
-riable" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12=
-pt; color: rgb(0, 0, 0);">argc</span><span style=3D"font-family: Calibri, H=
-elvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span =
-class=3D"cm-operator" style=3D"font-family: Calibri, Helvetica, sans-serif;=
- font-size: 12pt; color: rgb(0, 0, 0);">&gt;</span><span style=3D"font-fami=
-ly: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">=
- </span><span class=3D"cm-number" style=3D"color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif; font-size: 12pt;">1</span><span style=3D"=
-font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0,=
- 0, 0);">) {</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">        </span><span class=3D"cm-variable" st=
-yle=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color:=
- rgb(0, 0, 0);">sscanf</span><span style=3D"font-family: Calibri, Helvetica=
-, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> (</span><span class=
-=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-serif; font=
--size: 12pt; color: rgb(0, 0, 0);">argv</span><span style=3D"font-family: C=
-alibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">[</sp=
-an><span class=3D"cm-number" style=3D"color: rgb(0, 0, 0); font-family: Cal=
-ibri, Helvetica, sans-serif; font-size: 12pt;">1</span><span style=3D"font-=
-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0=
-);">],</span><span class=3D"cm-string" style=3D"color: rgb(0, 0, 0); font-f=
-amily: Calibri, Helvetica, sans-serif; font-size: 12pt;">&quot;%d&quot;</sp=
-an><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 1=
-2pt; color: rgb(0, 0, 0);">,</span><span class=3D"cm-operator" style=3D"fon=
-t-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0,=
- 0);">&amp;</span><span class=3D"cm-variable" style=3D"font-family: Calibri=
-, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">tp_num</spa=
-n><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12=
-pt; color: rgb(0, 0, 0);">);</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b><span style=3D"font-size: 12pt;">    }</span></b></sp=
-an></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">    </span><span class=3D"cm-keyword" style=
-=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-=
-size: 12pt;">for</span><span style=3D"font-family: Calibri, Helvetica, sans=
--serif; font-size: 12pt; color: rgb(0, 0, 0);"> (</span><span class=3D"cm-v=
-ariable" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 1=
-2pt; color: rgb(0, 0, 0);">i</span><span style=3D"font-family: Calibri, Hel=
-vetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span cl=
-ass=3D"cm-operator" style=3D"font-family: Calibri, Helvetica, sans-serif; f=
-ont-size: 12pt; color: rgb(0, 0, 0);">=3D</span><span style=3D"font-family:=
- Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </=
-span><span class=3D"cm-number" style=3D"color: rgb(0, 0, 0); font-family: C=
-alibri, Helvetica, sans-serif; font-size: 12pt;">0</span><span style=3D"fon=
-t-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0,=
- 0);">; </span><span class=3D"cm-variable" style=3D"font-family: Calibri, H=
-elvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">i</span><span =
-style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; colo=
-r: rgb(0, 0, 0);"> </span><span class=3D"cm-operator" style=3D"font-family:=
- Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">&lt=
-;</span><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-si=
-ze: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-variable" style=
-=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rg=
-b(0, 0, 0);">tp_num</span><span style=3D"font-family: Calibri, Helvetica, s=
-ans-serif; font-size: 12pt; color: rgb(0, 0, 0);">; </span><span class=3D"c=
-m-variable" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">i</span><span class=3D"cm-operator" style=3D"=
-font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0,=
- 0, 0);">&#43;&#43;</span><span style=3D"font-family: Calibri, Helvetica, s=
-ans-serif; font-size: 12pt; color: rgb(0, 0, 0);">) {</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">        </span><span class=3D"cm-variable" st=
-yle=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color:=
- rgb(0, 0, 0);">now</span><span style=3D"font-family: Calibri, Helvetica, s=
-ans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm=
--operator" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size:=
- 12pt; color: rgb(0, 0, 0);">=3D</span><span style=3D"font-family: Calibri,=
- Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><spa=
-n class=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-seri=
-f; font-size: 12pt; color: rgb(0, 0, 0);">get_time_nsec</span><span style=
-=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rg=
-b(0, 0, 0);">();</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">        </span><span class=3D"cm-variable" st=
-yle=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color:=
- rgb(0, 0, 0);">lttng_ust_tracepoint</span><span style=3D"font-family: Cali=
-bri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">(</span>=
-<span class=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-=
-serif; font-size: 12pt; color: rgb(0, 0, 0);">hello_world</span><span style=
-=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rg=
-b(0, 0, 0);">, </span><span class=3D"cm-variable" style=3D"font-family: Cal=
-ibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">my_firs=
-t_tracepoint</span><span style=3D"font-family: Calibri, Helvetica, sans-ser=
-if; font-size: 12pt; color: rgb(0, 0, 0);">,</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">                             </span><span cla=
-ss=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-serif; fo=
-nt-size: 12pt; color: rgb(0, 0, 0);">i</span><span style=3D"font-family: Ca=
-libri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">, </sp=
-an><span class=3D"cm-string" style=3D"color: rgb(0, 0, 0); font-family: Cal=
-ibri, Helvetica, sans-serif; font-size: 12pt;">&quot;some_str&quot;</span><=
-span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt;=
- color: rgb(0, 0, 0);">);</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">        </span><span class=3D"cm-variable" st=
-yle=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color:=
- rgb(0, 0, 0);">nowz</span><span style=3D"font-family: Calibri, Helvetica, =
-sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span class=3D"c=
-m-operator" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">=3D</span><span style=3D"font-family: Calibri=
-, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><sp=
-an class=3D"cm-variable" style=3D"font-family: Calibri, Helvetica, sans-ser=
-if; font-size: 12pt; color: rgb(0, 0, 0);">get_time_nsec</span><span style=
-=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rg=
-b(0, 0, 0);">();</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">        </span><span class=3D"cm-variable" st=
-yle=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color:=
- rgb(0, 0, 0);">total_time</span><span style=3D"font-family: Calibri, Helve=
-tica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span><span clas=
-s=3D"cm-operator" style=3D"font-family: Calibri, Helvetica, sans-serif; fon=
-t-size: 12pt; color: rgb(0, 0, 0);">&#43;=3D</span><span style=3D"font-fami=
-ly: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">=
- (</span><span class=3D"cm-variable" style=3D"font-family: Calibri, Helveti=
-ca, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">nowz</span><span sty=
-le=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: =
-rgb(0, 0, 0);"> </span><span class=3D"cm-operator" style=3D"font-family: Ca=
-libri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">-</spa=
-n><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12=
-pt; color: rgb(0, 0, 0);"> </span><span class=3D"cm-variable" style=3D"font=
--family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, =
-0);">now</span><span style=3D"font-family: Calibri, Helvetica, sans-serif; =
-font-size: 12pt; color: rgb(0, 0, 0);">);</span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b><span style=3D"font-size: 12pt;">    }</span></b></sp=
-an></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b></b></span></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">    </span><span class=3D"cm-keyword" style=
-=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, sans-serif; font-=
-size: 12pt;">if</span><span style=3D"font-family: Calibri, Helvetica, sans-=
-serif; font-size: 12pt; color: rgb(0, 0, 0);"> (</span><span class=3D"cm-va=
-riable" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12=
-pt; color: rgb(0, 0, 0);">tp_num</span><span style=3D"font-family: Calibri,=
- Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">) {</span></=
-b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><b><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);">        </span><span class=3D"cm-variable" st=
-yle=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color:=
- rgb(0, 0, 0);">printf</span><span style=3D"font-family: Calibri, Helvetica=
-, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">(</span><span class=3D=
-"cm-string" style=3D"color: rgb(0, 0, 0); font-family: Calibri, Helvetica, =
-sans-serif; font-size: 12pt;">&quot;---------------------------Average TP t=
-ime is %&quot;</span><span class=3D"cm-variable" style=3D"font-family: Cali=
-bri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">PRIu64</=
-span><span class=3D"cm-string" style=3D"color: rgb(0, 0, 0); font-family: C=
-alibri, Helvetica, sans-serif; font-size: 12pt;">&quot;--------------------=
--------\n&quot;</span><span style=3D"font-family: Calibri, Helvetica, sans-=
-serif; font-size: 12pt; color: rgb(0, 0, 0);">, </span><span class=3D"cm-va=
-riable" style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12=
-pt; color: rgb(0, 0, 0);">total_time</span><span style=3D"font-family: Cali=
-bri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"> </span>=
-<span class=3D"cm-operator" style=3D"font-family: Calibri, Helvetica, sans-=
-serif; font-size: 12pt; color: rgb(0, 0, 0);">/</span><span style=3D"font-f=
-amily: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0)=
-;"> </span><span class=3D"cm-variable" style=3D"font-family: Calibri, Helve=
-tica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">tp_num</span><span=
- style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; col=
-or: rgb(0, 0, 0);">);      </span></b></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b><span style=3D"font-size: 12pt;">    }</span></b></sp=
-an></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"><b><span style=3D"font-size: 12pt;">}</span></b></span><=
-/pre>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 1=
-4pt; color: rgb(0, 0, 0);"><span style=3D"font-size: 12pt;"></span></span><=
-span style=3D"font-size: 12pt;">-------------------------------------------=
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    </b></span></font><font size=3D"3" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>uint64_t</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>now</b></span></fo=
+nt><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetic=
+a, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>, </b=
+></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Calib=
+ri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12p=
+t;"><b>nowz</b></span></font><font size=3D"3" color=3D"black" style=3D"font=
+-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"=
+font-size: 12pt;"><b>;</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    </b></span></font><font size=3D"3" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>if</b></span></font><font size=3D"3" color=3D"blac=
+k" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"=
+><span style=3D"font-size: 12pt;"><b> (</b></span></font><font size=3D"3" c=
+olor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif,=
+ EmojiFont;"><span style=3D"font-size: 12pt;"><b>argc</b></span></font><fon=
+t size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans=
+-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></span>=
+</font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>&=
+gt;</b></span></font><font size=3D"3" color=3D"black" style=3D"font-family:=
+ Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-siz=
+e: 12pt;"><b> </b></span></font><font size=3D"3" color=3D"black" style=3D"f=
+ont-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>1</b></span></font><font size=3D"3" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 12pt;"><b>) {</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>sscanf</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b> (</b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>argv</b></span></f=
+ont><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helveti=
+ca, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>[</b=
+></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Calib=
+ri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12p=
+t;"><b>1</b></span></font><font size=3D"3" color=3D"black" style=3D"font-fa=
+mily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fon=
+t-size: 12pt;"><b>],</b></span></font><font size=3D"3" color=3D"black" styl=
+e=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span =
+style=3D"font-size: 12pt;"><b>&quot;%d&quot;</b></span></font><font size=3D=
+"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, s=
+erif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>,</b></span></font><f=
+ont size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sa=
+ns-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>&amp;</b><=
+/span></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri=
+, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;=
+"><b>tp_num</b></span></font><font size=3D"3" color=3D"black" style=3D"font=
+-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"=
+font-size: 12pt;"><b>);</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    }</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    </b></span></font><font size=3D"3" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>for</b></span></font><font size=3D"3" color=3D"bla=
+ck" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;=
+"><span style=3D"font-size: 12pt;"><b> (</b></span></font><font size=3D"3" =
+color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif=
+, EmojiFont;"><span style=3D"font-size: 12pt;"><b>i</b></span></font><font =
+size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-s=
+erif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></=
+font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvet=
+ica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>=3D=
+</b></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Ca=
+libri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: =
+12pt;"><b> </b></span></font><font size=3D"3" color=3D"black" style=3D"font=
+-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"=
+font-size: 12pt;"><b>0</b></span></font><font size=3D"3" color=3D"black" st=
+yle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><spa=
+n style=3D"font-size: 12pt;"><b>; </b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b>i</b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font=
+><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica,=
+ sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>&lt;</b=
+></span></font><font size=3D"3" color=3D"black" style=3D"font-family: Calib=
+ri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12p=
+t;"><b> </b></span></font><font size=3D"3" color=3D"black" style=3D"font-fa=
+mily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fon=
+t-size: 12pt;"><b>tp_num</b></span></font><font size=3D"3" color=3D"black" =
+style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><s=
+pan style=3D"font-size: 12pt;"><b>; </b></span></font><font size=3D"3" colo=
+r=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Em=
+ojiFont;"><span style=3D"font-size: 12pt;"><b>i</b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>&#43;&#43;</b></sp=
+an></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, H=
+elvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><=
+b>) {</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>now</b></span></font><font size=3D"3" color=3D=
+"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiF=
+ont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><font size=3D"=
+3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, se=
+rif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>=3D</b></span></font><=
+font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, s=
+ans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></sp=
+an></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, H=
+elvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><=
+b>get_time_nsec</b></span></font><font size=3D"3" color=3D"black" style=3D"=
+font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>();</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>lttng_ust_tracepoint</b></span></font><font si=
+ze=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-ser=
+if, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>(</b></span></fo=
+nt><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetic=
+a, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>hello=
+_world</b></span></font><font size=3D"3" color=3D"black" style=3D"font-fami=
+ly: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-=
+size: 12pt;"><b>, </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>my_first_tracepoint</b></span></font><font siz=
+e=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-seri=
+f, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>,</b></span></fon=
+t></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>                             </b></span></font><font size=3D"3" co=
+lor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, =
+EmojiFont;"><span style=3D"font-size: 12pt;"><b>i</b></span></font><font si=
+ze=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-ser=
+if, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>, </b></span></f=
+ont><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helveti=
+ca, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>&quo=
+t;some_str&quot;</b></span></font><font size=3D"3" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 12pt;"><b>);</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>nowz</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>=3D</b></span></fo=
+nt><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetic=
+a, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b>=
+</span></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibr=
+i, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt=
+;"><b>get_time_nsec</b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>();</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>total_time</b></span></font><font size=3D"3" c=
+olor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif,=
+ EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><font s=
+ize=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-se=
+rif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>&#43;=3D</b></s=
+pan></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, =
+Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;">=
+<b> (</b></span></font><font size=3D"3" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 12pt;"><b>nowz</b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b> </b></span></font><font size=3D"3" color=3D"b=
+lack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFon=
+t;"><span style=3D"font-size: 12pt;"><b>-</b></span></font><font size=3D"3"=
+ color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, seri=
+f, EmojiFont;"><span style=3D"font-size: 12pt;"><b> </b></span></font><font=
+ size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-=
+serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>now</b></span=
+></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Hel=
+vetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>=
+);</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    }</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    </b></span></font><font size=3D"3" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b>if</b></span></font><font size=3D"3" color=3D"blac=
+k" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"=
+><span style=3D"font-size: 12pt;"><b> (</b></span></font><font size=3D"3" c=
+olor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif,=
+ EmojiFont;"><span style=3D"font-size: 12pt;"><b>tp_num</b></span></font><f=
+ont size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sa=
+ns-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>) {</b></s=
+pan></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>        </b></span></font><font size=3D"3" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 12pt;"><b>printf</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b>(</b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>&quot;------------=
+---------------Average TP time is %&quot;</b></span></font><font size=3D"3"=
+ color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, seri=
+f, EmojiFont;"><span style=3D"font-size: 12pt;"><b>PRIu64</b></span></font>=
+<font size=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, =
+sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>&quot;--=
+-------------------------\n&quot;</b></span></font><font size=3D"3" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 12pt;"><b>, </b></span></font><font size=
+=3D"3" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><b>total_time</b></sp=
+an></font><font size=3D"3" color=3D"black" style=3D"font-family: Calibri, H=
+elvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 12pt;"><=
+b> </b></span></font><font size=3D"3" color=3D"black" style=3D"font-family:=
+ Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-siz=
+e: 12pt;"><b>/</b></span></font><font size=3D"3" color=3D"black" style=3D"f=
+ont-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 12pt;"><b> </b></span></font><font size=3D"3" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 12pt;"><b>tp_num</b></span></font><font size=3D"3=
+" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, ser=
+if, EmojiFont;"><span style=3D"font-size: 12pt;"><b>);      </b></span></fo=
+nt></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>    }</b></span></font></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+2pt;"><b>}</b></span></font></font></pre>
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"3"><span style=3D"font-size: 12pt;">--------=
 ---------------------------------------------------------------------------=
-------------------------------------------------------------</span></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"></span></pre>
-<span style=3D"font-size: 12pt;"></span></div>
-<span style=3D"font-size: 12pt;"></span>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x"><span style=3D"font-size: 12pt;"></span>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-keyword" style=3D"color:rgb(0,0,0); font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt"><br></span></pre>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-keyword" style=3D"color:rgb(0,0,0); font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt">I</span><span style=3D"font-family:=
-Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><sp=
-an class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif;=
- font-size:14pt; color:rgb(0,0,0)">observed</span><span style=3D"font-famil=
-y:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><=
-span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-seri=
-f; font-size:14pt; color:rgb(0,0,0)">a</span><span style=3D"font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span =
-class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)">big</span><span style=3D"font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span cla=
-ss=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-=
-size:14pt; color:rgb(0,0,0)">average</span><span style=3D"font-family:Calib=
-ri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span cl=
-ass=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font=
--size:14pt; color:rgb(0,0,0)">latency</span><span style=3D"font-family:Cali=
-bri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span c=
-lass=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fon=
-t-size:14pt; color:rgb(0,0,0)">variance</span><span style=3D"font-family:Ca=
-libri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span=
- class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; f=
-ont-size:14pt; color:rgb(0,0,0)">on</span><span style=3D"font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span cla=
-ss=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-=
-size:14pt; color:rgb(0,0,0)">different</span><span style=3D"font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span =
-class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)">platforms</span><span style=3D"font-family:=
-Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><sp=
-an class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif;=
- font-size:14pt; color:rgb(0,0,0)">when</span><span style=3D"font-family:Ca=
-libri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span=
- class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; f=
-ont-size:14pt; color:rgb(0,0,0)">tracing</span><span style=3D"font-family:C=
-alibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><spa=
-n class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; =
-font-size:14pt; color:rgb(0,0,0)">a</span><span style=3D"font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span cla=
-ss=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-=
-size:14pt; color:rgb(0,0,0)">high</span><span style=3D"font-family:Calibri,=
-Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=
-=3D"cm-def" style=3D"color:rgb(0,0,0); font-family:Calibri,Helvetica,sans-s=
-erif; font-size:14pt">number</span><span style=3D"font-family:Calibri,Helve=
-tica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> (</span><span class=3D"=
-cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:1=
-4pt; color:rgb(0,0,0)">many</span><span style=3D"font-family:Calibri,Helvet=
-ica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm=
--variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14p=
-t; color:rgb(0,0,0)">thousands</span><span style=3D"font-family:Calibri,Hel=
-vetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D=
-"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:=
-14pt; color:rgb(0,0,0)">to</span><span style=3D"font-family:Calibri,Helveti=
-ca,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm-=
-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt=
-; color:rgb(0,0,0)">millions</span><span style=3D"font-family:Calibri,Helve=
-tica,sans-serif; font-size:14pt; color:rgb(0,0,0)">) </span><span class=3D"=
-cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:1=
-4pt; color:rgb(0,0,0)">of</span><span style=3D"font-family:Calibri,Helvetic=
-a,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm-v=
-ariable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)">tracepoints</span><span style=3D"font-family:Calibri,Hel=
-vetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">:</span></pre>
+---------------------------------------------------------------------------=
+--------------------</span></font></font></pre>
 </div>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"></span></pre>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
 </div>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><ul style=3D"margin-bottom: 0px; margin-top: 0px;"><li><b><span class=3D=
-"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:=
-14pt; color:rgb(0,0,0)">[platform</span><span style=3D"font-family:Calibri,=
-Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span></b><span c=
-lass=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri,Helvetica=
-,sans-serif; font-size:14pt"><b>1]</b></span><span style=3D"font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span =
-class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)">with</span><span style=3D"font-family:Calib=
-ri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span cl=
-ass=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font=
--size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-family:Calibri,=
-Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=
-=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-si=
-ze:14pt; color:rgb(0,0,0)">info</span><span style=3D"font-family:Calibri,He=
-lvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=
-=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-si=
-ze:14pt; color:rgb(0,0,0)">running</span><span style=3D"font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span clas=
-s=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-s=
-ize:14pt; color:rgb(0,0,0)">a</span><span style=3D"font-family:Calibri,Helv=
-etica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"=
-cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:1=
-4pt; color:rgb(0,0,0)">linux</span><span style=3D"font-family:Calibri,Helve=
-tica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"c=
-m-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14=
-pt; color:rgb(0,0,0)">kernel</span><span style=3D"font-family:Calibri,Helve=
-tica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"c=
-m-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14=
-pt; color:rgb(0,0,0)">based</span><span style=3D"font-family:Calibri,Helvet=
-ica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm=
--variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14p=
-t; color:rgb(0,0,0)">on</span><span style=3D"font-family:Calibri,Helvetica,=
-sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm-def=
-" style=3D"color:rgb(0,0,0); font-family:Calibri,Helvetica,sans-serif; font=
--size:14pt">Buildroot</span><span style=3D"font-family:Calibri,Helvetica,sa=
-ns-serif; font-size:14pt; color:rgb(0,0,0)"> (</span><span class=3D"cm-numb=
-er" style=3D"color:rgb(0,0,0); font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt">4.19.273</span><span style=3D"font-family:Calibri,Helvetica,s=
-ans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm-vari=
-able" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; co=
-lor:rgb(0,0,0)">aarch64</span><span style=3D"font-family:Calibri,Helvetica,=
-sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm-var=
-iable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; c=
-olor:rgb(0,0,0)">GNU</span><span class=3D"cm-operator" style=3D"font-family=
-:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">/</span><s=
-pan class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif=
-; font-size:14pt; color:rgb(0,0,0)">Linux</span><span style=3D"font-family:=
-Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">):</span></=
-li></ul></pre>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">=0A=
+</span></font></font></pre>
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">I</span></font><font size=3D"4" color=3D"black" style=3D"font-family:=
+ Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-siz=
+e: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-fam=
+ily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font=
+-size: 14pt;">observed</span></font><font size=3D"4" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">a</span></font><font size=3D"4" color=3D"blac=
+k" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"=
+><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 14pt;">big</span></font><font size=3D"4" col=
+or=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, E=
+mojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4"=
+ color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, seri=
+f, EmojiFont;"><span style=3D"font-size: 14pt;">average</span></font><font =
+size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-s=
+erif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><f=
+ont size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sa=
+ns-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">latency</span=
+></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Hel=
+vetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </=
+span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri,=
+ Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"=
+>variance</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">on</span></font><font size=3D"4" color=3D"black" style=3D"f=
+ont-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 14pt;">different</span></font><font size=3D"4" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;">platforms</span></font><font size=
+=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font =
+size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-s=
+erif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">when</span></font=
+><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica,=
+ sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></=
+font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvet=
+ica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">tracin=
+g</span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calib=
+ri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14p=
+t;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-family: C=
+alibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size:=
+ 14pt;">a</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">high</span></font><font size=3D"4" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" styl=
+e=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span =
+style=3D"font-size: 14pt;">number</span></font><font size=3D"4" color=3D"bl=
+ack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+;"><span style=3D"font-size: 14pt;"> (</span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;">many</span></font><font size=3D"4=
+" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, ser=
+if, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=
+=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 14pt;">thousands</span></fon=
+t><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica=
+, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span><=
+/font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helve=
+tica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">to</s=
+pan></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, =
+Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">=
+ </span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calib=
+ri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14p=
+t;">millions</span></font><font size=3D"4" color=3D"black" style=3D"font-fa=
+mily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fon=
+t-size: 14pt;">) </span></font><font size=3D"4" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 14pt;">of</span></font><font size=3D"4" color=3D"black" styl=
+e=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span =
+style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" =
+style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><s=
+pan style=3D"font-size: 14pt;">tracepoints</span></font><font size=3D"4" co=
+lor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, =
+EmojiFont;"><span style=3D"font-size: 14pt;">:</span></font></font></pre>
 </div>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"></span></pre>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
 </div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><ul style=3D"margin-top: 0px; margin-bottom: 0px;"><li><fo=
+nt size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, san=
+s-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"><b>[platform</=
+b></span></font><font size=3D"4" color=3D"black" style=3D"font-family: Cali=
+bri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14=
+pt;"><b> </b></span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;"><b>1]</b></span></font><font size=3D"4" color=3D"black" sty=
+le=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span=
+ style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black"=
+ style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><=
+span style=3D"font-size: 14pt;">with</span></font><font size=3D"4" color=3D=
+"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiF=
+ont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" colo=
+r=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Em=
+ojiFont;"><span style=3D"font-size: 14pt;">CPU</span></font><font size=3D"4=
+" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, ser=
+if, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=
+=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 14pt;">info</span></font><fo=
+nt size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, san=
+s-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font=
+><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica,=
+ sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">running</s=
+pan></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, =
+Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">=
+ </span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calib=
+ri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14p=
+t;">a</span></font><font size=3D"4" color=3D"black" style=3D"font-family: C=
+alibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size:=
+ 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;">linux</span></font><font size=3D"4" color=3D"black" style=3D"fo=
+nt-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 14pt;">kernel</span></font><font size=3D"4" color=3D"bla=
+ck" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;=
+"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D=
+"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiF=
+ont;"><span style=3D"font-size: 14pt;">based</span></font><font size=3D"4" =
+color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif=
+, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D=
+"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, s=
+erif, EmojiFont;"><span style=3D"font-size: 14pt;">on</span></font><font si=
+ze=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-ser=
+if, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><fon=
+t size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans=
+-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">Buildroot</span=
+></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Hel=
+vetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> (<=
+/span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri=
+, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;=
+">4.19.273</span></font><font size=3D"4" color=3D"black" style=3D"font-fami=
+ly: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-=
+size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-=
+family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"f=
+ont-size: 14pt;">aarch64</span></font><font size=3D"4" color=3D"black" styl=
+e=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span =
+style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" =
+style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><s=
+pan style=3D"font-size: 14pt;">GNU</span></font><font size=3D"4" color=3D"b=
+lack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFon=
+t;"><span style=3D"font-size: 14pt;">/</span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;">Linux</span></font><font size=3D"=
+4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, se=
+rif, EmojiFont;"><span style=3D"font-size: 14pt;">):</span></font></li></ul=
+></font></pre>
 </div>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">BogoMIPS</span><span style=3D"font=
--family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: =
-</span><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt">187.50</span></pre>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
 </div>
+</span></font></div>
+<div style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+; font-size: 16px; margin: 0px 0px 0px 40px; padding: 0px; border-style: no=
+ne;">
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">BogoMIPS</span></font><font size=3D"4" color=3D"black" style=3D"font-=
+family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"f=
+ont-size: 14pt;">        : </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">187.50</span></font></font></pre>
 </div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">Features</span><span style=3D"font=
--family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: =
-</span><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,s=
-ans-serif; font-size:14pt; color:rgb(0,0,0)">fp</span><span style=3D"font-f=
-amily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </sp=
-an><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">asimd</span><span style=3D"font-fa=
-mily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </spa=
-n><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-s=
-erif; font-size:14pt; color:rgb(0,0,0)">evtstrm</span><span style=3D"font-f=
-amily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </sp=
-an><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">aes</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">pmull</span><span style=3D"font-famil=
-y:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><=
-span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-seri=
-f; font-size:14pt; color:rgb(0,0,0)">sha1</span><span style=3D"font-family:=
-Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><sp=
-an class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif;=
- font-size:14pt; color:rgb(0,0,0)">sha2</span><span style=3D"font-family:Ca=
-libri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span=
- class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; f=
-ont-size:14pt; color:rgb(0,0,0)">crc32</span><span style=3D"font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span =
-class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)">cpuid</span></pre>
+</span></font></div>
 </div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">implementer</span><span style=3D"font=
--family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: =
-</span><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt">0x41</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">architecture</span><span style=3D"fon=
-t-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">: =
-</span><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt">8</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">variant</span><span style=3D"font-fam=
-ily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: </sp=
-an><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt">0x0</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">part</span><span style=3D"font-family=
-:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: </span>=
-<span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri,He=
-lvetica,sans-serif; font-size:14pt">0xd08</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">revision</span><span style=3D"font-fa=
-mily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: </s=
-pan><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt">3</span></pre>
-</div>
-</div>
-</blockquote>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt"></span></pre>
-</div>
-</div>
-</blockquote>
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt"></span></pre>
-</div>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><ul style=3D"margin-bottom: 0px; margin-top: 0px;"><li><span class=3D"cm=
--variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14p=
-t; color:rgb(0,0,0)">&nbsp;Saw</span><span style=3D"font-family:Calibri,Hel=
-vetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D=
-"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:=
-14pt; color:rgb(0,0,0)">an</span><span style=3D"font-family:Calibri,Helveti=
-ca,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm-=
-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt=
-; color:rgb(0,0,0)">average</span><span style=3D"font-family:Calibri,Helvet=
-ica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm=
--variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14p=
-t; color:rgb(0,0,0)">latency</span><span style=3D"font-family:Calibri,Helve=
-tica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"c=
-m-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14=
-pt; color:rgb(0,0,0)">of</span><span style=3D"font-family:Calibri,Helvetica=
-,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><b><span class=3D"cm=
--number" style=3D"color:rgb(0,0,0); font-family:Calibri,Helvetica,sans-seri=
-f; font-size:14pt">2</span><span class=3D"cm-operator" style=3D"font-family=
-:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">-</span></=
-b><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri,=
-Helvetica,sans-serif; font-size:14pt"><b>3usec=0A=
-</b>=0A=
-</span></li><li><b><span class=3D"cm-variable" style=3D"font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">[platform</span><s=
-pan style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; colo=
-r:rgb(0,0,0)"> </span></b><span class=3D"cm-number" style=3D"color:rgb(0,0,=
-0); font-family:Calibri,Helvetica,sans-serif; font-size:14pt"><b>2]</b></sp=
-an><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"> </span><span class=3D"cm-variable" style=3D"font-family=
-:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">with</span=
-><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; c=
-olor:rgb(0,0,0)"> </span><span class=3D"cm-variable" style=3D"font-family:C=
-alibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><s=
-pan style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; colo=
-r:rgb(0,0,0)"> </span><span class=3D"cm-variable" style=3D"font-family:Cali=
-bri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">info</span><spa=
-n style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:=
-rgb(0,0,0)"> </span><span class=3D"cm-variable" style=3D"font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">running</span><sp=
-an style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color=
-:rgb(0,0,0)"> </span><span class=3D"cm-variable" style=3D"font-family:Calib=
-ri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">a</span><span st=
-yle=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(=
-0,0,0)"> </span><span class=3D"cm-variable" style=3D"font-family:Calibri,He=
-lvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">linux</span><span sty=
-le=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0=
-,0,0)"> </span><span class=3D"cm-variable" style=3D"font-family:Calibri,Hel=
-vetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">kernel</span><span sty=
-le=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0=
-,0,0)"> </span><span class=3D"cm-variable" style=3D"font-family:Calibri,Hel=
-vetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">based</span><span styl=
-e=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,=
-0,0)"> </span><span class=3D"cm-variable" style=3D"font-family:Calibri,Helv=
-etica,sans-serif; font-size:14pt; color:rgb(0,0,0)">on</span><span style=3D=
-"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)=
-"> </span><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetic=
-a,sans-serif; font-size:14pt; color:rgb(0,0,0)">Amazon</span><span style=3D=
-"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)=
-"> </span><span class=3D"cm-def" style=3D"color:rgb(0,0,0); font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt">Linux</span><span style=3D"font-=
-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> (</=
-span><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calib=
-ri,Helvetica,sans-serif; font-size:14pt">4.14.294</span><span class=3D"cm-o=
-perator" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)">-</span><span class=3D"cm-number" style=3D"color:rgb(0,0=
-,0); font-family:Calibri,Helvetica,sans-serif; font-size:14pt">220.533.amzn=
-2.aarch64</span><span style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm-variable" style=
-=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0=
-,0)">aarch64</span><span style=3D"font-family:Calibri,Helvetica,sans-serif;=
- font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D"cm-variable" styl=
-e=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,=
-0,0)">GNU</span><span class=3D"cm-operator" style=3D"font-family:Calibri,He=
-lvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">/</span><span class=
-=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-si=
-ze:14pt; color:rgb(0,0,0)">Linux</span><span style=3D"font-family:Calibri,H=
-elvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">):</span></li></ul><=
-/pre>
-</div>
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"></span></pre>
-</div>
-</div>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">BogoMIPS</span><span style=3D"font=
--family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: =
-</span><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt">243.75</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">Features</span><span style=3D"font=
--family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: =
-</span><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,s=
-ans-serif; font-size:14pt; color:rgb(0,0,0)">fp</span><span style=3D"font-f=
-amily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </sp=
-an><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">asimd</span><span style=3D"font-fa=
-mily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </spa=
-n><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-s=
-erif; font-size:14pt; color:rgb(0,0,0)">evtstrm</span><span style=3D"font-f=
-amily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </sp=
-an><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">aes</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">pmull</span><span style=3D"font-famil=
-y:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><=
-span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-seri=
-f; font-size:14pt; color:rgb(0,0,0)">sha1</span><span style=3D"font-family:=
-Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><sp=
-an class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif;=
- font-size:14pt; color:rgb(0,0,0)">sha2</span><span style=3D"font-family:Ca=
-libri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span=
- class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; f=
-ont-size:14pt; color:rgb(0,0,0)">crc32</span><span style=3D"font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span =
-class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)">atomics</span><span style=3D"font-family:Ca=
-libri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span=
- class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; f=
-ont-size:14pt; color:rgb(0,0,0)">fphp</span><span style=3D"font-family:Cali=
-bri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span c=
-lass=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fon=
-t-size:14pt; color:rgb(0,0,0)">asimdhp</span><span style=3D"font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span =
-class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)">cpuid</span><span style=3D"font-family:Cali=
-bri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span c=
-lass=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fon=
-t-size:14pt; color:rgb(0,0,0)">asimdrdm</span><span style=3D"font-family:Ca=
-libri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span=
- class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; f=
-ont-size:14pt; color:rgb(0,0,0)">lrcpc</span><span style=3D"font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span =
-class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)">dcpop</span><span style=3D"font-family:Cali=
-bri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span c=
-lass=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fon=
-t-size:14pt; color:rgb(0,0,0)">asimddp</span><span style=3D"font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span =
-class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)">ssbs</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">implementer</span><span style=3D"font=
--family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: =
-</span><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt">0x41</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">architecture</span><span style=3D"fon=
-t-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">: =
-</span><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt">8</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">variant</span><span style=3D"font-fam=
-ily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: </sp=
-an><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt">0x3</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">part</span><span style=3D"font-family=
-:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: </span>=
-<span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri,He=
-lvetica,sans-serif; font-size:14pt">0xd0c</span></pre>
-</div>
-</div>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">CPU</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">revision</span><span style=3D"font-fa=
-mily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)">	: </s=
-pan><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt">1</span></pre>
-</div>
-</div>
-</blockquote>
-</blockquote>
-<blockquote style=3D"margin: 0 0 0 40px; border: none; padding: 0px;">
-<div dir=3D"ltr" style=3D"font-size: 12pt; color: rgb(0, 0, 0); font-family=
-: Calibri, Helvetica, sans-serif, EmojiFont, &quot;Apple Color Emoji&quot;,=
- &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;Segoe UI Symbol&quot;, &=
-quot;Android Emoji&quot;, EmojiSymbols;">
-<div style=3D"counter-increment:snippet 1; margin-left:32px; padding:0px 8p=
-x">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt"></span></pre>
-</div>
-</div>
-</blockquote>
-<div dir=3D"ltr" style=3D"color: rgb(0, 0, 0);">
-<div style=3D"font-family: Calibri, Helvetica, sans-serif, EmojiFont, &quot=
-;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot=
-;Segoe UI Symbol&quot;, &quot;Android Emoji&quot;, EmojiSymbols; font-size:=
- 12pt; counter-increment: snippet 1; margin-left: 32px; padding: 0px 8px;">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt"></span></pre>
-</div>
-<div style=3D"font-family: Calibri, Helvetica, sans-serif, EmojiFont, &quot=
-;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot=
-;Segoe UI Symbol&quot;, &quot;Android Emoji&quot;, EmojiSymbols; font-size:=
- 12pt; counter-increment: snippet 1; margin-left: 32px; padding: 0px 8px;">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"></span></pre>
-</div>
-<div style=3D"counter-increment: snippet 1; margin-left: 32px; padding: 0px=
- 8px;">
-<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; line-h=
-eight: inherit; tab-size: 4; word-break: normal; border-width: 0px; border-=
-radius: 0px; color: inherit; overflow: visible;"><ul style=3D"font-family: =
-inherit; font-size: inherit; margin-bottom: 0px; margin-top: 0px;"><li><spa=
-n class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; =
-font-size:14pt; color:rgb(0,0,0)">Saw</span><span style=3D"font-family:Cali=
-bri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span c=
-lass=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fon=
-t-size:14pt; color:rgb(0,0,0)">an</span><span style=3D"font-family:Calibri,=
-Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=
-=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-si=
-ze:14pt; color:rgb(0,0,0)">average</span><span style=3D"font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span clas=
-s=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-s=
-ize:14pt; color:rgb(0,0,0)">latency</span><span style=3D"font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span cla=
-ss=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-=
-size:14pt; color:rgb(0,0,0)">of</span><span style=3D"font-family:Calibri,He=
-lvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><b><span clas=
-s=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-s=
-ize:14pt; color:rgb(0,0,0)">~0</span><span class=3D"cm-number" style=3D"col=
-or:rgb(0,0,0); font-family:Calibri,Helvetica,sans-serif; font-size:14pt">.5=
-u</span></b><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvet=
-ica,sans-serif; font-size:14pt; color:rgb(0,0,0)"><b>sec=0A=
-</b></span></li></ul><div style=3D""><font face=3D"Calibri, Helvetica, sans=
--serif"><span style=3D"font-size: 18.6667px;"><b><br></b></span></font></di=
-v></pre>
-</div>
-<div style=3D"font-family: Calibri, Helvetica, sans-serif, EmojiFont, &quot=
-;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot=
-;Segoe UI Symbol&quot;, &quot;Android Emoji&quot;, EmojiSymbols; font-size:=
- 12pt; counter-increment: snippet 1; margin-left: 32px; padding: 0px 8px;">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"></span></pre>
-</div>
-<div style=3D"font-family: Calibri, Helvetica, sans-serif, EmojiFont, &quot=
-;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot=
-;Segoe UI Symbol&quot;, &quot;Android Emoji&quot;, EmojiSymbols; font-size:=
- 12pt; counter-increment: snippet 1; margin-left: 32px; padding: 0px 8px;">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">Are</span><span style=3D"font-fami=
-ly:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span>=
-<span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-ser=
-if; font-size:14pt; color:rgb(0,0,0)">there</span><span style=3D"font-famil=
-y:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><=
-span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-seri=
-f; font-size:14pt; color:rgb(0,0,0)">any</span><span style=3D"font-family:C=
-alibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><spa=
-n class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; =
-font-size:14pt; color:rgb(0,0,0)">suggestions</span><span style=3D"font-fam=
-ily:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span=
-><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-se=
-rif; font-size:14pt; color:rgb(0,0,0)">to</span><span style=3D"font-family:=
-Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><sp=
-an class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif;=
- font-size:14pt; color:rgb(0,0,0)">root</span><span style=3D"font-family:Ca=
-libri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span=
- class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; f=
-ont-size:14pt; color:rgb(0,0,0)">cause</span><span style=3D"font-family:Cal=
-ibri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span =
-class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; fo=
-nt-size:14pt; color:rgb(0,0,0)">the</span><span style=3D"font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span cla=
-ss=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-=
-size:14pt; color:rgb(0,0,0)">high</span><span style=3D"font-family:Calibri,=
-Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=
-=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-si=
-ze:14pt; color:rgb(0,0,0)">latency</span><span style=3D"font-family:Calibri=
-,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span clas=
-s=3D"cm-keyword" style=3D"color:rgb(0,0,0); font-family:Calibri,Helvetica,s=
-ans-serif; font-size:14pt">and</span><span style=3D"font-family:Calibri,Hel=
-vetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=3D=
-"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:=
-14pt; color:rgb(0,0,0)">potentially</span><span style=3D"font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span cla=
-ss=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-=
-size:14pt; color:rgb(0,0,0)">improve</span><span style=3D"font-family:Calib=
-ri,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span cl=
-ass=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font=
--size:14pt; color:rgb(0,0,0)">it</span><span style=3D"font-family:Calibri,H=
-elvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><span class=
-=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-si=
-ze:14pt; color:rgb(0,0,0)">on</span><span style=3D"font-family:Calibri,Helv=
-etica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span><b><span class=
-=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-serif; font-si=
-ze:14pt; color:rgb(0,0,0)">platform</span><span style=3D"font-family:Calibr=
-i,Helvetica,sans-serif; font-size:14pt; color:rgb(0,0,0)"> </span></b><span=
- class=3D"cm-number" style=3D"color:rgb(0,0,0); font-family:Calibri,Helveti=
-ca,sans-serif; font-size:14pt"><b>1</b></span><span class=3D"cm-operator" s=
-tyle=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt; color:rgb=
-(0,0,0)">?</span></pre>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-operator" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)"><br></span></pre>
-</div>
-<div style=3D"font-family: Calibri, Helvetica, sans-serif, EmojiFont, &quot=
-;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot=
-;Segoe UI Symbol&quot;, &quot;Android Emoji&quot;, EmojiSymbols; font-size:=
- 12pt; counter-increment: snippet 1; margin-left: 32px; padding: 0px 8px;">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span style=3D"font-family:Calibri,Helvetica,sans-serif; font-size:14pt;=
- color:rgb(0,0,0)"></span></pre>
-</div>
-<div style=3D"font-family: Calibri, Helvetica, sans-serif, EmojiFont, &quot=
-;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot=
-;Segoe UI Symbol&quot;, &quot;Android Emoji&quot;, EmojiSymbols; font-size:=
- 12pt; counter-increment: snippet 1; margin-left: 32px; padding: 0px 8px;">
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">Thanks and best regards,</span></p=
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">Features</span></font><font size=3D"4" color=3D"black" style=3D"font-=
+family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"f=
+ont-size: 14pt;">        : </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">fp</span></font><font size=3D"4" color=3D"bla=
+ck" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;=
+"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D=
+"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiF=
+ont;"><span style=3D"font-size: 14pt;">asimd</span></font><font size=3D"4" =
+color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif=
+, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D=
+"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, s=
+erif, EmojiFont;"><span style=3D"font-size: 14pt;">evtstrm</span></font><fo=
+nt size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, san=
+s-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font=
+><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica,=
+ sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">aes</span>=
+</font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </s=
+pan></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, =
+Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">=
+pmull</span></font><font size=3D"4" color=3D"black" style=3D"font-family: C=
+alibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size:=
+ 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;">sha1</span></font><font size=3D"4" color=3D"black" style=3D"fon=
+t-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D=
+"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 14pt;">sha2</span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"blac=
+k" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"=
+><span style=3D"font-size: 14pt;">crc32</span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" c=
+olor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif,=
+ EmojiFont;"><span style=3D"font-size: 14pt;">cpuid</span></font></font></p=
 re>
-<pre style=3D"margin-top:0px; margin-bottom:0px; padding:0px 4px; font-size=
-:inherit; line-height:inherit; tab-size:4; word-break:normal; font-family:i=
-nherit; border-width:0px; border-radius:0px; color:inherit; overflow:visibl=
-e"><span class=3D"cm-variable" style=3D"font-family:Calibri,Helvetica,sans-=
-serif; font-size:14pt; color:rgb(0,0,0)">Anas.</span></pre>
 </div>
-<br>
-<p style=3D"font-family: Calibri, Helvetica, sans-serif, EmojiFont, &quot;A=
-pple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, NotoColorEmoji, &quot;S=
-egoe UI Symbol&quot;, &quot;Android Emoji&quot;, EmojiSymbols; font-size: 1=
-2pt;">
-</p>
+</span></font></div>
 </div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">implementer</span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">   : </span></font><font size=3D"4" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 14pt;">0x41</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">architecture</span></font><font size=3D"4" color=3D"black" =
+style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><s=
+pan style=3D"font-size: 14pt;">: </span></font><font size=3D"4" color=3D"bl=
+ack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+;"><span style=3D"font-size: 14pt;">8</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">variant</span></font><font size=3D"4" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 14pt;">       : </span></font><font size=3D"4" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 14pt;">0x0</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">part</span></font><font size=3D"4" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 14pt;">  : </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">0xd08</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">revision</span></font><font size=3D"4" color=3D"black" styl=
+e=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span =
+style=3D"font-size: 14pt;">      : </span></font><font size=3D"4" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 14pt;">3</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+</div>
+<div style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+; font-size: 16px; margin: 0px 0px 0px 40px; padding: 0px; border-style: no=
+ne;">
+<font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji,Sego=
+e UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" size=
+=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
+</div>
+</span></font></div>
+<div style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+; font-size: 16px;">
+<font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji,Sego=
+e UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" size=
+=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><ul style=3D"margin-top: 0px; margin-bottom: 0px;"><ul><li=
+><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica,=
+ sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">&nbsp;Saw<=
+/span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri=
+, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;=
+"> </span></font><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">an</span></font><font size=3D"4" color=3D"black" style=3D"font-family=
+: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-si=
+ze: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-fa=
+mily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fon=
+t-size: 14pt;">average</span></font><font size=3D"4" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">latency</span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" c=
+olor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif,=
+ EmojiFont;"><span style=3D"font-size: 14pt;">of</span></font><font size=3D=
+"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, s=
+erif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font siz=
+e=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-seri=
+f, serif, EmojiFont;"><span style=3D"font-size: 14pt;"><b>2</b></span></fon=
+t><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica=
+, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"><b>-</b><=
+/span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri=
+, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;=
+"><b>3usec=0A=
+=0A=
+</b></span></font></li></ul><li><font size=3D"4" color=3D"black" style=3D"f=
+ont-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 14pt;"><b>[platform</b></span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;"><b> </b></span></font><font size=
+=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 14pt;"><b>2]</b></span></fon=
+t><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica=
+, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span><=
+/font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helve=
+tica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">with<=
+/span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri=
+, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;=
+"> </span></font><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">info</span></font><font size=3D"4" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" styl=
+e=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span =
+style=3D"font-size: 14pt;">running</span></font><font size=3D"4" color=3D"b=
+lack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFon=
+t;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;">a</span></font><font size=3D"4" c=
+olor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif,=
+ EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"=
+4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, se=
+rif, EmojiFont;"><span style=3D"font-size: 14pt;">linux</span></font><font =
+size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-s=
+erif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><f=
+ont size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sa=
+ns-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">kernel</span>=
+</font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </s=
+pan></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, =
+Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">=
+based</span></font><font size=3D"4" color=3D"black" style=3D"font-family: C=
+alibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size:=
+ 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;">on</span></font><font size=3D"4" color=3D"black" style=3D"font-=
+family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"f=
+ont-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"f=
+ont-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 14pt;">Amazon</span></font><font size=3D"4" color=3D"black" =
+style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><s=
+pan style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"bla=
+ck" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;=
+"><span style=3D"font-size: 14pt;">Linux</span></font><font size=3D"4" colo=
+r=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Em=
+ojiFont;"><span style=3D"font-size: 14pt;"> (</span></font><font size=3D"4"=
+ color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, seri=
+f, EmojiFont;"><span style=3D"font-size: 14pt;">4.14.294</span></font><font=
+ size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-=
+serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">-</span></font><=
+font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, s=
+ans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">220.533.amzn=
+2.aarch64</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">aarch64</span></font><font size=3D"4" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">GNU</span></font><font size=3D"4" color=3D"bl=
+ack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+;"><span style=3D"font-size: 14pt;">/</span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;">Linux</span></font><font size=3D"=
+4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, se=
+rif, EmojiFont;"><span style=3D"font-size: 14pt;">):</span></font></li></ul=
+></font></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
+</div>
+</span></font></div>
+<div style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+; font-size: 16px; margin: 0px 0px 0px 40px; padding: 0px; border-style: no=
+ne;">
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">BogoMIPS</span></font><font size=3D"4" color=3D"black" style=3D"font-=
+family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"f=
+ont-size: 14pt;">        : </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">243.75</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">Features</span></font><font size=3D"4" color=3D"black" style=3D"font-=
+family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"f=
+ont-size: 14pt;">        : </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">fp</span></font><font size=3D"4" color=3D"bla=
+ck" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;=
+"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D=
+"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiF=
+ont;"><span style=3D"font-size: 14pt;">asimd</span></font><font size=3D"4" =
+color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif=
+, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D=
+"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, s=
+erif, EmojiFont;"><span style=3D"font-size: 14pt;">evtstrm</span></font><fo=
+nt size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, san=
+s-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font=
+><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica,=
+ sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">aes</span>=
+</font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </s=
+pan></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, =
+Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">=
+pmull</span></font><font size=3D"4" color=3D"black" style=3D"font-family: C=
+alibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size:=
+ 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;">sha1</span></font><font size=3D"4" color=3D"black" style=3D"fon=
+t-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D=
+"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 14pt;">sha2</span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"blac=
+k" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"=
+><span style=3D"font-size: 14pt;">crc32</span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" c=
+olor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif,=
+ EmojiFont;"><span style=3D"font-size: 14pt;">atomics</span></font><font si=
+ze=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-ser=
+if, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><fon=
+t size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans=
+-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">fphp</span></fo=
+nt><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetic=
+a, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span>=
+</font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">asim=
+dhp</span></font><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-family:=
+ Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-siz=
+e: 14pt;">cpuid</span></font><font size=3D"4" color=3D"black" style=3D"font=
+-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"=
+font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"=
+font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 14pt;">asimdrdm</span></font><font size=3D"4" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"b=
+lack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFon=
+t;"><span style=3D"font-size: 14pt;">lrcpc</span></font><font size=3D"4" co=
+lor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, =
+EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4=
+" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, ser=
+if, EmojiFont;"><span style=3D"font-size: 14pt;">dcpop</span></font><font s=
+ize=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-se=
+rif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><fo=
+nt size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, san=
+s-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">asimddp</span>=
+</font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </s=
+pan></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, =
+Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">=
+ssbs</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">implementer</span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">   : </span></font><font size=3D"4" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 14pt;">0x41</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">architecture</span></font><font size=3D"4" color=3D"black" =
+style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><s=
+pan style=3D"font-size: 14pt;">: </span></font><font size=3D"4" color=3D"bl=
+ack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+;"><span style=3D"font-size: 14pt;">8</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">variant</span></font><font size=3D"4" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 14pt;">       : </span></font><font size=3D"4" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 14pt;">0x3</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">part</span></font><font size=3D"4" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 14pt;">  : </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">0xd0c</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+<div style=3D"margin: 0px 0px 0px 40px; padding: 0px; border-style: none;">
+<div><font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji=
+,Segoe UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" =
+size=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">CPU</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">revision</span></font><font size=3D"4" color=3D"black" styl=
+e=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span =
+style=3D"font-size: 14pt;">      : </span></font><font size=3D"4" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 14pt;">1</span></font></font></pre>
+</div>
+</span></font></div>
+</div>
+</div>
+<div style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+; font-size: 16px; margin: 0px 0px 0px 40px; padding: 0px; border-style: no=
+ne;">
+<font face=3D"Calibri,Helvetica,sans-serif,EmojiFont,Apple Color Emoji,Sego=
+e UI Emoji,NotoColorEmoji,Segoe UI Symbol,Android Emoji,EmojiSymbols" size=
+=3D"3" color=3D"black"><span style=3D"font-size: 12pt;">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
+</div>
+</span></font></div>
+<div style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+; font-size: 16px;">
+<font color=3D"black">
+<div style=3D"margin-left: 32px; padding: 0px 8px;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><ul style=3D"margin-top: 0px; margin-bott=
+om: 0px;"><font style=3D"font-family: monospace, serif, EmojiFont;"><ul><li=
+><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica,=
+ sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">Saw</span>=
+</font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </s=
+pan></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, =
+Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">=
+an</span></font><font size=3D"4" color=3D"black" style=3D"font-family: Cali=
+bri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14=
+pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-family: =
+Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size=
+: 14pt;">average</span></font><font size=3D"4" color=3D"black" style=3D"fon=
+t-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D=
+"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 14pt;">latency</span></font><font size=3D"4" color=3D"black=
+" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;">=
+<span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"b=
+lack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFon=
+t;"><span style=3D"font-size: 14pt;">of</span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" c=
+olor=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif,=
+ EmojiFont;"><span style=3D"font-size: 14pt;"><b>~0</b></span></font><font =
+size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-s=
+erif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"><b>.5u</b></span>=
+</font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"><b>s=
+ec=0A=
+</b></span></font></li></ul></font></ul><div style=3D"font-family: monospac=
+e, serif, EmojiFont;"><font size=3D"3" style=3D"font-family: Calibri, Helve=
+tica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 18.67px;"><b=
+>=0A=
+</b></span></font></div></pre>
+</div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;"><font face=3D"Calibri,H=
+elvetica,sans-serif,EmojiFont,Apple Color Emoji,Segoe UI Emoji,NotoColorEmo=
+ji,Segoe UI Symbol,Android Emoji,EmojiSymbols" size=3D"3"><span style=3D"fo=
+nt-size: 12pt;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
+</span></font></div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;"><font face=3D"Calibri,H=
+elvetica,sans-serif,EmojiFont,Apple Color Emoji,Segoe UI Emoji,NotoColorEmo=
+ji,Segoe UI Symbol,Android Emoji,EmojiSymbols" size=3D"3"><span style=3D"fo=
+nt-size: 12pt;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">Are</span></font><font size=3D"4" color=3D"black" style=3D"font-famil=
+y: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-s=
+ize: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-f=
+amily: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"fo=
+nt-size: 14pt;">there</span></font><font size=3D"4" color=3D"black" style=
+=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span s=
+tyle=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" s=
+tyle=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><sp=
+an style=3D"font-size: 14pt;">any</span></font><font size=3D"4" color=3D"bl=
+ack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;">suggestions</span></font><font si=
+ze=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-ser=
+if, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><fon=
+t size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans=
+-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">to</span></font=
+><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica,=
+ sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></=
+font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvet=
+ica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">root</=
+span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri,=
+ Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"=
+> </span></font><font size=3D"4" color=3D"black" style=3D"font-family: Cali=
+bri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14=
+pt;">cause</span></font><font size=3D"4" color=3D"black" style=3D"font-fami=
+ly: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-=
+size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-=
+family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"f=
+ont-size: 14pt;">the</span></font><font size=3D"4" color=3D"black" style=3D=
+"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span styl=
+e=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" styl=
+e=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span =
+style=3D"font-size: 14pt;">high</span></font><font size=3D"4" color=3D"blac=
+k" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"=
+><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"=
+black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFo=
+nt;"><span style=3D"font-size: 14pt;">latency</span></font><font size=3D"4"=
+ color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, seri=
+f, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font><font size=
+=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif=
+, serif, EmojiFont;"><span style=3D"font-size: 14pt;">and</span></font><fon=
+t size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans=
+-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"> </span></font>=
+<font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, =
+sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;">potentially=
+</span></font><font size=3D"4" color=3D"black" style=3D"font-family: Calibr=
+i, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt=
+;"> </span></font><font size=3D"4" color=3D"black" style=3D"font-family: Ca=
+libri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: =
+14pt;">improve</span></font><font size=3D"4" color=3D"black" style=3D"font-=
+family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"f=
+ont-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" style=3D"f=
+ont-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=
+=3D"font-size: 14pt;">it</span></font><font size=3D"4" color=3D"black" styl=
+e=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><span =
+style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=3D"black" =
+style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont;"><s=
+pan style=3D"font-size: 14pt;">on</span></font><font size=3D"4" color=3D"bl=
+ack" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, EmojiFont=
+;"><span style=3D"font-size: 14pt;"> </span></font><font size=3D"4" color=
+=3D"black" style=3D"font-family: Calibri, Helvetica, sans-serif, serif, Emo=
+jiFont;"><span style=3D"font-size: 14pt;"><b>platform</b></span></font><fon=
+t size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helvetica, sans=
+-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"><b> </b></span>=
+</font><font size=3D"4" color=3D"black" style=3D"font-family: Calibri, Helv=
+etica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 14pt;"><b>1=
+</b></span></font><font size=3D"4" color=3D"black" style=3D"font-family: Ca=
+libri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: =
+14pt;">?</span></font></font></pre>
+</span></font></div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;"><font face=3D"Calibri,H=
+elvetica,sans-serif,EmojiFont,Apple Color Emoji,Segoe UI Emoji,NotoColorEmo=
+ji,Segoe UI Symbol,Android Emoji,EmojiSymbols" size=3D"3"><span style=3D"fo=
+nt-size: 12pt;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;">&nbsp;</font></pre>
+</span></font></div>
+<div style=3D"margin-left: 32px; padding: 0px 8px;"><font face=3D"Calibri,H=
+elvetica,sans-serif,EmojiFont,Apple Color Emoji,Segoe UI Emoji,NotoColorEmo=
+ji,Segoe UI Symbol,Android Emoji,EmojiSymbols" size=3D"3"><span style=3D"fo=
+nt-size: 12pt;">
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">Thanks and best regards,</span></font></font></pre>
+<pre style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px 4px; border=
+-width: 0px; border-radius: 0px;"><font style=3D"font-family: monospace, se=
+rif, EmojiFont;"><font size=3D"4" color=3D"black" style=3D"font-family: Cal=
+ibri, Helvetica, sans-serif, serif, EmojiFont;"><span style=3D"font-size: 1=
+4pt;">Anas.</span></font></font></pre>
+</span></font></div>
+</font></div>
+<span id=3D"ms-rterangepaste-end"></span><br>
+<p></p>
 </div>
 </body>
 </html>
 
---_000_1255477015ae4da8a6523b5d204334daamazoncom_--
+--_000_6e06b605ec9f446da5dc8948c8621518amazoncom_--
 
---===============0369875271704751774==
+--===============6493914625085299052==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -1739,4 +1856,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0369875271704751774==--
+--===============6493914625085299052==--
