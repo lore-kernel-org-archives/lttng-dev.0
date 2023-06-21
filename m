@@ -4,61 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09775EB64D7
-	for <lttng-dev@archiver.kernel.org>; Wed, 21 Jun 2023 22:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F295BEB64D7
+	for <lttng-dev@archiver.kernel.org>; Wed, 21 Jun 2023 23:22:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1687384957;
-	bh=ULEtQrO0YsKVrw+95/yeFP8TfQnDooLExyeDXvwtt7o=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=PAvZxSo1RfIPFqUBfyUCHikPjx44/XUhNkdfWD6QfYDeGgL92dlKs2Tsq7cxzNUnV
-	 RMI5r1k85NmSArwoC/Z0/GHI0SrhJ34a2eoJKvtqTIXrPOETjDCytPhO0EOiwM4g1L
-	 M06WyM0pZcKwJQLwu4uERCksQvmH94AuXXvW5ghAkFAFA0sPmsyxQlcSrQktyFw0tZ
-	 D22SrXJMjwrM79zwg8wLA2kInYstkVxubgwS+9zfACqZEd0f++wm/4QRWXovEqaL/t
-	 qHIhLUIKF3XN4gAx5tbOvLSVu9TiXdG0LYD4IwJdtF7l+xMa20I+0A5sy5iOdSRwTF
-	 MUWmf+7cNsDJw==
+	s=default; t=1687389760;
+	bh=usyvtNECgwJdlGz3QFsmZveq4rmhreMIKegleFJ71AY=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=JKK7Z56Brc+N4fzShHfDDtApEsBVYyyWrzACdv3Syyfk3Hp24nNQkeaFYdBAUbN8i
+	 Mlrf6kcRbKqBZPJKRD6NkEt3C8G7WvPHukrRRutwrHTxxZ2FH2LlQrP6IaiaNpZ629
+	 CRPDr1AsEiFmndgBtC4wat18GdO+4O34VKnV1gO6MiQAirQpNc/JnBPPRBV/FZSbXo
+	 JhtGQ83ismwRZ+8z4GBW/FDX7B1ENAopmhzvo3NErAlMFPnM16tsoaP4NwydpGkIBc
+	 XdAyPbRV+bSJpmZb0ZPNnHaO/lmsVn5Q0n0McEOwcRfIlZ8BQ4gqQ2SdTJr3xNdF0O
+	 OlsJbqI/3s37A==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Qmctj1rN0z1ykQ;
-	Wed, 21 Jun 2023 18:02:37 -0400 (EDT)
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by lists.lttng.org (Postfix) with ESMTPS id 4Qmcth0nMCz1yqV
- for <lttng-dev@lists.lttng.org>; Wed, 21 Jun 2023 18:02:36 -0400 (EDT)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-3f9c0abc876so10551415e9.3
- for <lttng-dev@lists.lttng.org>; Wed, 21 Jun 2023 15:02:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1687384955; x=1689976955;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=+8uyidyKUGseh7jsYXnitstwGihm1bEUXyS5bQmfBNM=;
- b=NGZiCvX7gIP2CQjaIIyYq943ZW098fWoHJ+uaRjHk6kHLfBXO5edh1yFGq2GUrjIgH
- R/26LAm2OGvUud+ne1whW+/B6SQX9WPQRE0Tdc+UkdR+rsLZgHHRG5cMIQkHoldjgZwv
- A6sIYtORO/ryXtlzgoXsj6mAO37YV7BvtQvaGz9poBxmUgdOM/SBkTsiJE8rF2oCbeUz
- su+pIXMtQncYNdC0TKJwQBD44e5agnLTtyrwOPJVanreoj4tSx7dAZXr/uazKHkYNG4U
- LwnXZF7Zo2ftdPU/R+i6kzNG1VAuvm3Eu6Tui/fCwH594/WTUVaPHgb+MWiq5WGZ8HSv
- 9UVg==
-X-Gm-Message-State: AC+VfDwbCKvuTsOfTm57wFLmjWRSuJTWln7A+xIEwnw+VhejJ009KhmK
- ocU+jU83T17UsAFviDYv1kgf/XNsVDWforKYi3DSH0O3N+I=
-X-Google-Smtp-Source: ACHHUZ4U+WiSXnbo+EKUxRpLu3N6Cc+/86S2TW/0p+S04xipNQmnjIEaWiB0X2NcLRX/NqJBpRYF0KpSn11W+2hiQTU=
-X-Received: by 2002:a7b:c411:0:b0:3f7:ee69:869f with SMTP id
- k17-20020a7bc411000000b003f7ee69869fmr11515134wmi.5.1687384954467; Wed, 21
- Jun 2023 15:02:34 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Qmfg4107rz1yPG;
+	Wed, 21 Jun 2023 19:22:40 -0400 (EDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org
+ [IPv6:2604:1380:4641:c500::1])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Qmfg234vPz1ybD
+ for <lttng-dev@lists.lttng.org>; Wed, 21 Jun 2023 19:22:38 -0400 (EDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id 888C6616F5;
+ Wed, 21 Jun 2023 23:22:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF0AC433C8;
+ Wed, 21 Jun 2023 23:22:36 +0000 (UTC)
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+ id 7C69DCE23B2; Wed, 21 Jun 2023 16:22:36 -0700 (PDT)
+Date: Wed, 21 Jun 2023 16:22:36 -0700
+To: Olivier Dion <odion@efficios.com>
+Message-ID: <bc031f8e-8380-4a1d-bfe2-9e8204e06283@paulmck-laptop>
+References: <20230515201718.9809-1-odion@efficios.com>
+ <20230515201718.9809-5-odion@efficios.com>
 MIME-Version: 1.0
-References: <CAFZh4h-Xsf7HGZ6A57BpuWH7CzogwV6D25vg05dOq30_MfxE0A@mail.gmail.com>
- <CAFZh4h8awEpJgAcygRY=1f7A2qK91b31HBnLBPvvueuRnquOjQ@mail.gmail.com>
- <41fa4914-b519-9ff9-3659-7e4cf2d41904@efficios.com>
- <91d1c0ca-af15-2972-da1e-8f07a148158b@efficios.com>
- <CAFZh4h-MPXsqHETtYGv2LqMgvt_me33eGSU-UhhZQxmjMEUTig@mail.gmail.com>
- <6938a214-8858-6805-f508-924ef3bdc17f@efficios.com>
-In-Reply-To: <6938a214-8858-6805-f508-924ef3bdc17f@efficios.com>
-Date: Wed, 21 Jun 2023 18:02:22 -0400
-Message-ID: <CAFZh4h_Ha_Ag+KqqFatpbWPni7ek9Q4D_=nkOjGKP8FuOYMB0A@mail.gmail.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] I'm still getting empty ust traces using tracef
+Content-Disposition: inline
+In-Reply-To: <20230515201718.9809-5-odion@efficios.com>
+Subject: Re: [lttng-dev] [PATCH 04/11] urcu/arch/generic: Use atomic
+ builtins if configured
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -70,103 +56,55 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Brian Hutchinson via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Brian Hutchinson <b.hutchman@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: "Paul E. McKenney via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: paulmck@kernel.org
+Cc: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-T24gV2VkLCBKdW4gMjEsIDIwMjMgYXQgNDoyMeKAr1BNIE1hdGhpZXUgRGVzbm95ZXJzCjxtYXRo
-aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+Cj4gT24gNi8yMC8yMyAxODowMiwg
-QnJpYW4gSHV0Y2hpbnNvbiB3cm90ZToKPiA+IE9uIFRodSwgTWF5IDExLCAyMDIzIGF0IDI6MTTi
-gK9QTSBNYXRoaWV1IERlc25veWVycwo+ID4gPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNv
-bT4gd3JvdGU6Cj4gPj4KPiA+PiBPbiAyMDIzLTA1LTExIDE0OjEzLCBNYXRoaWV1IERlc25veWVy
-cyB2aWEgbHR0bmctZGV2IHdyb3RlOgo+ID4+PiBPbiAyMDIzLTA1LTExIDEyOjM2LCBCcmlhbiBI
-dXRjaGluc29uIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4gPj4+PiAuLi4gbW9yZSBiYWNrZ3JvdW5k
-LiAgSSd2ZSBhbHdheXMgdXNlZCBsdHQgaW4gdGhlIGtlcm5lbCBzbyBJIGRvbid0Cj4gPj4+PiBo
-YXZlIG11Y2ggZXhwZXJpZW5jZSB3aXRoIHRoZSB1c2VyIHNpZGUgb2YgaXQgYW5kIGVzcGVjaWFs
-bHkKPiA+Pj4+IG11bHRpLXRocmVhZGVkLCBtdWx0aS1jb3JlIHNvIEknbSBwcm9iYWJseSBtaXNz
-aW5nIHNvbWUgZnVuZGFtZW50YWwKPiA+Pj4+IGNvbmNlcHRzIHRoYXQgSSBuZWVkIHRvIHVuZGVy
-c3RhbmQuCj4gPj4+Cj4gPj4+IFdoaWNoIGFyZSB0aGUgZXhhY3QgdmVyc2lvbnMgb2YgTFRUbmct
-VVNUIGFuZCBMVFRuZy1Ub29scyB5b3UgYXJlIHVzaW5nCj4gPj4+IG5vdyA/ICgyLjEzLk4gb3Ig
-d2hpY2ggZ2l0IGNvbW1pdCA/KQo+ID4+Pgo+ID4+Cj4gPj4gQWxzbywgY2FuIHlvdSB0cnkgdXNp
-bmcgbHR0bmctdXN0IHN0YWJsZS0yLjEzIGJyYW5jaCwgd2hpY2ggaW5jbHVkZXMgdGhlIGZvbGxv
-d2luZyBjb21taXQgPwo+ID4+Cj4gPj4gY29tbWl0IGJlMmNhOGI1NjNiYWI4MWJlMTVjYmNlN2I5
-ZjUyNDIyMzY5Zjc5ZjcKPiA+PiBBdXRob3I6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRl
-c25veWVyc0BlZmZpY2lvcy5jb20+Cj4gPj4gRGF0ZTogICBUdWUgRmViIDIxIDE0OjI5OjQ5IDIw
-MjMgLTA1MDAKPiA+Pgo+ID4+ICAgICAgIEZpeDogUmVldmFsdWF0ZSBMVFROR19VU1RfVFJBQ0VQ
-T0lOVF9ERUZJTkUgZWFjaCB0aW1lIHRyYWNlcG9pbnQuaCBpcyBpbmNsdWRlZAo+ID4+Cj4gPj4g
-ICAgICAgRml4IGlzc3VlcyB3aXRoIG1pc3Npbmcgc3ltYm9scyBpbiB1c2UtY2FzZXMgd2hlcmUg
-dHJhY2VmLmggaXMgaW5jbHVkZWQKPiA+PiAgICAgICBiZWZvcmUgZGVmaW5pbmcgTFRUTkdfVVNU
-X1RSQUNFUE9JTlRfREVGSU5FLCBlLmcuOgo+ID4+Cj4gPj4gICAgICAgICNpbmNsdWRlIDxsdHRu
-Zy90cmFjZWYuaD4KPiA+PiAgICAgICAgI2RlZmluZSBMVFROR19VU1RfVFJBQ0VQT0lOVF9ERUZJ
-TkUKPiA+PiAgICAgICAgI2luY2x1ZGUgPHByb3ZpZGVyLmg+Cj4gPj4KPiA+PiAgICAgICBJdCBp
-cyBjYXVzZWQgYnkgdGhlIGZhY3QgdGhhdCB0cmFjZWYuaCBpbmNsdWRlcyB0cmFjZXBvaW50Lmgg
-aW4gYQo+ID4+ICAgICAgIGNvbnRleHQgd2hpY2ggaGFzIExUVE5HX1VTVF9UUkFDRVBPSU5UX0RF
-RklORSB1bmRlZmluZWQsIGFuZCB0aGlzIGlzIG5vdAo+ID4+ICAgICAgIHJlLWV2YWx1YXRlZCBm
-b3IgdGhlIGZvbGxvd2luZyBpbmNsdWRlcy4KPiA+Pgo+ID4+ICAgICAgIEZpeCB0aGlzIGJ5IGxp
-ZnRpbmcgdGhlIGRlZmluaXRpb24gY29kZSBpbiB0cmFjZXBvaW50Lmggb3V0c2lkZSBvZiB0aGUK
-PiA+PiAgICAgICBoZWFkZXIgaW5jbHVkZSBndWFyZHMsIGFuZCAjdW5kZWYgdGhlIG9sZCBMVFRO
-R19VU1RfX0RFRklORV9UUkFDRVBPSU5UCj4gPj4gICAgICAgYmVmb3JlIHJlLWRlZmluaW5nIGl0
-IHRvIGl0cyBuZXcgc2VtYW50aWMuIFVzZSBhIG5ldwo+ID4+ICAgICAgIF9MVFROR19VU1RfVFJB
-Q0VQT0lOVF9ERUZJTkVfT05DRSBpbmNsdWRlIGd1YXJkIHdpdGhpbiB0aGUKPiA+PiAgICAgICBM
-VFROR19VU1RfVFJBQ0VQT0lOVF9ERUZJTkUgZGVmaW5lZCBjYXNlIHRvIGVuc3VyZSBzeW1ib2xz
-IGFyZSBub3QKPiA+PiAgICAgICBkdXBsaWNhdGVkLgo+ID4+Cj4gPj4gICAgICAgU2lnbmVkLW9m
-Zi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4K
-PiA+PiAgICAgICBDaGFuZ2UtSWQ6IEkwZWY3MjA0MzUwMDNhN2NhMGJmY2YyOWQ3YmYyNzg2NmM1
-ZmY4Njc4Cj4gPj4KPiA+Cj4gPiBJIGFwcGxpZWQgdGhpcyBwYXRjaCBhbmQgaWYgSSB1c2UgInRy
-YWNlZiIgdHlwZSBjYWxscyBpbiBvdXIKPiA+IGFwcGxpY2F0aW9uIHRoYXQgaXMgbWFkZSB1cCBv
-ZiBhIGJ1bmNoIG9mIHN0YXRpYyBsaWJzIC4uLiB0aGUgVVNUCj4gPiB0cmFjZSBjYWxscyB3b3Jr
-LiAgSSB2ZXJpZmllZCB0aGF0IHRyYWNlcyB0aGF0IHdlcmUgY2FsbGVkIGZyb20KPiA+IHNldmVy
-YWwgZGlmZmVyZW50IHN0YXRpYyBsaWJzIGFsbCB3b3JrZWQuCj4gPgo+ID4gQnV0IGFzIHNvb24g
-YXMgSSBpbmNsdWRlIGEgInRyYWNlcG9pbnQiIHN0eWxlIHRyYWNlcG9pbnQgKHRoYXQgdXNlcwo+
-ID4gdHJhY2UgcHJvdmlkZXIgaW5jbHVkZSBmaWxlcyBldGMuKSB0aGVuIGRvaW5nIGEgImx0dG5n
-IGxpc3QgLXUiCj4gPiByZXR1cm5zICJOb25lIiBmb3IgVVNUIGV2ZW50cy4KPiA+Cj4gPiBJcyB0
-aGVyZSBzb21lIGtpbmQgb2YgcnVsZSB0aGF0IHNheXMgYSBmaWxlIGNhbid0IHVzZSBib3RoIHRy
-YWNlZiBhbmQKPiA+IHRyYWNlcG9pbnQgY2FsbHM/ICBJcyB0aGVyZSBzb21ldGhpbmcgc3BlY2lh
-bCB5b3UgaGF2ZSB0byBkbyB0byB1c2UKPiA+IHRyYWNlZiBhbmQgdHJhY2Vwb2ludHMgaW4gc2Ft
-ZSBmaWxlPyAgRG9pbmcgc28gYXBwZWFycyB0byBoYXZlIGJyb2tlbgo+ID4gZXZlcnl0aGluZy4K
-Pgo+IEl0IHNob3VsZCBqdXN0IHdvcmsuCj4KPiBDYW4geW91IHByb3ZpZGUgYSBtaW5pbWFsIGV4
-YW1wbGUgb2YgdGhlIGNvbXBpbGUgdW5pdCBoYXZpbmcgdGhpcwo+IGlzc3VlID8KPgo+IEFsc28g
-eW91IG1lbnRpb24gInN0YXRpYyBsaWJzIi4gTWFrZSBzdXJlIHlvdSBkbyAqbm90KiBkZWZpbmUK
-PiAiTFRUTkdfVVNUX1RSQUNFUE9JTlRfUFJPQkVfRFlOQU1JQ19MSU5LQUdFIiBpbiB0aGlzIGNh
-c2UuIFNlZSB0aGUKPiBsdHRuZy11c3QoMykgbWFuIHBhZ2UgZm9yIGRldGFpbHMgKHNlY3Rpb24g
-IlN0YXRpY2FsbHkgbGlua2luZyB0aGUKPiB0cmFjZXBvaW50IHByb3ZpZGVyIikuCgpBYm91dCB0
-aGF0LiAgSXQncyBhIGJpZyBwcm9qZWN0IHNvIGFsbCBvZiBvdXIgY29tcG9uZW50cyBhcmUgY29t
-cGlsZWQKYXMgc3RhdGljIGxpYnMgYW5kIGxpbmtlZCBpbnRvIG9uZSBiaWcgZXhlY3V0YWJsZSBh
-dCB0aGUgZW5kLCBJJ20gbm90CnVzaW5nIGx0dG5nLXVzdCBzdGF0aWMgbGlicy4gIEknbSBsaW5r
-aW5nIGZpbmFsIGV4ZWN1dGFibGUgd2l0aAotbGx0dG5nLXVzdCBhbmQgLWxkbAoKSSBhbHNvIGhh
-dmUgYW5vdGhlciBxdWVzdGlvbiBJIGp1c3QgdGhvdWdodCBvZiByZWdhcmRpbmcgdHJhY2UgcHJv
-dmlkZXIgY29kZS4KCldlJ3ZlIGdvdCBhIGJ1bmNoIG9mIEMgY29kZSB0aGF0IGlzIGJlaW5nIGNv
-bXBpbGVkIHdpdGggZysrLiAgSQppbml0aWFsbHkgaGFkIHByb2JsZW1zIGdldHRpbmcgYW55dGhp
-bmcgdHJhY2Vwb2ludCByZWxhdGVkIHRvIHdvcmsKKHdpdGggMi4xMSkgYW5kIHJlYWQgc29tZXdo
-ZXJlIHRoYXQgdGhlIHRyYWNlIHByb3ZpZGVyIGNvZGUgbmVlZGVkIHRvCmJlIGNvbXBpbGVkIHdp
-dGggZ2NjIHNvIEkgYnVpbHQgdGhhdCBieSBoYW5kIHNpbmNlIG91ciBjbWFrZSBidWlsZApzeXN0
-ZW0gaXMgcHJldHR5IGNvbXBsaWNhdGVkIGFuZCBqdXN0IGNvcGllZCB0aGUgcmVzdWx0aW5nIEMg
-Lm9iaiBpbnRvCm91ciBidWlsZCBkaXJlY3Rvcnkgc3RydWN0dXJlIGZvciBjbWFrZSB0byBwaWNr
-IHVwIGFuZCB0aGF0IHdvcmtlZC4gIEkKYmFzaWNhbGx5IGNvcGllZCB0aGUgZ2NjIC5vYmogb3Zl
-ciB0aGUgYnJva2VuIG9uZSB0aGF0IGNtYWtlL2crKwpnZW5lcmF0ZWQuCgpJJ20gbm90IGRvaW5n
-IHRoYXQgbm93IGFuZCBhbSB3cmFwcGluZyB0aGUgLXRwLmggVFJBQ0VQT0lOVF9FVkVOVApkZWZp
-bml0aW9ucyB3aXRoICNpZmRlZiBfX2NwbHVzcGx1cyBleHRlcm4gIkMiIHt9ICNlbmRpZiAvKgpf
-X2NwbHVzcGx1cyAqLwoKSSdsbCBoYXZlIHRvIGdvIGJhY2sgYW5kIGNoZWNrIG15IHJlc3VsdHMg
-YXMgSSd2ZSBiZWVuIG9uL29mZiB3b3JraW5nCm9uIHRoaXMgZm9yIGEgd2hpbGUgYnV0IGlmIEkg
-c3R1YiBvdXQgdHJhY2Vwb2ludCBjYWxscyBhbmQganVzdCBkbwp0cmFjZWYgaXQgYXBwZWFycyBl
-dmVyeXRoaW5nIHdvcmtzLiAgSWYgSSBzdHViIG91dCB0cmFjZWYgY2FsbHMgYW5kCmp1c3QgZG8g
-dHJhY2Vwb2ludCBjYWxscyBJIHRoaW5rIHRoYXQgd29ya3MgdG9vLiAgVGhlIHByb2JsZW0gSSBo
-YXZlCmlzIHdoZW4gSSB0cnkgdG8gZG8gYm90aCB0cmFjZWYgYW5kIHRyYWNlcG9pbnQgaW4gc2Ft
-ZSBmaWxlLiAgVGhhdCdzCndoZW4gbm90aGluZyB3b3Jrcy4KCklzIHRoZXJlIGFuIG9yZGVyIHRv
-IHRoZSBpbmNsdWRlcz8KCkluIHRoZSBDIHNvdXJjZSBmaWxlIGluIHF1ZXN0aW9uIEkgZG86Cgoj
-aW5jbHVkZSA8bHR0bmcvdHJhY2VmLmg+CnRoZW4gbGF0ZXIgLi4uCiNkZWZpbmUgVFJBQ0VQT0lO
-VF9ERUZJTkUKI2luY2x1ZGUgIm15LXRwLmgiCgpIbW0sIG5vdyB0aGF0IEkgcGF5IG1vcmUgYXR0
-ZW50aW9uLCBJIGRvbid0IHNlZSBhbnkgbWVudGlvbiBvZgp0cmFjZXByb3ZpZGVyIGNvZGUgbmVl
-ZGluZyB0byBiZSBjb21waWxlZCB3aXRoIGdjYyB2cyBnKysgaW4gdGhlIDIuMTMKZG9jdW1lbnRh
-dGlvbi4KCi4uLiBhbmQgaXQgbG9va3MgbGlrZSB0aGUgdHJhY2Vwcm92aWRlciBoZWFkZXIgY2hh
-bmdlZCB0byB1c2UKTFRUTkdfVVNUXyBpbiBmcm9udCBvZiBldmVyeXRoaW5nIGFuZCBJJ20gc3Rp
-bGwgdXNpbmcgbHR0bmcgMi4xMQpzdHlsZSEgIFNvIEkgdGhpbmsgbXkgcHJvYmxlbSBpcyBwcm9i
-YWJseSBhc3NvY2lhdGVkIHdpdGggbmVlZGluZyB0bwpyZS1kbyBteSB0cmFjZXByb3ZpZGVyIGNv
-ZGUgdG8gdXBkYXRlIHRvIDIuMTMgc3R5bGUuICBEb24ndCBrbm93IGlmCnRoZSBDKysgdGhpbmcg
-aXMgc3RpbGwgYW4gaXNzdWUuCgpSZWdhcmRzLAoKQnJpYW4KX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYK
+On Mon, May 15, 2023 at 04:17:11PM -0400, Olivier Dion wrote:
+> If configured to use atomic builtins, implement SMP memory barriers in
+> term of atomic builtins if the architecture does not implement its own
+> version.
+> 
+> Change-Id: Iddc4283606e0fce572e104d2d3f03b5c0d9926fb
+> Co-authored-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Signed-off-by: Olivier Dion <odion@efficios.com>
+> ---
+>  include/urcu/arch/generic.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/include/urcu/arch/generic.h b/include/urcu/arch/generic.h
+> index be6e41e..e292c70 100644
+> --- a/include/urcu/arch/generic.h
+> +++ b/include/urcu/arch/generic.h
+> @@ -43,6 +43,14 @@ extern "C" {
+>   * GCC builtins) as well as cmm_rmb and cmm_wmb (defaulting to cmm_mb).
+>   */
+>  
+> +#ifdef CONFIG_RCU_USE_ATOMIC_BUILTINS
+> +
+> +# ifndef cmm_smp_mb
+> +#  define cmm_smp_mb() __atomic_thread_fence(__ATOMIC_SEQ_CST)
+> +# endif
+> +
+> +#endif	/* CONFIG_RCU_USE_ATOMIC_BUILTINS */
+> +
+>  #ifndef cmm_mb
+>  #define cmm_mb()    __sync_synchronize()
+
+Just out of curiosity, why not also implement cmm_mb() in terms of
+__atomic_thread_fence(__ATOMIC_SEQ_CST)?  (Or is that a later patch?)
+
+							Thanx, Paul
+
+>  #endif
+> -- 
+> 2.39.2
+> 
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
