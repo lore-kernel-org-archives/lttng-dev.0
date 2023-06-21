@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F295BEB64D7
-	for <lttng-dev@archiver.kernel.org>; Wed, 21 Jun 2023 23:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E20BDEB64D7
+	for <lttng-dev@archiver.kernel.org>; Wed, 21 Jun 2023 23:24:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1687389760;
-	bh=usyvtNECgwJdlGz3QFsmZveq4rmhreMIKegleFJ71AY=;
+	s=default; t=1687389841;
+	bh=HZFUkS3UkRQTgiwFMHDziFHkYSOzvE9BBKx5ciE5pDs=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=JKK7Z56Brc+N4fzShHfDDtApEsBVYyyWrzACdv3Syyfk3Hp24nNQkeaFYdBAUbN8i
-	 Mlrf6kcRbKqBZPJKRD6NkEt3C8G7WvPHukrRRutwrHTxxZ2FH2LlQrP6IaiaNpZ629
-	 CRPDr1AsEiFmndgBtC4wat18GdO+4O34VKnV1gO6MiQAirQpNc/JnBPPRBV/FZSbXo
-	 JhtGQ83ismwRZ+8z4GBW/FDX7B1ENAopmhzvo3NErAlMFPnM16tsoaP4NwydpGkIBc
-	 XdAyPbRV+bSJpmZb0ZPNnHaO/lmsVn5Q0n0McEOwcRfIlZ8BQ4gqQ2SdTJr3xNdF0O
-	 OlsJbqI/3s37A==
+	b=ffmSkarmBqjb77/Z6NnHoF1Ugnne1kn+5Ps8txaJ1re5wUCfhny1245myXzUcfVEX
+	 WB4uqjwzNZRAi8YTr7Q7tpyRJvRIUiZiay/IB6OOuZ6rPX2LUyit5tDUjS2N7gyoD7
+	 +SI8yiK2ZeUmp698JiNBYRRemfqwefLxGOs9WOiWyo30vZRqPnxO3aUQ6lPj08HQtH
+	 90knwuvxX7xk572y69UrNsCI25IgxfvdOVpfZ0iLUkI7qJVxgmnzT9Yryt2HqqFK9N
+	 CZmvaiY5f9QTl6opctmCJc67H+evKOChiE9TFleXiy3NhLlrE/CXk4i2oXS4ZVw5tT
+	 cCXIhZ8P1Vz9w==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Qmfg4107rz1yPG;
-	Wed, 21 Jun 2023 19:22:40 -0400 (EDT)
-Received: from dfw.source.kernel.org (dfw.source.kernel.org
- [IPv6:2604:1380:4641:c500::1])
- by lists.lttng.org (Postfix) with ESMTPS id 4Qmfg234vPz1ybD
- for <lttng-dev@lists.lttng.org>; Wed, 21 Jun 2023 19:22:38 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Qmfhc48D0z203n;
+	Wed, 21 Jun 2023 19:24:00 -0400 (EDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Qmfhb5ptxz203l
+ for <lttng-dev@lists.lttng.org>; Wed, 21 Jun 2023 19:23:59 -0400 (EDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits))
  (No client certificate requested)
- by dfw.source.kernel.org (Postfix) with ESMTPS id 888C6616F5;
- Wed, 21 Jun 2023 23:22:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF0AC433C8;
- Wed, 21 Jun 2023 23:22:36 +0000 (UTC)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id 3D359616F5;
+ Wed, 21 Jun 2023 23:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F454C433C0;
+ Wed, 21 Jun 2023 23:23:58 +0000 (UTC)
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
- id 7C69DCE23B2; Wed, 21 Jun 2023 16:22:36 -0700 (PDT)
-Date: Wed, 21 Jun 2023 16:22:36 -0700
+ id 52BBDCE23B2; Wed, 21 Jun 2023 16:23:58 -0700 (PDT)
+Date: Wed, 21 Jun 2023 16:23:58 -0700
 To: Olivier Dion <odion@efficios.com>
-Message-ID: <bc031f8e-8380-4a1d-bfe2-9e8204e06283@paulmck-laptop>
+Message-ID: <81bdddb0-0a8e-4ce7-a40d-789bba0a74e2@paulmck-laptop>
 References: <20230515201718.9809-1-odion@efficios.com>
- <20230515201718.9809-5-odion@efficios.com>
+ <20230607185359.8125-5-odion@efficios.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230515201718.9809-5-odion@efficios.com>
-Subject: Re: [lttng-dev] [PATCH 04/11] urcu/arch/generic: Use atomic
- builtins if configured
+In-Reply-To: <20230607185359.8125-5-odion@efficios.com>
+Subject: Re: [lttng-dev] [PATCH v2 04/12] urcu/system: Use atomic builtins
+ if configured
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -58,51 +57,70 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: "Paul E. McKenney via lttng-dev" <lttng-dev@lists.lttng.org>
 Reply-To: paulmck@kernel.org
-Cc: lttng-dev@lists.lttng.org
+Cc: Tony Finch <dot@dotat.at>, lttng-dev@lists.lttng.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On Mon, May 15, 2023 at 04:17:11PM -0400, Olivier Dion wrote:
-> If configured to use atomic builtins, implement SMP memory barriers in
-> term of atomic builtins if the architecture does not implement its own
-> version.
+On Wed, Jun 07, 2023 at 02:53:51PM -0400, Olivier Dion wrote:
+> If configured to use atomic builtins, use them for implementing the
+> CMM_LOAD_SHARED and CMM_STORE_SHARED macros.
 > 
-> Change-Id: Iddc4283606e0fce572e104d2d3f03b5c0d9926fb
+> Change-Id: I3eaaaaf0d26c47aced6e94b40fd59c7b8baa6272
 > Co-authored-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > Signed-off-by: Olivier Dion <odion@efficios.com>
 > ---
->  include/urcu/arch/generic.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  include/urcu/system.h | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
-> diff --git a/include/urcu/arch/generic.h b/include/urcu/arch/generic.h
-> index be6e41e..e292c70 100644
-> --- a/include/urcu/arch/generic.h
-> +++ b/include/urcu/arch/generic.h
-> @@ -43,6 +43,14 @@ extern "C" {
->   * GCC builtins) as well as cmm_rmb and cmm_wmb (defaulting to cmm_mb).
+> diff --git a/include/urcu/system.h b/include/urcu/system.h
+> index faae390..f184aad 100644
+> --- a/include/urcu/system.h
+> +++ b/include/urcu/system.h
+> @@ -19,9 +19,28 @@
+>   * all copies or substantial portions of the Software.
 >   */
+>  
+> +#include <urcu/config.h>
+>  #include <urcu/compiler.h>
+>  #include <urcu/arch.h>
 >  
 > +#ifdef CONFIG_RCU_USE_ATOMIC_BUILTINS
 > +
-> +# ifndef cmm_smp_mb
-> +#  define cmm_smp_mb() __atomic_thread_fence(__ATOMIC_SEQ_CST)
-> +# endif
+> +#define CMM_LOAD_SHARED(x)			\
+> +	__atomic_load_n(&(x), __ATOMIC_RELAXED)
 > +
-> +#endif	/* CONFIG_RCU_USE_ATOMIC_BUILTINS */
+> +#define _CMM_LOAD_SHARED(x) CMM_LOAD_SHARED(x)
 > +
->  #ifndef cmm_mb
->  #define cmm_mb()    __sync_synchronize()
+> +#define CMM_STORE_SHARED(x, v)					\
+> +	__extension__						\
+> +	({							\
+> +		__typeof__(v) _v = (v);				\
+> +		__atomic_store_n(&(x), _v, __ATOMIC_RELAXED);	\
+> +		_v;						\
+> +	})
+> +
+> +#define _CMM_STORE_SHARED(x, v) CMM_STORE_SHARED(x, v)
 
-Just out of curiosity, why not also implement cmm_mb() in terms of
-__atomic_thread_fence(__ATOMIC_SEQ_CST)?  (Or is that a later patch?)
+Same question here on loss of volatile semantics.
 
 							Thanx, Paul
 
->  #endif
+> +
+> +#else
+>  /*
+>   * Identify a shared load. A cmm_smp_rmc() or cmm_smp_mc() should come
+>   * before the load.
+> @@ -56,4 +75,6 @@
+>  		_v = _v;	/* Work around clang "unused result" */	\
+>  	})
+>  
+> +#endif	/* CONFIG_RCU_USE_ATOMIC_BUILTINS */
+> +
+>  #endif /* _URCU_SYSTEM_H */
 > -- 
-> 2.39.2
+> 2.40.1
 > 
 _______________________________________________
 lttng-dev mailing list
