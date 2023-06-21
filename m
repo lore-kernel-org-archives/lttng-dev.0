@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EAF8EB64D7
-	for <lttng-dev@archiver.kernel.org>; Wed, 21 Jun 2023 23:29:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B57EEB64D7
+	for <lttng-dev@archiver.kernel.org>; Wed, 21 Jun 2023 23:37:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1687390184;
-	bh=eS7n8dUP9SXE/clq8CRFic5UVIQHVcp8ysYa29tuizQ=;
+	s=default; t=1687390641;
+	bh=83wMyBOPuCW+RDeCKGpb4XBzId8mQXBOUKmhV1yjVzE=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=r+4XtZ5GNIvlJMBfe5tRQdgx3+IrcM01/0MWZJg9J1Hjzx9exYcBQpeVZVMM+1BOa
-	 w8fUlm18GtAJzgNyaP4Pef+6t6MGUciN8OQ3hGNMOP8RQVzDl9ysHXjUrcRNX6d44Q
-	 fa3ltJc2NRH7KW2glAUNAZZgZYb8T8ACM83sl4dZnnpM5Qz9GsRKCW5bbiYZBHhyZ+
-	 +b6cvDpFtxj1g/zbMjMfhV5tLAZSjpW6L1eyxL2+j67fg1gtViKbSzLAeTtgjRmmMn
-	 cmfluS3JZwctFeNukLsjwvp1i2PnsQ2dEFfKBZIzy3zlMGvcqaEO0DXOWcaHXp+Mne
-	 zwiILjVT6F8Dw==
+	b=TD4Oy3DqnfsU3O9xy2Eg45sRTZJa0fXWd3NFxtR0YeIsFjnzY0KO1RIATlLDJ7DNw
+	 7zZeKgfx/xDdfekCdXXGlVrdFcJJAgE9PGuCnKlmf9cifq5p70rw25aAyfgjAq908q
+	 3A2qlC/2XGTHZK01z0tPVpw8mSPbjri1pX/t0JQWP1+715eu0menk3xw1BYY/jxNcL
+	 JC+Q5apQdRkjOWwPfcMH8ckP7U2fcVNBJXi2h8Ulsa9+KVbQijL0YmLSGSoXz6xOWA
+	 Xu4XFc554w6QzvvFrkPX67Ac5KNmuQIDCsoTarDFp0jgf1p/xb5eFrgX2vEsThjuU6
+	 6s5dtFXi8xBhg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QmfqD44vBz1yqs;
-	Wed, 21 Jun 2023 19:29:44 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Qmg006n45z203v;
+	Wed, 21 Jun 2023 19:37:20 -0400 (EDT)
 Received: from dfw.source.kernel.org (dfw.source.kernel.org
  [IPv6:2604:1380:4641:c500::1])
- by lists.lttng.org (Postfix) with ESMTPS id 4QmfqB4DGfz1yqq
- for <lttng-dev@lists.lttng.org>; Wed, 21 Jun 2023 19:29:42 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4Qmfzz5WG7z1yPM
+ for <lttng-dev@lists.lttng.org>; Wed, 21 Jun 2023 19:37:19 -0400 (EDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (2048 bits))
  (No client certificate requested)
- by dfw.source.kernel.org (Postfix) with ESMTPS id 6AD306152C;
- Wed, 21 Jun 2023 23:19:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1BD8C433C8;
- Wed, 21 Jun 2023 23:19:57 +0000 (UTC)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id D8AFE616E6;
+ Wed, 21 Jun 2023 23:37:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4772BC433C0;
+ Wed, 21 Jun 2023 23:37:18 +0000 (UTC)
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
- id 64BC2CE23B2; Wed, 21 Jun 2023 16:19:57 -0700 (PDT)
-Date: Wed, 21 Jun 2023 16:19:57 -0700
+ id DB45ECE23B2; Wed, 21 Jun 2023 16:37:17 -0700 (PDT)
+Date: Wed, 21 Jun 2023 16:37:17 -0700
 To: Olivier Dion <odion@efficios.com>
-Message-ID: <c7834f41-c033-4c53-96e8-0ad728c2a285@paulmck-laptop>
+Message-ID: <44c01482-2c3e-4370-94fb-d4843feb892f@paulmck-laptop>
 References: <20230515201718.9809-1-odion@efficios.com>
- <20230515201718.9809-3-odion@efficios.com>
+ <20230607185359.8125-8-odion@efficios.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230515201718.9809-3-odion@efficios.com>
-Subject: Re: [lttng-dev] [PATCH 02/11] urcu/uatomic: Use atomic builtins if
- configured
+In-Reply-To: <20230607185359.8125-8-odion@efficios.com>
+Subject: Re: [lttng-dev] [PATCH v2 07/12] tests: Use uatomic for accessing
+ global states
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -58,343 +58,330 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: "Paul E. McKenney via lttng-dev" <lttng-dev@lists.lttng.org>
 Reply-To: paulmck@kernel.org
-Cc: lttng-dev@lists.lttng.org
+Cc: Tony Finch <dot@dotat.at>, lttng-dev@lists.lttng.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On Mon, May 15, 2023 at 04:17:09PM -0400, Olivier Dion wrote:
-> Implement uatomic in term of atomic builtins if configured to do so.
+On Wed, Jun 07, 2023 at 02:53:54PM -0400, Olivier Dion wrote:
+> Global states accesses were protected via memory barriers. Use the
+> uatomic API with the CMM memory model so that TSAN does not warns about
+
+"does not warn", for whatever that is worth.
+
+> none atomic concurrent accesses.
 > 
-> Change-Id: I5814494c62ee507fd5d381c3ba4ccd0a80c4f4e3
+> Also, the thread id map mutex must be unlocked after setting the new
+> created thread id in the map. Otherwise, the new thread could observe an
+> unset id.
+> 
+> Change-Id: I1ecdc387b3f510621cbc116ad3b95c676f5d659a
 > Co-authored-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > Signed-off-by: Olivier Dion <odion@efficios.com>
 > ---
->  include/Makefile.am                     |  3 +
->  include/urcu/uatomic.h                  |  5 +-
->  include/urcu/uatomic/builtins-generic.h | 85 +++++++++++++++++++++++++
->  include/urcu/uatomic/builtins-x86.h     | 85 +++++++++++++++++++++++++
->  include/urcu/uatomic/builtins.h         | 83 ++++++++++++++++++++++++
->  5 files changed, 260 insertions(+), 1 deletion(-)
->  create mode 100644 include/urcu/uatomic/builtins-generic.h
->  create mode 100644 include/urcu/uatomic/builtins-x86.h
->  create mode 100644 include/urcu/uatomic/builtins.h
+>  tests/common/api.h            |  12 ++--
+>  tests/regression/rcutorture.h | 106 +++++++++++++++++++++++-----------
+>  2 files changed, 80 insertions(+), 38 deletions(-)
 > 
-> diff --git a/include/Makefile.am b/include/Makefile.am
-> index ba1fe60..fac941f 100644
-> --- a/include/Makefile.am
-> +++ b/include/Makefile.am
-> @@ -63,6 +63,9 @@ nobase_include_HEADERS = \
->  	urcu/uatomic/alpha.h \
->  	urcu/uatomic_arch.h \
->  	urcu/uatomic/arm.h \
-> +	urcu/uatomic/builtins.h \
-> +	urcu/uatomic/builtins-generic.h \
-> +	urcu/uatomic/builtins-x86.h \
->  	urcu/uatomic/gcc.h \
->  	urcu/uatomic/generic.h \
->  	urcu/uatomic.h \
-> diff --git a/include/urcu/uatomic.h b/include/urcu/uatomic.h
-> index 2fb5fd4..6b57c5f 100644
-> --- a/include/urcu/uatomic.h
-> +++ b/include/urcu/uatomic.h
-> @@ -22,8 +22,11 @@
->  #define _URCU_UATOMIC_H
+> diff --git a/tests/common/api.h b/tests/common/api.h
+> index a260463..9d22b0f 100644
+> --- a/tests/common/api.h
+> +++ b/tests/common/api.h
+> @@ -26,6 +26,7 @@
 >  
+>  #include <urcu/compiler.h>
 >  #include <urcu/arch.h>
-> +#include <urcu/config.h>
+> +#include <urcu/uatomic.h>
 >  
-> -#if defined(URCU_ARCH_X86)
-> +#if defined(CONFIG_RCU_USE_ATOMIC_BUILTINS)
-> +#include <urcu/uatomic/builtins.h>
-> +#elif defined(URCU_ARCH_X86)
->  #include <urcu/uatomic/x86.h>
->  #elif defined(URCU_ARCH_PPC)
->  #include <urcu/uatomic/ppc.h>
-> diff --git a/include/urcu/uatomic/builtins-generic.h b/include/urcu/uatomic/builtins-generic.h
-> new file mode 100644
-> index 0000000..8e6a9b5
-> --- /dev/null
-> +++ b/include/urcu/uatomic/builtins-generic.h
-> @@ -0,0 +1,85 @@
+>  /*
+>   * Machine parameters.
+> @@ -135,7 +136,7 @@ static int __smp_thread_id(void)
+>  	thread_id_t tid = pthread_self();
+>  
+>  	for (i = 0; i < NR_THREADS; i++) {
+> -		if (__thread_id_map[i] == tid) {
+> +		if (uatomic_read(&__thread_id_map[i]) == tid) {
+>  			long v = i + 1;  /* must be non-NULL. */
+>  
+>  			if (pthread_setspecific(thread_id_key, (void *)v) != 0) {
+> @@ -184,12 +185,13 @@ static thread_id_t create_thread(void *(*func)(void *), void *arg)
+>  		exit(-1);
+>  	}
+>  	__thread_id_map[i] = __THREAD_ID_MAP_WAITING;
+> -	spin_unlock(&__thread_id_map_mutex);
+> +
+>  	if (pthread_create(&tid, NULL, func, arg) != 0) {
+>  		perror("create_thread:pthread_create");
+>  		exit(-1);
+>  	}
+> -	__thread_id_map[i] = tid;
+> +	uatomic_set(&__thread_id_map[i], tid);
+> +	spin_unlock(&__thread_id_map_mutex);
+>  	return tid;
+>  }
+>  
+> @@ -199,7 +201,7 @@ static void *wait_thread(thread_id_t tid)
+>  	void *vp;
+>  
+>  	for (i = 0; i < NR_THREADS; i++) {
+> -		if (__thread_id_map[i] == tid)
+> +		if (uatomic_read(&__thread_id_map[i]) == tid)
+>  			break;
+>  	}
+>  	if (i >= NR_THREADS){
+> @@ -211,7 +213,7 @@ static void *wait_thread(thread_id_t tid)
+>  		perror("wait_thread:pthread_join");
+>  		exit(-1);
+>  	}
+> -	__thread_id_map[i] = __THREAD_ID_MAP_EMPTY;
+> +	uatomic_set(&__thread_id_map[i], __THREAD_ID_MAP_EMPTY);
+>  	return vp;
+>  }
+>  
+> diff --git a/tests/regression/rcutorture.h b/tests/regression/rcutorture.h
+> index bc394f9..5835b8f 100644
+> --- a/tests/regression/rcutorture.h
+> +++ b/tests/regression/rcutorture.h
+> @@ -44,6 +44,14 @@
+>   * data.  A correct RCU implementation will have all but the first two
+>   * numbers non-zero.
+>   *
+> + * rcu_stress_count: Histogram of "ages" of structures seen by readers.  If any
+> + * entries past the first two are non-zero, RCU is broken. The age of a newly
+> + * allocated structure is zero, it becomes one when removed from reader
+> + * visibility, and is incremented once per grace period subsequently -- and is
+> + * freed after passing through (RCU_STRESS_PIPE_LEN-2) grace periods.  Since
+> + * this tests only has one true writer (there are fake writers), only buckets at
+> + * indexes 0 and 1 should be none-zero.
+> + *
+>   * This program is free software; you can redistribute it and/or modify
+>   * it under the terms of the GNU General Public License as published by
+>   * the Free Software Foundation; either version 2 of the License, or
+> @@ -68,6 +76,8 @@
+>  #include <stdlib.h>
+>  #include "tap.h"
+>  
+> +#include <urcu/uatomic.h>
+> +
+>  #define NR_TESTS	1
+>  
+>  DEFINE_PER_THREAD(long long, n_reads_pt);
+> @@ -145,10 +155,10 @@ void *rcu_read_perf_test(void *arg)
+>  	run_on(me);
+>  	uatomic_inc(&nthreadsrunning);
+>  	put_thread_offline();
+> -	while (goflag == GOFLAG_INIT)
+> +	while (uatomic_read(&goflag) == GOFLAG_INIT)
+>  		(void) poll(NULL, 0, 1);
+>  	put_thread_online();
+> -	while (goflag == GOFLAG_RUN) {
+> +	while (uatomic_read(&goflag) == GOFLAG_RUN) {
+>  		for (i = 0; i < RCU_READ_RUN; i++) {
+>  			rcu_read_lock();
+>  			/* rcu_read_lock_nest(); */
+> @@ -180,9 +190,9 @@ void *rcu_update_perf_test(void *arg __attribute__((unused)))
+>  		}
+>  	}
+>  	uatomic_inc(&nthreadsrunning);
+> -	while (goflag == GOFLAG_INIT)
+> +	while (uatomic_read(&goflag) == GOFLAG_INIT)
+>  		(void) poll(NULL, 0, 1);
+> -	while (goflag == GOFLAG_RUN) {
+> +	while (uatomic_read(&goflag) == GOFLAG_RUN) {
+>  		synchronize_rcu();
+>  		n_updates_local++;
+>  	}
+> @@ -211,15 +221,11 @@ int perftestrun(int nthreads, int nreaders, int nupdaters)
+>  	int t;
+>  	int duration = 1;
+>  
+> -	cmm_smp_mb();
+>  	while (uatomic_read(&nthreadsrunning) < nthreads)
+>  		(void) poll(NULL, 0, 1);
+> -	goflag = GOFLAG_RUN;
+> -	cmm_smp_mb();
+> +	uatomic_set(&goflag, GOFLAG_RUN);
+>  	sleep(duration);
+
+The theory here being that the context switches implied by the sleep()
+make the memory barrier unnecesary?  Not unreasonable, I guess.  ;-)
+
+> -	cmm_smp_mb();
+> -	goflag = GOFLAG_STOP;
+> -	cmm_smp_mb();
+> +	uatomic_set(&goflag, GOFLAG_STOP);
+>  	wait_all_threads();
+>  	for_each_thread(t) {
+>  		n_reads += per_thread(n_reads_pt, t);
+> @@ -300,6 +306,13 @@ struct rcu_stress rcu_stress_array[RCU_STRESS_PIPE_LEN] = { { 0, 0 } };
+>  struct rcu_stress *rcu_stress_current;
+>  int rcu_stress_idx = 0;
+>  
 > +/*
-> + * urcu/uatomic/builtins-generic.h
+> + * How many time a reader has seen something that should not be visible. It is
+> + * an error if this value is different than zero at the end of the stress test.
 > + *
-> + * Copyright (c) 2023 Olivier Dion <odion@efficios.com>
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; either
-> + * version 2.1 of the License, or (at your option) any later version.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+> + * Here, the something that should not be visibile is an old pipe that has been
+> + * freed (mbtest = 0).
 > + */
+>  int n_mberror = 0;
+>  DEFINE_PER_THREAD(long long [RCU_STRESS_PIPE_LEN + 1], rcu_stress_count);
+>  
+> @@ -315,19 +328,25 @@ void *rcu_read_stress_test(void *arg __attribute__((unused)))
+>  
+>  	rcu_register_thread();
+>  	put_thread_offline();
+> -	while (goflag == GOFLAG_INIT)
+> +	while (uatomic_read(&goflag) == GOFLAG_INIT)
+>  		(void) poll(NULL, 0, 1);
+>  	put_thread_online();
+> -	while (goflag == GOFLAG_RUN) {
+> +	while (uatomic_read(&goflag) == GOFLAG_RUN) {
+>  		rcu_read_lock();
+>  		p = rcu_dereference(rcu_stress_current);
+>  		if (p->mbtest == 0)
+> -			n_mberror++;
+> +			uatomic_inc_mo(&n_mberror, CMM_RELAXED);
+>  		rcu_read_lock_nest();
+> +		/*
+> +		 * The value of garbage is nothing important. This is
+> +		 * essentially a busy loop. The atomic operation -- while not
+> +		 * important here -- helps tools such as TSAN to not flag this
+> +		 * as a race condition.
+> +		 */
+>  		for (i = 0; i < 100; i++)
+> -			garbage++;
+> +			uatomic_inc(&garbage);
+>  		rcu_read_unlock_nest();
+> -		pc = p->pipe_count;
+> +		pc = uatomic_read(&p->pipe_count);
+>  		rcu_read_unlock();
+>  		if ((pc > RCU_STRESS_PIPE_LEN) || (pc < 0))
+>  			pc = RCU_STRESS_PIPE_LEN;
+> @@ -397,26 +416,47 @@ static
+>  void *rcu_update_stress_test(void *arg __attribute__((unused)))
+>  {
+>  	int i;
+> -	struct rcu_stress *p;
+> +	struct rcu_stress *p, *old_p;
+>  	struct rcu_head rh;
+>  	enum writer_state writer_state = WRITER_STATE_SYNC_RCU;
+>  
+> -	while (goflag == GOFLAG_INIT)
+> +	rcu_register_thread();
 > +
-> +#ifndef _URCU_UATOMIC_BUILTINS_GENERIC_H
-> +#define _URCU_UATOMIC_BUILTINS_GENERIC_H
+> +	put_thread_offline();
+> +	while (uatomic_read(&goflag) == GOFLAG_INIT)
+>  		(void) poll(NULL, 0, 1);
+> -	while (goflag == GOFLAG_RUN) {
 > +
-> +#include <urcu/system.h>
+> +	put_thread_online();
+> +	while (uatomic_read(&goflag) == GOFLAG_RUN) {
+>  		i = rcu_stress_idx + 1;
+>  		if (i >= RCU_STRESS_PIPE_LEN)
+>  			i = 0;
+> +		/*
+> +		 * Get old pipe that we free after a synchronize_rcu().
+> +		 */
+> +		rcu_read_lock();
+> +		old_p = rcu_dereference(rcu_stress_current);
+> +		rcu_read_unlock();
 > +
-> +#define uatomic_set(addr, v) __atomic_store_n(addr, v, __ATOMIC_RELAXED)
+> +		/*
+> +		 * Allocate a new pipe.
+> +		 */
+>  		p = &rcu_stress_array[i];
+> -		p->mbtest = 0;
+> -		cmm_smp_mb();
+>  		p->pipe_count = 0;
+>  		p->mbtest = 1;
 > +
-> +#define uatomic_read(addr) __atomic_load_n(addr, __ATOMIC_RELAXED)
+>  		rcu_assign_pointer(rcu_stress_current, p);
+>  		rcu_stress_idx = i;
+> +
+> +		/*
+> +		 * Increment every pipe except the freshly allocated one. A
+> +		 * reader should only see either the old pipe or the new
+> +		 * pipe. This is reflected in the rcu_stress_count histogram.
+> +		 */
+>  		for (i = 0; i < RCU_STRESS_PIPE_LEN; i++)
+>  			if (i != rcu_stress_idx)
+> -				rcu_stress_array[i].pipe_count++;
+> +				uatomic_inc(&rcu_stress_array[i].pipe_count);
+> +
+>  		switch (writer_state) {
+>  		case WRITER_STATE_SYNC_RCU:
+>  			synchronize_rcu();
+> @@ -432,9 +472,7 @@ void *rcu_update_stress_test(void *arg __attribute__((unused)))
+>  					strerror(errno));
+>  				abort();
+>  			}
+> -			rcu_register_thread();
+>  			call_rcu(&rh, rcu_update_stress_test_rcu);
+> -			rcu_unregister_thread();
+>  			/*
+>  			 * Our MacOS X test machine with the following
+>  			 * config:
+> @@ -470,18 +508,24 @@ void *rcu_update_stress_test(void *arg __attribute__((unused)))
+>  		{
+>  			struct urcu_gp_poll_state poll_state;
+>  
+> -			rcu_register_thread();
+>  			poll_state = start_poll_synchronize_rcu();
+> -			rcu_unregister_thread();
+>  			while (!poll_state_synchronize_rcu(poll_state))
+>  				(void) poll(NULL, 0, 1);	/* Wait for 1ms */
+>  			break;
+>  		}
+>  		}
+> +		/*
+> +		 * No readers should see that old pipe now. Setting mbtest to 0
+> +		 * to mark it as "freed".
+> +		 */
+> +		old_p->mbtest = 0;
+>  		n_updates++;
+>  		advance_writer_state(&writer_state);
+>  	}
+>  
+> +	put_thread_offline();
+> +	rcu_unregister_thread();
+> +
+>  	return NULL;
+>  }
+>  
+> @@ -497,9 +541,9 @@ void *rcu_fake_update_stress_test(void *arg __attribute__((unused)))
+>  			set_thread_call_rcu_data(crdp);
+>  		}
+>  	}
+> -	while (goflag == GOFLAG_INIT)
+> +	while (uatomic_read(&goflag) == GOFLAG_INIT)
+>  		(void) poll(NULL, 0, 1);
+> -	while (goflag == GOFLAG_RUN) {
+> +	while (uatomic_read(&goflag) == GOFLAG_RUN) {
+>  		synchronize_rcu();
+>  		(void) poll(NULL, 0, 1);
+>  	}
+> @@ -535,13 +579,9 @@ int stresstest(int nreaders)
+>  	create_thread(rcu_update_stress_test, NULL);
+>  	for (i = 0; i < 5; i++)
+>  		create_thread(rcu_fake_update_stress_test, NULL);
+> -	cmm_smp_mb();
+> -	goflag = GOFLAG_RUN;
+> -	cmm_smp_mb();
+> +	uatomic_set(&goflag, GOFLAG_RUN);
+>  	sleep(10);
+> -	cmm_smp_mb();
+> -	goflag = GOFLAG_STOP;
+> -	cmm_smp_mb();
+> +	uatomic_set(&goflag, GOFLAG_STOP);
+>  	wait_all_threads();
+>  	for_each_thread(t)
+>  		n_reads += per_thread(n_reads_pt, t);
 
-Does this lose the volatile semantics that the old-style definitions
-had?
-
-> +
-> +#define uatomic_cmpxchg(addr, old, new)					\
-> +	__extension__							\
-> +	({								\
-> +		__typeof__(*(addr)) _old = (__typeof__(*(addr)))old;	\
-> +		__atomic_compare_exchange_n(addr, &_old, new, 0,	\
-> +					    __ATOMIC_SEQ_CST,		\
-> +					    __ATOMIC_SEQ_CST);		\
-> +		_old;							\
-> +	})
-> +
-> +#define uatomic_xchg(addr, v)				\
-> +	__atomic_exchange_n(addr, v, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_add_return(addr, v)			\
-> +	__atomic_add_fetch(addr, v, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_sub_return(addr, v)			\
-> +	__atomic_sub_fetch(addr, v, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_and(addr, mask)					\
-> +	(void)__atomic_and_fetch(addr, mask, __ATOMIC_RELAXED)
-> +
-> +#define uatomic_or(addr, mask)					\
-> +	(void)__atomic_or_fetch(addr, mask, __ATOMIC_RELAXED)
-> +
-> +#define uatomic_add(addr, v)					\
-> +	(void)__atomic_add_fetch(addr, v, __ATOMIC_RELAXED)
-> +
-> +#define uatomic_sub(addr, v)					\
-> +	(void)__atomic_sub_fetch(addr, v, __ATOMIC_RELAXED)
-> +
-> +#define uatomic_inc(addr)					\
-> +	(void)__atomic_add_fetch(addr, 1, __ATOMIC_RELAXED)
-> +
-> +#define uatomic_dec(addr)					\
-> +	(void)__atomic_sub_fetch(addr, 1, __ATOMIC_RELAXED)
-> +
-> +#define cmm_smp_mb__before_uatomic_and() cmm_smp_mb()
-> +#define cmm_smp_mb__after_uatomic_and()  cmm_smp_mb()
-> +
-> +#define cmm_smp_mb__before_uatomic_or() cmm_smp_mb()
-> +#define cmm_smp_mb__after_uatomic_or()  cmm_smp_mb()
-> +
-> +#define cmm_smp_mb__before_uatomic_add() cmm_smp_mb()
-> +#define cmm_smp_mb__after_uatomic_add()  cmm_smp_mb()
-> +
-> +#define cmm_smp_mb__before_uatomic_sub() cmm_smp_mb()
-> +#define cmm_smp_mb__after_uatomic_sub()  cmm_smp_mb()
-> +
-> +#define cmm_smp_mb__before_uatomic_inc() cmm_smp_mb()
-> +#define cmm_smp_mb__after_uatomic_inc() cmm_smp_mb()
-> +
-> +#define cmm_smp_mb__before_uatomic_dec() cmm_smp_mb()
-> +#define cmm_smp_mb__after_uatomic_dec() cmm_smp_mb()
-> +
-> +#endif /* _URCU_UATOMIC_BUILTINS_GENERIC_H */
-> diff --git a/include/urcu/uatomic/builtins-x86.h b/include/urcu/uatomic/builtins-x86.h
-> new file mode 100644
-> index 0000000..a70f922
-> --- /dev/null
-> +++ b/include/urcu/uatomic/builtins-x86.h
-> @@ -0,0 +1,85 @@
-> +/*
-> + * urcu/uatomic/builtins-x86.h
-> + *
-> + * Copyright (c) 2023 Olivier Dion <odion@efficios.com>
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; either
-> + * version 2.1 of the License, or (at your option) any later version.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> + */
-> +
-> +#ifndef _URCU_UATOMIC_BUILTINS_X86_H
-> +#define _URCU_UATOMIC_BUILTINS_X86_H
-> +
-> +#include <urcu/system.h>
-> +
-> +#define uatomic_set(addr, v) __atomic_store_n(addr, v, __ATOMIC_RELAXED)
-> +
-> +#define uatomic_read(addr) __atomic_load_n(addr, __ATOMIC_RELAXED)
-
-And same question here.
+Looks plausible!
 
 							Thanx, Paul
-
-> +
-> +#define uatomic_cmpxchg(addr, old, new)					\
-> +	__extension__							\
-> +	({								\
-> +		__typeof__(*(addr)) _old = (__typeof__(*(addr)))old;	\
-> +		__atomic_compare_exchange_n(addr, &_old, new, 0,	\
-> +					    __ATOMIC_SEQ_CST,		\
-> +					    __ATOMIC_SEQ_CST);		\
-> +		_old;							\
-> +	})
-> +
-> +#define uatomic_xchg(addr, v)				\
-> +	__atomic_exchange_n(addr, v, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_add_return(addr, v)			\
-> +	__atomic_add_fetch(addr, v, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_sub_return(addr, v)			\
-> +	__atomic_sub_fetch(addr, v, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_and(addr, mask)					\
-> +	(void)__atomic_and_fetch(addr, mask, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_or(addr, mask)					\
-> +	(void)__atomic_or_fetch(addr, mask, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_add(addr, v)					\
-> +	(void)__atomic_add_fetch(addr, v, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_sub(addr, v)					\
-> +	(void)__atomic_sub_fetch(addr, v, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_inc(addr)					\
-> +	(void)__atomic_add_fetch(addr, 1, __ATOMIC_SEQ_CST)
-> +
-> +#define uatomic_dec(addr)					\
-> +	(void)__atomic_sub_fetch(addr, 1, __ATOMIC_SEQ_CST)
-> +
-> +#define cmm_smp_mb__before_uatomic_and() do { } while (0)
-> +#define cmm_smp_mb__after_uatomic_and()  do { } while (0)
-> +
-> +#define cmm_smp_mb__before_uatomic_or() do { } while (0)
-> +#define cmm_smp_mb__after_uatomic_or()  do { } while (0)
-> +
-> +#define cmm_smp_mb__before_uatomic_add() do { } while (0)
-> +#define cmm_smp_mb__after_uatomic_add()  do { } while (0)
-> +
-> +#define cmm_smp_mb__before_uatomic_sub() do { } while (0)
-> +#define cmm_smp_mb__after_uatomic_sub()  do { } while (0)
-> +
-> +#define cmm_smp_mb__before_uatomic_inc() do { } while (0)
-> +#define cmm_smp_mb__after_uatomic_inc()  do { } while (0)
-> +
-> +#define cmm_smp_mb__before_uatomic_dec() do { } while (0)
-> +#define cmm_smp_mb__after_uatomic_dec()  do { } while (0)
-> +
-> +#endif /* _URCU_UATOMIC_BUILTINS_X86_H */
-> diff --git a/include/urcu/uatomic/builtins.h b/include/urcu/uatomic/builtins.h
-> new file mode 100644
-> index 0000000..164201b
-> --- /dev/null
-> +++ b/include/urcu/uatomic/builtins.h
-> @@ -0,0 +1,83 @@
-> +/*
-> + * urcu/uatomic/builtins.h
-> + *
-> + * Copyright (c) 2023 Olivier Dion <odion@efficios.com>
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; either
-> + * version 2.1 of the License, or (at your option) any later version.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> + */
-> +
-> +#ifndef _URCU_UATOMIC_BUILTINS_H
-> +#define _URCU_UATOMIC_BUILTINS_H
-> +
-> +#include <urcu/arch.h>
-> +
-> +#if defined(__has_builtin)
-> +#  if !__has_builtin(__atomic_store_n)
-> +#    error "Toolchain does not support __atomic_store_n."
-> +#  endif
-> +#  if !__has_builtin(__atomic_load_n)
-> +#    error "Toolchain does not support __atomic_load_n."
-> +#  endif
-> +#  if !__has_builtin(__atomic_exchange_n)
-> +#    error "Toolchain does not support __atomic_exchange_n."
-> +#  endif
-> +#  if !__has_builtin(__atomic_compare_exchange_n)
-> +#    error "Toolchain does not support __atomic_compare_exchange_n."
-> +#  endif
-> +#  if !__has_builtin(__atomic_add_fetch)
-> +#    error "Toolchain does not support __atomic_add_fetch."
-> +#  endif
-> +#  if !__has_builtin(__atomic_sub_fetch)
-> +#    error "Toolchain does not support __atomic_sub_fetch."
-> +#  endif
-> +#  if !__has_builtin(__atomic_or_fetch)
-> +#    error "Toolchain does not support __atomic_or_fetch."
-> +#  endif
-> +#  if !__has_builtin(__atomic_thread_fence)
-> +#    error "Toolchain does not support __atomic_thread_fence."
-> +#  endif
-> +#  if !__has_builtin(__atomic_signal_fence)
-> +#    error "Toolchain does not support __atomic_signal_fence."
-> +#  endif
-> +#elif defined(__GNUC__)
-> +#  define GCC_VERSION (__GNUC__       * 10000 + \
-> +		       __GNUC_MINOR__ * 100   + \
-> +		       __GNUC_PATCHLEVEL__)
-> +#  if  GCC_VERSION < 40700
-> +#    error "GCC version is too old. Version must be 4.7 or greater"
-> +#  endif
-> +#  undef  GCC_VERSION
-> +#else
-> +#  error "Toolchain is not supported."
-> +#endif
-> +
-> +#if defined(__GNUC__)
-> +#  define UATOMIC_HAS_ATOMIC_BYTE  __GCC_ATOMIC_CHAR_LOCK_FREE
-> +#  define UATOMIC_HAS_ATOMIC_SHORT __GCC_ATOMIC_SHORT_LOCK_FREE
-> +#elif defined(__clang__)
-> +#  define UATOMIC_HAS_ATOMIC_BYTE  __CLANG_ATOMIC_CHAR_LOCK_FREE
-> +#  define UATOMIC_HAS_ATOMIC_SHORT __CLANG_ATOMIC_SHORT_LOCK_FREE
-> +#else
-> +/* #  define UATOMIC_HAS_ATOMIC_BYTE  */
-> +/* #  define UATOMIC_HAS_ATOMIC_SHORT */
-> +#endif
-> +
-> +#if defined(URCU_ARCH_X86)
-> +#  include <urcu/uatomic/builtins-x86.h>
-> +#else
-> +#  include <urcu/uatomic/builtins-generic.h>
-> +#endif
-> +
-> +#endif	/* _URCU_UATOMIC_BUILTINS_H */
-> -- 
-> 2.39.2
-> 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
