@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F119EB64D9
-	for <lttng-dev@archiver.kernel.org>; Thu, 29 Jun 2023 18:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 472F6EB64D9
+	for <lttng-dev@archiver.kernel.org>; Thu, 29 Jun 2023 18:40:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1688063600;
-	bh=rXPKwVJkEVbUEVgdBOwVqcuG02nJwbY7csAoRsCK0gw=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=BL9IMCJFccpp6iYzl7uFd6Dir2jxviHS7A/SfLyltP6OY8bTc5klZHAk+l6k0wYmk
-	 zGU7bbNKSdgz3hB9fXj1DN4JlQ14e0rYtYx4TPL14vs2yhm8crI1LmoiuwQIKhKsB7
-	 C9yUDsYxHl8OIgm5L73zqHq1bjCtzJWxaaFC+iD9lcR2Pzy9v3qRjvHpUX+k16uGIM
-	 T+XvxJs0mKcAJycfeT0NLo+V5ZqLP4HVAC4Ek+Y2NgOihOrwEg4JoDBbImVT2QNrw2
-	 xZAX5mHj9lJ5D2q6PsKQFa0OEY8LeVLTJv66b5R2P3LtfYLezX/vvPn9AHlOlKMHaq
-	 HZJa9msI0MaYQ==
+	s=default; t=1688064018;
+	bh=aL8nykeo7/tvu8hUMkrJYYJZk6tXKDhETbf/q+zcaio=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=oi5lU438HT+rFqMYVqIGalHmVR7igMm/SMyijO8ImmxEZtt4rleCHEw+afda4a54w
+	 veEqiPJPAnp9PyE2hLB1R5HncqZiu3qQENTGiLjldCBju2l+sxa24m4GbMqDp86vgd
+	 qbthdv4G3AMgm5CY0NL+QirJFTAl28WnArp9DlYEx8bYHsb1EY8psCEdBYHgF9EcQV
+	 viXoRC3tqzVJvxZjIQZXWm2gUSLGpmvbjDN2hl0W+3ZDdA58guEHM7fpLeJq+NcpE2
+	 Pk8LXZ2rm4oUtrjM7lL2fyLUFPG0IidfbM4jVwz9+JNWQ1tABoL3OWq3Ir6Zn/xO6C
+	 K/Bl1NV2OaCgQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QsRsX1nZZz22Gv;
-	Thu, 29 Jun 2023 14:33:20 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4QsRsS65Syz22Gs
- for <lttng-dev@lists.lttng.org>; Thu, 29 Jun 2023 14:33:16 -0400 (EDT)
-Received: from [192.168.18.2] (unknown [198.16.185.171])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4QsRsS1SfZz19f6;
- Thu, 29 Jun 2023 14:33:16 -0400 (EDT)
-Message-ID: <1b98056b-7e94-36c1-21b3-0c2fd069e42b@efficios.com>
-Date: Thu, 29 Jun 2023 14:33:45 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To: Olivier Dion <odion@efficios.com>, paulmck@kernel.org
-Cc: lttng-dev@lists.lttng.org
+	by lists.lttng.org (Postfix) with ESMTP id 4QsS1Z21M1z22Lf;
+	Thu, 29 Jun 2023 14:40:18 -0400 (EDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by lists.lttng.org (Postfix) with ESMTPS id 4QsS1X5VfFz22Gx
+ for <lttng-dev@lists.lttng.org>; Thu, 29 Jun 2023 14:40:16 -0400 (EDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id 826E0615C5;
+ Thu, 29 Jun 2023 18:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E653FC433C0;
+ Thu, 29 Jun 2023 18:40:08 +0000 (UTC)
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+ id 8457ACE04CF; Thu, 29 Jun 2023 11:40:08 -0700 (PDT)
+Date: Thu, 29 Jun 2023 11:40:08 -0700
+To: Olivier Dion <odion@efficios.com>
+Message-ID: <5a440c51-43d3-4be6-ba5a-215c9d3e960f@paulmck-laptop>
 References: <20230515201718.9809-1-odion@efficios.com>
- <20230515201718.9809-3-odion@efficios.com>
- <c7834f41-c033-4c53-96e8-0ad728c2a285@paulmck-laptop>
- <ffec193e-7060-3fe2-6526-c54e89e992e6@efficios.com>
- <105bad2a-9fed-4353-a434-a571ce9da7ac@paulmck-laptop> <878rc2ji9z.fsf@laura>
- <875y76ji0g.fsf@laura>
-In-Reply-To: <875y76ji0g.fsf@laura>
-Subject: Re: [lttng-dev] [PATCH 02/11] urcu/uatomic: Use atomic builtins if
- configured
+ <20230607185359.8125-6-odion@efficios.com>
+ <b669606b-74bf-4a07-8094-babbd829d9e8@paulmck-laptop>
+ <87bkgyjjsz.fsf@laura>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <87bkgyjjsz.fsf@laura>
+Subject: Re: [lttng-dev] [PATCH v2 05/12] urcu/uatomic: Add CMM memory model
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -55,58 +56,35 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: "Paul E. McKenney via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: paulmck@kernel.org
+Cc: Tony Finch <dot@dotat.at>, lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On 6/29/23 13:27, Olivier Dion wrote:
-> On Thu, 29 Jun 2023, Olivier Dion <odion@efficios.com> wrote:
+On Thu, Jun 29, 2023 at 12:49:00PM -0400, Olivier Dion wrote:
+> On Wed, 21 Jun 2023, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > On Wed, Jun 07, 2023 at 02:53:52PM -0400, Olivier Dion wrote:
+> >> -#ifdef __URCU_DEREFERENCE_USE_ATOMIC_CONSUME
+> >> -# define _rcu_dereference(p) __extension__ ({						\
+> >> -				__typeof__(__extension__ ({				\
+> >> -					__typeof__(p) __attribute__((unused)) _________p0 = { 0 }; \
+> >> -					_________p0;					\
+> >> -				})) _________p1;					\
+> >> -				__atomic_load(&(p), &_________p1, __ATOMIC_CONSUME);	\
+> >
+> > There is talk of getting rid of memory_order_consume.  But for the moment,
+> > it is what there is.  Another alternative is to use a volatile load,
+> > similar to old-style CMM_LOAD_SHARED() or in-kernel READ_ONCE().
 > 
->>    [0] https://godbolt.org/z/3nW14M3v1
->>    [1] https://godbolt.org/z/TcTeMeKbW
-> 
-> Sorry.  That was:
-> 
->      [0] https://godbolt.org/z/ETcxnz4TW
+> I think we can stick to __ATOMIC_CONSUME for now.  Hopefully getting rid
+> of it means it will be an alias for __ATOMIC_ACQUIRE for ever.
 
-Change
+That seems emininently reasonable to me!
 
-(volatile __typeof__(ptr))(ptr);
-
-for:
-
-(volatile __typeof__(*(ptr)) *)(ptr);
-
-and:
-
-void love_iso(int *x)
-{
-      __atomic_store_n(cast_volatile(&x), 1,
-                       __ATOMIC_RELAXED);
-}
-
-for
-
-void love_iso(int *x)
-{
-      __atomic_store_n(cast_volatile(x), 1,
-                       __ATOMIC_RELAXED);
-}
-
-Thanks,
-
-Mathieu
-
-
->      [1] https://godbolt.org/z/jMjh8YoM4
-> -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+							Thanx, Paul
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
