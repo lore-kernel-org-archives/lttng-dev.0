@@ -4,76 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC262EB64D9
-	for <lttng-dev@archiver.kernel.org>; Tue,  4 Jul 2023 18:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A08AEB64D9
+	for <lttng-dev@archiver.kernel.org>; Tue,  4 Jul 2023 19:16:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1688495978;
-	bh=yLMJM8MGAiLGRVwA2PKUzOkCVKidGkFT+F/m+eBnMcc=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=rxFaAkfTtgQpmgtgyoccpCvAAkv3+y+XxqjOzt8QuXJxr92x00EUbPwJ4B2YJa3oG
-	 Ww2ed9J516Y3tU8tR41dnM03JSCEH5xc1dXaH3NT4OLM01LU8qBTc3FjzAyfw2Jeza
-	 j4YlwHTwYVhwfYFqp00fbTmYIzSIB8vznTynmp6fe/2w8WokRf234eZHttNzOqEdT4
-	 7tSrRQUo47mzR+1tiivaFhk+HvPDIsipsc/+vwP30uRaAy9gEhE6cVPziPEa/FLY4M
-	 Z1JHo0Jvi0D3aQErw/O5f4IUgMlJ2NBY/jiywP01hFgCibZfgYcYmMgbPBe4ej6rjK
-	 CeVLtYjk+aYmA==
+	s=default; t=1688498185;
+	bh=txoHX0p+5RCEyO6UPByHi9iMAYiTD+ZjCmJU6oWSgAQ=;
+	h=Date:To:References:Cc:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=corCHB0yFZc7IwPKzIJlrMd9sEmERuzExTyjgSTa2Hm0coTy43cqmyrvk1SNgqxg3
+	 Cv/d1bh+w+j1emYxkYfz9iyeSDo+Sb3OVbernh3L16vmHOc9J6mHaOXKlm2GJoIcw9
+	 ylxBcPk/cMqYhCnmHKmWtbAkW7tzYBB0+6pFltRmIrAeweoPnUQ3iH2XVc9xRWsbV0
+	 rDtSOOUzl856tkhUY8NuJt9FCsyNXZLKDd+A+FwxJYS8qpJ4PFW/gdA3UkZxr34mix
+	 VAsFJosRVf/su/7EuZ5HBtYHQbRkDYX0/G0O1TNYsMRtBD0aRW+qSSJ90B2D5sUEsU
+	 S9/zNBfh/MVXg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4QwWmV07t2z23lJ;
-	Tue,  4 Jul 2023 14:39:38 -0400 (EDT)
-Received: from smtp-relay-internal-1.canonical.com
- (smtp-relay-internal-1.canonical.com [185.125.188.123])
- by lists.lttng.org (Postfix) with ESMTPS id 4QwWmS0qFGz23nq
- for <lttng-dev@lists.lttng.org>; Tue,  4 Jul 2023 14:39:36 -0400 (EDT)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5C71C3F196
- for <lttng-dev@lists.lttng.org>; Tue,  4 Jul 2023 18:39:28 +0000 (UTC)
-Received: by mail-ej1-f72.google.com with SMTP id
- a640c23a62f3a-99388334de6so89889166b.0
- for <lttng-dev@lists.lttng.org>; Tue, 04 Jul 2023 11:39:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1688495967; x=1691087967;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=OZ4DbRXVrDsvh3UGzIPWp2ISCFGqm5ClEoekm7AGtkA=;
- b=QXcpp2rt9Vx3COm8xaeLPkYP0PY4hbvmYy8iSLs4tIZb2BkK+aqOFkDfe+Rcp0bHbD
- JzC7YJkiysOxluM4ovkxEWYYxyg01nHh/JC9l+m4vZVoa7TzbBGjc023IZdQHlpQE9hF
- psEw9hfXp2zkBEe9sAdTFiceA1xJNpY7lQ02ArOqUhp0zf3h5+GYy3EIhZYIIC3R7dsY
- C2YUHW71CYCeS4BgY1BYeVmkyikHa9ReQf0bdtk4QfvNfB/VPjfn47Nx1D2GvUYnmDkU
- iOuB2TNCNnIVTJ1deEPHUZB35GnCat/tkYBzJ3U485E6+P4FZGbwdZz1p7Q7hHfU6+Ys
- tstQ==
-X-Gm-Message-State: ABy/qLZ+bYUqCZ1ivvYUQCYkZLh9UrLJlXhcEdkWHylLh6H1BaFWzk93
- Bd0xZyxUC9ThGYdHBX9ezIVQ//3BOc3B6B3uJsMXPE7UZgCl1GrGKeEG2GLE/UzEvLJHprUVUcx
- R50KbMdFaBPaAACIQhkjs3ahRYNphIxx3I17Teplcsye3eybro0I=
-X-Received: by 2002:a17:906:854c:b0:98c:cc3c:194e with SMTP id
- h12-20020a170906854c00b0098ccc3c194emr9837774ejy.52.1688495967712; 
- Tue, 04 Jul 2023 11:39:27 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlG12KL5kLQjb7kyn8w7ELAhlzXVP4RcYxG6ejLqXxP9jM7PxtQoGyMV0Y9QrAW/CS6hR8rCSw==
-X-Received: by 2002:a17:906:854c:b0:98c:cc3c:194e with SMTP id
- h12-20020a170906854c00b0098ccc3c194emr9837768ejy.52.1688495967394; 
- Tue, 04 Jul 2023 11:39:27 -0700 (PDT)
-Received: from [192.168.0.189] (77-169-125-32.fixed.kpn.net. [77.169.125.32])
- by smtp.gmail.com with ESMTPSA id
- q21-20020a1709064c9500b009929c39d5c3sm8038242eju.95.2023.07.04.11.39.25
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 04 Jul 2023 11:39:26 -0700 (PDT)
-Message-ID: <ecbb3bbf-b61c-a777-2ee5-c81231a2b8c1@canonical.com>
-Date: Tue, 4 Jul 2023 20:39:23 +0200
+	by lists.lttng.org (Postfix) with ESMTP id 4QwXZx0W7qz23wm;
+	Tue,  4 Jul 2023 15:16:25 -0400 (EDT)
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+ by lists.lttng.org (Postfix) with ESMTPS id 4QwXZv4cL4z23Tr
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Jul 2023 15:16:18 -0400 (EDT)
+Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net
+ [192.222.143.198])
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4QwXZn6bf6z1Frw;
+ Tue,  4 Jul 2023 15:16:17 -0400 (EDT)
+Message-ID: <2c6e0b29-0e88-4dc7-6691-7a89a5428932@efficios.com>
+Date: Tue, 4 Jul 2023 15:16:45 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
 Content-Language: en-US
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+To: Roxana Nicolescu <roxana.nicolescu@canonical.com>,
  Michael Jeanson <mjeanson@efficios.com>, lttng-dev@lists.lttng.org
 References: <20230703182859.49731-1-roxana.nicolescu@canonical.com>
  <01b221fc-05f8-ac1f-0c88-9875fd945e9c@efficios.com>
  <4a1b6647-3870-41c7-7335-862983e60346@efficios.com>
-In-Reply-To: <4a1b6647-3870-41c7-7335-862983e60346@efficios.com>
+ <ecbb3bbf-b61c-a777-2ee5-c81231a2b8c1@canonical.com>
+Cc: =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@stgraber.org>
+In-Reply-To: <ecbb3bbf-b61c-a777-2ee5-c81231a2b8c1@canonical.com>
 Subject: Re: [lttng-dev] [PATCH lttng-modules 0/1] Introduce configure
  script to describe changes in linux kernel interface
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -87,101 +55,172 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Roxana Nicolescu via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Roxana Nicolescu <roxana.nicolescu@canonical.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGksCgpUaGFua3MgYSBsb3QgZm9yIHlvdXIgZmVlZGJhY2suCgpJIHJlYWxpemUgSSBkaWQgbm90
-IHNheSB0aGUgcmVhc29uIHdoeSBJIGRpZCBub3QgZ28gZm9yIApMVFROR19VQlVOVFVfS0VSTkVM
-X1JBTkdFLgpXZSBkZWxpdmVyIGEgYnVuY2ggb2YgZGlmZmVyZW50IGRlcml2YXRpdmVzIChpbmhl
-cml0ZWQgZnJvbSB0aGUgbWFpbiAKa2VybmVsKSwgZWFjaCB3aXRoIGl0cyBvd24gdmVyc2lvbiBh
-bmQgaXQncyBpbXBvc3NpYmxlIHRvIHVzZSAKTFRUTkdfVUJVTlRVX0tFUk5FTF9SQU5HRSBhbG9u
-ZS4KRGVyaXZhdGl2ZXMgaW4gdGhlIHNhbWUgY3ljbGUgZG9uJ3QgaGF2ZSB0aGUgc2FtZSB2ZXJz
-aW9uIG51bWJlciwgc28gSSAKY2Fubm90IHJlbHkgb24gdGhlIHZlcnNpb24gYWxvbmUgdG8gZGV0
-ZXJtaW5lIHdoZW4gYSBjaGFuZ2UgaGFzIGhhcHBlbmVkLgpGb3IgZXhhbXBsZSB0aGVzZSBhcmUg
-c29tZSBrZXJuZWxzIHdlIHJlbGVhc2VkIGxhc3QgY3ljbGU6Ci0gbGludXggKG1haW4ga2VybmVs
-KTogNS4xOS4wLTQ2Ci0gbGludXgta3ZtOiA1LjE5LjAtMTAyNgotIGxpbnV4LWxvd2xhdGVuY3k6
-IDUuMTkuMC0xMDI4CkFzIHlvdSBjYW4gc2VlLCBsaW51eC1rdm0gYW5kIGxpbnV4LWxvd2xhdGVu
-Y3kgdmVyc2lvbnMgYXJlIG5vdCB0aGUgCnNhbWUsIGFuZCBsaW51eC1sb3dsYXRlbmN5IGZyb20g
-MiBtb250aHMgYWdvIHZlcnNpb24gdmVyc2lvbiBudW1iZXIgCmNvaW5jaWRlcyB3aXRoIGxpbnV4
-LWt2bSBmcm9tIG5vdywgYnV0IHRoZXkgZG9uJ3QgbWF0Y2ggdGhlIHNhbWUgYmFzZS4KSSBob3Bl
-IHRoYXQgZXhwbGFpbnMgaXQuCgpJbml0aWFsbHkgSSB0aG91Z2h0IGFib3V0IGV4cG9zaW5nIHRo
-ZSB2ZXJzaW9uIG9mIHRoZSBtYWluIGtlcm5lbCBpbiB0aGUgCmtlcm5lbCBoZWFkZXJzIHRoYXQg
-Y2FuIGJlIGxhdGVyIHVzZWQgaW4gdGhlIG1vZHVsZSwgYnV0IHRoZW4gSSBjYW1lIAphY3Jvc3Mg
-b3BlbnZzd2l0Y2ggYW5kIHRoYXQncyBob3cgSSBjYW1lIHVwIHdpdGggdGhlIGlkZWEgb2YgYW4g
-aW5pdGlhbCAKY29uZmlndXJlIHN0ZXAuCgpCdXQgSSB0b3RhbGx5IHVuZGVyc3RhbmQgaWYgeW91
-IHRoaW5rIHRoaXMgaXMgbm90IHdvcnRoIGl0LgoKQWxsIHRoZSBiZXN0LApSb3hhbmEKCk9uIDA0
-LzA3LzIwMjMgMjA6MDcsIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOgo+IE9uIDcvNC8yMyAxMToz
-NSwgTWljaGFlbCBKZWFuc29uIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4+IE9uIDIwMjMtMDctMDMg
-MTQ6MjgsIFJveGFuYSBOaWNvbGVzY3UgdmlhIGx0dG5nLWRldiB3cm90ZToKPj4+IFRoaXMgc2Ny
-aXB0IGRlc2NyaWJlZCB0aGUgY2hhbmdlcyBpbiB0aGUgbGludXgga2VybmVsIGludGVyZmFjZSB0
-aGF0Cj4+PiBhZmZlY3QgY29tcGF0aWJpbGl0eSB3aXRoIGx0dG5nLW1vZHVsZXMuCj4+Pgo+Pj4g
-SXQgaXMgaW50cm9kdWNlZCBmb3IgYSBzcGVjaWZpYyB1c2VjYXNlIHdoZXJlIGNvbW1pdAo+Pj4g
-ZDg3YTdiNGM3N2E5OiAiamJkMjogdXNlIHRoZSBjb3JyZWN0IHByaW50IGZvcm1hdCIKPj4+IGJy
-b2tlIHRoZSBpbnRlcmZhY2UgYmV0d2VlbiB0aGUga2VybmVsIGFuZCBsdHRuZy1tb2R1bGUuIDMg
-dmFyaWFibGVzCj4+PiBjaGFuZ2VkIHRoZWlyIHR5cGUgdG8gdGlkX3QgKHRyYW5zYWN0aW9uLCBo
-ZWFkIGFuZCB0aWQpIGluIG11bHRpcGxlCj4+PiBmdW5jdGlvbiBkZWNsYXJhdGlvbnMuIFRoZSBs
-dHRuZyBtb2R1bGUgd2FzIHVwZGF0ZWQgcHJvcGVybHkgdG8gZW5zdXJlCj4+PiBiYWNrd2FyZHMg
-Y29tcGF0aWJpbGl0eSBieSB1c2luZyB0aGUgdmVyc2lvbiBvZiB0aGUga2VybmVsLgo+Pj4gQnV0
-IHRoaXMgY2hhbmdlIHRvb2sgaW50byBhY2NvdW50IG9ubHkgbG9uZyB0ZXJtIHN1cHBvcnRlZCB2
-ZXJzaW9ucy4KPj4+IEFzIGFuIGV4YW1wbGUsIHVidW50dSA1LjE5IGtlcm5lbHMgcGlja2VkIHRo
-ZSBsaW51eCBrZXJuZWwgY2hhbmdlIGZyb20KPj4+IDUuMTUgd2l0aG91dCBhY3R1YWxseSBjaGFu
-Z2luZyB0aGUgbGludXgga2VybmVsIHVwc3RyZWFtIHZlcnNpb24uIFRoaXMKPj4+IG1lYW5zIHRo
-ZSBjdXJyZW50IHRvb2xpbmcgZG9lcyBub3QgYWxsb3cgdG8gZml4IHRoZSBtb2R1bGUgZm9yIG5l
-d2VyCj4+PiB1YnVudHUgNS4xOSBrZXJuZWxzLgo+Pj4KPj4+IFRoaXMgc2NyaXB0IGlzIHN1cHBv
-c2VkIHRvIHNvbHZlIHRoZSBwcm9ibGVtIG1lbnRpb25lZCBhYm92ZSwgYnV0IHRvCj4+PiBhbHNv
-IG1ha2UgdGhpcyBjaGFuZ2UgZWFzaWVyIHRvIGludGVncmF0ZS4KPj4+IFdlIGNoZWNrIHRoZSBs
-aW51eCBrZXJuZWwgaGVhZGVyIChpbmNsdWRlL3RyYWNlL2V2ZW50cy9qYmQyLmgpIGlmIHRoZQo+
-Pj4gdHlwZXMgb2YgdGlkLCB0cmFuc2FjdGlvbiBhbmQgaGVhZCB2YXJpYWJsZSBoYXZlIGNoYW5n
-ZWQgdG8gdGlkX3QgYW5kCj4+PiBkZWZpbmUgdGhlc2UgMyB2YXJpYWJsZXMgaW4gJ2luY2x1ZGUv
-Z2VuZXJhdGVkL2NvbmZpZy5oJzoKPj4+IFRJRF9JU19USURfVCAxCj4+PiBUUkFOU0FDVElPTl9J
-U19USURfVCAxCj4+PiBIRUFEX0lTX1RJRF9UIDEKPj4+Cj4+PiBJbiAnaW5jbHVkZS9pbnN0cnVt
-ZW50YXRpb24vZXZlbnRzL2piZDIuaCcgd2UgdGhlbiBjaGVjayB0aGVzZSB0byAKPj4+IGRlZmlu
-ZQo+Pj4gdGhlIHByb3BlciB0eXBlIG9mIHRyYW5zYWN0aW9uLCBoZWFkIGFuZCB0aWQgdmFyaWFi
-bGVzIHRoYXQgd2lsbCBiZQo+Pj4gbGF0ZXIgdXNlZCBpbiB0aGUgZnVuY3Rpb24gZGVjbGFyYXRp
-b25zIHRoYXQgbmVlZCB0aGVtLgo+Pj4KPj4+IFRoaXMgY2hhbmdlIGlzIG1lYW50IHRvIHJlbW92
-ZSB0aGUgZGVwZW5kZW5jeSBvbiBsaW51eCBrZXJuZWwgdmVyc2lvbgo+Pj4gYW5kIHRoZSBvdXRj
-b21lIGlzIGEgYml0IGNsZWFuZXIgdGhhdCBiZWZvcmUuCj4+PiBBcyB3aXRoIHRoZSBwcmV2aW91
-cyBpbXBsZW1lbnRhdGlvbiwgdGhpcyBtYXkgbmVlZCBjaGFuZ2VzIGluIHRoZSAKPj4+IGZ1dHVy
-ZQo+Pj4gaWYgdGhlIGtlcm5lbCBpbnRlcmZhY2UgY2hhbmdlcyBhZ2Fpbi4KPj4+Cj4+PiBOb3Rl
-Ogo+Pj4gVGhpcyBpcyBhIHByb3Bvc2FsIGZvciBhIHNpbXBsZXIgd2F5IG9mIGludGVncmF0aW5n
-IGxpbnV4IGtlcm5lbCAKPj4+IGNoYW5nZXMKPj4+IGluIGx0dG5nLW1vZHVsZXMuIFRoZSBpbXBs
-ZW1lbnRhdGlvbiBpcyB2ZXJ5IHNpbXBsZSBkdWUgdG8gdGhlIGZhY3QgCj4+PiB0aGF0Cj4+PiB0
-aWRfdCB3YXMgaW50cm9kdWNlZCBldmVyeXdoZXJlIGluIG9uZSBjb21taXQgaW4KPj4+IGluY2x1
-ZGUvdHJhY2UvZXZlbnRzL2piZDIuaC4KPj4+IEkgd291bGQgbGlrZSB0byBnZXQgeW91ciBvcGlu
-aW9uIG9uIHRoaXMgYXBwcm9hY2guIElmIG5lZWRlZCwgaXQgY2FuIGJlCj4+PiBpbXByb3ZlZC4K
-Pj4+Cj4+PiBSb3hhbmEgTmljb2xlc2N1ICgxKToKPj4+IMKgwqAgSW50cm9kdWNlIGNvbmZpZ3Vy
-ZSBzY3JpcHQgdG8gZGVzY3JpYmUgY2hhbmdlcyBpbiBsaW51eCBrZXJuZWwKPj4+IMKgwqDCoMKg
-IGludGVyZmFjZQo+Pj4KPj4+IMKgIFJFQURNRS5tZMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDMgKy0KPj4+IMKgIGNvbmZpZ3Vy
-ZcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IHzCoCAzNiArKysrKysrKysKPj4+IMKgIGluY2x1ZGUvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9q
-YmQyLmggfCAxMTAgCj4+PiArKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLQo+Pj4gwqAgMyBmaWxl
-cyBjaGFuZ2VkLCA2MSBpbnNlcnRpb25zKCspLCA4OCBkZWxldGlvbnMoLSkKPj4+IMKgIGNyZWF0
-ZSBtb2RlIDEwMDc1NSBjb25maWd1cmUKPj4+Cj4+Cj4+IEhpIFJveGFuYSwKPj4KPj4gV2hpbGUg
-SSBjYW4gc2VlIGFkdmFudGFnZXMgdG8gYSBjb25maWd1cmUgc2NyaXB0IGFwcHJvYWNoIHRvIGRl
-dGVjdCAKPj4ga2VybmVsIHNvdXJjZSBjaGFuZ2VzIEkgZG9uJ3QgdGhpbmsgaXQncyB3b3J0aCB0
-aGUgYWRkZWQgY29tcGxleGl0eSAKPj4gb24gdG9wIG9mIG91ciBjdXJyZW50IGtlcm5lbCB2ZXJz
-aW9uIHJhbmdlIHN5c3RlbS4KPj4KPj4gV2UgYWxyZWFkeSBoYXZlIGFuIFVidW50dSBzcGVjaWZp
-YyBrZXJuZWwgcmFuZ2UgbWFjcm8gdGhhdCAKPj4gc3VwcGxlbWVudHMgdGhlIHVwc3RyZWFtIHZl
-cnNpb24gd2l0aCBVYnVudHUncyBrZXJuZWwgQUJJIG51bWJlcjoKPj4KPj4gTFRUTkdfVUJVTlRV
-X0tFUk5FTF9SQU5HRSg1LDE5LDE3LFgsIDYsMCwwLDApCj4+Cj4+IEknbGwgbGV0IE1hdGhpZXUg
-bWFrZSB0aGUgZmluYWwgY2FsbCBidXQgSSB0aGluayB0aGF0IHdvdWxkIGJlIHRoZSAKPj4gcHJl
-ZmVycmVkIGFwcHJvYWNoLgo+Cj4gSW5kZWVkLCBtYW55IG9mIHRoZSBrZXJuZWwgdHJhY2Vwb2lu
-dCBjb2RlIGNoYW5nZXMgd2UgaGFkIHRvIGRlYWwgd2l0aCAKPiBpbiB0aGUgcGFzdCAxMCB5ZWFy
-cyB3b3VsZCBub3QgYmUgZWFzeSB0byB0cmFjayB3aXRoIGNvbmZpZ3VyZSAKPiBzY3JpcHRzLCBz
-byB3ZSB3b3VsZCBlbmQgdXAgd2l0aCBub3QganVzdCBvbmUsIGJ1dCB3aXRoIGEgY29tYmluYXRp
-b24gCj4gb2YgdHdvIGRpZmZlcmVudCBtZWNoYW5pc21zIHRvIGFkYXB0IHRvIGtlcm5lbCBjb2Rl
-IGNoYW5nZXMuCj4KPiBJbiBvcmRlciB0byBrZWVwIHRoaW5ncyBtYWludGFpbmFibGUgbG9uZy10
-ZXJtLCBJIHByZWZlciB0aGF0IHdlIHN0YXkgCj4gd2l0aCB0aGUgdmVyc2lvbi1iYXNlZCBhcHBy
-b2FjaCBhcyByZWNvbW1lbmRlZCBieSBNaWNoYWVsLgo+Cj4gVGhhbmtzLAo+Cj4gTWF0aGlldQo+
-Cj4+IFJlZ2FyZHMsCj4+Cj4+IE1pY2hhZWwKPj4gX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+PiBsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
-bG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgo=
+On 7/4/23 14:39, Roxana Nicolescu wrote:
+> Hi,
+> 
+> Thanks a lot for your feedback.
+> 
+> I realize I did not say the reason why I did not go for 
+> LTTNG_UBUNTU_KERNEL_RANGE. We deliver a bunch of different
+> derivatives (inherited from the main kernel), each with its own
+> version and it's impossible to use LTTNG_UBUNTU_KERNEL_RANGE alone. 
+> Derivatives in the same cycle don't have the same version number, so
+> I cannot rely on the version alone to determine when a change has
+> happened. For example these are some kernels we released last cycle: 
+> - linux (main kernel): 5.19.0-46 - linux-kvm: 5.19.0-1026 -
+> linux-lowlatency: 5.19.0-1028 As you can see, linux-kvm and
+> linux-lowlatency versions are not the same, and linux-lowlatency from
+> 2 months ago version version number coincides with linux-kvm from
+> now, but they don't match the same base. I hope that explains it.
+> 
+> Initially I thought about exposing the version of the main kernel in
+> the kernel headers that can be later used in the module, but then I
+> came across openvswitch and that's how I came up with the idea of an
+> initial configure step.
+> 
+> But I totally understand if you think this is not worth it.
+
+LTTng modules use the UTS_UBUNTU_RELEASE_ABI from the Ubuntu 
+generated/utsrelease.h kernel headers to detect tracepoint 
+instrumentation changes. I don't understand why many kernel flavors 
+would have the same ABI number with different ABI semantics, but I guess 
+that's just how things are now.
+
+One way to solve this would be to detect the "-lowlatency" and "-kvm" 
+suffixes in the string within generated/utsrelease.h UTS_RELEASE, e.g.:
+
+#define UTS_RELEASE "5.15.0-76-lowlatency"
+
+This could be done by LTTng modules by implementing a script similar to 
+what we do for debian, fedora, rhel, and sle (see scripts/ in 
+lttng-modules).
+
+Then we could have:
+
+* LTTNG_UBUNTU_KERNEL_RANGE for kernels where all flavors have the same
+   kernel ABI.
+
+* LTTNG_UBUNTU_GENERIC_KERNEL_RANGE for generic kernels only, for
+   situations where the kernel ABI differ between flavors,
+
+* LTTNG_UBUNTU_LOWLATENCY_KERNEL_RANGE for lowlatency kernels only, for
+   situations where the kernel ABI differ between flavors,
+
+* LTTNG_UBUNTU_KVM_KERNEL_RANGE for kvm kernels only, for situations
+   where the kernel ABI differ between flavors.
+
+It would all have been simpler if the UTS_UBUNTU_RELEASE_ABI would 
+actually have been a versioned kernel ABI without different semantics 
+across kernel flavors, but considering the current situation we will 
+need to deal with this with scripts as we have done for other distributions.
+
+Thanks,
+
+Mathieu
+
+> 
+> All the best, Roxana
+> 
+> On 04/07/2023 20:07, Mathieu Desnoyers wrote:
+>> On 7/4/23 11:35, Michael Jeanson via lttng-dev wrote:
+>>> On 2023-07-03 14:28, Roxana Nicolescu via lttng-dev wrote:
+>>>> This script described the changes in the linux kernel interface
+>>>> that affect compatibility with lttng-modules.
+>>>> 
+>>>> It is introduced for a specific usecase where commit 
+>>>> d87a7b4c77a9: "jbd2: use the correct print format" broke the
+>>>> interface between the kernel and lttng-module. 3 variables 
+>>>> changed their type to tid_t (transaction, head and tid) in
+>>>> multiple function declarations. The lttng module was updated
+>>>> properly to ensure backwards compatibility by using the version
+>>>> of the kernel. But this change took into account only long term
+>>>> supported versions. As an example, ubuntu 5.19 kernels picked
+>>>> the linux kernel change from 5.15 without actually changing the
+>>>> linux kernel upstream version. This means the current tooling
+>>>> does not allow to fix the module for newer ubuntu 5.19
+>>>> kernels.
+>>>> 
+>>>> This script is supposed to solve the problem mentioned above,
+>>>> but to also make this change easier to integrate. We check the
+>>>> linux kernel header (include/trace/events/jbd2.h) if the types
+>>>> of tid, transaction and head variable have changed to tid_t
+>>>> and define these 3 variables in 'include/generated/config.h': 
+>>>> TID_IS_TID_T 1 TRANSACTION_IS_TID_T 1 HEAD_IS_TID_T 1
+>>>> 
+>>>> In 'include/instrumentation/events/jbd2.h' we then check these
+>>>> to define the proper type of transaction, head and tid
+>>>> variables that will be later used in the function declarations
+>>>> that need them.
+>>>> 
+>>>> This change is meant to remove the dependency on linux kernel
+>>>> version and the outcome is a bit cleaner that before. As with
+>>>> the previous implementation, this may need changes in the 
+>>>> future if the kernel interface changes again.
+>>>> 
+>>>> Note: This is a proposal for a simpler way of integrating linux
+>>>> kernel changes in lttng-modules. The implementation is very
+>>>> simple due to the fact that tid_t was introduced everywhere in
+>>>> one commit in include/trace/events/jbd2.h. I would like to get
+>>>> your opinion on this approach. If needed, it can be improved.
+>>>> 
+>>>> Roxana Nicolescu (1): Introduce configure script to describe
+>>>> changes in linux kernel interface
+>>>> 
+>>>> README.md                             |   3 +- configure
+>>>> |  36 +++++++++ include/instrumentation/events/jbd2.h | 110 
+>>>> ++++++-------------------- 3 files changed, 61 insertions(+),
+>>>> 88 deletions(-) create mode 100755 configure
+>>>> 
+>>> 
+>>> Hi Roxana,
+>>> 
+>>> While I can see advantages to a configure script approach to
+>>> detect kernel source changes I don't think it's worth the added
+>>> complexity on top of our current kernel version range system.
+>>> 
+>>> We already have an Ubuntu specific kernel range macro that 
+>>> supplements the upstream version with Ubuntu's kernel ABI
+>>> number:
+>>> 
+>>> LTTNG_UBUNTU_KERNEL_RANGE(5,19,17,X, 6,0,0,0)
+>>> 
+>>> I'll let Mathieu make the final call but I think that would be
+>>> the preferred approach.
+>> 
+>> Indeed, many of the kernel tracepoint code changes we had to deal
+>> with in the past 10 years would not be easy to track with configure
+>>  scripts, so we would end up with not just one, but with a
+>> combination of two different mechanisms to adapt to kernel code
+>> changes.
+>> 
+>> In order to keep things maintainable long-term, I prefer that we
+>> stay with the version-based approach as recommended by Michael.
+>> 
+>> Thanks,
+>> 
+>> Mathieu
+>> 
+>>> Regards,
+>>> 
+>>> Michael _______________________________________________ lttng-dev
+>>> mailing list lttng-dev@lists.lttng.org 
+>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
+a
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
