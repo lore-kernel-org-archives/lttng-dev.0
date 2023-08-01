@@ -4,104 +4,122 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15F9FC00528
-	for <lttng-dev@archiver.kernel.org>; Tue,  1 Aug 2023 20:15:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED498C0015E
+	for <lttng-dev@archiver.kernel.org>; Tue,  1 Aug 2023 20:29:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1690920958;
-	bh=KyUxct68qwXoVjIfQ4Q+jccgagyhPPN3qcGUk4CS+0M=;
-	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1690921745;
+	bh=Q7FiEKlIR1bd5TaLKF7h+A0AGIPYoC5HDBqJ10LkkQ8=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=YQGRxh2Pol2ZuQp7WfqyC3V+OxMR4BjqTKH+x53dIXZSJQQnIn5ofOUOo+N+3Ux7p
-	 XlEb+U7EOFIx/gF+SBciOza3ZgC4pKSQSTRIjBXN+UMqDowakpg95+vyw4qd6sAg9R
-	 3jlvLaZpA5JHqN5yiI/Pc5Q2tkw/C2Cvy0/+SI70KW8a/qxUeytJSmNXoV/mj+ebQd
-	 xtRjTjuSKTgrrp6lY6eunKHBSO0jMVFZGwueBUaQk0c+LisdnN/OC338KVlenNVErS
-	 Cx1Hu/UZIqevdmEx3c8+tCbish9tfmLKSqz3EA3RCbDTFaAGyhjCr1EPhrIvbbdoWx
-	 Ft3r8PlSfrjSw==
+	b=RrtMxDMob92FmpXCCZ6VPbO44eajqoZEBWonZODrpiJfOs5mYcOm/m+zQo42Qef3j
+	 5WbmCebskNzH/3jnwKU57361N/h7EORWE98V7fmMQPeDIVVHmCzXhYpOInzJ1YUZYz
+	 WzHTMymrPn6NDZm7wuPT78kZ0PaDNlS2IFaLV39VB/AzM1OpWHHZMJ3xcUbMYbH2AP
+	 a0M5TXnFGHEyWT6kMZ51/M5qW7Wv3hJpTTNsqZEeYO3xQrUsOH1AnOsib+vmcwsszh
+	 oewZRrio1nslcnbiZ8cITWtT0v97s5LWecvP4C+ImnrcdVB00IIuUp8ACJYuNV1fae
+	 2+muFmMvG94nA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4RFmZj6Zn7z2Gnm;
-	Tue,  1 Aug 2023 16:15:57 -0400 (EDT)
-Received: from mx0f-0014fe02.gpphosted.com (mx0f-0014fe02.gpphosted.com
- [67.231.155.114])
- by lists.lttng.org (Postfix) with ESMTPS id 4RFkcW2BJyz2H0X
- for <lttng-dev@lists.lttng.org>; Tue,  1 Aug 2023 14:47:23 -0400 (EDT)
-Received: from pps.filterd (m0210943.ppops.net [127.0.0.1])
- by mx0e-0014fe02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 371AsdRp013663; Tue, 1 Aug 2023 18:38:03 GMT
-Received: from usg02-bn3-obe.outbound.protection.office365.us
- (mail-bn3usg02lp0143.outbound.protection.office365.us [23.103.199.143])
- by mx0e-0014fe02.pphosted.com (PPS) with ESMTPS id 3s4v5khm3w-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Tue, 01 Aug 2023 18:38:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
- b=IU54odMz28IPGllPs8gUwlm0ICJFPpj3FDoerrarBPob9HVuI9ZkMtVlDT16evMoI3bxX0l9xJfdLnyIGfvTDeYdtxixJ7MN0AmfBYnMMED8syPyU/PoiTGWOvD7SH/wtK5/ZYLNn5rJqjbmFCnwqpN7t2SS1NJwf/OFqoxgsVToPVa3k8+HHtadq1XABj0NWjPkKHLL0el/77RngaUH9sEuc+cRPV7ym5ug7anSoYFL0ccw8PO2QTU5iXapNmWyps60iWtocRlNav7vjJU3VkpuU0fyOk5FLDKP2bWFUEy+vw9zH0RsEeg1Hqgj6i0YF5qJZGPg57yt9puKwvtZvQ==
+	by lists.lttng.org (Postfix) with ESMTP id 4RFmss6GH3z2GbS;
+	Tue,  1 Aug 2023 16:29:05 -0400 (EDT)
+Received: from CAN01-YQB-obe.outbound.protection.outlook.com
+ (mail-yqbcan01on20610.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:7052::610])
+ by lists.lttng.org (Postfix) with ESMTPS id 4RFmsp1xtQz2GbQ
+ for <lttng-dev@lists.lttng.org>; Tue,  1 Aug 2023 16:29:02 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SQCzg0OH+dJPAPuvCNMei4C3lsOu3jjmDgcQQdZSBqJWWQ78x1f8ZN8enZ+vphKAO//JjUVF0EszUagHQXFXkRiCrG+TX2LJlMRW8G7CpYq08rAh3UoXiaK66MagTCDcH7ueBgghhAeyOL8BW5BcXXBoXp0VFY9n2T7jTko7r9J+dUevt+hBOo062SXnDrR5I+s6ZX0IPId/uHgyEYRz4kvzlCAODhWt4i95tCe0R3DG0DSa1DfUSvjDN99TBkX+FaD/Dm+i/+KZ8drwUKUiICz/MumA/IV7Gm2d04/7yf2arsk8TOKFWv21nEbm3r2Y2aRRq2fIlESQc210igXYwA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector5401;
+ s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hkc6h7plXvSVru5ucZniJ9Dsr/WfqN3eA3JzWLLQyQk=;
- b=ulIuouusgOoynte72nntHpICAlZBQDme+4kZ4AcYAijlkTJiVx0UwgmvMqw2T38LRcxPqeAzX9l9EKAERST+AOaxI3JnF+0q0MayDK9bh+zxW+fuS6WWfXG4A3P9+r0GnLNkOmvS7wvxsYJnySM5uHJYuFReGCs6I7RbSxamUXJAtFGS6AKEZ02JpTAGn4zrgFAA4MUYq9qKW2TYWbJ/mlDQW96U6nKzQc3Upn708AFlOckZdY/OFMYshR1xRN6eY1z/Z7dX+X8GQzH9kbkjX/jrrrLXSN17Nf+2HxdpD+hd8BaVKY5wEcVqNgqjZoKUH5bz8BaerR3tQ1fpfQzm3A==
+ bh=UI21jJD0XADFzicbbKXAoeuuFt5vyOq4BtnIqHV64GU=;
+ b=Cqei7ewFVKkrOiq9Uxjqs1kUxyf0pLTA68c7feaD/LgQ0BS2C62hsPyYNXAxGDNulC97ajD3RQAuE/SLdxaqXfHqoYDGgCMb76YZSqpdYlMkz4E14itMvjhGCAIlPbmsJbnIPe9CiWxu2KS5BohQVA7pqrkkT3k32dR93y/ehTT/Q3ozP22yZbZMrcCcYwdkPAa7uK+oQ3VOGPj9NgZt4DzQRx0v1eD+YpNtcZZYCKxhEYj0NjENiPtxLtkbaoVWJjxfzW5LpVhW97CFxbDeTcNX37Bl3tudz2UwKZC5egzGajhbJIg6SADqFGvzmVV8oyZVsvElEzWzMJ8IHIgelQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ballaerospace.com; dmarc=pass action=none
- header.from=ballaerospace.com; dkim=pass header.d=ballaerospace.com; arc=none
-Received: from BN0P110MB0967.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:16f::10)
- by BN0P110MB1434.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:181::19)
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YQXPR01MB5082.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:1b::15)
+ by YQXPR01MB5497.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:40::18)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.44; Tue, 1 Aug
- 2023 18:37:58 +0000
-Received: from BN0P110MB0967.NAMP110.PROD.OUTLOOK.COM
- ([fe80::fdc1:ea94:bb8f:7ddb]) by BN0P110MB0967.NAMP110.PROD.OUTLOOK.COM
- ([fe80::fdc1:ea94:bb8f:7ddb%4]) with mapi id 15.20.6631.042; Tue, 1 Aug 2023
- 18:37:58 +0000
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ 2023 20:28:59 +0000
+Received: from YQXPR01MB5082.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::db5a:38f5:2818:b2d9]) by YQXPR01MB5082.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::db5a:38f5:2818:b2d9%3]) with mapi id 15.20.6631.043; Tue, 1 Aug 2023
+ 20:28:59 +0000
+Message-ID: <41373769-12d4-56e1-0ae3-a464481770b1@efficios.com>
+Date: Tue, 1 Aug 2023 16:28:58 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To: "Cook, Layne" <Layne.Cook@ballaerospace.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
  "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Thread-Topic: [EXTERNAL] Re: [lttng-dev] Status of LTTng-scope and
- Lttng-analyses
-Thread-Index: AQHZua2X0FVnjl5QPUmhulwhRf7CPa/BIdQAgBS1Lzw=
-Date: Tue, 1 Aug 2023 18:37:58 +0000
-Message-ID: <BN0P110MB0967A44E8E48B2C03878D429920AA@BN0P110MB0967.NAMP110.PROD.OUTLOOK.COM>
 References: <BN0P110MB0967334AFD6A7CF8DDD3BFBC9238A@BN0P110MB0967.NAMP110.PROD.OUTLOOK.COM>
  <a750cc37-76de-d717-3cce-d26974ca52ea@efficios.com>
-In-Reply-To: <a750cc37-76de-d717-3cce-d26974ca52ea@efficios.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN0P110MB0967:EE_|BN0P110MB1434:EE_
-x-ms-office365-filtering-correlation-id: 500c61c7-6f8d-4106-7b36-08db92be6dde
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gJ35dzxTF+Syve3tgGkWPs2z7s1z1Jzizih66VZuqi6rWYyTtGqnJiZf0eJH9MpHoxAMpLQy6EDm0r4E3TRPL0VEzopBloJaJ9r2UpEBiJn5CdU34LNRfdUGf/3xz5L6vLpZLeN4gca4CKllpgF1NVa7Gi1RASnlvnmdexrTeDO9Lh3jGFS5JbWecLor/AQxTFfTPjTpVxSIPQhZP0ojJhdbJKt4SiZLhixkiBRQ0Qdw4NBo67IulAyPW3QPAQToQFGjtU6GJPIryFBX12TXidx1Y+/lk6XOKLfrkGiMVOdnIpt7h13Y/xbe5aaPUAf/YnZpM7f8nIAY8+d2Cuso4K9JRtPBkR/JbARXz4wrHPGqroGXDQPUqB6UNW0cMTzJ5yXYBDK2trTcm5jD/ALRtFZtz8oFUt68Fxck9rVBOc59sp/M8bm3R2DsaHhVUIh+Xg403bTQ3IZm6u5Bw6+k6CXvxaFPKt2Dj4CIalZlOc8AvaTXeGzOqFBP7UlBBs4kY6uZ5/IbysBixPcXq4dbsx0pN6ZdNOOkbtSTDnrp8S7SVpgFxpLQ765Gmkpx7EA3kZG5EWgnx6QKL9Y59dbFCVrKIWgUmpXL2AaVS2n3qdU=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BN0P110MB0967.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230028)(4636009)(136003)(39830400003)(366004)(396003)(451199021)(52536014)(110136005)(9686003)(122000001)(966005)(166002)(26005)(8676002)(6506007)(33656002)(7696005)(76116006)(41320700001)(8936002)(5660300002)(55016003)(53546011)(66476007)(64756008)(71200400001)(66446008)(66556008)(66946007)(4326008)(2906002)(83380400001)(38070700005)(41300700001)(19627405001)(508600001)(86362001)(186003)(38100700002);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: +Ln5QfAiPmFV5foblXOzivDMKvSie+QVePDse1ocn5cPbCFMi2J6g3sOfviPN370WUn5nqRorpJ1Nbc6T+7RfXNb2iLyL68nugcum+6KImvX5rRut2oGjQ/KCeTo+y6ELG5JfNWWVkp9KfJCLYAd0VseDJLkRzUADTda0nZLmOfs951JUDQuBO5rQlyknlDcE2nBylZHHJSmfjgrUQecWmzle6c8QxzP1Zhy9YvvLydjlo6EBkSZZM4pTybXXd5iM4YH+Z9p0n1/23Bs285AMssoxee8mSWvd2voPz+22aj5jTCwYINJsWOAyyyNDO0y/R+E8QvUKU9AMIC5Wci+PurUfHIS7iFMBSAzVHT6RssIjR8Q9NdLZDAkHircerfSZkytvbYaYoCmmN0kSbOmECAPASeJ+lZcAGhXrgTuiwQ=
+ <BN0P110MB0967A44E8E48B2C03878D429920AA@BN0P110MB0967.NAMP110.PROD.OUTLOOK.COM>
+In-Reply-To: <BN0P110MB0967A44E8E48B2C03878D429920AA@BN0P110MB0967.NAMP110.PROD.OUTLOOK.COM>
+X-ClientProxiedBy: YQBPR01CA0164.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:7e::27) To YQXPR01MB5082.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:1b::15)
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: PFivxGl9fA4H7WG42dt+RZGT/PClffrYMDX3T/i1fUesRUTh//I0Y2b4stuPgRBRrIguqiL52HdWq/afLt7Ike6Gz9wzCXquRiwHtfBifBdVu1Zz5X2md84caqUQhC51iCYuuehlGRg8ElCQbG6GX99QALlt3/obSoZqJnakjKv/r06jwXcij4P90EfeKo/LC7EzlWUl+f/gywqfCsG+BoO4ZdmfRa7y9zWpjRUr5k5y8M8DgG/Jbi5oUj6xKYhQlzWbCj/SWxT7lZCgDDb0CVVbhUDClcNMtMqMe42Xvw6L2vMD6cpG5vTFKlFstFNlyvqHZ+V5OKituPpVhdgrmra5WUyUNidagGd+T6DexIWPrtQ4edJt4xJb1ELGibmyxP87PFfwN6WBAv4xex9qQ2fqZ6AM50YC7rTM/6UdZSwQfdQvmd2kMavsF+tuxC29BvTQxpx+kRMRcbartTd4RlKNm4KrsR3eAhRG8U4IlstOeDGOuEdrrMZenzSXO/qtsT4zFp6dgsYvrpHaMtOJ4CGvKIPDwIUUV6KqTX+lWaFCuK79og1K0epk0wfioBKlxP99DNic50xwT2XXZ3ipF+rxOJGPn7I518ki3N9ArlaXaHdXjEbtmhrYF68nWM6ws554IZPyHbvOXmZnXrWA8lbrxoeanvZhYnOmxfri0czpIQB0XfrJMUNJHmUWjZx/FteDJcb2VYq0ZpKUhju/RLI1FBZXYIts6hbGhYKQ5RNwgDDyGX/eIxbjL2sR1KBVCBya980xWvzN1qe0B9mwsdTMBXENvjsyx1J7p3vVPsqI5UcDfz4bUSgkeo5E1zy4bcVG/WlLMmhtD3Z8YSmK8LXxZrywghTLIKEyuDFTpQA=
-X-OriginatorOrg: Ballaerospace.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YQXPR01MB5082:EE_|YQXPR01MB5497:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6017cdbb-cf38-4fef-2888-08db92cdf005
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kRIvgXFa/kxzVvW44UGDaERxdCpq6EUkvYBWp8XEFMAIqH1CopiGi4VQ5DIefLPJE4BEUduRZMIAN9aRwaCSW6Iucxbk5kHQkJEeQlbgvr4G1ZdI+SEN4U5bTxRQU9CtukquYth2aVUzlLiAZA25+H+U158p0vZ0LOSiO2TZTbAj1kQ2wPRslAvFZDf3xTNUomfq0s+WBWybURVjQ5ITXQDsKHi2im3UIC07o4mj9APFYPKfpHnDCAfqUbTYeC8ZRq6pbj6VoXqRR65H556UEs+7y768MA/e92xvrkiqAy3imbWRmULL7Xjau3ajrtYZMrLzfBPfJsnZOuCT60yp6u32eTDyutLxRYUj8M5bvkQWhTwfXl0wvfVlzheS9aVLA5Ak72yW30RcLJgbt8pFmZBl7e7oxrgSoLaKq8G3uwpet+qD8Pgtm42/47a0CkI+H+aC9P+EzRmlbffc12WyFtwc5z3Bczk/TR2OZrIelZpYhQRLe2ec4w13JgUKusZuaDUPhGZARRj8S4FMrrC0QWNAREH8pUOIjRXFT2mpvfFSWShcDrZDA/cmhKb09WeVdJbuza5h0EsOR3rMsk9gH0CJbYIf+bz3A+cQgiBeuAQx+qV/DJQtYMjX1KSVIhzD
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YQXPR01MB5082.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230028)(136003)(39830400003)(396003)(346002)(366004)(376002)(451199021)(66556008)(41300700001)(8676002)(5660300002)(66946007)(8936002)(31686004)(110136005)(2906002)(478600001)(316002)(66476007)(31696002)(86362001)(6512007)(6486002)(966005)(6506007)(83380400001)(53546011)(26005)(38100700002)(36756003)(186003)(2616005)(45980500001)(43740500002);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bTZoYVF1WXFYZEpaVUlzY2dPTnhhdG1EV29aUCtMTXZkZHRUZFBYck5NMW4w?=
+ =?utf-8?B?clVtR1dkUUhXOGxybFZjaXdRZ2xUQ3ZlbDZ2NzNOMi9FNFNQOVluMk14Ykl6?=
+ =?utf-8?B?N3JXZzlseWxlaFlRSUgyNGpFbkhtdk1zMWJVTzQrVk1EWGFPbEJhdjVWTXlE?=
+ =?utf-8?B?RnE3WC9salJsVWRRdkVBN2ZsM1k2S3MreGZjMFRHVXVyU1JNQTBsQUlVdEhu?=
+ =?utf-8?B?U1JJdjNlY3QzWTU3ajZYcHgweEw1eFd5RDFOYjlKV2VQMUpTaW0rVnJtN0NS?=
+ =?utf-8?B?a1g2MmlTNGFkVkFzcnBkelAzOG5WN05IaGN6SEF6NWwzdk83TExGZDkyZ252?=
+ =?utf-8?B?NjhxNkNNc2M5OUM1eW53VG11eUNvdEQvQ0ZZUGZsQkdKbXFWZ1JCK3cwUFEw?=
+ =?utf-8?B?ZTJsdFZaS08wTVUxVnRCb0t3bHhuM2VwaUNVV3NUTzNIQ0tsTTVQV1NOc1h2?=
+ =?utf-8?B?bVVmZFBNZ1RBTDl1endjL0VNTXpsQmF5dTZyK2ZSaHRVa2pPVUNERW5VaDRV?=
+ =?utf-8?B?UzlvenVFb2JtbGwwWTJJT1Vzb1k2R1VURnAvR05WbHozbEZqR2t6TjNnNUht?=
+ =?utf-8?B?azliM0NOWXcxeS9hWk1jVUFIT3VZQWJQVlFrTmV4YXhRZ1F2bHI4QzZnZlBQ?=
+ =?utf-8?B?R0lISGp0azlkUWptRVNYZDVDaVMyS1Z5aEJrK2xSU2tiVHVrQUpQV1pBWS9x?=
+ =?utf-8?B?ZTBhRDZ6Yjd6YXZvMDN1azVUOUl4K21Od0F2RXVVZ1NtNHJkQmNIOVNiMFNX?=
+ =?utf-8?B?Y3VBVG1SWk8yRTFya2srNENlWHg2WVlRY0g5MGo2TTdrSlNSZGVaWUJkTXFO?=
+ =?utf-8?B?T3dtZ1hURTFDaU1CTVhCalhyb1F5TkkrZ1ZwRmhMVmE1L21mNllsRkx2OUZE?=
+ =?utf-8?B?Q2dZck5Ra1dlTlJCcGtFN3czakZBKzRBUE9mWnNXb1B6NGNESENsclBPQUM5?=
+ =?utf-8?B?TDE3aDVZNlJJR3Y1bGJaNlZNb0FGU254OFJjdmFMRlZuM0dPRm9ZcWRzQ0xl?=
+ =?utf-8?B?WUt6bkZHa0kzV1pPRnlsOTBjR0VMYWZqbU0walNkblN5M211SjhnRWhmK01X?=
+ =?utf-8?B?Nzcva1hHbC91QVRwRGtxM2pDc1V4NlVJQnI5MzlhK09BZFVMM2R0RU0yT1ll?=
+ =?utf-8?B?aUhLeEJ5eExGWUZUa3NwMFBkTlkzM1FlU25XOXFkOFJuQTEySGxKQVdvWWlH?=
+ =?utf-8?B?VlE0Ukt5bysxY00vOU1tMENlOWFSeGd4cThUeUlVRUVIMDUyUmhQTmtvbWY3?=
+ =?utf-8?B?dWE0RDUxa0FRSkhOSW82djBhUW56NWFTWjU1RzB0MGVRZ1h1VEp4ZzZvSURF?=
+ =?utf-8?B?bDJKelFlVTd2UGdvTTFPamJYK2s0NDF3dUIyQ0FKb1daeWt5ZzFOb0x3Z2FO?=
+ =?utf-8?B?M3d6c3Q3d3MwY3RrUjNPSTFTdU96ekZYRHlNcUF1S1REdlR3L3djT3VWMmh3?=
+ =?utf-8?B?SHpBTTBldkdGOXVPUFFlSkpMbXc3ZzFYM25Ld0lSVUxycEY0UGlZRFJtUzJn?=
+ =?utf-8?B?RXlZeHhZNXhzbGlaU1N2cU1WaGprbXVQNy8zRld3YW9TTkxoYzkyRjRRQ1Ir?=
+ =?utf-8?B?SjZ2TkcwVDZaMFRZREJxS0tjUHZYRnJ4aVNHYWt3N21EMmk2dEFuZlc0VzBE?=
+ =?utf-8?B?UVBBc2RjaDNWeEszYlJQNjRGMnhZQ2dIaFN4VzhzRDNrRUZqRmRRTkkzZFFY?=
+ =?utf-8?B?NmZ6K0NGWThDNW9BMEdoNWdFR250aEdUY0dpNlZ1SkRlZlhWekNwT2NoY0dT?=
+ =?utf-8?B?VldmVzNPZmphdzltWjZ5WUZYYk9tL1phM1N3dkxPRG5YWk53d3VLY25jVXFl?=
+ =?utf-8?B?cDVnMzIyaitza3JWbldzTGFCSzJFU3FEQVk1Z2dTWHQyWDRWWXJlRTBYVEds?=
+ =?utf-8?B?UDJUZ2lYRFZVSXNqa05QK2hYZzZ2ZGhCZXNDV2tsZmgvcEszNnJaK21JbEJD?=
+ =?utf-8?B?VkloK040K2lWRTA5c1lybVorbmllTDVyQXUyUkZTN1F4V0djSnpXY0M2VDhZ?=
+ =?utf-8?B?OHZsUGlLUGhRai8zeFltbndIVW9qRzRPR0lHc2RyVUJnMGdvd09SUnpiamQw?=
+ =?utf-8?B?bXRtYjNtdUdUamhWTDJYa2FHSjcvdmJ0ZTlPTjNqb0xKaXM2MlB0dDlLazVj?=
+ =?utf-8?B?SUNtODMzSXVmK2s4eFdqdVVRUkRtc1BkdDlRWXp4RjRUMFc4TVQ4RjVwVVIx?=
+ =?utf-8?B?Wnc9PQ==?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6017cdbb-cf38-4fef-2888-08db92cdf005
+X-MS-Exchange-CrossTenant-AuthSource: YQXPR01MB5082.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0P110MB0967.NAMP110.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 500c61c7-6f8d-4106-7b36-08db92be6dde
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2023 18:37:58.7646 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: cb0751b7-e940-4c3b-b051-95460db7f4d7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0P110MB1434
-X-Proofpoint-GUID: lvSgGmFZIcPWPMzluVaqnscACTNEpPDk
-X-Proofpoint-ORIG-GUID: lvSgGmFZIcPWPMzluVaqnscACTNEpPDk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-01_16,2023-08-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=outbound score=0
- lowpriorityscore=0 clxscore=1011
- impostorscore=0 bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
- spamscore=0 phishscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2308010167
-X-Mailman-Approved-At: Tue, 01 Aug 2023 16:15:57 -0400
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2023 20:28:59.7261 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FxNVDAVXrbk8rlzrHjORxQOULqVQawllAFLy6v/uYFYrBF7MNk/CVescZoiJ4OArf8KKm2muLzfhYKmEG95s5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQXPR01MB5497
 Subject: Re: [lttng-dev] [EXTERNAL] Re: Status of LTTng-scope and
  Lttng-analyses
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -115,379 +133,46 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "Cook, Layne via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "Cook, Layne" <Layne.Cook@ballaerospace.com>
-Content-Type: multipart/mixed; boundary="===============4152858818765213265=="
+From: Michael Jeanson via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Michael Jeanson <mjeanson@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============4152858818765213265==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_BN0P110MB0967A44E8E48B2C03878D429920AABN0P110MB0967NAMP_"
-
---_000_BN0P110MB0967A44E8E48B2C03878D429920AABN0P110MB0967NAMP_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Thanks for the reply Mathieu. We are going to go with Trace Compass.
-
-Could I hit you with one more question? I've been unable to find an answer =
-on the web.
-
-When I build lttng-modules using the sources and instructions from here<htt=
-ps://github.com/lttng/lttng-modules/blob/master/README.md#kernel-built-in-s=
-upport>, it fails because it cannot sign the kernel modules with keys. Duri=
-ng the  "make modules_install" phase, it gives these messages for each modu=
-le:
-
-At main.c:160:
-- SSL error:02001002:system library:fopen:No such file or directory: crypto=
-/bio/bss_file.c:69
-- SSL error:2006D080:BIO routines:BIO_new_file:no such file: crypto/bio/bss=
-_file.c:76
-sign-file: certs/signing_key.pem: No such file or directory
-  INSTALL /root/lttng-modules-master/src/lib/lttng-lib-ring-buffer.ko
-
-Subsequently, the modules fail to load with an error:
-modprobe: ERROR: could not insert 'lttng_ring_buffer_client_discard': Requi=
-red key not available
-
-I'm am installing on a RHEL8 system. Is this because RHEL8 is not supported=
- as an official Enterprise release? Have the keys and/or their locations ch=
-anged for RHEL8?
-
-Thanks,
-
-LC
-layne.cook@ballaerospace.com
-________________________________
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Sent: Wednesday, July 19, 2023 8:09 AM
-To: Cook, Layne <Layne.Cook@ballaerospace.com>; lttng-dev@lists.lttng.org <=
-lttng-dev@lists.lttng.org>
-Cc: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: [EXTERNAL] Re: [lttng-dev] Status of LTTng-scope and Lttng-analyse=
-s
-
-On 7/18/23 15:27, Cook, Layne via lttng-dev wrote:
-> Can you tell me the status of the beta projects listed on the web site?
->
-> LTTng scope
-> LTTng analyses
->
-> The github projects haven't had an activity for quite a while. Have
-> these projects been abandoned, or superceded by something else?
-
-Hi Layne,
-
-Thanks for your interest in those projects!
-
-The LTTng scope beta project was an attempt at doing a significant UX
-redesign of Trace Compass, starting from a use-cases/user workflow
-perspective. We currently don't have the resources/funding/staff to
-work on this project further, so it has not progressed for a while.
-
-You should look at the Trace Compass and VSCode trace extension
-projects instead, which have a lot more activity:
-
-https://urldefense.us/v3/__https://tracecompass.org__;!!LNnLTj473Oq-L_5O-MA=
-pfw!itm5HF-sPBKIyjFB3RohR9bQQPAiezGuN0s4IGMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo=
-7QeOQGjNezadNyIoevmmmSCqGL7Y$
-https://urldefense.us/v3/__https://github.com/eclipse-cdt-cloud/vscode-trac=
-e-extension__;!!LNnLTj473Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR9bQQPAiezGuN0s4=
-IGMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo7QeOQGjNezadNyIoevmmmwRBeFCI$
-
-The LTTng analyses beta project is a set of python scripts to analyze
-LTTng traces. Our original intent with that project was that EfficiOS
-would fund the work to create those analyses as prototypes in Python,
-and eventually customers would fund the rather large amount of work
-required to go from a prototype (slow scripts) to a production quality
-project (faster C++ implementation, generic state tracking module).
-Unfortunately, this never materialized, so this beta project has been
-on the back burner as well.
-
-In the recent years we have focused our efforts on the Babeltrace 2
-project and on CTF2 (Common Trace Format version 2).
-
-Feel free to have a look at Trace Compass and VSCode trace extension, and
-please let us know if LTTng scope and LTTng analyses fill a gap that is
-not covered by those other tools.
-
-Thanks,
-
-Mathieu
-
->
-> Thanks,
->
-> LC
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://urldefense.us/v3/__https://lists.lttng.org/cgi-bin/mailman/listin=
-fo/lttng-dev__;!!LNnLTj473Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR9bQQPAiezGuN0s=
-4IGMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo7QeOQGjNezadNyIoevmmmqyhp8ro$
-
---
-Mathieu Desnoyers
-EfficiOS Inc.
-https://urldefense.us/v3/__https://www.efficios.com__;!!LNnLTj473Oq-L_5O-MA=
-pfw!itm5HF-sPBKIyjFB3RohR9bQQPAiezGuN0s4IGMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo=
-7QeOQGjNezadNyIoevmmmVNGqlAY$
-
-
---_000_BN0P110MB0967A44E8E48B2C03878D429920AABN0P110MB0967NAMP_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof">
-Thanks for the reply Mathieu. We are going to go with Trace Compass.</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof">
-Could I hit you with one more question? I've been unable to find an answer =
-on the web.</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof">
-When I build lttng-modules using the sources and instructions from <a href=
-=3D"https://github.com/lttng/lttng-modules/blob/master/README.md#kernel-bui=
-lt-in-support" title=3D"https://github.com/lttng/lttng-modules/blob/master/=
-README.md#kernel-built-in-support" id=3D"LPlnk825714">
-here</a>, it fails because it cannot sign the kernel modules with keys. Dur=
-ing the&nbsp; &quot;make modules_install&quot; phase, it gives these messag=
-es for each module:</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof">
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-At main.c:160:
-<div class=3D"ContentPasted0">- SSL error:02001002:system library:fopen:No =
-such file or directory: crypto/bio/bss_file.c:69</div>
-<div class=3D"ContentPasted0">- SSL error:2006D080:BIO routines:BIO_new_fil=
-e:no such file: crypto/bio/bss_file.c:76</div>
-<div class=3D"ContentPasted0">sign-file: certs/signing_key.pem: No such fil=
-e or directory</div>
-<div class=3D"ContentPasted0">&nbsp; INSTALL /root/lttng-modules-master/src=
-/lib/lttng-lib-ring-buffer.ko</div>
-<br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-Subsequently, the modules fail to load with an error:</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-<span data-contrast=3D"auto" class=3D"TextRun SCXO234394666 BCX8" lang=3D"E=
-N" style=3D"margin: 0px; user-select: text; text-align: left; font-size: 11=
-pt; font-family: Calibri, sans-serif; line-height: 18px; font-variant-ligat=
-ures: none !important; background-color: rgb(255, 255, 255);"><span class=
-=3D"SpellingError SCXO234394666 BCX8 ContentPasted1" style=3D"margin:0px;us=
-er-select:text;background-repeat:repeat-x;background-position:left bottom;b=
-ackground-image:url(&quot;data:image/gif;base64,R0lGODlhBQAEAJECAP////8AAAA=
-AAAAAACH5BAEAAAIALAAAAAAFAAQAAAIIlGAXCCHrTCgAOw=3D=3D&quot;:base64,R0lGODlh=
-BQAEAJECAP////8AAAAAAAAAACH5BAEAAAIALAAAAAAFAAQAAAIIlGAXCCHrTCgAOw=3D=3D&qu=
-ot;);border-bottom:1px solid transparent">modprobe</span><span class=3D"Nor=
-malTextRun SCXO234394666 BCX8 ContentPasted1" style=3D"margin:0px;user-sele=
-ct:text">:
- ERROR: could not insert '</span><span class=3D"SpellingError SCXO234394666=
- BCX8 ContentPasted1" style=3D"margin:0px;user-select:text;background-repea=
-t:repeat-x;background-position:left bottom;background-image:url(&quot;data:=
-image/gif;base64,R0lGODlhBQAEAJECAP////8AAAAAAAAAACH5BAEAAAIALAAAAAAFAAQAAA=
-IIlGAXCCHrTCgAOw=3D=3D&quot;:base64,R0lGODlhBQAEAJECAP////8AAAAAAAAAACH5BAE=
-AAAIALAAAAAAFAAQAAAIIlGAXCCHrTCgAOw=3D=3D&quot;);border-bottom:1px solid tr=
-ansparent">lttng_ring_buffer_client_discard</span><span class=3D"NormalText=
-Run SCXO234394666 BCX8 ContentPasted1" style=3D"margin:0px;user-select:text=
-">':
- Required key not available</span></span><span class=3D"EOP SCXO234394666 B=
-CX8 ContentPasted1" style=3D"margin: 0px; user-select: text; text-align: le=
-ft; font-size: 11pt; line-height: 18px; font-family: Calibri, sans-serif; b=
-ackground-color: rgb(255, 255, 255);">&nbsp;</span><br>
-</div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-<span class=3D"EOP SCXO234394666 BCX8 ContentPasted1" style=3D"margin: 0px;=
- user-select: text; text-align: left; font-size: 11pt; line-height: 18px; f=
-ont-family: Calibri, sans-serif; background-color: rgb(255, 255, 255);"><br=
->
-</span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-<span class=3D"EOP SCXO234394666 BCX8 ContentPasted1" style=3D"margin: 0px;=
- user-select: text; text-align: left; font-size: 12pt; line-height: normal;=
- font-family: Calibri, Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); b=
-ackground-color: rgb(255, 255, 255);">I'm
- am installing on a RHEL8 system. Is this because RHEL8 is not supported as=
- an official Enterprise release? Have the keys and/or their locations chang=
-ed for RHEL8?</span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-<span class=3D"EOP SCXO234394666 BCX8 ContentPasted1" style=3D"margin: 0px;=
- user-select: text; text-align: left; font-size: 12pt; line-height: normal;=
- font-family: Calibri, Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); b=
-ackground-color: rgb(255, 255, 255);"><br>
-</span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-<span class=3D"EOP SCXO234394666 BCX8 ContentPasted1" style=3D"margin: 0px;=
- user-select: text; text-align: left; font-size: 12pt; line-height: normal;=
- font-family: Calibri, Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); b=
-ackground-color: rgb(255, 255, 255);">Thanks,</span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-<span class=3D"EOP SCXO234394666 BCX8 ContentPasted1" style=3D"margin: 0px;=
- user-select: text; text-align: left; font-size: 12pt; line-height: normal;=
- font-family: Calibri, Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); b=
-ackground-color: rgb(255, 255, 255);"><br>
-</span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-<span class=3D"EOP SCXO234394666 BCX8 ContentPasted1" style=3D"margin: 0px;=
- user-select: text; text-align: left; font-size: 12pt; line-height: normal;=
- font-family: Calibri, Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); b=
-ackground-color: rgb(255, 255, 255);">LC</span></div>
-<div style=3D"font-family: Calibri, Arial, Helvetica, sans-serif; font-size=
-: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof ContentPasted0">
-<span class=3D"EOP SCXO234394666 BCX8 ContentPasted1" style=3D"margin: 0px;=
- user-select: text; text-align: left; font-size: 12pt; line-height: normal;=
- font-family: Calibri, Arial, Helvetica, sans-serif; color: rgb(0, 0, 0); b=
-ackground-color: rgb(255, 255, 255);">layne.cook@ballaerospace.com</span></=
-div>
-<div id=3D"appendonsend"></div>
-<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
-yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> Mathieu Desnoyers &lt=
-;mathieu.desnoyers@efficios.com&gt;<br>
-<b>Sent:</b> Wednesday, July 19, 2023 8:09 AM<br>
-<b>To:</b> Cook, Layne &lt;Layne.Cook@ballaerospace.com&gt;; lttng-dev@list=
-s.lttng.org &lt;lttng-dev@lists.lttng.org&gt;<br>
-<b>Cc:</b> Matthew Khouzam &lt;matthew.khouzam@ericsson.com&gt;<br>
-<b>Subject:</b> [EXTERNAL] Re: [lttng-dev] Status of LTTng-scope and Lttng-=
-analyses</font>
-<div>&nbsp;</div>
-</div>
-<div class=3D"BodyFragment"><font size=3D"2"><span style=3D"font-size:11pt;=
-">
-<div class=3D"PlainText">On 7/18/23 15:27, Cook, Layne via lttng-dev wrote:=
-<br>
-&gt; Can you tell me the status of the beta projects listed on the web site=
-?<br>
-&gt; <br>
-&gt; LTTng scope<br>
-&gt; LTTng analyses<br>
-&gt; <br>
-&gt; The github projects haven't had an activity for quite a while. Have <b=
-r>
-&gt; these projects been abandoned, or superceded by something else?<br>
-<br>
-Hi Layne,<br>
-<br>
-Thanks for your interest in those projects!<br>
-<br>
-The LTTng scope beta project was an attempt at doing a significant UX<br>
-redesign of Trace Compass, starting from a use-cases/user workflow<br>
-perspective. We currently don't have the resources/funding/staff to<br>
-work on this project further, so it has not progressed for a while.<br>
-<br>
-You should look at the Trace Compass and VSCode trace extension<br>
-projects instead, which have a lot more activity:<br>
-<br>
-<a href=3D"https://urldefense.us/v3/__https://tracecompass.org__;!!LNnLTj47=
-3Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR9bQQPAiezGuN0s4IGMJQ-4HqkYlCNLHc3e9tJ6Z=
-l_S4J6DtTNo7QeOQGjNezadNyIoevmmmSCqGL7Y$">https://urldefense.us/v3/__https:=
-//tracecompass.org__;!!LNnLTj473Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR9bQQPAie=
-zGuN0s4IGMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo7QeOQGjNezadNyIoevmmmSCqGL7Y$</a>
-<br>
-<a href=3D"https://urldefense.us/v3/__https://github.com/eclipse-cdt-cloud/=
-vscode-trace-extension__;!!LNnLTj473Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR9bQQ=
-PAiezGuN0s4IGMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo7QeOQGjNezadNyIoevmmmwRBeFCI$=
-">https://urldefense.us/v3/__https://github.com/eclipse-cdt-cloud/vscode-tr=
-ace-extension__;!!LNnLTj473Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR9bQQPAiezGuN0=
-s4IGMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo7QeOQGjNezadNyIoevmmmwRBeFCI$</a>
-<br>
-<br>
-The LTTng analyses beta project is a set of python scripts to analyze<br>
-LTTng traces. Our original intent with that project was that EfficiOS<br>
-would fund the work to create those analyses as prototypes in Python,<br>
-and eventually customers would fund the rather large amount of work<br>
-required to go from a prototype (slow scripts) to a production quality<br>
-project (faster C++ implementation, generic state tracking module).<br>
-Unfortunately, this never materialized, so this beta project has been<br>
-on the back burner as well.<br>
-<br>
-In the recent years we have focused our efforts on the Babeltrace 2<br>
-project and on CTF2 (Common Trace Format version 2).<br>
-<br>
-Feel free to have a look at Trace Compass and VSCode trace extension, and<b=
-r>
-please let us know if LTTng scope and LTTng analyses fill a gap that is<br>
-not covered by those other tools.<br>
-<br>
-Thanks,<br>
-<br>
-Mathieu<br>
-<br>
-&gt; <br>
-&gt; Thanks,<br>
-&gt; <br>
-&gt; LC<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; lttng-dev@lists.lttng.org<br>
-&gt; <a href=3D"https://urldefense.us/v3/__https://lists.lttng.org/cgi-bin/=
-mailman/listinfo/lttng-dev__;!!LNnLTj473Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR=
-9bQQPAiezGuN0s4IGMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo7QeOQGjNezadNyIoevmmmqyhp=
-8ro$">
-https://urldefense.us/v3/__https://lists.lttng.org/cgi-bin/mailman/listinfo=
-/lttng-dev__;!!LNnLTj473Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR9bQQPAiezGuN0s4I=
-GMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo7QeOQGjNezadNyIoevmmmqyhp8ro$</a>
-<br>
-<br>
--- <br>
-Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-<a href=3D"https://urldefense.us/v3/__https://www.efficios.com__;!!LNnLTj47=
-3Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR9bQQPAiezGuN0s4IGMJQ-4HqkYlCNLHc3e9tJ6Z=
-l_S4J6DtTNo7QeOQGjNezadNyIoevmmmVNGqlAY$">https://urldefense.us/v3/__https:=
-//www.efficios.com__;!!LNnLTj473Oq-L_5O-MApfw!itm5HF-sPBKIyjFB3RohR9bQQPAie=
-zGuN0s4IGMJQ-4HqkYlCNLHc3e9tJ6Zl_S4J6DtTNo7QeOQGjNezadNyIoevmmmVNGqlAY$</a>
-<br>
-<br>
-</div>
-</span></font></div>
-</body>
-</html>
-
---_000_BN0P110MB0967A44E8E48B2C03878D429920AABN0P110MB0967NAMP_--
-
---===============4152858818765213265==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============4152858818765213265==--
+T24gMjAyMy0wOC0wMSAxNDozNywgQ29vaywgTGF5bmUgdmlhIGx0dG5nLWRldiB3cm90ZToKPiBU
+aGFua3MgZm9yIHRoZSByZXBseSBNYXRoaWV1LiBXZSBhcmUgZ29pbmcgdG8gZ28gd2l0aCBUcmFj
+ZSBDb21wYXNzLgo+IAo+IENvdWxkIEkgaGl0IHlvdSB3aXRoIG9uZSBtb3JlIHF1ZXN0aW9uPyBJ
+J3ZlIGJlZW4gdW5hYmxlIHRvIGZpbmQgYW4gYW5zd2VyIG9uIAo+IHRoZSB3ZWIuCj4gCj4gV2hl
+biBJIGJ1aWxkIGx0dG5nLW1vZHVsZXMgdXNpbmcgdGhlIHNvdXJjZXMgYW5kIGluc3RydWN0aW9u
+cyBmcm9tIGhlcmUgCj4gPGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy1tb2R1bGVzL2Js
+b2IvbWFzdGVyL1JFQURNRS5tZCNrZXJuZWwtYnVpbHQtaW4tc3VwcG9ydD4sIGl0IGZhaWxzIGJl
+Y2F1c2UgaXQgY2Fubm90IHNpZ24gdGhlIGtlcm5lbCBtb2R1bGVzIHdpdGgga2V5cy4gRHVyaW5n
+IHRoZcKgICJtYWtlIG1vZHVsZXNfaW5zdGFsbCIgcGhhc2UsIGl0IGdpdmVzIHRoZXNlIG1lc3Nh
+Z2VzIGZvciBlYWNoIG1vZHVsZToKPiAKPiBBdCBtYWluLmM6MTYwOgo+IC0gU1NMIGVycm9yOjAy
+MDAxMDAyOnN5c3RlbSBsaWJyYXJ5OmZvcGVuOk5vIHN1Y2ggZmlsZSBvciBkaXJlY3Rvcnk6IAo+
+IGNyeXB0by9iaW8vYnNzX2ZpbGUuYzo2OQo+IC0gU1NMIGVycm9yOjIwMDZEMDgwOkJJTyByb3V0
+aW5lczpCSU9fbmV3X2ZpbGU6bm8gc3VjaCBmaWxlOiAKPiBjcnlwdG8vYmlvL2Jzc19maWxlLmM6
+NzYKPiBzaWduLWZpbGU6IGNlcnRzL3NpZ25pbmdfa2V5LnBlbTogTm8gc3VjaCBmaWxlIG9yIGRp
+cmVjdG9yeQo+ICDCoCBJTlNUQUxMIC9yb290L2x0dG5nLW1vZHVsZXMtbWFzdGVyL3NyYy9saWIv
+bHR0bmctbGliLXJpbmctYnVmZmVyLmtvCj4gCj4gU3Vic2VxdWVudGx5LCB0aGUgbW9kdWxlcyBm
+YWlsIHRvIGxvYWQgd2l0aCBhbiBlcnJvcjoKPiBtb2Rwcm9iZTogRVJST1I6IGNvdWxkIG5vdCBp
+bnNlcnQgJ2x0dG5nX3JpbmdfYnVmZmVyX2NsaWVudF9kaXNjYXJkJzogUmVxdWlyZWQgCj4ga2V5
+IG5vdCBhdmFpbGFibGUKPiAKPiBJJ20gYW0gaW5zdGFsbGluZyBvbiBhIFJIRUw4IHN5c3RlbS4g
+SXMgdGhpcyBiZWNhdXNlIFJIRUw4IGlzIG5vdCBzdXBwb3J0ZWQgYXMgCj4gYW4gb2ZmaWNpYWwg
+RW50ZXJwcmlzZSByZWxlYXNlPyBIYXZlIHRoZSBrZXlzIGFuZC9vciB0aGVpciBsb2NhdGlvbnMg
+Y2hhbmdlZCAKPiBmb3IgUkhFTDg/Cj4gCj4gVGhhbmtzLAo+IAo+IExDCj4gbGF5bmUuY29va0Bi
+YWxsYWVyb3NwYWNlLmNvbQoKSGksCgpUaGlzIHByb2JhYmx5IG1lYW5zIHRoYXQgeW91ciBtYWNo
+aW5lIGlzIHJ1bm5pbmcgd2l0aCBVRUZJIFNlY3VyZSBCb290IAphY3RpdmF0ZWQsIGlmIGl0J3Mg
+dGhlIGNhc2UgdG8gbG9hZCBvdXQgb2YgdHJlZSBtb2R1bGVzIHlvdSBlaXRoZXIgbmVlZCB0byAK
+ZGlzYWJsZSBpdCBvciBjcmVhdGUgYSBzaWduaW5nIGtleSwgcmVnaXN0ZXIgaXQgaW4gdGhlIGZp
+cm13YXJlIGFuZCBzaWduIHlvdXIgCm1vZHVsZXMgd2l0aCBpdC4KCkhlcmUgaXMgdGhlIFJlZGhh
+dCBkb2N1bWVudGF0aW9uIG9uIHRoZSBzdWJqZWN0IFsxXS4KClsxXSAKaHR0cHM6Ly9hY2Nlc3Mu
+cmVkaGF0LmNvbS9kb2N1bWVudGF0aW9uL2VuLXVzL3JlZF9oYXRfZW50ZXJwcmlzZV9saW51eC84
+L2h0bWwvbWFuYWdpbmdfbW9uaXRvcmluZ19hbmRfdXBkYXRpbmdfdGhlX2tlcm5lbC9zaWduaW5n
+LWEta2VybmVsLWFuZC1tb2R1bGVzLWZvci1zZWN1cmUtYm9vdF9tYW5hZ2luZy1tb25pdG9yaW5n
+LWFuZC11cGRhdGluZy10aGUta2VybmVsI3NpZ25pbmcta2VybmVsLW1vZHVsZXMtd2l0aC10aGUt
+cHJpdmF0ZS1rZXlfc2lnbmluZy1hLWtlcm5lbC1hbmQtbW9kdWxlcy1mb3Itc2VjdXJlLWJvb3QK
+Ck1pY2hhZWwKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
