@@ -4,111 +4,121 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6D71C3DA66
-	for <lttng-dev@archiver.kernel.org>; Wed, 23 Aug 2023 17:30:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79BF6C3DA66
+	for <lttng-dev@archiver.kernel.org>; Wed, 23 Aug 2023 19:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1692811803;
-	bh=RuFDtfLPklklBjMDPQgWY1GRmtVnB/s9UOES4etAAmU=;
-	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1692818530;
+	bh=9bex1rr/ndqQZ0/66FfT/XMZK6aUID1ed9Fwl3x1pk4=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=ARNyzNyeSt8hJXFD7yQ0atk5m7KKB39ciCt0VhiQ/spTNT1gc3K/zq0D4Y4u0VYZq
-	 DiuDpPb5p+lqLzb7zc3HIRUicZEdWIR01HsEGlaO34AGWTa4wpvNydwlpmTS2iz/QV
-	 JdqiUcuKvHrU6y0ThbVmNuImrHJ2HNNkYnnep3MB+37+WTHjrP5zqt9qU4WcGiUCur
-	 Xrq6QOWU49U3RtknLza+TWdISSSgnfPUVB4Jku9NQnpx31Ioi8m3LCSLgJWVC8hXoF
-	 1KJ6PHCGQP+jD/SBqLP4j73WeOuwiWWgZ2TyOgXIESrZsfTLRSLWDhTccUGiUjKdlp
-	 mHtvb5ulBIw5g==
+	b=LwnDmRgY1Sc8pTyiIHdJd2PQ53VdSUg1ms43PtFEHqdBuyvtcLw6vFnOW8FlTV+5Z
+	 ii0Ssf9+l5XzubivZzNRN74JOEm/onYqKFNIDSsEqWRVtWb81SjQfe3is1ybNtzkHu
+	 ZpSTZfA3gV86it9lRi6lAtikjRVJj6p4L+xWzpXluI62OFNZcaTwGFG/tnzHzLQYHo
+	 kk3hCXesDaelK7M2rlbXGHr0TDuU5bfmM15o6Rr89zYonUSZo7DOQ5CL2VFT0c+rFx
+	 G2em2eTzkMK6jqbg3PNmSrGJ/9ElBdmOUdxd/l4SfXBYYfuZcDzF7RNetqEyDCYcSq
+	 yp+hrGQVvrr4A==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4RWCs65Gk8z2QBK;
-	Wed, 23 Aug 2023 13:30:02 -0400 (EDT)
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam04on2067.outbound.protection.outlook.com [40.107.101.67])
- by lists.lttng.org (Postfix) with ESMTPS id 4RWCs4457dz2Q31
- for <lttng-dev@lists.lttng.org>; Wed, 23 Aug 2023 13:30:00 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4RWGLT4N1Tz2QGp;
+	Wed, 23 Aug 2023 15:22:09 -0400 (EDT)
+Received: from CAN01-YT3-obe.outbound.protection.outlook.com
+ (mail-yt3can01on2088.outbound.protection.outlook.com [40.107.115.88])
+ by lists.lttng.org (Postfix) with ESMTPS id 4RWGLS63lBz2QGm
+ for <lttng-dev@lists.lttng.org>; Wed, 23 Aug 2023 15:22:08 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UPjRsIjHJtWkL8o1P9MTqd9cWNyMOGUq17oLu4ScN68SrvlQxZJJgAC4VmPo6A47Srn1Bckr67bXMV33XD3tq+mlKFFBYrw6QM+IQCn6gs8tIWrW9dczTeto9gwJUm0tr+HsUEXjjDJJSlWf7o+LR3qwGXwwfUTcnwV3MOwth0veZM/VA0oyMUcFqS+YmPAoiRZyig5UMkXx0B8JLl4fZ5OPZjRK3ypFAeL8bIo51jPpZvHwsx4thF9YyuMKDWGWf5BXmYIMYLT/kI4tWJUJ5wE0mBGMFTZLsniT853yRkbmILm3N1OlkoBikDBJ+dha3bcNO+TZ/zaYPY63BFWf6A==
+ b=ChgTH/uJ28L6ocnutvkrfePiOXBLIQFuE7/LOm/aVRBVeimDaPczqdjWD3TtOLy86/yIEGDUSDOEKyIOVWIE4PCA8lakBctQJxDyVZMwsPuXH+a19d2+vBLAvxTs6lAp6qkxTOeouwYD32DATnJ88zauSnTGbAWMgDBI2jx7gBGoBcDSKWZjuhiF/Hr/yVCR2/Hv9Dx5NpVZ/TDnvpnCLLLuKqOa9twC/Zk45ATejshyDBd9FHlfFpwqx0ImSRBdJYZe13n9bNmOETU5Xom7S8ijUGxK4B/JOEuML2t25Q7mce462eI9NoGoGcfaS3E8CqMUUkRRSNU0QErQXZqeBQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cE2qsF4qNhXuU4wGoYG1rNLfkQqX/jdkc9ZdQGr56ZU=;
- b=SGfRagmAjQGgvICqR9+ZIXlejxmlGfYGQ0X1Gvwm6G7xW/Ar/716uiOR8qccEqPjkxLmicorad/WFZ6ZUuhGMAkngD8JYgvqRMe+HIbmiEBvRRcrvWNgMCHh+ihy2QzQ/LFWHzuogdrRjz+zFUm9uk0sR62nK6Y7gKhtB1f5Ya1nm0lei4cK5aOZWi7lhnzpG/btgLDMrGQz+ZMBIepYW9ZPmJe1QykeP4QsOYQY1RsIFVhTPtPZ+7g7v9ShredgWxK/UdNKJL3u5dIEkGrNBGuq4C6yRkRpjQ0/2yh0TgZn2+1BaIpaQ53YhXurgCeXKdKb9/bruJ3uBBQo9tGhLg==
+ bh=4ghturgme78dm5QIGcV2ipe75OWg8GQGQFc8tjBmIJs=;
+ b=Mgi8FbQ/bBb9hLEHjRR+OzEUiSu00je1mN/26TBMVBrWCKJneACqiPrytW/SswVKNWiTFa0/bgsrDDoYAjtV6YKVB7tUFUeyCxn8eLQwNfzuFzL1XwiKfq5nEsrBbNpenp05np07RdBVbUou/oZu679k5M/uX8qcQ5Tg4v+yehcfpAFSPmVHEePBiNC8KYbj23Rq2KFEE3mzH3Mrvl1sMbsfOz05L0oxNEBIvGJrT6sYpd+5FgGHw2ghPeKWNO5+4wCrZ5iVC4IQcsvHfsBAjwoiJGxy5DP5u4Ijv+QtWK8reHB8kkuekzrq+VOofqTWlw0NCA6FzI6wUyZgSyQdqQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ericsson.com; dmarc=pass action=none header.from=ericsson.com;
- dkim=pass header.d=ericsson.com; arc=none
-Received: from SA1PR15MB4401.namprd15.prod.outlook.com (2603:10b6:806:190::14)
- by PH0PR15MB5640.namprd15.prod.outlook.com (2603:10b6:510:28b::15)
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT4PR01MB9879.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e3::15)
+ by YT2PR01MB8552.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:b7::21)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.24; Wed, 23 Aug
- 2023 17:14:04 +0000
-Received: from SA1PR15MB4401.namprd15.prod.outlook.com
- ([fe80::cab:bf70:e554:8635]) by SA1PR15MB4401.namprd15.prod.outlook.com
- ([fe80::cab:bf70:e554:8635%7]) with mapi id 15.20.6699.026; Wed, 23 Aug 2023
- 17:14:04 +0000
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Bala Gundeboina
- <Bala.Gundeboina@kpit.com>, Matthew Khouzam <matthew.khouzam@ericsson.com>
-Thread-Topic: userspace logs cpu analysis and LTTng UST Callstack
-Thread-Index: AQHZ1R5JzcAa3ZMnsEaTPMWl5xdKpK/4AHkagAAfR8A=
-Date: Wed, 23 Aug 2023 17:14:04 +0000
-Message-ID: <SA1PR15MB4401C1D660802D563A5507609E1CA@SA1PR15MB4401.namprd15.prod.outlook.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.27; Wed, 23 Aug
+ 2023 19:22:07 +0000
+Received: from YT4PR01MB9879.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::3d63:1c62:5a0:6e31]) by YT4PR01MB9879.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::3d63:1c62:5a0:6e31%7]) with mapi id 15.20.6699.026; Wed, 23 Aug 2023
+ 19:22:07 +0000
+Message-ID: <8aa611b9-4920-d935-d03c-82f103d8bc4a@efficios.com>
+Date: Wed, 23 Aug 2023 15:22:05 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Content-Language: en-US
+To: Matthew Khouzam <matthew.khouzam@ericsson.com>,
+ "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>,
+ Bala Gundeboina <Bala.Gundeboina@kpit.com>
 References: <MA0PR01MB698794918256CD8FAFAF0005851FA@MA0PR01MB6987.INDPRD01.PROD.OUTLOOK.COM>
  <SA1PR15MB440196EFB7CC4F7B1081211F9E1CA@SA1PR15MB4401.namprd15.prod.outlook.com>
-In-Reply-To: <SA1PR15MB440196EFB7CC4F7B1081211F9E1CA@SA1PR15MB4401.namprd15.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR15MB4401:EE_|PH0PR15MB5640:EE_
-x-ms-office365-filtering-correlation-id: d4def6b4-1b41-45d6-b334-08dba3fc5a6d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NtuSXy1yTCWhqwaLFXqtAsgcC+5AWSEK1eByVqoFhdBF/XB0GsGwNcTgmFhYRmdByEPSk3QLygrmB1QMSvey5PLdhJ1Qzl/pqyG6+VwJZmCuyao6UWLoUpVAAeOt51br3R1qu5LHObBOaGJPtvq1O9SDB8c8vdU0LvHfDKS25taTyRP+JVQvcGzx/BUH0Kfp8ZO/aB9LnLu1u9B40+wKBIZoHLnnpilHh8LGWvfTrVRU8BaErNAWqSHXt7v3SRWmoLBmERD7+seRQt7gOBh5zsSghzbwC6o9u5hOHih7XxpLEwA+0jaUTntrMRdUC+bTbBlPC9gUqVorJHgbL5JNMrjQyvjlbA2zhrx+isdnFzzE5I3TJsJ3zvIoisDdrwc5nr3B39PG6tKNoW1mTAJ12pha+eapHt0mnHB9WkwVpUJ05ypO/BJK8BfIw9AFXpQ60dPattPSJ7F+F3l7aK39MAgrK2618rNhWxP9H/yOnxKLxJHN8M4yBa7DAboFBJGqmrOFGqBRDQCeEiAGJ08/gc1464/+f/FCfKQ1ZNdn0zS44xmVrEAhBKHPV8Ek6WuZMoJZd0V07kbsosIGB0fDIB2vQiiQohIGbaOM8TEubXQlJJ8EZ2jMC3/2rANrnmzJc7HPwTdRXHZ5Sy8FLwCFwQ==
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SA1PR15MB4401.namprd15.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(39860400002)(366004)(346002)(136003)(396003)(376002)(1690799017)(451199024)(186009)(1800799009)(15974865002)(2906002)(66574015)(38070700005)(38100700002)(6506007)(53546011)(83380400001)(5660300002)(44832011)(26005)(33656002)(52536014)(166002)(19627405001)(86362001)(7696005)(8676002)(8936002)(966005)(66556008)(316002)(66946007)(64756008)(9686003)(76116006)(66446008)(2940100002)(66476007)(110136005)(91956017)(66899024)(82960400001)(478600001)(55016003)(122000001)(71200400001)(41300700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?30ZGGE06tXVbrdEc0e0bn/n3Wo8iekTKEEVFBIb2jKOzF7/cDYHnedmd+6Of?=
- =?us-ascii?Q?h11KcSCvwwUigBI4wbgsFfMJe2ALoTjRE8ifNt1JtBisGfwtMffdX5Bg18KD?=
- =?us-ascii?Q?foQHx+VMgAOpeacsFfpEQAXwf443yo2ZdP8pm+S8ikxsek6J3PCbkrc18BTa?=
- =?us-ascii?Q?fDDYAPUpL2CAVsg67E5beeGEhcoicWP5/Z7MPCtU9ah+IzNbV3hUjRT3NmvJ?=
- =?us-ascii?Q?R9077L0Myshw3aGa/Oq6G0JzA5NDcTj6AMB4VfGq2Wwk2XOHNIdHc6oRTafL?=
- =?us-ascii?Q?Hqcwjdt0qQEal7QK9vG0GdTI7RqDc1/yee1Xe5pblYgT2tZw2K+Lp683w6nv?=
- =?us-ascii?Q?O6+6VdRMmaxjumrB6WKJcqnfr1c4Nz6zkZmhNfvePpiLhkW1Qw1KY5vtdn81?=
- =?us-ascii?Q?EZHh0VALx/5Pgb1M/sL71wTnL+6xcqKwRvUEODwVWhMngb3lXlm0ZHCaDDFO?=
- =?us-ascii?Q?2UAz2utmD+0eg622YWuq+l+8OfTUIOJ1827Vtr0fQL5pnE4H0xpzsjVCbnRX?=
- =?us-ascii?Q?wbeBE86KEFF3hqaEbCobh+9rr7npMZRWXO9uXP8Nnok4HdJxKJ1AJf+CkyL+?=
- =?us-ascii?Q?cMcpYxBVw6Dg6vBnQZ1oCLCtB1U1df66EtsQKvT9qF7NM9JVM8iUihTNWHGL?=
- =?us-ascii?Q?ABsG6Gg/Jii1w64Xjn6774jkwMiqybfgNq3BDTLFDScVaTffpY3X1zcDrGWQ?=
- =?us-ascii?Q?YPL/ZHBhxCdk5UZPhmHErzlN8GBpbT/TnkiZxJvFQwdn4kkmcJY+OIp+1e8m?=
- =?us-ascii?Q?k4dfyrpyNxR1U8MPWwL5NmZOGFE564/VBYwyjmq94D2XXC0yEu+pzhaJjpOb?=
- =?us-ascii?Q?9iB/LsVR0RoIH1oJmQz+8wrEFx68T/87rW7KMMph/H+pAU9wuvrRwsnmn5BW?=
- =?us-ascii?Q?4C1E+M7NIscNHScq4/ZMNYCOTi6+BKWp+GMiVnZtGUEEPSIG8P1mpjDuePCu?=
- =?us-ascii?Q?FiEjVjO2XkAHYr7p+GJHQKm3GtHo9hBfncAfliJE6+b+2GibJqlPPKPfME1F?=
- =?us-ascii?Q?WB1JNlpGjwdlWdYrW24+MxXmzKtgFh91j9B/00pkD+VKu/L4XtaqNsFxD+pT?=
- =?us-ascii?Q?fhiC70nqMoF+rIgrUo0VpV/MmUyfnNX49Uq6wdtPAtm4lhDw+st/cHnCof5e?=
- =?us-ascii?Q?II49WVJQ0ggrXLR82Kc+pb+6Fwu0t9iHUKjRdh9qoCjTZOkl5ZtNy9V8vXRn?=
- =?us-ascii?Q?Bc0blWKW5fGz6sHTvVksA0srQPtoj8IGe0hEcM+yqWu2sHdOh1t41J3s428F?=
- =?us-ascii?Q?EWq7HNFj3tpQfIAVtq7l+AfPJWcARZ8X8TznnqZfde6Z7l6h/e5K5kVCz4sY?=
- =?us-ascii?Q?/oGb/mYzP3zqYS8no2mQDxg3RYd3ZK/Hy/Qmj5hZSLw9hcwDDj4DdT/ivdvJ?=
- =?us-ascii?Q?5AJPu3LeX5uX36hk03ebBRbWXkmH1Cb0UJ/rLpNS+kf6WHpsTI2ngppqsjB1?=
- =?us-ascii?Q?shsWkKvVouQU/iQrCR4+WVuPAW/P20XsRqM6m8TnOEI9Oz0b8fc/0XOwYcHJ?=
- =?us-ascii?Q?WtunqcYXdr9R9gNQ2g9z44fAKZoldnDLZuj+Hp0gGmZY8lcjCZsJRBwf5CrA?=
- =?us-ascii?Q?lBNKQennP8HIijILMLAt151kzBPrWt1/zeLWLihy8LTDynTxSesnHqskQ7fY?=
- =?us-ascii?Q?XQ=3D=3D?=
+ <SA1PR15MB4401C1D660802D563A5507609E1CA@SA1PR15MB4401.namprd15.prod.outlook.com>
+In-Reply-To: <SA1PR15MB4401C1D660802D563A5507609E1CA@SA1PR15MB4401.namprd15.prod.outlook.com>
+X-ClientProxiedBy: YQZPR01CA0063.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:88::17) To YT4PR01MB9879.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:e3::15)
 MIME-Version: 1.0
-X-OriginatorOrg: ericsson.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT4PR01MB9879:EE_|YT2PR01MB8552:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0f155a6c-a09c-49f4-8201-08dba40e3d17
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zam7dPpGtNwI3/wY0QOxXQrY7aEiDqZdAG9NqXzBQM3V9dzfZvIOcOBuDA+wxjGsl3h1j7L6MNO5QrbJ9MKq/g/+23F/7n4H+AUtTdP4N4fXjzNkPGFJJ6Du+rDPU5gV9ydGw7Gm2OMg2meoRySjSyOZo7UMoX/PiFgV+ZfgtA/fcwjT4Y6p17pjpDacuZY1Nc3OOKtr8n3jsSrRkdf7DIWk1D08lIgWQ9Ll+kBshuN8+NE9vniOKVw8CRZDS17KWA87yHZX/mujB/GtrigCF9ty6dxXo8hxKel4MclLpSfc/isE/kqHktPaObNTOrXLyvBzRd2YqktHdIZFh0KOmgvGR1gv0KmNKo4F0OezDrz4NPrvH86NE6ZWyiiMagiO23/FaUX8PQb9Jii9BVPBn7Ez4eSjQU45zySEb0G3NISzqb8ZXe3vYVfvqeCAHcZWHbm1xldFilPi8HzN8A+ucp3Ue6vMd6uZ9gtYg2+cAQElUUMWGGVqBBnDPG2Qv62NWTrSLeLz1C4IHaHmkJC2HxsQyAZtnihsFqJaD+s0CfCzj/C/OMxpOQ8eIpGl0N2/vJ+fDxc+sZgdTfLXKf0c2ScLPo3dyIWnA7DQdtwWCR2bt2bRssZQxthXR5db9rIIxbEysgn4baf4V3wGzjDhVA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT4PR01MB9879.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(376002)(366004)(396003)(136003)(39830400003)(346002)(186009)(451199024)(1800799009)(2616005)(6506007)(6486002)(316002)(53546011)(8676002)(8936002)(110136005)(66556008)(66946007)(66476007)(6512007)(41300700001)(966005)(26005)(5660300002)(478600001)(31686004)(83380400001)(66574015)(36756003)(31696002)(86362001)(2906002)(38100700002)(45980500001)(43740500002);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a1BmTmZ4UUtjOHdVaHNQb3I5RVU2V1Z2bUpnUWd0U2NCd0JVVlpKZkZZN1FG?=
+ =?utf-8?B?UEJPVmRTaG9FUk02YktudXZzVmo0OU01allWMUdHQSs3Q1BqL2hFaVFxRkNC?=
+ =?utf-8?B?enQzdW9Pa2g1NnVGZnVZM1NUcS9iMkpSbkxWTGV6S0NTV2t6VkhWNk1pMTNP?=
+ =?utf-8?B?RGFFSHRqazdQK1hCSWF4ZmNVaS90V0t1cjZJR3FFNm15blVsKzl1QzZ5cXBu?=
+ =?utf-8?B?dEtJZEczMGNKODdPTTRZQ250b3FCZFovOHdkMGwzWks5S0NGUkJxMzJpcUN2?=
+ =?utf-8?B?bmVENjMvTGV5bmFsVUdzd1JCYWZoRVdrT2VhTkdlSTNqYWZTWlJRVEV6TDdU?=
+ =?utf-8?B?K1pBRDZxTlBER2Rmdm5vM2JvQkdqRENXRFdNdTl3Qkwra2pGSVFKTzlFcXdY?=
+ =?utf-8?B?WXJjSGtUdUoyTkhpR0NwMzhsbGlQR05vVzFyVkNPY3FKS3JlWng1Q0dvVUVu?=
+ =?utf-8?B?YThDN2VTU2ZJcXBJaG9FMGRvcUVmbDEySUlxVHo1UkVWZlhYdnhiQThvellF?=
+ =?utf-8?B?RFE1bkZ6citabEJnN1A5Y2pUM2pFYjdHQW5vWEFBMjZsWDh5UWpWblNUMVhK?=
+ =?utf-8?B?TGlRaEVaQ1Z2T2NJR2dmMnQ5LzdpVVhTNFVuQ0ltczZNVFNYcnZXMWdYeXdP?=
+ =?utf-8?B?N0ZJbXNxUTdRbEJBRFR4ZVNPWEpoR0xUV2srRGlyV0p4S3FFbkNuUFpFcnZx?=
+ =?utf-8?B?eE15Y0pqaExDVURnTTFjeGgvd3JGWUtxN0VPYnd1ZkJaS3lkL2hqL2NWNjQ4?=
+ =?utf-8?B?bHhPSXFwd2YwRTBmNi9IVFlmRUZwMi90RXNrZWZ3dTkyWDhBelp6YWkxYm9R?=
+ =?utf-8?B?dkVmTmwwZndwNW1DSWFHM2ZXNDhFajR4aVlpRi9DaFFiaTExcWd0OC9XVXo4?=
+ =?utf-8?B?VlJrM20vL3Q1TzROYzRxdVNNejJQRFVqNWR3U3N0UmJBWjhGOGRnU1NpUGxj?=
+ =?utf-8?B?MzlhQzdieG9IZGFTcmF6UkZvQllkeFMza2tLajJhZW14OEdmNFNWbXBNUVRJ?=
+ =?utf-8?B?TXhkRzZCcjdNQVBycGtaQ0xuWVIvVTdwb1JpTGpXNUNOVkJZRGpQd01IYUpE?=
+ =?utf-8?B?UTVCem5aS1J4a0RqNkZMcmo1ZDZTQmloblQ5b2NoTStFZExEa2ZBYVNzM3NR?=
+ =?utf-8?B?YVdyVDFoL2l1dmlQM2o1VllLU1BDdno3endaZVJUK1VOMy9DRDJWMjF1N2ta?=
+ =?utf-8?B?MnlGZE9IUXd4TUx4ZE1rZGFJcjZtSnBXSk1RTEVaNG91UkhpM1d3NndvejFL?=
+ =?utf-8?B?Y1FaNFk1RnlwYkJtRTFaOUZqZ3N5L21KMWdMTUJrY2xzSmFqMTgrQ3poZ0FO?=
+ =?utf-8?B?TjlUYy9RTi9NR2NTblE1WnRPbGtZb0M0ak53UkdEbThkRGhRK3BRWFcxVXdC?=
+ =?utf-8?B?ZlEvcDEzR0R1cFgwZDYrQTdXZU1hSzBGYzU2dXl6di82Y1MrQ2VUV1gwd095?=
+ =?utf-8?B?T3VKZzNFbmduV29JMVprUUwzUWlFUTRCaytPZzJPNWhENlhDc2F5SkZtalJY?=
+ =?utf-8?B?K0RPMnRDM0xvSmhKeDVFMmhSaGl6M1JuL01VTHJCclIwUGp0RXIvZEpWcjA4?=
+ =?utf-8?B?aTNxU3NqVlpEa3M0cnRRL2RjV1d5emRobVpROTRuUUhHdXRZNXRnSXpjRXhH?=
+ =?utf-8?B?a0psbWxscm9mYnkyWlI3QWdxNHo2Q0YyUTFISXZFOVo5andsYlZHUGpQam15?=
+ =?utf-8?B?WkUzMjdmVXdZRisrZ3NodnN4VDlNMEVkaDJlNWlOVHFMYWNIelMyR1NuT0ll?=
+ =?utf-8?B?andNcDhmMEo4WXFWZTJFKy9EWmhFbVlYOUVyRGxISm1QcjByV1R2SllYZWFF?=
+ =?utf-8?B?c0VnWEpLZXpKYndHMXZta1MxZ1F2ck4ycGZYMHFyMU4yRlp0VjNmSVJUYkFX?=
+ =?utf-8?B?NTMwSEptWjR1Zmphb3Y4c253OG5LOThmMEYxQUZrVUpleE5tV1hFMWJjQ016?=
+ =?utf-8?B?UnR0Q3cwT0dURDhxZzZ3SVhOM3RnNnNoWHlTbGxLb2FPTURuUHRmL2VkUEVz?=
+ =?utf-8?B?ZGlVNTUwK0lPV2ZSQTU5Vkt0N0R1QWpBVVV2bEFiRnVwR3ZjVkx2N1lTMEg5?=
+ =?utf-8?B?VHRqdWw2MlhwUktmTVc4eWd5azc5b3pkYlhhRU10T0xwRUxpNjFQVGFuTjg5?=
+ =?utf-8?B?K3AxRlltVnhvME50UEFva1BhUnJwa3FGeVE1aldTOVpOYWplRnNGZmpQZ0h3?=
+ =?utf-8?B?ZFE9PQ==?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f155a6c-a09c-49f4-8201-08dba40e3d17
+X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB9879.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB4401.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4def6b4-1b41-45d6-b334-08dba3fc5a6d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2023 17:14:04.7218 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 92e84ceb-fbfd-47ab-be52-080c6b87953f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5NIlZuJeCOY1fEsOjJODWwMf+20YuQElH8G9g+KO+jKEeiKvszq2yzYotyvFXOvZ98XUgzml1kbPVFLgbEEew9Ex+i8ty2D0jfy+/YSWoJk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB5640
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2023 19:22:06.9578 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Oi51XVaV31CG6p4WawUSCyLxS1fUT7afiILjwT1ZfBz4dc01SsuuGgIoHNKbJsb9zK5eHGXg9BFdTsJXQv+ALA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB8552
 Subject: Re: [lttng-dev] userspace logs cpu analysis and LTTng UST Callstack
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -121,270 +131,108 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Matthew Khouzam via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Content-Type: multipart/mixed; boundary="===============2398706334235294094=="
+From: Erica Bugden via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Erica Bugden <ebugden@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============2398706334235294094==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_SA1PR15MB4401C1D660802D563A5507609E1CASA1PR15MB4401namp_"
-
---_000_SA1PR15MB4401C1D660802D563A5507609E1CASA1PR15MB4401namp_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Here is a youtube video showing how userspace and kernel traces can play ni=
-cely together.
-
-https://www.youtube.com/watch?v=3DK1JNQ-HkC6w
-[https://www.bing.com/th?id=3DOVP.Gn3WzoDhqlLuUCSgJ3asFQHgFo&pid=3DApi]<htt=
-ps://www.youtube.com/watch?v=3DK1JNQ-HkC6w>
-Eclipse Trace Compass: What's the deal with Experiments?<https://www.youtub=
-e.com/watch?v=3DK1JNQ-HkC6w>
-Since the beginning of Eclipse Trace Compass, and even before, people wonde=
-red 'what is an experiment?' This video is a helper on that front. Experime=
-nts are a collection of traces that have similarities and thus can have enh=
-anced analyses as their information paints a full picture. Some examples of=
- where experiments shine: * Resources Views ...
-www.youtube.com
-
-________________________________
-From: lttng-dev <lttng-dev-bounces@lists.lttng.org> on behalf of Matthew Kh=
-ouzam via lttng-dev <lttng-dev@lists.lttng.org>
-Sent: Wednesday, August 23, 2023 11:28 AM
-To: lttng-dev@lists.lttng.org <lttng-dev@lists.lttng.org>; Bala Gundeboina =
-<Bala.Gundeboina@kpit.com>
-Subject: Re: [lttng-dev] userspace logs cpu analysis and LTTng UST Callstac=
-k
-
-I believe Percepio Tracealyzer is a fine commercial product, I have spoken =
-to the CEO, he seems like a great guy. I cannot speak for his work, however=
-, with eclipse trace compass, I want to make sure you know, with an experie=
-ment you can mix userspace and kernel traces. Then the userspace events com=
-plement the kernel views.
-________________________________
-From: lttng-dev <lttng-dev-bounces@lists.lttng.org> on behalf of Bala Gunde=
-boina via lttng-dev <lttng-dev@lists.lttng.org>
-Sent: Wednesday, August 23, 2023 2:17 AM
-To: lttng-dev@lists.lttng.org <lttng-dev@lists.lttng.org>
-Subject: [lttng-dev] userspace logs cpu analysis and LTTng UST Callstack
-
-Hi all,
-            I have capturing kernel and userspace trace logs with LTTng but=
- kernel logs will give more useful information but userspace logs is not gi=
-ving more useful information compared to kernel trace logs, how to get the =
-more data from userspace trace logs. PFA of userspace and kernel screenshot=
-s if you observe the kernel screenshot we will get per core cpu usage, thre=
-ad analysis and more .
-
-i am not able to load userspace trace logs in tracealyzer ,is tracealyzer i=
-s not supported the userspace logs ? , is there anyway we can make enable i=
-t ? kindly please me to sort out of this problem.
-
-Thanks
-Bala Gundeboina
-This message contains information that may be privileged or confidential an=
-d is the property of the KPIT Technologies Ltd. It is intended only for the=
- person to whom it is addressed. If you are not the intended recipient, you=
- are not authorized to read, print, retain copy, disseminate, distribute, o=
-r use this message or any part thereof. If you receive this message in erro=
-r, please notify the sender immediately and delete all copies of this messa=
-ge. KPIT Technologies Ltd. does not accept any liability for virus infected=
- mails.
-
---_000_SA1PR15MB4401C1D660802D563A5507609E1CASA1PR15MB4401namp_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);" clas=
-s=3D"elementToProof">
-Here is a youtube video showing how userspace and kernel traces can play ni=
-cely together.</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);" clas=
-s=3D"elementToProof">
-<br>
-</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);" clas=
-s=3D"elementToProof ContentPasted0">
-<a href=3D"https://www.youtube.com/watch?v=3DK1JNQ-HkC6w" id=3D"LPlnkOWALin=
-kPreview">https://www.youtube.com/watch?v=3DK1JNQ-HkC6w</a><br>
-</div>
-<div class=3D"_Entity _EType_OWALinkPreview _EId_OWALinkPreview _EReadonly_=
-1">
-<div id=3D"LPBorder_BVTaHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g:dj1LMUpOUS1I=
-a0M2dw.." class=3D"LPBorder130725" style=3D"width: 100%; margin-top: 16px; =
-margin-bottom: 16px; position: relative; max-width: 800px; min-width: 424px=
-;">
-<table id=3D"LPContainer130725" role=3D"presentation" style=3D"padding: 12p=
-x 36px 12px 12px; width: 100%; border-width: 1px; border-style: solid; bord=
-er-color: rgb(200, 200, 200); border-radius: 2px;">
-<tbody>
-<tr valign=3D"top" style=3D"border-spacing: 0px;">
-<td>
-<div id=3D"LPImageContainer130725" style=3D"position: relative; margin-righ=
-t: 12px; height: 180px; overflow: hidden; width: 240px;">
-<a target=3D"_blank" id=3D"LPImageAnchor130725" href=3D"https://www.youtube=
-.com/watch?v=3DK1JNQ-HkC6w"><img id=3D"LPThumbnailImageId130725" alt=3D"" s=
-tyle=3D"display: block;" height=3D"180" width=3D"240" src=3D"https://www.bi=
-ng.com/th?id=3DOVP.Gn3WzoDhqlLuUCSgJ3asFQHgFo&amp;pid=3DApi"></a></div>
-</td>
-<td style=3D"width: 100%;">
-<div id=3D"LPTitle130725" style=3D"font-size: 21px; font-weight: 300; margi=
-n-right: 8px; font-family: &quot;wf_segoe-ui_light&quot;, &quot;Segoe UI Li=
-ght&quot;, &quot;Segoe WP Light&quot;, &quot;Segoe UI&quot;, &quot;Segoe WP=
-&quot;, Tahoma, Arial, sans-serif; margin-bottom: 12px;">
-<a target=3D"_blank" id=3D"LPUrlAnchor130725" href=3D"https://www.youtube.c=
-om/watch?v=3DK1JNQ-HkC6w" style=3D"text-decoration: none;">Eclipse Trace Co=
-mpass: What's the deal with Experiments?</a></div>
-<div id=3D"LPDescription130725" style=3D"font-size: 14px; max-height: 100px=
-; font-family: &quot;wf_segoe-ui_normal&quot;, &quot;Segoe UI&quot;, &quot;=
-Segoe WP&quot;, Tahoma, Arial, sans-serif; margin-bottom: 12px; margin-righ=
-t: 8px; overflow: hidden; color: rgb(102, 102, 102);">
-Since the beginning of Eclipse Trace Compass, and even before, people wonde=
-red 'what is an experiment?' This video is a helper on that front. Experime=
-nts are a collection of traces that have similarities and thus can have enh=
-anced analyses as their information
- paints a full picture. Some examples of where experiments shine: * Resourc=
-es Views ...</div>
-<div id=3D"LPMetadata130725" style=3D"font-size: 14px; font-weight: 400; fo=
-nt-family: &quot;wf_segoe-ui_normal&quot;, &quot;Segoe UI&quot;, &quot;Sego=
-e WP&quot;, Tahoma, Arial, sans-serif; color: rgb(166, 166, 166);">
-www.youtube.com</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
-Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div id=3D"appendonsend"></div>
-<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
-yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> lttng-dev &lt;lttng-d=
-ev-bounces@lists.lttng.org&gt; on behalf of Matthew Khouzam via lttng-dev &=
-lt;lttng-dev@lists.lttng.org&gt;<br>
-<b>Sent:</b> Wednesday, August 23, 2023 11:28 AM<br>
-<b>To:</b> lttng-dev@lists.lttng.org &lt;lttng-dev@lists.lttng.org&gt;; Bal=
-a Gundeboina &lt;Bala.Gundeboina@kpit.com&gt;<br>
-<b>Subject:</b> Re: [lttng-dev] userspace logs cpu analysis and LTTng UST C=
-allstack</font>
-<div>&nbsp;</div>
-</div>
-<style type=3D"text/css" style=3D"display:none">
-<!--
-p
-	{margin-top:0;
-	margin-bottom:0}
--->
-</style>
-<div dir=3D"ltr">
-<div class=3D"x_elementToProof" style=3D"font-family:Aptos,Aptos_EmbeddedFo=
-nt,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; color:=
-rgb(0,0,0)">
-I believe Percepio Tracealyzer is a fine commercial product, I have spoken =
-to the CEO, he seems like a great guy. I cannot speak for his work, however=
-, with eclipse trace compass, I want to make sure you know, with an experie=
-ment you can mix userspace and kernel
- traces. Then the userspace events complement the kernel views.<br>
-</div>
-<div id=3D"x_appendonsend"></div>
-<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
-<div id=3D"x_divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" =
-color=3D"#000000" style=3D"font-size:11pt"><b>From:</b> lttng-dev &lt;lttng=
--dev-bounces@lists.lttng.org&gt; on behalf of Bala Gundeboina via lttng-dev=
- &lt;lttng-dev@lists.lttng.org&gt;<br>
-<b>Sent:</b> Wednesday, August 23, 2023 2:17 AM<br>
-<b>To:</b> lttng-dev@lists.lttng.org &lt;lttng-dev@lists.lttng.org&gt;<br>
-<b>Subject:</b> [lttng-dev] userspace logs cpu analysis and LTTng UST Calls=
-tack</font>
-<div>&nbsp;</div>
-</div>
-<style type=3D"text/css" style=3D"display:none">
-<!--
-p
-	{margin-top:0;
-	margin-bottom:0}
--->
-</style>
-<div dir=3D"ltr">
-<div class=3D"x_x_elementToProof" style=3D"font-family:Aptos,Aptos_Embedded=
-Font,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; colo=
-r:rgb(0,0,0)">
-Hi all,</div>
-<div class=3D"x_x_elementToProof" style=3D"font-family:Aptos,Aptos_Embedded=
-Font,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; colo=
-r:rgb(0,0,0)">
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; I have capturing kernel and users=
-pace trace logs with LTTng but kernel logs will give more useful informatio=
-n but userspace logs is not giving more useful information compared to kern=
-el trace logs, how to get the more data from userspace trace logs.
- PFA of userspace and kernel screenshots if you observe the kernel screensh=
-ot we will get per core cpu usage, thread analysis and more .</div>
-<div class=3D"x_x_elementToProof" style=3D"font-family:Aptos,Aptos_Embedded=
-Font,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; colo=
-r:rgb(0,0,0)">
-<br>
-</div>
-<div class=3D"x_x_elementToProof" style=3D"font-family:Aptos,Aptos_Embedded=
-Font,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; colo=
-r:rgb(0,0,0)">
-i am not able to load userspace trace logs in tracealyzer ,is tracealyzer i=
-s not supported the userspace logs ? , is there anyway we can make enable i=
-t ? kindly please me to sort out of this problem.</div>
-<div class=3D"x_x_elementToProof" style=3D"font-family:Aptos,Aptos_Embedded=
-Font,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; colo=
-r:rgb(0,0,0)">
-<br>
-</div>
-<div class=3D"x_x_elementToProof" style=3D"font-family:Aptos,Aptos_Embedded=
-Font,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; colo=
-r:rgb(0,0,0)">
-Thanks&nbsp;</div>
-<div class=3D"x_x_elementToProof" style=3D"font-family:Aptos,Aptos_Embedded=
-Font,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; colo=
-r:rgb(0,0,0)">
-Bala Gundeboina</div>
-This message contains information that may be privileged or confidential an=
-d is the property of the KPIT Technologies Ltd. It is intended only for the=
- person to whom it is addressed. If you are not the intended recipient, you=
- are not authorized to read, print,
- retain copy, disseminate, distribute, or use this message or any part ther=
-eof. If you receive this message in error, please notify the sender immedia=
-tely and delete all copies of this message. KPIT Technologies Ltd. does not=
- accept any liability for virus
- infected mails. </div>
-</div>
-</body>
-</html>
-
---_000_SA1PR15MB4401C1D660802D563A5507609E1CASA1PR15MB4401namp_--
-
---===============2398706334235294094==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2398706334235294094==--
+Ck9uIDIwMjMtMDgtMjMgMTM6MTQsIE1hdHRoZXcgS2hvdXphbSB2aWEgbHR0bmctZGV2IHdyb3Rl
+Ogo+IEhlcmUgaXMgYSB5b3V0dWJlIHZpZGVvIHNob3dpbmcgaG93IHVzZXJzcGFjZSBhbmQga2Vy
+bmVsIHRyYWNlcyBjYW4gcGxheSAKPiBuaWNlbHkgdG9nZXRoZXIuCj4gCj4gaHR0cHM6Ly93d3cu
+eW91dHViZS5jb20vd2F0Y2g/dj1LMUpOUS1Ia0M2dyAKCj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gKkZy
+b206KiBsdHRuZy1kZXYgPGx0dG5nLWRldi1ib3VuY2VzQGxpc3RzLmx0dG5nLm9yZz4gb24gYmVo
+YWxmIG9mIEJhbGEgCj4gR3VuZGVib2luYSB2aWEgbHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnPgo+ICpTZW50OiogV2VkbmVzZGF5LCBBdWd1c3QgMjMsIDIwMjMgMjoxNyBBTQo+
+ICpUbzoqIGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmc+Cj4gKlN1YmplY3Q6KiBbbHR0bmctZGV2XSB1c2Vyc3BhY2UgbG9ncyBjcHUgYW5hbHlzaXMg
+YW5kIExUVG5nIFVTVCBDYWxsc3RhY2sKPiBIaSBhbGwsCj4gIMKgIMKgIMKgIMKgIMKgIMKgIEkg
+aGF2ZSBjYXB0dXJpbmcga2VybmVsIGFuZCB1c2Vyc3BhY2UgdHJhY2UgbG9ncyB3aXRoIExUVG5n
+IAo+IGJ1dCBrZXJuZWwgbG9ncyB3aWxsIGdpdmUgbW9yZSB1c2VmdWwgaW5mb3JtYXRpb24gYnV0
+IHVzZXJzcGFjZSBsb2dzIGlzIAo+IG5vdCBnaXZpbmcgbW9yZSB1c2VmdWwgaW5mb3JtYXRpb24g
+Y29tcGFyZWQgdG8ga2VybmVsIHRyYWNlIGxvZ3MsIGhvdyB0byAKPiBnZXQgdGhlIG1vcmUgZGF0
+YSBmcm9tIHVzZXJzcGFjZSB0cmFjZSBsb2dzLiBQRkEgb2YgdXNlcnNwYWNlIGFuZCBrZXJuZWwg
+Cj4gc2NyZWVuc2hvdHMgaWYgeW91IG9ic2VydmUgdGhlIGtlcm5lbCBzY3JlZW5zaG90IHdlIHdp
+bGwgZ2V0IHBlciBjb3JlIAo+IGNwdSB1c2FnZSwgdGhyZWFkIGFuYWx5c2lzIGFuZCBtb3JlIC4K
+CkhlbGxvIEJhbGEsCgpJJ20gbm90IHN1cmUgZXhhY3RseSB3aGF0IHlvdSBtZWFuIGJ5LCAidXNl
+cnNwYWNlIGxvZ3MgaXMgbm90IGdpdmluZyAKbW9yZSB1c2VmdWwgaW5mb3JtYXRpb24gY29tcGFy
+ZWQgdG8ga2VybmVsIHRyYWNlIGxvZ3MiLCBidXQgSSB3b3VsZCAKZ3Vlc3MgeW91IG1lYW46IHdo
+ZW4gcmVhZGluZyB0aGUgX3VzZXJzcGFjZSB0cmFjZSBieSBpdHNlbGZfIGluIFRyYWNlIApDb21w
+YXNzLCB0aGVyZSBhcmUgd2F5IGZld2VyIHZpc3VhbGlzYXRpb25zIGF2YWlsYWJsZSBjb21wYXJl
+ZCB0byB3aGVuIAp5b3UgdmlldyB0aGUgX2tlcm5lbCB0cmFjZSBieSBpdHNlbGZfIGluIFRyYWNl
+IENvbXBhc3MuCgpJdCBjYW4gYmUgbm9ybWFsIGZvciBhIGtlcm5hbCB0cmFjZSB0byBwcm92aWRl
+IG11Y2ggbW9yZSBkYXRhIHRoYW4gYSAKdXNlcnNwYWNlIHRyYWNlLiBFYWNoIHZpc3VhbGlzYXRp
+b24gaW4gVHJhY2UgQ29tcGFzcyByZXF1aXJlcyBjZXJ0YWluIApraW5kcyBvZiBkYXRhIChldmVu
+dCB0eXBlcykuIFRoZSBhbW91bnQgb2YgZXZlbnRzIGluIGEgdHJhY2UgaXMgYSAKZnVuY3Rpb24g
+b2YgdGhlIG51bWJlciBvZiB0cmFjZXBvaW50cyAodGhlIG51bWJlciBvZiBpbnN0cnVtZW50ZWQg
+CmxvY2F0aW9ucykgaW4gdGhlIGNvZGUgdGhhdCBhcmUgYXZhaWxhYmxlIGFuZCBlbmFibGVkLiBU
+aGUga2VybmVsIGhhcyBhIAp2ZXJ5IGxhcmdlIG51bWJlciBvZiB0cmFjZXBvaW50cyB0aGF0IGFs
+cmVhZHkgY29tZSB3aXRoIHRoZSBjb2RlLiBPbiB0aGUgCm90aGVyIGhhbmQsIHVzZXJzcGFjZSBh
+cHBsaWNhdGlvbnMgb2Z0ZW4gbmVlZCB0byBoYXZlIHRoZSB0cmFjZXBvaW50cyAKYWRkZWQgbWFu
+dWFsbHkgYnkgdGhlIGZvbGtzIGludGVyZXN0ZWQgaW4gdHJhY2luZyBpdC4gVGhpcyBtZWFucyB0
+aGF0IAp1c2Vyc3BhY2UgdHJhY2VzIGNvdWxkIGhhdmUgZmV3ZXIgZXZlbnRzIChpZiB0aGVyZSBh
+cmUgZmV3ZXIgYXZhaWxhYmxlIAp0cmFjZXBvaW50cykuCgpPbmUgcHVycG9zZSBvZiBhIHVzZXJz
+cGFjZSB0cmFjZSBpcyB0byBwcm92aWRlIGNvbnRleHQgZm9yIGEga2VybmVsIAp0cmFjZS4gVG8g
+Z2V0IHRoZSBtb3N0IGluZm9ybWF0aW9uLCB5b3Ugd291bGQgY2FwdHVyZSBib3RoIGEga2VybmVs
+IGFuZCAKdXNlcnNwYWNlIHRyYWNlIHNpbXVsdGFuZW91c2x5IGFuZCB0aGVuIHZpZXcgdGhlIHRy
+YWNlcyB0b2dldGhlciBhcyBhIApjb21iaW5lZCB0cmFjZSAocmF0aGVyIHRoYXQgdmlld2luZyB0
+aGVtIHNlcGFyYXRlbHkpLiBXaGVuIHZpZXdpbmcgdGhlIAp1c2Vyc3BhY2UgYW5kIGtlcm5lbCBp
+bmZvcm1hdGlvbiB0b2dldGhlciB5b3UgZ2V0IHRoZSB2b2x1bWUgYW5kIApyaWNobmVzcyBvZiBr
+ZXJuZWwgaW5mb3JtYXRpb24gY29tYmluZWQgd2l0aCB0aGUgbW9yZSAiaHVtYW4tcmVhZGFibGUi
+IAphYnN0cmFjdCBpbmZvcm1hdGlvbiBmcm9tIHVzZXJzcGFjZSB0aGF0IG1ha2VzIHRoZSBrZXJu
+ZWwgaW5mb3JtYXRpb24gCmVhc2llciB0byBuYXZpZ2F0ZS4KCkFzIE1hdHRoZXcgbWVudGlvbmVk
+LCB0aGUgdG9vbCBUcmFjZSBDb21wYXNzIGFsbG93cyB5b3UgdG8gb3BlbiB0aGUgCmtlcm5lbCBh
+bmQgdXNlcnNwYWNlIHRyYWNlcyB0b2dldGhlciBhcyBhIGNvbWJpbmVkIHRyYWNlLiBUcmFjZSBD
+b21wYXNzIAp1c2VzIHRoZSB0ZXJtICJFeHBlcmltZW50IiB0byByZWZlciB0byBhIHNldCBvZiB0
+cmFjZXMgdmlld2VkIHRvZ2V0aGVyIApvbiBhIHNpbmdsZSB0aW1lbGluZSwgYnV0IGluIHByYWN0
+aWNlIHRoaXMgaXMgYSBjb21iaW5lZCB0cmFjZS4gVG8gZ2V0IAp0aGUgZnVsbCBhbmFseXRpY2Fs
+IHBvd2VyIG9mIHRoZSBrZXJuZWwgYW5kIHVzZXJzcGFjZSB0cmFjZXMgSSB3b3VsZCAKcmVjb21t
+ZW5kIGNyZWF0aW5nIGEgVHJhY2UgQ29tcGFzcyBFeHBlcmltZW50IHdpdGggdGhlIGtlcm5lbCBh
+bmQgCnVzZXJzcGFjZSB0cmFjZXMuIFRoZSB2aWRlbyBNYXR0aGV3IHNoYXJlZCBnaXZlcyB5b3Ug
+aW5mb3JtYXRpb24gYWJvdXQgCmhvdyB0byBjb21iaW5lIGFuZCB2aWV3IHRoZSB0cmFjZXMgdXNp
+bmcgYW4gRXhwZXJpbWVudCAoc2VlIHJlc291cmNlcyAKc2VjdGlvbiBiZWxvdykuCgpJbiB0aGUg
+cmVzb3VyY2VzIHNlY3Rpb24gYmVsb3csIEkgYWxzbyBpbmNsdWRlZCBhIGxpbmsgdG8gYSBzZXQg
+b2YgCnRyYWNpbmcgYW5hbHlzaXMgZXhhbXBsZXMuIEkgaGF2ZW4ndCBjaGVja2VkLCBidXQgdGhl
+cmUgbWF5IGJlIGFuIApleGFtcGxlIHRoZXJlIHRoYXQgc2hvd3MgaG93IHRvIGNyZWF0ZSBhIGNv
+bWJpbmVkIHRyYWNlIChUcmFjZSBDb21wYXNzIApFeHBlcmltZW50KS4gVGhlIFRyYWNlIENvbXBh
+c3MgdXNlciBpbnRlcmZhY2UgaGFzIGxpa2VseSBjaGFuZ2VkIHNpbmNlIAp0aGUgc2NyZWVuc2hv
+dHMgd2VyZSB0YWtlbiBzbyB5b3UgbWF5IG5vdCBiZSBhYmxlIHRvIGZvbGxvdyB0aGUgZ3VpZGUg
+CndvcmQtZm9yLXdvcmQsIGJ1dCBJIHRoaW5rIGl0IG1heSBzdGlsbCBzZXJ2ZSBhcyBhIHVzZWZ1
+bCByZWZlcmVuY2UuCgpCZXN0IHJlZ2FyZHMsCgpFcmljYQoKLS0tLQoKUkVTT1VSQ0VTCgotIENy
+ZWF0aW5nIGEgY29tYmluZWQga2VybmVsIGFuZCB1c2Vyc3BhY2UgdHJhY2UgdXNpbmcgYSBUcmFj
+ZSBDb21wYXNzIApFeHBlcmltZW50ICh2aWEgTWF0dGhldyBLaG91emFtKToKICBodHRwczovL3d3
+dy55b3V0dWJlLmNvbS93YXRjaD92PUsxSk5RLUhrQzZ3CiAgKEEgbWV0aG9kIG9mIHRyYWNlIEV4
+cGVyaW1lbnQgY3JlYXRpb24gaXMgc2hvd24gc3RhcnRpbmcgYXQgMDo1OCkKCi0gVHJhY2Ugdml6
+IGxhYnM6IEFuYWx5emUgYSBrZXJuZWwgdHJhY2UgaW4gVHJhY2UgQ29tcGFzcwpodHRwczovL2dp
+dGh1Yi5jb20vZG9yc2FsLWxhYi9UcmFjZXZpemxhYi90cmVlL21hc3Rlci9sYWJzLzEwMS1hbmFs
+eXplLXN5c3RlbS10cmFjZS1pbi10cmFjZWNvbXBhc3MgCgoKLSBBbGwgVHJhY2Ugdml6IGxhYnM6
+Cmh0dHBzOi8vZ2l0aHViLmNvbS9kb3JzYWwtbGFiL1RyYWNldml6bGFiL3RyZWUvbWFzdGVyL2xh
+YnMKCj4gCj4gaSBhbSBub3QgYWJsZSB0byBsb2FkIHVzZXJzcGFjZSB0cmFjZSBsb2dzIGluIHRy
+YWNlYWx5emVyICxpcyAKPiB0cmFjZWFseXplciBpcyBub3Qgc3VwcG9ydGVkIHRoZSB1c2Vyc3Bh
+Y2UgbG9ncyA/ICwgaXMgdGhlcmUgYW55d2F5IHdlIAo+IGNhbiBtYWtlIGVuYWJsZSBpdCA/IGtp
+bmRseSBwbGVhc2UgbWUgdG8gc29ydCBvdXQgb2YgdGhpcyBwcm9ibGVtLgoKSSdtIG5vdCBmYW1p
+bGlhciB3aXRoIFRyYWNlYWx5emVyIHNvIEknbSBub3Qgc3VyZSBhYm91dCBpdHMgCmNvbXBhdGli
+aWxpdHkgd2l0aCB0aGVzZSB0cmFjZXMuIEkgd291bGQgc3VnZ2VzdCB5b3UgcmVhY2ggb3V0IHRv
+IHRoZSAKVHJhY2VhbHl6ZXIgZm9sa3MgdG8gYXNrIGFib3V0IGNvbXBhdGliaWxpdHkgd2l0aCB0
+aGVpciB0b29scy4KClRyYWNlYWx5emVyIGlzIGEgcHJvcHJpZXRhcnkgdG9vbCBhbmQgbXkgdW5k
+ZXJzdGFuZGluZyBpcyB0aGF0IG9uIHRoaXMgCm1haWxpbmcgbGlzdCB3ZSBwcmVmZXIgdG8gZm9j
+dXMgb24gZnJlZSBhbmQgb3Blbi1zb3VyY2UgdG9vbHMgd2hlbiAKcG9zc2libGUgKHNpbmNlIGlu
+Zm9ybWF0aW9uIGFib3V0IHRoZW0gY2FuIGJlIG1vcmUgd2lkZWx5IHVzZWQpLgoKPiAKPiBUaGFu
+a3MKPiBCYWxhIEd1bmRlYm9pbmEKPiBUaGlzIG1lc3NhZ2UgY29udGFpbnMgaW5mb3JtYXRpb24g
+dGhhdCBtYXkgYmUgcHJpdmlsZWdlZCBvciBjb25maWRlbnRpYWwgCj4gYW5kIGlzIHRoZSBwcm9w
+ZXJ0eSBvZiB0aGUgS1BJVCBUZWNobm9sb2dpZXMgTHRkLiBJdCBpcyBpbnRlbmRlZCBvbmx5IAo+
+IGZvciB0aGUgcGVyc29uIHRvIHdob20gaXQgaXMgYWRkcmVzc2VkLiBJZiB5b3UgYXJlIG5vdCB0
+aGUgaW50ZW5kZWQgCj4gcmVjaXBpZW50LCB5b3UgYXJlIG5vdCBhdXRob3JpemVkIHRvIHJlYWQs
+IHByaW50LCByZXRhaW4gY29weSwgCj4gZGlzc2VtaW5hdGUsIGRpc3RyaWJ1dGUsIG9yIHVzZSB0
+aGlzIG1lc3NhZ2Ugb3IgYW55IHBhcnQgdGhlcmVvZi4gSWYgeW91IAo+IHJlY2VpdmUgdGhpcyBt
+ZXNzYWdlIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgaW1tZWRpYXRlbHkgYW5k
+IAo+IGRlbGV0ZSBhbGwgY29waWVzIG9mIHRoaXMgbWVzc2FnZS4gS1BJVCBUZWNobm9sb2dpZXMg
+THRkLiBkb2VzIG5vdCAKPiBhY2NlcHQgYW55IGxpYWJpbGl0eSBmb3IgdmlydXMgaW5mZWN0ZWQg
+bWFpbHMuCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+
+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMu
+bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
