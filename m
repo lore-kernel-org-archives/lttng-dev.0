@@ -4,42 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2AFAEE49A0
-	for <lttng-dev@archiver.kernel.org>; Wed, 23 Aug 2023 14:51:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20D0EEE49A0
+	for <lttng-dev@archiver.kernel.org>; Wed, 23 Aug 2023 14:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1692802281;
-	bh=GRjQDx2WmnfCYl1HC6sCGmTKSfdIMTbLdB7mXi/7oM4=;
+	s=default; t=1692802531;
+	bh=AoNuiIHm28tIzR1+DFgaMc6E1Kf9TogcQ9tjwGQKjm0=;
 	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=KzMSWHsi0/LRjBnhHeb4lkDgPVHP8YzWcp8U79IjnCZ0w/r78+gXRuBZIOFuQhRwt
-	 lNMHprbG2L6FMvktyW2eYNfg1EUpDYt7mGJRCbD4TzdUkmjXICzjewcwQsTq53bke5
-	 by95mENW/kbbtnLJWahjiSWwFvOe2DRyzPxQRpf6uaQrmTtXoyprlnVlNw4cdHYw5z
-	 2Tn3/zmEZG03PcDAZhPiXjYN2x0iClgcXSdJsAEoLlSIa5EHrlAHCtb/OfFs891cBP
-	 B7NA2/DXA6zJ7u3rbvUv5lDB4c8AqgkbZYcmU9nTy9rStGOy22HS+lss3zhQ02ImwI
-	 ykMhboUI9ovrQ==
+	b=jaSBDhsGuOiPCh+4KeGVy+QwX4QD7Z86NXdJekxfySGvGv20VEyZSnvCcoqXAciaG
+	 deYtFSMaChmh2HkPEFNApCNxNyh5n04aTF171VFXK2BDRpbW4skPe7NjSEQz2AbnR+
+	 GHMUgwfKv1W2jUZeAATE8Z10bi2gZP0uZqsmb88J/W0E8p/2c7FdgDSqEolTIc5jK5
+	 18Ay1NNbVTLPmJX9rFtJtmGuDr97xy1BNBnTlA5nxI4eTcURz+PpXT69EV5c4+5DBD
+	 gnP5qsb7TgnEYOfPKVrEsxomFhMD/aZuEMPBxYHh8QVelsU5f9dv35HV84zB0uTl/G
+	 M09941FGVd/mQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4RW8L12HQyz2QRr;
-	Wed, 23 Aug 2023 10:51:21 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4RW8Kz66Z8z2Q7m
- for <lttng-dev@lists.lttng.org>; Wed, 23 Aug 2023 10:51:19 -0400 (EDT)
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4RW8Kz08zpz1MDQ;
- Wed, 23 Aug 2023 10:51:18 -0400 (EDT)
-Message-ID: <b9394771-4b56-4914-331d-122fcb8c196f@efficios.com>
-Date: Wed, 23 Aug 2023 10:52:27 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Content-Language: en-US
-To: paulmck@kernel.org
+	by lists.lttng.org (Postfix) with ESMTP id 4RW8Qp4CJlz2Q7p;
+	Wed, 23 Aug 2023 10:55:30 -0400 (EDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org
+ [IPv6:2604:1380:4641:c500::1])
+ by lists.lttng.org (Postfix) with ESMTPS id 4RW8Qn5wRKz2QMw
+ for <lttng-dev@lists.lttng.org>; Wed, 23 Aug 2023 10:55:29 -0400 (EDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id BAE2C62B82;
+ Wed, 23 Aug 2023 14:47:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00181C433C7;
+ Wed, 23 Aug 2023 14:47:47 +0000 (UTC)
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+ id 88CD4CE02EE; Wed, 23 Aug 2023 07:47:47 -0700 (PDT)
+Date: Wed, 23 Aug 2023 07:47:47 -0700
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Message-ID: <cb0e05c0-c1ff-4ee2-8abe-e3134f86cfae@paulmck-laptop>
 References: <87v8gzuc3g.fsf@laura> <87jztxjpxa.fsf@laura>
  <df134b32-9e1b-8deb-14fc-b09f02e2e678@efficios.com>
  <cf12aa23-f3ad-e286-58b6-ae1b7e70b9e2@efficios.com>
- <cb0e05c0-c1ff-4ee2-8abe-e3134f86cfae@paulmck-laptop>
-In-Reply-To: <cb0e05c0-c1ff-4ee2-8abe-e3134f86cfae@paulmck-laptop>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <cf12aa23-f3ad-e286-58b6-ae1b7e70b9e2@efficios.com>
 Subject: Re: [lttng-dev] [RFC] Deprecating RCU signal flavor
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -52,88 +56,114 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: "Paul E. McKenney via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: paulmck@kernel.org
 Cc: Olivier Dion <odion@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-T24gOC8yMy8yMyAxMDo0NywgUGF1bCBFLiBNY0tlbm5leSB3cm90ZToKPiBPbiBNb24sIEF1ZyAy
-MSwgMjAyMyBhdCAxMTo0MzozMkFNIC0wNDAwLCBNYXRoaWV1IERlc25veWVycyB3cm90ZToKPj4g
-T24gOC8xNS8yMyAwODozOCwgTWF0aGlldSBEZXNub3llcnMgdmlhIGx0dG5nLWRldiB3cm90ZToK
-Pj4+IE9uIDgvMTQvMjMgMTc6MDUsIE9saXZpZXIgRGlvbiB2aWEgbHR0bmctZGV2IHdyb3RlOgo+
-Pj4+Cj4+Pj4gQWZ0ZXIgZGlzY3Vzc2luZyBpdCB3aXRoIE1hdGhpZXUsIHdlIGFncmVlIG9uIHRo
-ZSBmb2xsb3dpbmcgMyBwaGFzZXMgZm9yCj4+Pj4gZGVwcmVjYXRpbmcgdGhlIHNpZ25hbCBmbGF2
-b3I6Cj4+Pj4KPj4+PiAgwqAgMSkgbGlidXJjdS1zaWduYWwgd2lsbCBiZSBpbXBsZW1lbnRlZCBp
-biB0ZXJtIG9mIGxpYnVyY3UtbWIuIFRoZSBvbmx5Cj4+Pj4gIMKgIGRpZmZlcmVuY2UgYmV0d2Vl
-biB0aGUgdHdvIGZsYXZvcnMgd2lsbCBiZSB0aGUgcHVibGljIGhlYWRlciBmaWxlcywKPj4+PiAg
-wqAgbGlua2VkIHN5bWJvbHMgYW5kIGxpYnJhcnkgbmFtZS7CoCBOb3RlIHRoYXQgdGhpcyBhZGQg
-YSByZWdyZXNzaW9uIGluCj4+Pj4gIMKgIHRlcm0gb2YgcGVyZm9ybWFuY2UsIHNpbmNlIHRoZSBp
-bXBsZW1lbnRhdGlvbiBvZiBsaWJ1cmN1LW1iIGFkZHMgbWVtb3J5Cj4+Pj4gIMKgIGJhcnJpZXJz
-IG9uIHRoZSByZWFkZXIgc2lkZSB3aGljaCBhcmUgbm90IHByZXNlbnQgaW4gdGhlIG9yaWdpbmFs
-Cj4+Pj4gIMKgIGxpYnVyY3Utc2lnbmFsIGltcGxlbWVudGF0aW9uLgo+Pj4+Cj4+Pj4gIMKgIDIp
-IEFkZGluZyB0aGUgZGVwcmVjYXRlZCBhdHRyaWJ1dGUgdG8gZXZlcnkgcHVibGljIGZ1bmN0aW9u
-cyBleHBvc2VkIGJ5Cj4+Pj4gIMKgIHRoZSBsaWJ1cmN1LXNpZ25hbCBmbGF2b3IuwqAgQXQgdGhp
-cyBwb2ludCwgdGVzdHMgZm9yIGxpYnVyY3Utc2lnbmFsCj4+Pj4gIMKgIHdpbGwgYWxzbyBiZSBy
-ZW1vdmVkIGZyb20gdGhlIHByb2plY3QuwqAgVGhlcmUgd2lsbCBiZSBubyBtb3JlIHN1cHBvcnQK
-Pj4+PiAgwqAgZm9yIHRoaXMgZmxhdm9yLgo+Pj4+Cj4+Pj4gIMKgIDMpIFJlbW92aW5nIHRoZSBs
-aWJ1cmN1LXNpZ25hbCBmbGF2b3IgY29tcGxldGVseSBmcm9tIHRoZSBwcm9qZWN0Lgo+Pj4+Cj4+
-Pj4gRmluYWxseSwgaGVyZSBpcyBhIHRlbnRhdGl2ZSB2ZXJzaW9ucyByZWxlYXNlIG9mIG1pbmUg
-Zm9yIGVhY2ggcGhhc2U6Cj4+Pj4KPj4+PiAgwqAgMSkgMC4xNS4wIFtPY3RvYmVyIDIwMjNdIChh
-bHNvIFRTQU4gc3VwcG9ydCB5YXkhKQo+Pj4+Cj4+Pj4gIMKgIDIpIDAuMTUuMQo+Pj4+Cj4+Pj4g
-IMKgIDMpIDAuMTYuMCB8fCAxLjAuMCAobWF5YmUgYSBtYWpvciBidW1wIHNpbmNlIHRoaXMgaXMg
-YW4gQVBJIGJyZWFraW5nCj4+Pj4gIMKgIGNoYW5nZSkKPj4+Cj4+PiBUaGVyZSBpcyBhIGRpc3Rp
-bmN0aW9uIGJldHdlZW4gdGhlIHZlcnNpb24gbnVtYmVyIG9mIHRoZSBsaWJ1cmN1IHByb2plY3QK
-Pj4+ICgwLjE0KSBhbmQgdGhlIEFCSSBzb25hbWUgZm9yIHRoZSBzaGFyZWQgb2JqZWN0cy4gV2Ug
-bWF5IGJlIGFibGUgdG8gZG8KPj4+IHN0ZXAgKDMpIHdpdGhvdXQgZ29pbmcgdG8gMS4wLjAgKEkg
-ZG9uJ3Qgc2VlIHJlbW92YWwgb2YgdGhlIHVyY3Utc2lnbmFsCj4+PiBmbGF2b3IgYSBzdHJvbmcg
-ZW5vdWdoIG1vdGl2YXRpb24gZm9yIGhpdHRpbmcgMS4wLjAgeWV0KS4KPj4+Cj4+PiBUZWNobmlj
-YWxseSBzcGVha2luZywgZ2l2ZW4gdGhhdCB3ZSB3b3VsZCBiZSByZW1vdmluZyB0aGUgZW50aXJl
-Cj4+PiBsaWJ1cmN1LXNpZ25hbC5zbyBzaGFyZWQgb2JqZWN0LCB3ZSB3b3VsZCBub3QgYmUgY2hh
-bmdpbmcgX3N5bWJvbHNfCj4+PiB3aXRoaW4gYW4gZXhpc3Rpbmcgc2hhcmVkIG9iamVjdCwgdGhl
-cmVmb3JlIEknbSBub3QgZXZlbiBzdXJlIHdlIG5lZWQgdG8KPj4+IGJ1bXAgdGhlIHNvbmFtZSBm
-b3IgYWxsIHRoZSBvdGhlciByZW1haW5pbmcgc2hhcmVkIG9iamVjdHMuCj4+Cj4+IFNvIGFmdGVy
-IG1lcmdpbmcgdGhpcyBjb21taXQ6Cj4+Cj4+ICAgICAgUGhhc2UgMSBvZiBkZXByZWNhdGluZyBs
-aWJ1cmN1LXNpZ25hbAo+PiAgICAgIFRoZSBmaXJzdCBwaGFzZSBvZiBsaWJ1cmN1LXNpZ25hbCBk
-ZXByZWNhdGlvbiBjb25zaXN0cyBvZiBpbXBsZW1lbnRpbmcKPj4gICAgICBpdCBpbiB0ZXJtIG9m
-IGxpYnVyY3UtbWIuIEluIG90aGVyIHdvcmRzLCBsaWJ1cmN1LXNpZ25hbCBpcyBpZGVudGljYWwg
-dG8KPj4gICAgICBsaWJ1cmN1LW1iIGF0IHRoZSBleGNlcHRpb24gb2YgdGhlIGZ1bmN0aW9uIHN5
-bWJvbHMgYW5kIHB1YmxpYyBoZWFkZXIKPj4gICAgICBmaWxlcy4KPj4gICAgICBUaGlzIGlzIGRv
-bmUgYnk6Cj4+ICAgICAgICAxKSBSZW1vdmluZyB0aGUgUkNVX1NJR05BTCBzcGVjaWZpYyBjb2Rl
-IGluIHVyY3UuYwo+PiAgICAgICAgMikgTWFraW5nIHRoZSBSQ1VfTUIgc3BlY2lmaWMgY29kZSBh
-bHNvIHNwZWNpZmljIHRvIFJDVV9TSUdOQUwgaW4KPj4gICAgICAgIHVyY3UuYwo+PiAgICAgICAg
-MykgUmV3cml0aW5nIF91cmN1X3NpZ25hbF9yZWFkX3VubG9ja191cGRhdGVfYW5kX3dha2V1cCB0
-byB1c2UgYQo+PiAgICAgICAgYXRvbWljIHN0b3JlIHdpdGggQ01NX1NFUV9DU1QgaW5zdGVhZCBv
-ZiBhIHN0b3JlIENNTV9SRUxBWEVEIHdpdGgKPj4gICAgICAgIGNtbV9iYXJyaWVyKCkgYXJvdW5k
-IGl0LiBXZSBjb3VsZCBrZWVwIHRoZSBleHBsaWNpdCBiYXJyaWVycywgYnV0IHRoYXQKPj4gICAg
-ICAgIHdvdWxkIHJlcXVpcmUgdG8gYWRkIHNvbWUgY21tX2Fubm90YXRlIGFubm90YXRpb25zLiBU
-aGVyZWZvcmUsIHRvIGJlCj4+ICAgICAgICBsZXNzIGludHJ1c2l2ZSBpbiBhIHB1YmxpYyBoZWFk
-ZXIgZmlsZSwgc2ltcGx5IHVzZSB0aGUgQ01NX1NFUV9DU1QKPj4gICAgICAgIGxpa2UgZm9yIHRo
-ZSBtYiBmbGF2b3IuCj4+Cj4+IEkgbm90aWNlIHRoYXQgYW4gYXBwbGljYXRpb24gcHJldmlvdXNs
-eSBidWlsdCBhZ2FpbnN0IHVyY3Utc2lnbmFsIHdpdGgKPj4gX0xHUExfU09VUkNFIGRlZmluZWQg
-d291bGQgaGF2ZSB0byBiZSByZWJ1aWx0LCB3aGljaCB3b3VsZCByZXF1aXJlIGEKPj4gc29uYW1l
-IGJ1bXAgb2YgdXJjdS1zaWduYWwuCj4+Cj4+IFNvIGNvbnNpZGVyaW5nIHRoYXQgdGhpcyBwaGFz
-ZSAxIGlzIG5vdCByZWFsbHkgYSAiZHJvcCBpbiIgcmVwbGFjZW1lbnQsCj4+IEkgZmF2b3IgcmVt
-b3ZpbmcgdGhlIHVyY3Utc2lnbmFsIGZsYXZvciBlbnRpcmVseSBiZWZvcmUgdGhlIG5leHQgcmVs
-ZWFzZS4KPj4KPj4gVGhvdWdodHMgPwo+IAo+IFRoZSByZXBsYWNlbWVudCBpcyBsaWJ1cmN1LW1i
-LCBjb3JyZWN0PwoKQWZ0ZXIgbWVyZ2luZyB0aGlzICJwaGFzZSAxIiBvZiB0aGUgcmVtb3ZhbCwg
-SSBub3RpY2VkIHRoYXQgd2Ugd291bGQgbmVlZAp0byByZXF1aXJlIGFwcGxpY2F0aW9ucyBidWls
-dCB3aXRoIF9MR1BMX1NPVVJDRSBkZWZpbmVkIGFuZCB1c2luZwpsaWJ1cmN1LXNpZ25hbCB0byBi
-ZSByZWJ1aWx0LCB3aGljaCB3b3VsZCByZXF1aXJlIGEgbWFqb3IgbGlicmFyeSBzb25hbWUKYnVt
-cCwgd2hpY2ggSSB3b3VsZCBwcmVmZXIgdG8gYXZvaWQgdW5sZXNzIG5lY2Vzc2FyeS4KClRoZXJl
-Zm9yZSwgSSB3ZW50IGFoZWFkIGFuZCBwdXNoZWQgYWRkaXRpb25hbCBjb21taXRzIGluIHRoZSBt
-YXN0ZXIgYnJhbmNoCndoaWNoIGNvbXBsZXRlbHkgcmVtb3ZlIGxpYnVyY3Utc2lnbmFsIGZyb20g
-dGhlIHRyZWUuIFRoZXJlZm9yZSwgdGhlIG5leHQKcmVsZWFzZSBvZiBsaWJ1cmN1IHdpbGwgbm90
-IGhhdmUgdGhlIGxpYnVyY3Utc2lnbmFsIGhlYWRlciBmaWxlcyBub3IgaXRzCmxpYnJhcnkgc2hh
-cmVkIG9iamVjdHMuCgo+IAo+IEkgd2lsbCBuZWVkIHRvIGNoYW5nZSBwZXJmYm9vaywgYnV0IHRo
-YXQgc2hvdWxkIGJlIGFuIGVhc3kgY2hhbmdlLAo+IHBsdXMgc3lzX21lbWJhcnJpZXIoKSBpcyB3
-aWRlbHkgYXZhaWxhYmxlIGJ5IG5vdy4KClVzZXJzIG9mIGxpYnVyY3Utc2lnbmFsIHdvdWxkIGJl
-IGV4cGVjdGVkIHRvIG1pZ3JhdGUgdG8gbGlidXJjdS1tZW1iLCB3aGljaApyZWxpZXMgb24gbWVt
-YmFycmllciB0byBhY2hpZXZlIHNpbWlsYXIgcGVyZm9ybWFuY2UsIGJ1dCB3aXRoIGxvd2VyLW92
-ZXJoZWFkCmdyYWNlIHBlcmlvZHMuCgpUaGFua3MsCgpNYXRoaWV1CgoKCgoKLS0gCk1hdGhpZXUg
-RGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cHM6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+On Mon, Aug 21, 2023 at 11:43:32AM -0400, Mathieu Desnoyers wrote:
+> On 8/15/23 08:38, Mathieu Desnoyers via lttng-dev wrote:
+> > On 8/14/23 17:05, Olivier Dion via lttng-dev wrote:
+> > > =
+
+> > > After discussing it with Mathieu, we agree on the following 3 phases =
+for
+> > > deprecating the signal flavor:
+> > > =
+
+> > > =A0 1) liburcu-signal will be implemented in term of liburcu-mb. The =
+only
+> > > =A0 difference between the two flavors will be the public header file=
+s,
+> > > =A0 linked symbols and library name.=A0 Note that this add a regressi=
+on in
+> > > =A0 term of performance, since the implementation of liburcu-mb adds =
+memory
+> > > =A0 barriers on the reader side which are not present in the original
+> > > =A0 liburcu-signal implementation.
+> > > =
+
+> > > =A0 2) Adding the deprecated attribute to every public functions expo=
+sed by
+> > > =A0 the liburcu-signal flavor.=A0 At this point, tests for liburcu-si=
+gnal
+> > > =A0 will also be removed from the project.=A0 There will be no more s=
+upport
+> > > =A0 for this flavor.
+> > > =
+
+> > > =A0 3) Removing the liburcu-signal flavor completely from the project.
+> > > =
+
+> > > Finally, here is a tentative versions release of mine for each phase:
+> > > =
+
+> > > =A0 1) 0.15.0 [October 2023] (also TSAN support yay!)
+> > > =
+
+> > > =A0 2) 0.15.1
+> > > =
+
+> > > =A0 3) 0.16.0 || 1.0.0 (maybe a major bump since this is an API break=
+ing
+> > > =A0 change)
+> > =
+
+> > There is a distinction between the version number of the liburcu project
+> > (0.14) and the ABI soname for the shared objects. We may be able to do
+> > step (3) without going to 1.0.0 (I don't see removal of the urcu-signal
+> > flavor a strong enough motivation for hitting 1.0.0 yet).
+> > =
+
+> > Technically speaking, given that we would be removing the entire
+> > liburcu-signal.so shared object, we would not be changing _symbols_
+> > within an existing shared object, therefore I'm not even sure we need to
+> > bump the soname for all the other remaining shared objects.
+> =
+
+> So after merging this commit:
+> =
+
+>     Phase 1 of deprecating liburcu-signal
+>     The first phase of liburcu-signal deprecation consists of implementing
+>     it in term of liburcu-mb. In other words, liburcu-signal is identical=
+ to
+>     liburcu-mb at the exception of the function symbols and public header
+>     files.
+>     This is done by:
+>       1) Removing the RCU_SIGNAL specific code in urcu.c
+>       2) Making the RCU_MB specific code also specific to RCU_SIGNAL in
+>       urcu.c
+>       3) Rewriting _urcu_signal_read_unlock_update_and_wakeup to use a
+>       atomic store with CMM_SEQ_CST instead of a store CMM_RELAXED with
+>       cmm_barrier() around it. We could keep the explicit barriers, but t=
+hat
+>       would require to add some cmm_annotate annotations. Therefore, to be
+>       less intrusive in a public header file, simply use the CMM_SEQ_CST
+>       like for the mb flavor.
+> =
+
+> I notice that an application previously built against urcu-signal with
+> _LGPL_SOURCE defined would have to be rebuilt, which would require a
+> soname bump of urcu-signal.
+> =
+
+> So considering that this phase 1 is not really a "drop in" replacement,
+> I favor removing the urcu-signal flavor entirely before the next release.
+> =
+
+> Thoughts ?
+
+The replacement is liburcu-mb, correct?
+
+I will need to change perfbook, but that should be an easy change,
+plus sys_membarrier() is widely available by now.
+
+							Thanx, Paul
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
