@@ -4,38 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F73CEE7FF4
-	for <lttng-dev@archiver.kernel.org>; Mon, 11 Sep 2023 15:51:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9FEBEE57DF
+	for <lttng-dev@archiver.kernel.org>; Mon, 11 Sep 2023 16:26:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1694447486;
-	bh=CS62QNoumbxLXaAm7ZmVHMhN/Spqd8VNFnUSPBMPddQ=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	s=default; t=1694449559;
+	bh=4NHhkaTIgbmRW2cTxbI16bt0BJhLbG+emikrFzUtBmo=;
+	h=Date:To:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=qB+Ha+BXnCP5r/uUm10MTWZg14k1OAAIBf3+GXxOCAF80jD2DD46G6vV4hhHsliJm
-	 NIYhQ39zI2UzDj5twcMoQEPCousrQxOfdFHclOyo1Ls9AwEi2HiQB0chY9H+X9I07r
-	 lDHwSLMiOBgsrsbCNSKHQyvQBKs/5MetKymq0NDMPE7vDH7uV9KjCXcVpUamwlCD/z
-	 z5o708lG2fkNWCV1/KnScPbkhZa5wmRtx6gNmq7awPPSCCbtoGY1ZVYsP6AZIHM/5Q
-	 w58UAuJ8wMIj9kLKhwoDeZ3rAuefAtCUSnf+YTJmduBoujnudSw122H3WWIE14vkNM
-	 1aquWBa2HJteQ==
+	b=GsYlxkAl93DEzds4eAAzZC39NUarPs/IbsGmuwFljK9/902+s68jPlRu17N7d5mVe
+	 ndPVeiHhKYF7Hu8xigJlr+6TOL3ShV+a2gasFDVb7vq8cW5n7mv5J+GgHgzTCEdZUP
+	 EaGxA2s/H+MT6oKY/GcZ5ZjHSHlrnTmN0sPP6ktg8BQQYvSNRC3prkmM+TSJLfCUYk
+	 FcQ7qDqfyoeKVgmKxEZoVmQ9YzR7fEl3uDCXTi643BhrEhExHZ2y23AF94Rh2Td0ki
+	 Cb6/13bv1/JPwKxwhf/VAdXqT3b/2d/JL+UGtaZOPv/OIk5FH+Q6vnvoA38kn+7+Pw
+	 KCKzrD/BRccFQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4RkrmY19cQz2XRC;
-	Mon, 11 Sep 2023 11:51:25 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4RkrmT6Y0Kz2XT8
- for <lttng-dev@lists.lttng.org>; Mon, 11 Sep 2023 11:51:21 -0400 (EDT)
-Received: from [IPV6:2606:6d00:100:4000:cacb:9855:de1f:ded2] (unknown
- [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4RkrmS04Fkz1PNG;
- Mon, 11 Sep 2023 11:51:19 -0400 (EDT)
-Message-ID: <9fad646e-46bf-9229-81cb-93a237db2922@efficios.com>
-Date: Mon, 11 Sep 2023 11:52:40 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Content-Language: en-US
-To: "Mousa, Anas" <anasmous@amazon.com>, "Yitschak, Yehuda"
- <yehuday@amazon.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+	by lists.lttng.org (Postfix) with ESMTP id 4RksXR1CHWz2Xqs;
+	Mon, 11 Sep 2023 12:25:59 -0400 (EDT)
+Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
+ by lists.lttng.org (Postfix) with ESMTPS id 4RksXP6Wydz2Xqr
+ for <lttng-dev@lists.lttng.org>; Mon, 11 Sep 2023 12:25:57 -0400 (EDT)
+Received: from zimbra-s1.polymtl.ca (zimbra-s1.polymtl.ca [132.207.23.203])
+ by smtp.polymtl.ca (8.14.7/8.14.7) with ESMTP id 38BGKr6h025244;
+ Mon, 11 Sep 2023 12:20:53 -0400
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp.polymtl.ca 38BGKr6h025244
+Date: Mon, 11 Sep 2023 12:20:53 -0400 (EDT)
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Message-ID: <454808411.14773142.1694449253211.JavaMail.zimbra@polymtl.ca>
+In-Reply-To: <9fad646e-46bf-9229-81cb-93a237db2922@efficios.com>
 References: <6e06b605ec9f446da5dc8948c8621518@amazon.com>
  <63288a1f-59b4-80f9-2a26-bc252ce9cd1f@efficios.com>
  <900fe19a-5642-9124-4d83-0716e0d11a22@efficios.com>
@@ -43,7 +39,15 @@ References: <6e06b605ec9f446da5dc8948c8621518@amazon.com>
  <fb397173-040c-9370-c6c7-3c7b1535becb@efficios.com>
  <618d035e059840d3a32b75633aa378f5@amazon.com>
  <e658fc7033fd4a268dc9890093de6807@amazon.com>
-In-Reply-To: <e658fc7033fd4a268dc9890093de6807@amazon.com>
+ <9fad646e-46bf-9229-81cb-93a237db2922@efficios.com>
+MIME-Version: 1.0
+X-Originating-IP: [132.207.169.244]
+X-Mailer: Zimbra 8.8.15_GA_4562 (ZimbraWebClient - GC115
+ (Linux)/8.8.15_GA_4562)
+Thread-Topic: Profiling LTTng tracepoint latency on different arm platforms
+Thread-Index: 9uxwVQWriXUMPx1MG89xleJ6BZ2QVQ==
+X-Poly-FromMTA: (zimbra-s1.polymtl.ca [132.207.23.203]) at Mon,
+ 11 Sep 2023 16:20:53 +0000
 Subject: Re: [lttng-dev] Profiling LTTng tracepoint latency on different arm
  platforms
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -57,40 +61,47 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Michel Dagenais via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Michel Dagenais <michel.dagenais@polymtl.ca>
+Cc: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-T24gOS8xMC8yMyAxMDoxOCwgTW91c2EsIEFuYXMgd3JvdGU6Cj4gSGV5IE1hdGhpZXUsCgpIaSBB
-bmFzLAoKPiAKPiBXZSBzZWUgdGhhdCB1cG9uIHJlY29yZGluZyBhIHRyYWNlcG9pbnQsIHRoZXJl
-IGFyZSBtdWx0aXBsZSBzdGFnZXMgb2YgCj4gcmVzZXJ2ZS1jb21taXQtd3JpdGUsIHdoZXJlIGF0
-b21pY3MgYW5kIHNoYXJlZCBtZW1vcnkgYWNjZXNzZXMgdGFrZSB1cCBhIGJpZyBwYXJ0IG9mIHRo
-ZSAKPiByZWNvcmRpbmcgdGltZSwKPiAKPiB3ZSdyZSB3b25kZXJpbmcsIGlzIHRoZXJlIGEgImxp
-Z2h0LW1vZGUiIG9mIHJlY29yZGluZyBhIHRyYWNlcG9pbnQgCj4gaW52b2x2aW5nIGxlc3MgbG9n
-aWMgb3IKPiAKPiBhIG1vZGUgd2hpY2ggY2FuIHBvdGVudGlhbGx5IGhhdmUgbG93ZXIgbGF0ZW5j
-eT8KCkkndmUgYmVlbiB3b3JraW5nIG9uIHRoZSByc2VxKDIpIHN5c3RlbSBjYWxsIGZvciBhIGZl
-dyB5ZWFycyBub3csIGFuZCAKdGhpcyBpcyBpbnRlbmRlZCB0byBoZWxwIHJlZHVjZSB0aGUgY29z
-dCBvZiBsdHRuZy11c3QncyByaW5nIGJ1ZmZlciAKYXRvbWljcyBvbiB0aGUgdHJhY2luZyBmYXN0
-LXBhdGguIFRoZSByb2FkIGFoZWFkIHRoZXJlIGlzIGludGVncmF0aW9uIG9mIApyc2VxIHdpdGgg
-bHR0bmctdXN0LCB3aGljaCBkaWQgbm90IHNob3cgdXAgb24gb3VyIGN1c3RvbWVyIGZlYXR1cmUg
-CnJlcXVpcmVtZW50cyByYWRhciB5ZXQuCgpJbiB0ZXJtcyBvZiBsb2dpYyBpbnZvbHZlZCBpbiB0
-aGUgbHR0bmctdXN0IHRyYWNlcG9pbnRzLCBJIGhvcGUgdGhhdCBteSAKY3VycmVudCB3b3JrIG9u
-ICJsaWJzaWRlIiB3aWxsIGhlbHAgc3RlZXIgYXdheSBmcm9tIHRyYWNlcG9pbnQgcHJvdmlkZXJz
-IApiYXNlZCBvbiBtYWNyb3MgYW5kIGdlbmVyYXRlZCBjb2RlLCByZXBsYWNpbmcgdGhpcyBieSBh
-biBlZmZpY2llbnQgCmJ5dGVjb2RlIGludGVycHJldGVyLiBUaGlzIHNob3VsZCBhbGxvdyBtZSB0
-byBpbmxpbmUgbWFueSBvZiB0aGUgY2FsbHMgCnRoYXQgYXJlIGN1cnJlbnRseSBuZWVkZWQgYmV0
-d2VlbiB0aGUgdHJhY2Vwb2ludCBwcm9iZSBwcm92aWRlciBhbmQgdGhlIApsdHRuZy11c3Qgcmlu
-ZyBidWZmZXIuIEFnYWluLCB0aGlzIGlzIGFuIGFyZWEgd2hlcmUgSSB0aGluayB3ZSBjYW4gaGF2
-ZSAKZ3JlYXQgc3BlZWQgaW1wcm92ZW1lbnRzLCBidXQgaXQgZGlkIG5vdCBzaG93IHVwIG9uIG91
-ciBjdXN0b21lcidzIApmZWF0dXJlIHJlcXVpcmVtZW50IHJhZGFyIHlldC4KCj4gQWxzbywgYXJl
-IHRoZXJlIGFueSByZWNlbnTCoGRvY3MgdG8gc2hhcmUgcmVnYXJkaW5nwqB0cmFjZXBvaW50IGxh
-dGVuY3k/CgpUaGVyZSBpcyBhIFBvbHl0ZWNobmlxdWUgc3R1ZGVudCB3aG8gZXh0ZW5zaXZlbHkg
-YW5hbHl6ZWQgdGhpcyByZWNlbnRseS4gCk1pY2hlbCwgZG8geW91IGhhdmUgYSBwb2ludGVyIHRv
-IGhpcyB3b3JrID8KClRoYW5rcywKCk1hdGhpZXUKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZp
-Y2lPUyBJbmMuCmh0dHBzOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYK
+WW91IGFyZSBwcm9iYWJseSByZWZlcnJpbmcgdG8gdGhlIHdvcmsgb2YgTW9oYW1tYWQgR2ViYWk6
+CgpTdXJ2ZXkgYW5kIEFuYWx5c2lzIG9mIEtlcm5lbCBhbmQgVXNlcnNwYWNlIFRyYWNlcnMgb24g
+TGludXg6IERlc2lnbiwgSW1wbGVtZW50YXRpb24sIGFuZCBPdmVyaGVhZAoKaHR0cHM6Ly9kbC5h
+Y20ub3JnL2RvaS9hYnMvMTAuMTE0NS8zMTU4NjQ0IAoKLS0tLS0gTGUgMTEgU2VwIDIzLCDDoCAx
+MTo1MiwgTWF0aGlldSBEZXNub3llcnMgbWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tIGEg
+w6ljcml0IDoKCj4gT24gOS8xMC8yMyAxMDoxOCwgTW91c2EsIEFuYXMgd3JvdGU6Cj4+IEhleSBN
+YXRoaWV1LAo+IAo+IEhpIEFuYXMsCj4gCj4+IAo+PiBXZSBzZWUgdGhhdCB1cG9uIHJlY29yZGlu
+ZyBhIHRyYWNlcG9pbnQsIHRoZXJlIGFyZSBtdWx0aXBsZSBzdGFnZXMgb2YKPj4gcmVzZXJ2ZS1j
+b21taXQtd3JpdGUsIHdoZXJlIGF0b21pY3MgYW5kIHNoYXJlZCBtZW1vcnkgYWNjZXNzZXMgdGFr
+ZSB1cCBhIGJpZwo+PiBwYXJ0IG9mIHRoZQo+PiByZWNvcmRpbmcgdGltZSwKPj4gCj4+IHdlJ3Jl
+IHdvbmRlcmluZywgaXMgdGhlcmUgYSAibGlnaHQtbW9kZSIgb2YgcmVjb3JkaW5nIGEgdHJhY2Vw
+b2ludAo+PiBpbnZvbHZpbmcgbGVzcyBsb2dpYyBvcgo+PiAKPj4gYSBtb2RlIHdoaWNoIGNhbiBw
+b3RlbnRpYWxseSBoYXZlIGxvd2VyIGxhdGVuY3k/Cj4gCj4gSSd2ZSBiZWVuIHdvcmtpbmcgb24g
+dGhlIHJzZXEoMikgc3lzdGVtIGNhbGwgZm9yIGEgZmV3IHllYXJzIG5vdywgYW5kCj4gdGhpcyBp
+cyBpbnRlbmRlZCB0byBoZWxwIHJlZHVjZSB0aGUgY29zdCBvZiBsdHRuZy11c3QncyByaW5nIGJ1
+ZmZlcgo+IGF0b21pY3Mgb24gdGhlIHRyYWNpbmcgZmFzdC1wYXRoLiBUaGUgcm9hZCBhaGVhZCB0
+aGVyZSBpcyBpbnRlZ3JhdGlvbiBvZgo+IHJzZXEgd2l0aCBsdHRuZy11c3QsIHdoaWNoIGRpZCBu
+b3Qgc2hvdyB1cCBvbiBvdXIgY3VzdG9tZXIgZmVhdHVyZQo+IHJlcXVpcmVtZW50cyByYWRhciB5
+ZXQuCj4gCj4gSW4gdGVybXMgb2YgbG9naWMgaW52b2x2ZWQgaW4gdGhlIGx0dG5nLXVzdCB0cmFj
+ZXBvaW50cywgSSBob3BlIHRoYXQgbXkKPiBjdXJyZW50IHdvcmsgb24gImxpYnNpZGUiIHdpbGwg
+aGVscCBzdGVlciBhd2F5IGZyb20gdHJhY2Vwb2ludCBwcm92aWRlcnMKPiBiYXNlZCBvbiBtYWNy
+b3MgYW5kIGdlbmVyYXRlZCBjb2RlLCByZXBsYWNpbmcgdGhpcyBieSBhbiBlZmZpY2llbnQKPiBi
+eXRlY29kZSBpbnRlcnByZXRlci4gVGhpcyBzaG91bGQgYWxsb3cgbWUgdG8gaW5saW5lIG1hbnkg
+b2YgdGhlIGNhbGxzCj4gdGhhdCBhcmUgY3VycmVudGx5IG5lZWRlZCBiZXR3ZWVuIHRoZSB0cmFj
+ZXBvaW50IHByb2JlIHByb3ZpZGVyIGFuZCB0aGUKPiBsdHRuZy11c3QgcmluZyBidWZmZXIuIEFn
+YWluLCB0aGlzIGlzIGFuIGFyZWEgd2hlcmUgSSB0aGluayB3ZSBjYW4gaGF2ZQo+IGdyZWF0IHNw
+ZWVkIGltcHJvdmVtZW50cywgYnV0IGl0IGRpZCBub3Qgc2hvdyB1cCBvbiBvdXIgY3VzdG9tZXIn
+cwo+IGZlYXR1cmUgcmVxdWlyZW1lbnQgcmFkYXIgeWV0Lgo+IAo+PiBBbHNvLCBhcmUgdGhlcmUg
+YW55IHJlY2VudMKgZG9jcyB0byBzaGFyZSByZWdhcmRpbmfCoHRyYWNlcG9pbnQgbGF0ZW5jeT8K
+PiAKPiBUaGVyZSBpcyBhIFBvbHl0ZWNobmlxdWUgc3R1ZGVudCB3aG8gZXh0ZW5zaXZlbHkgYW5h
+bHl6ZWQgdGhpcyByZWNlbnRseS4KPiBNaWNoZWwsIGRvIHlvdSBoYXZlIGEgcG9pbnRlciB0byBo
+aXMgd29yayA/Cj4gCj4gVGhhbmtzLAo+IAo+IE1hdGhpZXUKPiAKPiAtLQo+IE1hdGhpZXUgRGVz
+bm95ZXJzCj4gRWZmaWNpT1MgSW5jLgo+IGh0dHBzOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
