@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9F4AE936ED
-	for <lttng-dev@archiver.kernel.org>; Wed,  4 Oct 2023 23:20:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D346E92734
+	for <lttng-dev@archiver.kernel.org>; Thu,  5 Oct 2023 19:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1696461650;
-	bh=aWT1fRXz6s4RpnFyd5ewLchrVnyf350mdJW3T/oqYis=;
+	s=default; t=1696535453;
+	bh=Dkcf3NhzSdw1rVpS1Qn0mOtQoIXbAxCGn6uQ1AeMwzw=;
 	h=In-Reply-To:References:Date:To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=YXBgXvxfOrGtKQ22Y1OKIsz3+8xCugPcrIMs5dfpmLvt+ctagmndibHv1X1Y44XeK
-	 8a+Am574Ps+1VmsDE5EAfnc1BPzUP1SvkR9KZreX4phcLp+CkK1k2emxO6mSLG3Myt
-	 XusrAtTIGn36AK42QPE8xqRsQJjrZB67tsWsLO48Pd04YdpzxkdDdZVqEC6cgjK4XW
-	 NvicKPhiztw/+U6PmnMTNJqwMOYV5wEfWZF8dKvWitzCT0iHci0auJEVILyQjyHlBV
-	 hDsM6ywn26mFOQFnxgq3A5WYNyNX5HRg4rDSWJauTSNMwa5cs9aMB1ZTUVhyTGbaaX
-	 /+zPg/yfd9cFQ==
+	b=IHYbxZS0E98SDVX83to3HpSk80MIKlNOOIUNmnf+loosiJR5e+sh5yTGPA7PPqFHC
+	 yAJdeOjggu9KfCZC2zUtS7SbE7sVZ6pcpdNfzQT8qHqV6ONykD9LJrab0WnTU/P0Sf
+	 s+IDchfuWFv824q7xUu+XlNFk6ARD0FgD6jZuabyX7py/PAUaHlLvRZh2SnWEyOpTR
+	 JWQAStPN2E4NdyFtpvmhKhQzv6qVhv40D9qXl4j0cICQ/Db6yXvIMHwg8gTMVKmWUM
+	 U5KIo+M59ur7gxOcoBTZ4YvqVQF69vbCDMpBqnB7Z9vtfYbCw6u0gt+SVooFAyR+W3
+	 OGut3qupjNGVA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4S19fV0b17z2rrH;
-	Wed,  4 Oct 2023 19:20:50 -0400 (EDT)
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com
- [66.111.4.26])
- by lists.lttng.org (Postfix) with ESMTPS id 4S19fT2Q5dz2sm5
- for <lttng-dev@lists.lttng.org>; Wed,  4 Oct 2023 19:20:48 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4S1hxm4hZDz2syv;
+	Thu,  5 Oct 2023 15:50:52 -0400 (EDT)
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com
+ [64.147.123.19])
+ by lists.lttng.org (Postfix) with ESMTPS id 4S1hxk3ZkZz2t9C
+ for <lttng-dev@lists.lttng.org>; Thu,  5 Oct 2023 15:50:50 -0400 (EDT)
 Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
- by mailout.nyi.internal (Postfix) with ESMTP id F3B265C0356;
- Wed,  4 Oct 2023 19:13:02 -0400 (EDT)
+ by mailout.west.internal (Postfix) with ESMTP id 23B7F32009F0;
+ Thu,  5 Oct 2023 15:40:50 -0400 (EDT)
 Received: from imap42 ([10.202.2.92])
- by compute2.internal (MEProxy); Wed, 04 Oct 2023 19:13:02 -0400
-X-ME-Sender: <xms:fvEdZUw-MkNBbbRlLDrkx0DXCFncWDtk9XzS36-gLRlXjZCrhFvHeQ>
- <xme:fvEdZYTqYl6dPOPmtVaCw9UR4jQ-e1z1gdVSYdR5jpZ-DDwAJ38nbe2LTLFABkoFc
- _-uak76GyVds6qlog>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeefgddulecutefuodetggdotefrodftvf
- curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
- uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
- fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfvehhrhhi
- shhtohhphhgvrhcujfgrrhhvvgihfdcuoegthhhrihhssegtfihhrghrvhgvhidrtggrqe
- enucggtffrrghtthgvrhhnpeeghfelleeigfehvdegveduhfduheetuefgleekhfdtveet
- leehhedttdefveevueenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhprghsthgvsg
- hinhdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
- ohhmpegthhhrihhssegtfihhrghrvhgvhidrtggr
-X-ME-Proxy: <xmx:fvEdZWXK4K-H2FDhLZjWs6hE3k9nN8rLwG67sGdSxPtq938EwP37yA>
- <xmx:fvEdZShXjEhSC8K4_LYurSb0wsn8lOEJpMky0EdME7NOqdrGpg6n4Q>
- <xmx:fvEdZWDQMj_TGe4Hqs5sDhxgPAoQIMlpLckO9Yz1jK8_0I8xKPnj6g>
- <xmx:fvEdZd9pQOtBTSFmB-yXiH7MKX2YaJJZ9CK6M1wmwhFP1HUqbdlRMQ>
+ by compute2.internal (MEProxy); Thu, 05 Oct 2023 15:40:50 -0400
+X-ME-Sender: <xms:QBEfZaKjIUYIoIVkD44MOWBDxaWHhPIiZD2ePmU_YeRgQWBm2COh_w>
+ <xme:QBEfZSJUpLLt24TlqehbUJq7-FIa0rRst3Ud0lIz5kIW131_hrpjAFlw_XRgvIlzd
+ KEgWTNa7ehgSB7-ag>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeggddufeeiucetufdoteggodetrfdotf
+ fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+ uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+ cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdevhhhr
+ ihhsthhophhhvghrucfjrghrvhgvhidfuceotghhrhhishestgifhhgrrhhvvgihrdgtrg
+ eqnecuggftrfgrthhtvghrnhepfeelueefvdefteekveekvdfhffdvvdetfedugedvleeu
+ hfeigeelfeffveetkeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+ hilhhfrhhomheptghhrhhishestgifhhgrrhhvvgihrdgtrg
+X-ME-Proxy: <xmx:QBEfZau2RrbZBTAwfXfEMQYOiufrkZ8zRVgLT1jxw6fPJYuA2B364g>
+ <xmx:QBEfZfbUwBizY9oUwnlPX837qJaEQcO8c__taDRH0gaVZm97s8PC_Q>
+ <xmx:QBEfZRZ1e6x65t5ok3RSzBbCuUBiJuajS-I07CTRY9dfT3V11IkKow>
+ <xmx:QREfZT0pHs4GNLlQDPOLgNaR4k079SJBzNFO4EgKteEakY9oaIvptg>
 Feedback-ID: i2d19425f:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
- id B1FC1BC007C; Wed,  4 Oct 2023 19:13:02 -0400 (EDT)
+ id 8B0B2BC007C; Thu,  5 Oct 2023 15:40:48 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
 MIME-Version: 1.0
-Message-Id: <db8dd95b-55ca-4259-bcc6-db145e0ad05d@app.fastmail.com>
-In-Reply-To: <2795ad9b-acbd-460a-bfcb-61f0101180d4@efficios.com>
+Message-Id: <7619596b-4c04-47d3-91ad-da49786fcfac@app.fastmail.com>
+In-Reply-To: <db8dd95b-55ca-4259-bcc6-db145e0ad05d@app.fastmail.com>
 References: <0c1fcf2c-c061-4074-a20e-44b870fbeef5@app.fastmail.com>
  <2795ad9b-acbd-460a-bfcb-61f0101180d4@efficios.com>
-Date: Wed, 04 Oct 2023 19:12:40 -0400
+ <db8dd95b-55ca-4259-bcc6-db145e0ad05d@app.fastmail.com>
+Date: Thu, 05 Oct 2023 15:40:27 -0400
 To: "Kienan Stewart" <kstewart@efficios.com>, lttng-dev@lists.lttng.org
 Subject: Re: [lttng-dev] What is DEFINE_LTTNG_UST_SIGBUS_STATE for and other
  beginner questions
@@ -78,77 +78,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On Wed, Oct 4, 2023, at 3:04 PM, Kienan Stewart wrote:
-> Hi Chris,
->
-> On 2023-10-04 12:56, Christopher Harvey via lttng-dev wrote:
->> Hi all,
->> 
->> I'm just getting started with lttng and have a couple of questions. My target is getting userspace tracepoints to work in a c++ application I control. I don't need kernel or system tracing. The target is running in a docker container I have control over as well. Running with --privileged is possible in my setup. I could run lttng inside the target container, outside on the host, or in another container on the same host. It's all the same to me. I don't know which setup is best, or if it even matters given that I don't need system or kernel traces.
->> 
->> I am using:
->> lttng-tools-2.13.11/      and       lttng-ust-2.13.6/
->> with userspace-rcu-0.14.0/
->> 
->> There is a slight version mismatch there, I just downloaded the "-lastest" from the links in the guide.
->> 
->> Here is my tracepoint provider header:
->> -----
-[SNIP]
->> --------
->> 
->> and the cpp:
->> -------
-[SNIP]
->> ----
->> 
->> I'm suspicious of a couple of things in my setup.
->> 
->> First, if I omit the DEFINE_LTTNG_UST_SIGBUS_STATE(); line, my program fails to compile with the following error:
->> liblttng-ust-ctl.so: undefined reference to `lttng_ust_sigbus_state'
->> 
->
-> I wasn't able to reproduce the compilation error you are seeing. Could 
-> you describe in more detail how you are compiling and linking your 
-> tracepoint provider and application?
+I got this one figured out. I used strace -fp <pid> -trace=connect on the target app to see why the connect was failing and it turns out there was a mismatch between sessiond's apps-socket paths and libust's.
 
-I just create a .o from the tracepoint provider compilation unit. I'm not making shared libraries or anything like that. More on this below.
+time to review my build environment I guess. It's very possible my docker container's path environment variables are non-standard.
 
->> The getting started guide doesn't say anything about needing DEFINE_LTTNG_UST_SIGBUS_STATE so it makes me wonder if I have done something else wrong somewhere else. I ran a find *.so | xargs nm -D | grep lttng_ust_sigbus_state and nothing in lttng-ust provides that symbol, so it looks like the target application has to define it. Is that normal?
->> 
->
-> If the application is actually using liblttng-ust-ctl, then it would be 
-> normal to do the define. The header file explains that this is done to 
-> avoid unnecessarily pre-allocating space in the thread-local storage.
-> https://github.com/lttng/lttng-ust/blob/master/include/lttng/ust-sigbus.h#L39
->
-> Traced applications typically don't link against liblttng-ust-ctl.
->
+If I had a tiny bit of feedback to provide it would be to print out the errno and paths in the connect/bind commands in the DBG commands. I had to bust out strace to get that info. Small problem, but it could have saved me a few hours and some mailing list messages.
 
-This ended up being one of the main problems. My final linking flags are
--llttng-ust -llttng-ust-common -llttng-ust-tracepoint
-I didn't have a particular reason for linking against liblttng-ust-ctl before. It was a mistake.
+Thank you for making this nice looking software available for free. Looking forward to playing with it some more.
 
->> If I leave DEFINE_LTTNG_UST_SIGBUS_STATE in then my program compiles. If I run lttng-sessiond in the target container, then run lttng list --userspace I see no tracepoints in the list.
->> 
->
-> Is your application actively running while you run `lttng list --userspace`?
-
-yes
-
-I was reading some lttng-sessiond source code and discovered -vvv as well as LTTNG_UST_DEBUG.
-
-I'm still not seeing the tracepoints show up in lttng list --userspace, but I found more hints as to why.
-Here is some output from my target application:
- liblttng_ust[454/467]: Info: sessiond not accepting connections to local apps socket (in ust_listener_thread() at lttng-ust-comm.c:1884)
-liblttng_ust[454/467]: Waiting for local apps sessiond (in wait_for_sessiond() at lttng-ust-comm.c:1758
-
-These prints only happen periodically when lttng-sessiond is running. If I stop lttng-sessiond then the prints stop so there is clearly some communication happening. Apparently this gets printed when there is an ECONNREFUSED from lttng-sessiond. I haven't gotten much further than that right now. I have pasted the output from sessiond -vvv here:
-
-https://pastebin.com/raw/ayJJ2J9p
-
-thank you for your time,
-Chris
+-Chris
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
