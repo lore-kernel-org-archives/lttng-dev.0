@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DE0DCD68E0
-	for <lttng-dev@archiver.kernel.org>; Tue, 10 Oct 2023 00:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82815CD8CA4
+	for <lttng-dev@archiver.kernel.org>; Tue, 10 Oct 2023 15:13:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1696897790;
-	bh=LICCkvMdYvXGj1wGff1FGS6IwhHRn8MGG2qO4PWN1ME=;
+	s=default; t=1696950831;
+	bh=rYuF9fyiAt60gkKJLNajubSynp5iY6AZw2TRoa3gAik=;
 	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=j0LcGr4Dd2aWY3B6ZovAhu66UgGwmLgx2Gnt/hU+zQqimpejojqkq5/WkQCEZd7bz
-	 9o6HLL6+9Peaz2ibkANwYqlJU5JUOJIQ4itr6n/o6cuuxLTk6t4BlrfnQYNp2Rf6Nk
-	 +HIpgioTm08bqGp57D9g5e06n0JCCuCrnOEQb858ASJoKec4PWNzKjHmsHN8JxtM+V
-	 O19pHTwvX0d214s8QtkStO33i0zmdu8gtZ0Nshn+l61YzbA5hj/RYY91uvOc04Mkga
-	 JBq1EYlH8W7HlF+pqtkDazriEU/N2ETDRcyHIic7xYvRE467bMZL3rceDfBjUUbpMu
-	 xkaVPmiUjXXdg==
+	b=IIrQHO+ugNeHW0bgsF+UY3kuExoUZAN+Za+Ku36MjvNU0RS6Rh6bSpxZdIlp42RqE
+	 pozb+mVqo+cOKve1w+hVxv0TMn+ZVmOZpe8eO/AElY8/9lpm035lpB17p8uV/riLV0
+	 QpcosiRfAhWyqa0wqHay92E7TQiEv0Y+LoE+Hlh7I47RYTkqfE3OlYgNtCrsN5Qxyt
+	 HMYtp4G9tzPCsOHEZjmdRzOT7Y4CWnNY5x4pcH/9C1S2rB7xj1onqS/IYpv7tfjRh8
+	 1ylEagu8VOKOa4WgfVQjntXuMHauZT8Vd1B8/ynaGR/rkX8i/4ey6JSL5drKxY/caj
+	 YnVeE4mSnfoVA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4S4Gxp111fz2w59;
-	Mon,  9 Oct 2023 20:29:50 -0400 (EDT)
-Received: from mail-yw1-x1161.google.com (mail-yw1-x1161.google.com
- [IPv6:2607:f8b0:4864:20::1161])
- by lists.lttng.org (Postfix) with ESMTPS id 4S4Gxm0NlVz2vpQ
- for <lttng-dev@lists.lttng.org>; Mon,  9 Oct 2023 20:29:47 -0400 (EDT)
-Received: by mail-yw1-x1161.google.com with SMTP id
- 00721157ae682-5a2379a8b69so62543917b3.2
- for <lttng-dev@lists.lttng.org>; Mon, 09 Oct 2023 17:29:47 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4S4fYp5dNGz2wDb;
+	Tue, 10 Oct 2023 11:13:50 -0400 (EDT)
+Received: from mail-ot1-x362.google.com (mail-ot1-x362.google.com
+ [IPv6:2607:f8b0:4864:20::362])
+ by lists.lttng.org (Postfix) with ESMTPS id 4S2RV54zsPz2tTR
+ for <lttng-dev@lists.lttng.org>; Fri,  6 Oct 2023 20:47:56 -0400 (EDT)
+Received: by mail-ot1-x362.google.com with SMTP id
+ 46e09a7af769-6c6504c9ac5so1795742a34.0
+ for <lttng-dev@lists.lttng.org>; Fri, 06 Oct 2023 17:47:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1696897787; x=1697502587;
+ d=1e100.net; s=20230601; t=1696639675; x=1697244475;
  h=content-disposition:mime-version:message-id:subject:to:from:date
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=1dnHHdY0fXqV30eTwLkk73uFYOlgGPDxxDs9qGKTw0A=;
- b=At8KJAgItT1J/72wRNUa6/PYq2WRRLYF0WJ5ytV+bJ0npzOajWVwdDomLcfsbohV9+
- 9eY++6CA4B6u3Frr+NIFuPJ/GAFZFikYE9N29GyiPXr7nBFEdrrxqIRn/1UbWcHDBacx
- ND+5vr5qbB3YvMS+oG86aSjHRPqHG+vCWku4E2/Vk6gje8LSKKoThvac9lnVfsNaBA3b
- srR6y755iGgwf7o4ebXpN7nhO+nbqWFCMTD09FGrO4CNO1ShXA/mTiRHjG17oLMEQR8J
- RmG8JTfvVy7LkbAHaHdSAEsHf6/qZFWJfplPQEyt+hutE+1JZKHjlH9824qLYOysGP5c
- IiJg==
-X-Gm-Message-State: AOJu0YwIJ7Priz/P0rDA0mT1e+eY6LCwJQsmRNyvAMOp+99tN29lmd7B
- mry6HtW9FKhtHXRffy+mjKIb/a1tDGlakkAAAbELWJJS7KoFeqbqKBjbJW81DlOXzmmkxny+dEr
- D3BlrpKEXIz/iPYt7gOBgvSLiQY3FSytV4FOkl+JTPXf2r7yN+vzt3li97NZYb8ppZfCGX0bk8c
- 0mZcz8qqCcxZah/YKX7agkyC/n3oZ+I/aAPwkOVzUwKpg=
-X-Google-Smtp-Source: AGHT+IGuxULocjGFHvoKmnVYYVdolEBHIdo9PczDdhj9/ViygNsmSM4reQW3oUQDTwl1ctsTiJmGEIdh3AkL
-X-Received: by 2002:a81:7309:0:b0:59b:2458:f608 with SMTP id
- o9-20020a817309000000b0059b2458f608mr17837819ywc.30.1696897787179; 
- Mon, 09 Oct 2023 17:29:47 -0700 (PDT)
-Received: from c7-smtp.dev.purestorage.com ([2620:125:9007:320:7:32:106:0])
+ bh=sMAWIIKgmyOta+qey8TPNgQuJeho+VFLAI/XK7OTl9s=;
+ b=rMrDyRR+bWEa7OG5E9jENFE5hYeCh/bGerRikLGxqeutqjg6D9kJfUuBvpi1AQblob
+ sdsQ7ESTX/ZYrWb6FhIpwj5axnLzdeGUuS0UVPSApxhNxgm0tQW2J4XKyhOtq0RQ0Qq6
+ t6PQo8HRxD5KSpKQ0B21z6QkMfMJaUVq4D0TjdE7rdC9vxyoefV6K0ADCNfHzkZhMGWC
+ ByBFaAUK/bIAveyix2D5hG8kI+0pjBNwPqlaEX6xf/INPip7CvFbGtumahnJ38/idmPK
+ LkzhneECPlxenjN70qSROthgq31NEZBpOszFG/JIz5sfBkGHBzCYkjUrTKGqJUsEkG1u
+ Cbtg==
+X-Gm-Message-State: AOJu0Yyl8wwqIzdc50e6rnyQiEBqD69pmU4jb5zY/CbIPtfvzImPr1FK
+ XVbynhoq2DFh0D8G9aArXSiSPhMVU/CMpo0+BUle9OCrNTXOBRl0JOfy72YPSrFH6vJ1XJOhv1T
+ smVzcymNfw3MC0MkMKoX7Rzhb34hTqEcN8jWufr3bBGGASvjdbe8UD4B+sqRYJzrStO/c3PzSe+
+ 5tnAvnPVUX0atjcIoX7BFKGFeOG98=
+X-Google-Smtp-Source: AGHT+IGLr1Erzx+XZk0FGi5RSmXBCIaDhlGRJI2aAJ3UssTyCmrYN5ydQ5hVY0MUNj8ddGJrFWTDZrx3udMd
+X-Received: by 2002:a9d:4d83:0:b0:6bc:d519:d7b3 with SMTP id
+ u3-20020a9d4d83000000b006bcd519d7b3mr9148177otk.37.1696639675407; 
+ Fri, 06 Oct 2023 17:47:55 -0700 (PDT)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
  by smtp-relay.gmail.com with ESMTPS id
- d18-20020a814f12000000b005a7be89a580sm22754ywb.18.2023.10.09.17.29.46
+ e25-20020a637459000000b005859bd29c66sm298905pgn.4.2023.10.06.17.47.54
  for <lttng-dev@lists.lttng.org>
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Mon, 09 Oct 2023 17:29:47 -0700 (PDT)
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 06 Oct 2023 17:47:55 -0700 (PDT)
 X-Relaying-Domain: purestorage.com
 Received: from dev-ushankar.dev.purestorage.com
- (dev-ushankar.dev.purestorage.com [IPv6:2620:125:9007:640:7:70:36:0])
- by c7-smtp.dev.purestorage.com (Postfix) with ESMTP id 798372210E
- for <lttng-dev@lists.lttng.org>; Mon,  9 Oct 2023 18:29:46 -0600 (MDT)
+ (dev-ushankar.dev.purestorage.com [10.7.70.36])
+ by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 750D43401BC
+ for <lttng-dev@lists.lttng.org>; Fri,  6 Oct 2023 18:47:54 -0600 (MDT)
 Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
- id 70DF1E403BF; Mon,  9 Oct 2023 18:29:46 -0600 (MDT)
-Date: Mon, 9 Oct 2023 18:29:46 -0600
+ id 676F9E4066A; Fri,  6 Oct 2023 18:47:53 -0600 (MDT)
+Date: Fri, 6 Oct 2023 18:47:53 -0600
 To: lttng-dev@lists.lttng.org
-Message-ID: <ZSSa+ocJYtvulAwv@dev-ushankar.dev.purestorage.com>
+Message-ID: <ZSCquVcm4WZdOP6Z@dev-ushankar.dev.purestorage.com>
 MIME-Version: 1.0
 Content-Disposition: inline
+X-Mailman-Approved-At: Tue, 10 Oct 2023 11:13:49 -0400
 Subject: [lttng-dev] lttng list -k is missing tracepoints
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -114,13 +115,13 @@ io_uring:io_uring_register
 io_uring:io_uring_create
 
 However, lttng list -k does not show any of these tracepoints. I'm using
-an lttng-modules built from the repo which I cloned last Friday:
+an lttng-modules built from the repo which I cloned earlier today:
 
 $ modinfo lttng-wrapper | grep extra_version_git
 extra_version_git:  v2.13.0-rc1-316-ga62977ca
 
-(lttng-tools and lttng-ust are older - whatever version came with my
-distro - but I don't think that should matter). Am I missing something?
+(lttng-tools and lttng-ust are older; whatever version came with my
+distro, but I don't think that should matter). Am I missing something?
 
 Here's the full output of lttng list -k, in case it's helpful:
 
