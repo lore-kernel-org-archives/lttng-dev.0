@@ -4,126 +4,119 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22426CD98C0
-	for <lttng-dev@archiver.kernel.org>; Tue, 10 Oct 2023 21:52:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05FB9CD98CA
+	for <lttng-dev@archiver.kernel.org>; Tue, 10 Oct 2023 22:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1696974732;
-	bh=TMvXjob/NSZgP8JRf8G1STVggR/CUG/uHLMblfpvOQE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Pr7D87aZGr4uy3ZQZCoLr6Ddn4vSolIyG/OymcknUcpkaB178NCxqCArcORmdPiSu
-	 Em+69va3pnMN/l7bSsjeSOJ2782/EuKTPA68kA/oIwZKDs8pVhFw+5Ts0XA2SsQ599
-	 eT8HQTu5FwgPA4Mkh1tBExPrnTIG0E6hXZ0EypeC+NyGXPaGhJYbzhGywesiiiCwEf
-	 15OpOHD09OUkThDs08bxryHjXR5rk+pdoilWBnps7JXE3Xze9Ilu4CK+GMcPF6pvBb
-	 f5Vwhmzzg/GQQNGFAYZ6hlF2Jotaga6kJib5ZOIxEM6uyAy7zlXbfNcKJoAuUBVvHP
-	 p9jd3+7EuAGiQ==
+	s=default; t=1696975391;
+	bh=5iWk8POlw6qpWzcj2JIxfEfObDajQwnO5y9OXhqq+jw=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=JqOhWScEmB5TkDNY41yVZnsJwiktYD/miPQdPB1REfEKzun697nLbR1WKelj0uLLM
+	 V7aTDEa8GFMLTVtOFjaI7uDWNoyY9qz+TJpdkoHH1YVm3uwWDI27XPoaLC5FYZ0Qpg
+	 MC8c7W5pS6y4ziLoDFQc5ifnrW7k2Vov694hW+8KvhagQJRStO5Xfegu+JrB4l5xtC
+	 VlDLMubmxkgHZWVUChYj1uchLbrTvzSoQVeEO8x6YC2qsRLM2Uf30q0zZNrR5pa2FI
+	 xFYyvuiMe89r5NrmkCrqITNz89/hV0uLH7SzqWpoiTNb81U5f49TtjlaQirrwlnRHr
+	 rLJpRxhhWUUwg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4S4qPR1B7Sz2w27;
-	Tue, 10 Oct 2023 17:52:11 -0400 (EDT)
-Received: from emp-mxpp104.dcs.leidos.com (emp-mxpp104.dcs.leidos.com
- [149.8.243.14])
- by lists.lttng.org (Postfix) with ESMTP id 4S4q0K60cnz2wF7
- for <lttng-dev@lists.lttng.org>; Tue, 10 Oct 2023 17:33:53 -0400 (EDT)
-Received: from pps.filterd (emp-mxpp104.dcs.leidos.com [127.0.0.1])
- by emp-mxpp104.dcs.leidos.com (8.17.1.5/8.17.1.5) with ESMTP id 39AKNjeA009782
- for <lttng-dev@lists.lttng.org>; Tue, 10 Oct 2023 16:33:50 -0500
-Received: from epsp-dlp-prev22.dcs.leidos.com (EPSP-DLP-PREV22.dcs.leidos.com
- [10.227.23.22])
- by emp-mxpp104.dcs.leidos.com (PPS) with ESMTPS id 3tk1eym88n-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Tue, 10 Oct 2023 16:33:49 -0500
-Received: from emp-mxpp112.dcs.leidos.com (unknown [149.8.242.102]) by
- EPSP-DLP-PREV22.dcs.leidos.com with smtp
- (TLS: TLSv1/SSLv3,128bits,ECDHE-RSA-AES128-GCM-SHA256)
- id 0f9f_1102_4b4cec4d_b3f7_440b_af30_3957f07b0fd4;
- Tue, 10 Oct 2023 21:33:49 +0000
-Received: from EMP-EXMR1822.corp.leidos.com (EMP-EXMR1822.corp.leidos.com
- [10.128.180.12])
- by emp-mxpp112.dcs.leidos.com (8.17.1.5/8.17.1.5) with ESMTPS id
- 39ALXmCY013212
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Tue, 10 Oct 2023 16:33:49 -0500
-Received: from EMP-EXMR1822.corp.leidos.com (10.128.180.12) by
- EMP-EXMR1822.corp.leidos.com (10.128.180.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.2507.32; Tue, 10 Oct 2023 16:33:47 -0500
-Received: from USG02-BN3-obe.outbound.protection.office365.us (10.226.129.6)
- by EMP-EXMR1822.corp.leidos.com (10.128.180.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.2507.32 via Frontend Transport; Tue, 10 Oct 2023 16:33:47 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
- b=Okb03qs7IftncteOiyFeTYkiadb54niqL4xOpCz9ns1ozcHykLQMepOfiif4j8t4vAYJXGzJUzkm/2NK9mUdWWX0G7VRhxeodmeMuQJFaU6qgnuBEbsaEAr6Ps8inUtRXHfuBUUU2w0yUJHPHrYR4d9YPquWAukbSeMVKoLuAN5OyHkeLbVPYNyZcFts4xELHWTKXypWTxUswCM1zi28V3v+tSRb2COvehj5T/3g5cgHYwtvsBBt23C1FcutjmeiE/DlsyD77fgNrAVD/EUu+0loXTOZXJ1OAxJCDQxhWuVRG8avqfuQFk8EhAoxnABr2wMqsCtiQhrWl8fQquD8RA==
+	by lists.lttng.org (Postfix) with ESMTP id 4S4qf65XpJz2vyC;
+	Tue, 10 Oct 2023 18:03:10 -0400 (EDT)
+Received: from CAN01-YQB-obe.outbound.protection.outlook.com
+ (mail-yqbcan01on2062e.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:7052::62e])
+ by lists.lttng.org (Postfix) with ESMTPS id 4S4qf33Dxtz2w28
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Oct 2023 18:03:07 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CFcUQFV3wxKo25qPKz3jpgQD0W5Y0AddInbZglpzyLSkg3iFSqkui9cDv0e5Sna+Nt9ogqAgzH4JMmKrnbv7F68R7PZ4DReCv9XnpRfwj0WU+1PMftRmyuyhsb3ekdTgZuXUjuC7Ys8zJ8Xq1fvziwaiVwjqTA526qq3FUVG99e1EI9t9RoCyvAnGIJ+QmbvWyF70wQzURp+z+Em3/ZEMeNWhKKeUjg10FkEfqOYxSk4roP40DBaSCQurgxgR9YXhU9l2jajkSGfll0StRBWfPPgQBlSthdUaGeNC8bF9dO379YAO9XMth/5SpBE3jNsf0hXPuFBvSe0LCOrWjxezQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector5401;
+ s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V5sCun2CLzWZCRoSuP0iIR3FSr8S+IUx+OsGNjumg3M=;
- b=sou+CZA6WVe8QNkSoIOY3ORGEGf/0iW62CyqOEWF82a82ZPDqUXyCLe+fFVE7ZFW5Vp0USgL4C4zzJl0RS5WYNlwt/ltLAG05imuFrhvWR4vOrbL7UT950ks7FsaWwLlNTD8MdvPsrt6thzU0K3jYK4Yi44AkaF3LgKehXDQb96h3EW6Y6aaA2i/104kWUfclSQJ/dJcxizhCYiPUR5EGO2G2V3g4Z8+Dfw7ZI5ZQyC/tRegJA4Vypy80PDJYSEfrTPsa4UAz7VO8i6nrFGj+zCQLpp22fL97V/SxTvgY6M6fKkRza/74HiRo6K1X9xYMU1ex7nu738P6pDZPNKuqA==
+ bh=0g1lrHYplr+UTLei4PTOiyN6bqNYSxsaOjkQ4DVvMjQ=;
+ b=ZlMqzeHhKj03z+z42pZC1YM3iiqLrEcry9Y3GAw3tI/7EmV3nWvjNEffFhyBuJ3c2THJ+hMziziwEBiybApEVdjuX+74f5O4CBLmQGBkOs+WbifyBxlaxgrwwjm0MC6fMDKDoY7hvhHsMOMHOVwjOXjbGVHMZh2Xth43PlzYPq5ba4F42PWGO9p/djKkwwLx/5FeT83wkBhO96akDeI7Pwa0GyCyPnqf80kyxXw1e2NWB4CE9FdDXnpH5Jy9WmAltMe6JPqsGvNymUK1ynCJE9j/xWOZM53N77su/5CNN5WApC35d+KEMT3zNxB2LEQ0K49A2QXKlHbA4zVxtbA7Xw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=leidos.com; dmarc=pass action=none header.from=leidos.com;
- dkim=pass header.d=leidos.com; arc=none
-Received: from BN2P110MB1237.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:179::21)
- by BN2P110MB1334.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:17f::21)
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:24::5)
+ by YQBPR0101MB6232.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:39::12)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.34; Tue, 10 Oct
- 2023 21:33:46 +0000
-Received: from BN2P110MB1237.NAMP110.PROD.OUTLOOK.COM
- ([fe80::b917:ae28:cdad:43bf]) by BN2P110MB1237.NAMP110.PROD.OUTLOOK.COM
- ([fe80::b917:ae28:cdad:43bf%4]) with mapi id 15.20.6813.027; Tue, 10 Oct 2023
- 21:33:46 +0000
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Thread-Topic: BabelTrace 1.5.8 Error
-Thread-Index: Adn7wJyhsi9YOw7oQ16Mjddl8KK43g==
-Date: Tue, 10 Oct 2023 21:33:46 +0000
-Message-ID: <BN2P110MB1237C60889C689B25E536D96DACDA@BN2P110MB1237.NAMP110.PROD.OUTLOOK.COM>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Tue, 10 Oct
+ 2023 22:03:05 +0000
+Received: from YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b19:618a:6701:fd05]) by YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b19:618a:6701:fd05%7]) with mapi id 15.20.6863.032; Tue, 10 Oct 2023
+ 22:03:05 +0000
+Message-ID: <e9d7efb4-7bf0-4e37-ad13-3571f4f4e1de@efficios.com>
+Date: Tue, 10 Oct 2023 18:03:04 -0400
+User-Agent: Mozilla Thunderbird
 Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_c968a81f-7ed4-4faa-9408-9652e001dd96_ActionId=0a630323-b131-425a-99cc-41acb9ecfae7;
- MSIP_Label_c968a81f-7ed4-4faa-9408-9652e001dd96_ContentBits=0;
- MSIP_Label_c968a81f-7ed4-4faa-9408-9652e001dd96_Enabled=true;
- MSIP_Label_c968a81f-7ed4-4faa-9408-9652e001dd96_Method=Privileged;
- MSIP_Label_c968a81f-7ed4-4faa-9408-9652e001dd96_Name=Unrestricted;
- MSIP_Label_c968a81f-7ed4-4faa-9408-9652e001dd96_SetDate=2023-10-10T21:33:43Z;
- MSIP_Label_c968a81f-7ed4-4faa-9408-9652e001dd96_SiteId=b64da4ac-e800-4cfc-8931-e607f720a1b8;
-dlp-product: dlpe-windows
-dlp-version: 11.10.901.55
-dlp-reaction: no-action
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN2P110MB1237:EE_|BN2P110MB1334:EE_
-x-ms-office365-filtering-correlation-id: efe2b9d1-a2b9-4060-386e-08dbc9d8958d
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ChrAbTQNFL9GNvTF/LhsjCWsqjUMnQ7LjA1kOlkV0Nyzi6tlsgB8Xrs0F3I9oORFRz4kaJw3w6FuhR+pLL9g1wYMCB/HWqIWzkVs51+rgKWu20MlUfxXSldzSbZ8sITxF6AI4UDffXWeczf46blvsw4AXTr97p95zzQ4JX8NStahebz0H7AKMajcGCjtDuuFHGSJ6P3EWXH6oGl/qfqJRc0uCTgqwk8HD2i+DB0EpZBV33pn3J9IJils5Uu2bnoLOmF5+O5KC5jqtYI2nbCyU6u5tHGUochgUPwd868xzLihxWWiTJGLh4gDO784bsf3R2FPFvifHQOFnFzw2E+L/EeHOqH3spAc51ctp+6Vqc4e1cwG1mCv9HFs98v01nopHy+sxvHtpA6vePHkgBEDLZsyAE08FRCZcullfVgBNq9qJecfpvhgCux9qnXWrrP5U/PNpeLMklPpKgvegGftk/IGMnkoTTRupFRXcM//Wz5rpKD0DP5/URb+r0kTwalCrOVdqsnPuxYafKjIsQbn7aPh7VPHeR5pw7MTWOT+FHG+1BXZUSZ+SVY4cgjywmP4YTW2S7EvUhk3AF6GX7EiklUCHW2snNGUsE0n/vNSvgI=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:BN2P110MB1237.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230031)(366004)(230922051799003)(186009)(1800799009)(451199024)(498600001)(2906002)(99936003)(6506007)(966005)(83380400001)(66446008)(38070700005)(166002)(33656002)(38100700002)(7116003)(66476007)(26005)(122000001)(76116006)(52536014)(8676002)(5660300002)(86362001)(8936002)(71200400001)(9326002)(55016003)(9686003)(7696005)(6916009)(64756008)(66946007)(66556008);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: FQMNtdowhU8b4MNxtYQHREYI3pxOoJlg3LXN5yo4zbIKmrdA2DWE9AzbbNxtroTT0eP+Day59tWcOdFeoXH1lYBto/FuUH7zua1KkvlxcJbbcL+B+fVSrIf6+ItBRKLxgo57+6zfmSui1IyFrZ4IFrhw43Sb/H69knxzGGc5lYAiXYbwVkfoVi20R6+5zPyD1B3riysmybrOV95fWRwjNa5BCWsZ2TMg6CcOpi9mcoBdZxwMCrCTtW0v9WXV4o4UyJmjLvgI9qqf5Are214mEXcYTPzBUejcAxsCE68aww6n1iHApNslBlIhJDqer1SsnXz4WO5dtzhdmLR9leM+8Z9bj9M66Ns9VzaDsUdxAlWXhV2LduLNL4FQngzXSSY3U5i95iS/2VTH0n2Upnt48OS3YOWcYR71nSMgv2YvRyw=
-Content-Type: multipart/mixed;
- boundary="_004_BN2P110MB1237C60889C689B25E536D96DACDABN2P110MB1237NAMP_"
+To: "Smet, Jonathan A. [US-US]" <Jonathan.A.Smet@leidos.com>,
+ "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+References: <BN2P110MB1237C60889C689B25E536D96DACDA@BN2P110MB1237.NAMP110.PROD.OUTLOOK.COM>
+In-Reply-To: <BN2P110MB1237C60889C689B25E536D96DACDA@BN2P110MB1237.NAMP110.PROD.OUTLOOK.COM>
+X-ClientProxiedBy: YQXPR0101CA0059.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:14::36) To YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:24::5)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YQBPR0101MB5080:EE_|YQBPR0101MB6232:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7380c8e0-0caf-4b40-0214-08dbc9dcae2b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vADEfuZBpK11Eh/vnsWJzyzJnJZpdofdy9lPnC6nkZcs71zZzE6ZqvgalVeX+yRG8gpuCJa+c7zKw8BNcISiSbTSgyft3iiPDhTI1dnuZn5+MDLfr5inZts5qMiEED5rlrY7ZCwCvLwir35adPiChPaooXL67gqeg0XP5BtEXvlXnTvppYw6TfA0GJSxdmW5BpKM83niYl3/y/Ff2RBt1onq5aE3x+YOf0YSGRfh0QB6o6pGn/e9zRPUzcpzUKwiGvUtbjDgtev5R7RVzdN7sBnPD4XX5DEisneWtP9VQNCYXheVVI62wJO7bDjloEI0qqqeH0OJ/HEOQ5+xoy56GTBz1zILpz/EIvB6nnrXfshwnuCdtqnPKtMubeA8gIZTk7t5sDCC+67ymCZqF3OGv3IgVfG/ar1XF/MUbPkp+1YHhGnfoIr2urFZZmGIf8qCTfZWwIu7HKSjt9yCDr21kiE97ZHKrpN1kfHKQkPoAJJCD1w2/Vuu2vwsxHVj7VgHjAbxkjPaUuHftnHMVCZ1EaiRLpObpMPM+abw7yV+6L0G+32jscYfBxoYOS1FrJZe5ZDYQ0gvcKt0evv3yKCGr886t7B0l2ldS7BBGSefhowckHix6/0reDDTgs0dcR3UgVWqiDmJVW01YaqwmpMMTw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(366004)(396003)(346002)(39830400003)(376002)(136003)(230922051799003)(451199024)(1800799009)(186009)(64100799003)(31696002)(31686004)(53546011)(6512007)(36756003)(86362001)(38100700002)(4001150100001)(26005)(2906002)(83380400001)(2616005)(966005)(66556008)(6506007)(478600001)(6486002)(8676002)(8936002)(41300700001)(5660300002)(66476007)(66946007)(110136005)(316002)(45980500001)(43740500002);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M1NOKzFkMHJLNC9MdjkwZ0ZxdXd2T1dZM1pwUkdnV0dydEJNbmZHQmhSYmtS?=
+ =?utf-8?B?aXFJK2RUdVpLdkZ4dUhrSWZrZTZHWmxMMUVVZnR5YWRsMU5FNUp3blcrSkpl?=
+ =?utf-8?B?Z1dwUTZpRHoyRHFXTmZpRlRNMG1Sam9ONTY5RkJtaEtDRW5teG81anlYZ3Vs?=
+ =?utf-8?B?TTU3RnVmME9YbmhFakhhZ0g5eDRiclM0b1RWV1VNa3J3dTdwT2M4eEM3cEs1?=
+ =?utf-8?B?akRTZWNoZGJ3OGF2eWVYMHRobzg1SHI3MHN5ckxGcW52bjdJRDhUM2xJemta?=
+ =?utf-8?B?VStOQStpSm15K1k4RHlyVmQ0ZzUwT1dUb1M3bUVQeFZqbGozaUVESnRPU2tU?=
+ =?utf-8?B?R3R5Q0dZT1A4YzM0OGsxNnBoYzVVeW94ekppZ0cyamVDeFBJdGIzRm5iUW5J?=
+ =?utf-8?B?TFFLWGVOUVVPbHVXVGdIV0VzK0pKV2hCbUNwcG1NTGp3U2docXlRNGhteENl?=
+ =?utf-8?B?Ykk4QjdEZEwxUitZZy9uV1BpV0NxT0dqUFdnYWxraE9nWmxSZWV1ZDBoUmZT?=
+ =?utf-8?B?Q0c1czJIRC93RDRSKzJTR3lDV1VVN21BSzlGZ3QrL05pSFBnUWJybnFNakpD?=
+ =?utf-8?B?bi9NUXArcFFPMS9rY3o0UkJyUEM3eW5tN1JtT04wdUtjZlhwM1RiRlM5VytZ?=
+ =?utf-8?B?VS9ET2RlRkZPV2hoWUJFaERkcHZ1cGp1TlJ5ZFBudlBNYkgycHdHRFZRUkFi?=
+ =?utf-8?B?KzAzWmxHN0FQZ1pJQk9Ed281djhKN2lReHA1SGpCVzRiZ3FVWW1RU2FiQy84?=
+ =?utf-8?B?NE5IeWZML3F5a3dYNThvT3MwK0JaNUpzNlV2emJEK2JUdzdtbTJkNFBqcGJl?=
+ =?utf-8?B?MTEwaVdXd0lCaHlJMmVBMzNXQnBERkx2ajhvdWdZb3J1SDV4L2s5ZzN0WWtR?=
+ =?utf-8?B?MWd5c01kZGZWM0o5WXU2ZFN0MlZyVkJyQ0JjWnhwcnpIV1d6WVZodE1YYlUw?=
+ =?utf-8?B?S1NWREgrUEdVVjlzWVNTeTNHWkhvOVJ0K09raGdPNEdYNmJtMmlPUnplYXJK?=
+ =?utf-8?B?UHl6cHhCOFJ6T0VWSXcwYkE2VkhUamd4UEVDV3JHUDk5U2Q0S3dCeDVyRjIz?=
+ =?utf-8?B?YUlaTHFSSzhTVDNydjdDV3dGRnJSYzltY0sxblBTaVhhTCs3NmZIYm02Uklr?=
+ =?utf-8?B?My9BUTdqNnowckRjcVIvbk56bU1ucDRZd09yWEJGTVArWWN0SVZnRE1mNnYw?=
+ =?utf-8?B?UzdyWG1QRy8vRHJpeTc0TUhWVjJZZkt1Wld6QW5XNktROXgyWkRNNEtJN0xP?=
+ =?utf-8?B?Skx0VE5DOEZNZkt2dEJRUitUY3V3WXdQWDg0ZjVib3cvenRHMDZMNlpmbmdU?=
+ =?utf-8?B?L1VQTFZCd2NpZWQvanQxNTFqQTUwOURuTk52NWovTkxpaEtTOE03V1ZwVEwy?=
+ =?utf-8?B?UnN4UGlUZTBaTlh3a0s0OC9pUXR0Q2NoNk9MbDVBYTNJUjlESk1GUlVQdFNo?=
+ =?utf-8?B?N2dUWnl0d3BweWJ3RG1ZVXI0WEJDV1ZYaVNhTzNhVThYVG43aUovYVk3ek1P?=
+ =?utf-8?B?dHZIRWZWT041dVhudGZCMmFWQlhVcnRoM0E3OEFiSlM3YzFiN1JyUGU0Nyti?=
+ =?utf-8?B?bnM4eFpXYWNpZy90ZU9XVEVjeHQxZ0tYdjFIeUNDQi81WStHV3V4OUF1MHov?=
+ =?utf-8?B?UmhyNytuYmxtNVVOVWhkTmRIaWY5SDlvME1CRWFQRFhmcXdzeEpSZzBzNVc1?=
+ =?utf-8?B?QzY5ZTBUOXdPS1lVNnJoekJoUVhneFBkUThJYnhRUDdsUmhVcjB1amV6cmd6?=
+ =?utf-8?B?UFk4MkZYOVpKYjRKYlNVTHRtMVNDR2tMRFVWb0RKSGk5VEpUOGwxN0pjRUha?=
+ =?utf-8?B?dmsvMUZmZUMxRVJ4SHdIRUx1dXczTDZHNW5jNW9xeG0zNHNrdEpqSlZXaXpL?=
+ =?utf-8?B?bzJLOXpIM0VhbnlQYlpkelY5WTI5NVFvc25sRGV6U0xiTFptTmZtUFdsa1pL?=
+ =?utf-8?B?aEV6SmozU3pqaEh5ck9RZFQ5MUxpRE1KeVZvZ1Rta2FRSnk0SE1tY0g2OE40?=
+ =?utf-8?B?RldVTExlT2ZRRXA5YlVNakxsTXZ6VDhaSHRWeVAvY05GNWxsV2EyWEMvQkFH?=
+ =?utf-8?B?RERFdi9aWmlWTFJ2dm4vR2Jic2MzbnBrUEFCbVRRT3M2RWxLWDZSUHl5OU0x?=
+ =?utf-8?B?K2pQaVZORE1rWE1LZFpjMXNnTkRUYmNUZ3J2Mk1NdTdES3R4UWFsdlRIMFRQ?=
+ =?utf-8?B?OFE9PQ==?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7380c8e0-0caf-4b40-0214-08dbc9dcae2b
+X-MS-Exchange-CrossTenant-AuthSource: YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN2P110MB1237.NAMP110.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: efe2b9d1-a2b9-4060-386e-08dbc9d8958d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2023 21:33:46.2193 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b64da4ac-e800-4cfc-8931-e607f720a1b8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN2P110MB1334
-X-OriginatorOrg: leidos.com
-X-EmailSecurity-Header: 1
-X-RCIS-Action: ALLOW
-X-Proofpoint-ORIG-GUID: k9zyNGhSrETG0yfLMWoinYYq4aQHYax1
-X-Proofpoint-GUID: k9zyNGhSrETG0yfLMWoinYYq4aQHYax1
-X-Proofpoint-Spam-Details: rule=notspam policy=outbound score=0 adultscore=0
- malwarescore=0
- phishscore=0 clxscore=1011 suspectscore=0 bulkscore=0 mlxlogscore=999
- impostorscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310100167
-X-Mailman-Approved-At: Tue, 10 Oct 2023 17:52:09 -0400
-Subject: [lttng-dev] BabelTrace 1.5.8 Error
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2023 22:03:05.6243 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SCdBMz0sg9zPPinzX5+zWsThYFpHf5dfjN3R5EJVaRZ6RG9juYfxASsa3jDagDpZf2/pUTCAMBLZ8J2nU8PfFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR0101MB6232
+Subject: Re: [lttng-dev] BabelTrace 1.5.8 Error
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -135,373 +128,46 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "Smet, Jonathan A. \[US-US\] via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "Smet, Jonathan A. \[US-US\]" <Jonathan.A.Smet@leidos.com>
+From: Michael Jeanson via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Michael Jeanson <mjeanson@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---_004_BN2P110MB1237C60889C689B25E536D96DACDABN2P110MB1237NAMP_
-Content-Type: multipart/alternative;
-	boundary="_000_BN2P110MB1237C60889C689B25E536D96DACDABN2P110MB1237NAMP_"
-
---_000_BN2P110MB1237C60889C689B25E536D96DACDABN2P110MB1237NAMP_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-I found this email in the README of https://github.com/efficios/babeltrace/=
-tree/stable-1.5
-
-I have a question regarding the usage of BabelTrace using version 1.5.8. I =
-am running on Ubuntu 20.04 and have installed or dependencies to use BabelT=
-race with Python bindings:
-
-  *   sudo apt-get install lttng-tools
-  *   sudo apt-get install lttng-modules-dkms
-  *   sudo apt-get install liblttng-ust-dev
-  *   sudo apt-get install python3-babeltrace
-
-When trying to import BabelTrace in a Python script with "import babeltrace=
-", I receive the following error (more error output in the attached text fi=
-le): "ModuleNotFoundError: No module named 'babeltrace._babeltrace'" follow=
-ed by "ModuleNotFoundError: No module named '_babeltrace'".
-
-My folder structure at /usr/lib/python3/dist-packages/babeltrace are as fol=
-lows:
-
-  *   _babeltrace.cpython-38-x86_64-linux-gnu.so
-  *   Babeltrace.py
-  *   __init__.py
-  *   /__pycache__
-
-I've been trying to debug this issue for a couple of days, but am running i=
-nto a wall. I've decided to email your team in case you have seen this issu=
-e before, or are able to spot a simple issue with my setup.
-
-Thank you,
-Jon Smet
-
-
-
-
---_000_BN2P110MB1237C60889C689B25E536D96DACDABN2P110MB1237NAMP_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:Wingdings;
-	panose-1:5 0 0 0 0 0 0 0 0 0;}
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;
-	mso-ligatures:standardcontextual;}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:#0563C1;
-	text-decoration:underline;}
-p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
-	{mso-style-priority:34;
-	margin-top:0in;
-	margin-right:0in;
-	margin-bottom:0in;
-	margin-left:.5in;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;
-	mso-ligatures:standardcontextual;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri",sans-serif;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
-/* List Definitions */
-@list l0
-	{mso-list-id:449589223;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-215030838 67698689 67698691 67698693 67698689 67698=
-691 67698693 67698689 67698691 67698693;}
-@list l0:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
-@list l0:level2
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:"Courier New";}
-@list l0:level3
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0A7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Wingdings;}
-@list l0:level4
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
-@list l0:level5
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:"Courier New";}
-@list l0:level6
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0A7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Wingdings;}
-@list l0:level7
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
-@list l0:level8
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:"Courier New";}
-@list l0:level9
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0A7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Wingdings;}
-@list l1
-	{mso-list-id:1112475498;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1606161172 67698689 67698691 67698693 67698689 67698=
-691 67698693 67698689 67698691 67698693;}
-@list l1:level1
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
-@list l1:level2
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:"Courier New";}
-@list l1:level3
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0A7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Wingdings;}
-@list l1:level4
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
-@list l1:level5
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:"Courier New";}
-@list l1:level6
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0A7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Wingdings;}
-@list l1:level7
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0B7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Symbol;}
-@list l1:level8
-	{mso-level-number-format:bullet;
-	mso-level-text:o;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:"Courier New";}
-@list l1:level9
-	{mso-level-number-format:bullet;
-	mso-level-text:\F0A7;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;
-	font-family:Wingdings;}
-ol
-	{margin-bottom:0in;}
-ul
-	{margin-bottom:0in;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72" style=3D"word-wrap:=
-break-word">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hello,<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">I found this email in the README of <a href=3D"https=
-://github.com/efficios/babeltrace/tree/stable-1.5">
-https://github.com/efficios/babeltrace/tree/stable-1.5</a><o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">I have a question regarding the usage of BabelTrace =
-using version 1.5.8. I am running on Ubuntu 20.04 and have installed or dep=
-endencies to use BabelTrace with Python bindings:<o:p></o:p></p>
-<ul style=3D"margin-top:0in" type=3D"disc">
-<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l0 level1 =
-lfo1">sudo apt-get install lttng-tools
-<o:p></o:p></li><li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso=
--list:l0 level1 lfo1">sudo apt-get install lttng-modules-dkms<o:p></o:p></l=
-i><li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l0 level=
-1 lfo1">sudo apt-get install liblttng-ust-dev
-<o:p></o:p></li><li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso=
--list:l0 level1 lfo1">sudo apt-get install python3-babeltrace<o:p></o:p></l=
-i></ul>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">When trying to import BabelTrace in a Python script =
-with &#8220;import babeltrace&#8221;, I receive the following error (more e=
-rror output in the attached text file): &#8220;ModuleNotFoundError: No modu=
-le named 'babeltrace._babeltrace'&#8221; followed by &#8220;ModuleNotFoundE=
-rror:
- No module named '_babeltrace'&#8221;.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">My folder structure at /usr/lib/python3/dist-package=
-s/babeltrace are as follows:<o:p></o:p></p>
-<ul style=3D"margin-top:0in" type=3D"disc">
-<li class=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l1 level1 =
-lfo2">_babeltrace.cpython-38-x86_64-linux-gnu.so<o:p></o:p></li><li class=
-=3D"MsoListParagraph" style=3D"margin-left:0in;mso-list:l1 level1 lfo2">Bab=
-eltrace.py<o:p></o:p></li><li class=3D"MsoListParagraph" style=3D"margin-le=
-ft:0in;mso-list:l1 level1 lfo2">__init__.py<o:p></o:p></li><li class=3D"Mso=
-ListParagraph" style=3D"margin-left:0in;mso-list:l1 level1 lfo2">/__pycache=
-__<o:p></o:p></li></ul>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">I&#8217;ve been trying to debug this issue for a cou=
-ple of days, but am running into a wall. I&#8217;ve decided to email your t=
-eam in case you have seen this issue before, or are able to spot a simple i=
-ssue with my setup.
-<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Thank you,<o:p></o:p></p>
-<p class=3D"MsoNormal">Jon Smet<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-</div>
-</body>
-</html>
-
---_000_BN2P110MB1237C60889C689B25E536D96DACDABN2P110MB1237NAMP_--
-
---_004_BN2P110MB1237C60889C689B25E536D96DACDABN2P110MB1237NAMP_
-Content-Type: text/plain; name="babeltrace_error.txt"
-Content-Description: babeltrace_error.txt
-Content-Disposition: attachment; filename="babeltrace_error.txt"; size=2195;
-	creation-date="Tue, 10 Oct 2023 21:30:13 GMT";
-	modification-date="Tue, 10 Oct 2023 21:33:45 GMT"
-Content-Transfer-Encoding: base64
-
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tDQpNb2R1bGVOb3RGb3VuZEVycm9yICAgICAgICAgICAgICAgICAg
-ICAgICBUcmFjZWJhY2sgKG1vc3QgcmVjZW50IGNhbGwgbGFzdCkNCi91c3IvbGliL3B5dGhvbjMv
-ZGlzdC1wYWNrYWdlcy9iYWJlbHRyYWNlL2JhYmVsdHJhY2UucHkgaW4gc3dpZ19pbXBvcnRfaGVs
-cGVyKCkNCiAgICAgMjUgICAgICAgICB0cnk6DQotLS0+IDI2ICAgICAgICAgICAgIHJldHVybiBp
-bXBvcnRsaWIuaW1wb3J0X21vZHVsZShtbmFtZSkNCiAgICAgMjcgICAgICAgICBleGNlcHQgSW1w
-b3J0RXJyb3I6DQoNCi91c3IvbGliL3B5dGhvbjMuNy9pbXBvcnRsaWIvX19pbml0X18ucHkgaW4g
-aW1wb3J0X21vZHVsZShuYW1lLCBwYWNrYWdlKQ0KICAgIDEyNiAgICAgICAgICAgICBsZXZlbCAr
-PSAxDQotLT4gMTI3ICAgICByZXR1cm4gX2Jvb3RzdHJhcC5fZ2NkX2ltcG9ydChuYW1lW2xldmVs
-Ol0sIHBhY2thZ2UsIGxldmVsKQ0KICAgIDEyOCANCg0KL3Vzci9saWIvcHl0aG9uMy43L2ltcG9y
-dGxpYi9fYm9vdHN0cmFwLnB5IGluIF9nY2RfaW1wb3J0KG5hbWUsIHBhY2thZ2UsIGxldmVsKQ0K
-DQovdXNyL2xpYi9weXRob24zLjcvaW1wb3J0bGliL19ib290c3RyYXAucHkgaW4gX2ZpbmRfYW5k
-X2xvYWQobmFtZSwgaW1wb3J0XykNCg0KL3Vzci9saWIvcHl0aG9uMy43L2ltcG9ydGxpYi9fYm9v
-dHN0cmFwLnB5IGluIF9maW5kX2FuZF9sb2FkX3VubG9ja2VkKG5hbWUsIGltcG9ydF8pDQoNCk1v
-ZHVsZU5vdEZvdW5kRXJyb3I6IE5vIG1vZHVsZSBuYW1lZCAnYmFiZWx0cmFjZS5fYmFiZWx0cmFj
-ZScNCg0KRHVyaW5nIGhhbmRsaW5nIG9mIHRoZSBhYm92ZSBleGNlcHRpb24sIGFub3RoZXIgZXhj
-ZXB0aW9uIG9jY3VycmVkOg0KDQpNb2R1bGVOb3RGb3VuZEVycm9yICAgICAgICAgICAgICAgICAg
-ICAgICBUcmFjZWJhY2sgKG1vc3QgcmVjZW50IGNhbGwgbGFzdCkNCi90bXAvaXB5a2VybmVsXzg3
-NjczLzIyOTU0NDY1MjEucHkgaW4gPG1vZHVsZT4NCi0tLS0+IDEgaW1wb3J0IGJhYmVsdHJhY2UN
-Cg0KL3Vzci9saWIvcHl0aG9uMy9kaXN0LXBhY2thZ2VzL2JhYmVsdHJhY2UvX19pbml0X18ucHkg
-aW4gPG1vZHVsZT4NCiAgICAgMjEgIyBUSEUgU09GVFdBUkUuDQogICAgIDIyIA0KLS0tPiAyMyBm
-cm9tIC5iYWJlbHRyYWNlIGltcG9ydCAqDQogICAgIDI0IA0KICAgICAyNSBfX3ZlcnNpb25fXyA9
-ICcxLjUuOCcNCg0KL3Vzci9saWIvcHl0aG9uMy9kaXN0LXBhY2thZ2VzL2JhYmVsdHJhY2UvYmFi
-ZWx0cmFjZS5weSBpbiA8bW9kdWxlPg0KICAgICAyNyAgICAgICAgIGV4Y2VwdCBJbXBvcnRFcnJv
-cjoNCiAgICAgMjggICAgICAgICAgICAgcmV0dXJuIGltcG9ydGxpYi5pbXBvcnRfbW9kdWxlKCdf
-YmFiZWx0cmFjZScpDQotLS0+IDI5ICAgICBfYmFiZWx0cmFjZSA9IHN3aWdfaW1wb3J0X2hlbHBl
-cigpDQogICAgIDMwICAgICBkZWwgc3dpZ19pbXBvcnRfaGVscGVyDQogICAgIDMxIGVsaWYgX3N3
-aWdfcHl0aG9uX3ZlcnNpb25faW5mbyA+PSAoMiwgNiwgMCk6DQoNCi91c3IvbGliL3B5dGhvbjMv
-ZGlzdC1wYWNrYWdlcy9iYWJlbHRyYWNlL2JhYmVsdHJhY2UucHkgaW4gc3dpZ19pbXBvcnRfaGVs
-cGVyKCkNCiAgICAgMjYgICAgICAgICAgICAgcmV0dXJuIGltcG9ydGxpYi5pbXBvcnRfbW9kdWxl
-KG1uYW1lKQ0KICAgICAyNyAgICAgICAgIGV4Y2VwdCBJbXBvcnRFcnJvcjoNCi0tLT4gMjggICAg
-ICAgICAgICAgcmV0dXJuIGltcG9ydGxpYi5pbXBvcnRfbW9kdWxlKCdfYmFiZWx0cmFjZScpDQog
-ICAgIDI5ICAgICBfYmFiZWx0cmFjZSA9IHN3aWdfaW1wb3J0X2hlbHBlcigpDQogICAgIDMwICAg
-ICBkZWwgc3dpZ19pbXBvcnRfaGVscGVyDQoNCi91c3IvbGliL3B5dGhvbjMuNy9pbXBvcnRsaWIv
-X19pbml0X18ucHkgaW4gaW1wb3J0X21vZHVsZShuYW1lLCBwYWNrYWdlKQ0KICAgIDEyNSAgICAg
-ICAgICAgICAgICAgYnJlYWsNCiAgICAxMjYgICAgICAgICAgICAgbGV2ZWwgKz0gMQ0KLS0+IDEy
-NyAgICAgcmV0dXJuIF9ib290c3RyYXAuX2djZF9pbXBvcnQobmFtZVtsZXZlbDpdLCBwYWNrYWdl
-LCBsZXZlbCkNCiAgICAxMjggDQogICAgMTI5IA0KDQpNb2R1bGVOb3RGb3VuZEVycm9yOiBObyBt
-b2R1bGUgbmFtZWQgJ19iYWJlbHRyYWNlJw0KDQo=
-
---_004_BN2P110MB1237C60889C689B25E536D96DACDABN2P110MB1237NAMP_
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---_004_BN2P110MB1237C60889C689B25E536D96DACDABN2P110MB1237NAMP_--
+T24gMjAyMy0xMC0xMCAxNzozMywgU21ldCwgSm9uYXRoYW4gQS4gW1VTLVVTXSB2aWEgbHR0bmct
+ZGV2IHdyb3RlOgo+IEhlbGxvLAo+IAo+IEkgZm91bmQgdGhpcyBlbWFpbCBpbiB0aGUgUkVBRE1F
+IG9mIAo+IGh0dHBzOi8vZ2l0aHViLmNvbS9lZmZpY2lvcy9iYWJlbHRyYWNlL3RyZWUvc3RhYmxl
+LTEuNSAKPiA8aHR0cHM6Ly9naXRodWIuY29tL2VmZmljaW9zL2JhYmVsdHJhY2UvdHJlZS9zdGFi
+bGUtMS41Pgo+IAo+IEkgaGF2ZSBhIHF1ZXN0aW9uIHJlZ2FyZGluZyB0aGUgdXNhZ2Ugb2YgQmFi
+ZWxUcmFjZSB1c2luZyB2ZXJzaW9uIDEuNS44LiBJIGFtIAo+IHJ1bm5pbmcgb24gVWJ1bnR1IDIw
+LjA0IGFuZCBoYXZlIGluc3RhbGxlZCBvciBkZXBlbmRlbmNpZXMgdG8gdXNlIEJhYmVsVHJhY2Ug
+Cj4gd2l0aCBQeXRob24gYmluZGluZ3M6Cj4gCj4gICAqIHN1ZG8gYXB0LWdldCBpbnN0YWxsIGx0
+dG5nLXRvb2xzCj4gICAqIHN1ZG8gYXB0LWdldCBpbnN0YWxsIGx0dG5nLW1vZHVsZXMtZGttcwo+
+ICAgKiBzdWRvIGFwdC1nZXQgaW5zdGFsbCBsaWJsdHRuZy11c3QtZGV2Cj4gICAqIHN1ZG8gYXB0
+LWdldCBpbnN0YWxsIHB5dGhvbjMtYmFiZWx0cmFjZQo+IAo+IFdoZW4gdHJ5aW5nIHRvIGltcG9y
+dCBCYWJlbFRyYWNlIGluIGEgUHl0aG9uIHNjcmlwdCB3aXRoIOKAnGltcG9ydCBiYWJlbHRyYWNl
+4oCdLCAKPiBJIHJlY2VpdmUgdGhlIGZvbGxvd2luZyBlcnJvciAobW9yZSBlcnJvciBvdXRwdXQg
+aW4gdGhlIGF0dGFjaGVkIHRleHQgZmlsZSk6IAo+IOKAnE1vZHVsZU5vdEZvdW5kRXJyb3I6IE5v
+IG1vZHVsZSBuYW1lZCAnYmFiZWx0cmFjZS5fYmFiZWx0cmFjZSfigJ0gZm9sbG93ZWQgYnkgCj4g
+4oCcTW9kdWxlTm90Rm91bmRFcnJvcjogTm8gbW9kdWxlIG5hbWVkICdfYmFiZWx0cmFjZSfigJ0u
+Cj4gCj4gTXkgZm9sZGVyIHN0cnVjdHVyZSBhdCAvdXNyL2xpYi9weXRob24zL2Rpc3QtcGFja2Fn
+ZXMvYmFiZWx0cmFjZSBhcmUgYXMgZm9sbG93czoKPiAKPiAgICogX2JhYmVsdHJhY2UuY3B5dGhv
+bi0zOC14ODZfNjQtbGludXgtZ251LnNvCj4gICAqIEJhYmVsdHJhY2UucHkKPiAgICogX19pbml0
+X18ucHkKPiAgICogL19fcHljYWNoZV9fCj4gCj4gSeKAmXZlIGJlZW4gdHJ5aW5nIHRvIGRlYnVn
+IHRoaXMgaXNzdWUgZm9yIGEgY291cGxlIG9mIGRheXMsIGJ1dCBhbSBydW5uaW5nIGludG8gCj4g
+YSB3YWxsLiBJ4oCZdmUgZGVjaWRlZCB0byBlbWFpbCB5b3VyIHRlYW0gaW4gY2FzZSB5b3UgaGF2
+ZSBzZWVuIHRoaXMgaXNzdWUgCj4gYmVmb3JlLCBvciBhcmUgYWJsZSB0byBzcG90IGEgc2ltcGxl
+IGlzc3VlIHdpdGggbXkgc2V0dXAuCj4gCj4gVGhhbmsgeW91LAo+IAo+IEpvbiBTbWV0CgpIaSBK
+b24sCgpUaGUgVWJ1bnR1IHB5dGhvbjMtYmFiZWx0cmFjZSBwYWNrYWdlIGNvbnRhaW5zIGEgYmlu
+YXJ5IG1vZHVsZSAKKF9iYWJlbHRyYWNlLmNweXRob24tMzgteDg2XzY0LWxpbnV4LWdudS5zbykg
+YnVpbHQgZm9yIHRoZSBzeXN0ZW0ncyBweXRob24gMy44IAppbnRlcnByZXRlciwgaW4gdGhlIGxv
+ZyBmaWxlIHlvdSBhdHRhY2hlZCB5b3Ugc2VlbSB0byBiZSB1c2luZyBweXRob24gMy43IAooL3Vz
+ci9saWIvcHl0aG9uMy43L2ltcG9ydGxpYi9fX2luaXRfXy5weSkuCgpZb3UgZWl0aGVyIG5lZWQg
+dG8gdXNlIHRoZSBzeXN0ZW0ncyBweXRob24zIGludGVycHJldGVyIHRvIHVzZSB0aGUgcGFja2Fn
+ZWQgCnB5dGhvbjMtYmFiZWx0cmFjZSBvciBidWlsZCB5b3VyIG93biB2ZXJzaW9uIG9mIHB5dGhv
+bjMtYmFiZWx0cmFjZSBhZ2FpbnN0IHRoZSAKcHl0aG9uIDMuNyBpbnRlcnByZXRlciB5b3UgYXJl
+IHVzaW5nLgoKUmVnYXJkcywKCk1pY2hhZWwKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2Cg==
