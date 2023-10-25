@@ -4,60 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04C33C0032E
-	for <lttng-dev@archiver.kernel.org>; Wed, 25 Oct 2023 08:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 777F5C07545
+	for <lttng-dev@archiver.kernel.org>; Wed, 25 Oct 2023 14:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1698224061;
-	bh=zabZ2Nc7qGSNZrxt7kxAwS0OkM0FqJhnAZcUppK6S4U=;
+	s=default; t=1698245486;
+	bh=blvIuEcYVafThRO/w5Hs8Inw8Bf52H72YA1aTY+0ezM=;
 	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=G3SJwcXLV6BIc4fKjGzQMq0g30zymQe1fTm8VbKtVjjNzuvKT8qMf2JZmiJcoTgfo
-	 O//rasyNQz3bSJlCKrbfQm7qVZqsp2DO789pOUmbTLpCVgjXBOkj7ds1OPddn0mTJf
-	 2ponSZ+w08OgaV7SSBc3spQOQ/jvefp/yU7XPpcOoQkTEA8KuIzRPllg/+w8E0k6nW
-	 /frwv59Y9kF7toFxfezYEM/vw9ZgBest4UxEIS3ZsKCuWNwm5PiDGnB3s6JkD1HTcR
-	 MXse9XrF17HkqdG1FYVzF97Qt9vYe+qHZSaCGTmHaw8w9mA0ZKsiyV16qOxziPgQmy
-	 s/vJ+hKAhFgrA==
+	b=b41pQjMstaNERQ9GT4GSP/PsMiIQkjVt9OcKMMpuN+F9ip4J5ryLY5XV/wpWtb7Vw
+	 yzZkTp8hO0Uc/vF/0f/93qni9PGXA5AOdgNrDbYumkqGG9sj5EMDyUzALO28eJLqko
+	 kmaNNDBFJa665TWCrTuKKyoelvp6LSq/mx52B2SkJ9Q4JZEW6/WNJa7lRKGQbHD77K
+	 qhTwirmqLqwIDdALAFhw/VoidUN9EX2YTGjldTYiKYuIg1JhUtd7zyh3mL0AOKnNY+
+	 Ck0CR3QV1gJA7N3PNUwlM3DFG7whzAAZ7fkjmHGxZTcsLJsEcywjsJ2xNPp6JhRI5R
+	 462ElJUgLxVfw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4SFjR10HLkz8L3;
-	Wed, 25 Oct 2023 04:54:21 -0400 (EDT)
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com
- [IPv6:2001:4860:4864:20::32])
- by lists.lttng.org (Postfix) with ESMTPS id 4SFjQz28YDz8L2
- for <lttng-dev@lists.lttng.org>; Wed, 25 Oct 2023 04:54:19 -0400 (EDT)
-Received: by mail-oa1-x32.google.com with SMTP id
- 586e51a60fabf-1dd5b98d9aeso335092fac.0
- for <lttng-dev@lists.lttng.org>; Wed, 25 Oct 2023 01:54:19 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4SFsM13YDBz8Ld;
+	Wed, 25 Oct 2023 10:51:25 -0400 (EDT)
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
+ [IPv6:2a00:1450:4864:20::236])
+ by lists.lttng.org (Postfix) with ESMTPS id 4SFsLz4kklz7lL
+ for <lttng-dev@lists.lttng.org>; Wed, 25 Oct 2023 10:51:23 -0400 (EDT)
+Received: by mail-lj1-x236.google.com with SMTP id
+ 38308e7fff4ca-2c51682fddeso11259801fa.1
+ for <lttng-dev@lists.lttng.org>; Wed, 25 Oct 2023 07:51:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1698224058; x=1698828858;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=pw0+W+Gtu6wfaM8X0H5BlT57/h6KMJx0TkIkMeZzcVA=;
- b=A89MQtIuTRAObzF+hp88QCEgglnvHtGmZEpp9QUWboI7WyH9AXEpDwipJKRuxoMA0L
- NaqOGoJg3HTrUO4N+x37wgv1mY0mMF1CwVMSfXEyjNuxCFuECTyMllhvz3yJQBnKd+Ak
- TcsvBFLkpprGJMrz4R43tHOPDyqh/CkYqHOmxWQE3knAhATeBf2j0ipCY/CNDpN9YE+V
- smTKhjEDepvuCzJr9FE643JJ/BLwPBy9vVF8FfEF2T5C9Mia2rOTti6yWM9Zy/G9r8yn
- Pu0eLXTa7z1my9sx1dVyvNU91QbZf77DdGTuneL9TRA+v5lEcMPTKDUdsyn3g4CmSEvz
- PwQQ==
-X-Gm-Message-State: AOJu0YwyPz4sf1tyTNVaOCS9MWvwuHgd+jw4jOscootLCLdm8iaQkxsJ
- g1lMJ6F2TlrrueKa5OyMwGPD8GHSfQ/80Bn0clA=
-X-Google-Smtp-Source: AGHT+IE235jsTpK2olt3a7z47VU+ZDkAF43lXRks44L+nPY0wWvQVuC30qnh3l9wsfqAbbVxhLXZFsM6iNW3eDecXmo=
-X-Received: by 2002:a05:6870:13c6:b0:1e9:b5d7:4000 with SMTP id
- 6-20020a05687013c600b001e9b5d74000mr7549131oat.7.1698224058186; Wed, 25 Oct
- 2023 01:54:18 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1698245482; x=1698850282;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=bkYQkW+XlRadFv/amWJv3ITfWs7WV3bONWdErV2G2qM=;
+ b=n4UDcOX6r+31Lze1+W00JCppkjuhkJ2u3dM4nPIowNyUnpUy36tTwX/5s8dTUNgm6N
+ UWiVhQOLs8NRkbOhG9grW3/akNT+0fylVrwhRtPIQRZTEBofDatjhgjKftZEP+6CXXzs
+ lOXElPwGQtDrR1Mh6Tse3Jbpaj6ZYUGKlpsWa1hlo4IHpQazzvtyYkolZYjYsRfgiSH4
+ e2tWbPWFsdgXCkbvj7JoEVJ07xllsNjxgtkgNwpjNfX05BNmNM+5FmHsYr6gRminUkhI
+ 9TqiMC2qdLVSI69uR2uOQz6IaxT23uRXD3flboJXtXhcnYzgh6dlRw1TMXih5pMKomx7
+ lBEw==
+X-Gm-Message-State: AOJu0YybsSUnznCXj/KWuj0J7Ks5EFYgTQIYDESOkIr5RGyJ3gTB5mV7
+ aogfnmjlFEqge7rhUG8jfui+yfR8WPhLsZyjKaY=
+X-Google-Smtp-Source: AGHT+IG82wKM7XponkGtCGwHFmsV4/4uG10Uff6J9ER9Uhxxx9OmMA8OMvVWZ9NR5T96dfbruFn8gv1480xrZR63PX8=
+X-Received: by 2002:a05:6512:1113:b0:502:e0dd:628b with SMTP id
+ l19-20020a056512111300b00502e0dd628bmr5933465lfg.32.1698245480930; Wed, 25
+ Oct 2023 07:51:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <CALBKf8Jv-QRwbZ0ATdPzj1KyzDQT6SqG9G_4-5-QfG35iJyetQ@mail.gmail.com>
- <2eaa5b1f-c3b2-4790-bf45-dadb66f45d48@efficios.com>
- <CALBKf8JtZKGe5i9S0=zcU_7Qj8b_Z_FkbLv+hqcDf1BbBnZF7w@mail.gmail.com>
- <f59560b2-550f-4423-8428-5116fb1c6ad8@efficios.com>
-In-Reply-To: <f59560b2-550f-4423-8428-5116fb1c6ad8@efficios.com>
-Date: Wed, 25 Oct 2023 10:54:07 +0200
-Message-ID: <CALBKf8JHM1xDf9L3m+4p-2eNQ2s6yGJw0fxWpv_U3f2uDoFJEQ@mail.gmail.com>
-To: Kienan Stewart <kstewart@efficios.com>
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] Can't receive a lot of functions that i registerd
- as trace-points
+References: <AM9P190MB107537176AB808CA2F55AA2488DFA@AM9P190MB1075.EURP190.PROD.OUTLOOK.COM>
+ <f0ca6352-ee2e-4943-8375-a228557eb49c@simark.ca>
+ <AM9P190MB1075EE7CA033D45006FCDB0D88DEA@AM9P190MB1075.EURP190.PROD.OUTLOOK.COM>
+In-Reply-To: <AM9P190MB1075EE7CA033D45006FCDB0D88DEA@AM9P190MB1075.EURP190.PROD.OUTLOOK.COM>
+Date: Wed, 25 Oct 2023 10:50:54 -0400
+Message-ID: <CAB4xu_3rBu0ROuypyQ6WEa_GdCYdUxvpHOzPNteAU6=TTA0B2w@mail.gmail.com>
+To: "Seidl, Aron" <aron.seidl@zeiss.com>
+Cc: Simon Marchi <simark@simark.ca>, 
+ "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Subject: Re: [lttng-dev] Debugging Libaries in Babeltrace 2
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -69,148 +68,120 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Lin ArcX via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Lin ArcX <linarcx@gmail.com>
-Content-Type: multipart/mixed; boundary="===============2274719005726193942=="
+From: Philippe Proulx via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Philippe Proulx <eeppeliteloop@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============2274719005726193942==
-Content-Type: multipart/alternative; boundary="000000000000bcd76b0608869934"
-
---000000000000bcd76b0608869934
-Content-Type: text/plain; charset="UTF-8"
-
-On Tue, 24 Oct 2023 at 21:56, Kienan Stewart <kstewart@efficios.com> wrote:
-
-> Hi Lin,
->
-> could you keep the lttng-dev list in CC on your replies in the future?
->
-Yes, sure.
-
->
->
-> On 2023-10-24 09:25, Lin ArcX wrote:
-> > Thanks for your response. i fixed the names. here is new commands:
-> > # enable event for traced functions
-> > sudo lttng enable-event --kernel
-> irq_handler_entry,napi_poll,net_dev_queue
-> >
-> > # different name with kernel
-> > sudo lttng enable-event --kernel
-> >
-> net_if_rx_entry,net_if_rx_ni_entry,net_napi_gro_receive_entry,net_if_receive_skb_list_entry,net_if_receive_skb
-> >
-> > Now In new tracefile i can see a lot of new events come. but still can't
-> > see any trace from these:
-> >
-> > net_if_rx_ni_entry
-> > net_napi_gro_receive_entry
-> > net_if_receive_skb_list_entry
-> >
-> This looks fine to me.
->
-> On a linux 4.19 system, I ran a test with using lttng-modules 2.12.14. I
-> saw events for "net_napi_gro_receive_entry".
->
-> In parallel with the LTTng tracing session, I ran
->
->    perf stat -e
->
-> net:netif_rx_ni_entry,net:netif_receive_skb_list_entry,net:napi_gro_receive_entry
->
-> The above allowed me to confirm that there were
-> "net:napi_gro_receive_entry_events", but no "net:netif_rx_ni_entry" or
-> "net:netif_receive_skb_list_entry" occurrences in my test.
->
-> Are you seeing a situation where another tool is recording occurrences
-> of the events that you think aren't being seen during your tracing session?
->
-
-No, nothing, I'm running my client/server application inside wsl and no
-other tools are running.
-
->
-> thanks,
-> kienan
->
-
---000000000000bcd76b0608869934
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Tue, 24 Oct 2023 at 21:56, Kienan =
-Stewart &lt;<a href=3D"mailto:kstewart@efficios.com">kstewart@efficios.com<=
-/a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
-px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">H=
-i Lin,<br>
-<br>
-could you keep the lttng-dev list in CC on your replies in the future?<br><=
-/blockquote><div>Yes, sure.=C2=A0</div><blockquote class=3D"gmail_quote" st=
-yle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padd=
-ing-left:1ex">
-<br>
-<br>
-On 2023-10-24 09:25, Lin ArcX wrote:<br>
-&gt; Thanks for your response. i fixed the names. here is new commands:<br>
-&gt; # enable event for traced functions<br>
-&gt; sudo lttng enable-event --kernel irq_handler_entry,napi_poll,net_dev_q=
-ueue<br>
-&gt; <br>
-&gt; # different name with kernel<br>
-&gt; sudo lttng enable-event --kernel <br>
-&gt; net_if_rx_entry,net_if_rx_ni_entry,net_napi_gro_receive_entry,net_if_r=
-eceive_skb_list_entry,net_if_receive_skb<br>
-&gt; <br>
-&gt; Now In new tracefile=C2=A0i can see a lot of new events come. but stil=
-l can&#39;t <br>
-&gt; see any trace from these:<br>
-&gt; <br>
-&gt; net_if_rx_ni_entry<br>
-&gt; net_napi_gro_receive_entry<br>
-&gt; net_if_receive_skb_list_entry<br>
-&gt; <br>
-This looks fine to me.<br>
-<br>
-On a linux 4.19 system, I ran a test with using lttng-modules 2.12.14. I <b=
-r>
-saw events for &quot;net_napi_gro_receive_entry&quot;.<br>
-<br>
-In parallel with the LTTng tracing session, I ran<br>
-<br>
-=C2=A0 =C2=A0perf stat -e <br>
-net:netif_rx_ni_entry,net:netif_receive_skb_list_entry,net:napi_gro_receive=
-_entry<br>
-<br>
-The above allowed me to confirm that there were <br>
-&quot;net:napi_gro_receive_entry_events&quot;, but no &quot;net:netif_rx_ni=
-_entry&quot; or <br>
-&quot;net:netif_receive_skb_list_entry&quot; occurrences in my test.<br>
-<br>
-Are you seeing a situation where another tool is recording occurrences <br>
-of the events that you think aren&#39;t being seen during your tracing sess=
-ion?<br></blockquote><div><br></div><div>No, nothing, I&#39;m running my cl=
-ient/server application inside wsl and no other tools are running.=C2=A0=C2=
-=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
-x;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-thanks,<br>
-kienan<br>
-</blockquote></div></div>
-
---000000000000bcd76b0608869934--
-
---===============2274719005726193942==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2274719005726193942==--
+T24gV2VkLCBPY3QgMjUsIDIwMjMgYXQgMzoyOeKAr0FNIFNlaWRsLCBBcm9uIHZpYSBsdHRuZy1k
+ZXYKPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+IHdyb3RlOgo+Cj4gSGkgU2ltb24sCj4gVGhh
+bmtzIGZvciB5b3VyIHF1aWNrIGFuc3dlciEKPiBJIHJ1biBHREIgbGlrZSB0aGlzOgo+IGdkYiAt
+LWFyZ3MgLi9iYWJlbHRyYWNlMiAvaG9tZS9hcm9uL1NjaHJlaWJ0aXNjaC9rZXJuZWw0IC1vIHRl
+eHQKPiAoSSdtIGluIHNyYy9jbGkvLmxpYnMpCj4KPiBJIGRvbid0IHRoaW5rIEkndmUgZXZlciBp
+bnN0YWxsZWQgYSBTeXN0ZW0gVmVyc2lvbiBvZiBiYWJlbHRyYWNlMiwgc28gaXQgaXMgcmVhbGx5
+IHdlaXJkIHRoYXQgR0RCIHVzZXMgZm9sbG93aW5nIGxpYnJhcnk6Cj4KPiAweDAwMDA3ZmZmZjdm
+MzZmMDAgIDB4MDAwMDdmZmZmN2Y4OTc0OSAgWWVzICgqKSAgICAgL2xpYi94ODZfNjQtbGludXgt
+Z251L2xpYmJhYmVsdHJhY2UyLnNvLjAKPiAoKik6IFNoYXJlZCBsaWJyYXJ5IGlzIG1pc3Npbmcg
+ZGVidWdnaW5nIGluZm9ybWF0aW9uLgo+Cj4gQW5kIHlvdSdyZSBhYnNvbHV0ZWx5IHJpZ2h0ISBU
+aGF0IGlzIHRoZSByZWFzb24gd2h5IEkgY2FuJ3QgZGVidWcgaXQuCgpOb3RlIHRoYXQgeW91IGNh
+biBhbHNvIGluc3RhbGwgdGhlIHByb2plY3QgbG9jYWxseToKCiAgICAkIEJBQkVMVFJBQ0VfREVW
+X01PREU9MSBCQUJFTFRSQUNFX01JTklNQUxfTE9HX0xFVkVMPVRSQUNFIFwKICAgICAgQkFCRUxU
+UkFDRV9ERUJVR19NT0RFPTEgQ0ZMQUdTPSctZyAtTzAnIENQUEZMQUdTPSctZyAtTzAnIFwKICAg
+ICAgLi9jb25maWd1cmUgLS1wcmVmaXg9JFBXRC9pbnN0YWxsCgpNYWtlIHN1cmUgdG8gcnVuIGBt
+YWtlIGluc3RhbGxgLgoKVGhlbiBgJFBXRC9pbnN0YWxsL2Jpbi9iYWJlbHRyYWNlMmAgaXMgZnVs
+bHkgaW5zdGFsbGVkIGFuZCBpbmRlcGVuZGVudAphbmQgd2lsbCBsb2FkIHRoZSBjb3JyZWN0IGxp
+YmJhYmVsdHJhY2UyIGJlY2F1c2UgaXQgaGFzCmAkUFdEL2luc3RhbGwvbGliYCBhcyBpdHMgcnVu
+cGF0aC4KCllvdSBtYXkgZGVidWcgYXMgdXN1YWw6CgogICAgJCBnZGIgLS1hcmdzIC4vaW5zdGFs
+bC9iaW4vYmFiZWx0cmFjZTIgWy4uLl0KClBoaWxpcHBlCgo+IElzIHRoZXJlIGEgd2F5IHRvIHNw
+ZWNpZnkgdGhlIGxpYnJhcnkgcGF0aD8gQmVjYXVzZSBldmVuIHdpdGggdGhlIGxpYnRvb2wgd3Jh
+cHBlciwgR0RCIHVzZXMgdGhlIHJlbGVhc2UgdmVyc2lvbiBvZiBsaWJiYWJlbHRyYWNlMi5zby4w
+Lgo+Cj4gWW91J3JlIGhlbHBpbmcgbWUgYSBsb3QsIHRoYW5rIHlvdSEgOikKPiBJIGhvcGUgeW91
+IGhhdmUgYSBncmVhdCBkYXkhCj4KPiBLaW5kIHJlZ2FyZHMsCj4gQXJvbgo+IF9fX19fX19fX18K
+PiBBcm9uIFNlaWRsCj4gREgtU3R1ZGVudCBJVCBFZHVjYXRpb24KPgo+IENhcmwgWmVpc3MgQUcK
+PiBDYXJsLVplaXNzLVN0cmFzc2UgMjIKPiA3MzQ0NyBPYmVya29jaGVuLCBEZXV0c2NobGFuZAo+
+Cj4gYXJvbi5zZWlkbEB6ZWlzcy5jb20KPiBodHRwOi8vd3d3LnplaXNzLmRlLwo+IF9fX19fX19f
+X18KPiBDYXJsIFplaXNzIEFHCj4gU2l0eiBkZXIgR2VzZWxsc2NoYWZ0OiBPYmVya29jaGVuLCBE
+ZXV0c2NobGFuZAo+IFZvcnNpdHplbmRlciBkZXMgQXVmc2ljaHRzcmF0ZXM6IERyLiBNaWNoYWVs
+IEJvbGxlCj4gVm9yc3RhbmQ6IERyLiBLYXJsIExhbXByZWNodCAoVm9yc2l0emVuZGVyKSwKPiBT
+dXNhbi1TdGVmYW5pZSBCcmVpdGtvcGYsIFN2ZW4gSGVybWFubiwgRHIuIENocmlzdGlhbiBNw7xs
+bGVyLAo+IEFuZHJlYXMgUGVjaGVyLCBEci4gSm9jaGVuIFBldGVyLCBEci4gTWFya3VzIFdlYmVy
+Cj4gQW10c2dlcmljaHQgVWxtLCBIUkIgNTAxIDU1NSwgVVN0LUlkTnI6IERFIDgxMSAxMTkgOTQw
+Cj4KPgo+Cj4KPiAtLS0tLVVyc3Byw7xuZ2xpY2hlIE5hY2hyaWNodC0tLS0tCj4gVm9uOiBTaW1v
+biBNYXJjaGkgPHNpbWFya0BzaW1hcmsuY2E+Cj4gR2VzZW5kZXQ6IERpZW5zdGFnLCAyNC4gT2t0
+b2JlciAyMDIzIDIwOjUyCj4gQW46IFNlaWRsLCBBcm9uIDxhcm9uLnNlaWRsQHplaXNzLmNvbT47
+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBCZXRyZWZmOiBSZTogW2x0dG5nLWRldl0gRGVi
+dWdnaW5nIExpYmFyaWVzIGluIEJhYmVsdHJhY2UgMgo+Cj4gT24gMTAvMjQvMjMgMTE6NTIsIFNl
+aWRsLCBBcm9uIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4gPiBIZWxsbyBndXlzLAo+ID4gSSdtIGN1
+cnJlbnRseSBhIHN0dWRlbnQgYXQgdGhlIGNvbXBhbnkgQ2FybCBaZWlzcyBpbiBPYmVya29jaGVu
+IEdlcm1hbnkuIEknZCBsaWtlIHRvIHRyYWNlIHRoZSBLZXJuZWwgZnJvbSBvdXIgQ01NLUNvbnRy
+b2xsZXIgd2l0aCBDVEYgYW5kIGNvbnZlcnQgaXQgdG8gcGxhaW4gdGV4dCwgbGlrZSBCYWJlbHRy
+YWNlIDIgZG9lcy4gVG8gdW5kZXJzdGFuZCBob3cgQmFiZWx0cmFjZSAyIHdvcmtzIHdpdGggQ1RG
+LCBJIGRlYnVnIHRoZSBjb2RlLgo+Cj4gSGkgQXJvbiwKPiA6dwo+Cj4gPgo+ID4KPiA+IEhvd2V2
+ZXIgd2hlbiBJIHRyeSB0byBzdGVwIGludG8gYSBmdW5jdGlvbiB3aGljaCBpcyBpbmNsdWRlZCB2
+aWEgdGhlIGV4dGVybiBCYWJlbHRyYWNlIDIgbGlicmFyeSAoZS5nLiAqYnRfZ3JhcGhfcnVuKGN0
+eC5ncmFwaCkqIGluIGdyYXBoLmMpLCB0aGUgR05VIENvbXBpbGVyIHN0ZXBzIG92ZXIgdGhlIGZ1
+bmN0aW9uIGFuZCBJJ20gdW5hYmxlIHRvIGxvb2sgaW50byB0aGlzIGZ1bmN0aW9uLgo+ID4KPiA+
+Cj4gPgo+ID4gSSBmaWd1cmVkLCBpdCBpcyBiZWNhdXNlIHRoZSBEZWJ1Z2dlciBjYW5ub3QgZmlu
+ZCB0aGUgRGVidWcgU3ltYm9scyBldmVuIHRob3VnaCBJIGNvbXBpbGUgZXZlcnl0aGluZyB3aXRo
+IERlYnVnLVN5bWJvbHMgYW5kIG5vIGNvbXBpbGVyIG9wdGltaXphdGlvbi4KPiA+Cj4gPiBJIGNv
+bmZpZ3VyZSB0aGUgTWFrZWZpbGUgYXMgZm9sbG93czoKPiA+Cj4gPgo+ID4KPiA+IEJBQkVMVFJB
+Q0VfREVWX01PREU9MSBCQUJFTFRSQUNFX01JTklNQUxfTE9HX0xFVkVMPVRSQUNFCj4gPiBCQUJF
+TFRSQUNFX0RFQlVHX01PREU9MSBDRkxBR1M9Jy1nIC1PMCcgQ1BQRkxBR1M9Jy1nIC1PMCcgTERG
+TEFHUz0nLWcKPiA+IC1PMCcgLi9jb25maWd1cmUKPgo+IFlvdSBwcm9iYWJseSBtZWFuIENYWEZM
+QUdTLCBub3QgQ1BQRkxBR1MuICBDWFhGTEFHUyBhcmUgZmxhZ3MgdG8gYmUgcGFzc2VkIHRvIHRo
+ZSBDKysgY29tcGlsZXIsIENQUEZMQUdTIGFyZSBmbGFncyB0byBiZSBwYXNzZWQgdG8gdGhlIHBy
+ZXByb2Nlc3Nvci4gIEl0J3MgcHJvYmFibHkgZ29pbmcgdG8gd29yayBhbnl3YXksIHNpbmNlIHBy
+ZXByb2Nlc3NvciBmbGFncyBhcmUgcGFzc2VkIHdoZW4gY29tcGlsaW5nLCBidXQgSSB3YW50ZWQg
+dG8gcG9pbnQgaXQgb3V0IGJlY2F1c2UgaXQgbG9va3MgbGlrZSBhIG1pc3Rha2UuCj4KPiA+Cj4g
+Pgo+ID4KPiA+IEZvciB0ZXN0IHB1cnBvc2VzLCBJIGltcGxlbWVudGVkIHRoZSBmdW5jdGlvbiAq
+YnRfZ3JhcGhfcnVuKE5VTEwpICppbnNpZGUgYSBuZXcgcHJvamVjdCB0byBjaGVjaywgaWYgSSBj
+b3VsZCBzdGVwIGludG8gdGhlIGZ1bmN0aW9uIHdpdGggbXkgZGVidWdnZXIsIG9yIHdoZXRoZXIg
+aXQgaXMgYSBnZW5lcmFsIHByb2JsZW0gd2l0aCBteSBtYWNoaW5lLgo+ID4KPiA+IFRoYXQgYWN0
+dWFsbHkgd29ya2VkIGFuZCBJIHdhcyBhYmxlIHRvIHN0ZXAgaW50byB0aGUgZnVuY3Rpb24sIGJ1
+dCBub3Qgd2l0aCB0aGUgbm9ybWFsIEJhYmVsdHJhY2UgMiBwcm9qZWN0Lgo+ID4KPiA+IE5vbmUg
+b2YgbXkgY29sbGVhZ3VlcyBjb3VsZCBleHBsYWluIHRoaXMgYmVoYXZpb3IsIHNvIG15IHF1ZXN0
+aW9uIG5vdyBpcywgaG93IGRvIHlvdSBndXlzIGRlYnVnIHRoZSBjb2RlPyBJcyB0aGVyZSBhIGRp
+ZmZlcmVudCB3YXkgeW91IGRlYnVnIHRoZXNlIGZ1bmN0aW9ucywgb3IgZG8gSSBjb25maWd1cmUg
+bXkgcHJvamVjdCB0aGUgd3Jvbmcgd2F5Pwo+ID4KPiA+Cj4gPgo+ID4gSSBhcHByZWNpYXRlIGl0
+IGlmIHNvbWVvbmUgY2FuIGhlbHAgbWUgYW5kIHRlbGwgbWUgaG93IHRvIGNvbmZpZ3VyZSB0aGUg
+cHJvamVjdCBzbyB0aGF0IHRoZSBjb2RlIGlzIGRlYnVnYWJsZS4KPgo+IENhbiB5b3UgcGxlYXNl
+IHNob3cgaG93IHlvdSBzdGFydCBhbmQgcnVuIGJhYmVsdHJhY2UyIHVuZGVyIEdEQj8KPgo+IE15
+IGd1ZXNzIGlzIHRoYXQgeW91IGVuZCB1cCB1c2luZyBhIHN5c3RlbSB2ZXJzaW9uIG9mIGxpYmJh
+YmVsdHJhY2UyLnNvIGZyb20gYSBwYWNrYWdlIHlvdSBpbnN0YWxsZWQgb3Igc29tZXRoaW5nLiAg
+SW4gR0RCLCBkbyAiaW5mbyBzaGFyZWQiIGFuZCBzZWUgd2hhdCB0aGUgbGliYmFiZWx0cmFjZTIu
+c28gbGluZSBsb29rcyBsaWtlLiAgSXQgc2hvdWxkIGJlIGxpa2UgdGhpcywgd2l0aCBhIHBhdGgg
+aW4geW91ciBidWlsZCBkaXJlY3RvcnkuICBUaGVyZSBzaG91bGQgYmUgbm8gYXN0ZXJpc2sgaW5k
+aWNhdGluZyB0aGF0IHRoZSBkZWJ1ZyBpbmZvIGlzIG1pc3NpbmcuCj4KPiAgICAgMHgwMDAwN2Zm
+ZmY3NWE4N2YwICAweDAwMDA3ZmZmZjc2ZjU5OTAgIFllcyAgICAgICAgIC9ob21lL3NtYXJjaGkv
+YnVpbGQvYmFiZWx0cmFjZS9zcmMvbGliLy5saWJzL2xpYmJhYmVsdHJhY2UyLnNvLjAKPgo+IFNp
+bmNlIHdlIGFyZSB1c2luZyBsaWJ0b29sLCB0aGUgc3JjL2NsaS9iYWJlbHRyYWNlMiBmaWxlIGlz
+IGFjdHVhbGx5IGEgbGlidG9vbCBzY3JpcHQgdGhhdCBzZXRzIHVwIHRoZSByaWdodCBlbnZpcm9u
+bWVudCAoTERfTElCUkFSWV9QQVRIIGFuZAo+IHN0dWZmKSBmb3IgcnVubmluZyB0aGUgcmVhbCBi
+YWJlbHRyYWNlMiBiaW5hcnkgKGZvdW5kIGF0Cj4gc3JjL2NsaS8ubGlicy9iYWJlbHRyYWNlMikg
+ZGlyZWN0bHkgaW4gdGhlIGJ1aWxkIHRyZWUuICBUaGUgcHJvcGVyIHdheSB0byBkZWJ1ZyBpdCBp
+cyB3aXRoIHRoZSBsaWJ0b29sIHdyYXBwZXI6Cj4KPiAgICAgJCBsaWJ0b29sIC0tbW9kZT1leGVj
+dXRlIGdkYiAtcSAtLWFyZ3Mgc3JjL2NsaS9iYWJlbHRyYWNlMiAvaG9tZS9zbWFyY2hpL3NyYy9i
+YWJlbHRyYWNlL3Rlc3RzL2RhdGEvY3RmLXRyYWNlcy8xL3N1Y2NlZWQvc2VxdWVuY2UKPiAgICAg
+UmVhZGluZyBzeW1ib2xzIGZyb20gL2hvbWUvc21hcmNoaS9idWlsZC9iYWJlbHRyYWNlL3NyYy9j
+bGkvLmxpYnMvYmFiZWx0cmFjZTIuLi4KPiAgICAgKGdkYikgYiBidF9ncmFwaF9ydW4KPiAgICAg
+RnVuY3Rpb24gImJ0X2dyYXBoX3J1biIgbm90IGRlZmluZWQuCj4gICAgIE1ha2UgYnJlYWtwb2lu
+dCBwZW5kaW5nIG9uIGZ1dHVyZSBzaGFyZWQgbGlicmFyeSBsb2FkPyAoeSBvciBbbl0pIHkKPiAg
+ICAgQnJlYWtwb2ludCAxIChidF9ncmFwaF9ydW4pIHBlbmRpbmcuCj4gICAgIChnZGIpIHIKPiAg
+ICAgU3RhcnRpbmcgcHJvZ3JhbTogL2hvbWUvc21hcmNoaS9idWlsZC9iYWJlbHRyYWNlL3NyYy9j
+bGkvLmxpYnMvYmFiZWx0cmFjZTIgL2hvbWUvc21hcmNoaS9zcmMvYmFiZWx0cmFjZS90ZXN0cy9k
+YXRhL2N0Zi10cmFjZXMvMS9zdWNjZWVkL3NlcXVlbmNlCj4gICAgIFtUaHJlYWQgZGVidWdnaW5n
+IHVzaW5nIGxpYnRocmVhZF9kYiBlbmFibGVkXQo+ICAgICBVc2luZyBob3N0IGxpYnRocmVhZF9k
+YiBsaWJyYXJ5ICIvbGliL3g4Nl82NC1saW51eC1nbnUvbGlidGhyZWFkX2RiLnNvLjEiLgo+Cj4g
+ICAgIEJyZWFrcG9pbnQgMSwgYnRfZ3JhcGhfcnVuIChncmFwaD0weDYxMjAwMDAwMjVjMCkgYXQg
+L2hvbWUvc21hcmNoaS9zcmMvYmFiZWx0cmFjZS9zcmMvbGliL2dyYXBoL2dyYXBoLmM6NjgzCj4g
+ICAgIDY4MyAgICAgICAgICAgICBCVF9BU1NFUlRfUFJFX05PX0VSUk9SKCk7Cj4KPiBTZWU6IGh0
+dHBzOi8vd3d3LmdudS5vcmcvc29mdHdhcmUvbGlidG9vbC9tYW51YWwvaHRtbF9ub2RlL0RlYnVn
+Z2luZy1leGVjdXRhYmxlcy5odG1sCj4KPiBTaW1vbgo+IF9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
+dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cg==
