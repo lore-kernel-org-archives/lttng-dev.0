@@ -4,114 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93E2FC35274
-	for <lttng-dev@archiver.kernel.org>; Tue, 19 Dec 2023 03:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 180BCC46CA2
+	for <lttng-dev@archiver.kernel.org>; Tue, 19 Dec 2023 17:29:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1702954893;
-	bh=CqAdqXQIYX5auoV7TW7YVH1Lo0FW8ev8ZnuSyUlmtkw=;
+	s=default; t=1703006987;
+	bh=ehH0n1xPwTSQSTypZjiMdjA1L8cEdjGlIpD8dF3td2w=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=BGJu37BvKunhPPrp0ABv4pkPWdiDcvU+XqGB5WXyV8jS5woiC+u15qJS5mIK/Jq9+
-	 kchcGw4cR2zJJjzyil8wUDSjrRVE2U3vyodJlU2ICdGbYM77KC1qXufrTQ/r6ArvUl
-	 7HLH48lIjZJNLP9LnbG14BVwu8G9LQUvCwCOlGD/nOoVn1DCSADkl7gEr5khvHkP8A
-	 VuLMtSzALLNMfB/46aHOo3drxpmzO30/AqDRnJo75kN3WvpFlWt1UvG2GhuNTbhhb6
-	 csgpn1Y5/F/EQeYug9i9+kXLfH95/wlZhR9eXMtR+MR9+/BkdhmtW2+0/stP7LCfSS
-	 m7BEC+EkqZnoQ==
+	b=P1EH14bDVsXdX9GxBwvoYSWbBhOWX9Vs5z0u2PaexH9wRRKqMhdRGkEU+K0ZoCafb
+	 oY6sSAkdakbtRpX2BDMOL9znrlYLCYjABl33n3zNpORjtmOl4XpcHn7sGTs4+jjM83
+	 bZ36BD2gYqGlyU33s9WWu0CUlzYQXkWhhc6m4OsJ3thEXeH1A8u0TzaMSxBV1OommU
+	 Pejnjk3woBh0zH675zt+b9WfX6VcckUAsM8OnXRsWmCfu1z7xmazN/BrnqJ68+nTOe
+	 LC2Emy5uYXpLOPXtJGJriiIrbG8dzCRJ/tq4lyjNUHR90Hm++XO93h9lJogMtuF6Uj
+	 cPgLBndfx9LIQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4SvM0X5Zlzz18Lf;
-	Mon, 18 Dec 2023 22:01:32 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4SvkGL24m5z18K5;
+	Tue, 19 Dec 2023 12:29:46 -0500 (EST)
 Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com
  [205.220.166.238])
- by lists.lttng.org (Postfix) with ESMTP id 4SvM0W2v28z18Lc
- for <lttng-dev@lists.lttng.org>; Mon, 18 Dec 2023 22:01:30 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTP id 4SvkGH453Bz182T
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Dec 2023 12:29:43 -0500 (EST)
 Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
  by mx0a-0064b401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id
- 3BJ2xOKV002042
- for <lttng-dev@lists.lttng.org>; Mon, 18 Dec 2023 19:01:23 -0800
-Received: from nam10-dm6-obe.outbound.protection.outlook.com
- (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
- by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3v1c9kjbfw-1
+ 3BJCV9XX025557
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Dec 2023 09:29:41 -0800
+Received: from nam11-dm6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
+ by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3v1c9kk6dq-1
  (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Mon, 18 Dec 2023 19:01:22 -0800 (PST)
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Dec 2023 09:29:40 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Aa9xUmxCniCGN2i/LYAQm6SZTt1YF+wPfFszofJnAdFl1ywGZgM337RtHrwK/lgjXs+bksxUVjxe8hC9wiXJmqKTDOH7XAZi8z6SziPiFowLvzwTjyTACNARx8WsJ5Pn/+Qok5+qCpegNI0fSkiJIYVW2ZmLfW1ouO0ChjqruEizBGmb+1yosON8/yJSbKaH/NZPvcxpxzDdQnYB3D535dA8MM8kkQBG46qaJOCX8mrEU1CULENWZuSfBtt4o6YZzckIHqKI5WK82LhaX2gK7WNIMgk9HfcrIveNxn3bBeZm0QU7WvHM8eHKmuxBArM80r5EcJqRFm7FJhUA06TWyQ==
+ b=oDbadMhMxUCPIRVPE43zR4L6nP3iUTRuoUDE7XrBcQrlbdvLpO9GABks1JvvX6jrXhx8Mq6tuXfVLwDEVU4UvKv+nY0LzGMcx0sk3O/MTk4dIBUIBFUm9mC+0cEFAHWWDLyxmB5GjRx+agmxmqJhpCPUx5YY/LjTMSfHmCZ6pt4ii2j9FksFnmXJU2LLi/c2ZzfDffn1G13JgjTrJ0gQqaB4atzleQeHIkx5Pv2+dV9/Vz4AoWSRQOyKtFh96EgMGPYaDst8bslBggRONxPuJ9DZVMGHKW9T8mYXdDb2XKTKUCJU4pkPpkOtQqRC1qcYQ3nbR5DddH7zBj2dgEIe8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T6gVj6OYTezgzDLEThBGhENP8TAACX4PGV4qS9/xjm8=;
- b=UCv71OhOrkmHLP8p1m97FrcTKgnrg03OHCcl5AObfNJEOqhwbHwqJ2zZ6EsRhg/zhnE7Jp8DdG3GMuuKxFhjGzvF3a13EoRGi5McJPPJHJwOKlE50ZNhwexrFZjObhrqo1MZ3768b1sLITg1M/BgMuBYr43/e7Oo9t+gH36K4KkwHozVIETbmXUWGSUIINyvGVMxX6pv1jYQORwDvFbmXixYTWgcv5243pn9f76yQ3ujnpqfEMA4rK36fkVCjBACNNxGqFmR6z3+klZiXRYcwAX5ukztUGWPzGQFk8xxrE4Feb2kOvIrkiD+hLcPksGG65x29zmKWWqNsAUpI/yHlQ==
+ bh=tyM0z/qEI5B16utP6V33CTIm3NZ0kMcPD8QjtI9RmWU=;
+ b=Z9g82SpRmGW7qn6jwf2fRIi24QQQJpyo400Gvh8siSt2Qstwj5HLPkn6Gh8MP9VTRg30kkTdi9iTExUeLleJZKtL0NJTJeCTgXIQ8n2qmQ46l3pUVGnb48TRO4hh8JRFnonPRGjkAIzzgBfJshkTFrLWjeFZCakygbILhM3Ey1VOBtpcG9JhDtcJEn22wPwRzp+xKIVMBPhS9c3fONKJOP+y9A3REzSEEWIfYxKkHgctWnCBk5mMkkpaPvvE1SzKZ3b1HrjD3LA4f9j/Jot+pPWgNMa4nvFGRmmowSTyXERM6GIItIpqV76YQgQYkz7Sdv3LpoqWaWcmwO53XXsfXg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=eng.windriver.com; dkim=pass header.d=eng.windriver.com; arc=none
 Received: from MW4PR11MB5824.namprd11.prod.outlook.com (2603:10b6:303:187::19)
- by MW4PR11MB7029.namprd11.prod.outlook.com (2603:10b6:303:22e::14)
- with Microsoft SMTP Server (version=TLS1_2,
+ by CY8PR11MB6867.namprd11.prod.outlook.com (2603:10b6:930:5d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.38; Tue, 19 Dec
- 2023 03:01:19 +0000
+ 2023 17:29:37 +0000
 Received: from MW4PR11MB5824.namprd11.prod.outlook.com
  ([fe80::6162:ed58:51f5:efd]) by MW4PR11MB5824.namprd11.prod.outlook.com
  ([fe80::6162:ed58:51f5:efd%4]) with mapi id 15.20.7091.034; Tue, 19 Dec 2023
- 03:01:19 +0000
+ 17:29:37 +0000
 To: lttng-dev@lists.lttng.org
-Date: Tue, 19 Dec 2023 11:36:08 +0800
-Message-Id: <20231219033608.852088-1-xiangyu.chen@eng.windriver.com>
+Date: Wed, 20 Dec 2023 02:04:27 +0800
+Message-Id: <20231219180427.597841-1-xiangyu.chen@eng.windriver.com>
 X-Mailer: git-send-email 2.25.1
-X-ClientProxiedBy: TYWP286CA0024.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:262::9) To MW4PR11MB5824.namprd11.prod.outlook.com
+X-ClientProxiedBy: SI2PR02CA0002.apcprd02.prod.outlook.com
+ (2603:1096:4:194::22) To MW4PR11MB5824.namprd11.prod.outlook.com
  (2603:10b6:303:187::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR11MB5824:EE_|MW4PR11MB7029:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6694bb97-5a03-4703-1007-08dc003ec5bc
+X-MS-TrafficTypeDiagnostic: MW4PR11MB5824:EE_|CY8PR11MB6867:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1f9b27b-fec5-4c09-319f-08dc00b812df
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: arEaupSNEabYnwa+JeolxWj6jvT8deKDtThCYzpykT1KV4DL6I07CD64web0wSf2ZcIITGZ83N43S+wHYRUI/YSOsol332qgJfGg3ZCHK+RDWW0+KSkPifOE2zG2x7U4V2KhxsUArNDAy7AX2rUu1u/uPBcrlvMLye+X7wF3U73gt2DKW3rD1TmXMod+o9AZ75Abz/ULolDBzO5vn2KsytZPV4zDtIkXeyfXHxtLi7WKZB2oq/ooTmd4vs9jVCZ55Y+UNcCdWzseKcDI1jB95RPaNiCQoeW9VLQClxVuqloOsIuq+nNkww8YmFvjusEx5mtUbq3ljQ15ZsOGmr9pHSov4rZSjYzFLzuUL/r+32RcKgAAOuwOLbwHD3TtorZ0Z2i8ZAqq4SN3knyffBDEsLMfCClL+L/wR/xfT7imPehvwiEPtIsXyq2i/l0vF6vVTT009lkml0ohHbRQFfDvU4GJsmIBPq2P8ADtYJEXXJ0BGhGn780jslOvvEFjCw07WPQNTOdaOG11HgmDAD+hDOmFFjJ5ckPFvsyhrn59ISSiYT3ZcYnU0BIXYSx9QpZ4LAN6vTxetqj43G9etQgAIR2SFIkq+x2iwh3oJKQGw6i6ooDcOPqgEkaetCauXgMY
+X-Microsoft-Antispam-Message-Info: B9vGXBhlT9BCgoCg4i5x72yL6j0ELYVyXyj5k08cJpXSGkaS3xy5Ds8HbLJ4txARpJWanumT3j6asiLlm1kbNILKFE3eSL9JxNc+WkZifvdDABM1hwDkD1paSvzgz4eu73GcUTW4n8v/NbvqkCnYNZW7cZ8zsYLoKWhz7K6AkBUfMn37OUElDUiM+BnkB6WUYHLtYXXZb+Xo5e0MuG6Qmy4OrInywtCR4WdrA4sP6JjrtBDKgOxompXVocsZaGzBC852bPyiYyxzYfeETnnAMM0uzxA5TskLY6OzF9XJNRrXCDBBNahgyg9XGAlheiABwdbB+2H1kwWlATE15NQhMXNkdwdlfqd4iklJjbskt110Uc1sD9xaH+iY0tjbK9F3pV+foyQqJ3CCAjasINB5pZ5w4JvEZ0645mMQ+Vl/ZCtjZ139ApyKT9BCyD4C1WXO0Htdr0zOuj2Y3ZvvZGuz1gxbtS/RO2/gM8Qptx4MnAe7Il4zSlyR9Wjf71Ee6nDzeuBtrnyBvx4bOBOiZf04fTfes2q/myGp22lfPI/XxpBhnMxsFkqsF1r9zUsLzKw7NBQfHXsn2ccVPbdFhm55cZAIIrqhtaUwjgu23zBZMgWTUhay/lrG2rS++TzvBaY6
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:MW4PR11MB5824.namprd11.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(346002)(396003)(366004)(376002)(136003)(39860400002)(230922051799003)(186009)(1800799012)(451199024)(64100799003)(38350700005)(316002)(6916009)(83380400001)(66946007)(66556008)(66476007)(30864003)(2906002)(38100700002)(5660300002)(8676002)(8936002)(44832011)(6506007)(6666004)(6512007)(52116002)(1076003)(26005)(6486002)(478600001)(2616005)(41300700001)(83170400001);
+ SFS:(13230031)(346002)(136003)(396003)(39850400004)(376002)(366004)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(30864003)(2906002)(5660300002)(38350700005)(41300700001)(83170400001)(38100700002)(478600001)(1076003)(26005)(6486002)(2616005)(66556008)(66946007)(83380400001)(66476007)(316002)(6916009)(52116002)(6506007)(6666004)(6512007)(44832011)(8676002)(8936002);
  DIR:OUT; SFP:1101; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WrBABw7+GWHMfH5iA1BA2ymoq3rWee7oSI5+v3I9Hc+58eL7gRk/eU+78LmG?=
- =?us-ascii?Q?hXyarktMmGwJ3fPNL+dhSstCi3KRTg1KtHVT4Px4VN/v8y4hc/L9IES9RAiR?=
- =?us-ascii?Q?Okq4fYttQ8cF9tbspIgRkmJn76M0K3Wb/YC9KOK10vEnsajVThx1c3EhOHq1?=
- =?us-ascii?Q?4HkSoub/F1FG04OEXoD7r9rLicB4uQOdpcs7jbwMQyhAP03O6fwOejS/NfCN?=
- =?us-ascii?Q?hYihkS6onQOvK1BShX2z5jnwD9CNAdyRCXAVIzpn8T+aX/3JkXinbVysl8Pp?=
- =?us-ascii?Q?9WaE+SUCWU6QElcEOq4qO6b7WZPNfDp/2BTmykFdAe/MKd6/YkeT5Qk5zJun?=
- =?us-ascii?Q?BwOi0yLh1tPtBL+KViYEJ1D/BMW0vFX/0F02dgCf8M7nAu/6ZlbS1eJOimTi?=
- =?us-ascii?Q?fCkh9g5I1HVhhvaXktdZ87BB8n831mEgjsV4y2RUMEZuGhjpbqTPI9hcKEVu?=
- =?us-ascii?Q?ZoikPy2YeCa+Dk3/V9uqt0N3p3ipqmUXM0sqrMAzu90ppKTN3gzwQyJTiv8C?=
- =?us-ascii?Q?s6AmScvUx2HTKAWpsiNsFlUumy92d4eyGJgE0YqE5A5b2EmkEBH0eh2nx3uO?=
- =?us-ascii?Q?kah+KApnVeH9st5fybJDu0K4R6pwa4E0i6+4r+XvP2SHX3+5zyqDpQy4bl+k?=
- =?us-ascii?Q?nf5sM4Y2KZNlWu03Bm/jX23j5TkFzveQk6T797H5aD8/2fg+SLjBw5uASKMM?=
- =?us-ascii?Q?60AL7HIywsJnlYF8VOxpKKtA3IKkKx3MSPo7KTH1eED2KY+M03tJdrlSQqTB?=
- =?us-ascii?Q?axRJgDhIvpibhB5gnsXXKi/aHI1HRNp4yWkuuWbX2Sdl+wh0t4bpTxFv3kyk?=
- =?us-ascii?Q?+BHkkHrm5F73L9cOoyuEV/T1j7lJS8JFhRzgwRhInpfvy/MONqMl+s2S5EKB?=
- =?us-ascii?Q?vDHnzopdtidrkrxj3Cu3CjQ8o+pidLUgei3Bw6FrGI+Jz/52XU8BVLVo/YFF?=
- =?us-ascii?Q?Baul9OQky3sq2RNRtDrICdTY+As2yPqsv5BKm3okLOxNBXmJkvV7949mXdTc?=
- =?us-ascii?Q?+8Q6x0BN0A8Hdwqxv2RzeCC5IsSz8rOl0E0XY9ZbifJ0hlBY1N1K9EgEmzut?=
- =?us-ascii?Q?dLNsc3YnoiPZOY2cTAPPYvel5dX534E5zDZgiy8Rfm7IyX84B4pFtGp55/xj?=
- =?us-ascii?Q?3BYVwCMtNqUA17r951cw1VmAFsXhdxCfo7cty37rxgJ5lzizSqs+OVm+O9ym?=
- =?us-ascii?Q?IfXlEzosRcz3s+AvFtvzlewi9+J90BJEHyUEfRvYkxbSbinP4q4l8lY5mbxI?=
- =?us-ascii?Q?gu/kLwcNHMA6t6FjKfyUjy8G0TOTYdP+f91vdxzqeBl8yJ24l2NVFB9eo8p3?=
- =?us-ascii?Q?2MuKTkTdXZ2ZpB9Mv3zuYDy6HNgtkiXATDVU2cVq6dI9QxFnuvS9cKcMrm0A?=
- =?us-ascii?Q?nAknedtCch8AaTyFn6xhflfP210EMHfIXgL3j6bHKIOkdYp7EVnjSWeMDzT1?=
- =?us-ascii?Q?ctgK3Yf62+5mdiJmLyjJrd7MmdP6djqgEOUwkAPdV3k8oLdrcB7ztfRiw/jG?=
- =?us-ascii?Q?8pDtvGUotVqe28n0aqgzglOpCRDVjZo6UODU/2UgZ8rBDcbqprzndl9j8Tup?=
- =?us-ascii?Q?ic7Jlcb/y6UyhgU40RRmAqwD0wW+Qw3Cf47+3DbuI8hOcVFIFo03PRPChVBN?=
- =?us-ascii?Q?+w=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a/hfD2CtUdDgf9WmxkdIY0fNHGxZfqOsSgEIN77zPgT8/esP1jYRKsmkEScg?=
+ =?us-ascii?Q?ZIPWMUCH+JnmXJ5AkRwRIewQDkMOOd/+KxbGEYbRIG0exHmtUI5NS/UOrHjc?=
+ =?us-ascii?Q?srPORdKIY5tzHhGiNu6Yec/4bUf4tdtFfDzeK4qlohCwf395VpODEqPjBfrx?=
+ =?us-ascii?Q?xKTdcOcnncckiFvLu0Yb1quHyhLPwo0zykCt5PKX3UItEellxO1v99HZeriC?=
+ =?us-ascii?Q?Uk7RfjcmZBGSYXIj7LY11AHVszS1xF5y4oSfVF1t+r3qM/XXnjRYEGhKtwKk?=
+ =?us-ascii?Q?1L8QwpYacOwMrs2l9SyM0qC8OE1E6848MVUPWF4DhEcFuj80mLXUeQB4yb9P?=
+ =?us-ascii?Q?01iVDVatW9pZ92OpOALzCmFWNA763YJA2IsLASl/1FIPkJnFjm8+kntn8XFb?=
+ =?us-ascii?Q?GlCzbHuDYgN6v8/gSRuHwnhtKcKIgy9jxALPae2YH9q5Ck/D0LZX7PnA9KL7?=
+ =?us-ascii?Q?4dVEEiQBJvYPyWDSkS2CjsO6ayoaO6VVHjsys9xwtRKIdiAzvUV8RR/4HzGC?=
+ =?us-ascii?Q?HeyKuxHqz3xDXu9rHQOUSZ/Uq9BawE1ljrEgINoJk6kGzdl8iLFwqjvIwqk6?=
+ =?us-ascii?Q?uPom7iW32kUxYAJlxT6EnGGb2j98AyIMYa8PXoNR/dpsvDllQyounaoOuyhA?=
+ =?us-ascii?Q?504iGbjsLLXYrZWhJfBw4j+JM0elJbfgyPW4IuJHodnURLdIxMfxz7SyOSSd?=
+ =?us-ascii?Q?BMWjzOeTjKDBt13EFXFf/5xcAfBzWAacCz57DYcEP9+RlHYilzlhPF+8qck6?=
+ =?us-ascii?Q?zCVlzUbJrBwHgnSU9XQclS5U9keexdQG5Yo53gkArtY3As6bhHztFRIiCrOg?=
+ =?us-ascii?Q?A2r5sU+bgXlVtgXElf3vE4zafzOs4K039FKG5FkPKaWHUieB+l2q3bLoVgGN?=
+ =?us-ascii?Q?N27fb+9ZonA8aHMpZOQ8cf46ErpSd2gEfFIt09ffmdaY4UQEPaO1+c3HDhOF?=
+ =?us-ascii?Q?n7EU8ygEB2C3gGLmhaL6+jp2UmBnUpduMIVUuZCSivuYq1clRhbI/P30Fa8z?=
+ =?us-ascii?Q?p+yOvK8lbwGA2w5NU2SPDIRTUbKCT83c1frg/iacV9LAH8Ehd48X7yzO4O5y?=
+ =?us-ascii?Q?y1KwGbOAN4pzf1i6PLe1FQvYj7olx6Z8N1vyxObukceNM9Bxkm1MRr/DFOED?=
+ =?us-ascii?Q?tNHFa8/xvVbYsX/6a7rrb9ONW2Z1e1Ok62QbKorEk1c3aUp7I/npiIex1oO2?=
+ =?us-ascii?Q?wztHFHJBE8Sk6hUtRTpMdOSxy18IzW65Dz1ikRl5IGp9Pz2ZHc1nOjYjzsR1?=
+ =?us-ascii?Q?UiYX8TbGW/18nAaJkKvuBR/L6hUvR0Dg9bc8dNlX+pwaGYdWlBflvz+1rIs/?=
+ =?us-ascii?Q?hdOWIudsp63vHrd//rC/aTQ2S3ORmcGkz0xFzGh8jtyKMscr/ghNQNwhOK0F?=
+ =?us-ascii?Q?ZMt4rhz0Zp9vY+GXVwQEbrSBPUDvwyxYpVMjpkWlNh8nLJZxLlmTKYYFboRa?=
+ =?us-ascii?Q?Ja4tGJbNwJgODIFfSLSpqwJuMaAwdixz2m617VGEVPMJ6aeks2JIhnHBep3e?=
+ =?us-ascii?Q?hb/mdXSNwa1CJdt0kqkS7JcdT10R6LfgrzbjjQdkw9mReoceJocVSU6OagaA?=
+ =?us-ascii?Q?XVidQArMJAB2Y5E1XTEb7zfi5t+tuRIoqIfUw1nlcLZaKnUZ8urDFNFJkqti?=
+ =?us-ascii?Q?ZA=3D=3D?=
 X-OriginatorOrg: eng.windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6694bb97-5a03-4703-1007-08dc003ec5bc
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1f9b27b-fec5-4c09-319f-08dc00b812df
 X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5824.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2023 03:01:18.9903 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2023 17:29:37.4177 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oB1FczNrRlxpQ9Qtf3Bz2Bin5s1kGi2YN94mnenBVmqHyYIUbabDm4kEsYG5ZbfnUCAQvXNL+vBK205pRYV+IZ8koLNnze3XOuSyNPuwBZU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7029
-X-Proofpoint-GUID: AtJ_X57Z4hHnFqpCLqt3Utu1C8Eg44i0
-X-Proofpoint-ORIG-GUID: AtJ_X57Z4hHnFqpCLqt3Utu1C8Eg44i0
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2ZyyHwr+F7dFvPCE3J7vG+4/BiSSkdHfcvZyfrxFp3sd08rMglg1dQJyVEunAeG/xm5CiCqUGJykQYob2yVPVryTCeQPUQyXLSgq9sqmTB4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB6867
+X-Proofpoint-GUID: 6Cb85xjfR21eu_t4LGu3om5Hpyzj0K54
+X-Proofpoint-ORIG-GUID: 6Cb85xjfR21eu_t4LGu3om5Hpyzj0K54
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-16_25,2023-11-16_01,2023-05-22_02
@@ -120,8 +120,8 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  lowpriorityscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0
  impostorscore=0 malwarescore=0 suspectscore=0 spamscore=0 adultscore=0
  priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312190022
-Subject: [lttng-dev] [PATCH v3 lttng-tools] tests: Add
+ engine=8.19.0-2311290000 definitions=main-2312190131
+Subject: [lttng-dev] [PATCH v4 lttng-tools] tests: Add
  LTTNG_TOOLS_DISABLE_KERNEL_TESTS flags to skip kernel test
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -157,7 +157,7 @@ make check LTTNG_TOOLS_DISABLE_KERNEL_TESTS=1
 When this flag was set, all kernel related testcases would be marked
 as SKIP in result.
 
-Change-Id: I909d3a0001a1afd6abf07cfbb7f300eca0577e59
+Change-Id: I6618161c7b07f759aed7d205a716943346e7536c
 Signed-off-by: Xiangyu Chen <xiangyu.chen@windriver.com>
 ---
  tests/destructive/metadata-regeneration       |  3 ++
@@ -181,12 +181,12 @@ Signed-off-by: Xiangyu Chen <xiangyu.chen@windriver.com>
  tests/regression/tools/live/test_kernel       |  8 ++++
  tests/regression/tools/live/test_lttng_kernel |  3 ++
  tests/regression/tools/metadata/test_kernel   |  3 ++
- .../test_notification_kernel_buffer_usage     | 35 ++++++++--------
- .../test_notification_kernel_capture          | 28 ++++++++-----
- .../test_notification_kernel_error            | 29 ++++++++------
- .../test_notification_kernel_instrumentation  | 27 ++++++++-----
- .../notification/test_notification_multi_app  | 22 ++++++----
- ...test_notification_notifier_discarded_count | 40 +++++++++++--------
+ .../test_notification_kernel_buffer_usage     | 37 ++++++++--------
+ .../test_notification_kernel_capture          | 30 +++++++------
+ .../test_notification_kernel_error            | 29 +++++++------
+ .../test_notification_kernel_instrumentation  | 29 +++++++------
+ .../notification/test_notification_multi_app  | 24 +++++++----
+ ...test_notification_notifier_discarded_count | 42 +++++++++++--------
  .../tools/regen-metadata/test_kernel          |  3 ++
  .../tools/regen-statedump/test_kernel         |  3 ++
  tests/regression/tools/rotation/test_kernel   |  3 ++
@@ -196,7 +196,7 @@ Signed-off-by: Xiangyu Chen <xiangyu.chen@windriver.com>
  .../tools/trigger/test_list_triggers_cli      |  6 +++
  .../tools/wildcard/test_event_wildcard        |  3 ++
  tests/utils/utils.sh                          | 11 +++++
- 36 files changed, 215 insertions(+), 74 deletions(-)
+ 36 files changed, 220 insertions(+), 79 deletions(-)
 
 diff --git a/tests/destructive/metadata-regeneration b/tests/destructive/metadata-regeneration
 index 048c601b6..6b5e58a4f 100755
@@ -497,13 +497,15 @@ index 9e1e81232..88b98d6a5 100755
  {
  	validate_lttng_modules_present
 diff --git a/tests/regression/tools/notification/test_notification_kernel_buffer_usage b/tests/regression/tools/notification/test_notification_kernel_buffer_usage
-index 5a87583dc..d2b660448 100755
+index 5a87583dc..2f38e7422 100755
 --- a/tests/regression/tools/notification/test_notification_kernel_buffer_usage
 +++ b/tests/regression/tools/notification/test_notification_kernel_buffer_usage
-@@ -64,28 +64,31 @@ function test_buffer_usage_notification
+@@ -63,29 +63,32 @@ function test_buffer_usage_notification
+ 	wait $APP_PID 2> /dev/null
  }
  
- if [ "$(id -u)" == "0" ]; then
+-if [ "$(id -u)" == "0" ]; then
++if [ "$(id -u)" != "0" ]; then
 +	plan_skip_all "Root access is needed. Skipping all tests."
 +	exit 0
 +fi
@@ -549,14 +551,16 @@ index 5a87583dc..d2b660448 100755
 +rm -rf "${consumerd_pipe[@]}" 2> /dev/null
  rm -rf "$TEST_TMPDIR"
 diff --git a/tests/regression/tools/notification/test_notification_kernel_capture b/tests/regression/tools/notification/test_notification_kernel_capture
-index 88a3691eb..f086c4e03 100755
+index 88a3691eb..34cb4d3d5 100755
 --- a/tests/regression/tools/notification/test_notification_kernel_capture
 +++ b/tests/regression/tools/notification/test_notification_kernel_capture
-@@ -32,21 +32,27 @@ function test_basic_error_path
+@@ -31,22 +31,28 @@ function test_basic_error_path
+ }
  
  
- if [ "$(id -u)" == "0" ]; then
+-if [ "$(id -u)" == "0" ]; then
 -	validate_lttng_modules_present
++if [ "$(id -u)" != "0" ]; then
 +	plan_skip_all "Root access is needed. Skipping all tests."
 +	exit 0
 +fi
@@ -592,36 +596,36 @@ index 88a3691eb..f086c4e03 100755
  
  rm -f "$TESTAPP_STATE_PATH"
 diff --git a/tests/regression/tools/notification/test_notification_kernel_error b/tests/regression/tools/notification/test_notification_kernel_error
-index 891146747..1768231c6 100755
+index 891146747..895e35838 100755
 --- a/tests/regression/tools/notification/test_notification_kernel_error
 +++ b/tests/regression/tools/notification/test_notification_kernel_error
 @@ -30,23 +30,28 @@ function test_basic_error_path
  	wait $APP_PID 2> /dev/null
  }
  
--
- if [ "$(id -u)" == "0" ]; then
--	validate_lttng_modules_present
++if [ "$(id -u)" != "0" ]; then
 +	plan_skip_all "Root access is needed. Skipping all tests."
 +	exit 0
 +fi
  
--	modprobe lttng-test
+-if [ "$(id -u)" == "0" ]; then
+-	validate_lttng_modules_present
 +check_skip_kernel_test
  
--	start_lttng_sessiond_notap
+-	modprobe lttng-test
 +if [ $? == 0 ]; then
 +	plan_skip_all "LTTNG_TOOLS_DISABLE_KERNEL_TESTS was set. Skipping all tests."
 +	exit 0
 +fi
  
--	test_basic_error_path
+-	start_lttng_sessiond_notap
 +validate_lttng_modules_present
+ 
+-	test_basic_error_path
++modprobe lttng-test
  
 -	stop_lttng_sessiond_notap
 -	rmmod lttng-test
-+modprobe lttng-test
-+
 +start_lttng_sessiond_notap
 +
 +test_basic_error_path
@@ -637,14 +641,16 @@ index 891146747..1768231c6 100755
  
  rm -f "$TESTAPP_STATE_PATH"
 diff --git a/tests/regression/tools/notification/test_notification_kernel_instrumentation b/tests/regression/tools/notification/test_notification_kernel_instrumentation
-index b8f0c7eb8..66d996210 100755
+index b8f0c7eb8..9658fb0d3 100755
 --- a/tests/regression/tools/notification/test_notification_kernel_instrumentation
 +++ b/tests/regression/tools/notification/test_notification_kernel_instrumentation
-@@ -29,21 +29,26 @@ function test_kernel_instrumentation_notification
+@@ -28,22 +28,27 @@ function test_kernel_instrumentation_notification
+ 	wait $APP_PID 2> /dev/null
  }
  
- if [ "$(id -u)" == "0" ]; then
+-if [ "$(id -u)" == "0" ]; then
 -	validate_lttng_modules_present
++if [ "$(id -u)" != "0" ]; then
 +	plan_skip_all "Root access is needed. Skipping all tests."
 +	exit 0
 +fi
@@ -679,13 +685,14 @@ index b8f0c7eb8..66d996210 100755
  
  rm -f "$TESTAPP_STATE_PATH"
 diff --git a/tests/regression/tools/notification/test_notification_multi_app b/tests/regression/tools/notification/test_notification_multi_app
-index 85d863804..e019cff63 100755
+index 85d863804..3d2fe5b94 100755
 --- a/tests/regression/tools/notification/test_notification_multi_app
 +++ b/tests/regression/tools/notification/test_notification_multi_app
-@@ -418,15 +418,23 @@ TESTS=(
+@@ -417,16 +417,24 @@ TESTS=(
+ 	test_on_register_evaluation_ust
  )
  
- if [ "$(id -u)" == "0" ]; then
+-if [ "$(id -u)" == "0" ]; then
 -	validate_lttng_modules_present
 -	TESTS+=(
 -	test_multi_app_kernel
@@ -693,6 +700,7 @@ index 85d863804..e019cff63 100755
 -)
 -else
 -        skip 0 "Root access is needed. Skipping all kernel multi-app notification tests." $NUM_TEST_KERNEL
++if [ "$(id -u)" != "0" ]; then
 +	plan_skip_all "Root access is needed. Skipping all tests."
 +	exit 0
 +fi
@@ -714,13 +722,15 @@ index 85d863804..e019cff63 100755
  for fct_test in ${TESTS[@]};
  do
 diff --git a/tests/regression/tools/notification/test_notification_notifier_discarded_count b/tests/regression/tools/notification/test_notification_notifier_discarded_count
-index 1eb960d02..cd9d533f0 100755
+index 1eb960d02..6751625c0 100755
 --- a/tests/regression/tools/notification/test_notification_notifier_discarded_count
 +++ b/tests/regression/tools/notification/test_notification_notifier_discarded_count
-@@ -395,30 +395,36 @@ test_ust_notifier_discarded_count
+@@ -394,31 +394,37 @@ function test_ust_notifier_discarded_regardless_trigger_owner
+ test_ust_notifier_discarded_count
  test_ust_notifier_discarded_count_max_bucket
  
- if [ "$(id -u)" == "0" ]; then
+-if [ "$(id -u)" == "0" ]; then
++if [ "$(id -u)" != "0" ]; then
 +	skip 0 "Root access is needed. Skipping all kernel notification tests." $KERNEL_NUM_TESTS
 +	exit 0
 +fi
