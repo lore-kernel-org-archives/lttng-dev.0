@@ -4,125 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47AC9C3DA6E
-	for <lttng-dev@archiver.kernel.org>; Wed, 20 Dec 2023 05:15:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF92CC46CD3
+	for <lttng-dev@archiver.kernel.org>; Tue, 26 Dec 2023 16:19:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1703049338;
-	bh=WVVP1dvEhUbQu7McawrR2R/B9WzmuBWxouAvLKlHuBo=;
+	s=default; t=1703607595;
+	bh=0pKPjdT4p39cgu7Fg9iMHy2UaxdpOWbxulwumrtwEp0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gJ2W6fLF6n+94Kw+YTt9B/Z6/0P5XgffP+bLXAcZCzUa0s1TrDydQU1pqczrp8c9q
-	 ce2rlTjKBAuH1HjKvgjTSv4a5cW9zWy4BGO9+GM95DrbriByHvTxmdGscCkZXIDNN/
-	 RobytA2VKqMnvNRaTLZI0w0nsSYunDWyPz8W5Vdh1p5SL65jiEmd3aOfZKFta7DJ2Y
-	 g+2/rY6gZgiuwlYyNaPSmFBsvKfkTavHkdFn1Q7f+s3GyzkFpT1JH5pYLLIMy5wGhs
-	 o5czL84NCiaj6gQYIdicKTBxn+xqdWPPBK7opdnygcbK0KEWqk+QFAy39Du45t6NEJ
-	 QzSttEqZRATJA==
+	b=wMp9eEfJFeco5KJkXxw5S9L/MBdgKYRhWXXH9FJiPNU78sJZQVhlWfQAXgmFqD6fV
+	 OlUI3iwcWTBLni1AyYuG2Iie7leU9K/BG7CWK1da+BQ2Ln8K1gG8haHD7EGvQKlDzu
+	 kRYUQpO3D21pb4zKBYLOGUEq7veIcXjCUBRCUSI0Sf8A382JstwF7nkSYWIdFNlcNI
+	 aWTGM3C6d34r1QsIXfdxg4cB9kxZSxAGFPfXTlMWs21ihSsZjkml0nXmMRbt+QXHuF
+	 INi6eSJIRLBkmrl1ndrurR315m6rX7aDfNAOZfWnHNbdBYD2Px+PaGFqFEkvqr6MhS
+	 TsntF1TshBdGQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Sw1wn3qGRz18W7;
-	Wed, 20 Dec 2023 00:15:37 -0500 (EST)
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com
- [205.220.166.238])
- by lists.lttng.org (Postfix) with ESMTP id 4Sw1wl1tyWz18W0
- for <lttng-dev@lists.lttng.org>; Wed, 20 Dec 2023 00:15:34 -0500 (EST)
-Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
- by mx0a-0064b401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id
- 3BK4vcDN012401
- for <lttng-dev@lists.lttng.org>; Tue, 19 Dec 2023 21:15:28 -0800
-Received: from nam11-co1-obe.outbound.protection.outlook.com
- (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
- by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3v1824kurk-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Tue, 19 Dec 2023 21:15:27 -0800 (PST)
+	by lists.lttng.org (Postfix) with ESMTP id 4T00NV68W2z1CT0;
+	Tue, 26 Dec 2023 11:19:54 -0500 (EST)
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com
+ (mail-dm3nam02on2049.outbound.protection.outlook.com [40.107.95.49])
+ by lists.lttng.org (Postfix) with ESMTPS id 4T00NS3nCnz1CdR
+ for <lttng-dev@lists.lttng.org>; Tue, 26 Dec 2023 11:19:52 -0500 (EST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CQSNMlkzc/xMwY8Bc7sRmkT4B/viNUxxb6PxpL8k7CJFRt3HsV1NJFk0PDGvfQVc2a9AqJVBhNuHRdcFSV3kvCtIzf6M/6UMj8WlbWvM6L0re0+zc2pzY6SMp/ELjselB/z2sBggXbJpugrVS6U7GnIsHMEyDfdAKU3N3ZCYYfeyn+MMyCj8lVrlr6c2KYXfqaOMouLWJFWRXXNNcTOni+MHo3RFvXyK43kVj1Bh+buOb1Wl0FEnb58hS4sKnEGRzLpz64ax2cLCLleu8tXoSGCBQY7G0KaNOfNVLqUHBx8FUUXyGif2DDChEmjySZCW+UC6vPMRgZJsgJOQPxHo1w==
+ b=EY5KWR6RqEBwGuIhPsfJXaHLcllwD9LGLSEUid44D8Kaj9F7WeF6PcdNRZLAdBNzVyEMgBNaAkGZ3SK5yniuzF9YgmEgw/NqD+wIfaKgqBy4cO3ykmVeFgqU5K3pTofxxTIgXa8RPyOrQzbcSzvrci6GytciQTnKuQKlXXWyQ9mve9aBsTVkP3UeFKxcgq6l8NSepH2KqV+c1XQLZyS+1pyjQg0JEPIDdLuorRYfPVzS6DGvKmSjvyLzb4L0jbUVXrn4e8jR9ey+Zh1T8SYMm6igfcmUcavARA38EivyeGtcxHat4DMe3fjKaXkf/C7ymS6jXCPw+cYwqzL+ic41+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kNreQyx21cFDCIjGp/I/ZexmQQvuXqBKon3yYHCBRBI=;
- b=nyhx6F3RFE5ZKxYWALBNyUTrwaeM9NSgmUGj2Om7YALISG4h+FYA1th1lFu3tOGmwtc75lrOZZFQqMpt/pjoY1XhghJU+T6tcg4SdhIHy6eZ62HmWYv2tMMO2IJRb0az3bU3T68TpO044qTDc+76b5v6aeKUQ+JUAu10DnHvf9juFWQGiD4y5l/dqg+3wcXoZsMK0vOZQU6vgG8YNVYbRTyKV/gtb8vWcCtRXjJzqGt6bDn9mkmF1JF5UQB7ZqdDtzKM7BrGY3b/Iyz+72S1DJ2F+cR/kK4QLXA7ReqiAvB7KAkxYdjx+YeabnLwsiU1daUzckXsggnlLmKlu8s0pg==
+ bh=KL6j49KaBvs7AvU3CE3s2VPOJZmrDlx6u1vkpsioCzo=;
+ b=eJECTvdkP2jeZYt3Q4nAyAcFXM0NI7cysLrfdJfn9ni1BXRcV49ms1Ma0HhgJto9kUa2onO5Xqy+BaR1WSsF0q1eeKK2Oj3uq2KvgdLe7dlXy+W8x5ZyauUhynbUFP0lY36ycSFAVYOhz1F5foCUWKhTzlh/JHb/KQ8s6gxArVc5jpdXUFA3TLpV7nYGtPbIPz3sdQonXbxUjEZ1U1ashvAY9zNrYTx92xyYFEkaju2Gm3/q4dUd7ynhM7UxFYQER4HyivKL5GQidg8QdmKTfWdsZjabEb++c7tdFm97dHKhABfzf275rac27HV70kiFvsQ8tK3Zw/OjXfUY/Qc5bQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=eng.windriver.com; dkim=pass header.d=eng.windriver.com; arc=none
-Received: from MW4PR11MB5824.namprd11.prod.outlook.com (2603:10b6:303:187::19)
- by PH8PR11MB6855.namprd11.prod.outlook.com (2603:10b6:510:22c::10)
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from MW3PR12MB4555.namprd12.prod.outlook.com (2603:10b6:303:59::20)
+ by SJ2PR12MB7868.namprd12.prod.outlook.com (2603:10b6:a03:4cd::11)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.38; Wed, 20 Dec
- 2023 05:15:22 +0000
-Received: from MW4PR11MB5824.namprd11.prod.outlook.com
- ([fe80::6162:ed58:51f5:efd]) by MW4PR11MB5824.namprd11.prod.outlook.com
- ([fe80::6162:ed58:51f5:efd%4]) with mapi id 15.20.7091.034; Wed, 20 Dec 2023
- 05:15:21 +0000
-To: lttng-dev@lists.lttng.org
-Date: Wed, 20 Dec 2023 13:50:12 +0800
-Message-Id: <20231220055012.1769681-1-xiangyu.chen@eng.windriver.com>
-X-Mailer: git-send-email 2.35.5
-X-ClientProxiedBy: TYAPR01CA0213.jpnprd01.prod.outlook.com
- (2603:1096:404:29::33) To MW4PR11MB5824.namprd11.prod.outlook.com
- (2603:10b6:303:187::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR11MB5824:EE_|PH8PR11MB6855:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2bb87fd5-b890-442b-6123-08dc011aa9ae
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YSmjGLmhW9DC1kCyz9hfLyngsafS7suZEIPtEbFTxA0OkyBfKwRF3r/xa0HtfNuBtVxJwBAKs4O1ZVUbSiZhZ5Efcpv9pERx7/BKhTe9wn7h0UfzrnOBeXYEYDkEeBYGz7ilEPa+k8Vtx6b1+hU/JNd4MYKmcHRtZlm92gIg0YR3e7piBvB6+6y6F0+U6qcWhHBOUnZbYG5piIUSYM23H+4QUjmocHZRCISRkpyA+8IzdI6uYEQIJfSnmLcqkbgB9e4OQUEdkHwvaqyLLTwSqmOkrY2pUGuzVZJYrpFZyb2ryVb9ZZZC5ZO8VqQtvoWYg2tzV/jYbryL4KEom95VXX6y0movtcIjoFk8TTzb3BFY1inBsAFKo1mDTdpyP5p1sEgd1qXMk+jZUNz4N3TguzUPP0p4WAMCpUWOImDz4vg/oivUWRWWzYjEUi9+tkYOiK5VCytqVSRl9CVIHGPagxcIx1mCHwQXLugla0eJktGDb8XUyY3JkwaMYK7YJZRulRKJOILMbl2NKO+5WVRgdpM5tJTF3/cTInTZxnDCdF2LIl6wm2TtGdcsaiJmIfZHwzz4w750LhJrz32cHioTd/t39kBYwLK1msLi0xDCtOWV1Rb//LFrNdN9kW0FHmrP
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:MW4PR11MB5824.namprd11.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230031)(396003)(366004)(136003)(346002)(39850400004)(376002)(230922051799003)(1800799012)(186009)(451199024)(64100799003)(478600001)(6486002)(2616005)(1076003)(6666004)(6512007)(66476007)(66556008)(83380400001)(6916009)(66946007)(316002)(52116002)(5660300002)(44832011)(8676002)(8936002)(6506007)(26005)(30864003)(83170400001)(2906002)(38100700002)(41300700001)(38350700005)(579004);
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.27; Tue, 26 Dec
+ 2023 16:19:49 +0000
+Received: from MW3PR12MB4555.namprd12.prod.outlook.com
+ ([fe80::8677:b517:f2b2:b7c6]) by MW3PR12MB4555.namprd12.prod.outlook.com
+ ([fe80::8677:b517:f2b2:b7c6%4]) with mapi id 15.20.7113.027; Tue, 26 Dec 2023
+ 16:19:49 +0000
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Thread-Topic: Python lttngust module import error
+Thread-Index: AQHaOBat2WAtu9W2EEWbjLijOZRXfQ==
+Date: Tue, 26 Dec 2023 16:19:49 +0000
+Message-ID: <MW3PR12MB4555207ADC0ECAF8DA3EFF74D998A@MW3PR12MB4555.namprd12.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW3PR12MB4555:EE_|SJ2PR12MB7868:EE_
+x-ms-office365-filtering-correlation-id: 0a7a6d83-7886-4869-0db5-08dc062e7bbb
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gvH6qIlVHNTE0IM7wK95SfjzWUyIT00GXkbr4M1xAHndthU+zWH6XNeun02NsXvae1J6EpJlBJYFHM9QndckgxIlx+8Ew+9ehLzuQmDOAd3YXu67rJ1Y6661bVtxATGzGpsIeUk6Ryufr5ri+RY2HOvNB9YwAVdVwXo/7/xpZV1eFTGxapC+0obqmA3oDnbOX6mkKnfERQIuwmdTgCa+DJrztgLirwLp/x6XydI4BLNT1XgiQxYn/NuWrKy/JyEtKxCHCJNX7dsWeNmbverPsOBHc2G4UDh5wGlJ9P+16XWt0Aa75CwKWqgT6zR/7T/9KDvY8IZAOlNqDG5ysnvVEs9g3hgsMEKr01yPqBy2OY2xoB/1B/u8+mnwpB5BZ+9n+7H7eNIPt3rVuqarCQUV+avfnYBjxaPQffBpGwNIyawn+CxMSfbUnMny7B910l+NveGcMN9jE9q9XPCn66XCkV+0IjCCWzf3Sgoh9VvkQDSpc5IFlVi+oZViwmTWnlGRj694m1fL7B7anvfqgk3BL4fT0F1NOjxSpcEbXojh4wPnKOlieo4qNRoVHIJ3Phc0KJlKw6HEiJlnuc/V5RLeo3j6YCneQub6EULDS0kPgXKJVFZP/Mr5k3/dP1qFX65kfoiLzbIbQv8u1JiXDOEUtUdngPKNAxYlm4dLj1rvbdc=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:MW3PR12MB4555.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230031)(376002)(366004)(39860400002)(136003)(396003)(346002)(84040400005)(230922051799003)(451199024)(64100799003)(186009)(1800799012)(71200400001)(478600001)(8676002)(8936002)(33656002)(9686003)(7696005)(6506007)(52536014)(38070700009)(316002)(122000001)(41300700001)(66946007)(76116006)(91956017)(38100700002)(64756008)(66476007)(6916009)(66556008)(66446008)(55016003)(83380400001)(86362001)(5660300002)(26005)(2906002)(19627405001);
  DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WERDQCs6WXyRxKOGr8Ntr0zvpjWR6PYQJ6nIjB3KOOHWXS8cx1mf0fszRmiJ?=
- =?us-ascii?Q?oH5osqwTLhs5jVg0fAQVTUD2n5lfk8Bpl3SLtnVDQHYzb2/mJnYkkvmhT7rY?=
- =?us-ascii?Q?N4m5iKu2Pbh/PFFqBO56J/9SHsviuWD9ab4Q6YvPIyn/Gahe6o3tKAmP1s1t?=
- =?us-ascii?Q?gdA4lscLPk1jhCPfJ7/lHcOvtOio49vaaavhnR/1QTpdQt3squCiHTCzSrJy?=
- =?us-ascii?Q?/tn3DvP5SPbNm4WLxdKDPtdWndhosfTx1ojLFBSt8BxCNAcWviKGunXZ8Rcm?=
- =?us-ascii?Q?YY8nH4OeHFeFmHm9BdeHxGOoaX7ujx3hEoBrRZL56049LjHkeFxDDG4mqISr?=
- =?us-ascii?Q?spiA93Z5yjwr3VFMgCsxSMVD0cajWJwaUgGZvO22TrYlkckF4VZGK7YYxQB7?=
- =?us-ascii?Q?dLP+LTHCF25r4X1o5O+TgQJJnnaJLzz/5Jf7DjOsiHVwLm0icpMmL+5tp/M4?=
- =?us-ascii?Q?OHyPPFhPfC+xoBEV8nOtjTI7WvavoDuoFYr9oi3oBROIiZ8Kf2ApApNzhS0w?=
- =?us-ascii?Q?cMxOzJfOCB9O7yTVwnqd603hJWUnEpo6j0pJbbbaPW0y17KgojmPA/XXPMlh?=
- =?us-ascii?Q?z83egXlSBTCF8YMSw/g/Bd7zH4CO050o28r81O/I/fBvwWjaVR4LmD2yl+g7?=
- =?us-ascii?Q?RXYWFNr07taW1G57KySDrHwdHbr+ajGLHDDafg/ZhFfBd5vfqAIgvjyc2J8n?=
- =?us-ascii?Q?NsdbjpS6K8As0PI5tC0ETofGW7LqCJ3rNvcIelJeuv18o+g4pFgcJ+1+e6+Z?=
- =?us-ascii?Q?EgzCWki7V8NbjxG99AtwamN3MPlg+uuqWP5M+PIsJ3vSUG9KCgRINHqOelSu?=
- =?us-ascii?Q?IogmAlTO8+no1olneo+F2BfMjwcmmU9ywfmzmsybwJMNQcICR9xcvigkACTD?=
- =?us-ascii?Q?w3oKatRtUFa1TfQEN6tBCuJ4qtEfHE9vuTP4RG0PnK6DXiqicym9sgEWbYrR?=
- =?us-ascii?Q?fEdgctL7z81/J5XayvxK4hrtm4IpeLAEfvpNaifB4KbDqErx1Oz1e3b74EDs?=
- =?us-ascii?Q?x1FGkmFSmg5oKgxSdbqmyM3nU4vw+cIfwT8LXmqERoOvWj/PZ1dSLtp2Sb5x?=
- =?us-ascii?Q?CxoqsJoU4dMHznZ/T/DUgCIoeAl1BTaTC7lvQoaHX/qRgXS+wYCIKu2zzK2V?=
- =?us-ascii?Q?mJYwEgxSJLybrxHJeBgRpqujm+8gFdW3T/qJwWMN6YmoV1pUeUVCqJ2a6i2F?=
- =?us-ascii?Q?6PxHLsiHdElIk3yzRlFQFiLHbsqetK5Rgue+373h+FDsKjCbRlYXFQXE/c/F?=
- =?us-ascii?Q?db4Fx+ejCZXCh5XNT9TU9RhF5vV28wRQOAlF5MAU3JthaM2AZqFsMbgaBg5o?=
- =?us-ascii?Q?HTE3mb4mJMRJRIGCAqgVE91t/I4Cn+JuBBosp7MKZEqSQ292HUEHjHnikrCs?=
- =?us-ascii?Q?RBK461fnJcqAnwk5RZksNOoKqYa2rMbhhZFVQM/xzg+RTZ/D731cDb/W0VJx?=
- =?us-ascii?Q?bQWMsE84oKjefAPrhP8vFnWoApHbwyTBIvUSMcx5H4rsP1XoTry4ok5i8eto?=
- =?us-ascii?Q?WUqgvx7Yb/MsULLw8VvcTXQ8TyEEqQ1YDol/c1dHWBIWFqCGLlCe/Kt6Rsjx?=
- =?us-ascii?Q?HbS85fNRLKNGHTMkj5eXB2SGc/+gZm8wYJsquL967LNvM8RGabE6y4tJOsFD?=
- =?us-ascii?Q?6g=3D=3D?=
-X-OriginatorOrg: eng.windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bb87fd5-b890-442b-6123-08dc011aa9ae
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5824.namprd11.prod.outlook.com
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y2ladjhGc1ZEVmMzU1Z1amxHUGxUMHp4K1dhbkxKSHNmbmsyVlhiYmtsbXF0?=
+ =?utf-8?B?U0ZrbHh5MjV1QnNGV0FUb3lUS2NEQmRIRVkwbVRXYWF6YUpnMS9IU0JhKzA2?=
+ =?utf-8?B?SVFscDU2VUlnWFZDTVdVV2htVUlQVUpnV0Q2K21VcnFtTWlVUHlrWG8xc1hO?=
+ =?utf-8?B?QnMwU3Y0ejdXOFl1d0ZlS0FXZVpROXJTTEJYM3E0U2pKY2RtRGtXMFpTQWk2?=
+ =?utf-8?B?RkRNV01YanRvUnZGaXhLejVOODJNa0tCVjNvQlJVc2UrRnpZd0pITmVGTTlW?=
+ =?utf-8?B?SXVaOVVmVjl4eWNSWnJKOStWbHM1QzdtL2FxdXFBVTFoM1l0K0E2ZDZ4VHNw?=
+ =?utf-8?B?NWlyUUtiYzREZlFGWWk4ejE1M1lGdWNnS3R1aGNJV3pxTk8xSXZhNVEvdlJ3?=
+ =?utf-8?B?VW1VeWg1UDQ2NE5xaVU4ZVdsY3dSK2ZVZy92ME9PNmlRakszbytST3B6cFJK?=
+ =?utf-8?B?ZHBSbUJTby92b0pvUWI1WkNNenBhc2RFL1BBSVdaQVgrZ2JaQlZkQ2xaekpj?=
+ =?utf-8?B?dDhhdHh6SEdBaWNteVNvWWxSdzBUdFlKZDFGa2tvTm1PZTFGOFVaVUdKWGxP?=
+ =?utf-8?B?N2JXVGQ1NUV4aGJHZ2EwK0xKVndwRzlUcFVtNmpreWtNTnc0aGx3Q2FERVVq?=
+ =?utf-8?B?QUpyOE9CVzROeXAwemllU2ljQ1RZMkFEYjBlWjZnMXZhUUNCRmErTU41SW1M?=
+ =?utf-8?B?azRpQU5nVTNQYk52dVN5TWM1SXAxV215b3dpZlkzUndoRTQvQnlVdjdlOUp0?=
+ =?utf-8?B?d3VFWHFZUjFQQS9CUlB3N0JPNzJXS2VYYXBlN1ZZclkrU1NUc1R6WWFjT0p2?=
+ =?utf-8?B?MnU0dXJQQ1FvZXJNYlY5Sklmd3hHbW1FMDRwaTdwRGx4dXFNNGMzMzhkbDV0?=
+ =?utf-8?B?eUpUL3A4OGkxVjBHNFpLd2RCbWlnVkVhNk9rL0I0QmNtVUxoSm1QSEUwb0xU?=
+ =?utf-8?B?U3dOdnd0Q2tjWERWNGpMaG5FaXQ0ZklNOS9TQ1g0WG5vbDFiNS96TitBNE5P?=
+ =?utf-8?B?U3k2SWo4eXZZZTVDblRCd1BuMUZKL1EwbmdJT0NFY1VFTkdKemtXN0YvTUdS?=
+ =?utf-8?B?SGpDWmM2WDJ2OUhPc3pOZDgvUlpWNVRnNW93M3NZU3FxeEcwMXRKTHo4MVZT?=
+ =?utf-8?B?RDVUYmw5WG52Q3NNdzhkUWJteENRdzYydzNIVnYraUxpbWh0dWk4dlJ2dk9O?=
+ =?utf-8?B?SElRUDdockpOMHg2OERqaDlXb3BYZGhScWhwTUlLNEsxQ3B0V1R5ejhTVDFL?=
+ =?utf-8?B?eVRlM05qS1orVGFQbmI0NUU0b29uWlZpLzZvN0x3ZzBleDJUb1pLc25PVTJJ?=
+ =?utf-8?B?VGlDNHd3ZklvUXBSZ0cySm1hblJDcEZ5WTVpc21sMGpHRm90b1dleE9zaHZl?=
+ =?utf-8?B?M0c1Wm84VEVZak5jc0M5akhFZGJaNHI0N2I2NWdhc3ZjRlYxbG02c2VmbDZT?=
+ =?utf-8?B?c1BSaWJuTnQ5YXpJYnQ2RTVrN2dqNVJERUdKMTZJT2YvZ3RGTW1BNDR0OG1P?=
+ =?utf-8?B?RkRJdUFscEdkNGlkUGhkdzNFU1lVSHFzbXVIVXJ4MTZCM0RUYm1HVy84TSt6?=
+ =?utf-8?B?cThFSnVOVnZQdk5NSDlSaUpGWHRhaGpTeEVFekk3VWhrdTVNNjFOb1dUTHpW?=
+ =?utf-8?B?emhNaWhVQ0ZYb0piNk5OOG5maHVPVXpMMFRsVHUxM0tFVTlCRkZlNU5zVCsy?=
+ =?utf-8?B?QXorN3hkSmdYTkRhTCtSbkIrVGFzbWs2TDRwRWdwRU82ZTFTeWdDNC81QTlh?=
+ =?utf-8?B?NlNwMlB6OWREVndKRExpWDZLdEYxL3dBR1Q5NGVSdERRVkFiR2VkYVBpRkgx?=
+ =?utf-8?B?YlBuTTY4c2hDMmVRZi9yd0NEMk4zeXBlcy94MHlpenRCYndZSHR1SUNmNVdB?=
+ =?utf-8?B?dHgxVVZXZHFvMlZXUUFWeUdmOE1JaEsyV1I5VTZlVDFYcFc4TFBqZlcwRHlV?=
+ =?utf-8?B?YXhUSWVzODVlb1ZNam5HNS9oeTFCZzR6S0JXakY5NlVkRVNRZXBRZitkYTJU?=
+ =?utf-8?B?UU1MT3U1Yk95UTRUenhPQlhTMjVrdlhvc05xVEx5bm1NOGdaSVdJTjdDb2F0?=
+ =?utf-8?B?NWQ1cHBrdDZPZE5jYUN4dXJ6cHdlU3NMYkhlVGh1SDE0TUhJTHJEd0tNTlEv?=
+ =?utf-8?Q?kAUs=3D?=
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2023 05:15:21.0425 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fGTEZC7jyookeHGL+Bz4JmjToddiuC5WADAPe3kk21r16ql92JvWDZKR2NpBSlA1shdJUubnHSjEJLrS1wca4tPYfJ+gNEXYvr81JDyVsas=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6855
-X-Proofpoint-ORIG-GUID: tvdNEbMcWFB5d0X2DHL2dH802ZxaJVOy
-X-Proofpoint-GUID: tvdNEbMcWFB5d0X2DHL2dH802ZxaJVOy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-16_25,2023-11-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 phishscore=0
- mlxscore=0 impostorscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
- adultscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312200032
-Subject: [lttng-dev] [PATCH v5 lttng-tools] tests: add
- check_skip_kernel_test to check root user and lttng kernel modules
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4555.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a7a6d83-7886-4869-0db5-08dc062e7bbb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Dec 2023 16:19:49.3285 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /N0TcE6HzplcjhSHxPIkQdtALbIg0ZwH+KLNTHjeTnMLWI78fko9xQ1kPeJwbrPmEZmGyz7MvsqEApr5vfxdhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7868
+Subject: [lttng-dev] Python lttngust module import error
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -134,1240 +124,274 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Xiangyu Chen via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Xiangyu Chen <xiangyu.chen@eng.windriver.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Lakshmi Deverkonda via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Lakshmi Deverkonda <laksd@nvidia.com>
+Content-Type: multipart/mixed; boundary="===============7885808652617907880=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-From: Xiangyu Chen <xiangyu.chen@windriver.com>
+--===============7885808652617907880==
+Content-Language: en-GB
+Content-Type: multipart/alternative;
+	boundary="_000_MW3PR12MB4555207ADC0ECAF8DA3EFF74D998AMW3PR12MB4555namp_"
 
-The current tests will run both userspace and kernel testing.
-Some of use cases only use lttng for one kind of tracing on
-an embedded device (e.g. userspace), so in this scenario,
-the kernel modules might not install to target rootfs, the
-test cases would be fail and exit.
+--_000_MW3PR12MB4555207ADC0ECAF8DA3EFF74D998AMW3PR12MB4555namp_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Add LTTNG_TOOLS_DISABLE_KERNEL_TESTS to skip the lttng kernel
-features test, this flag can be set via "make":
+SGksDQoNCkknbSBvYnNlcnZpbmcgYW4gaXNzdWUgcmVjZW50bHkgd3J0IGltcG9ydCBvZiBweXRo
+b24zIGx0dG5nIG1vZHVsZS4NCkZvbGxvd2luZyBpcyB0aGUgZXJyb3IgYW5kIG5lZWQgeW91ciBo
+ZWxwIHRvIGZpbmQgb3V0IHdoYXQgaXMgd3JvbmcuDQoNCj4+PiBpbXBvcnQgbHR0bmd1c3QNCkV4
+Y2VwdGlvbiBpbiB0aHJlYWQgc3lzdGVtOg0KVHJhY2ViYWNrIChtb3N0IHJlY2VudCBjYWxsIGxh
+c3QpOg0KICBGaWxlICIvdXNyL2xpYi9weXRob24zLjcvdGhyZWFkaW5nLnB5IiwgbGluZSA5MTcs
+IGluIF9ib290c3RyYXBfaW5uZXINCiAgICBzZWxmLnJ1bigpDQogIEZpbGUgIi91c3IvbGliL3B5
+dGhvbjMuNy90aHJlYWRpbmcucHkiLCBsaW5lIDg2NSwgaW4gcnVuDQogICAgc2VsZi5fdGFyZ2V0
+KCpzZWxmLl9hcmdzLCAqKnNlbGYuX2t3YXJncykNCiAgRmlsZSAiL3Vzci9sb2NhbC9saWIvcHl0
+aG9uMy43L2Rpc3QtcGFja2FnZXMvbHR0bmd1c3QvYWdlbnQucHkiLCBsaW5lIDI5MSwgaW4gX2Ns
+aWVudF90aHJlYWRfdGFyZ2V0DQogICAgY2xpZW50ID0gX1RjcENsaWVudChuYW1lLCBfU0VTU0lP
+TkRfSE9TVCwgcG9ydCwgcmVnX3F1ZXVlKQ0KICBGaWxlICIvdXNyL2xvY2FsL2xpYi9weXRob24z
+LjcvZGlzdC1wYWNrYWdlcy9sdHRuZ3VzdC9hZ2VudC5weSIsIGxpbmUgNzYsIGluIF9faW5pdF9f
+DQogICAgcmFpc2UgZQ0KICBGaWxlICIvdXNyL2xvY2FsL2xpYi9weXRob24zLjcvZGlzdC1wYWNr
+YWdlcy9sdHRuZ3VzdC9hZ2VudC5weSIsIGxpbmUgNzMsIGluIF9faW5pdF9fDQogICAgc2VsZi5f
+bG9nX2hhbmRsZXIgPSBsdHRuZ3VzdC5sb2doYW5kbGVyLl9IYW5kbGVyKCkNCiAgRmlsZSAiL3Vz
+ci9sb2NhbC9saWIvcHl0aG9uMy43L2Rpc3QtcGFja2FnZXMvbHR0bmd1c3QvbG9naGFuZGxlci5w
+eSIsIGxpbmUgMzIsIGluIF9faW5pdF9fDQogICAgc2VsZi5hZ2VudF9saWIgPSBjdHlwZXMuY2Rs
+bC5Mb2FkTGlicmFyeShfSGFuZGxlci5fTElCX05BTUUpDQogIEZpbGUgIi91c3IvbGliL3B5dGhv
+bjMuNy9jdHlwZXMvX19pbml0X18ucHkiLCBsaW5lIDQzNCwgaW4gTG9hZExpYnJhcnkNCiAgICBy
+ZXR1cm4gc2VsZi5fZGxsdHlwZShuYW1lKQ0KICBGaWxlICIvdXNyL2xpYi9weXRob24zLjcvY3R5
+cGVzL19faW5pdF9fLnB5IiwgbGluZSAzNTYsIGluIF9faW5pdF9fDQogICAgc2VsZi5faGFuZGxl
+ID0gX2Rsb3BlbihzZWxmLl9uYW1lLCBtb2RlKQ0KT1NFcnJvcjogbGlibHR0bmctdXN0LXB5dGhv
+bi1hZ2VudC5zbzogY2Fubm90IG9wZW4gc2hhcmVkIG9iamVjdCBmaWxlOiBObyBzdWNoIGZpbGUg
+b3IgZGlyZWN0b3J5DQoNCg0KPj4+DQoNCkkgaGF2ZSBpbnN0YWxsZWQgbGlibHR0bmctdXN0LXB5
+dGhvbi1hZ2VudC5zbw0KDQovIyBsZGNvbmZpZyAtcCB8IGdyZXAgbGlibHR0bmcNCuKAguKAguKA
+guKAguKAguKAgmxpYmx0dG5nLXVzdC5zby4wIChsaWJjNix4ODYtNjQpID0+IC9saWIveDg2XzY0
+LWxpbnV4LWdudS9saWJsdHRuZy11c3Quc28uMA0K4oCC4oCC4oCC4oCC4oCC4oCCbGlibHR0bmct
+dXN0LXRyYWNlcG9pbnQuc28uMCAobGliYzYseDg2LTY0KSA9PiAvbGliL3g4Nl82NC1saW51eC1n
+bnUvbGlibHR0bmctdXN0LXRyYWNlcG9pbnQuc28uMA0K4oCC4oCC4oCC4oCC4oCC4oCCbGlibHR0
+bmctdXN0LXB5dGhvbi1hZ2VudC5zby4wIChsaWJjNix4ODYtNjQpID0+IC9saWIveDg2XzY0LWxp
+bnV4LWdudS9saWJsdHRuZy11c3QtcHl0aG9uLWFnZW50LnNvLjANCuKAguKAguKAguKAguKAguKA
+gmxpYmx0dG5nLXVzdC1wdGhyZWFkLXdyYXBwZXIuc28uMCAobGliYzYseDg2LTY0KSA9PiAvbGli
+L3g4Nl82NC1saW51eC1nbnUvbGlibHR0bmctdXN0LXB0aHJlYWQtd3JhcHBlci5zby4wDQrigILi
+gILigILigILigILigIJsaWJsdHRuZy11c3QtbGliYy13cmFwcGVyLnNvLjAgKGxpYmM2LHg4Ni02
+NCkgPT4gL2xpYi94ODZfNjQtbGludXgtZ251L2xpYmx0dG5nLXVzdC1saWJjLXdyYXBwZXIuc28u
+MA0K4oCC4oCC4oCC4oCC4oCC4oCCbGlibHR0bmctdXN0LWZvcmsuc28uMCAobGliYzYseDg2LTY0
+KSA9PiAvbGliL3g4Nl82NC1saW51eC1nbnUvbGlibHR0bmctdXN0LWZvcmsuc28uMA0K4oCC4oCC
+4oCC4oCC4oCC4oCCbGlibHR0bmctdXN0LWZkLnNvLjAgKGxpYmM2LHg4Ni02NCkgPT4gL2xpYi94
+ODZfNjQtbGludXgtZ251L2xpYmx0dG5nLXVzdC1mZC5zby4wDQrigILigILigILigILigILigIJs
+aWJsdHRuZy11c3QtZGwuc28uMCAobGliYzYseDg2LTY0KSA9PiAvbGliL3g4Nl82NC1saW51eC1n
+bnUvbGlibHR0bmctdXN0LWRsLnNvLjANCuKAguKAguKAguKAguKAguKAgmxpYmx0dG5nLXVzdC1j
+eWctcHJvZmlsZS5zby4wIChsaWJjNix4ODYtNjQpID0+IC9saWIveDg2XzY0LWxpbnV4LWdudS9s
+aWJsdHRuZy11c3QtY3lnLXByb2ZpbGUuc28uMA0K4oCC4oCC4oCC4oCC4oCC4oCCbGlibHR0bmct
+dXN0LWN5Zy1wcm9maWxlLWZhc3Quc28uMCAobGliYzYseDg2LTY0KSA9PiAvbGliL3g4Nl82NC1s
+aW51eC1nbnUvbGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLWZhc3Quc28uMA0K4oCC4oCC4oCC4oCC
+4oCC4oCCbGlibHR0bmctdXN0LWN0bC5zby40IChsaWJjNix4ODYtNjQpID0+IC9saWIveDg2XzY0
+LWxpbnV4LWdudS9saWJsdHRuZy11c3QtY3RsLnNvLjQNCuKAguKAguKAguKAguKAguKAgmxpYmx0
+dG5nLWN0bC5zby4wIChsaWJjNix4ODYtNjQpID0+IC9saWIveDg2XzY0LWxpbnV4LWdudS9saWJs
+dHRuZy1jdGwuc28uMA0KDQoNClJlZ2FyZHMsDQpMYWtzaG1pDQo=
 
-make check LTTNG_TOOLS_DISABLE_KERNEL_TESTS=1
+--_000_MW3PR12MB4555207ADC0ECAF8DA3EFF74D998AMW3PR12MB4555namp_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-When this flag was set, all kernel related testcases would be marked
-as SKIP in result.
+PGh0bWw+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0i
+dGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyIgc3R5bGU9
+ImRpc3BsYXk6bm9uZTsiPiBQIHttYXJnaW4tdG9wOjA7bWFyZ2luLWJvdHRvbTowO30gPC9zdHls
+ZT4NCjwvaGVhZD4NCjxib2R5IGRpcj0ibHRyIj4NCjxkaXYgY2xhc3M9ImVsZW1lbnRUb1Byb29m
+IiBzdHlsZT0iZm9udC1mYW1pbHk6IEFwdG9zLCBBcHRvc19FbWJlZGRlZEZvbnQsIEFwdG9zX01T
+Rm9udFNlcnZpY2UsIENhbGlicmksIEhlbHZldGljYSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAx
+MnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+DQpIaSw8L2Rpdj4NCjxkaXYgY2xhc3M9ImVsZW1l
+bnRUb1Byb29mIiBzdHlsZT0iZm9udC1mYW1pbHk6IEFwdG9zLCBBcHRvc19FbWJlZGRlZEZvbnQs
+IEFwdG9zX01TRm9udFNlcnZpY2UsIENhbGlicmksIEhlbHZldGljYSwgc2Fucy1zZXJpZjsgZm9u
+dC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+DQo8YnI+DQo8L2Rpdj4NCjxkaXYg
+Y2xhc3M9ImVsZW1lbnRUb1Byb29mIiBzdHlsZT0iZm9udC1mYW1pbHk6IEFwdG9zLCBBcHRvc19F
+bWJlZGRlZEZvbnQsIEFwdG9zX01TRm9udFNlcnZpY2UsIENhbGlicmksIEhlbHZldGljYSwgc2Fu
+cy1zZXJpZjsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+DQpJJ20gb2Jz
+ZXJ2aW5nIGFuIGlzc3VlIHJlY2VudGx5IHdydCBpbXBvcnQgb2YgcHl0aG9uMyBsdHRuZyBtb2R1
+bGUuJm5ic3A7PC9kaXY+DQo8ZGl2IGNsYXNzPSJlbGVtZW50VG9Qcm9vZiIgc3R5bGU9ImZvbnQt
+ZmFtaWx5OiBBcHRvcywgQXB0b3NfRW1iZWRkZWRGb250LCBBcHRvc19NU0ZvbnRTZXJ2aWNlLCBD
+YWxpYnJpLCBIZWx2ZXRpY2EsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJwdDsgY29sb3I6IHJn
+YigwLCAwLCAwKTsiPg0KRm9sbG93aW5nIGlzIHRoZSBlcnJvciBhbmQgbmVlZCB5b3VyIGhlbHAg
+dG8gZmluZCBvdXQgd2hhdCBpcyB3cm9uZy4mbmJzcDs8L2Rpdj4NCjxkaXYgY2xhc3M9ImVsZW1l
+bnRUb1Byb29mIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6ICZxdW90O0NvdXJpZXIgTmV3JnF1
+b3Q7LCBtb25vc3BhY2U7IGZvbnQtc2l6ZTogMTJwdDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPjxi
+cj4NCjwvc3Bhbj48L2Rpdj4NCjxkaXYgY2xhc3M9ImVsZW1lbnRUb1Byb29mIj48c3BhbiBzdHls
+ZT0iZm9udC1mYW1pbHk6ICZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7LCBtb25vc3BhY2U7IGZvbnQt
+c2l6ZTogMTJwdDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPiZndDsmZ3Q7Jmd0OyBpbXBvcnQgbHR0
+bmd1c3Q8L3NwYW4+PC9kaXY+DQo8ZGl2PjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTogJnF1b3Q7
+Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdi
+KDAsIDAsIDApOyI+RXhjZXB0aW9uIGluIHRocmVhZCBzeXN0ZW06PC9zcGFuPjwvZGl2Pg0KPGRp
+dj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6ICZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7LCBtb25v
+c3BhY2U7IGZvbnQtc2l6ZTogMTJwdDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPlRyYWNlYmFjayAo
+bW9zdCByZWNlbnQgY2FsbCBsYXN0KTo8L3NwYW4+PC9kaXY+DQo8ZGl2PjxzcGFuIHN0eWxlPSJm
+b250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXpl
+OiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+Jm5ic3A7IEZpbGUgJnF1b3Q7L3Vzci9saWIv
+cHl0aG9uMy43L3RocmVhZGluZy5weSZxdW90OywgbGluZSA5MTcsIGluIF9ib290c3RyYXBfaW5u
+ZXI8L3NwYW4+PC9kaXY+DQo8ZGl2PjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTogJnF1b3Q7Q291
+cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAs
+IDAsIDApOyI+Jm5ic3A7ICZuYnNwOyBzZWxmLnJ1bigpPC9zcGFuPjwvZGl2Pg0KPGRpdj48c3Bh
+biBzdHlsZT0iZm9udC1mYW1pbHk6ICZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7LCBtb25vc3BhY2U7
+IGZvbnQtc2l6ZTogMTJwdDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPiZuYnNwOyBGaWxlICZxdW90
+Oy91c3IvbGliL3B5dGhvbjMuNy90aHJlYWRpbmcucHkmcXVvdDssIGxpbmUgODY1LCBpbiBydW48
+L3NwYW4+PC9kaXY+DQo8ZGl2PjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTogJnF1b3Q7Q291cmll
+ciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAs
+IDApOyI+Jm5ic3A7ICZuYnNwOyBzZWxmLl90YXJnZXQoKnNlbGYuX2FyZ3MsICoqc2VsZi5fa3dh
+cmdzKTwvc3Bhbj48L2Rpdj4NCjxkaXY+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiAmcXVvdDtD
+b3VyaWVyIE5ldyZxdW90OywgbW9ub3NwYWNlOyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiByZ2Io
+MCwgMCwgMCk7Ij4mbmJzcDsgRmlsZSAmcXVvdDsvdXNyL2xvY2FsL2xpYi9weXRob24zLjcvZGlz
+dC1wYWNrYWdlcy9sdHRuZ3VzdC9hZ2VudC5weSZxdW90OywgbGluZSAyOTEsIGluIF9jbGllbnRf
+dGhyZWFkX3RhcmdldDwvc3Bhbj48L2Rpdj4NCjxkaXY+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5
+OiAmcXVvdDtDb3VyaWVyIE5ldyZxdW90OywgbW9ub3NwYWNlOyBmb250LXNpemU6IDEycHQ7IGNv
+bG9yOiByZ2IoMCwgMCwgMCk7Ij4mbmJzcDsgJm5ic3A7IGNsaWVudCA9IF9UY3BDbGllbnQobmFt
+ZSwgX1NFU1NJT05EX0hPU1QsIHBvcnQsIHJlZ19xdWV1ZSk8L3NwYW4+PC9kaXY+DQo8ZGl2Pjxz
+cGFuIHN0eWxlPSJmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFj
+ZTsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+Jm5ic3A7IEZpbGUgJnF1
+b3Q7L3Vzci9sb2NhbC9saWIvcHl0aG9uMy43L2Rpc3QtcGFja2FnZXMvbHR0bmd1c3QvYWdlbnQu
+cHkmcXVvdDssIGxpbmUgNzYsIGluIF9faW5pdF9fPC9zcGFuPjwvZGl2Pg0KPGRpdj48c3BhbiBz
+dHlsZT0iZm9udC1mYW1pbHk6ICZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7LCBtb25vc3BhY2U7IGZv
+bnQtc2l6ZTogMTJwdDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPiZuYnNwOyAmbmJzcDsgcmFpc2Ug
+ZTwvc3Bhbj48L2Rpdj4NCjxkaXY+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiAmcXVvdDtDb3Vy
+aWVyIE5ldyZxdW90OywgbW9ub3NwYWNlOyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiByZ2IoMCwg
+MCwgMCk7Ij4mbmJzcDsgRmlsZSAmcXVvdDsvdXNyL2xvY2FsL2xpYi9weXRob24zLjcvZGlzdC1w
+YWNrYWdlcy9sdHRuZ3VzdC9hZ2VudC5weSZxdW90OywgbGluZSA3MywgaW4gX19pbml0X188L3Nw
+YW4+PC9kaXY+DQo8ZGl2PjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBO
+ZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDAp
+OyI+Jm5ic3A7ICZuYnNwOyBzZWxmLl9sb2dfaGFuZGxlciA9IGx0dG5ndXN0LmxvZ2hhbmRsZXIu
+X0hhbmRsZXIoKTwvc3Bhbj48L2Rpdj4NCjxkaXY+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiAm
+cXVvdDtDb3VyaWVyIE5ldyZxdW90OywgbW9ub3NwYWNlOyBmb250LXNpemU6IDEycHQ7IGNvbG9y
+OiByZ2IoMCwgMCwgMCk7Ij4mbmJzcDsgRmlsZSAmcXVvdDsvdXNyL2xvY2FsL2xpYi9weXRob24z
+LjcvZGlzdC1wYWNrYWdlcy9sdHRuZ3VzdC9sb2doYW5kbGVyLnB5JnF1b3Q7LCBsaW5lIDMyLCBp
+biBfX2luaXRfXzwvc3Bhbj48L2Rpdj4NCjxkaXY+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiAm
+cXVvdDtDb3VyaWVyIE5ldyZxdW90OywgbW9ub3NwYWNlOyBmb250LXNpemU6IDEycHQ7IGNvbG9y
+OiByZ2IoMCwgMCwgMCk7Ij4mbmJzcDsgJm5ic3A7IHNlbGYuYWdlbnRfbGliID0gY3R5cGVzLmNk
+bGwuTG9hZExpYnJhcnkoX0hhbmRsZXIuX0xJQl9OQU1FKTwvc3Bhbj48L2Rpdj4NCjxkaXY+PHNw
+YW4gc3R5bGU9ImZvbnQtZmFtaWx5OiAmcXVvdDtDb3VyaWVyIE5ldyZxdW90OywgbW9ub3NwYWNl
+OyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiByZ2IoMCwgMCwgMCk7Ij4mbmJzcDsgRmlsZSAmcXVv
+dDsvdXNyL2xpYi9weXRob24zLjcvY3R5cGVzL19faW5pdF9fLnB5JnF1b3Q7LCBsaW5lIDQzNCwg
+aW4gTG9hZExpYnJhcnk8L3NwYW4+PC9kaXY+DQo8ZGl2PjxzcGFuIHN0eWxlPSJmb250LWZhbWls
+eTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxMnB0OyBj
+b2xvcjogcmdiKDAsIDAsIDApOyI+Jm5ic3A7ICZuYnNwOyByZXR1cm4gc2VsZi5fZGxsdHlwZShu
+YW1lKTwvc3Bhbj48L2Rpdj4NCjxkaXY+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiAmcXVvdDtD
+b3VyaWVyIE5ldyZxdW90OywgbW9ub3NwYWNlOyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiByZ2Io
+MCwgMCwgMCk7Ij4mbmJzcDsgRmlsZSAmcXVvdDsvdXNyL2xpYi9weXRob24zLjcvY3R5cGVzL19f
+aW5pdF9fLnB5JnF1b3Q7LCBsaW5lIDM1NiwgaW4gX19pbml0X188L3NwYW4+PC9kaXY+DQo8ZGl2
+PjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9z
+cGFjZTsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+Jm5ic3A7ICZuYnNw
+OyBzZWxmLl9oYW5kbGUgPSBfZGxvcGVuKHNlbGYuX25hbWUsIG1vZGUpPC9zcGFuPjwvZGl2Pg0K
+PGRpdj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6ICZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7LCBt
+b25vc3BhY2U7IGZvbnQtc2l6ZTogMTJwdDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPjxiPk9TRXJy
+b3I6IGxpYmx0dG5nLXVzdC1weXRob24tYWdlbnQuc286IGNhbm5vdCBvcGVuIHNoYXJlZCBvYmpl
+Y3QgZmlsZTogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeTwvYj48L3NwYW4+PC9kaXY+DQo8ZGl2
+PjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9z
+cGFjZTsgZm9udC1zaXplOiAxMnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+PGJyPg0KPC9zcGFu
+PjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTogQXB0b3MsIEFwdG9zX0VtYmVkZGVkRm9udCwgQXB0
+b3NfTVNGb250U2VydmljZSwgQ2FsaWJyaSwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNp
+emU6IDEycHQ7IGNvbG9yOiByZ2IoMCwgMCwgMCk7Ij48YnI+DQo8L3NwYW4+PC9kaXY+DQo8ZGl2
+IGNsYXNzPSJlbGVtZW50VG9Qcm9vZiI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiBBcHRvcywg
+QXB0b3NfRW1iZWRkZWRGb250LCBBcHRvc19NU0ZvbnRTZXJ2aWNlLCBDYWxpYnJpLCBIZWx2ZXRp
+Y2EsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJwdDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPiZn
+dDsmZ3Q7Jmd0Ozwvc3Bhbj48L2Rpdj4NCjxkaXYgY2xhc3M9ImVsZW1lbnRUb1Byb29mIj48c3Bh
+biBzdHlsZT0iZm9udC1mYW1pbHk6IEFwdG9zLCBBcHRvc19FbWJlZGRlZEZvbnQsIEFwdG9zX01T
+Rm9udFNlcnZpY2UsIENhbGlicmksIEhlbHZldGljYSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAx
+MnB0OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+PGJyPg0KPC9zcGFuPjwvZGl2Pg0KPGRpdiBjbGFz
+cz0iZWxlbWVudFRvUHJvb2YiPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTogQXB0b3MsIEFwdG9z
+X0VtYmVkZGVkRm9udCwgQXB0b3NfTVNGb250U2VydmljZSwgQ2FsaWJyaSwgSGVsdmV0aWNhLCBz
+YW5zLXNlcmlmOyBmb250LXNpemU6IDEycHQ7IGNvbG9yOiByZ2IoMCwgMCwgMCk7Ij5JIGhhdmUg
+aW5zdGFsbGVkDQo8L3NwYW4+PHNwYW4gc3R5bGU9ImxldHRlci1zcGFjaW5nOiBub3JtYWw7IGZv
+bnQtZmFtaWx5OiAmcXVvdDtDb3VyaWVyIE5ldyZxdW90OywgbW9ub3NwYWNlOyBmb250LXNpemU6
+IDE2cHg7IGNvbG9yOiByZ2IoMCwgMCwgMCk7IGJhY2tncm91bmQtY29sb3I6IHJnYigyNTUsIDI1
+NSwgMjU1KTsiPjxiPmxpYmx0dG5nLXVzdC1weXRob24tYWdlbnQuc288L2I+PC9zcGFuPjwvZGl2
+Pg0KPGRpdiBjbGFzcz0iZWxlbWVudFRvUHJvb2YiPjxzcGFuIHN0eWxlPSJsZXR0ZXItc3BhY2lu
+Zzogbm9ybWFsOyBmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFj
+ZTsgZm9udC1zaXplOiAxNnB4OyBjb2xvcjogcmdiKDAsIDAsIDApOyBiYWNrZ3JvdW5kLWNvbG9y
+OiByZ2IoMjU1LCAyNTUsIDI1NSk7Ij48Yj48YnI+DQo8L2I+PC9zcGFuPjwvZGl2Pg0KPGRpdiBj
+bGFzcz0iZWxlbWVudFRvUHJvb2YiPjxzcGFuIHN0eWxlPSJsZXR0ZXItc3BhY2luZzogbm9ybWFs
+OyBmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1z
+aXplOiAxNnB4OyBjb2xvcjogcmdiKDAsIDAsIDApOyBiYWNrZ3JvdW5kLWNvbG9yOiByZ2IoMjU1
+LCAyNTUsIDI1NSk7Ij4vIyBsZGNvbmZpZyAtcCB8IGdyZXAgbGlibHR0bmc8L3NwYW4+PC9kaXY+
+DQo8ZGl2PjxzcGFuIHN0eWxlPSJsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBmb250LWZhbWlseTog
+JnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxNnB4OyBjb2xv
+cjogcmdiKDAsIDAsIDApOyI+4oCC4oCC4oCC4oCC4oCC4oCCbGlibHR0bmctdXN0LnNvLjAgKGxp
+YmM2LHg4Ni02NCkgPSZndDsgL2xpYi94ODZfNjQtbGludXgtZ251L2xpYmx0dG5nLXVzdC5zby4w
+PC9zcGFuPjwvZGl2Pg0KPGRpdj48c3BhbiBzdHlsZT0ibGV0dGVyLXNwYWNpbmc6IG5vcm1hbDsg
+Zm9udC1mYW1pbHk6ICZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7LCBtb25vc3BhY2U7IGZvbnQtc2l6
+ZTogMTZweDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPuKAguKAguKAguKAguKAguKAgmxpYmx0dG5n
+LXVzdC10cmFjZXBvaW50LnNvLjAgKGxpYmM2LHg4Ni02NCkgPSZndDsgL2xpYi94ODZfNjQtbGlu
+dXgtZ251L2xpYmx0dG5nLXVzdC10cmFjZXBvaW50LnNvLjA8L3NwYW4+PC9kaXY+DQo8ZGl2Pjxz
+cGFuIHN0eWxlPSJsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBmb250LWZhbWlseTogJnF1b3Q7Q291
+cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxNnB4OyBjb2xvcjogcmdiKDAs
+IDAsIDApOyI+4oCC4oCC4oCC4oCC4oCC4oCCPC9zcGFuPjxzcGFuIHN0eWxlPSJsZXR0ZXItc3Bh
+Y2luZzogbm9ybWFsOyBmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9z
+cGFjZTsgZm9udC1zaXplOiAxNnB4OyBjb2xvcjogcmdiKDAsIDAsIDApOyBiYWNrZ3JvdW5kLWNv
+bG9yOiByZ2IoMjU1LCAyNTUsIDApOyI+PGI+bGlibHR0bmctdXN0LXB5dGhvbi1hZ2VudC5zby4w
+DQogKGxpYmM2LHg4Ni02NCkgPSZndDsgL2xpYi94ODZfNjQtbGludXgtZ251L2xpYmx0dG5nLXVz
+dC1weXRob24tYWdlbnQuc28uMDwvYj48L3NwYW4+PC9kaXY+DQo8ZGl2PjxzcGFuIHN0eWxlPSJs
+ZXR0ZXItc3BhY2luZzogbm9ybWFsOyBmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVv
+dDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxNnB4OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+4oCC
+4oCC4oCC4oCC4oCC4oCCbGlibHR0bmctdXN0LXB0aHJlYWQtd3JhcHBlci5zby4wIChsaWJjNix4
+ODYtNjQpID0mZ3Q7IC9saWIveDg2XzY0LWxpbnV4LWdudS9saWJsdHRuZy11c3QtcHRocmVhZC13
+cmFwcGVyLnNvLjA8L3NwYW4+PC9kaXY+DQo8ZGl2PjxzcGFuIHN0eWxlPSJsZXR0ZXItc3BhY2lu
+Zzogbm9ybWFsOyBmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFj
+ZTsgZm9udC1zaXplOiAxNnB4OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+4oCC4oCC4oCC4oCC4oCC
+4oCCbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci5zby4wIChsaWJjNix4ODYtNjQpID0mZ3Q7IC9s
+aWIveDg2XzY0LWxpbnV4LWdudS9saWJsdHRuZy11c3QtbGliYy13cmFwcGVyLnNvLjA8L3NwYW4+
+PC9kaXY+DQo8ZGl2PjxzcGFuIHN0eWxlPSJsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBmb250LWZh
+bWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxNnB4
+OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+4oCC4oCC4oCC4oCC4oCC4oCCbGlibHR0bmctdXN0LWZv
+cmsuc28uMCAobGliYzYseDg2LTY0KSA9Jmd0OyAvbGliL3g4Nl82NC1saW51eC1nbnUvbGlibHR0
+bmctdXN0LWZvcmsuc28uMDwvc3Bhbj48L2Rpdj4NCjxkaXY+PHNwYW4gc3R5bGU9ImxldHRlci1z
+cGFjaW5nOiBub3JtYWw7IGZvbnQtZmFtaWx5OiAmcXVvdDtDb3VyaWVyIE5ldyZxdW90OywgbW9u
+b3NwYWNlOyBmb250LXNpemU6IDE2cHg7IGNvbG9yOiByZ2IoMCwgMCwgMCk7Ij7igILigILigILi
+gILigILigIJsaWJsdHRuZy11c3QtZmQuc28uMCAobGliYzYseDg2LTY0KSA9Jmd0OyAvbGliL3g4
+Nl82NC1saW51eC1nbnUvbGlibHR0bmctdXN0LWZkLnNvLjA8L3NwYW4+PC9kaXY+DQo8ZGl2Pjxz
+cGFuIHN0eWxlPSJsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBmb250LWZhbWlseTogJnF1b3Q7Q291
+cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxNnB4OyBjb2xvcjogcmdiKDAs
+IDAsIDApOyI+4oCC4oCC4oCC4oCC4oCC4oCCbGlibHR0bmctdXN0LWRsLnNvLjAgKGxpYmM2LHg4
+Ni02NCkgPSZndDsgL2xpYi94ODZfNjQtbGludXgtZ251L2xpYmx0dG5nLXVzdC1kbC5zby4wPC9z
+cGFuPjwvZGl2Pg0KPGRpdj48c3BhbiBzdHlsZT0ibGV0dGVyLXNwYWNpbmc6IG5vcm1hbDsgZm9u
+dC1mYW1pbHk6ICZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7LCBtb25vc3BhY2U7IGZvbnQtc2l6ZTog
+MTZweDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPuKAguKAguKAguKAguKAguKAgmxpYmx0dG5nLXVz
+dC1jeWctcHJvZmlsZS5zby4wIChsaWJjNix4ODYtNjQpID0mZ3Q7IC9saWIveDg2XzY0LWxpbnV4
+LWdudS9saWJsdHRuZy11c3QtY3lnLXByb2ZpbGUuc28uMDwvc3Bhbj48L2Rpdj4NCjxkaXY+PHNw
+YW4gc3R5bGU9ImxldHRlci1zcGFjaW5nOiBub3JtYWw7IGZvbnQtZmFtaWx5OiAmcXVvdDtDb3Vy
+aWVyIE5ldyZxdW90OywgbW9ub3NwYWNlOyBmb250LXNpemU6IDE2cHg7IGNvbG9yOiByZ2IoMCwg
+MCwgMCk7Ij7igILigILigILigILigILigIJsaWJsdHRuZy11c3QtY3lnLXByb2ZpbGUtZmFzdC5z
+by4wIChsaWJjNix4ODYtNjQpID0mZ3Q7IC9saWIveDg2XzY0LWxpbnV4LWdudS9saWJsdHRuZy11
+c3QtY3lnLXByb2ZpbGUtZmFzdC5zby4wPC9zcGFuPjwvZGl2Pg0KPGRpdj48c3BhbiBzdHlsZT0i
+bGV0dGVyLXNwYWNpbmc6IG5vcm1hbDsgZm9udC1mYW1pbHk6ICZxdW90O0NvdXJpZXIgTmV3JnF1
+b3Q7LCBtb25vc3BhY2U7IGZvbnQtc2l6ZTogMTZweDsgY29sb3I6IHJnYigwLCAwLCAwKTsiPuKA
+guKAguKAguKAguKAguKAgmxpYmx0dG5nLXVzdC1jdGwuc28uNCAobGliYzYseDg2LTY0KSA9Jmd0
+OyAvbGliL3g4Nl82NC1saW51eC1nbnUvbGlibHR0bmctdXN0LWN0bC5zby40PC9zcGFuPjwvZGl2
+Pg0KPGRpdiBjbGFzcz0iZWxlbWVudFRvUHJvb2YiPjxzcGFuIHN0eWxlPSJsZXR0ZXItc3BhY2lu
+Zzogbm9ybWFsOyBmb250LWZhbWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFj
+ZTsgZm9udC1zaXplOiAxNnB4OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+4oCC4oCC4oCC4oCC4oCC
+4oCCbGlibHR0bmctY3RsLnNvLjAgKGxpYmM2LHg4Ni02NCkgPSZndDsgL2xpYi94ODZfNjQtbGlu
+dXgtZ251L2xpYmx0dG5nLWN0bC5zby4wPC9zcGFuPjwvZGl2Pg0KPGRpdiBjbGFzcz0iZWxlbWVu
+dFRvUHJvb2YiPjxzcGFuIHN0eWxlPSJsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBmb250LWZhbWls
+eTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxNnB4OyBj
+b2xvcjogcmdiKDAsIDAsIDApOyI+PGJyPg0KPC9zcGFuPjwvZGl2Pg0KPGRpdiBjbGFzcz0iZWxl
+bWVudFRvUHJvb2YiPjxzcGFuIHN0eWxlPSJsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBmb250LWZh
+bWlseTogJnF1b3Q7Q291cmllciBOZXcmcXVvdDssIG1vbm9zcGFjZTsgZm9udC1zaXplOiAxNnB4
+OyBjb2xvcjogcmdiKDAsIDAsIDApOyI+PGJyPg0KPC9zcGFuPjwvZGl2Pg0KPGRpdiBjbGFzcz0i
+ZWxlbWVudFRvUHJvb2YiPjxzcGFuIHN0eWxlPSJsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBmb250
+LWZhbWlseTogQXB0b3MsIEFwdG9zX0VtYmVkZGVkRm9udCwgQXB0b3NfTVNGb250U2VydmljZSwg
+Q2FsaWJyaSwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDE2cHg7IGNvbG9yOiBy
+Z2IoMCwgMCwgMCk7Ij5SZWdhcmRzLDwvc3Bhbj48L2Rpdj4NCjxkaXYgY2xhc3M9ImVsZW1lbnRU
+b1Byb29mIj48c3BhbiBzdHlsZT0ibGV0dGVyLXNwYWNpbmc6IG5vcm1hbDsgZm9udC1mYW1pbHk6
+IEFwdG9zLCBBcHRvc19FbWJlZGRlZEZvbnQsIEFwdG9zX01TRm9udFNlcnZpY2UsIENhbGlicmks
+IEhlbHZldGljYSwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxNnB4OyBjb2xvcjogcmdiKDAsIDAs
+IDApOyI+TGFrc2htaTwvc3Bhbj48L2Rpdj4NCjwvYm9keT4NCjwvaHRtbD4NCg==
 
-Since the the LTTNG_TOOLS_DISABLE_KERNEL_TESTS was checked in function
-check_skip_kernel_test, lots of testcases also need to check root
-permission, so merging the root permission checking into check_skip_kernel_test.
+--_000_MW3PR12MB4555207ADC0ECAF8DA3EFF74D998AMW3PR12MB4555namp_--
 
-Change-Id: If6d6e7ff9b3599340e5b07cdee4e1f36a856f4a2
-Signed-off-by: Xiangyu Chen <xiangyu.chen@windriver.com>
----
- tests/destructive/metadata-regeneration       |  8 +----
- tests/perf/test_perf_raw.in                   |  8 +----
- tests/regression/kernel/test_all_events       |  8 +----
- tests/regression/kernel/test_callstack        |  8 +----
- tests/regression/kernel/test_channel          |  8 +----
- tests/regression/kernel/test_clock_override   |  8 +----
- tests/regression/kernel/test_event_basic      |  8 +----
- tests/regression/kernel/test_kernel_function  |  8 +----
- tests/regression/kernel/test_lttng_logger     |  7 +---
- tests/regression/kernel/test_ns_contexts      |  8 +----
- .../regression/kernel/test_ns_contexts_change |  9 +----
- .../kernel/test_rotation_destroy_flush        |  8 +----
- .../regression/kernel/test_select_poll_epoll  |  8 +----
- tests/regression/kernel/test_syscall          |  8 +----
- tests/regression/kernel/test_userspace_probe  |  8 +----
- tests/regression/tools/clear/test_kernel      |  8 +----
- .../tools/filtering/test_invalid_filter       |  8 +----
- .../tools/filtering/test_unsupported_op       |  8 +----
- .../tools/filtering/test_valid_filter         |  8 +----
- tests/regression/tools/health/test_health.sh  | 10 ++----
- tests/regression/tools/health/test_thread_ok  | 10 ++----
- tests/regression/tools/live/test_kernel       | 10 +++---
- tests/regression/tools/live/test_lttng_kernel |  8 +----
- tests/regression/tools/metadata/test_kernel   |  8 +----
- .../test_notification_kernel_buffer_usage     | 15 ++++----
- .../test_notification_kernel_capture          | 12 +++----
- .../test_notification_kernel_error            | 10 +++---
- .../test_notification_kernel_instrumentation  | 12 +++----
- .../test_notification_kernel_syscall          | 12 +++----
- .../test_notification_kernel_userspace_probe  | 11 +++---
- .../notification/test_notification_multi_app  | 16 ++++-----
- ...test_notification_notifier_discarded_count | 36 +++++++++----------
- .../tools/regen-metadata/test_kernel          |  8 +----
- .../tools/regen-statedump/test_kernel         |  8 +----
- tests/regression/tools/rotation/test_kernel   |  8 +----
- .../regression/tools/rotation/test_ust_kernel |  8 +----
- tests/regression/tools/snapshots/test_kernel  |  9 +----
- .../tools/snapshots/test_kernel_streaming     |  8 +----
- .../tools/snapshots/test_ust_streaming        |  6 ----
- .../streaming/test_high_throughput_limits     |  8 +----
- tests/regression/tools/streaming/test_kernel  |  8 +----
- .../tools/tracker/test_event_tracker          |  8 +----
- .../tools/trigger/test_add_trigger_cli        | 12 ++-----
- .../tools/trigger/test_list_triggers_cli      |  6 ++++
- .../tools/wildcard/test_event_wildcard        |  8 +----
- .../test_relayd_working_directory             |  8 +----
- .../ust/namespaces/test_ns_contexts_change    |  7 +---
- tests/regression/ust/test_event_perf          |  8 +----
- tests/utils/utils.sh                          | 33 +++++++++++++++++
- 49 files changed, 138 insertions(+), 345 deletions(-)
-
-diff --git a/tests/destructive/metadata-regeneration b/tests/destructive/metadata-regeneration
-index 048c601b6..457f0b9dd 100755
---- a/tests/destructive/metadata-regeneration
-+++ b/tests/destructive/metadata-regeneration
-@@ -189,12 +189,6 @@ function test_ust_streaming ()
- 	rm -f "${file_sync_before_last}"
- }
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
- if ! destructive_tests_enabled ; then
- 	echo 'Please make sure that ntp is not running while executing this test'
- 	skip 0 "You need to set the LTTNG_ENABLE_DESTRUCTIVE_TESTS environment variable to \"will-break-my-system\" to run this test" $NUM_TESTS
-@@ -202,7 +196,7 @@ if ! destructive_tests_enabled ; then
- 	exit 0
- fi
- 
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test $NUM_TESTS ||
- {
- 	original_date=$(date)
- 	start_lttng_relayd "-o $TRACE_PATH"
-diff --git a/tests/perf/test_perf_raw.in b/tests/perf/test_perf_raw.in
-index 0a451ce63..f02a103cc 100644
---- a/tests/perf/test_perf_raw.in
-+++ b/tests/perf/test_perf_raw.in
-@@ -137,12 +137,6 @@ function test_kernel_raw()
- 	rm -rf $TRACE_PATH
- }
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
- # MUST set TESTDIR before calling those functions
- plan_tests $NUM_TESTS
- 
-@@ -154,7 +148,7 @@ have_libpfm
- 
- test_ust_raw
- 
--skip $isroot "Root access is needed for kernel testing, skipping." 9 ||
-+check_skip_kernel_test $NUM_TESTS ||
- {
- 	modprobe lttng-test
- 	test_kernel_raw
-diff --git a/tests/regression/kernel/test_all_events b/tests/regression/kernel/test_all_events
-index 2fb2f611d..636469dea 100755
---- a/tests/regression/kernel/test_all_events
-+++ b/tests/regression/kernel/test_all_events
-@@ -43,13 +43,7 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 	start_lttng_sessiond
-diff --git a/tests/regression/kernel/test_callstack b/tests/regression/kernel/test_callstack
-index cf39089af..1467e7942 100755
---- a/tests/regression/kernel/test_callstack
-+++ b/tests/regression/kernel/test_callstack
-@@ -136,13 +136,7 @@ print_test_banner "$TEST_DESC"
- 
- bail_out_if_no_babeltrace
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." "$NUM_TESTS" ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 	start_lttng_sessiond
-diff --git a/tests/regression/kernel/test_channel b/tests/regression/kernel/test_channel
-index 5525564d2..f399f5038 100755
---- a/tests/regression/kernel/test_channel
-+++ b/tests/regression/kernel/test_channel
-@@ -47,13 +47,7 @@ function test_channel_buffer_too_large()
- plan_tests $NUM_TESTS
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	start_lttng_sessiond
- 
-diff --git a/tests/regression/kernel/test_clock_override b/tests/regression/kernel/test_clock_override
-index 524c3c3bb..53c75d3a5 100755
---- a/tests/regression/kernel/test_clock_override
-+++ b/tests/regression/kernel/test_clock_override
-@@ -174,13 +174,7 @@ TESTS=(
- TEST_COUNT=${#TESTS[@]}
- i=0
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 	trap signal_cleanup SIGTERM SIGINT
-diff --git a/tests/regression/kernel/test_event_basic b/tests/regression/kernel/test_event_basic
-index 9f22d7db8..20215a11f 100755
---- a/tests/regression/kernel/test_event_basic
-+++ b/tests/regression/kernel/test_event_basic
-@@ -73,13 +73,7 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test $NUM_TESTS ||
- {
- 	validate_lttng_modules_present
- 	start_lttng_sessiond
-diff --git a/tests/regression/kernel/test_kernel_function b/tests/regression/kernel/test_kernel_function
-index 131c1c70b..bfdf0091a 100755
---- a/tests/regression/kernel/test_kernel_function
-+++ b/tests/regression/kernel/test_kernel_function
-@@ -43,13 +43,7 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	start_lttng_sessiond_notap
- 	validate_lttng_modules_present
-diff --git a/tests/regression/kernel/test_lttng_logger b/tests/regression/kernel/test_lttng_logger
-index 849428807..d1b9567ee 100755
---- a/tests/regression/kernel/test_lttng_logger
-+++ b/tests/regression/kernel/test_lttng_logger
-@@ -110,13 +110,8 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
- 
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 	start_lttng_sessiond
-diff --git a/tests/regression/kernel/test_ns_contexts b/tests/regression/kernel/test_ns_contexts
-index 98b673c98..9ada1655a 100755
---- a/tests/regression/kernel/test_ns_contexts
-+++ b/tests/regression/kernel/test_ns_contexts
-@@ -108,13 +108,7 @@ plan_tests $NUM_TESTS
- print_test_banner "$TEST_DESC"
- 
- 
--isroot=0
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." "$NUM_TESTS" && exit 0
--
-+check_skip_kernel_test "$NUM_TESTS" && exit 0
- 
- system_has_ns=0
- if [ -d "/proc/$$/ns" ]; then
-diff --git a/tests/regression/kernel/test_ns_contexts_change b/tests/regression/kernel/test_ns_contexts_change
-index 715c67cc8..d2826ba88 100755
---- a/tests/regression/kernel/test_ns_contexts_change
-+++ b/tests/regression/kernel/test_ns_contexts_change
-@@ -162,14 +162,7 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--
--isroot=0
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." "$NUM_TESTS" && exit 0
--
-+check_skip_kernel_test "$NUM_TESTS" && exit 0
- 
- system_has_ns=0
- if [ -d "/proc/$$/ns" ]; then
-diff --git a/tests/regression/kernel/test_rotation_destroy_flush b/tests/regression/kernel/test_rotation_destroy_flush
-index 6e568afda..b2df95811 100755
---- a/tests/regression/kernel/test_rotation_destroy_flush
-+++ b/tests/regression/kernel/test_rotation_destroy_flush
-@@ -120,13 +120,7 @@ TESTS=(
- TEST_COUNT=${#TESTS[@]}
- i=0
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 	trap signal_cleanup SIGTERM SIGINT
-diff --git a/tests/regression/kernel/test_select_poll_epoll b/tests/regression/kernel/test_select_poll_epoll
-index cdde1ea4f..1f457be21 100755
---- a/tests/regression/kernel/test_select_poll_epoll
-+++ b/tests/regression/kernel/test_select_poll_epoll
-@@ -363,15 +363,9 @@ if test $? != 0; then
- 	exit 0
- fi
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
- diag "Supported syscalls are $SUPPORTED_SYSCALLS_LIST"
- 
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 
-diff --git a/tests/regression/kernel/test_syscall b/tests/regression/kernel/test_syscall
-index f9b490858..20130dde9 100755
---- a/tests/regression/kernel/test_syscall
-+++ b/tests/regression/kernel/test_syscall
-@@ -664,13 +664,7 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 	start_lttng_sessiond
-diff --git a/tests/regression/kernel/test_userspace_probe b/tests/regression/kernel/test_userspace_probe
-index bfa260e47..8e9002e2b 100755
---- a/tests/regression/kernel/test_userspace_probe
-+++ b/tests/regression/kernel/test_userspace_probe
-@@ -815,13 +815,7 @@ fi
- plan_tests $NUM_TESTS
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 	start_lttng_sessiond
-diff --git a/tests/regression/tools/clear/test_kernel b/tests/regression/tools/clear/test_kernel
-index ce76f85d2..5f86ae386 100755
---- a/tests/regression/tools/clear/test_kernel
-+++ b/tests/regression/tools/clear/test_kernel
-@@ -538,12 +538,6 @@ print_test_banner "$TEST_DESC"
- 
- bail_out_if_no_babeltrace
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
- streaming_tests=(test_kernel_streaming
- 	test_kernel_streaming_rotate_clear
- 	test_kernel_streaming_clear_rotate
-@@ -565,7 +559,7 @@ snapshot_tests=(test_kernel_streaming_snapshot
- 	test_kernel_local_snapshot
- )
- 
--skip $isroot "Root access is needed. Skipping all kernel streaming tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	trap signal_cleanup SIGTERM SIGINT
- 
-diff --git a/tests/regression/tools/filtering/test_invalid_filter b/tests/regression/tools/filtering/test_invalid_filter
-index 8dfbe9eb5..839d6aff8 100755
---- a/tests/regression/tools/filtering/test_invalid_filter
-+++ b/tests/regression/tools/filtering/test_invalid_filter
-@@ -170,13 +170,7 @@ done
- 
- test_bytecode_limit -u
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel invalid filter tests." $NUM_KERNEL_TESTS ||
-+check_skip_kernel_test "$NUM_KERNEL_TESTS" ||
- {
- 	diag "Test kernel filters"
- 	i=0
-diff --git a/tests/regression/tools/filtering/test_unsupported_op b/tests/regression/tools/filtering/test_unsupported_op
-index dc76f99a6..e8101bdda 100755
---- a/tests/regression/tools/filtering/test_unsupported_op
-+++ b/tests/regression/tools/filtering/test_unsupported_op
-@@ -103,13 +103,7 @@ while [ "$i" -lt "$OP_COUNT" ]; do
- 	let "i++"
- done
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel unsupported filter operations tests." $NUM_KERNEL_TESTS ||
-+check_skip_kernel_test $NUM_KERNEL_TESTS ||
- {
- 	diag "Test kernel unsupported filter operations"
- 
-diff --git a/tests/regression/tools/filtering/test_valid_filter b/tests/regression/tools/filtering/test_valid_filter
-index cd5b1a3b9..f8d3abc0b 100755
---- a/tests/regression/tools/filtering/test_valid_filter
-+++ b/tests/regression/tools/filtering/test_valid_filter
-@@ -1454,13 +1454,7 @@ KERNEL_FILTERS=(
- 
- IFS=$OLDIFS
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel valid filter tests." $NUM_KERNEL_TESTS ||
-+check_skip_kernel_test "$NUM_KERNEL_TESTS" ||
- {
- 	diag "Test kernel valid filters"
- 
-diff --git a/tests/regression/tools/health/test_health.sh b/tests/regression/tools/health/test_health.sh
-index b4b416f92..85810d8e9 100644
---- a/tests/regression/tools/health/test_health.sh
-+++ b/tests/regression/tools/health/test_health.sh
-@@ -82,7 +82,7 @@ function test_health
- 		diag "With UST consumer daemons"
- 		enable_ust_lttng_event_ok $SESSION_NAME $UST_EVENT_NAME $CHANNEL_NAME
- 
--		skip $isroot "Root access is needed. Skipping kernel consumer health check test." "1" ||
-+		check_skip_kernel_test "1" ||
- 		{
- 			diag "With kernel consumer daemon"
- 			lttng_enable_kernel_event $SESSION_NAME $KERNEL_EVENT_NAME $CHANNEL_NAME
-@@ -113,7 +113,7 @@ function test_health
- 
- 
- 	if [ ${test_needs_root} -eq 1 ]; then
--		skip ${isroot} "Root access needed for test \"${test_thread_name}\"." "1" ||
-+		check_skip_kernel_test "1" ||
- 		{
- 			report_errors "${test_thread_error_string}" "${test_relayd}"
- 		}
-@@ -271,12 +271,6 @@ STDERR_PATH=$(mktemp -t tmp.test_health_stderr_path.XXXXXX)
- TRACE_PATH=$(mktemp -d -t tmp.test_health_trace_path.XXXXXX)
- HEALTH_PATH=$(mktemp -d -t tmp.test_health_trace_path.XXXXXX)
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
- THREAD_COUNT=${#THREAD[@]}
- i=0
- while [ "$i" -lt "$THREAD_COUNT" ]; do
-diff --git a/tests/regression/tools/health/test_thread_ok b/tests/regression/tools/health/test_thread_ok
-index 663b7e4cb..21aab0133 100755
---- a/tests/regression/tools/health/test_thread_ok
-+++ b/tests/regression/tools/health/test_thread_ok
-@@ -67,7 +67,7 @@ function test_thread_ok
- 	$CURDIR/$HEALTH_CHECK_BIN > ${STDOUT_PATH} 2> ${STDERR_PATH}
- 	report_errors
- 
--	skip $isroot "Root access is needed. Skipping kernel consumer health check test." "5" ||
-+	check_skip_kernel_test "5" ||
- 	{
- 		diag "With kernel consumer daemon"
- 		create_lttng_session_no_output $SESSION_NAME
-@@ -115,13 +115,7 @@ STDERR_PATH=$(mktemp -t tmp.test_thread_ok_stderr_path.XXXXXX)
- TRACE_PATH=$(mktemp -d -t tmp.test_thread_ok_trace_path.XXXXXX)
- HEALTH_PATH=$(mktemp -d -t tmp.test_thread_ok_trace_path.XXXXXX)
- 
--# The manage kernel thread is only spawned if we are root
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
-+check_skip_kernel_test "$NUM_TESTS" ||
- test_thread_ok
- 
- rm -rf ${HEALTH_PATH}
-diff --git a/tests/regression/tools/live/test_kernel b/tests/regression/tools/live/test_kernel
-index 1be703aac..6d8909d09 100755
---- a/tests/regression/tools/live/test_kernel
-+++ b/tests/regression/tools/live/test_kernel
-@@ -39,13 +39,11 @@ function clean_live_tracing()
- 	rm -rf $TRACE_PATH
- }
- 
--# Need root access for kernel tracing.
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	plan_skip_all "Root access is needed. Skipping all tests."
-+check_skip_kernel_test ||
-+{
-+	plan_skip_all "Skipping all tests."
- 	exit 0
--fi
-+}
- 
- modprobe lttng-test
- 
-diff --git a/tests/regression/tools/live/test_lttng_kernel b/tests/regression/tools/live/test_lttng_kernel
-index ae8c57e6b..91f526ceb 100755
---- a/tests/regression/tools/live/test_lttng_kernel
-+++ b/tests/regression/tools/live/test_lttng_kernel
-@@ -45,13 +45,7 @@ function clean_live_tracing()
- }
- 
- # Need root access for kernel tracing.
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	modprobe lttng-test
- 
-diff --git a/tests/regression/tools/metadata/test_kernel b/tests/regression/tools/metadata/test_kernel
-index 9e1e81232..01053541d 100755
---- a/tests/regression/tools/metadata/test_kernel
-+++ b/tests/regression/tools/metadata/test_kernel
-@@ -98,13 +98,7 @@ print_test_banner "$TEST_DESC"
- 
- bail_out_if_no_babeltrace
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel metadata tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 	modprobe lttng-test
-diff --git a/tests/regression/tools/notification/test_notification_kernel_buffer_usage b/tests/regression/tools/notification/test_notification_kernel_buffer_usage
-index 5a87583dc..88f05eff8 100755
---- a/tests/regression/tools/notification/test_notification_kernel_buffer_usage
-+++ b/tests/regression/tools/notification/test_notification_kernel_buffer_usage
-@@ -63,10 +63,12 @@ function test_buffer_usage_notification
- 	wait $APP_PID 2> /dev/null
- }
- 
--if [ "$(id -u)" == "0" ]; then
-+plan_tests "$NUM_TESTS"
- 
--	validate_lttng_modules_present
-+check_skip_kernel_test "$NUM_TESTS" ||
-+{
- 
-+	validate_lttng_modules_present
- 
- 	modprobe lttng-test
- 
-@@ -80,12 +82,7 @@ if [ "$(id -u)" == "0" ]; then
- 
- 	stop_lttng_sessiond_notap
- 	rmmod lttng-test
-+}
- 
--	rm -rf "${consumerd_pipe[@]}" 2> /dev/null
--else
--	# Kernel tests are skipped.
--	plan_tests $NUM_TESTS
--	skip 0 "Root access is needed. Skipping all kernel notification tests." $NUM_TESTS
--fi
--
-+rm -rf "${consumerd_pipe[@]}" 2> /dev/null
- rm -rf "$TEST_TMPDIR"
-diff --git a/tests/regression/tools/notification/test_notification_kernel_capture b/tests/regression/tools/notification/test_notification_kernel_capture
-index 88a3691eb..808bf1f51 100755
---- a/tests/regression/tools/notification/test_notification_kernel_capture
-+++ b/tests/regression/tools/notification/test_notification_kernel_capture
-@@ -31,7 +31,10 @@ function test_basic_error_path
- }
- 
- 
--if [ "$(id -u)" == "0" ]; then
-+plan_tests "$NUM_TESTS"
-+
-+check_skip_kernel_test "$NUM_TESTS" ||
-+{
- 	validate_lttng_modules_present
- 
- 	modprobe lttng-test
-@@ -42,11 +45,6 @@ if [ "$(id -u)" == "0" ]; then
- 
- 	stop_lttng_sessiond_notap
- 	rmmod lttng-test
--
--else
--	# Kernel tests are skipped.
--	plan_tests $NUM_TESTS
--	skip 0 "Root access is needed. Skipping all kernel notification tests." $NUM_TESTS
--fi
-+}
- 
- rm -f "$TESTAPP_STATE_PATH"
-diff --git a/tests/regression/tools/notification/test_notification_kernel_error b/tests/regression/tools/notification/test_notification_kernel_error
-index 891146747..a9fa65cab 100755
---- a/tests/regression/tools/notification/test_notification_kernel_error
-+++ b/tests/regression/tools/notification/test_notification_kernel_error
-@@ -30,8 +30,10 @@ function test_basic_error_path
- 	wait $APP_PID 2> /dev/null
- }
- 
-+plan_tests $NUM_TESTS
- 
--if [ "$(id -u)" == "0" ]; then
-+check_skip_kernel_test "$NUM_TESTS" ||
-+{
- 	validate_lttng_modules_present
- 
- 	modprobe lttng-test
-@@ -42,11 +44,7 @@ if [ "$(id -u)" == "0" ]; then
- 
- 	stop_lttng_sessiond_notap
- 	rmmod lttng-test
-+}
- 
--else
--	# Kernel tests are skipped.
--	plan_tests $NUM_TESTS
--	skip 0 "Root access is needed. Skipping all kernel notification tests." $NUM_TESTS
--fi
- 
- rm -f "$TESTAPP_STATE_PATH"
-diff --git a/tests/regression/tools/notification/test_notification_kernel_instrumentation b/tests/regression/tools/notification/test_notification_kernel_instrumentation
-index b8f0c7eb8..31cbc7794 100755
---- a/tests/regression/tools/notification/test_notification_kernel_instrumentation
-+++ b/tests/regression/tools/notification/test_notification_kernel_instrumentation
-@@ -28,7 +28,10 @@ function test_kernel_instrumentation_notification
- 	wait $APP_PID 2> /dev/null
- }
- 
--if [ "$(id -u)" == "0" ]; then
-+plan_tests "$NUM_TESTS"
-+
-+check_skip_kernel_test "$NUM_TESTS" ||
-+{
- 	validate_lttng_modules_present
- 
- 	modprobe lttng-test
-@@ -39,11 +42,6 @@ if [ "$(id -u)" == "0" ]; then
- 
- 	stop_lttng_sessiond_notap
- 	rmmod lttng-test
--
--else
--	# Kernel tests are skipped.
--	plan_tests $NUM_TESTS
--	skip 0 "Root access is needed. Skipping all kernel notification tests." $NUM_TESTS
--fi
-+}
- 
- rm -f "$TESTAPP_STATE_PATH"
-diff --git a/tests/regression/tools/notification/test_notification_kernel_syscall b/tests/regression/tools/notification/test_notification_kernel_syscall
-index ba12716fd..5dbbe5c2a 100755
---- a/tests/regression/tools/notification/test_notification_kernel_syscall
-+++ b/tests/regression/tools/notification/test_notification_kernel_syscall
-@@ -31,7 +31,10 @@ function test_kernel_syscall_notification
- 	wait $APP_PID 2> /dev/null
- }
- 
--if [ "$(id -u)" == "0" ]; then
-+plan_tests $NUM_TESTS
-+
-+check_skip_kernel_test "$NUM_TESTS" ||
-+{
- 	validate_lttng_modules_present
- 
- 	start_lttng_sessiond_notap
-@@ -39,11 +42,6 @@ if [ "$(id -u)" == "0" ]; then
- 	test_kernel_syscall_notification
- 
- 	stop_lttng_sessiond_notap
--
--else
--	# Kernel tests are skipped.
--	plan_tests $NUM_TESTS
--	skip 0 "Root access is needed. Skipping all kernel notification tests." $NUM_TESTS
--fi
-+}
- 
- rm -f "$TESTAPP_STATE_PATH"
-diff --git a/tests/regression/tools/notification/test_notification_kernel_userspace_probe b/tests/regression/tools/notification/test_notification_kernel_userspace_probe
-index 065e66add..25fb09f0d 100755
---- a/tests/regression/tools/notification/test_notification_kernel_userspace_probe
-+++ b/tests/regression/tools/notification/test_notification_kernel_userspace_probe
-@@ -29,7 +29,10 @@ function test_kernel_userspace_probe_notification
- 	wait $APP_PID 2> /dev/null
- }
- 
--if [ "$(id -u)" == "0" ]; then
-+plan_tests "$NUM_TESTS"
-+
-+check_skip_kernel_test "$NUM_TESTS" ||
-+{
- 	validate_lttng_modules_present
- 
- 	start_lttng_sessiond_notap
-@@ -37,10 +40,6 @@ if [ "$(id -u)" == "0" ]; then
- 	test_kernel_userspace_probe_notification
- 
- 	stop_lttng_sessiond_notap
--else
--	# Kernel tests are skipped.
--	plan_tests $NUM_TESTS
--	skip 0 "Root access is needed. Skipping all kernel notification tests." $NUM_TESTS
--fi
-+}
- 
- rm -f "$TESTAPP_STATE_PATH"
-diff --git a/tests/regression/tools/notification/test_notification_multi_app b/tests/regression/tools/notification/test_notification_multi_app
-index 85d863804..32482eeaa 100755
---- a/tests/regression/tools/notification/test_notification_multi_app
-+++ b/tests/regression/tools/notification/test_notification_multi_app
-@@ -417,15 +417,15 @@ TESTS=(
- 	test_on_register_evaluation_ust
- )
- 
--if [ "$(id -u)" == "0" ]; then
--	validate_lttng_modules_present
--	TESTS+=(
--	test_multi_app_kernel
--	test_on_register_evaluation_kernel
-+plan_tests "$NUM_TESTS"
-+
-+check_skip_kernel_test "$NUM_TESTS" && exit 0
-+
-+validate_lttng_modules_present
-+TESTS+=(
-+test_multi_app_kernel
-+test_on_register_evaluation_kernel
- )
--else
--        skip 0 "Root access is needed. Skipping all kernel multi-app notification tests." $NUM_TEST_KERNEL
--fi
- 
- 
- for fct_test in ${TESTS[@]};
-diff --git a/tests/regression/tools/notification/test_notification_notifier_discarded_count b/tests/regression/tools/notification/test_notification_notifier_discarded_count
-index 1eb960d02..ed1c310d3 100755
---- a/tests/regression/tools/notification/test_notification_notifier_discarded_count
-+++ b/tests/regression/tools/notification/test_notification_notifier_discarded_count
-@@ -394,31 +394,27 @@ function test_ust_notifier_discarded_regardless_trigger_owner
- test_ust_notifier_discarded_count
- test_ust_notifier_discarded_count_max_bucket
- 
--if [ "$(id -u)" == "0" ]; then
-+check_skip_kernel_test "$KERNEL_NUM_TESTS" && exit 0
- 
--	validate_lttng_modules_present
-+validate_lttng_modules_present
- 
--	modprobe lttng-test
-+modprobe lttng-test
- 
--	test_kernel_notifier_discarded_count
--	test_kernel_notifier_discarded_count_max_bucket
-+test_kernel_notifier_discarded_count
-+test_kernel_notifier_discarded_count_max_bucket
- 
--	if destructive_tests_enabled ; then
--		# Those tests add a new user on the system. Since it's a quite
--		# intrusive change to the system, we decide to only run it when
--		# the user knows what they are doing.
--		test_ust_notifier_discarded_count_multi_uid
--		test_ust_notifier_discarded_regardless_trigger_owner
--	else
--		skip 0 "You need to set the LTTNG_ENABLE_DESTRUCTIVE_TESTS environment variable to \"will-break-my-system\" to run this test" $DESTRUCTIVE_TESTS_NUM
--	fi
--
--	modprobe --remove lttng-test
--
--	rm -rf "${sessiond_pipe[@]}" 2> /dev/null
-+if destructive_tests_enabled ; then
-+	# Those tests add a new user on the system. Since it's a quite
-+	# intrusive change to the system, we decide to only run it when
-+	# the user knows what they are doing.
-+	test_ust_notifier_discarded_count_multi_uid
-+	test_ust_notifier_discarded_regardless_trigger_owner
- else
--	# Kernel tests are skipped.
--	skip 0 "Root access is needed. Skipping all kernel notification tests." $KERNEL_NUM_TESTS
-+	skip 0 "You need to set the LTTNG_ENABLE_DESTRUCTIVE_TESTS environment variable to \"will-break-my-system\" to run this test" $DESTRUCTIVE_TESTS_NUM
- fi
- 
-+modprobe --remove lttng-test
-+
-+rm -rf "${sessiond_pipe[@]}" 2> /dev/null
-+
- rm -rf "$TEST_TMPDIR"
-diff --git a/tests/regression/tools/regen-metadata/test_kernel b/tests/regression/tools/regen-metadata/test_kernel
-index 7c4191a47..eb37783d2 100755
---- a/tests/regression/tools/regen-metadata/test_kernel
-+++ b/tests/regression/tools/regen-metadata/test_kernel
-@@ -99,13 +99,7 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel streaming tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 
-diff --git a/tests/regression/tools/regen-statedump/test_kernel b/tests/regression/tools/regen-statedump/test_kernel
-index cb0c0ad5e..d33bdf478 100755
---- a/tests/regression/tools/regen-statedump/test_kernel
-+++ b/tests/regression/tools/regen-statedump/test_kernel
-@@ -39,13 +39,7 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel streaming tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 	start_lttng_sessiond
-diff --git a/tests/regression/tools/rotation/test_kernel b/tests/regression/tools/rotation/test_kernel
-index 817019036..92903c3cc 100755
---- a/tests/regression/tools/rotation/test_kernel
-+++ b/tests/regression/tools/rotation/test_kernel
-@@ -107,13 +107,7 @@ plan_tests $NUM_TESTS
- print_test_banner "$TEST_DESC"
- bail_out_if_no_babeltrace
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel streaming tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 
-diff --git a/tests/regression/tools/rotation/test_ust_kernel b/tests/regression/tools/rotation/test_ust_kernel
-index 2f19e807a..c6d9373e7 100755
---- a/tests/regression/tools/rotation/test_ust_kernel
-+++ b/tests/regression/tools/rotation/test_ust_kernel
-@@ -85,13 +85,7 @@ plan_tests $NUM_TESTS
- print_test_banner "$TEST_DESC"
- bail_out_if_no_babeltrace
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 
-diff --git a/tests/regression/tools/snapshots/test_kernel b/tests/regression/tools/snapshots/test_kernel
-index 870c437b2..f30ead382 100755
---- a/tests/regression/tools/snapshots/test_kernel
-+++ b/tests/regression/tools/snapshots/test_kernel
-@@ -221,14 +221,7 @@ print_test_banner "$TEST_DESC"
- 
- bail_out_if_no_babeltrace
- 
--
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel snapshot tests" $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 
- 	validate_lttng_modules_present
-diff --git a/tests/regression/tools/snapshots/test_kernel_streaming b/tests/regression/tools/snapshots/test_kernel_streaming
-index 2abd838e7..5a1eb3a42 100755
---- a/tests/regression/tools/snapshots/test_kernel_streaming
-+++ b/tests/regression/tools/snapshots/test_kernel_streaming
-@@ -145,13 +145,7 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel streaming tests" $NUM_TESTS ||
-+check_skip_kernel_test $NUM_TESTS ||
- {
- 	validate_lttng_modules_present
- 
-diff --git a/tests/regression/tools/snapshots/test_ust_streaming b/tests/regression/tools/snapshots/test_ust_streaming
-index 3104afb3b..1278605dc 100755
---- a/tests/regression/tools/snapshots/test_ust_streaming
-+++ b/tests/regression/tools/snapshots/test_ust_streaming
-@@ -234,12 +234,6 @@ print_test_banner "$TEST_DESC"
- 
- bail_out_if_no_babeltrace
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
- start_lttng_relayd "-o $TRACE_PATH"
- start_lttng_sessiond
- 
-diff --git a/tests/regression/tools/streaming/test_high_throughput_limits b/tests/regression/tools/streaming/test_high_throughput_limits
-index 50c21df4d..a7d4317b4 100755
---- a/tests/regression/tools/streaming/test_high_throughput_limits
-+++ b/tests/regression/tools/streaming/test_high_throughput_limits
-@@ -174,13 +174,7 @@ print_test_banner "$TEST_DESC"
- 
- bail_out_if_no_babeltrace
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed to set bandwith limits. Skipping all tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 
- 	# Catch sigint and try to cleanup limits
-diff --git a/tests/regression/tools/streaming/test_kernel b/tests/regression/tools/streaming/test_kernel
-index aef1e11bc..2beb4b015 100755
---- a/tests/regression/tools/streaming/test_kernel
-+++ b/tests/regression/tools/streaming/test_kernel
-@@ -47,13 +47,7 @@ plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel streaming tests." $NUM_TESTS ||
-+check_skip_kernel_test "$NUM_TESTS" ||
- {
- 	validate_lttng_modules_present
- 
-diff --git a/tests/regression/tools/tracker/test_event_tracker b/tests/regression/tools/tracker/test_event_tracker
-index 98ca990fc..3840b4676 100755
---- a/tests/regression/tools/tracker/test_event_tracker
-+++ b/tests/regression/tools/tracker/test_event_tracker
-@@ -468,13 +468,7 @@ test_event_track_untrack ust 0 "${EVENT_NAME}" "--pid --all"	# backward compat
- test_event_tracker ust 1 "${EVENT_NAME}" "--pid --all"	# backward compat
- test_event_pid_tracker ust 1 "${EVENT_NAME}"
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel tracker tests." $NUM_KERNEL_TESTS ||
-+check_skip_kernel_test "$NUM_KERNEL_TESTS" ||
- {
- 	diag "Test kernel tracker"
- 
-diff --git a/tests/regression/tools/trigger/test_add_trigger_cli b/tests/regression/tools/trigger/test_add_trigger_cli
-index 9ba8c22f0..0dc4c6b2f 100755
---- a/tests/regression/tools/trigger/test_add_trigger_cli
-+++ b/tests/regression/tools/trigger/test_add_trigger_cli
-@@ -34,12 +34,6 @@ tmp_stdout=$(mktemp -t test_parse_cli_trigger_stdout.XXXXXX)
- tmp_stderr=$(mktemp -t test_parse_cli_trigger_stderr.XXXXXX)
- uprobe_elf_binary="${TESTDIR}/utils/testapp/userspace-probe-elf-binary/.libs/userspace-probe-elf-binary"
- 
--if [ "$(id -u)" == "0" ]; then
--	ist_root=1
--else
--	ist_root=0
--fi
--
- function test_success ()
- {
- 	local test_name="$1"
-@@ -223,7 +217,7 @@ test_success "--exclude-name two" "trigger5" \
- 	--condition event-rule-matches --type=user --name='jean-*' --exclude-name jean-chretien -x jean-charest \
- 	--action notify
- 
--skip $ist_root "non-root user: skipping kprobe tests" 18 || {
-+check_skip_kernel_test 18 || {
- 	i=0
- 
- 	for type in kprobe kernel:kprobe; do
-@@ -262,7 +256,7 @@ skip $ist_root "non-root user: skipping kprobe tests" 18 || {
- 	done
- }
- 
--skip $ist_root "non-root user: skipping uprobe tests" 6 || {
-+check_skip_kernel_test 6 || {
- 	test_success "--condition event-rule-matches uprobe" "uprobe-trigger-0" \
- 		--name="uprobe-trigger-0" \
- 		--condition event-rule-matches --type=kernel:uprobe --location=${uprobe_elf_binary}:test_function --event-name=ma-probe \
-@@ -274,7 +268,7 @@ skip $ist_root "non-root user: skipping uprobe tests" 6 || {
- 		--action notify
- }
- 
--skip $ist_root "non-root user: skipping syscall tests" 30 || {
-+check_skip_kernel_test 30 || {
- 	test_success "--condition event-rule-matches one syscall" "syscall-trigger-0" \
- 		--name="syscall-trigger-0" \
- 		--condition event-rule-matches --type=syscall --name=open \
-diff --git a/tests/regression/tools/trigger/test_list_triggers_cli b/tests/regression/tools/trigger/test_list_triggers_cli
-index 6194b8891..6b61df206 100755
---- a/tests/regression/tools/trigger/test_list_triggers_cli
-+++ b/tests/regression/tools/trigger/test_list_triggers_cli
-@@ -51,6 +51,8 @@ else
- 	hast_sdt_binary=0
- fi
- 
-+check_skip_kernel_test
-+ist_kernel=$?
- 
- test_top_level_options ()
- {
-@@ -2695,9 +2697,13 @@ start_lttng_sessiond_notap
- 
- test_top_level_options
- test_event_rule_matches_tracepoint
-+skip $ist_kernel "LTTNG_TOOLS_DISABLE_KERNEL_TESTS was set. Skipping all tests." 13 ||
- skip $ist_root "non-root user: skipping kprobe tests" 13 || test_event_rule_matches_probe
-+skip $ist_kernel "LTTNG_TOOLS_DISABLE_KERNEL_TESTS was set. Skipping all tests." 9 ||
- skip $ist_root "non-root user: skipping uprobe tests" 9 || test_event_rule_matches_userspace_probe_elf
-+skip $ist_kernel "LTTNG_TOOLS_DISABLE_KERNEL_TESTS was set. Skipping all tests." 9 ||
- skip $(($ist_root && $hast_sdt_binary)) "skipping userspace probe SDT tests" 9 || test_event_rule_matches_userspace_probe_sdt
-+skip $ist_kernel "LTTNG_TOOLS_DISABLE_KERNEL_TESTS was set. Skipping all tests." 17 ||
- skip $ist_root "non-root user: skipping syscall tests" 17 || test_event_rule_matches_syscall
- test_session_consumed_size_condition
- test_buffer_usage_conditions
-diff --git a/tests/regression/tools/wildcard/test_event_wildcard b/tests/regression/tools/wildcard/test_event_wildcard
-index 36e669b32..1bc61991d 100755
---- a/tests/regression/tools/wildcard/test_event_wildcard
-+++ b/tests/regression/tools/wildcard/test_event_wildcard
-@@ -126,13 +126,7 @@ test_event_wildcard ust 1 'tp*tptest'
- test_event_wildcard ust 1 'tp**tptest'
- test_event_wildcard ust 1 'tp*test'
- 
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--else
--	isroot=0
--fi
--
--skip $isroot "Root access is needed. Skipping all kernel wildcard tests." $NUM_KERNEL_TESTS ||
-+check_skip_kernel_test "$NUM_KERNEL_TESTS" ||
- {
- 	diag "Test kernel wildcards"
- 
-diff --git a/tests/regression/tools/working-directory/test_relayd_working_directory b/tests/regression/tools/working-directory/test_relayd_working_directory
-index c196a059e..248547b82 100755
---- a/tests/regression/tools/working-directory/test_relayd_working_directory
-+++ b/tests/regression/tools/working-directory/test_relayd_working_directory
-@@ -144,13 +144,7 @@ function test_relayd_debug_permission()
- 
- 	diag "Test lttng-relayd change working directory on non writable directory"
- 
--	if [ "$(id -u)" == "0" ]; then
--	    is_user=0
--	else
--	    is_user=1
--	fi
--
--	skip $is_user "Skipping permission debug output test; operation can't fail as root" 6 ||
-+	check_skip_kernel_test 6 ||
- 	{
- 		local output_pattern='Working directory \".*\" is not writable'
- 		local cwd
-diff --git a/tests/regression/ust/namespaces/test_ns_contexts_change b/tests/regression/ust/namespaces/test_ns_contexts_change
-index fd1621630..e2c30659a 100755
---- a/tests/regression/ust/namespaces/test_ns_contexts_change
-+++ b/tests/regression/ust/namespaces/test_ns_contexts_change
-@@ -103,12 +103,7 @@ print_test_banner "$TEST_DESC"
- 
- bail_out_if_no_babeltrace
- 
--isroot=0
--if [ "$(id -u)" == "0" ]; then
--	isroot=1
--fi
--
--skip $isroot "Root access is needed. Skipping all tests." "$NUM_TESTS" && exit 0
-+check_skip_kernel_test "$NUM_TESTS" && exit 0
- 
- system_has_ns=0
- if [ -d "/proc/$$/ns" ]; then
-diff --git a/tests/regression/ust/test_event_perf b/tests/regression/ust/test_event_perf
-index 9b2de4de2..551ea407c 100755
---- a/tests/regression/ust/test_event_perf
-+++ b/tests/regression/ust/test_event_perf
-@@ -121,17 +121,11 @@ print_test_banner "$TEST_DESC"
- 
- bail_out_if_no_babeltrace
- 
--if [ "$(id -u)" == "0" ]; then
--        isroot=1
--else
--        isroot=0
--fi
--
- start_lttng_sessiond
- 
- test_parsing_raw
- 
--skip $isroot "Root access is needed. Skipping UST perf tests." 8 ||
-+check_skip_kernel_test 8 ||
- {
- 	test_event_basic
- }
-diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
-index 44b3f167a..758db8bdd 100644
---- a/tests/utils/utils.sh
-+++ b/tests/utils/utils.sh
-@@ -323,6 +323,39 @@ function conf_proc_count()
- 	echo
- }
- 
-+# Usage:
-+# check_skip_kernel_test [NB_TESTS]
-+# Return 0 if disable kernel test was set or current user is not a root user
-+# If NB_TESTS passes to function, it would call the skip() to skip number of tests.
-+# If NB_TESTS is empty, function just output a reason
-+
-+function check_skip_kernel_test ()
-+{
-+	local num_tests="$1"
-+
-+	# Check for skip test kernel flag
-+	if [ "$LTTNG_TOOLS_DISABLE_KERNEL_TESTS" == "1" ]; then
-+		if ! test -z "$num_tests"; then
-+			skip 0 "LTTNG_TOOLS_DISABLE_KERNEL_TESTS was set. Skipping all tests." "$num_tests"
-+		else
-+			diag "LTTNG_TOOLS_DISABLE_KERNEL_TESTS was set"
-+		fi
-+		return 0
-+	fi
-+
-+	# Check if we are running as root
-+	if [ "$(id -u)" != "0" ]; then
-+		if ! test -z "$num_tests"; then
-+			skip 0 "Root access is needed for kernel testing, skipping." "$num_tests"
-+		else
-+			diag "Root access is needed for kernel testing"
-+		fi
-+		return 0
-+	fi
-+
-+	return 1
-+}
-+
- # Check if base lttng-modules are present.
- # Bail out on failure
- function validate_lttng_modules_present ()
--- 
-2.35.5
+--===============7885808652617907880==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============7885808652617907880==--
