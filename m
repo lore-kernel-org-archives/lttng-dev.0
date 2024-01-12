@@ -4,51 +4,119 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D907C4706C
-	for <lttng-dev@archiver.kernel.org>; Fri, 12 Jan 2024 13:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A86D7C4706C
+	for <lttng-dev@archiver.kernel.org>; Fri, 12 Jan 2024 15:02:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1705065157;
-	bh=wEAMJ+jVEb7ewHc9/jIKTxPj7Wvh9cbUf0F4aR2P4cw=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ueo/3UBQORV6rKzETRNj0m15P9jT503M3A51NIC/W15W0JnGHoS71UAtd+C9T/Oxa
-	 FqNQta3CKhPTqjjwdwpzn+G8XiFeBGp5qmIsgs/rQOhQT9AP4debjyzNX+u5meFJLo
-	 jE4jzJ+out/54yXJdrb7KDFIX+Ll3iKiJ4v+6jXoqbDFQ/qHAKxZUoMxBOIZ2nPrnG
-	 J3NBIBjhy2+7j0jbUzWfY9mqVnihBSlDsdLMI//FSRz7fZ9cXzL5f8LXP3qfuRAY2y
-	 10KCsfRU/JSR5UqbpRP2AD2xh1AOjKP/Ggdoov9tDD6tFUbdlCUZvkCxibDBMiJy68
-	 jqsj4qqMQPv1w==
+	s=default; t=1705071724;
+	bh=877R43c6zF95xgiyHHOjXNMHTFXCR711rRGxlYD/HOY=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=tXU2tqq9lCRGrM+p6Wr8lijhPtIR1HSJrgjRVA14zp10yAV6bPiFpK0MDn4SmcCcZ
+	 KX9DZtEUmINWl6CidBIYR/Rk3y8qSBOtmVWVpbNsZIeOV5JIt7Z8flGQwJYtcB5qW/
+	 MyUL5Rr1RG9tBDacb9ZCTsDTFl7mvX8VmkuNVMNkxZ0bpko/l2u2nnqFH+A80dE8IY
+	 3tFARg47zNgqpZgBlWP5HK62rom3LqbwH5Lpm1Yn5A5q7tndUVK8AhWpCLdmBuF6R1
+	 hBEdYQKsPNwxYSY+jwW95wsF7Hcq/LSWGTGI7rcpLIU5fAWLUHTcOaWi0eKF0A7Tio
+	 SE5mIA7hqhSlQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4TBMQX58Fbz1LCt;
-	Fri, 12 Jan 2024 08:12:36 -0500 (EST)
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
- [IPv6:2a00:1450:4864:20::22d])
- by lists.lttng.org (Postfix) with ESMTPS id 4TBMQW0chbz1LRV
- for <lttng-dev@lists.lttng.org>; Fri, 12 Jan 2024 08:12:34 -0500 (EST)
-Received: by mail-lj1-x22d.google.com with SMTP id
- 38308e7fff4ca-2cd703e9014so48028661fa.1
- for <lttng-dev@lists.lttng.org>; Fri, 12 Jan 2024 05:12:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1705065153; x=1705669953;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=HEufFkV6NVmLT/A4Nsc6TLiTq3v+nhPQlbJEyIuxnUQ=;
- b=QQJ9dPl/hbbRAwCPEWw80bpTLXeeB+3wJMXt2aQ8nhDm/eNvJ672Z3b2+5kiKvb66z
- gSWnHxOBjHVpECpeuTPq0WmFDWU/6I4Ag9F/MvacTLOkTe+u6uM3Qb/eYUYJmAIgIFv5
- dCUt0v87jKawmZMqcwb690TqQsajX34N0723yIg//U9FBDq9jDD1bWsmfzV9EkuBjQ3I
- ToW5dlQPkbNKszpAUBV5QoW612J3jgvbFE2nbPcabtFfrHbVuZJ+RdOQu3B2UPJpzAkV
- x5LJJbye6nsN0Ux/+xwCC6wtjUz1A3Mu0zgSSzAUFh5A6qzZ9dXOCuo4iwMYx465udLu
- HA6Q==
-X-Gm-Message-State: AOJu0YyOQULX+NVWlr9jq6CtsSttzW1ZXnJjhoHhbC8KHyMduCCg/l9Z
- TGkecEafbUvfjvZTYF1IzBGCQGb/a0DhFtDDpRX287gA
-X-Google-Smtp-Source: AGHT+IEHFqzTVgNbNqrLj6DGmujuI2brD0jtZA865cGh8ATn3y87hYo1F1DphNceXtS9TBTi8O90VL4N/5KDm1UdY+E=
-X-Received: by 2002:a2e:7d15:0:b0:2cc:6d60:d7cf with SMTP id
- y21-20020a2e7d15000000b002cc6d60d7cfmr762924ljc.58.1705065152864; Fri, 12 Jan
- 2024 05:12:32 -0800 (PST)
+	by lists.lttng.org (Postfix) with ESMTP id 4TBPrq496mz1LK4;
+	Fri, 12 Jan 2024 10:02:03 -0500 (EST)
+Received: from CAN01-YQB-obe.outbound.protection.outlook.com
+ (mail-yqbcan01on20601.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:241d::601])
+ by lists.lttng.org (Postfix) with ESMTPS id 4TBPrn3R2mz1Lm1
+ for <lttng-dev@lists.lttng.org>; Fri, 12 Jan 2024 10:01:57 -0500 (EST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P/U2e6hGdChnLbd/6odmxwSJSNYj24IfMG//SZ78HzOrBjxi2djjLwe0qWgQTqjWihxVDsaR8p1S9WucQdYx2spjBa80Yee9NYwALoKS7RRzjm7zkGoLBG/gN+pTGxX1AUHE0kDKscBAEiKXrVX7aQUdI1znIGfBY/2ArI0jt2HxO2Io74PUVbk3Sq6p3lKBEq2p5q6VazC4rx4jnF5B6lVAUykCbTk39evQx/V8b2a9/rFDtNfHCKQ7o0cP1BxwKdvD1gwDl4/FWnC66NXCiYhKyFRmfjiK/8Jt9FK/AstPK/xhW4z8lkvzIYYGW9sjWrpK0NgscY9i7u4edE8pLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tZo1LQrG/iE0w8mjDO92Bq+PMl6xhWZO06wy/fO3wgU=;
+ b=dGQXoah0M0fyyIJrxd9PLw+9o/qrLYYTaAe/G3gHeEer3+cc41NsFmCp6t0cMZBQk8JaPfT+JHOBGkktvzuGF9O0icdKooguaqUG8rJMW4URcHXpRFTguibbLA9UM+Je+kY3S6hMYjWiaBDhEM1SqKvfQPOvRFSiMaQ9WCorqx18DlOFDPd8RM/agy7agh+AhXMgpncBhaUdVQQ1HOw93lOEJ0IOW6fZ706zaz7XSI8cRc7Xifpkcb8aCwDY/dWYXsz8jL5lXc4YcgK99PfXGPaGKM72bp/dGiTNKlPHSRTPxREaX7CEPxwrcToH2BTt9MGRRecUV/JkPCikYtRDzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT1PR01MB4153.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:28::14)
+ by YT4PR01MB10743.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:103::10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.23; Fri, 12 Jan
+ 2024 15:01:55 +0000
+Received: from YT1PR01MB4153.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::999e:b830:64f7:13eb]) by YT1PR01MB4153.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::999e:b830:64f7:13eb%7]) with mapi id 15.20.7181.020; Fri, 12 Jan 2024
+ 15:01:55 +0000
+Message-ID: <0797f455-b051-405f-9814-294e6867241c@efficios.com>
+Date: Fri, 12 Jan 2024 10:01:54 -0500
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: lttng-dev@lists.lttng.org
+References: <CACJEY861mX+FerESW6O6pTU7CzadHGDSBF9HktNrXr_fGp-Hcw@mail.gmail.com>
+In-Reply-To: <CACJEY861mX+FerESW6O6pTU7CzadHGDSBF9HktNrXr_fGp-Hcw@mail.gmail.com>
+X-ClientProxiedBy: YQBPR0101CA0187.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:f::30) To YT1PR01MB4153.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:28::14)
 MIME-Version: 1.0
-Date: Fri, 12 Jan 2024 08:12:21 -0500
-Message-ID: <CACJEY861mX+FerESW6O6pTU7CzadHGDSBF9HktNrXr_fGp-Hcw@mail.gmail.com>
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [lttng-dev] LTTng sessiond daemon Assertion `buf' failed and killed
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT1PR01MB4153:EE_|YT4PR01MB10743:EE_
+X-MS-Office365-Filtering-Correlation-Id: 05038337-4498-4e19-600a-08dc137f6b03
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 56zwP/jTcxyWPSean51NICxX/M6xoBfCBK4XMS7L88aiVLSlGQJqs+ezk07mFexE246JXhwxDFzlEI4sIa/kZqOhen6w5ac1QIJJs65fjTuj7+qnKFBkaf6ZFyRw9e3HXxxWqY3eps4UTJNKbAc9Xjqig63UE6Sbv4uvPgdHUdoYuloeB1vMPBO+TSRMb5YScfSLjEhJQwS2f1S9XHoTY7ZFrKz+ka7ziCkQh3rvmgyZyXnvozo9RNnyV5n0klu7k16Wm3tc2ZQweiHduDsjsbJd+FswOphqdEl3Gf3lehDxhVFqxoC0WnvxryXU+bhOIOhIEQ3GX7j8G47PJvb8tU0YFRwVUEgBGSAe1i/+Bu4qgH2WFQ+Kc0xXwfl2tyowAelcFQbJQZnyuqtPdD9s2E+VffOdn/GGUQKqE9a6AxzBoVDlou3V3F4C4gNaRHu/b41sPfyu6tnRcTCv3lgdYtfcECIaD48DoWsv0g7jsDlYMV6SN95FdS0y6vG9pRCUJzi19ppvisQmxraV7JVtTsLv5xYsGMkCDoQZN35Hlo3UGY1VhS+4FLWOLchPQqhvJqtwJabSsbkVLo16pTVj0F9PJUOgS+UgtOBp2z2KA89chvLEFmZ7MuZn/pxkOlNS9XLvYvDvuv7Z6jQ+8ojANQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT1PR01MB4153.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(346002)(39830400003)(366004)(136003)(396003)(376002)(230922051799003)(186009)(451199024)(1800799012)(64100799003)(2616005)(26005)(478600001)(6512007)(6506007)(53546011)(4326008)(966005)(83380400001)(5660300002)(41300700001)(2906002)(6486002)(6916009)(8676002)(66476007)(316002)(66556008)(66946007)(8936002)(86362001)(31696002)(38100700002)(36756003)(31686004)(81973001)(43740500002)(45980500001);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M1YrejZvQVJ2Q2JYYXdoeG8yZGdxUXMwTXRLK3NmMjczTkhoajJYVGlvR25y?=
+ =?utf-8?B?ajZSdkVMVDRsWjFScW9JNzVyQm9MaERwK3g3ZzlNNnFFZ0RKVTFyVnRXdC9S?=
+ =?utf-8?B?NzRBdGJzOGtQVW52RlI2UkM0L0ZmT3YwUEFIa0xwQWpxNEZaSCtUTEJLcEZC?=
+ =?utf-8?B?T2tVYWp6MWlQeEhGdnVBZkoraDB1Z0MvUVJLWU5EQWQ0YVlKdm9RRVlEaWg1?=
+ =?utf-8?B?RmIvNjJ3QUc0VVUyODFUdWdnYzJ1ZW5JZWtEbUFEZm5KVnF5M2ZrdXJnSDlx?=
+ =?utf-8?B?TG5EN2s5WU40WUJzaXVyTWNOdUVFQ3NMNCtqeTZBMStDWHExTXl2V1hZaWRX?=
+ =?utf-8?B?VGx6cXdIZkFTRmRoZUJOUEJxdG5NM1RWS3hlZGtQTGZtM3I5aExzMytmbmlw?=
+ =?utf-8?B?T0l1WE9QZmNEd20yNnN0akdVb05IbTNRd2JDN3dtTGRWbjFYaEVEakd0R2hL?=
+ =?utf-8?B?NUxWM2pOVEJkaWhmbmJwNTJKRnhpRUhqL3ZVZGcrUUFzcUk1Ri9UVnhFY0E5?=
+ =?utf-8?B?Y25NeTVhcGhUOERLOFpOUmREbnFldmRQREZmeGVpeWJIOXZTcnIvRHRjSGRL?=
+ =?utf-8?B?d2JJM1NwM0tYTGZGaFlaREc0ZXBMMUwwRkhWdzU3S1h0YXJ4bUVwS20xbEZJ?=
+ =?utf-8?B?Mm04a2ZpVE9tVk9tMGNMNE1yNEhaUGlYMlVTMnhISlZ3dXFtSlE3Z0ZDK3VU?=
+ =?utf-8?B?RzFMZkgrR0dMQzlQc0JLU2FsUTVKWFlReTlQUjNFNDd4SDc3bzN0dHlPUldn?=
+ =?utf-8?B?MkIrR3ZmQ2xqNEp0UEFFcCtaWXdXcm4rczk0clNrNFpDWmt6QzdMR09PbXo5?=
+ =?utf-8?B?WW5WeEk0TnNPaWRPT3VNU1YwYnZXN0oyN2tsZ3F2djdsSGEybnM3T2oyblZT?=
+ =?utf-8?B?VkdYTFZxdmJybjRNOFEzdTAvWkUwTk1kbTdid3Z6V2hWY0Z5OXh0dmRubVJD?=
+ =?utf-8?B?SVFFa05Kckh1ZEFnVitmb0IrVnB0QkI3dTU1WU1lRlBHRUhlYU1od1hFdGs3?=
+ =?utf-8?B?WXlpUERMb241Wkg3MjdLcVN4V2NybUZQanhHemNaNVpkNEpZbnl2UFdTQmho?=
+ =?utf-8?B?OUYrUXhYa05neFlZdm1FdWNVNmtWRUxybzlQSnMrbFpYcHg5Q1NOSkg1Rm1H?=
+ =?utf-8?B?NjBhckZ0bWZ0MjgwRVRBYkVtRVFIWXhNTFpJTUtqV01neERTbnF3cFg3Mkhq?=
+ =?utf-8?B?eFU2ZDZYUUt0Y3kxU2pqcG1sWWxBQXlaVExydkg0QVFHRVlnQ3Nxa3RXTDRH?=
+ =?utf-8?B?T2Z2N2NKb1VSUy9NNUJQSFRpcHh0L0NZdEtTMFlsMmU2QmxHQ2I2dnBzWkZH?=
+ =?utf-8?B?WXBxdXJrMm16RmZKSGVob0dkUUpvNlRDVHBTQkI1SEpoT1lnTXpBTDRxa1NI?=
+ =?utf-8?B?THF3RFpaOUh5b2k5c1F0NFBlcUp0eXRpNGZOK1pLOG92SWN2djdVRy8vSnBw?=
+ =?utf-8?B?cVNJL01YeXc4NU9vVU95aElPd3pNK1ZESzdvaGhEZVg3cXREbzdFa2o3RHQy?=
+ =?utf-8?B?UWZvUzY2SXN6Y3lLUjBCUm1tZWM1V3I1c1ZTUy9haUFiV2pHU1ZPbUNhWlRs?=
+ =?utf-8?B?dTJWbjBoLzA0amhtTDBMS01LWW84dXZKUXN1M1F0NlNKc3NHamlyMHhtV0Z1?=
+ =?utf-8?B?Z0w1SW5JakZuOHk2SDRNWGU1N3pNRDRtTGE5dDVWT2txY0tWQXd5MjFQV01Q?=
+ =?utf-8?B?b28zY1AwbXp5bFhaYXZtZC9vNUY3UkdmeW8veG16L0NnTklaK0NURDhxZVNw?=
+ =?utf-8?B?QWJ3eDhxUGFja0lOYThEMmYvU0RkM3JuZTArV1ZzckxqZDZsUkM3T2F6MnUy?=
+ =?utf-8?B?VkFCNWd2enl0YWNmdzA0YmhXVHovMTBrMnJ2WVc3MlRTTTFwblBsTTdBMlN2?=
+ =?utf-8?B?bnhwVGllMmFiMEZlbHBFakc0dGNHMmswY0dxR25vbjM4dGZCTjN5czZOaHJt?=
+ =?utf-8?B?L0NlclJOME5hb1hYdWU0Ti9hR3JjYVNQRDJ1RnRiWkRwRE9qemJBOVVZY1M1?=
+ =?utf-8?B?dWt5d2Q1bVpEcUZLVDAyMGhOYUhERVJaTzlZS2VrS0ZaUlJiSHFUOFZWT2J6?=
+ =?utf-8?B?eVdoVXBTZ1c3NGwrN0pGa1ZXT1EybnBYdWQyenI1bkxNNkRUMVhheEFLVlVq?=
+ =?utf-8?B?VW5pMWRsMkxqS1I3WXMzZ1oyZ3BnRkhHMXJuenU0elVpSWl0eVF2b3ZMUTlN?=
+ =?utf-8?B?YVE9PQ==?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05038337-4498-4e19-600a-08dc137f6b03
+X-MS-Exchange-CrossTenant-AuthSource: YT1PR01MB4153.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2024 15:01:55.8265 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jYIAalJl1kf1ZW9KqDP/6w9aYvtdRyG22cnwAmrXpQHSvoeMJlSdPq4NTDiK+tZx6NHa7Ae8nwsiPB1vH3sYIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT4PR01MB10743
+Subject: Re: [lttng-dev] LTTng sessiond daemon Assertion `buf' failed and
+ killed
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -60,268 +128,78 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Yonghong Yan via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Yonghong Yan <yanyh15@gmail.com>
-Content-Type: multipart/mixed; boundary="===============0309750082188625648=="
+From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Kienan Stewart <kstewart@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============0309750082188625648==
-Content-Type: multipart/alternative; boundary="000000000000c16740060ebf6aba"
-
---000000000000c16740060ebf6aba
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-I am not sure whether this is my setting problem or a bug with a
-more recent kernel. lttng-sessiond was killed when I tried to "enable
-event" after a session was created. See below part of the verbose output of
-the sessiond. It is observed on Ubuntu 22.04, kernel 6.5.0-14-generic
-#14~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC, lttng (LTTng Trace Control) 2.13.10
-- Nordicit=C3=A9.
-
-
-The same version of LTTng works on another Ubuntu 22.04 machine, but with
-kernel 6.2.0-33-generic. Any suggestion on what I should try?
-
-
-Thank you
-
-Yonghong
-
-
-
-c:1016)
-
-DBG1 - 00:24:25.134138433 [Client management]: Getting session
-auto-20240112-002417 by name (in process_client_msg() at client.c:1133)
-
-DBG1 - 00:24:25.134148894 [Client management]: Creating UST session (in
-create_ust_session() at client.c:510)
-
-DBG1 - 00:24:25.134267958 [Client management]: Spawning consumerd (in
-spawn_consumerd() at client.c:204)
-
-DBG1 - 00:24:25.135155823 [Client management]: Waiting for consumer
-management thread to be ready (in wait_until_thread_is_ready() at
-manage-consumer.c:46)
-
-DBG1 - 00:24:25.135247552 [Consumer management]: Entering thread entry
-point (in launch_thread() at thread.c:65)
-
-DBG1 - 00:24:25.135293542 [Consumer management]: [thread] Manage consumer
-started (in thread_consumer_management() at manage-consumer.c:65)
-
-DBG1 - 00:24:25.135335776 [Client management]: Using 64-bit UST consumer
-at: /usr/lib/x86_64-linux-gnu/lttng/libexec/lttng-consumerd (in
-spawn_consumerd() at client.c:284)
-
-DBG1 - 00:24:25.240725883 [Consumer management]: Consumer command socket
-ready (fd: 61) (in thread_consumer_management() at manage-consumer.c:204)
-
-DBG1 - 00:24:25.240746802 [Consumer management]: Consumer metadata socket
-ready (fd: 62) (in thread_consumer_management() at manage-consumer.c:205)
-
-DBG1 - 00:24:25.240775318 [Consumer management]: Sending consumer
-initialization command (in consumer_init() at consumer.c:1791)
-
-DBG1 - 00:24:25.241066762 [Consumer management]: Marking consumer
-management thread as ready (in mark_thread_as_ready() at
-manage-consumer.c:31)
-
-DBG1 - 00:24:25.241100481 [Client management]: Consumer management thread
-is ready (in wait_until_thread_is_ready() at manage-consumer.c:48)
-
-DBG1 - 00:24:25.241138386 [Client management]: Setting relayd for session
-auto-20240112-002417 (in cmd_setup_relayd() at cmd.c:1004)
-
-lttng-sessiond: unix.c:185: lttcomm_recv_unix_sock: Assertion `buf' failed.
-
-Error: Events: No session daemon is available (channel channel0, session
-auto-20240112-002417)
-
-[1]+  Aborted                 (core dumped) lttng-sessiond --verbose
-
-DBG1 - 00:24:26.357769106 [Run-as worker]: run_as worker exiting (ret =3D 0=
-)
-(in run_as_create_worker_no_lock() at runas.c:1526)
-
---000000000000c16740060ebf6aba
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=
-=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><di=
-v dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr">
-
-
-
-
-
-<p style=3D"margin:0px;font-variant-numeric:normal;font-variant-east-asian:=
-normal;font-variant-alternates:normal;font-kerning:auto;font-feature-settin=
-gs:normal;font-stretch:normal;line-height:normal;color:rgb(0,0,0)"><font fa=
-ce=3D"times new roman, serif" style=3D""><span style=3D"font-variant-ligatu=
-res:no-common-ligatures">I am not sure=C2=A0whether=C2=A0this is my setting=
- problem or a bug with a more=C2=A0recent=C2=A0kernel. lttng-sessiond was k=
-illed when I tried to &quot;enable event&quot; after a session was created.=
- See below part of the verbose output of the sessiond. It is observed on Ub=
-untu 22.04, kernel=C2=A0</span><span style=3D"font-variant-ligatures:no-com=
-mon-ligatures">6.5.0-14-generic #14~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC,=C2=
-=A0</span><span style=3D"font-variant-ligatures:no-common-ligatures">lttng =
-(LTTng Trace Control) 2.13.10 - Nordicit=C3=A9.=C2=A0</span></font></p><p s=
-tyle=3D"margin:0px;font-variant-numeric:normal;font-variant-east-asian:norm=
-al;font-variant-alternates:normal;font-kerning:auto;font-feature-settings:n=
-ormal;font-stretch:normal;line-height:normal;color:rgb(0,0,0)"><span style=
-=3D"font-variant-ligatures:no-common-ligatures"><font face=3D"times new rom=
-an, serif"><br></font></span></p><p style=3D"margin:0px;font-variant-numeri=
-c:normal;font-variant-east-asian:normal;font-variant-alternates:normal;font=
--kerning:auto;font-feature-settings:normal;font-stretch:normal;line-height:=
-normal;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:no-common-li=
-gatures"><font face=3D"times new roman, serif">The same version of LTTng wo=
-rks on another Ubuntu 22.04 machine, but with kernel 6.2.0-33-generic. Any =
-suggestion on what I should try?</font></span></p><p style=3D"margin:0px;fo=
-nt-variant-numeric:normal;font-variant-east-asian:normal;font-variant-alter=
-nates:normal;font-kerning:auto;font-feature-settings:normal;font-stretch:no=
-rmal;line-height:normal;color:rgb(0,0,0)"><span style=3D"font-variant-ligat=
-ures:no-common-ligatures"><font face=3D"times new roman, serif"><br></font>=
-</span></p><p style=3D"margin:0px;font-variant-numeric:normal;font-variant-=
-east-asian:normal;font-variant-alternates:normal;font-kerning:auto;font-fea=
-ture-settings:normal;font-stretch:normal;line-height:normal;color:rgb(0,0,0=
-)"><span style=3D"font-variant-ligatures:no-common-ligatures"><font face=3D=
-"times new roman, serif">Thank you</font></span></p><p style=3D"margin:0px;=
-font-variant-numeric:normal;font-variant-east-asian:normal;font-variant-alt=
-ernates:normal;font-kerning:auto;font-feature-settings:normal;font-stretch:=
-normal;line-height:normal;color:rgb(0,0,0)"><span style=3D"font-variant-lig=
-atures:no-common-ligatures"><font face=3D"times new roman, serif">Yonghong<=
-/font></span></p><p style=3D"margin:0px;font-variant-numeric:normal;font-va=
-riant-east-asian:normal;font-variant-alternates:normal;font-kerning:auto;fo=
-nt-feature-settings:normal;font-stretch:normal;font-size:17px;line-height:n=
-ormal;font-family:Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligat=
-ures:no-common-ligatures"><br></span></p>
-
-
-
-
-
-
-
-
-
-
-
-<p style=3D"margin:0px;font-variant-numeric:normal;font-variant-east-asian:=
-normal;font-variant-alternates:normal;font-kerning:auto;font-feature-settin=
-gs:normal;font-stretch:normal;font-size:17px;line-height:normal;font-family=
-:Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:no-common-li=
-gatures"><br></span></p><p style=3D"margin:0px;font:17px Menlo;color:rgb(0,=
-0,0)"><span style=3D"font-variant-ligatures:no-common-ligatures">c:1016)</s=
-pan></p><p style=3D"margin:0px;font:17px Menlo;color:rgb(0,0,0)"><span styl=
-e=3D"font-variant-ligatures:no-common-ligatures">DBG1 - 00:24:25.134138433 =
-[Client management]: Getting session auto-20240112-002417 by name (in proce=
-ss_client_msg() at client.c:1133)</span></p><p style=3D"margin:0px;font:17p=
-x Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:no-common-l=
-igatures">DBG1 - 00:24:25.134148894 [Client management]: Creating UST sessi=
-on (in create_ust_session() at client.c:510)</span></p><p style=3D"margin:0=
-px;font:17px Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:=
-no-common-ligatures">DBG1 - 00:24:25.134267958 [Client management]: Spawnin=
-g consumerd (in spawn_consumerd() at client.c:204)</span></p><p style=3D"ma=
-rgin:0px;font:17px Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-liga=
-tures:no-common-ligatures">DBG1 - 00:24:25.135155823 [Client management]: W=
-aiting for consumer management thread to be ready (in wait_until_thread_is_=
-ready() at manage-consumer.c:46)</span></p><p style=3D"margin:0px;font:17px=
- Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:no-common-li=
-gatures">DBG1 - 00:24:25.135247552 [Consumer management]: Entering thread e=
-ntry point (in launch_thread() at thread.c:65)</span></p><p style=3D"margin=
-:0px;font:17px Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligature=
-s:no-common-ligatures">DBG1 - 00:24:25.135293542 [Consumer management]: [th=
-read] Manage consumer started (in thread_consumer_management() at manage-co=
-nsumer.c:65)</span></p><p style=3D"margin:0px;font:17px Menlo;color:rgb(0,0=
-,0)"><span style=3D"font-variant-ligatures:no-common-ligatures">DBG1 - 00:2=
-4:25.135335776 [Client management]: Using 64-bit UST consumer at: /usr/lib/=
-x86_64-linux-gnu/lttng/libexec/lttng-consumerd (in spawn_consumerd() at cli=
-ent.c:284)</span></p><p style=3D"margin:0px;font:17px Menlo;color:rgb(0,0,0=
-)"><span style=3D"font-variant-ligatures:no-common-ligatures">DBG1 - 00:24:=
-25.240725883 [Consumer management]: Consumer command socket ready (fd: 61) =
-(in thread_consumer_management() at manage-consumer.c:204)</span></p><p sty=
-le=3D"margin:0px;font:17px Menlo;color:rgb(0,0,0)"><span style=3D"font-vari=
-ant-ligatures:no-common-ligatures">DBG1 - 00:24:25.240746802 [Consumer mana=
-gement]: Consumer metadata socket ready (fd: 62) (in thread_consumer_manage=
-ment() at manage-consumer.c:205)</span></p><p style=3D"margin:0px;font:17px=
- Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:no-common-li=
-gatures">DBG1 - 00:24:25.240775318 [Consumer management]: Sending consumer =
-initialization command (in consumer_init() at consumer.c:1791)</span></p><p=
- style=3D"margin:0px;font:17px Menlo;color:rgb(0,0,0)"><span style=3D"font-=
-variant-ligatures:no-common-ligatures">DBG1 - 00:24:25.241066762 [Consumer =
-management]: Marking consumer management thread as ready (in mark_thread_as=
-_ready() at manage-consumer.c:31)</span></p><p style=3D"margin:0px;font:17p=
-x Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:no-common-l=
-igatures">DBG1 - 00:24:25.241100481 [Client management]: Consumer managemen=
-t thread is ready (in wait_until_thread_is_ready() at manage-consumer.c:48)=
-</span></p><p style=3D"margin:0px;font:17px Menlo;color:rgb(0,0,0)"><span s=
-tyle=3D"font-variant-ligatures:no-common-ligatures">DBG1 - 00:24:25.2411383=
-86 [Client management]: Setting relayd for session auto-20240112-002417 (in=
- cmd_setup_relayd() at cmd.c:1004)</span></p><p style=3D"margin:0px;font:17=
-px Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:no-common-=
-ligatures">lttng-sessiond: unix.c:185: lttcomm_recv_unix_sock: Assertion `b=
-uf&#39; failed.</span></p><p style=3D"margin:0px;font:17px Menlo;color:rgb(=
-0,0,0)"><span style=3D"font-variant-ligatures:no-common-ligatures">Error: E=
-vents: No session daemon is available (channel channel0, session auto-20240=
-112-002417)</span></p><p style=3D"margin:0px;font:17px Menlo;color:rgb(0,0,=
-0)"><span style=3D"font-variant-ligatures:no-common-ligatures">[1]+<span>=
-=C2=A0 </span>Aborted <span>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 </span>(core dumped) lttng-sessiond --verbose</span></p><p style=
-=3D"margin:0px;font-variant-numeric:normal;font-variant-east-asian:normal;f=
-ont-variant-alternates:normal;font-kerning:auto;font-feature-settings:norma=
-l;font-stretch:normal;font-size:17px;line-height:normal;font-family:Menlo;c=
-olor:rgb(0,0,0)">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</p><p style=3D"margin:0px;font-variant-numeric:normal;font-variant-east-as=
-ian:normal;font-variant-alternates:normal;font-kerning:auto;font-feature-se=
-ttings:normal;font-stretch:normal;font-size:17px;line-height:normal;font-fa=
-mily:Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:no-commo=
-n-ligatures">DBG1 - 00:24:26.357769106 [Run-as worker]: run_as worker exiti=
-ng (ret =3D 0) (in run_as_create_worker_no_lock() at runas.c:1526)</span></=
-p><p style=3D"margin:0px;font-variant-numeric:normal;font-variant-east-asia=
-n:normal;font-variant-alternates:normal;font-kerning:auto;font-feature-sett=
-ings:normal;font-stretch:normal;font-size:17px;line-height:normal;font-fami=
-ly:Menlo;color:rgb(0,0,0)"><span style=3D"font-variant-ligatures:no-common-=
-ligatures"><br></span></p><div dir=3D"ltr"><div dir=3D"ltr"><p style=3D"fon=
-t-size:12.8px"></p></div><div dir=3D"ltr"></div></div></div></div></div></d=
-iv></div></div></div></div>
-
---000000000000c16740060ebf6aba--
-
---===============0309750082188625648==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0309750082188625648==--
+SGkgWW9uZ2hvbmcsCgppbiBhIGJyaWVmIHRlc3QgSSdtIHVuYWJsZSB0byByZXByb2R1Y2UgdGhl
+IGVycm9yIHlvdSBzZWUgYnkgcnVubmluZyB0aGUgCmZvbGxvd2luZyBjb21tYW5kcyBvbiBhbiBV
+YnVudHUgMjIuMDQgaW5zdGFsbGF0aW9uIHdpdGggbHR0bmctdG9vbHMgCjIuMTMuMTAsIGx0dG5n
+LXVzdCAyLjEzLjYsIHVyY3Ugc3RhYmxlLTAuMTIsIGFuZCBiYWJlbHRyYWNlIHN0YWJsZS0yLjAu
+CmBgYAokIHVuYW1lIC1yIC12CjYuNS4wLTE0LWdlbmVyaWMgIzE0fjIyLjA0LjEtVWJ1bnR1IFNN
+UCBQUkVFTVBUX0RZTkFNSUMgTW9uIE5vdiAyMCAKMTg6MTU6MzAgVVRDIDIKCiQgbHR0bmctcmVs
+YXlkIC12IC1iCiQgbHR0bmctc2Vzc2lvbmQgLXYgLWIKJCBsdHRuZyBjcmVhdGUKJCBsdHRuZyBl
+bmFibGUtZXZlbnQgLXUgLS1hbGwKYGBgCgpDb3VsZCB5b3UgcGxlYXNlIHJldmlldyB0aGUgYnVn
+IHJlcG9ydGluZyBndWlkZWxpbmVzIGF0IApodHRwczovL2x0dG5nLm9yZy9jb21tdW5pdHkvIGFu
+ZCBlbGFib3JhdGUgb24gdGhlIHN0ZXBzIHRha2VuIHRvIApyZXByb2R1Y2UgdGhlIGlzc3VlPwoK
+dGhhbmtzLApraWVuYW4KCk9uIDEvMTIvMjQgMDg6MTIsIFlvbmdob25nIFlhbiB2aWEgbHR0bmct
+ZGV2IHdyb3RlOgo+IEkgYW0gbm90IHN1cmXCoHdoZXRoZXLCoHRoaXMgaXMgbXkgc2V0dGluZyBw
+cm9ibGVtIG9yIGEgYnVnIHdpdGggYSAKPiBtb3JlwqByZWNlbnTCoGtlcm5lbC4gbHR0bmctc2Vz
+c2lvbmQgd2FzIGtpbGxlZCB3aGVuIEkgdHJpZWQgdG8gImVuYWJsZSAKPiBldmVudCIgYWZ0ZXIg
+YSBzZXNzaW9uIHdhcyBjcmVhdGVkLiBTZWUgYmVsb3cgcGFydCBvZiB0aGUgdmVyYm9zZSBvdXRw
+dXQgCj4gb2YgdGhlIHNlc3Npb25kLiBJdCBpcyBvYnNlcnZlZCBvbiBVYnVudHUgMjIuMDQsIGtl
+cm5lbCA2LjUuMC0xNC1nZW5lcmljIAo+ICMxNH4yMi4wNC4xLVVidW50dSBTTVAgUFJFRU1QVF9E
+WU5BTUlDLCBsdHRuZyAoTFRUbmcgVHJhY2UgQ29udHJvbCkgCj4gMi4xMy4xMCAtIE5vcmRpY2l0
+w6kuCj4gCj4gCj4gVGhlIHNhbWUgdmVyc2lvbiBvZiBMVFRuZyB3b3JrcyBvbiBhbm90aGVyIFVi
+dW50dSAyMi4wNCBtYWNoaW5lLCBidXQgCj4gd2l0aCBrZXJuZWwgNi4yLjAtMzMtZ2VuZXJpYy4g
+QW55IHN1Z2dlc3Rpb24gb24gd2hhdCBJIHNob3VsZCB0cnk/Cj4gCj4gCj4gVGhhbmsgeW91Cj4g
+Cj4gWW9uZ2hvbmcKPiAKPiAKPiAKPiBjOjEwMTYpCj4gCj4gREJHMSAtIDAwOjI0OjI1LjEzNDEz
+ODQzMyBbQ2xpZW50IG1hbmFnZW1lbnRdOiBHZXR0aW5nIHNlc3Npb24gCj4gYXV0by0yMDI0MDEx
+Mi0wMDI0MTcgYnkgbmFtZSAoaW4gcHJvY2Vzc19jbGllbnRfbXNnKCkgYXQgY2xpZW50LmM6MTEz
+MykKPiAKPiBEQkcxIC0gMDA6MjQ6MjUuMTM0MTQ4ODk0IFtDbGllbnQgbWFuYWdlbWVudF06IENy
+ZWF0aW5nIFVTVCBzZXNzaW9uIChpbiAKPiBjcmVhdGVfdXN0X3Nlc3Npb24oKSBhdCBjbGllbnQu
+Yzo1MTApCj4gCj4gREJHMSAtIDAwOjI0OjI1LjEzNDI2Nzk1OCBbQ2xpZW50IG1hbmFnZW1lbnRd
+OiBTcGF3bmluZyBjb25zdW1lcmQgKGluIAo+IHNwYXduX2NvbnN1bWVyZCgpIGF0IGNsaWVudC5j
+OjIwNCkKPiAKPiBEQkcxIC0gMDA6MjQ6MjUuMTM1MTU1ODIzIFtDbGllbnQgbWFuYWdlbWVudF06
+IFdhaXRpbmcgZm9yIGNvbnN1bWVyIAo+IG1hbmFnZW1lbnQgdGhyZWFkIHRvIGJlIHJlYWR5IChp
+biB3YWl0X3VudGlsX3RocmVhZF9pc19yZWFkeSgpIGF0IAo+IG1hbmFnZS1jb25zdW1lci5jOjQ2
+KQo+IAo+IERCRzEgLSAwMDoyNDoyNS4xMzUyNDc1NTIgW0NvbnN1bWVyIG1hbmFnZW1lbnRdOiBF
+bnRlcmluZyB0aHJlYWQgZW50cnkgCj4gcG9pbnQgKGluIGxhdW5jaF90aHJlYWQoKSBhdCB0aHJl
+YWQuYzo2NSkKPiAKPiBEQkcxIC0gMDA6MjQ6MjUuMTM1MjkzNTQyIFtDb25zdW1lciBtYW5hZ2Vt
+ZW50XTogW3RocmVhZF0gTWFuYWdlIAo+IGNvbnN1bWVyIHN0YXJ0ZWQgKGluIHRocmVhZF9jb25z
+dW1lcl9tYW5hZ2VtZW50KCkgYXQgbWFuYWdlLWNvbnN1bWVyLmM6NjUpCj4gCj4gREJHMSAtIDAw
+OjI0OjI1LjEzNTMzNTc3NiBbQ2xpZW50IG1hbmFnZW1lbnRdOiBVc2luZyA2NC1iaXQgVVNUIGNv
+bnN1bWVyIAo+IGF0OiAvdXNyL2xpYi94ODZfNjQtbGludXgtZ251L2x0dG5nL2xpYmV4ZWMvbHR0
+bmctY29uc3VtZXJkIChpbiAKPiBzcGF3bl9jb25zdW1lcmQoKSBhdCBjbGllbnQuYzoyODQpCj4g
+Cj4gREJHMSAtIDAwOjI0OjI1LjI0MDcyNTg4MyBbQ29uc3VtZXIgbWFuYWdlbWVudF06IENvbnN1
+bWVyIGNvbW1hbmQgc29ja2V0IAo+IHJlYWR5IChmZDogNjEpIChpbiB0aHJlYWRfY29uc3VtZXJf
+bWFuYWdlbWVudCgpIGF0IG1hbmFnZS1jb25zdW1lci5jOjIwNCkKPiAKPiBEQkcxIC0gMDA6MjQ6
+MjUuMjQwNzQ2ODAyIFtDb25zdW1lciBtYW5hZ2VtZW50XTogQ29uc3VtZXIgbWV0YWRhdGEgCj4g
+c29ja2V0IHJlYWR5IChmZDogNjIpIChpbiB0aHJlYWRfY29uc3VtZXJfbWFuYWdlbWVudCgpIGF0
+IAo+IG1hbmFnZS1jb25zdW1lci5jOjIwNSkKPiAKPiBEQkcxIC0gMDA6MjQ6MjUuMjQwNzc1MzE4
+IFtDb25zdW1lciBtYW5hZ2VtZW50XTogU2VuZGluZyBjb25zdW1lciAKPiBpbml0aWFsaXphdGlv
+biBjb21tYW5kIChpbiBjb25zdW1lcl9pbml0KCkgYXQgY29uc3VtZXIuYzoxNzkxKQo+IAo+IERC
+RzEgLSAwMDoyNDoyNS4yNDEwNjY3NjIgW0NvbnN1bWVyIG1hbmFnZW1lbnRdOiBNYXJraW5nIGNv
+bnN1bWVyIAo+IG1hbmFnZW1lbnQgdGhyZWFkIGFzIHJlYWR5IChpbiBtYXJrX3RocmVhZF9hc19y
+ZWFkeSgpIGF0IAo+IG1hbmFnZS1jb25zdW1lci5jOjMxKQo+IAo+IERCRzEgLSAwMDoyNDoyNS4y
+NDExMDA0ODEgW0NsaWVudCBtYW5hZ2VtZW50XTogQ29uc3VtZXIgbWFuYWdlbWVudCAKPiB0aHJl
+YWQgaXMgcmVhZHkgKGluIHdhaXRfdW50aWxfdGhyZWFkX2lzX3JlYWR5KCkgYXQgbWFuYWdlLWNv
+bnN1bWVyLmM6NDgpCj4gCj4gREJHMSAtIDAwOjI0OjI1LjI0MTEzODM4NiBbQ2xpZW50IG1hbmFn
+ZW1lbnRdOiBTZXR0aW5nIHJlbGF5ZCBmb3IgCj4gc2Vzc2lvbiBhdXRvLTIwMjQwMTEyLTAwMjQx
+NyAoaW4gY21kX3NldHVwX3JlbGF5ZCgpIGF0IGNtZC5jOjEwMDQpCj4gCj4gbHR0bmctc2Vzc2lv
+bmQ6IHVuaXguYzoxODU6IGx0dGNvbW1fcmVjdl91bml4X3NvY2s6IEFzc2VydGlvbiBgYnVmJyBm
+YWlsZWQuCj4gCj4gRXJyb3I6IEV2ZW50czogTm8gc2Vzc2lvbiBkYWVtb24gaXMgYXZhaWxhYmxl
+IChjaGFubmVsIGNoYW5uZWwwLCBzZXNzaW9uIAo+IGF1dG8tMjAyNDAxMTItMDAyNDE3KQo+IAo+
+IFsxXStBYm9ydGVkIChjb3JlIGR1bXBlZCkgbHR0bmctc2Vzc2lvbmQgLS12ZXJib3NlCj4gCj4g
+REJHMSAtIDAwOjI0OjI2LjM1Nzc2OTEwNiBbUnVuLWFzIHdvcmtlcl06IHJ1bl9hcyB3b3JrZXIg
+ZXhpdGluZyAocmV0ID0gCj4gMCkgKGluIHJ1bl9hc19jcmVhdGVfd29ya2VyX25vX2xvY2soKSBh
+dCBydW5hcy5jOjE1MjYpCj4gCj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
+aXN0aW5mby9sdHRuZy1kZXYKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYK
