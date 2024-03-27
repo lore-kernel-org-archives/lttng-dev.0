@@ -4,52 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65EFDC47DD9
-	for <lttng-dev@archiver.kernel.org>; Wed, 27 Mar 2024 09:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06058C54E67
+	for <lttng-dev@archiver.kernel.org>; Wed, 27 Mar 2024 17:31:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1711531611;
-	bh=f3NjY7GL2dO66uWlkjPSZUXz+VK00Ta/MRBlrscEm5U=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EiCIL6wa7CRg9quPF9J7ZETDAcFck2CcgdIo+pCAXYyorYUnzs4+eRepAFxH4LAnK
-	 QRYrKKuyIhp9ugwnZF/6NY2hxKRG1VhijtAlp94N8M+k7tOV3XpakByff5c90e02C7
-	 xddkZbOjus0spKN5CYQ8T9e5QMxim2LzUCkOMzR4HsZ7fhzeAHbWdIf0YnzKmcHUY8
-	 OlAjHLyn3iEwAvtVhobAOvcPnzHvs5baRH6SJ3DyxnF1PiGpcGzDeivFRxmp37thVf
-	 mr+bFf5trZcLA9AqGq1FGEbYe6KvuvM8DOzQGHXDjW0Wla+7Tjo85QpDR0tF65Rtsl
-	 HdaP8skA4aFig==
+	s=default; t=1711560717;
+	bh=iwZZX9CKb7wmZfol9T7no2UjhTJib0IeOMqnCYSTKLc=;
+	h=In-Reply-To:References:Date:To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=Hqkp1cZ/bchCHbculloxTQmQ863Tptq9h4EchfFBvLqP96LOQwZf9Ki8plARtlnlW
+	 x384KaJSI1kpeKc8q02CaaD5aj1g20VsIr5jU1MCFX5ypYn8jO3a4iJdYVM8duf+Ix
+	 ul9SE8Q3G8oaTXWAbCRSRPIi8NasJGsSEyoccAAlVlxQzH56WyQpLpKq45Y6B3sAUs
+	 SHdkSIePvCBncaSgnhPE9VbI4TvVoTWNuWY/p5iraeOoQ9G7wKp9aN1FBZDuGhxQEc
+	 e01fHpF8n7V1ugWDAai246Dthn21UBo0uWnTtDvPOBoFgMb8Tgj0YcYrBGW4rClSGS
+	 dZXgZpgfIt0lg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4V4LsQ2kvDz2Wvk;
-	Wed, 27 Mar 2024 05:26:50 -0400 (EDT)
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by lists.lttng.org (Postfix) with ESMTPS id 4V4LsP2btmz2WhM
- for <lttng-dev@lists.lttng.org>; Wed, 27 Mar 2024 05:26:49 -0400 (EDT)
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-515a86daf09so4777712e87.3
- for <lttng-dev@lists.lttng.org>; Wed, 27 Mar 2024 02:26:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711531607; x=1712136407;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=gE3HSgOW2vis9X419p/VKNreFgDR0LlJPnVTmpg+pW0=;
- b=DUBwO4xiXR8tdWgJ1U9PauaH05sC8av1kvsmhcjMCJN1qPno/nglB1NIRjnX65hScF
- bVdEQiksVdsaZBEOl6aT4MbM9MdnluyKLPeSSlXBJqFCL/62/HboMjmb+1Xk1WiFF+oQ
- /XKjiIsSBAnpLG/4MP27MHM23bYxVAuslfFSdbRgcXkO5QIbVz/3r2laZMBFRk8auD4O
- NW48CJ0ACMTTBbDHnyx4D5vLgIs+jM8CZvUGtbVs09Dc6Ww8ben21/mdcq67uSfKF9c3
- Kp/mh8o8HTUOP2ycaMYLOKNqnOR/O+ne4nO+/SKP1e4kcQPt8CZMTyW3g78JYTI/Eg2W
- WprA==
-X-Gm-Message-State: AOJu0Yz/68z54V52Fq3xYYM8AbohP0dBADRkd0PTGAtbF08KYlZjwuaV
- sW8CbVMjBGQ3UsVpMV5iPVeNM0jar8sUPVsCPlqzN285V/kWud0xM9Wk0Vg23kyTl3bLonQi42H
- kzR5pby88hCgK2JZKNsjfjWG3sWRmpQgG
-X-Google-Smtp-Source: AGHT+IG7JCJShOg1zsk/T1VTM5RPj0IfW7UT/s8zPkcOjHjrW0t1jGhWYbvs8RrHoLjzPtsbaXH6CXjpkGsXR0VXzfI=
-X-Received: by 2002:ac2:4ac5:0:b0:515:8bde:56c3 with SMTP id
- m5-20020ac24ac5000000b005158bde56c3mr611431lfp.26.1711531606994; Wed, 27 Mar
- 2024 02:26:46 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4V4Yd85yBcz2Wnq;
+	Wed, 27 Mar 2024 13:31:56 -0400 (EDT)
+Received: from fhigh8-smtp.messagingengine.com
+ (fhigh8-smtp.messagingengine.com [103.168.172.159])
+ by lists.lttng.org (Postfix) with ESMTPS id 4V4Yd75rMzz2Wnp
+ for <lttng-dev@lists.lttng.org>; Wed, 27 Mar 2024 13:31:54 -0400 (EDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+ by mailfhigh.nyi.internal (Postfix) with ESMTP id 92AD51140131
+ for <lttng-dev@lists.lttng.org>; Wed, 27 Mar 2024 13:28:55 -0400 (EDT)
+Received: from imap42 ([10.202.2.92])
+ by compute2.internal (MEProxy); Wed, 27 Mar 2024 13:28:55 -0400
+X-ME-Sender: <xms:V1cEZjIW3y1aYpkMaXwbbJV7O8bg-EGWlvs_BqEfc1qfUXjVtAsHZg>
+ <xme:V1cEZnJ7-w9SmP6mzXHifb-6yc_PHn9ZiP1vzj-CT3dE78DaKeMqbn-2L62zds6Yh
+ K_-t64IOmwjF91j5Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudduiedgjeeiucetufdoteggodetrfdotf
+ fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+ uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvufgtsehttd
+ ertderredtnecuhfhrohhmpedfvehhrhhishhtohhphhgvrhcujfgrrhhvvgihfdcuoegt
+ hhhrihhssegtfihhrghrvhgvhidrtggrqeenucggtffrrghtthgvrhhnpedtvdfhvdevie
+ efvdektdffgeduiefgtdfgheehvddutefhgeevudfgudduhedtffenucffohhmrghinhep
+ vggtlhhiphhsvgdrohhrghdpphgvrhhfvghtthhordguvghvpdhlthhtnhhgrdhorhhgne
+ cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheptghhrhhi
+ shestgifhhgrrhhvvgihrdgtrg
+X-ME-Proxy: <xmx:V1cEZrtTdF-h8APlmvDI_7XpqcJWih04T3vVUO8086wF8Y0IqTMkPg>
+ <xmx:V1cEZsYUCce-zlZQUPUmEkbrTRvmUBY6ah4eVpEoYWUitEoflaOUWw>
+ <xmx:V1cEZqaAU_4ojWF7drayKSU1ueVMDzspqumdHKzvPKTMWgZKiq5SzA>
+ <xmx:V1cEZgCHEV1QJHvryFB1IuljjZHqUmPI34py-5K_LCixO5OYY29ghQ>
+ <xmx:V1cEZtyyB2LZL5J6rPcUEG9ALHgclqVu005_w5TqfjcZbVaA6NEzoA>
+Feedback-ID: i2d19425f:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+ id 19C94BC007D; Wed, 27 Mar 2024 13:28:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-328-gc998c829b7-fm-20240325.002-gc998c829
 MIME-Version: 1.0
-Date: Wed, 27 Mar 2024 11:26:35 +0200
-Message-ID: <CABRndgz2BHX9LubVXoaJxLH+KoYfgzQ0XzY=xHG60+HoO-Tm7A@mail.gmail.com>
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [lttng-dev] Lttng: display active threads in multiple cores.
+Message-Id: <a128a334-b2d8-4cec-ae40-91e1384a228d@app.fastmail.com>
+In-Reply-To: <CABRndgz2BHX9LubVXoaJxLH+KoYfgzQ0XzY=xHG60+HoO-Tm7A@mail.gmail.com>
+References: <CABRndgz2BHX9LubVXoaJxLH+KoYfgzQ0XzY=xHG60+HoO-Tm7A@mail.gmail.com>
+Date: Wed, 27 Mar 2024 13:28:27 -0400
+To: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] Lttng: display active threads in multiple cores.
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -61,54 +70,39 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Zvi Vered via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Zvi Vered <veredz72@gmail.com>
-Content-Type: multipart/mixed; boundary="===============2776628521694407268=="
+From: Christopher Harvey via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Christopher Harvey <chris@cwharvey.ca>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============2776628521694407268==
-Content-Type: multipart/alternative; boundary="00000000000074f7a30614a1013d"
+you can use an ftrace-enabled kernel with lttng (maybe even just tracecompass) or perfetto to get that kind of trace
 
---00000000000074f7a30614a1013d
-Content-Type: text/plain; charset="UTF-8"
+https://archive.eclipse.org/tracecompass.incubator/doc/org.eclipse.tracecompass.incubator.ftrace.doc.user/User-Guide.html
 
-Hello,
+or
 
-I have an application with 4 threads.
-I'm required to display on the graph when thread starts working till it
-blocks for the next semaphore.
+https://ui.perfetto.dev/
 
-But without using the lttng userspace library.
-
-Is it possible ?
-
-Thank you,
-Zvika
-
---00000000000074f7a30614a1013d
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto">Hello,<div dir=3D"auto"><br></div><div dir=3D"auto">I hav=
-e an application with 4 threads.=C2=A0</div><div dir=3D"auto">I&#39;m requi=
-red to display on the graph when thread starts working till it blocks for t=
-he next semaphore.=C2=A0</div><div dir=3D"auto"><br></div><div dir=3D"auto"=
->But without using the lttng userspace library.</div><div dir=3D"auto"><br>=
-</div><div dir=3D"auto">Is it possible ?</div><div dir=3D"auto"><br></div><=
-div dir=3D"auto">Thank you,</div><div dir=3D"auto">Zvika</div></div>
-
---00000000000074f7a30614a1013d--
-
---===============2776628521694407268==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+On Wed, Mar 27, 2024, at 5:26 AM, Zvi Vered via lttng-dev wrote:
+> Hello,
+>
+> I have an application with 4 threads. 
+> I'm required to display on the graph when thread starts working till it 
+> blocks for the next semaphore. 
+>
+> But without using the lttng userspace library.
+>
+> Is it possible ?
+>
+> Thank you,
+> Zvika
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2776628521694407268==--
