@@ -4,52 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9786DC6FD1F
-	for <lttng-dev@archiver.kernel.org>; Sun, 31 Mar 2024 02:48:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA2EDCD1292
+	for <lttng-dev@archiver.kernel.org>; Mon,  1 Apr 2024 14:03:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1711853309;
-	bh=qk1Vq2hgDIigosGI7Gjq72MIjFImUgsVJQQJIgt8V3w=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LYAc7ZGr1a1Edn5TeikZe4E4SSV/n3Yr7F/Stbwr7GNOF8hx3/qBm7Gz0AepvgU/L
-	 xszcbFH9Y7uqAMrCHvA7nRyk7Xn4z2Ejcg85be+mht34Qozh8F5xtsTlDeKGfmAS8o
-	 H92jAppHolvh42Gun78a2IKYM1lgl4DRkAn+DFV4MjWw+r1dee76F3FiYauTpjKjZE
-	 e+5T0qmB36X1UbcfbQ/IOR7FFQbuPAwmAEeL6g80LVVd16oMzqNgLFrMxO3EDjNFTy
-	 sEeu2uUHVM6Oen+gUW3tLJWTicSom3NuoSaVIo0zBjy2MCGEnb1dQtoyXqaKMECtZV
-	 pwEmaCA4njBzw==
+	s=default; t=1711980208;
+	bh=bZsBLkQmkNR7URWUhokfe0rZtIBs7pssPySm4NsMeMg=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=IQhJ2gaX7ctS/cfhgHgVkccqBWNTFhMfg9GrxPu6W4CMfh2slbpqQ+FMgg3RhyRzI
+	 VunZveVDWt4DkouA4ueer0LtyJiuxmFkyJk0hkZAgeEBNf35JxnCXb7h7oYIoSUeKx
+	 yc+RD+HKHwyG5dwNHg+BrCVerJxKiKHWMdegZbyIkeaR2EbOCrUo0HOKHDtkUhN+o5
+	 46FLsjACJgavLSnpHpZDCGtKqGHtQCmaUC5o3t0CJCKtkQIL9Nzd43QcLrdB7Wvq4m
+	 AanbfPdn2gDpgM32lwYIhQzpFs//oVkruwieRfaGiKYnBffFBk0YhPlss+5RmGtzk2
+	 cMB5G2cU8AbwQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4V6dqw4cXzz2YjX;
-	Sat, 30 Mar 2024 22:48:28 -0400 (EDT)
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
- [IPv6:2a00:1450:4864:20::22d])
- by lists.lttng.org (Postfix) with ESMTPS id 4V6dqt1Qdfz2YK5
- for <lttng-dev@lists.lttng.org>; Sat, 30 Mar 2024 22:48:26 -0400 (EDT)
-Received: by mail-lj1-x22d.google.com with SMTP id
- 38308e7fff4ca-2d4360ab3daso38387341fa.3
- for <lttng-dev@lists.lttng.org>; Sat, 30 Mar 2024 19:48:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1711853304; x=1712458104;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=io8rA8Fd6RguoxJULIa5VPk9lktnArYkMx+33xAfUQw=;
- b=l3xT84FQGllZcQ+2WnPFocNwqpEzJcz13HXLOCH/KVRgulmDn6n6eMppVIp8Ib+O2s
- w5wIgzOksjGcct5Mo546UJ6IYkBtEbx9SdNYwW0zKTAtHYxk1spbJnCfFLHc6119KYgf
- 27/Jftvd5LOD2SrPkl4fU1tS+CTIG4VgNkG4YvwsUir62JLehbkSSoWP3Cz6oACuawWy
- dE0Ekb0uQjDwAChvTwXBrZ3u9HvJPaRt5RUh8j8+bXfFyphYwAKjwiUGXmv5tTzOAMxp
- Wb/c4U2O6s5yvJJLSyICy9oPHZHhTElxAxuWQCODrm5fBpzXUof8+pprmAn4dbidvjLP
- VT8A==
-X-Gm-Message-State: AOJu0Yw6fMuWJNPQMxt+vWsX545+zmduUbvTehLzQLDeiOt4OV2zG+1N
- T4bd5T1bQDRhF09oG/EWFfq0tadMko8UatQ5ANBSWAfaWNHGMDPqeTSbEmbhrYp+ldQkJENgIdj
- xbNxSBpNHNDbByxcDHeVl+YeCZMfVKQbH
-X-Google-Smtp-Source: AGHT+IEjOHXjzIQXYHAcJRw/kQsrB3JCfDKTXO4JMM4u/wDNRBOoxD8/GJ43EhFORlRvrX/sOZ09Wh9yrnyNKQAoCWQ=
-X-Received: by 2002:a05:651c:4c8:b0:2d4:376f:5b44 with SMTP id
- e8-20020a05651c04c800b002d4376f5b44mr4018727lji.34.1711853303878; Sat, 30 Mar
- 2024 19:48:23 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4V7XmJ0HnVz2YxX;
+	Mon,  1 Apr 2024 10:03:27 -0400 (EDT)
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+ by lists.lttng.org (Postfix) with ESMTPS id 4V7XmF1nqtz2Z86
+ for <lttng-dev@lists.lttng.org>; Mon,  1 Apr 2024 10:03:25 -0400 (EDT)
+Received: from [IPV6:2606:6d00:100:4000:cacb:9855:de1f:ded2] (unknown
+ [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4V7XmC1spmzpCQ;
+ Mon,  1 Apr 2024 10:03:23 -0400 (EDT)
+Message-ID: <cb341ad4-1888-4d34-9da3-636d6d8036bd@efficios.com>
+Date: Mon, 1 Apr 2024 10:03:53 -0400
 MIME-Version: 1.0
-Date: Sun, 31 Mar 2024 05:52:19 +0300
-Message-ID: <CABRndgyb_=9VrrgV-Z21YDe1w879kTuE9t6m8Hoa3h-4MpfcEQ@mail.gmail.com>
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Subject: [lttng-dev] lttng-modules(13.9) : insmod order
+User-Agent: Mozilla Thunderbird
+To: Duncan Sands <baldrick@free.fr>, lttng-dev <lttng-dev@lists.lttng.org>
+References: <c0fa14f8-2771-4597-9232-0438a67badca@free.fr>
+Content-Language: en-US
+In-Reply-To: <c0fa14f8-2771-4597-9232-0438a67badca@free.fr>
+Subject: Re: [lttng-dev] Compile fix for urcu-bp.c
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -61,54 +48,31 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Zvi Vered via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Zvi Vered <veredz72@gmail.com>
-Content-Type: multipart/mixed; boundary="===============5362190196712975152=="
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============5362190196712975152==
-Content-Type: multipart/alternative; boundary="00000000000015de4d0614ebe817"
-
---00000000000015de4d0614ebe817
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-For some reason, I failed to integrate v13.9 into buildroot 2023.02.2
-But I compiled all modules with the my kernel source: 5.4.249
-
-Can you please tell what is the right order of *insmod *for the kernel
-modules ?
-
-All I need is to record IRQ events and user space events.
-
-Thank you,
-Zvika
-
---00000000000015de4d0614ebe817
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello,<br><div><br></div><div>For some reason, I failed to=
- integrate v13.9 into buildroot 2023.02.2=C2=A0</div><div>But I compiled al=
-l modules with the my kernel source: 5.4.249</div><div><br></div><div>Can y=
-ou please tell what is the right order of <b>insmod </b>for the kernel modu=
-les ?</div><div><br></div><div>All I need is to record IRQ events and user =
-space events.=C2=A0=C2=A0</div><div><br></div><div>Thank you,</div><div>Zvi=
-ka=C2=A0</div></div>
-
---00000000000015de4d0614ebe817--
-
---===============5362190196712975152==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5362190196712975152==--
+SGksCgpUaGVyZSBhcmUgYSBmZXcgdGhpbmdzIG1pc3NpbmcgYmVmb3JlIEkgY2FuIHRha2UgdGhp
+cyBwYXRjaDoKCi0gTWlzc2luZyBjb21taXQgbWVzc2FnZSBkZXNjcmliaW5nIHRoZSBpc3N1ZSwK
+LSBNaXNzaW5nICJTaWduZWQtb2ZmLWJ5IiB0YWcuCgpUaGFua3MhCgpNYXRoaWV1CgpPbiAyMDI0
+LTAzLTI5IDEwOjA2LCBEdW5jYW4gU2FuZHMgdmlhIGx0dG5nLWRldiB3cm90ZToKPiAtLS0gc3Jj
+L3VyY3UtYnAuYwo+ICsrKyBzcmMvdXJjdS1icC5jCj4gQEAgLTQwOSw3ICs0MDksNyBAQCB2b2lk
+IGV4cGFuZF9hcmVuYShzdHJ1Y3QgcmVnaXN0cnlfYXJlbmEgKmFyZW5hKQo+ICDCoMKgwqDCoMKg
+wqDCoMKgIG5ld19jaHVua19zaXplX2J5dGVzLCAwKTsKPiAgwqDCoMKgwqAgaWYgKG5ld19jaHVu
+ayAhPSBNQVBfRkFJTEVEKSB7Cj4gIMKgwqDCoMKgwqDCoMKgwqAgLyogU2hvdWxkIG5vdCBoYXZl
+IG1vdmVkLiAqLwo+IC3CoMKgwqDCoMKgwqDCoCBhc3NlcnQobmV3X2NodW5rID09IGxhc3RfY2h1
+bmspOwo+ICvCoMKgwqDCoMKgwqDCoCB1cmN1X3Bvc2l4X2Fzc2VydChuZXdfY2h1bmsgPT0gbGFz
+dF9jaHVuayk7Cj4gIMKgwqDCoMKgwqDCoMKgwqAgbWVtc2V0KChjaGFyICopIGxhc3RfY2h1bmsg
+KyBvbGRfY2h1bmtfc2l6ZV9ieXRlcywgMCwKPiAgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG5l
+d19jaHVua19zaXplX2J5dGVzIC0gb2xkX2NodW5rX3NpemVfYnl0ZXMpOwo+ICDCoMKgwqDCoMKg
+wqDCoMKgIGxhc3RfY2h1bmstPmNhcGFjaXR5ID0gbmV3X2NhcGFjaXR5Owo+IF9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcg
+bGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgotLSAKTWF0aGlldSBEZXNub3ll
+cnMKRWZmaWNpT1MgSW5jLgpodHRwczovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
+L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
