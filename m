@@ -4,60 +4,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF6B6C6FD1F
-	for <lttng-dev@archiver.kernel.org>; Wed,  3 Apr 2024 03:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E3CCD1288
+	for <lttng-dev@archiver.kernel.org>; Wed,  3 Apr 2024 18:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1712116118;
-	bh=WcevrMO2Lw4s/LH8fAkHo4+DuY2y3s2ueBQfcvt6XPI=;
-	h=References:In-Reply-To:Date:To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=e0zxPYo4jge2sdcBIFckNi7O3FgiyubG6gqbeRmSyJHkeRnRFrPITtjj89yI//muv
-	 EZq9wgQPMGMfE13o2A++PWouSSX72q8miK5XL2Kq/BDuIx9j3J2rI0TNLEztSmUJXd
-	 H1dQRetpg8Z1IVRrtwiV+qnx9LSLPL2BJXplNLGxxK3McHcP6lErdl0cIkeU8kr5Ra
-	 4+2/5+MQChRrATLUj7ApdLiQHkKyOHlYlJk56llEuWj6mHAmmxuRcBIUxX9YBU28xh
-	 WXSb0uSrOrJZX96pen6x6M2K52VgRhFn2X5pzmwSstmJZYLlGoCBExFF7DXb3nqTQg
-	 iK7y+wcGPrXEA==
+	s=default; t=1712169711;
+	bh=fS6XJIx0w+2RxyvuYVjS67mA4z0fq8k1jg6VXx8VwKA=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=yV3d4UMuqUQEy8QP69NMJcxgB9pbFIJAqz0+XAwNzv3YvBoD8FJ2VZ6+s7teaU17B
+	 p8+hqC6QtbqKVSzli+kbiQHpN9ZyeYNXNH5ss9F0t4EAW6m7H3JpAeVr1Dc0ph5C08
+	 jusXeyC5Q12EkG3/t+1nrZavrECHY54/lXpSk1RY5+Sv6pLYhytr8PTXe8EibjETwY
+	 imSBRFePHG6FOVttWl4TrYVbPH1WOltxvJJXMDjO7c4f1o6Z7GQQ22IB/HNiaPA85u
+	 8q18wcWmzz5iHI0VpxQSVo52fxJoY4Py7flg99Jsznk7htDvZKXwFfjRkMIYx/FuAi
+	 +73Q5HvMNTcdw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4V8W1y0BGsz2ZpR;
-	Tue,  2 Apr 2024 23:48:38 -0400 (EDT)
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by lists.lttng.org (Postfix) with ESMTPS id 4V8W1v5bYkz2Zg5
- for <lttng-dev@lists.lttng.org>; Tue,  2 Apr 2024 23:48:35 -0400 (EDT)
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-2d48f03a8bbso4602821fa.0
- for <lttng-dev@lists.lttng.org>; Tue, 02 Apr 2024 20:48:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712116114; x=1712720914;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3QM5RgD/yPYxpmgQZjP2CFSXOSewwExhWFj6N17tFRI=;
- b=vdg4aru6TWeV5QxnROhe2XSTTx+OpaJhHwZ+ncnAHOPDpfy/R/8KopMNwAAoaRlZUu
- CxJVx4xtdUFykOadcxeFXueQW0B+suseiOAgN/XPYcpsdDTgmKWihU9v8sDMQ0xccECa
- SDRXToyIwgzzWgYIKshf/omwfB+ckV0eO4wnQr+OgIW316xnRbZ79HvVY4cuPr2Wh9Zb
- bHDGGtUm8Mvv5NwAAacid1pzq5bp8DB1Hox/bSIX+XUWhkVtrXn/9xgscQE/ea3Hxeyi
- SVzc23r5Z5GB9f/tdRVP6TyCAqcYZw46p0OBba8uWMTSXeSBVI81MxyTKz52LN12NziM
- BGXg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCV6CyHpQtgEQroC1XLeC8Fzgz/4vrBh6Y0YOvaosdJo6phlZ7kTkg0/H2N9sL2DtSHvek+4fxdMiEy8JeteMKvmU6jyUQbvw1jU
-X-Gm-Message-State: AOJu0Yw/doF339dnQgIsRxR9rPD3EJ+QE6X+jbhR6yPyS4sWBNtune60
- vvuxJLQ+YcjJwtF9dKLpO/Ew1MfqzTAb/UqHP/Ab1QH/lW9vKe+00gdoe0o/xghFrOcWER7uAT0
- wNiyEjNZ9FItXlugLFBwN9/PwErJj+mQD
-X-Google-Smtp-Source: AGHT+IFfISu283meOA7o+5YUPMJnfHjRKH7AWy+T5lvDkNRG+xlFoRS7CniknYHiRROIntVc3v1xx/Q8wLdukC/cpvc=
-X-Received: by 2002:a05:651c:203:b0:2d8:3f1c:9978 with SMTP id
- y3-20020a05651c020300b002d83f1c9978mr99907ljn.17.1712116114106; Tue, 02 Apr
- 2024 20:48:34 -0700 (PDT)
-MIME-Version: 1.0
+	by lists.lttng.org (Postfix) with ESMTP id 4V8trZ3WhFz2Zh4;
+	Wed,  3 Apr 2024 14:41:50 -0400 (EDT)
+Received: from CAN01-YT3-obe.outbound.protection.outlook.com
+ (mail-yt3can01on2105.outbound.protection.outlook.com [40.107.115.105])
+ by lists.lttng.org (Postfix) with ESMTPS id 4V8trX3rZCz2Zxv
+ for <lttng-dev@lists.lttng.org>; Wed,  3 Apr 2024 14:41:48 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lHWSwl30JkN5DTcVCuunrrEHuhIxidYU5HM6oiZcLPrASCvhW0unVhS5AWjPVs5mQjTg7qR+Oq/2MaDAyI6cc3mQezbehFVjYP9Bjt/QHfMfk9U2rkDe1at9o/rHJ27gZT1a9f+gYTe/3Lt9SJVVo0OwtRwsr1OwzUad6afHo2D1EH25NyfqLJIalpIxIllellEOjqzLJrkSzkogXfKdtWXx+0zbzQld7uj+YL13TvXX2IxtncQ1RPvPN7BFSkpcf1uJeitISN33KE4uzsZvZQFGLqH9Hsd7Qy///Dj4RYJ45O2Kad6qb6mh5Er9eOE2MzjGhjWXc+khzkAC1FE7sw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CSi/RQKe/hu6sFiMRsQ/gBpRIiPUNDHfq4i7/6ciLQs=;
+ b=NWt8VIdHbQWAFqqbseEKQJJ10Wbq/xODaKdgBAdVeSvUAiJjSDYE9CBVLyL7Z6keNPxW6UYxC5wj7prkput1vWMxlpIekd6dDbBn1xgolhEInmyMVV0hxJFwSgmD4nEzzlkZUZpNbjIc/J8UHPlODZ1akPQeJE28jODNIm2xsiC7iqyGPNVXz+Nd39bcHE+GmmL9AqyFA1VjrNTWUhZPyAtrbeDkJ/0jLkCZcQftgsWZO2VLgQz9kpQLwZYj8WPVtC/+ZRVC8MDC/V2VKNaTS5ITbUNEtsReP4eNdjLJH4U3fC+lCGHK0V9gYJT3XioPsctN3JQLmiS3N/xv7t0A6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT1PR01MB2730.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:3::10)
+ by YQBPR01MB10381.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:6f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.26; Wed, 3 Apr
+ 2024 18:41:44 +0000
+Received: from YT1PR01MB2730.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::ad7c:6193:524e:38c3]) by YT1PR01MB2730.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::ad7c:6193:524e:38c3%7]) with mapi id 15.20.7452.019; Wed, 3 Apr 2024
+ 18:41:44 +0000
+Message-ID: <1b3e8bbc-aba5-4148-8ba2-7c4b676fcc85@efficios.com>
+Date: Wed, 3 Apr 2024 14:41:43 -0400
+User-Agent: Mozilla Thunderbird
+To: Zvi Vered <veredz72@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 References: <CABRndgz2BHX9LubVXoaJxLH+KoYfgzQ0XzY=xHG60+HoO-Tm7A@mail.gmail.com>
  <a128a334-b2d8-4cec-ae40-91e1384a228d@app.fastmail.com>
  <CABRndgy8RJ-rkszYGpvnqJ6oth35ajJhWgF8T4aWFEFjZiBz0g@mail.gmail.com>
  <5d588684-17f3-4b96-aafd-9ff6728b2ddd@efficios.com>
-In-Reply-To: <5d588684-17f3-4b96-aafd-9ff6728b2ddd@efficios.com>
-Date: Wed, 3 Apr 2024 06:52:33 +0300
-Message-ID: <CABRndgzUxjE1=KmfxNV2gn7g43A91WV8s8-ncFK3ekQWWrQGoQ@mail.gmail.com>
-To: Erica Bugden <ebugden@efficios.com>
+ <CABRndgzUxjE1=KmfxNV2gn7g43A91WV8s8-ncFK3ekQWWrQGoQ@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CABRndgzUxjE1=KmfxNV2gn7g43A91WV8s8-ncFK3ekQWWrQGoQ@mail.gmail.com>
+X-ClientProxiedBy: YQBPR01CA0043.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:2::15) To YT1PR01MB2730.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:3::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT1PR01MB2730:EE_|YQBPR01MB10381:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KqyGYtgZXKuxNJoAb7i/o91aSqff9SZFkig0fmMPWb3luI9wXrGHnbM03jKHNwD1hz/MUt3/SKjWyqq7JxOXgH6pULO/H6OQU6oG5gOVCbBBAazEY/pfWnLCBMxF8+eN+aRqgiI9TbSO7edVuSSlzbjNN9B29BA9V4vCSBZLd9JQz39zq3T0qMekIpEnD6i/TTcmX6QnpmLKgsgbKWHBpoYui+E3IyZJ6LXlO5YWb1zN+iukdmcSw+DMZmyKZIVuf5apNftJDiWt5JpERzBgexHnc76wsN3ubVQ6p4oKzO1IYgj7BXCWSxmrriwt1/ybMC8xKtuQrdczhbITtWgwXaDCwCqpWKgVk5uchUnH7L3HtY7mylVH9MXGC6sIaXqVzF0U9DT+xTQfFYsPKK8VExAcZnDCOQuTpDofLDo1EynFck6PiqJfJujp/Af3oFW0N9wY0R87L/BHHxslet1VQjt5xewnMFjuISKcZ0Ki9KpDEuNb+omjhNFtj1PKK3Umv2StVhRd4Drz9AN+yvJaxorBgNXPfFkKAsAu5G57FzFO5yzTL+MA4HvjNr5B7o00B/OtN4ZTr/RtTQEUIeLcZe9PMo5PLpyVve1ac1IE0vY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT1PR01MB2730.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(1800799015)(376005)(366007); DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3BlS2dNWFNBanRCV3N6VkdRL3dXT05FSkxCM0hCRnhsclBZeHVhK0I3V2dV?=
+ =?utf-8?B?Tzc0N0phaHJFQmk1MnQvMWhjRG5HOHN6RHE2eG5CYzhxNTA2dXdiY2JXSlZz?=
+ =?utf-8?B?TE9lY0s0TWhpekxMdVpXWHNuSWFzYWx5Ry9hS3drOHU3TzEvM2o2eDlVODhY?=
+ =?utf-8?B?RDVPcnV6N3BDVC9RSmplZjFYdlo1VGRrNHFTMU8vOWV0ZkxXb3lhVS80WDBq?=
+ =?utf-8?B?dkxTVnZQZWNYSGQ5bHNBaW92ZTJuejF3ZWY2OFdTZmRpV1REOVR6UGxmbnNt?=
+ =?utf-8?B?NDc2WUlaRUhMVmZXajlUb0MzN1FEVm9OSFJnZHVldFpoeS9qMHUzWWl4a25D?=
+ =?utf-8?B?WHJ2UkhpNTZBYTNVRXlqYkVhNDI5ckl2S3VKNjV6NXAwT3pVUHVvNDZXK0FU?=
+ =?utf-8?B?MU5ac1FyQVU4a2N4L25ENDRzTi94NlUrVmxkM0JBcGNjMmowWGk0WDlyRVJp?=
+ =?utf-8?B?WEVMNnhlYlVoTGNCYm9kNEplUzFCUTRsYzNCRTBoSGFHbVlhd0t5ekJnc3VI?=
+ =?utf-8?B?UWJZRDVsMTlnemtlWnA3bXdoS3pjUVpDb2xNUUNLMzBXWVE3Q1Yxdm9hdG5a?=
+ =?utf-8?B?M0huMnpUcXIzZFcrbmF5TnpLZXRWZzRQK2NtQlhwUkJIdG1PMElhVkc3NjFO?=
+ =?utf-8?B?S3NNM09HRFBIcVduM3lIdHpYbUh6N0JZSTlNYWhHWjRaZEVXcXliQkpCZHVl?=
+ =?utf-8?B?OGNRQkVvVXVGdWZMbStYR0JmWmdtS3dxVW5CZXNYbzB2ZWhMUGJsTWJ5SG5q?=
+ =?utf-8?B?OEVnSWVUS0NFMFBhaHp0V2U4RXdUTDRMbTVUYW55dGpwMFFtSVhyejhERzUr?=
+ =?utf-8?B?Nm9jMmJLQTZ6amtua2oranVKLythb0dXcVRBQzZCcWJvTXczWDNvN3VsVExw?=
+ =?utf-8?B?aFJkS1pzMklWd2o1d1h0V3hKNFBsTWc1WW51bGM2RDBXRkF0Nmt6OEdLZUd2?=
+ =?utf-8?B?OFh5WVhnUjZXMGc0L2NHYy9QUFREbE1HeW1rSEI5ZDgwc0JpMkZkYkI0YnlV?=
+ =?utf-8?B?VHZZR1ZvR1NhMzRZNytOZGhsajBaSytqa1FJN2RtWExaS21Ham05ZHZheFd5?=
+ =?utf-8?B?cVpNdlA2bjFiMnBORXoxVWpqMXFMQmVaY0crVkdwNlVYT1FVa0ozUlNvNXFE?=
+ =?utf-8?B?aGJNM2lObU9JVkdjazV2cmU4b1FFellobzdNV2RGUnRZSmdSMWNYNnYxVjJr?=
+ =?utf-8?B?VzlGNnJpT1B2azNHT3BxckgwRzBMU3VxaERNVFVEeHVqZ25QUURaQnRabXBK?=
+ =?utf-8?B?RmJ4SjVOS0NjTEhhWFJHWE0wd1ZXeXloRXR2K1pHSjl6RkM2dHRKSDI5ZDlY?=
+ =?utf-8?B?YkI0dFF2ZWRjbU1WL09uMnJiS3pyUDM5SjB5cHVHMUVSRzFKZk1JSzhOS1RH?=
+ =?utf-8?B?a0ttQVlQRksrVjhNamRXSG1VU2lSU2ZSeHBMUG5NTlpVTEVUUzhod1MwRk9z?=
+ =?utf-8?B?OFZWZ29XN0pXWDBkWG5aZk9jdVRZN3F3TlZ6ZW1uZzRzYkxNVXBzVEZ1VE5a?=
+ =?utf-8?B?QVZrSGwyQllEMzVpaEdhZVBWWUVqVjRaM1hUQTMwUnVvSkxleFJQaWxUMVVL?=
+ =?utf-8?B?T1daNnZDNWxVVnVUbjVaaEZuVzlYWDZWbnh4VDRGeHd3REZBd1daR1BxZ1ly?=
+ =?utf-8?B?NC9MZmQyWFl6MnZvNWdlb0VObVc2MmVwV1kxVUtKU2lqMmFYNmdQbmQ3YWxB?=
+ =?utf-8?B?amRDTE5oSkdIR0Ixakgwczh0Z3hvV0ExbWJjRDBzRjAvVjVDRjVvQUdMbVZJ?=
+ =?utf-8?B?OHJ1OFNhWEtkeTFya0F2UEtCMERrOWNVWTkyUkl3anJOOVk2VVBrakNpK3BL?=
+ =?utf-8?B?R0RuQ2J4SFJmSXpqOUxwc0lHNzdXNWxmNDNLakFEZG5aUnA0aFdTWittNnF5?=
+ =?utf-8?B?bjg0U1FoRjZWYXRmUzFjelFnY1c5eXhsQlRxRzBDV0ZvYlBOR0FrWlcwL2pt?=
+ =?utf-8?B?eG53WEFkOXpweld5VUowTUQ5eFBQQXowREgrVklMelVxeVhRRk9JUXppQk11?=
+ =?utf-8?B?NitpbWw5YU1ab05Ld2lGb2F1bWkzSW9iU2YrdHpRd0pYVnpjRXY5UlIrZjM3?=
+ =?utf-8?B?eFJGeklvcFl2Uk9TVjJUZWp6Z0F6TXFhSENRV3VrQ3hhQ1JHazBJWHMwckR0?=
+ =?utf-8?Q?IHu53Ax+7fDVvJdnFCzho6k4s?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82747c17-9264-4f23-870d-08dc540db60a
+X-MS-Exchange-CrossTenant-AuthSource: YT1PR01MB2730.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2024 18:41:44.6462 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z23b+xsvrX77RsRAK/a8HVMX0BpfWc9QG/zJd7AQ2Ii3dolM0pi/Vh2H9hpG6WnBkIuBpYPymtOmVkLvx6wbjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR01MB10381
 Subject: Re: [lttng-dev] Lttng: display active threads in multiple cores.
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -70,264 +128,110 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Zvi Vered via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Zvi Vered <veredz72@gmail.com>
-Cc: lttng-dev@lists.lttng.org
-Content-Type: multipart/mixed; boundary="===============8832932647651679548=="
+From: Erica Bugden via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Erica Bugden <ebugden@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============8832932647651679548==
-Content-Type: multipart/alternative; boundary="000000000000cbb3c90615291854"
-
---000000000000cbb3c90615291854
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Erica,
-
-Thank you very much for your answer.
-Can you please tell what is the added value of ftrace (compared to using
-only lttng) ?
-
-Best regards,
-Zvika
-
-
-On Tue, Apr 2, 2024 at 5:11=E2=80=AFPM Erica Bugden <ebugden@efficios.com> =
-wrote:
-
-> Hello Zvika,
->
-> On 2024-03-29 01:09, Zvi Vered via lttng-dev wrote:
-> > Hi Christopher,
-> >
-> > Thank you very much for your reply.
-> > Can you please explain what do you mean by ftrace-enabled kernel ?
->
-> I believe what Christopher means by "ftrace-enabled" kernel is that the
-> Linux kernel has been configured to include ftrace. Both the ftrace
-> tracer and the LTTng tracer use the same kernel tracepoints to extract
-> execution information and these tracepoints are included in the kernel
-> if ftrace is included.
->
-> Most Linux distributions will include ftrace by default. However, you
-> can check whether this is the case by searching for `tracefs` in
-> `/proc/filesystems` (assuming it's already mounted) or by trying to
-> mount `tracefs`. `tracefs` is the filesystem ftrace uses to communicate
-> with users.
->
-> More details about how to check if ftrace is enabled and how to enable
-> it if not:
-> https://wiki.linuxfoundation.org/realtime/documentation/howto/tools/ftrac=
-e
->
-> The "More Information" section points to the primary sources (Linux
-> kernel documentation), but I find this page to be a good starting point.
->
-> Best,
-> Erica
->
-> >
-> > Best regards,
-> > Zvika
-> >
-> > On Wed, Mar 27, 2024 at 7:32=E2=80=AFPM Christopher Harvey via lttng-de=
-v
-> > <lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>> wrote:
-> >
-> >     you can use an ftrace-enabled kernel with lttng (maybe even just
-> >     tracecompass) or perfetto to get that kind of trace
-> >
-> >
-> https://archive.eclipse.org/tracecompass.incubator/doc/org.eclipse.tracec=
-ompass.incubator.ftrace.doc.user/User-Guide.html
-> <
-> https://archive.eclipse.org/tracecompass.incubator/doc/org.eclipse.tracec=
-ompass.incubator.ftrace.doc.user/User-Guide.html
-> >
-> >
-> >     or
-> >
-> >     https://ui.perfetto.dev/ <https://ui.perfetto.dev/>
-> >
-> >     On Wed, Mar 27, 2024, at 5:26 AM, Zvi Vered via lttng-dev wrote:
-> >      > Hello,
-> >      >
-> >      > I have an application with 4 threads.
-> >      > I'm required to display on the graph when thread starts working
-> >     till it
-> >      > blocks for the next semaphore.
-> >      >
-> >      > But without using the lttng userspace library.
-> >      >
-> >      > Is it possible ?
-> >      >
-> >      > Thank you,
-> >      > Zvika
-> >      > _______________________________________________
-> >      > lttng-dev mailing list
-> >      > lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
-> >      > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >     <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>
-> >     _______________________________________________
-> >     lttng-dev mailing list
-> >     lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
-> >     https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >     <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>
-> >
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
---000000000000cbb3c90615291854
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi Erica,<div><br></div><div>Thank you very much for your =
-answer.=C2=A0</div><div>Can you please tell what is the added value of ftra=
-ce (compared to using only lttng) ?</div><div><br></div><div>Best=C2=A0rega=
-rds,=C2=A0</div><div>Zvika=C2=A0</div><div><br></div></div><br><div class=
-=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, Apr 2, 2024 =
-at 5:11=E2=80=AFPM Erica Bugden &lt;<a href=3D"mailto:ebugden@efficios.com"=
->ebugden@efficios.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_qu=
-ote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,20=
-4);padding-left:1ex">Hello Zvika,<br>
-<br>
-On 2024-03-29 01:09, Zvi Vered via lttng-dev wrote:<br>
-&gt; Hi Christopher,<br>
-&gt; <br>
-&gt; Thank you very much for your reply.<br>
-&gt; Can you please explain what do you mean by ftrace-enabled kernel ?<br>
-<br>
-I believe what Christopher means by &quot;ftrace-enabled&quot; kernel is th=
-at the <br>
-Linux kernel has been configured to include ftrace. Both the ftrace <br>
-tracer and the LTTng tracer use the same kernel tracepoints to extract <br>
-execution information and these tracepoints are included in the kernel <br>
-if ftrace is included.<br>
-<br>
-Most Linux distributions will include ftrace by default. However, you <br>
-can check whether this is the case by searching for `tracefs` in <br>
-`/proc/filesystems` (assuming it&#39;s already mounted) or by trying to <br=
->
-mount `tracefs`. `tracefs` is the filesystem ftrace uses to communicate <br=
->
-with users.<br>
-<br>
-More details about how to check if ftrace is enabled and how to enable <br>
-it if not: <br>
-<a href=3D"https://wiki.linuxfoundation.org/realtime/documentation/howto/to=
-ols/ftrace" rel=3D"noreferrer" target=3D"_blank">https://wiki.linuxfoundati=
-on.org/realtime/documentation/howto/tools/ftrace</a><br>
-<br>
-The &quot;More Information&quot; section points to the primary sources (Lin=
-ux <br>
-kernel documentation), but I find this page to be a good starting point.<br=
->
-<br>
-Best,<br>
-Erica<br>
-<br>
-&gt; <br>
-&gt; Best=C2=A0regards,<br>
-&gt; Zvika<br>
-&gt; <br>
-&gt; On Wed, Mar 27, 2024 at 7:32=E2=80=AFPM Christopher Harvey via lttng-d=
-ev <br>
-&gt; &lt;<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">ltt=
-ng-dev@lists.lttng.org</a> &lt;mailto:<a href=3D"mailto:lttng-dev@lists.ltt=
-ng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a>&gt;&gt; wrote:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0you can use an ftrace-enabled kernel with lttng (ma=
-ybe even just<br>
-&gt;=C2=A0 =C2=A0 =C2=A0tracecompass) or perfetto to get that kind of trace=
-<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://archive.eclipse.org/tracecompass=
-.incubator/doc/org.eclipse.tracecompass.incubator.ftrace.doc.user/User-Guid=
-e.html" rel=3D"noreferrer" target=3D"_blank">https://archive.eclipse.org/tr=
-acecompass.incubator/doc/org.eclipse.tracecompass.incubator.ftrace.doc.user=
-/User-Guide.html</a> &lt;<a href=3D"https://archive.eclipse.org/tracecompas=
-s.incubator/doc/org.eclipse.tracecompass.incubator.ftrace.doc.user/User-Gui=
-de.html" rel=3D"noreferrer" target=3D"_blank">https://archive.eclipse.org/t=
-racecompass.incubator/doc/org.eclipse.tracecompass.incubator.ftrace.doc.use=
-r/User-Guide.html</a>&gt;<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0or<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://ui.perfetto.dev/" rel=3D"norefer=
-rer" target=3D"_blank">https://ui.perfetto.dev/</a> &lt;<a href=3D"https://=
-ui.perfetto.dev/" rel=3D"noreferrer" target=3D"_blank">https://ui.perfetto.=
-dev/</a>&gt;<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 =C2=A0On Wed, Mar 27, 2024, at 5:26 AM, Zvi Vered via ltt=
-ng-dev wrote:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Hello,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; I have an application with 4 threads.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; I&#39;m required to display on the graph when=
- thread starts working<br>
-&gt;=C2=A0 =C2=A0 =C2=A0till it<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; blocks for the next semaphore.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; But without using the lttng userspace library=
-.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Is it possible ?<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Thank you,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Zvika<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; _____________________________________________=
-__<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; lttng-dev mailing list<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" =
-target=3D"_blank">lttng-dev@lists.lttng.org</a> &lt;mailto:<a href=3D"mailt=
-o:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a=
->&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 &gt; <a href=3D"https://lists.lttng.org/cgi-bin/ma=
-ilman/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">https://list=
-s.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://lists.lttng.org/cgi-bin/mail=
-man/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">https://lists.=
-lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0_______________________________________________<br>
-&gt;=C2=A0 =C2=A0 =C2=A0lttng-dev mailing list<br>
-&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"mailto:lttng-dev@lists.lttng.org" target=
-=3D"_blank">lttng-dev@lists.lttng.org</a> &lt;mailto:<a href=3D"mailto:lttn=
-g-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a>&gt;<=
-br>
-&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://lists.lttng.org/cgi-bin/mailman/=
-listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">https://lists.lttn=
-g.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
-&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://lists.lttng.org/cgi-bin/mail=
-man/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">https://lists.=
-lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>&gt;<br>
-&gt; <br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev</a><br>
-</blockquote></div>
-
---000000000000cbb3c90615291854--
-
---===============8832932647651679548==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============8832932647651679548==--
+SGVsbG8gWnZpa2EsCgpPbiAyMDI0LTA0LTAyIDIzOjUyLCBadmkgVmVyZWQgd3JvdGU6Cj4gSGkg
+RXJpY2EsCj4gCj4gVGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgeW91ciBhbnN3ZXIuCj4gQ2FuIHlv
+dSBwbGVhc2UgdGVsbCB3aGF0IGlzIHRoZSBhZGRlZCB2YWx1ZSBvZiBmdHJhY2UgKGNvbXBhcmVk
+IHRvIHVzaW5nIAo+IG9ubHkgbHR0bmcpID8KCkkgZG9uJ3QgdGhpbmsgSSB1bmRlcnN0YW5kIHRo
+ZSBpbnRlbnRpb24gYmVoaW5kIHlvdXIgcXVlc3Rpb24uIEknbGwgbWFrZSAKc29tZSBndWVzc2Vz
+IGJlbG93IGFuZCB5b3UncmUgd2VsY29tZSB0byBjbGFyaWZ5IGlmIHlvdSB3aXNoLgoKZnRyYWNl
+IGFuZCBMVFRuZyBhcmUgZGlmZmVyZW50IHRvb2xzIHRoYXQgaGF2ZSBzb21lIG92ZXJsYXAgaW4g
+dGhlIAp0cmFjaW5nIHVzZSBjYXNlcyB0aGV5IGNhbiBhZGRyZXNzLiBmdHJhY2UgaXMgYSBMaW51
+eCBrZXJuZWwgdHJhY2VyIHRoYXQgCmlzIGluY2x1ZGVkIGluIHRoZSBrZXJuZWw7IGl0IGlzbid0
+IGFuIExUVG5nIGFkZC1vbi4KCkJvdGggZnRyYWNlIGFuZCBMVFRuZyBjYW4gdHJhY2UgdGhlIExp
+bnV4IGtlcm5lbCBpZiB0aGUgdHJhY2Vwb2ludHMgaGF2ZSAKYmVlbiBpbmNsdWRlZC4gTFRUbmcg
+ZG9lc24ndCB1c2UgZnRyYWNlLCBidXQgbW9zdCBrZXJuZWxzIHRoYXQgYXJlIApjb25maWd1cmVk
+IHRvIGluY2x1ZGUgdGhlIHRyYWNlcG9pbnRzIHR5cGljYWxseSBhbHNvIGluY2x1ZGUgZnRyYWNl
+LgoKVGhhdCBiZWluZyBzYWlkLCBpZiB5b3Ugb25seSB3YW50IHRvIHRyYWNlIHVzZXJzcGFjZSBh
+cHBsaWNhdGlvbnMgd2l0aCAKTFRUbmcgYW5kIGRvbid0IGFsc28gd2FudCBrZXJuZWwgdHJhY2Vz
+LCB0aGVuIHlvdSBkb24ndCBuZWVkIGFuIApmdHJhY2UtZW5hYmxlZCBrZXJuZWwuCgpCZXN0LApF
+cmljYQoKPiAKPiBCZXN0wqByZWdhcmRzLAo+IFp2aWthCj4gCj4gCj4gT24gVHVlLCBBcHIgMiwg
+MjAyNCBhdCA1OjEx4oCvUE0gRXJpY2EgQnVnZGVuIDxlYnVnZGVuQGVmZmljaW9zLmNvbSAKPiA8
+bWFpbHRvOmVidWdkZW5AZWZmaWNpb3MuY29tPj4gd3JvdGU6Cj4gCj4gICAgIEhlbGxvIFp2aWth
+LAo+IAo+ICAgICBPbiAyMDI0LTAzLTI5IDAxOjA5LCBadmkgVmVyZWQgdmlhIGx0dG5nLWRldiB3
+cm90ZToKPiAgICAgID4gSGkgQ2hyaXN0b3BoZXIsCj4gICAgICA+Cj4gICAgICA+IFRoYW5rIHlv
+dSB2ZXJ5IG11Y2ggZm9yIHlvdXIgcmVwbHkuCj4gICAgICA+IENhbiB5b3UgcGxlYXNlIGV4cGxh
+aW4gd2hhdCBkbyB5b3UgbWVhbiBieSBmdHJhY2UtZW5hYmxlZCBrZXJuZWwgPwo+IAo+ICAgICBJ
+IGJlbGlldmUgd2hhdCBDaHJpc3RvcGhlciBtZWFucyBieSAiZnRyYWNlLWVuYWJsZWQiIGtlcm5l
+bCBpcyB0aGF0IHRoZQo+ICAgICBMaW51eCBrZXJuZWwgaGFzIGJlZW4gY29uZmlndXJlZCB0byBp
+bmNsdWRlIGZ0cmFjZS4gQm90aCB0aGUgZnRyYWNlCj4gICAgIHRyYWNlciBhbmQgdGhlIExUVG5n
+IHRyYWNlciB1c2UgdGhlIHNhbWUga2VybmVsIHRyYWNlcG9pbnRzIHRvIGV4dHJhY3QKPiAgICAg
+ZXhlY3V0aW9uIGluZm9ybWF0aW9uIGFuZCB0aGVzZSB0cmFjZXBvaW50cyBhcmUgaW5jbHVkZWQg
+aW4gdGhlIGtlcm5lbAo+ICAgICBpZiBmdHJhY2UgaXMgaW5jbHVkZWQuCj4gCj4gICAgIE1vc3Qg
+TGludXggZGlzdHJpYnV0aW9ucyB3aWxsIGluY2x1ZGUgZnRyYWNlIGJ5IGRlZmF1bHQuIEhvd2V2
+ZXIsIHlvdQo+ICAgICBjYW4gY2hlY2sgd2hldGhlciB0aGlzIGlzIHRoZSBjYXNlIGJ5IHNlYXJj
+aGluZyBmb3IgYHRyYWNlZnNgIGluCj4gICAgIGAvcHJvYy9maWxlc3lzdGVtc2AgKGFzc3VtaW5n
+IGl0J3MgYWxyZWFkeSBtb3VudGVkKSBvciBieSB0cnlpbmcgdG8KPiAgICAgbW91bnQgYHRyYWNl
+ZnNgLiBgdHJhY2Vmc2AgaXMgdGhlIGZpbGVzeXN0ZW0gZnRyYWNlIHVzZXMgdG8gY29tbXVuaWNh
+dGUKPiAgICAgd2l0aCB1c2Vycy4KPiAKPiAgICAgTW9yZSBkZXRhaWxzIGFib3V0IGhvdyB0byBj
+aGVjayBpZiBmdHJhY2UgaXMgZW5hYmxlZCBhbmQgaG93IHRvIGVuYWJsZQo+ICAgICBpdCBpZiBu
+b3Q6Cj4gICAgIGh0dHBzOi8vd2lraS5saW51eGZvdW5kYXRpb24ub3JnL3JlYWx0aW1lL2RvY3Vt
+ZW50YXRpb24vaG93dG8vdG9vbHMvZnRyYWNlIDxodHRwczovL3dpa2kubGludXhmb3VuZGF0aW9u
+Lm9yZy9yZWFsdGltZS9kb2N1bWVudGF0aW9uL2hvd3RvL3Rvb2xzL2Z0cmFjZT4KPiAKPiAgICAg
+VGhlICJNb3JlIEluZm9ybWF0aW9uIiBzZWN0aW9uIHBvaW50cyB0byB0aGUgcHJpbWFyeSBzb3Vy
+Y2VzIChMaW51eAo+ICAgICBrZXJuZWwgZG9jdW1lbnRhdGlvbiksIGJ1dCBJIGZpbmQgdGhpcyBw
+YWdlIHRvIGJlIGEgZ29vZCBzdGFydGluZyBwb2ludC4KPiAKPiAgICAgQmVzdCwKPiAgICAgRXJp
+Y2EKPiAKPiAgICAgID4KPiAgICAgID4gQmVzdMKgcmVnYXJkcywKPiAgICAgID4gWnZpa2EKPiAg
+ICAgID4KPiAgICAgID4gT24gV2VkLCBNYXIgMjcsIDIwMjQgYXQgNzozMuKAr1BNIENocmlzdG9w
+aGVyIEhhcnZleSB2aWEgbHR0bmctZGV2Cj4gICAgICA+IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KPiAgICAgPG1haWx0bzpsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCj4gICAgIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZz4+PiB3cm90ZToKPiAgICAgID4KPiAgICAgID7CoCDCoCDCoHlvdSBjYW4gdXNlIGFuIGZ0
+cmFjZS1lbmFibGVkIGtlcm5lbCB3aXRoIGx0dG5nIChtYXliZSBldmVuIGp1c3QKPiAgICAgID7C
+oCDCoCDCoHRyYWNlY29tcGFzcykgb3IgcGVyZmV0dG8gdG8gZ2V0IHRoYXQga2luZCBvZiB0cmFj
+ZQo+ICAgICAgPgo+ICAgICAgPgo+ICAgICBodHRwczovL2FyY2hpdmUuZWNsaXBzZS5vcmcvdHJh
+Y2Vjb21wYXNzLmluY3ViYXRvci9kb2Mvb3JnLmVjbGlwc2UudHJhY2Vjb21wYXNzLmluY3ViYXRv
+ci5mdHJhY2UuZG9jLnVzZXIvVXNlci1HdWlkZS5odG1sIDxodHRwczovL2FyY2hpdmUuZWNsaXBz
+ZS5vcmcvdHJhY2Vjb21wYXNzLmluY3ViYXRvci9kb2Mvb3JnLmVjbGlwc2UudHJhY2Vjb21wYXNz
+LmluY3ViYXRvci5mdHJhY2UuZG9jLnVzZXIvVXNlci1HdWlkZS5odG1sPiA8aHR0cHM6Ly9hcmNo
+aXZlLmVjbGlwc2Uub3JnL3RyYWNlY29tcGFzcy5pbmN1YmF0b3IvZG9jL29yZy5lY2xpcHNlLnRy
+YWNlY29tcGFzcy5pbmN1YmF0b3IuZnRyYWNlLmRvYy51c2VyL1VzZXItR3VpZGUuaHRtbCA8aHR0
+cHM6Ly9hcmNoaXZlLmVjbGlwc2Uub3JnL3RyYWNlY29tcGFzcy5pbmN1YmF0b3IvZG9jL29yZy5l
+Y2xpcHNlLnRyYWNlY29tcGFzcy5pbmN1YmF0b3IuZnRyYWNlLmRvYy51c2VyL1VzZXItR3VpZGUu
+aHRtbD4+Cj4gICAgICA+Cj4gICAgICA+wqAgwqAgwqBvcgo+ICAgICAgPgo+ICAgICAgPiBodHRw
+czovL3VpLnBlcmZldHRvLmRldi8gPGh0dHBzOi8vdWkucGVyZmV0dG8uZGV2Lz4KPiAgICAgPGh0
+dHBzOi8vdWkucGVyZmV0dG8uZGV2LyA8aHR0cHM6Ly91aS5wZXJmZXR0by5kZXYvPj4KPiAgICAg
+ID4KPiAgICAgID7CoCDCoCDCoE9uIFdlZCwgTWFyIDI3LCAyMDI0LCBhdCA1OjI2IEFNLCBadmkg
+VmVyZWQgdmlhIGx0dG5nLWRldiB3cm90ZToKPiAgICAgID7CoCDCoCDCoCA+IEhlbGxvLAo+ICAg
+ICAgPsKgIMKgIMKgID4KPiAgICAgID7CoCDCoCDCoCA+IEkgaGF2ZSBhbiBhcHBsaWNhdGlvbiB3
+aXRoIDQgdGhyZWFkcy4KPiAgICAgID7CoCDCoCDCoCA+IEknbSByZXF1aXJlZCB0byBkaXNwbGF5
+IG9uIHRoZSBncmFwaCB3aGVuIHRocmVhZCBzdGFydHMKPiAgICAgd29ya2luZwo+ICAgICAgPsKg
+IMKgIMKgdGlsbCBpdAo+ICAgICAgPsKgIMKgIMKgID4gYmxvY2tzIGZvciB0aGUgbmV4dCBzZW1h
+cGhvcmUuCj4gICAgICA+wqAgwqAgwqAgPgo+ICAgICAgPsKgIMKgIMKgID4gQnV0IHdpdGhvdXQg
+dXNpbmcgdGhlIGx0dG5nIHVzZXJzcGFjZSBsaWJyYXJ5Lgo+ICAgICAgPsKgIMKgIMKgID4KPiAg
+ICAgID7CoCDCoCDCoCA+IElzIGl0IHBvc3NpYmxlID8KPiAgICAgID7CoCDCoCDCoCA+Cj4gICAg
+ICA+wqAgwqAgwqAgPiBUaGFuayB5b3UsCj4gICAgICA+wqAgwqAgwqAgPiBadmlrYQo+ICAgICAg
+PsKgIMKgIMKgID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KPiAgICAgID7CoCDCoCDCoCA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiAgICAgID7CoCDC
+oCDCoCA+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiAgICAgPG1haWx0bzpsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnPiA8bWFpbHRvOmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiAgICAg
+PG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPj4KPiAgICAgID7CoCDCoCDCoCA+IGh0
+dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+PiAgICAgPGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
+dHRuZy1kZXY+Cj4gICAgICA+wqAgwqAgwqA8aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+ICAgICA8aHR0cHM6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldj4+Cj4gICAgICA+wqAgwqAgwqBf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ICAgICAgPsKg
+IMKgIMKgbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+ICAgICAgPiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KPiAgICAgPG1haWx0bzps
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+Zz4+Cj4gICAgICA+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYKPiAgICAgPGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
+bG1hbi9saXN0aW5mby9sdHRuZy1kZXY+Cj4gICAgICA+wqAgwqAgwqA8aHR0cHM6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+ICAgICA8aHR0cHM6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldj4+Cj4g
+ICAgICA+Cj4gICAgICA+Cj4gICAgICA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCj4gICAgICA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiAgICAgID4g
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyA8bWFpbHRvOmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmc+Cj4gICAgICA+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYKPiAgICAgPGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
+bG1hbi9saXN0aW5mby9sdHRuZy1kZXY+Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2Cg==
