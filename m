@@ -4,64 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A85C2C04FFE
-	for <lttng-dev@archiver.kernel.org>; Fri, 26 Apr 2024 13:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB5D3C4345F
+	for <lttng-dev@archiver.kernel.org>; Fri, 26 Apr 2024 15:06:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1714139822;
-	bh=vTHG2y8z+l/byrrA2iank6rSQT29rcOOHcyPor/gqFA=;
-	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1714143999;
+	bh=0+724M0r3OJI4iokV9Xzjyhn2N/GCcSC2Rns7JpfeSc=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=K3JQedPip9iykMzUcWwidpjeczxKZ/OHm+tWYz2SpOiJH3IZK15+4px2P1MsUcqvF
-	 3viY22Zcyhkeai5rzZrXPK+UkAIBpzJBnD6a0Fc5rWgQdk43boYymsMsY3jJ914bV/
-	 LWgutzLv2aWygx2AsHfuqMHCTrLMvSilZ6DIAfYLmhX0OZAkNOXAwdF9zDPHm88GxG
-	 S3LgrGXhs9tqffeoQCIbKQaAfaG33iAkJZ/QEmE4k6hYoCF2TKaFbZ3i+Tn8kE6OTk
-	 CpxGOIlv0NOTWISY4ipVASbGqwB5VLet2XWkw4lMspQFlLXLjlTOhtwtn7IR6Zc9S/
-	 UTjXmk0KyFXyQ==
+	b=t7/Ou6NJtz+t2XeAFdy0Cl/hOhSiUNWie6exrcBKHOoPIcbeCt4s0nj8kTe4KtLeV
+	 gK1e3Up9hU4/vDOGd4DEOxT2YNXZHMMQFeNpNiWqtEU468mdVLW4L4N+0MuIJfy78p
+	 Tl0xCH99dN3/pMRvsrBJd4mG72DdYuvg+qRM8UZkTKiEs6H9jnLK8BQtPZtH4qFIQ4
+	 7HI9zYQrh87DXQoR2QWEDpBtjKMiy8N/oywEDbqniy5+WKUjzG9qQRGlSYgdta1lyX
+	 c5jie8roHNbTHydh2/pUCJ4VdVLynkxht7Jeo86Dm0Tjk4pIdD94xXjDU7iDDDZnV8
+	 a1wiklFaYwl2Q==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4VQvRK2gTyz2jk0;
-	Fri, 26 Apr 2024 09:57:01 -0400 (EDT)
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
- by lists.lttng.org (Postfix) with ESMTPS id 4VQvRJ25kJz2jjl
- for <lttng-dev@lists.lttng.org>; Fri, 26 Apr 2024 09:57:00 -0400 (EDT)
-X-IronPort-AV: E=Sophos;i="6.07,232,1708387200"; 
- d="scan'208,217";a="397505064"
-Thread-Topic: [lttng-dev] [babeltrace2]about python self-defined plugin loading
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO
- smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
- by smtp-border-fw-2101.iad2.amazon.com with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 13:56:54 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [10.0.21.151:4279]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.28.195:2525]
- with esmtp (Farcaster)
- id ed311084-29b7-48de-9dba-136cb9382e3a; Fri, 26 Apr 2024 13:56:54 +0000 (UTC)
-X-Farcaster-Flow-ID: ed311084-29b7-48de-9dba-136cb9382e3a
-Received: from EX19D003ANC004.ant.amazon.com (10.37.240.207) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Fri, 26 Apr 2024 13:56:54 +0000
-Received: from EX19D003ANC001.ant.amazon.com (10.37.240.216) by
- EX19D003ANC004.ant.amazon.com (10.37.240.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.28;
- Fri, 26 Apr 2024 13:56:52 +0000
-Received: from EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8]) by
- EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8%5]) with
- mapi id 15.02.1258.028; Fri, 26 Apr 2024 13:56:52 +0000
-To: Kienan Stewart <kstewart@efficios.com>, "lttng-dev@lists.lttng.org"
- <lttng-dev@lists.lttng.org>
-Thread-Index: AQHalsCI/TKHXb5QNEKHKCHW1+CDTrF5IH2AgAAAiICAAXNMFw==
-Date: Fri, 26 Apr 2024 13:56:52 +0000
-Message-ID: <8c49688cb4bb43009b5ba1f6fb8e32cf@amazon.com>
-References: <03304ae9731e474db911b8ef6703cf69@amazon.com>
- <b8b2da19-5c08-4369-9bd4-8a3ae554ac4f@efficios.com>,
- <d00cba29-4ebc-4974-890c-ecf821b2fa8a@efficios.com>
-In-Reply-To: <d00cba29-4ebc-4974-890c-ecf821b2fa8a@efficios.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.187.170.27]
+	by lists.lttng.org (Postfix) with ESMTP id 4VQwzf5y1zz2jmt;
+	Fri, 26 Apr 2024 11:06:38 -0400 (EDT)
+Received: from simark.ca (simark.ca [158.69.221.121])
+ by lists.lttng.org (Postfix) with ESMTPS id 4VQwzc369Vz2jvM
+ for <lttng-dev@lists.lttng.org>; Fri, 26 Apr 2024 11:06:36 -0400 (EDT)
+Received: from [10.0.0.11] (modemcable238.237-201-24.mc.videotron.ca
+ [24.201.237.238])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+ (No client certificate requested)
+ by simark.ca (Postfix) with ESMTPSA id BB9AA1E092;
+ Fri, 26 Apr 2024 10:57:59 -0400 (EDT)
+Message-ID: <52708661-b095-4f23-bfc7-9eb8c89f0cbe@simark.ca>
+Date: Fri, 26 Apr 2024 10:57:59 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: "Wu, Yannan" <yannanwu@amazon.com>, Kienan Stewart <kstewart@efficios.com>,
+ "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+References: <03304ae9731e474db911b8ef6703cf69@amazon.com>
+ <b8b2da19-5c08-4369-9bd4-8a3ae554ac4f@efficios.com>
+ <d00cba29-4ebc-4974-890c-ecf821b2fa8a@efficios.com>
+ <8c49688cb4bb43009b5ba1f6fb8e32cf@amazon.com>
+Content-Language: en-US
+In-Reply-To: <8c49688cb4bb43009b5ba1f6fb8e32cf@amazon.com>
 Subject: Re: [lttng-dev] [babeltrace2]about python self-defined plugin
  loading
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -75,288 +56,85 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "Wu, Yannan via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "Wu, Yannan" <yannanwu@amazon.com>
-Content-Type: multipart/mixed; boundary="===============1173077755250614418=="
+From: Simon Marchi via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Simon Marchi <simark@simark.ca>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============1173077755250614418==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_8c49688cb4bb43009b5ba1f6fb8e32cfamazoncom_"
 
---_000_8c49688cb4bb43009b5ba1f6fb8e32cfamazoncom_
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 
-SGloaSwgS2llbmFuLA0KDQpJIGZpbmFsbHkgZmluZCBhIHdvcmthcm91bmQuIEkgY291bGQgc3Vj
-Y2VzcyB3aXRoIHRoZSBmb2xsb3dpbmcgY29kZToNCmZpbGVfbmFtZSA9ICJidF9wbHVnaW5fbGF0
-ZW5jeV9maWx0ZXIucHkiDQpjdXJyZW50X2RpcmVjdG9yeT1vcy5nZXRjd2QoKQ0KDQpmaWxlX3Bh
-dGggPSBvcy5wYXRoLmpvaW4oY3VycmVudF9kaXJlY3RvcnksIGZpbGVfbmFtZSkNCnBzZXQ9YnQy
-LmZpbmRfcGx1Z2luc19pbl9wYXRoKGZpbGVfcGF0aCkNCg0KZm9ycGx1Z2luaW5wc2V0Og0KDQpp
-ZiBwbHVnaW4ubmFtZT09ImxhdGVuY3lfZmlsdGVyImFuZCBoYXNhdHRyKHBsdWdpbiwiZmlsdGVy
-X2NvbXBvbmVudF9jbGFzc2VzIik6DQoNCiAgICBsYXRlbmN5X2ZpbHRlcl9jb21wX2Nscz1wbHVn
-aW4uZmlsdGVyX2NvbXBvbmVudF9jbGFzc2VzWydMYXRlbmN5RmlsdGVyJ10NCg0KDQoNCkJ1dCBs
-b2FkaW5nIHRoZSB3aG9sZSBkaXJlY3RvcnksIGl0IGp1c3QgZG9lc250IHdvcmsgZnJvbSBjb21t
-YW5kIGxpbmUuDQoNCkFtYW5kYQ0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18NCkZyb206IEtpZW5hbiBTdGV3YXJ0IDxrc3Rld2Fy
-dEBlZmZpY2lvcy5jb20+DQpTZW50OiBUaHVyc2RheSwgQXByaWwgMjUsIDIwMjQgMTE6NDM6MDUg
-UE0NClRvOiBXdSwgWWFubmFuOyBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnDQpTdWJqZWN0OiBS
-RTogW0VYVEVSTkFMXSBbbHR0bmctZGV2XSBbYmFiZWx0cmFjZTJdYWJvdXQgcHl0aG9uIHNlbGYt
-ZGVmaW5lZCBwbHVnaW4gbG9hZGluZw0KDQpDQVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQg
-ZnJvbSBvdXRzaWRlIG9mIHRoZSBvcmdhbml6YXRpb24uIERvIG5vdCBjbGljayBsaW5rcyBvciBv
-cGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UgY2FuIGNvbmZpcm0gdGhlIHNlbmRlciBhbmQga25v
-dyB0aGUgY29udGVudCBpcyBzYWZlLg0KDQoNCg0KTXkgYXBvbG9naWVzLA0KDQp0aGVyZSBpcyBh
-IHR5cG8gaW4gbXkgcHJldmlvdXMgZS1tYWlsLCB0aGUgbGlicmFyeSBkaXJlY3Rvcnkgc2hvdWxk
-IGJlOg0KDQpgPGxpYmRpcj4vYmFiZWx0cmFjZTIvcGx1Z2luLXByb3ZpZGVycy8nDQoNCnRoYW5r
-cywNCmtpZW5hbg0KDQpPbiA0LzI1LzI0IDExOjQxIEFNLCBLaWVuYW4gU3Rld2FydCB2aWEgbHR0
-bmctZGV2IHdyb3RlOg0KPiBIaSBBbWFuZGEsDQo+DQo+IGNvdWxkIHlvdSBkb3VibGUtY2hlY2sg
-dG8gZW5zdXJlIHRoYXQgYmFiZWx0cmFjZTIgd2FzIGJ1aWx0IHdpdGgNCj4gYC0tZW5hYmxlLXB5
-dGhvbi1wbHVnaW5zYCwgYW5kIHRoYXQgYGltcG9ydCBidDJgIHdvcmtzPw0KPg0KPiBUaGVyZSBz
-aG91bGQgYmUgYSBiYWJlbHRyYWNlMi1weXRob24tcGx1Z2luLXByb3ZpZGVyLnNvIGluDQo+IGA8
-bGliZGlyPi9iYWJlbHRyYWNlMi9wbHVnaW4tcHJvdmlkZXNgDQo+DQo+IHRoYW5rcywNCj4ga2ll
-bmFuDQo+DQo+DQo+IE9uIDQvMjQvMjQgMTE6MjggUE0sIFd1LCBZYW5uYW4gdmlhIGx0dG5nLWRl
-diB3cm90ZToNCj4+IEhpLCBUaGVyZSwNCj4+DQo+PiBJIGFtIHRyeWluZyB0byBjb25zdHJ1Y3Qg
-YSBjdXN0b21pemVkIGZpbHRlciBhbmQgc2luayBiYXNlZCBvbg0KPj4gYmFiZWx0cmFjZTIgcHl0
-aG9uIGJpbmRpbmcuIEhvd2V2ZXIsIG5ldGhlciBtaW5lIHBsdWdpbiBub3IgdGhlDQo+PiBwbHVn
-aW5zIHNhbXBsZSBJIGNvdWxkIGZpbmQgb24gdGhlIGludGVybmV0IGFsbCBkb250IHdvcmsuDQo+
-Pg0KPj4gRm9yIGV4YW1wbGUsDQo+PiBodHRwczovL2dpdGh1Yi5jb20vc2ltYXJrL2JhYmVsdHJh
-Y2UtZnVuLXBsdWdpbnMvdHJlZS9tYXN0ZXIvbXktZmlyc3QtY29tcG9uZW50cyA8aHR0cHM6Ly9n
-aXRodWIuY29tL3NpbWFyay9iYWJlbHRyYWNlLWZ1bi1wbHVnaW5zL3RyZWUvbWFzdGVyL215LWZp
-cnN0LWNvbXBvbmVudHM+DQo+Pg0KPj4gSSBqdXN0IGRvd25sb2FkZWQgdGhlIHB5IGZpbGUgYW5k
-IHJ1biB0aGUgZXhhY3QgY29tbWFuZCwgaXQgZmFpbGVkLg0KPj4gVGhlIGxvZyBpcyBhcyBmb2xs
-b3dpbmc6DQo+Pg0KPj4NCj4+IGJhYmVsdHJhY2UyIC0tcGx1Z2luLXBhdGggLiAtYyBzb3VyY2Uu
-ZGVtby5NeUZpcnN0U291cmNlIC1jDQo+PiBzaW5rLmRlbW8uTXlGaXJzdFNpbmsNCj4+IDA0LTI0
-IDE2OjUyOjA0LjM0OSA5MTk4MDUgOTE5ODA1IEUgQ0xJDQo+PiBhZGRfZGVzY3JpcHRvcl90b19j
-b21wb25lbnRfZGVzY3JpcHRvcl9zZXRAYmFiZWx0cmFjZTIuYzoxNzIwIENhbm5vdA0KPj4gZmlu
-ZCBjb21wb25lbnQgY2xhc3M6IHBsdWdpbi1uYW1lPSJkZW1vIiwNCj4+IGNvbXAtY2xzLW5hbWU9
-Ik15Rmlyc3RTb3VyY2UiLCBjb21wLWNscy10eXBlPTENCj4+IDA0LTI0IDE2OjUyOjA0LjM0OSA5
-MTk4MDUgOTE5ODA1IEUgQ0xJDQo+PiBjbWRfcnVuX2N0eF9pbml0QGJhYmVsdHJhY2UyLmM6MTg4
-MiBDYW5ub3QgZmluZCBhbiBvcGVyYXRpdmUgbWVzc2FnZQ0KPj4gaW50ZXJjaGFuZ2UgcHJvdG9j
-b2wgdmVyc2lvbiB0byB1c2UgdG8gY3JlYXRlIHRoZSBgcnVuYCBjb21tYW5kJ3MNCj4+IGdyYXBo
-OiBzdGF0dXM9RVJST1INCj4+IDA0LTI0IDE2OjUyOjA0LjM0OSA5MTk4MDUgOTE5ODA1IEUgQ0xJ
-IGNtZF9ydW5AYmFiZWx0cmFjZTIuYzoyNDY1DQo+PiBDYW5ub3QgaW5pdGlhbGl6ZSB0aGUgY29t
-bWFuZCdzIGNvbnRleHQuDQo+Pg0KPj4gRVJST1I6ICAgIFtCYWJlbHRyYWNlIENMSV0gKGJhYmVs
-dHJhY2UyLmM6MjQ2NSkNCj4+ICAgIENhbm5vdCBpbml0aWFsaXplIHRoZSBjb21tYW5kJ3MgY29u
-dGV4dC4NCj4+IENBVVNFRCBCWSBbQmFiZWx0cmFjZSBDTEldIChiYWJlbHRyYWNlMi5jOjE4ODIp
-DQo+PiAgICBDYW5ub3QgZmluZCBhbiBvcGVyYXRpdmUgbWVzc2FnZSBpbnRlcmNoYW5nZSBwcm90
-b2NvbCB2ZXJzaW9uIHRvDQo+PiB1c2UgdG8gY3JlYXRlIHRoZSBgcnVuYCBjb21tYW5kJ3MgZ3Jh
-cGg6IHN0YXR1cz1FUlJPUg0KPj4gQ0FVU0VEIEJZIFtCYWJlbHRyYWNlIENMSV0gKGJhYmVsdHJh
-Y2UyLmM6MTcyMCkNCj4+ICAgIENhbm5vdCBmaW5kIGNvbXBvbmVudCBjbGFzczogcGx1Z2luLW5h
-bWU9ImRlbW8iLA0KPj4gY29tcC1jbHMtbmFtZT0iTXlGaXJzdFNvdXJjZSIsIGNvbXAtY2xzLXR5
-cGU9MQ0KPj4NCj4+IGJhYmVsdHJhY2UyIC0tdmVyc2lvbg0KPj4gQmFiZWx0cmFjZSAyLjAuNyAi
-QW1xdWkiIFt2Mi4wLjYtMS1nODI1YTBlZDZkXQ0KPj4NCj4+IEFtcXVpICgvyZJta3dpy5AvKSBp
-cyBhIHRvd24gaW4gZWFzdGVybiBRdcOpYmVjLCBDYW5hZGEsIGF0IHRoZSBiYXNlIG9mDQo+PiB0
-aGUgR2FzcMOpIHBlbmluc3VsYSBpbiBCYXMtU2FpbnQtTGF1cmVudC4gTG9jYXRlZCBhdCB0aGUN
-Cj4+IGNvbmZsdWVuY2Ugb2YgdGhlIEh1bXF1aSBhbmQgTWF0YXDDqWRpYSBSaXZlcnMsIGl0cyBw
-cm94aW1pdHkgdG8NCj4+IHdvb2RsYW5kcyBtYWtlcyBpdCBhIGdyZWF0IGRlc3RpbmF0aW9uIGZv
-ciBvdXRkb29yIGFjdGl2aXRpZXMgc3VjaCBhcw0KPj4gY2FtcGluZywgaGlraW5nLCBhbmQgbW91
-bnRhaW4gYmlraW5nLg0KPj4geWFubmFud3VAdWU5MWU5NmYyOTUxYjVjOn4vdHJlZXMvbHR0bmdf
-dGVzdF9ydW4kDQo+Pg0KPj4gSXMgdGhlIGNsaSBjaGFuZ2VkIG9yIHNvbWV0aGluZz8gSG93IGNh
-biBJIG1ha2UgaXQgcmlnaHQ/DQo+Pg0KPj4gQmVzaWRlcywgaXMgaXQgcG9zc2libGUgd2UgY3Jl
-YXRlIGEgcGlwZWxpbmUgaW4gcHl0aG9uIGFuZCBtYWtlIHVzZQ0KPj4gdGhlIHRoZSBweXRob24g
-ZHJhZnRlZCBwbHVnaW4/IENhbiB5b3UgYWR2aXNlIG1lIGhvdz8NCj4+DQo+PiBBbWFuZGENCj4+
-DQo+Pg0KPj4NCj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fDQo+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0DQo+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnDQo+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2DQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fDQo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QNCj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zw0KPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
-bmctZGV2DQo=
+On 2024-04-26 09:56, Wu, Yannan via lttng-dev wrote:
+> Hihi, Kienan,
+> 
+> I finally find a workaround. I could success with the following code:
+> file_name = "bt_plugin_latency_filter.py"
+> current_directory=os.getcwd()
+> 
+> file_path = os.path.join(current_directory, file_name)
+> pset=bt2.find_plugins_in_path(file_path)
+> 
+> forplugininpset:
+> if plugin.name=="latency_filter"andhasattr(plugin,"filter_component_classes"):
+> 
+>     latency_filter_comp_cls=plugin.filter_component_classes['LatencyFilter']
+> 
+> But loading the whole directory, it just doesnt work from command line.
+> Amanda
 
---_000_8c49688cb4bb43009b5ba1f6fb8e32cfamazoncom_
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
+So, since this works, it confirms that your babeltrace build has support
+for Python plugins.  Then there's no reason for your original example
+using babeltrace-fun-plugins/my-first-components not to work.
 
-PGh0bWw+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0i
-dGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRvciIgY29udGVu
-dD0iTWljcm9zb2Z0IEV4Y2hhbmdlIFNlcnZlciI+DQo8IS0tIGNvbnZlcnRlZCBmcm9tIHRleHQg
-LS0+PHN0eWxlPjwhLS0gLkVtYWlsUXVvdGUgeyBtYXJnaW4tbGVmdDogMXB0OyBwYWRkaW5nLWxl
-ZnQ6IDRwdDsgYm9yZGVyLWxlZnQ6ICM4MDAwMDAgMnB4IHNvbGlkOyB9IC0tPjwvc3R5bGU+DQo8
-L2hlYWQ+DQo8Ym9keT4NCjxtZXRhIGNvbnRlbnQ9InRleHQvaHRtbDsgY2hhcnNldD1VVEYtOCI+
-DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiIHN0eWxlPSIiPg0KPCEtLQ0KcA0KCXttYXJnaW4tdG9w
-OjA7DQoJbWFyZ2luLWJvdHRvbTowfQ0KLS0+DQo8L3N0eWxlPg0KPGRpdiBkaXI9Imx0ciI+DQo8
-ZGl2IGlkPSJ4X2RpdnRhZ2RlZmF1bHR3cmFwcGVyIiBkaXI9Imx0ciIgc3R5bGU9ImZvbnQtc2l6
-ZToxMnB0OyBjb2xvcjojMDAwMDAwOyBmb250LWZhbWlseTpDYWxpYnJpLEhlbHZldGljYSxzYW5z
-LXNlcmlmIj4NCjxwPkhpaGksIEtpZW5hbiw8L3A+DQo8cD5JIGZpbmFsbHkgZmluZCBhIHdvcmth
-cm91bmQuIEkgY291bGQgc3VjY2VzcyB3aXRoIHRoZSBmb2xsb3dpbmcgY29kZTo8YnI+DQo8dGFi
-bGUgY2xhc3M9InhfY29kZSB4X2pzLXN5bnRheC1oaWdobGlnaHQgeF9ibGFtZURldGFpbCI+DQo8
-dGJvZHk+DQo8dHIgY2xhc3M9InhfbGluZV9ob2xkZXIiIGlkPSJ4X0wyNyI+DQo8dGQgY2xhc3M9
-InhfbGluZV9jb250ZW50Ij48c3BhbiBjbGFzcz0ieF9uIj5maWxlX25hbWU8L3NwYW4+IDxzcGFu
-IGNsYXNzPSJ4X28iPj08L3NwYW4+DQo8c3BhbiBjbGFzcz0ieF9zaCI+JnF1b3Q7PC9zcGFuPjxz
-cGFuIGNsYXNzPSJ4X3MiPmJ0X3BsdWdpbl9sYXRlbmN5X2ZpbHRlci5weTwvc3Bhbj48c3BhbiBj
-bGFzcz0ieF9zaCI+JnF1b3Q7PC9zcGFuPg0KPC90ZD4NCjwvdHI+DQo8dHIgY2xhc3M9InhfbGlu
-ZV9ob2xkZXIiIGlkPSJ4X0wyOCI+DQo8dGQgY2xhc3M9InhfYmxhbWUtY29udGFpbmVyIj48c3Bh
-biBjbGFzcz0ieF9uIj5jdXJyZW50X2RpcmVjdG9yeTwvc3Bhbj48c3BhbiBjbGFzcz0ieF9vIj49
-PC9zcGFuPjxzcGFuIGNsYXNzPSJ4X24iPm9zPC9zcGFuPjxzcGFuIGNsYXNzPSJ4X3AiPi48L3Nw
-YW4+PHNwYW4gY2xhc3M9InhfbmYiPmdldGN3ZDwvc3Bhbj48c3BhbiBjbGFzcz0ieF9wIj4oKTwv
-c3Bhbj48YnI+DQo8L3RkPg0KPC90cj4NCjwvdGJvZHk+DQo8L3RhYmxlPg0KPHRhYmxlIGNsYXNz
-PSJ4X2NvZGUgeF9qcy1zeW50YXgtaGlnaGxpZ2h0IHhfYmxhbWVEZXRhaWwiPg0KPHRib2R5Pg0K
-PHRyIGNsYXNzPSJ4X2xpbmVfaG9sZGVyIiBpZD0ieF9MMjgiPg0KPHRkIGNsYXNzPSJ4X2xpbmVf
-Y29udGVudCI+PHNwYW4gY2xhc3M9InhfbiI+ZmlsZV9wYXRoPC9zcGFuPiA8c3BhbiBjbGFzcz0i
-eF9vIj49PC9zcGFuPg0KPHNwYW4gY2xhc3M9InhfbiI+b3M8L3NwYW4+PHNwYW4gY2xhc3M9Inhf
-cCI+Ljwvc3Bhbj48c3BhbiBjbGFzcz0ieF9uIj5wYXRoPC9zcGFuPjxzcGFuIGNsYXNzPSJ4X3Ai
-Pi48L3NwYW4+PHNwYW4gY2xhc3M9InhfbmYiPmpvaW48L3NwYW4+PHNwYW4gY2xhc3M9InhfcCI+
-KDwvc3Bhbj48c3BhbiBjbGFzcz0ieF9uIj5jdXJyZW50X2RpcmVjdG9yeTwvc3Bhbj48c3BhbiBj
-bGFzcz0ieF9wIj4sPC9zcGFuPg0KPHNwYW4gY2xhc3M9InhfbiI+ZmlsZV9uYW1lPC9zcGFuPjxz
-cGFuIGNsYXNzPSJ4X3AiPik8L3NwYW4+IDwvdGQ+DQo8L3RyPg0KPHRyIGNsYXNzPSJ4X2xpbmVf
-aG9sZGVyIiBpZD0ieF9MMjkiPg0KPHRkIGNsYXNzPSJ4X2JsYW1lLWNvbnRhaW5lciI+PHNwYW4g
-Y2xhc3M9InhfbiI+cHNldDwvc3Bhbj48c3BhbiBjbGFzcz0ieF9vIj49PC9zcGFuPjxzcGFuIGNs
-YXNzPSJ4X24iPmJ0Mjwvc3Bhbj48c3BhbiBjbGFzcz0ieF9wIj4uPC9zcGFuPjxzcGFuIGNsYXNz
-PSJ4X25mIj5maW5kX3BsdWdpbnNfaW5fcGF0aDwvc3Bhbj48c3BhbiBjbGFzcz0ieF9wIj4oPC9z
-cGFuPjxzcGFuIGNsYXNzPSJ4X24iPmZpbGVfcGF0aDwvc3Bhbj48c3BhbiBjbGFzcz0ieF9wIj4p
-PC9zcGFuPjxicj4NCjwvdGQ+DQo8L3RyPg0KPC90Ym9keT4NCjwvdGFibGU+DQo8dGFibGUgY2xh
-c3M9InhfY29kZSB4X2pzLXN5bnRheC1oaWdobGlnaHQgeF9ibGFtZURldGFpbCI+DQo8dGJvZHk+
-DQo8dHIgY2xhc3M9InhfbGluZV9ob2xkZXIiIGlkPSJ4X0wyOSI+DQo8dGQgY2xhc3M9InhfbGlu
-ZV9jb250ZW50Ij48c3BhbiBjbGFzcz0ieF9wIj48L3NwYW4+PHNwYW4gY2xhc3M9InhfayI+Zm9y
-PC9zcGFuPjxzcGFuIGNsYXNzPSJ4X24iPnBsdWdpbjwvc3Bhbj48c3BhbiBjbGFzcz0ieF9vdyI+
-aW48L3NwYW4+PHNwYW4gY2xhc3M9InhfbiI+cHNldDwvc3Bhbj48c3BhbiBjbGFzcz0ieF9wIj46
-PC9zcGFuPjxicj4NCjwvdGQ+DQo8L3RyPg0KPHRyIGNsYXNzPSJ4X2xpbmVfaG9sZGVyIiBpZD0i
-eF9MMzAiPg0KPHRkIGNsYXNzPSJ4X2JsYW1lLWNvbnRhaW5lciI+PHNwYW4gY2xhc3M9InhfayI+
-aWYgPC9zcGFuPjxzcGFuIGNsYXNzPSJ4X24iPnBsdWdpbjwvc3Bhbj48c3BhbiBjbGFzcz0ieF9w
-Ij4uPC9zcGFuPjxzcGFuIGNsYXNzPSJ4X24iPm5hbWU8L3NwYW4+PHNwYW4gY2xhc3M9InhfbyI+
-PT08L3NwYW4+PHNwYW4gY2xhc3M9Inhfc2giPiZxdW90Ozwvc3Bhbj48c3BhbiBjbGFzcz0ieF9z
-Ij5sYXRlbmN5X2ZpbHRlcjwvc3Bhbj48c3BhbiBjbGFzcz0ieF9zaCI+JnF1b3Q7PC9zcGFuPjxz
-cGFuIGNsYXNzPSJ4X293Ij5hbmQ8L3NwYW4+PHNwYW4gY2xhc3M9InhfbmYiPg0KIGhhc2F0dHI8
-L3NwYW4+PHNwYW4gY2xhc3M9InhfcCI+KDwvc3Bhbj48c3BhbiBjbGFzcz0ieF9uIj5wbHVnaW48
-L3NwYW4+PHNwYW4gY2xhc3M9InhfcCI+LDwvc3Bhbj48c3BhbiBjbGFzcz0ieF9zaCI+JnF1b3Q7
-PC9zcGFuPjxzcGFuIGNsYXNzPSJ4X3MiPmZpbHRlcl9jb21wb25lbnRfY2xhc3Nlczwvc3Bhbj48
-c3BhbiBjbGFzcz0ieF9zaCI+JnF1b3Q7PC9zcGFuPjxzcGFuIGNsYXNzPSJ4X3AiPik6PC9zcGFu
-Pjxicj4NCjwvdGQ+DQo8L3RyPg0KPC90Ym9keT4NCjwvdGFibGU+DQo8dGFibGUgY2xhc3M9Inhf
-Y29kZSB4X2pzLXN5bnRheC1oaWdobGlnaHQgeF9ibGFtZURldGFpbCI+DQo8dGJvZHk+DQo8dHIg
-Y2xhc3M9InhfbGluZV9ob2xkZXIiIGlkPSJ4X0wzMCI+DQo8dGQgY2xhc3M9InhfbGluZV9jb250
-ZW50Ij4mbmJzcDsgPHNwYW4gY2xhc3M9InhfcCI+PC9zcGFuPiZuYnNwOyA8c3BhbiBjbGFzcz0i
-eF9uIj5sYXRlbmN5X2ZpbHRlcl9jb21wX2Nsczwvc3Bhbj48c3BhbiBjbGFzcz0ieF9vIj49PC9z
-cGFuPjxzcGFuIGNsYXNzPSJ4X24iPnBsdWdpbjwvc3Bhbj48c3BhbiBjbGFzcz0ieF9wIj4uPC9z
-cGFuPjxzcGFuIGNsYXNzPSJ4X24iPmZpbHRlcl9jb21wb25lbnRfY2xhc3Nlczwvc3Bhbj48c3Bh
-biBjbGFzcz0ieF9wIj5bPC9zcGFuPjxzcGFuIGNsYXNzPSJ4X3NoIj4nPC9zcGFuPjxzcGFuIGNs
-YXNzPSJ4X3MiPkxhdGVuY3lGaWx0ZXI8L3NwYW4+PHNwYW4gY2xhc3M9Inhfc2giPic8L3NwYW4+
-PHNwYW4gY2xhc3M9InhfcCI+XTwvc3Bhbj48YnI+DQo8L3RkPg0KPC90cj4NCjx0ciBjbGFzcz0i
-eF9saW5lX2hvbGRlciIgaWQ9InhfTDMxIj4NCjx0ZCBjbGFzcz0ieF9ibGFtZS1jb250YWluZXIi
-Pjxicj4NCjwvdGQ+DQo8L3RyPg0KPC90Ym9keT4NCjwvdGFibGU+DQo8dGFibGUgY2xhc3M9Inhf
-Y29kZSB4X2pzLXN5bnRheC1oaWdobGlnaHQgeF9ibGFtZURldGFpbCI+DQo8dGJvZHk+DQo8dHIg
-Y2xhc3M9InhfbGluZV9ob2xkZXIiIGlkPSJ4X0wzMSI+DQo8dGQgY2xhc3M9InhfbGluZV9jb250
-ZW50Ij4NCjx0YWJsZSBjbGFzcz0ieF9jb2RlIHhfanMtc3ludGF4LWhpZ2hsaWdodCB4X2JsYW1l
-RGV0YWlsIj4NCjx0Ym9keT4NCjx0ciBjbGFzcz0ieF9saW5lX2hvbGRlciIgaWQ9InhfTDI3Ij4N
-Cjx0ZCBjbGFzcz0ieF9ibGFtZS1jb250YWluZXIiIHJvd3NwYW49IjEiPkJ1dCBsb2FkaW5nIHRo
-ZSB3aG9sZSBkaXJlY3RvcnksIGl0IGp1c3QgZG9lc250IHdvcmsgZnJvbSBjb21tYW5kIGxpbmUu
-PGJyPg0KPC90ZD4NCjwvdHI+DQo8dHIgY2xhc3M9InhfbGluZV9ob2xkZXIiIGlkPSJ4X0wyNyI+
-DQo8dGQgY2xhc3M9InhfYmxhbWUtY29udGFpbmVyIiByb3dzcGFuPSIxIj5BbWFuZGE8YnI+DQo8
-L3RkPg0KPC90cj4NCjwvdGJvZHk+DQo8L3RhYmxlPg0KPGJyPg0KPC90ZD4NCjwvdHI+DQo8dHIg
-Y2xhc3M9InhfbGluZV9ob2xkZXIiIGlkPSJ4X0wzMiI+DQo8dGQgY2xhc3M9InhfYmxhbWUtY29u
-dGFpbmVyIj48YnI+DQo8L3RkPg0KPC90cj4NCjwvdGJvZHk+DQo8L3RhYmxlPg0KPHRhYmxlIGNs
-YXNzPSJ4X2NvZGUgeF9qcy1zeW50YXgtaGlnaGxpZ2h0IHhfYmxhbWVEZXRhaWwiPg0KPHRib2R5
-Pg0KPHRyIGNsYXNzPSJ4X2xpbmVfaG9sZGVyIiBpZD0ieF9MMjYiPg0KPHRkIGNsYXNzPSJ4X2xp
-bmVfY29udGVudCI+PGJyPg0KPC90ZD4NCjwvdHI+DQo8dHIgY2xhc3M9InhfbGluZV9ob2xkZXIi
-IGlkPSJ4X0wyNyI+DQo8dGQgY2xhc3M9InhfYmxhbWUtY29udGFpbmVyIj48YnI+DQo8L3RkPg0K
-PC90cj4NCjx0ciBjbGFzcz0ieF9saW5lX2hvbGRlciIgaWQ9InhfTDI3Ij4NCjx0ZCBjbGFzcz0i
-eF9ibGFtZS1jb250YWluZXIiIHJvd3NwYW49IjEiPjxicj4NCjwvdGQ+DQo8L3RyPg0KPHRyIGNs
-YXNzPSJ4X2xpbmVfaG9sZGVyIiBpZD0ieF9MMjciPg0KPHRkIGNsYXNzPSJ4X2JsYW1lLWNvbnRh
-aW5lciIgcm93c3Bhbj0iMSI+PGJyPg0KPC90ZD4NCjwvdHI+DQo8L3Rib2R5Pg0KPC90YWJsZT4N
-Cjxicj4NCjwvcD4NCjwvZGl2Pg0KPGhyIHRhYmluZGV4PSItMSIgc3R5bGU9ImRpc3BsYXk6aW5s
-aW5lLWJsb2NrOyB3aWR0aDo5OCUiPg0KPGRpdiBpZD0ieF9kaXZScGx5RndkTXNnIiBkaXI9Imx0
-ciI+PGZvbnQgZmFjZT0iQ2FsaWJyaSwgc2Fucy1zZXJpZiIgY29sb3I9IiMwMDAwMDAiIHN0eWxl
-PSJmb250LXNpemU6MTFwdCI+PGI+RnJvbTo8L2I+IEtpZW5hbiBTdGV3YXJ0ICZsdDtrc3Rld2Fy
-dEBlZmZpY2lvcy5jb20mZ3Q7PGJyPg0KPGI+U2VudDo8L2I+IFRodXJzZGF5LCBBcHJpbCAyNSwg
-MjAyNCAxMTo0MzowNSBQTTxicj4NCjxiPlRvOjwvYj4gV3UsIFlhbm5hbjsgbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZzxicj4NCjxiPlN1YmplY3Q6PC9iPiBSRTogW0VYVEVSTkFMXSBbbHR0bmct
-ZGV2XSBbYmFiZWx0cmFjZTJdYWJvdXQgcHl0aG9uIHNlbGYtZGVmaW5lZCBwbHVnaW4gbG9hZGlu
-ZzwvZm9udD4NCjxkaXY+Jm5ic3A7PC9kaXY+DQo8L2Rpdj4NCjwvZGl2Pg0KPGZvbnQgc2l6ZT0i
-MiI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMHB0OyI+DQo8ZGl2IGNsYXNzPSJQbGFpblRleHQi
-PkNBVVRJT046IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgdGhlIG9yZ2Fu
-aXphdGlvbi4gRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlv
-dSBjYW4gY29uZmlybSB0aGUgc2VuZGVyIGFuZCBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUuPGJy
-Pg0KPGJyPg0KPGJyPg0KPGJyPg0KTXkgYXBvbG9naWVzLDxicj4NCjxicj4NCnRoZXJlIGlzIGEg
-dHlwbyBpbiBteSBwcmV2aW91cyBlLW1haWwsIHRoZSBsaWJyYXJ5IGRpcmVjdG9yeSBzaG91bGQg
-YmU6PGJyPg0KPGJyPg0KYCZsdDtsaWJkaXImZ3Q7L2JhYmVsdHJhY2UyL3BsdWdpbi1wcm92aWRl
-cnMvJzxicj4NCjxicj4NCnRoYW5rcyw8YnI+DQpraWVuYW48YnI+DQo8YnI+DQpPbiA0LzI1LzI0
-IDExOjQxIEFNLCBLaWVuYW4gU3Rld2FydCB2aWEgbHR0bmctZGV2IHdyb3RlOjxicj4NCiZndDsg
-SGkgQW1hbmRhLDxicj4NCiZndDs8YnI+DQomZ3Q7IGNvdWxkIHlvdSBkb3VibGUtY2hlY2sgdG8g
-ZW5zdXJlIHRoYXQgYmFiZWx0cmFjZTIgd2FzIGJ1aWx0IHdpdGg8YnI+DQomZ3Q7IGAtLWVuYWJs
-ZS1weXRob24tcGx1Z2luc2AsIGFuZCB0aGF0IGBpbXBvcnQgYnQyYCB3b3Jrcz88YnI+DQomZ3Q7
-PGJyPg0KJmd0OyBUaGVyZSBzaG91bGQgYmUgYSBiYWJlbHRyYWNlMi1weXRob24tcGx1Z2luLXBy
-b3ZpZGVyLnNvIGluPGJyPg0KJmd0OyBgJmx0O2xpYmRpciZndDsvYmFiZWx0cmFjZTIvcGx1Z2lu
-LXByb3ZpZGVzYDxicj4NCiZndDs8YnI+DQomZ3Q7IHRoYW5rcyw8YnI+DQomZ3Q7IGtpZW5hbjxi
-cj4NCiZndDs8YnI+DQomZ3Q7PGJyPg0KJmd0OyBPbiA0LzI0LzI0IDExOjI4IFBNLCBXdSwgWWFu
-bmFuIHZpYSBsdHRuZy1kZXYgd3JvdGU6PGJyPg0KJmd0OyZndDsgSGksIFRoZXJlLDxicj4NCiZn
-dDsmZ3Q7PGJyPg0KJmd0OyZndDsgSSBhbSB0cnlpbmcgdG8gY29uc3RydWN0IGEgY3VzdG9taXpl
-ZCBmaWx0ZXIgYW5kIHNpbmsgYmFzZWQgb248YnI+DQomZ3Q7Jmd0OyBiYWJlbHRyYWNlMiBweXRo
-b24gYmluZGluZy4gSG93ZXZlciwgbmV0aGVyIG1pbmUgcGx1Z2luIG5vciB0aGU8YnI+DQomZ3Q7
-Jmd0OyBwbHVnaW5zIHNhbXBsZSBJIGNvdWxkIGZpbmQgb24gdGhlIGludGVybmV0IGFsbCBkb250
-IHdvcmsuPGJyPg0KJmd0OyZndDs8YnI+DQomZ3Q7Jmd0OyBGb3IgZXhhbXBsZSw8YnI+DQomZ3Q7
-Jmd0OyA8YSBocmVmPSJodHRwczovL2dpdGh1Yi5jb20vc2ltYXJrL2JhYmVsdHJhY2UtZnVuLXBs
-dWdpbnMvdHJlZS9tYXN0ZXIvbXktZmlyc3QtY29tcG9uZW50cyI+DQpodHRwczovL2dpdGh1Yi5j
-b20vc2ltYXJrL2JhYmVsdHJhY2UtZnVuLXBsdWdpbnMvdHJlZS9tYXN0ZXIvbXktZmlyc3QtY29t
-cG9uZW50czwvYT4gJmx0OzxhIGhyZWY9Imh0dHBzOi8vZ2l0aHViLmNvbS9zaW1hcmsvYmFiZWx0
-cmFjZS1mdW4tcGx1Z2lucy90cmVlL21hc3Rlci9teS1maXJzdC1jb21wb25lbnRzIj5odHRwczov
-L2dpdGh1Yi5jb20vc2ltYXJrL2JhYmVsdHJhY2UtZnVuLXBsdWdpbnMvdHJlZS9tYXN0ZXIvbXkt
-Zmlyc3QtY29tcG9uZW50czwvYT4mZ3Q7PGJyPg0KJmd0OyZndDs8YnI+DQomZ3Q7Jmd0OyBJIGp1
-c3QgZG93bmxvYWRlZCB0aGUgcHkgZmlsZSBhbmQgcnVuIHRoZSBleGFjdCBjb21tYW5kLCBpdCBm
-YWlsZWQuPGJyPg0KJmd0OyZndDsgVGhlIGxvZyBpcyBhcyBmb2xsb3dpbmc6PGJyPg0KJmd0OyZn
-dDs8YnI+DQomZ3Q7Jmd0Ozxicj4NCiZndDsmZ3Q7IGJhYmVsdHJhY2UyIC0tcGx1Z2luLXBhdGgg
-LiAtYyBzb3VyY2UuZGVtby5NeUZpcnN0U291cmNlIC1jPGJyPg0KJmd0OyZndDsgc2luay5kZW1v
-Lk15Rmlyc3RTaW5rPGJyPg0KJmd0OyZndDsgMDQtMjQgMTY6NTI6MDQuMzQ5IDkxOTgwNSA5MTk4
-MDUgRSBDTEk8YnI+DQomZ3Q7Jmd0OyBhZGRfZGVzY3JpcHRvcl90b19jb21wb25lbnRfZGVzY3Jp
-cHRvcl9zZXRAYmFiZWx0cmFjZTIuYzoxNzIwIENhbm5vdDxicj4NCiZndDsmZ3Q7IGZpbmQgY29t
-cG9uZW50IGNsYXNzOiBwbHVnaW4tbmFtZT0mcXVvdDtkZW1vJnF1b3Q7LDxicj4NCiZndDsmZ3Q7
-IGNvbXAtY2xzLW5hbWU9JnF1b3Q7TXlGaXJzdFNvdXJjZSZxdW90OywgY29tcC1jbHMtdHlwZT0x
-PGJyPg0KJmd0OyZndDsgMDQtMjQgMTY6NTI6MDQuMzQ5IDkxOTgwNSA5MTk4MDUgRSBDTEk8YnI+
-DQomZ3Q7Jmd0OyBjbWRfcnVuX2N0eF9pbml0QGJhYmVsdHJhY2UyLmM6MTg4MiBDYW5ub3QgZmlu
-ZCBhbiBvcGVyYXRpdmUgbWVzc2FnZTxicj4NCiZndDsmZ3Q7IGludGVyY2hhbmdlIHByb3RvY29s
-IHZlcnNpb24gdG8gdXNlIHRvIGNyZWF0ZSB0aGUgYHJ1bmAgY29tbWFuZCdzPGJyPg0KJmd0OyZn
-dDsgZ3JhcGg6IHN0YXR1cz1FUlJPUjxicj4NCiZndDsmZ3Q7IDA0LTI0IDE2OjUyOjA0LjM0OSA5
-MTk4MDUgOTE5ODA1IEUgQ0xJIGNtZF9ydW5AYmFiZWx0cmFjZTIuYzoyNDY1PGJyPg0KJmd0OyZn
-dDsgQ2Fubm90IGluaXRpYWxpemUgdGhlIGNvbW1hbmQncyBjb250ZXh0Ljxicj4NCiZndDsmZ3Q7
-PGJyPg0KJmd0OyZndDsgRVJST1I6Jm5ic3A7Jm5ic3A7Jm5ic3A7IFtCYWJlbHRyYWNlIENMSV0g
-KGJhYmVsdHJhY2UyLmM6MjQ2NSk8YnI+DQomZ3Q7Jmd0OyZuYnNwOyZuYnNwOyZuYnNwOyBDYW5u
-b3QgaW5pdGlhbGl6ZSB0aGUgY29tbWFuZCdzIGNvbnRleHQuPGJyPg0KJmd0OyZndDsgQ0FVU0VE
-IEJZIFtCYWJlbHRyYWNlIENMSV0gKGJhYmVsdHJhY2UyLmM6MTg4Mik8YnI+DQomZ3Q7Jmd0OyZu
-YnNwOyZuYnNwOyZuYnNwOyBDYW5ub3QgZmluZCBhbiBvcGVyYXRpdmUgbWVzc2FnZSBpbnRlcmNo
-YW5nZSBwcm90b2NvbCB2ZXJzaW9uIHRvPGJyPg0KJmd0OyZndDsgdXNlIHRvIGNyZWF0ZSB0aGUg
-YHJ1bmAgY29tbWFuZCdzIGdyYXBoOiBzdGF0dXM9RVJST1I8YnI+DQomZ3Q7Jmd0OyBDQVVTRUQg
-QlkgW0JhYmVsdHJhY2UgQ0xJXSAoYmFiZWx0cmFjZTIuYzoxNzIwKTxicj4NCiZndDsmZ3Q7Jm5i
-c3A7Jm5ic3A7Jm5ic3A7IENhbm5vdCBmaW5kIGNvbXBvbmVudCBjbGFzczogcGx1Z2luLW5hbWU9
-JnF1b3Q7ZGVtbyZxdW90Oyw8YnI+DQomZ3Q7Jmd0OyBjb21wLWNscy1uYW1lPSZxdW90O015Rmly
-c3RTb3VyY2UmcXVvdDssIGNvbXAtY2xzLXR5cGU9MTxicj4NCiZndDsmZ3Q7PGJyPg0KJmd0OyZn
-dDsgYmFiZWx0cmFjZTIgLS12ZXJzaW9uPGJyPg0KJmd0OyZndDsgQmFiZWx0cmFjZSAyLjAuNyAm
-cXVvdDtBbXF1aSZxdW90OyBbdjIuMC42LTEtZzgyNWEwZWQ2ZF08YnI+DQomZ3Q7Jmd0Ozxicj4N
-CiZndDsmZ3Q7IEFtcXVpICgvyZJta3dpy5AvKSBpcyBhIHRvd24gaW4gZWFzdGVybiBRdcOpYmVj
-LCBDYW5hZGEsIGF0IHRoZSBiYXNlIG9mPGJyPg0KJmd0OyZndDsgdGhlIEdhc3DDqSBwZW5pbnN1
-bGEgaW4gQmFzLVNhaW50LUxhdXJlbnQuIExvY2F0ZWQgYXQgdGhlPGJyPg0KJmd0OyZndDsgY29u
-Zmx1ZW5jZSBvZiB0aGUgSHVtcXVpIGFuZCBNYXRhcMOpZGlhIFJpdmVycywgaXRzIHByb3hpbWl0
-eSB0bzxicj4NCiZndDsmZ3Q7IHdvb2RsYW5kcyBtYWtlcyBpdCBhIGdyZWF0IGRlc3RpbmF0aW9u
-IGZvciBvdXRkb29yIGFjdGl2aXRpZXMgc3VjaCBhczxicj4NCiZndDsmZ3Q7IGNhbXBpbmcsIGhp
-a2luZywgYW5kIG1vdW50YWluIGJpa2luZy48YnI+DQomZ3Q7Jmd0OyB5YW5uYW53dUB1ZTkxZTk2
-ZjI5NTFiNWM6fi90cmVlcy9sdHRuZ190ZXN0X3J1biQ8YnI+DQomZ3Q7Jmd0Ozxicj4NCiZndDsm
-Z3Q7IElzIHRoZSBjbGkgY2hhbmdlZCBvciBzb21ldGhpbmc/IEhvdyBjYW4gSSBtYWtlIGl0IHJp
-Z2h0Pzxicj4NCiZndDsmZ3Q7PGJyPg0KJmd0OyZndDsgQmVzaWRlcywgaXMgaXQgcG9zc2libGUg
-d2UgY3JlYXRlIGEgcGlwZWxpbmUgaW4gcHl0aG9uIGFuZCBtYWtlIHVzZTxicj4NCiZndDsmZ3Q7
-IHRoZSB0aGUgcHl0aG9uIGRyYWZ0ZWQgcGx1Z2luPyBDYW4geW91IGFkdmlzZSBtZSBob3c/PGJy
-Pg0KJmd0OyZndDs8YnI+DQomZ3Q7Jmd0OyBBbWFuZGE8YnI+DQomZ3Q7Jmd0Ozxicj4NCiZndDsm
-Z3Q7PGJyPg0KJmd0OyZndDs8YnI+DQomZ3Q7Jmd0OyBfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXzxicj4NCiZndDsmZ3Q7IGx0dG5nLWRldiBtYWlsaW5nIGxp
-c3Q8YnI+DQomZ3Q7Jmd0OyBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPGJyPg0KJmd0OyZndDsg
-PGEgaHJlZj0iaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldiI+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldjwvYT48YnI+DQomZ3Q7IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fPGJyPg0KJmd0OyBsdHRuZy1kZXYgbWFpbGluZyBsaXN0PGJyPg0K
-Jmd0OyBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPGJyPg0KJmd0OyA8YSBocmVmPSJodHRwczov
-L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Ij5odHRw
-czovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2PC9h
-Pjxicj4NCjwvZGl2Pg0KPC9zcGFuPjwvZm9udD4NCjwvYm9keT4NCjwvaHRtbD4NCg==
+When running the command:
 
---_000_8c49688cb4bb43009b5ba1f6fb8e32cfamazoncom_--
+  babeltrace2 --plugin-path . -c source.demo.MyFirstSource -c sink.demo.MyFirstSink
 
---===============1173077755250614418==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+is your working directory babeltrace-fun-plugins/my-first-component?
+`--plugin-path .` refers to the current working directory, so it must be
+the directory that directly contains the `bt_plugin_*.py` file.
 
+I made an example with docker to show it working, hopefully this can
+help you figure out what's wrong on your side.  Put this inside a
+`Dockerfile` file:
+
+```
+FROM debian:12
+
+RUN apt-get -y update
+RUN apt-get -y full-upgrade
+RUN apt-get -y install babeltrace2 git
+RUN git clone https://github.com/simark/babeltrace-fun-plugins.git
+WORKDIR /babeltrace-fun-plugins/my-first-components
+ENTRYPOINT babeltrace2 --plugin-path . -c source.demo.MyFirstSource -c sink.demo.MyFirstSink
+```
+
+Then, do either (whatever works for you):
+
+  $ docker buildx build -t bt2-example .
+  $ docker build -t bt2-example .
+
+And finally:
+
+  $ docker run -it bt2-example
+  Stream beginning
+  event my-event, timestamp 123
+  Stream end
+
+This last command runs babeltrace2, loading the Python plugin from
+babeltrace-fun-plugins/my-first-components.
+
+Finally, to investigate more in depth, you can increase the log level of
+babeltrace2, like so:
+
+  $ babeltrace2 --log-level DEBUG --plugin-path . -c source.demo.MyFirstSource -c sink.demo.MyFirstSink
+
+This will output all sorts of things about babeltrace looking for
+plugins and trying to load them.
+
+Simon
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1173077755250614418==--
