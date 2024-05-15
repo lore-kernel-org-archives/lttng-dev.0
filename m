@@ -4,41 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82703C25B10
-	for <lttng-dev@archiver.kernel.org>; Mon, 13 May 2024 19:34:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BB1BC25B75
+	for <lttng-dev@archiver.kernel.org>; Wed, 15 May 2024 22:24:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1715628854;
-	bh=b4LebmtHm2XSisooDXhx7cDwGea0pqxo0/QlPeZ5Gu0=;
+	s=default; t=1715811880;
+	bh=SQ4yt/iXuK4SYBnxzi6sDHA/Rf37NTmpJB8MrK3EmMU=;
 	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pyhmA7H2j5TeToL+0DNpOmNC3rxlAB3pu/ZFm/wIdh1V86R8e/8tz8H0iJ1uyLD9F
-	 1p1UJbDJ16yjQsqA2jOy1oiZIl+3O3N9cG1qjRVu9IkW/z7/LgmGfy3RVAQcy6N2oZ
-	 ff801exC17XNNVjeGDDi/6x2ggqEjiLkDHUAYQ6FWuSEvS9mjC9uHh2xCpbUsrcDWP
-	 QakKBtavDqfckXLAc13cK5vaYE/9gVu8s3Ay1pF0XFQJkicvNW8Cof+gs+P+KXlmnC
-	 DGU+ZH7ZpJ28Y7d/QnyqF23BURnFLP5vWOle9VCF+dKsBPDsRcttSptKZWrxvWk1rf
-	 zyn43jaMTayGg==
+	b=CfaF46P5TVfyrG8vZqwo+Yei7Z4VPJEXNVdQePmt7Mt7aS4zczIG2AqEb6EvV4Dye
+	 LEmIgqG2z7/7Kl/Ndh/wvzV4NjYDaol0VrAIDHVpxuOCtGPNda8DTYyKeoFaujY5nX
+	 6BxTVhUj7IsR7kqHPBH/JA5wOSge7QR4kJNx1sDvhsvg/BHUFPEpgwzHl7MbDTXA5L
+	 jIY0eHHkIiWN2i0ieR4SQiH4ZPFMm5lrsWGw1lxo/UkV/NYoGkxdMTugSEVdGqX0il
+	 zwrLeRYsFrgE2m8aIy1CNVNMSWadgNoWyOW45jtJA3cmRQMnaCHfKTj3SwYltGgBY2
+	 53RiGoeyrY+Xw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4VdV6Y2mzSz2nKN;
-	Mon, 13 May 2024 15:34:13 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com
- [IPv6:2607:5300:203:b2ee::31e5])
- by lists.lttng.org (Postfix) with ESMTPS id 4VdV6W3292z2nCl
- for <lttng-dev@lists.lttng.org>; Mon, 13 May 2024 15:34:11 -0400 (EDT)
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4VdV6V5dydz109Z;
- Mon, 13 May 2024 15:34:10 -0400 (EDT)
-Message-ID: <5c0e0cc3-b849-400c-90eb-2b7d115d2f66@efficios.com>
-Date: Mon, 13 May 2024 15:34:36 -0400
+	by lists.lttng.org (Postfix) with ESMTP id 4VfnpJ1xl9z2nkp;
+	Wed, 15 May 2024 18:24:40 -0400 (EDT)
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com
+ [IPv6:2607:f8b0:4864:20::112a])
+ by lists.lttng.org (Postfix) with ESMTPS id 4VfnpG4yycz2nkX
+ for <lttng-dev@lists.lttng.org>; Wed, 15 May 2024 18:24:38 -0400 (EDT)
+Received: by mail-yw1-x112a.google.com with SMTP id
+ 00721157ae682-62050e00cfdso66610807b3.3
+ for <lttng-dev@lists.lttng.org>; Wed, 15 May 2024 15:24:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715811878; x=1716416678;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=1Zm1iVSMlBaQcaAYPUKhpbjWkyoRoA2hrYs/ivjcxZs=;
+ b=VBh/UWonqIt+YNNZGhDV15uJlHKxZeRu2u+yLWStPGKweW49exzwiTkscUiA4OItVP
+ 5BMa37PBzK9pU7iqnpk3vjLwKKky5XEnc9uzO2lBbJzRMDFF0n2V9YywV9ayu4P8CzXq
+ drk+UupMMhPyzTMEnBzRtMlGJ8t93QrrdQtdvdf1hAhofgmJXiv/WuoT+NGCilEaPCC1
+ 9O5z5yXA66GSZF5Oj0GZc2u7H7bhD/iQ0tcG0yIwqz/WE8I4JL4YPfvGXnyhbpAYFpsd
+ imq7TVAioLQcAy0x34iPYjgK8iZnmHLfjBxN6CCdHYQqAVxgxAOEAOwV0mUDX63tsmmC
+ OU7w==
+X-Gm-Message-State: AOJu0YwWhLpsIerh6AHvExDwlfBESliGjJ3BHgGJO9h/wZACSULejBR5
+ +CpK5gq1sC8ffsR8ZPjZHBRMComtaKTyimWehE8L0smxDoNDqwm7H3wzU75kBLqg+6896nvJuv7
+ AS7VDpsg0IpADA52EZ9kPF+OD1PQiWzr2kD40i/5hAou9Np9AGq/a4Q==
+X-Google-Smtp-Source: AGHT+IHHp1iW3ZBDk4i9I3oS49XX5HtlSwlf6C8vB+KHolpowMRb6YzM3T4aQtrDa1mpHxUU4lQGaoUrVLd8SpCVY/A=
+X-Received: by 2002:a05:690c:6f8d:b0:61a:da7e:1f66 with SMTP id
+ 00721157ae682-622aff75ff2mr195741427b3.2.1715811877454; Wed, 15 May 2024
+ 15:24:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: lttng-dev <lttng-dev@lists.lttng.org>,
- Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
- linux-trace-users <linux-trace-users@vger.kernel.org>,
- linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [lttng-dev] [RELEASE] LTTng-modules 2.13.13 and 2.12.17 (Linux
- kernel tracer)
+Date: Wed, 15 May 2024 15:24:26 -0700
+Message-ID: <CAA1MA5d-ah6bqoN8=_5PwTe-6h_2B0GsHzt=cVuwJANyiMDhGg@mail.gmail.com>
+To: lttng-dev@lists.lttng.org
+Subject: [lttng-dev] Capturing snapshot on kernel panic
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -50,100 +61,127 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Damien Berget via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Damien Berget <damien.berget@flyzipline.com>
+Content-Type: multipart/mixed; boundary="===============1453802629387778688=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi,
+--===============1453802629387778688==
+Content-Type: multipart/alternative; boundary="000000000000751f3f0618859516"
 
-This is a stable release announcement for the LTTng kernel tracer,
-an out-of-tree kernel tracer for the Linux kernel.
+--000000000000751f3f0618859516
+Content-Type: text/plain; charset="UTF-8"
 
-The LTTng project provides low-overhead, correlated userspace and
-kernel tracing on Linux. Its use of the Common Trace Format and a
-flexible control interface allows it to fulfill various workloads.
+Good day,
+we have been using LTTng successfully to capture snapshots on user defined
+tracepoints and it did provide invaluable to debug our issues. Thanks to
+all the contributors of this project!
 
-* New in these releases:
+We'd like to know if it would be possible to trigger on a kernel panic? I
+might be dubiously possible as you would still need to have the file-system
+working to write the results but I should ask.
 
-- LTTng-modules 2.13.13:
+Looking at available kernel syscall, the "reboot" one seems like a good
+candidate, however I was not able to capture a snapshot on it. I have
+tested the setup below with "--name=chdir" syscall and it works, "cd" to a
+directory will create a trace. But no dice with reboot.
 
-   - Introduce support for Linux v6.9.
+Would you have any suggestions?
+Thanks for your help,
+Cheers
+Damien
 
-   - Removed unused duplicated code, add missing static to
-     function definitions, and add missing includes for function
-     declarations which were observed when building against recent
-     kernels with newer toolchains.
-     We plan to adapt our CI to add jobs that will report warnings
-     as errors when building lttng-modules against recent kernels
-     with a recent tool chain so we can catch and fix those warnings
-     earlier in the future.
+============================
 
-- In both LTTng-modules 2.12.17 and 2.13.13:
+# Prep output dir
+mkdir /application/trace/
+rm -rf /application/trace/*
 
-   - Fix incorrect get_pfnblock_flags_mask prototype which did not match
-     upstream after upstream commit 535b81e209219 (v5.9). Fix the prototype
-     mismatch detection code as well. This affects the event
-     mm_page_alloc_extfrag which uses get_pageblock_migratetype(). Note that
-     because the kernel macro get_pageblock_migratetype was also updated
-     to pass 3 parameters to get_pfnblock_flags_mask as its kernel prototype
-     was updated to expect three parameters, it does not matter that the
-     lttng-modules wrapper expects 4 parameters and provides those 4 parameters
-     to the kernel function. This issue should therefore not affect the
-     runtime behavior.
+# Create session
+sudo lttng destroy snapshot-trace-session
+sudo lttng create snapshot-trace-session --snapshot
+--output="/application/trace/"
+sudo lttng enable-channel --kernel --num-subbuf=8 channelk
+sudo lttng enable-channel --userspace --num-subbuf=8 channelu
 
-   - Instrumentation updates to support EL 8.4+.
+# Configure session
+sudo lttng enable-event --kernel --syscall --all --channel channelk
+sudo lttng enable-event --kernel --tracepoint "sched*" --channel channelk
+sudo lttng enable-event --userspace --all --channel channelu
+sudo lttng add-context -u -t vtid -t procname
+sudo lttng remove-trigger trig_reboot
+sudo lttng add-trigger --name=trig_reboot \
+        --condition=event-rule-matches --type=kernel:syscall:entry \
+        --name=reboot\
+        --action=snapshot-session snapshot-trace-session \
+        --rate-policy=once-after:1
 
-   - Instrumentation updates for RHEL kernels.
+# start & list info
+sudo lttng start
+sudo lttng list snapshot-trace-session
+sudo lttng list-triggers
 
-   - Instrumentation updates to the timer subsystem to adapt to
-     changes backported in the 4.19 stable kernels.
+#======== test it...
+sudo reboot
 
+#======= reconnect and Nothing :(
+$ ls -alu /application/trace/
+drwxr-xr-x    2 u  u       4096 May 15  2024 .
+drwxr-xr-x   10 u  u       4096 May 15  2024 ..
 
-* Detailed change logs:
+--000000000000751f3f0618859516
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-2024-05-13 (National Leprechaun Day) LTTng modules 2.13.13
-         * splice wrapper: Fix missing declaration
-         * page alloc wrapper: Fix get_pfnblock_flags_mask prototype
-         * lttng probe: include events-internal.h
-         * syscalls: Remove unused duplicated code
-         * statedump: Add missing events-internal.h include
-         * lttng-events: Add missing static
-         * event notifier: Add missing static
-         * context callstack: Add missing static
-         * lttng-clock: Add missing lttng/events-internal.h include
-         * lttng-calibrate: Add missing static and include
-         * lttng-bytecode: Remove dead code
-         * lttng-abi: Add missing static to function definitions
-         * ring buffer: Add missing static to function definitions
-         * blkdev wrapper: Fix constness warning
-         * Fix: timer_expire_entry changed in 4.19.312
-         * Fix: dev_base_lock removed in linux 6.9-rc1
-         * Fix: mm_compaction_migratepages changed in linux 6.9-rc1
-         * Fix: ASoC add component to set_bias_level events in linux 6.9-rc1
-         * Fix: ASoC snd_doc_dapm on linux 6.9-rc1
-         * Fix: build kvm probe on EL 8.4+
-         * Fix: support ext4_journal_start on EL 8.4+
-         * Fix: correct RHEL range for kmem_cache_free define
+<div dir=3D"ltr">Good day,<br>we have been using LTTng successfully=C2=A0to=
+ capture snapshots on user defined tracepoints and it did provide invaluabl=
+e to debug our issues. Thanks to all the contributors of this project!<br><=
+br>We&#39;d like to know if it would be possible to trigger on a kernel pan=
+ic? I might be dubiously possible as you would still need to have the file-=
+system working to write the results but I should ask.<br><br>Looking at ava=
+ilable kernel syscall, the &quot;reboot&quot; one seems like a good candida=
+te, however I was not able to capture a snapshot on it. I have tested the s=
+etup below with &quot;--name=3Dchdir&quot; syscall and it works,=C2=A0&quot=
+;cd&quot; to a directory will=C2=A0create a trace. But no dice with reboot.=
+<br><br>Would you have any suggestions?<br>Thanks for your help,<br>Cheers<=
+div>Damien<br><br>=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D<br><br># Prep output dir<br>mkdir /application/=
+trace/<br>rm -rf /application/trace/*<br><br># Create session<br>sudo lttng=
+ destroy snapshot-trace-session<br>sudo lttng create snapshot-trace-session=
+ --snapshot --output=3D&quot;/application/trace/&quot;<br>sudo lttng enable=
+-channel --kernel --num-subbuf=3D8 channelk<br>sudo lttng enable-channel --=
+userspace --num-subbuf=3D8 channelu</div><div>
+<br># Configure session<br>sudo lttng enable-event --kernel --syscall --all=
+ --channel channelk<br>sudo lttng enable-event --kernel --tracepoint &quot;=
+sched*&quot; --channel channelk<br>sudo lttng enable-event --userspace --al=
+l --channel channelu<br>sudo lttng add-context -u -t vtid -t procname<br>su=
+do lttng remove-trigger trig_reboot<br>sudo lttng add-trigger --name=3Dtrig=
+_reboot \<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 --condition=3Devent-rule-matches -=
+-type=3Dkernel:syscall:entry \<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 --name=3Drebo=
+ot\<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 --action=3Dsnapshot-session snapshot-tra=
+ce-session \<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 --rate-policy=3Donce-after:1<br=
+><br># start &amp; list info<br>sudo lttng start<br>sudo lttng list snapsho=
+t-trace-session<br>sudo lttng list-triggers</div><div><br>#=3D=3D=3D=3D=3D=
+=3D=3D=3D test it...<br>sudo reboot =C2=A0 =C2=A0<br><br></div><div>#=3D=3D=
+=3D=3D=3D=3D=3D reconnect and=C2=A0Nothing :(<br>$ ls -alu /application/tra=
+ce/<br>drwxr-xr-x =C2=A0 =C2=A02 u =C2=A0u =C2=A0 =C2=A0 =C2=A0 4096 May 15=
+ =C2=A02024 .<br>drwxr-xr-x =C2=A0 10 u =C2=A0u =C2=A0 =C2=A0 =C2=A0 4096 M=
+ay 15 =C2=A02024 ..<div dir=3D"ltr" class=3D"gmail_signature" data-smartmai=
+l=3D"gmail_signature"><div dir=3D"ltr"><div style=3D"color:rgb(34,34,34)"><=
+br></div></div></div></div></div>
 
-2024-05-13 (National Leprechaun Day) 2.12.17
-         * page alloc wrapper: Fix get_pfnblock_flags_mask prototype
-         * Fix: timer_expire_entry changed in 4.19.312
-         * Fix: build kvm probe on EL 8.4+
-         * Fix: support ext4_journal_start on EL 8.4+
-         * Fix: correct RHEL range for kmem_cache_free define
+--000000000000751f3f0618859516--
 
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
+--===============1453802629387778688==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1453802629387778688==--
