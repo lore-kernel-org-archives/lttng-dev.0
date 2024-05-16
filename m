@@ -4,144 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26F37C25B77
-	for <lttng-dev@archiver.kernel.org>; Thu, 16 May 2024 15:12:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28826C25B74
+	for <lttng-dev@archiver.kernel.org>; Thu, 16 May 2024 18:23:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1715872361;
-	bh=ejOgdCd4sWnEnL5b3OU4eBE2HJ5sF/HDHoLiBxCojpI=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=KI4+LUQDmS1Lsge60qwdVMVbwGK2sBzs9xdjo98CBZyQamGUqZygkgnla0RVX85Sz
-	 cUnCuS4DgnP/E5TLR5HCitbSgGIeOjSePinDl+4OzRp/C03RzUjWZ9EGmYiAfMgKT0
-	 qMuzqeEC9VONz9L17Y3CjZc2QzhJnqi+wbcRVqx3CdRjRrwvnOV8uDkld93iXPPm5z
-	 R+lExZG0XUnerZ2/ZhSPdGX/uYENnn9sw/uQW4x/LfsPp2lwf/Gh6Ip1b628nYlzNX
-	 2fqfZA+siC4NrHYWCf8CV+byTd93z0aEF9cXvTOzD/gY5VcgswrkELuTM37shM6JdY
-	 cROhWR4ZvZjRA==
+	s=default; t=1715883786;
+	bh=jYhxZcRjdKNnc/StNQCwmcfHcGsmC8WhXEfzPp3KR+I=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=0/SfcJZliM5MN2ytVOB+PULkLF044uCStSN16lMXm1s44NfdtpOqQl2/tRttfLqKG
+	 UDwzKfKg6y3DqCWyesC14ZBel/rC7VA7hl0bWjPrFzY8Z3CJmQj5atAFNoVv88mtdh
+	 Z9NDRIdC9kGufnXu2Y6nRHjlBagFIImn+dl01QdZsYdEKeScG5e03dCUvjCzIfwo1O
+	 s9VxVd2wQc0m0U7BRh3Dj/GaQdPLVTMKr3QaXPMe23dGGWOpEwAma/owY8n4rBYOq1
+	 XAOVLfJ+gOCZyR1N9oFQVBQ4vqJbYT9pVc0SuWRohVzKLSEpzoTpQ4QpocbLEyNsaZ
+	 0Il1DmJ41N+bw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4VgD9N2dslz2ntg;
-	Thu, 16 May 2024 11:12:40 -0400 (EDT)
-Received: from YT6PR01CU002.outbound.protection.outlook.com
- (mail-canadacentralazon11022019.outbound.protection.outlook.com
- [52.101.189.19])
- by lists.lttng.org (Postfix) with ESMTPS id 4VgD9L5QPtz2nww
- for <lttng-dev@lists.lttng.org>; Thu, 16 May 2024 11:12:36 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Syhi7Mz1VTi3W7j4peo6gHCul6jRiIm5AH1pyOcvMdsJQaMbXPMRvbhHnDWJ4iPgM+GmoIzdHJIzJaj8qLCeyPfmJ4gdMS8/ddD+wPIouMqdQNdbOIcYq8LQ5o0PQ+6GoNFiHY8Mtr0KekpeigoTmEG3y5PUKUKAGxRvEjU2bowDIgowgVuk6eh+WRwYKP62jNsEDOeJDjC4zKwjZwbDzXsvaokXw1RH9wNmW9gALgfYI+/R2WZfbAGQsVl5BOJ/fzxV6yW6Omh3pNAV61MmxvCV3RizuTAa8pMtVW2qExBhJBijEmbb1eDuwsAlY+VaLrEjcmm+KKsS3b13W1kDBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uiwBp7kXNSTCz+56g+SXsPS8jRFtP9bEkWIJkCO5p9Y=;
- b=FTV3xSavEY4gG4DOFm8KIvImPx5kuTEKMs+N/f3XRqPZxcHCqv7uGOvgDEu/38/dIWxV2CqCJX1QsI25oEogtEOxwZwglTxWdu00xX2I5ZIDVHT5wUTtwGBMGPJMqYKRhgqQM2unE1Qyh3DbmdEcn9+eqD9NbIgJX9TSFLvgXkunkLZeBcgcaY5OLl0YxQdVykQXOXXHX9xaqIXu5HJcv4P54RB7T0Bp0esW8Cigq7DT/nZrnadKbNiUSe7MU2ANLb6u8v+P1HEYcVdBAOs/mhHZPGcwXR386wUWzvwNC+OHaEk6AT5DR3O6lNStCdNJFZYQtu+c6Q5NGiN25BY65Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::14)
- by YT4PR01MB10600.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:106::5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.28; Thu, 16 May
- 2024 15:12:32 +0000
-Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e27c:c1e2:e6e:9256]) by YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e27c:c1e2:e6e:9256%2]) with mapi id 15.20.7544.052; Thu, 16 May 2024
- 15:12:32 +0000
-Message-ID: <39257e22-f657-4bba-b99d-97d4ee8789d5@efficios.com>
-Date: Thu, 16 May 2024 11:12:31 -0400
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: lttng-dev@lists.lttng.org, damien.berget@flyzipline.com
+	by lists.lttng.org (Postfix) with ESMTP id 4VgJP53mQ5z2nrC;
+	Thu, 16 May 2024 14:23:05 -0400 (EDT)
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com
+ [IPv6:2607:f8b0:4864:20::1130])
+ by lists.lttng.org (Postfix) with ESMTPS id 4VgJP42S5lz2nr9
+ for <lttng-dev@lists.lttng.org>; Thu, 16 May 2024 14:23:03 -0400 (EDT)
+Received: by mail-yw1-x1130.google.com with SMTP id
+ 00721157ae682-6277a2bb35fso8648197b3.1
+ for <lttng-dev@lists.lttng.org>; Thu, 16 May 2024 11:23:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1715883783; x=1716488583;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=nHlCpezm2uC4wBXQxWtAMNAoocMSbmdMBWrDfvHp0/Q=;
+ b=PoBtSJjskwmBtO7CFfa4tW1Fu/Oz6qxHrlWY4o0G4soy8OVpXXGgfZcuZp1xUYwUIV
+ 91NEODynM0b4AN4tS8VcxgkbnqUWwI0nra2Hgv4G0gRYpyKzMoOvDgoCb9IF4X/HQega
+ dTQ/XTWks1bDv0P/Y8gLXqe8+1zEt7fPxzrP+UcHaQ4qk7CqnQZirtrtgGNR9LOfOufA
+ k80y0MVZ7ibyYx4q4L5l6JPAIHzKapI9AC9C+FJbL3GszwFTcHoU8xMRhDR5Ac0FwA0K
+ FQm3mw95fidySSZS8p9SxEPOd824E6PVgD1vqxDBUOSZv0G5kluhRCvgllbm7DzhUKM+
+ mUUQ==
+X-Gm-Message-State: AOJu0YxkP1rvQjtGWvWvo/nQgxEC4Zlc+zfGHf32q/G1DAQNBwIRrKtt
+ lC2I7CYcff6befDdX9Updl6L9uDM5buDDnlVAPSPr1mlgyNf3CJyt2SL6CDzuborCe9oDElQKTT
+ gIQEt1arQUGyo6xnvak3mQfgDW7HMPRLs7KqbOg==
+X-Google-Smtp-Source: AGHT+IEpyCwKcUAcDcUB3n2xpb/xdCdBSwaJmLvG9qAyCvnFn7S/xlJAgt6aQ4mt8XRnBOGCQC8BV/ZIr6GLJ+0hzRo=
+X-Received: by 2002:a0d:d545:0:b0:61a:bf86:9d29 with SMTP id
+ 00721157ae682-620993808d8mr169017757b3.8.1715883782983; Thu, 16 May 2024
+ 11:23:02 -0700 (PDT)
+MIME-Version: 1.0
 References: <CAA1MA5d-ah6bqoN8=_5PwTe-6h_2B0GsHzt=cVuwJANyiMDhGg@mail.gmail.com>
  <479fa8db-6d40-49c3-bb4f-8c920ab291ac@efficios.com>
-In-Reply-To: <479fa8db-6d40-49c3-bb4f-8c920ab291ac@efficios.com>
-X-ClientProxiedBy: YQBPR0101CA0142.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:e::15) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:e8::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YT4PR01MB10600:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0c00693a-31bb-4a81-36cd-08dc75ba9c53
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|1800799015|376005;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?bEVtQ1h0NjdtclVyQ2NoaXBCY0ZlUGRsYWRINElLeVVCM2JUd1FmZEI0cVFh?=
- =?utf-8?B?UFFZMlFWVHBzVE5OMGFzc2FJSkpSRzFwU2hiRU9vMHlaN3d4QmdKZTdqVVJK?=
- =?utf-8?B?UnhuZkNSM1hWOHpIYkFrYm9tOUNsYldOT2MvMFBlTDVyclJnK1l3eUVFV0Er?=
- =?utf-8?B?ZkJHb2lkUU5CZDAzTEZ2NXd0YUZrb1RsY0EvNjhQdjRhVTVFd2NJVXFrMENZ?=
- =?utf-8?B?cVZydkhLTVVuMWtTQnRmQXo5OVNBemdIcXdMeFVLWVJJREt2N2gxUGZRMmZJ?=
- =?utf-8?B?blpGVWhtZDdLemRvaS9pd2ozcGVqTTljUkw1MndyS2w3aUUreDE2OEpiaUZQ?=
- =?utf-8?B?bi9ReEczUGJaQW9KZWJKTmt1NGMvSlBUaUpVcHVwTmR2c2xvclRySmR3TG5v?=
- =?utf-8?B?NWJNb1VWRC9aUjlTalgvYXhTcUVrY1dNcDdIcUJIbUxlR1RDRktmRW9mU085?=
- =?utf-8?B?SnMxVEJZT2lwV1lyS3lDUFFvREJEOHkxa04zNWtDVkloZWNLR2dEZXFXcjlH?=
- =?utf-8?B?b0M0M0NKRGZNVi90RmdjTHhmVnUyWEd1eUcyYXpncTQwWm82Y283cEthazYz?=
- =?utf-8?B?WVp4Q0V5cFdVZDdWeCs1SHVndzY3THhUWWlPTzdCNDFXOUZ3UWxOUWk5Vlpj?=
- =?utf-8?B?NU5ZNVBoMTdHdURoQ1BLbnlSNDd3Z0pOUm1Pc2E1bGI2QUR4czdZT3oreHFM?=
- =?utf-8?B?QVJEL3pEbllhQmhCY010M1hzYjlrelhuVjdlMldJMjQ5S2VJMDVMd1pVUnFQ?=
- =?utf-8?B?bnJiS1hwOVdqTGRiem01TlpVQUFTUXRLT2wxVXlLaVkzSHdsblFkTWo2dzBU?=
- =?utf-8?B?UXNQK0NlMEUvQUN0bmdsRFRsYWJoYiszRksxVTIwQzMvTTBKYWhyQkNvZkJ6?=
- =?utf-8?B?cjdEa3k3a0dRbEQwdHdKY29SRjJqTkR3d2NpUzRubmh5SFpncjBjQUpNbElI?=
- =?utf-8?B?K0ZtRmdEUzRURW85TzEzTDFmNDNjYnBjVFZrVVVtVUVqVzFoOVFIU0JkeWNG?=
- =?utf-8?B?MUxZTk5uSGJVSUNUZFRZNVByK2xZUlVzY0RaendtUlpIRDIvNUFvSk1YZ2hB?=
- =?utf-8?B?dm9RNjNvcTJ2cFNhalNPY3k1cytWY2Q4SE1aM2R1UXF3d2NhUFJuNEsxMXBH?=
- =?utf-8?B?Tzk0SEdySVc1ZVREblloVWNoWDFscTVjVExEYk1JMDZqM2Y5TWh1aDB6ek9y?=
- =?utf-8?B?ekRkVXprLzVUWnFIRzVidXNnYU5lRnZRWHBveVVJMk5mQ3p2djlHZ2s2c1pU?=
- =?utf-8?B?cTZabG01TGFWaWc4Y0FYY3RzTUtZMS9UZS9PMUh3L2tFOXNzSU11QkY4MFRu?=
- =?utf-8?B?ZUhDeVdMbjhIODFRWURLb2JmOUhmajlYcHRtY2ZReTBtVjJLNy8rdnYxSU9M?=
- =?utf-8?B?SUJ0cTdWUXhFNnhWT016ZExkYmJXVmt6bUYzc0U3ZVRVN1ZmRUFMazc0VkhY?=
- =?utf-8?B?U25INlVLeHpSaUxXWE9sdE53Tm1QYmdkdzVLYzhHVDNrUmdad2FYbm8yOFA4?=
- =?utf-8?B?eHZ4dFNmRUtkTlpBM1FINUg4VXlaSWFwRFNCc1BySWF3QzBDTEcvdk9nODla?=
- =?utf-8?B?dmFYaVIxZGllR0tOK2xNeGlyaTBGSlMrbmMwcnVlMlhxazVyRTBZTldYWTFM?=
- =?utf-8?Q?JjNNctr9mNn8f6qM93PKwjAkWbqK3Q8nGKvZMf1a/LmU=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230031)(366007)(1800799015)(376005); DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ny9JWktTb05xbFBJYVkxY0tDQStZYTZtTFdkRC95NW0yQ21rRGc1RWlQUy9I?=
- =?utf-8?B?UnNZaHQzalBWT01WWjBEUlo5aHlPNjVYSm9QWUMwUUgreHZIMnI1aUIyVGcw?=
- =?utf-8?B?RkZvdUpYOFY4OVoxZk4rYjB5dFRkdzNXdGRWd3ZEcStSM2xnelRYWng4K2Jt?=
- =?utf-8?B?ZHhpaGxrZnRWNklUcmFXaXhDbFBFSVVibDg4TG1Ia09wNlNHNVZKYVRBUThM?=
- =?utf-8?B?OG5sTThjdHFpWG5sZzdRa3N0VXRuMG9BUkpha0tmNEpSMFA0anNzd3dVeXBZ?=
- =?utf-8?B?VTM2bHAwZTBTL0dLbUVwbWpZQVJKVlprbEZpemdyamNUemxRS1c4KzdYbUNL?=
- =?utf-8?B?U1g1YTVnTnBzeGpXUDlPR21iSUoyZkdFVFdBRU1VYUc1WkNZZm1pRm5vT20w?=
- =?utf-8?B?dkFuNEF6cFdsTlBuT1h6SXRNdktjTFJyQ0ttTUg4aWFkM2JPWC9xSElndVNU?=
- =?utf-8?B?TVE3bmtqanl1TGFyMWpXUzNjYWhxV1NHWHl3dWJkejlDSHBqVWdzYUR0L05X?=
- =?utf-8?B?WndJVHN3RWFkaUYrL2Uzd0RZT1BNbmdWUzRETkZQdWZQU0E3NlJha3hwS1Iw?=
- =?utf-8?B?NDFtMjQ0SjgzYlpyajIrbGRSQVZnY0NFVndCWnRTNWVtVW1RS0UyclNDOGR5?=
- =?utf-8?B?T0RlL3JWdysvSzg2ZGJEUnBJM1dRNlVOYWlnbWFVeXk4WFpTeVNXdTdnNkNm?=
- =?utf-8?B?WkVTNnVrTnlFNjJtTjRkc0YzN3V2RmRJcGtJeXI2ZkQ2NDE2VjRySGgxaVB0?=
- =?utf-8?B?WFpTN0pFWUMyejFHOVk0UitCRjk0ZWVGeXd2TENtZGNDaW9TMGs4WFlYcXFw?=
- =?utf-8?B?MHJtNU9XVmhSd1V0MjMvT0RIb1FTcjJ1aVZ0ZDZZQkk2Wk5vT3IrQkJWMnJB?=
- =?utf-8?B?MlFDQUl3Z1Z6Y1VlT1dRUWVKWXl4aE9HZGkzUTI0OU1iMzYwQWZPYU53VFRD?=
- =?utf-8?B?dndMbm9kaDlnNkpkV0RvWmhRSFBnYWt1NWEwNTdzY2VVaHJuYVdPaXFsZXJQ?=
- =?utf-8?B?ZG9TNGd2M0kyNkI1ekt0R05tWEd4MjBQVVVzRjl2amxhamVpVnZNVVQ3ZHNp?=
- =?utf-8?B?WlNNV080Z0k3eUt2VE1wYUFFc0dNNnVzZkZ5M3VFS0RFdUhHa1hIc3FIZTFC?=
- =?utf-8?B?bGUyQ0VZV0tXdU03L1VRNmJkUFZJdVNtMWZJaVRnb1V5RUtDWWxJb29XS1Rj?=
- =?utf-8?B?TzJoNVhLemVJK3lXZmZkWS81SXdKZUZFQkF0MzhPRmt3aVNZZm9CREtrdDFy?=
- =?utf-8?B?amhVVmVkVTZMOTh3azRiNmROakhsNUQ0WTZHTUJuZmpKNEcvSTZ3WW9SR0xK?=
- =?utf-8?B?U0J0RXp6c1hIWU0rRnlCN0p1cVhMeFcvaFlYTDRVd0JJeVFVWnhZRUVkSzd1?=
- =?utf-8?B?YmRPK3VYV1F1VjYzdGNpL2FCcHRsaVZZMFRLL1NqTGFpVzFBV1FMbWZ6UkpW?=
- =?utf-8?B?SkZmaW5wbTRHcHY5eExwNkI5djZzSFpoeWJiMzlOWUhoSVBxdG94aXNDZDdS?=
- =?utf-8?B?M2VZVldyMHpQWCtPK25aM1pkcElnTG8zV2JwaXNwZ1puclNVcDJCbGVkeWhZ?=
- =?utf-8?B?RFhXU1pxZktKQk1sc01nWHFxZ3JmYWt3alZKTVFrYVlwaVphakZPK0U2d2ts?=
- =?utf-8?B?cEpwK0dXN2RRaG1vZ3NkWC9SbG5qV1RzVm5TUmpIckJxamQzbFUrMEQyZnZv?=
- =?utf-8?B?Y1lnUVlrUEh4ZlVwMEgxK1VyN0lmazZMeUFaOUJWUWs2dGk2ZkErUnZmRzk0?=
- =?utf-8?B?K3M5dE8rNHVEbi80bmFvZ2w0MmM4YlFUUW4zcXNYVzZrdnBJOGlFL044dmsr?=
- =?utf-8?B?Qkg4SmE3aHlEM0FFbWNXR0EyR0ZZWW5PTkg4WXRrWFVQdUlrY3lwSU1aOTZG?=
- =?utf-8?B?dVFXaGcvdGxab3JvRVFPOWNzcVBPZjFqTTYva1M3WVFxUzlySkt6NVlsaWoy?=
- =?utf-8?B?Qms0L0YzVUJTRkZoenJ5Ti9NYlhLd0g3KzVYZUpBME9pR0lSMmkvOTJLV3pa?=
- =?utf-8?B?cFRYZ04vTnZGU3d2TnhPZytuQ01pcXJnZWVlZ1d0OUxUb1doNTFXdGVuOHBL?=
- =?utf-8?B?Y2piUWkrWW9lZ0NRWmtVRytjTkl0MTBFUlFzV3VIZ1YzQlk4RjlyNHlsR2x0?=
- =?utf-8?B?RHh1U1FRUkM2T1IxaExkQ2EvRlhpcDBIYTIzZERuV2RIN1pBNm5HVEtnaU52?=
- =?utf-8?B?Q3c9PQ==?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c00693a-31bb-4a81-36cd-08dc75ba9c53
-X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2024 15:12:32.7734 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uRCdhWPEHfLQ9NvpOVazxP/6DxQWxn5GfDVlBTpt9sINsOQCdHcV5PeFzmTU3jaWSS+cSFKjMKr232yRQTjb6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT4PR01MB10600
+ <39257e22-f657-4bba-b99d-97d4ee8789d5@efficios.com>
+In-Reply-To: <39257e22-f657-4bba-b99d-97d4ee8789d5@efficios.com>
+Date: Thu, 16 May 2024 11:22:52 -0700
+Message-ID: <CAA1MA5e+qMEBGAtiuLPKsospQycRFFpOYKVkh66pOAvdX5TtTg@mail.gmail.com>
+To: Kienan Stewart <kstewart@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 Subject: Re: [lttng-dev] Capturing snapshot on kernel panic
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -154,114 +68,433 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Kienan Stewart <kstewart@efficios.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Damien Berget via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Damien Berget <damien.berget@flyzipline.com>
+Content-Type: multipart/mixed; boundary="===============7043627842448215477=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGkgRGFtaWVuLAoKSSB3YW50IHRvIGV4cGFuZCBvbiBvbmUgb2YgdGhlIG9wdGlvbnMgdGhhdCBj
-b3VsZCB3b3JrIGZvciB5b3VyIGNhc2UuCgpPbiA1LzE2LzI0IDk6MzcgQU0sIEtpZW5hbiBTdGV3
-YXJ0IHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4gSGkgRGFtaWVuLAo+IAo+IAo+IE9uIDUvMTUvMjQg
-NjoyNCBQTSwgRGFtaWVuIEJlcmdldCB2aWEgbHR0bmctZGV2IHdyb3RlOgo+PiBHb29kIGRheSwK
-Pj4gd2UgaGF2ZSBiZWVuIHVzaW5nIExUVG5nIHN1Y2Nlc3NmdWxsecKgdG8gY2FwdHVyZSBzbmFw
-c2hvdHMgb24gdXNlciAKPj4gZGVmaW5lZCB0cmFjZXBvaW50cyBhbmQgaXQgZGlkIHByb3ZpZGUg
-aW52YWx1YWJsZSB0byBkZWJ1ZyBvdXIgaXNzdWVzLiAKPj4gVGhhbmtzIHRvIGFsbCB0aGUgY29u
-dHJpYnV0b3JzIG9mIHRoaXMgcHJvamVjdCEKPj4KPj4gV2UnZCBsaWtlIHRvIGtub3cgaWYgaXQg
-d291bGQgYmUgcG9zc2libGUgdG8gdHJpZ2dlciBvbiBhIGtlcm5lbCAKPj4gcGFuaWM/IEkgbWln
-aHQgYmUgZHViaW91c2x5IHBvc3NpYmxlIGFzIHlvdSB3b3VsZCBzdGlsbCBuZWVkIHRvIGhhdmUg
-Cj4+IHRoZSBmaWxlLXN5c3RlbSB3b3JraW5nIHRvIHdyaXRlIHRoZSByZXN1bHRzIGJ1dCBJIHNo
-b3VsZCBhc2suCj4+Cj4gCj4gRm9yIHVzZXJzcGFjZSB0cmFjaW5nLCBJIHRoaW5rIHRoZSByZWNv
-bW1lbmRhdGlvbiBpcyB1c3VhbGx5IHRvIHVzZSBhIAo+IGRheC9wbWVtIGRldmljZSBhbmQgaGF2
-ZSB0aGUgYnVmZmVycyBmb3IgdGhlIHNlc3Npb24gbWFwcGVkIHRoZXJlLiBBZnRlciAKPiBhIHBh
-bmljLCB0aGUgY29udGVudHMgb2YgdGhlIGJ1ZmZlcnMgY2FuIGJlIHJlc3RvcmVkIHVzaW5nIGx0
-dG5nLWNyYXNoWzFdLgo+IAo+IE5vdGUgdGhhdCBkYXgvcGVtIGlzbid0IHN1cHBvcnRlZCBieSB0
-aGUga2VybmVsIHNwYWNlIHRyYWNlciBhdCB0aGlzIHRpbWUuCj4gCj4gSWYgSSByZWNhbGwsIHRo
-ZXJlIGFyZSBvdGhlciB3YXlzIHRvIHRoaW5ncyBpbiB0aGUgcGFuaWMgc2VxdWVuY2UgKHRoYXQg
-Cj4gYXJlbid0IGx0dG5nIHNwZWNpZmljKSwgYnV0IEknbSBwZXJzb25hbGx5IG5vdCBhcyBmYW1p
-bGlhciB3aXRoIHRoZSAKPiBkZXRhaWxzIG9mIHRoYXQgc3RhZ2Ugb2YgbGludXguCj4gCgpJdCdz
-IHBvc3NpYmxlIHRvIGtleGVjLXRvb2xzIHRvIGxvYWQgYSBuZXcga2VybmVsIHBvc3QtcGFuaWNb
-MV0uIElmIHlvdXIgCnN5c3RlbSB1c2VzIGtleGVjLCB0aGUgY29udGVudHMgb2YgUkFNIGFyZW4n
-dCBuZWNlc3NhcmlseSBmbHVzaGVkLCBhbmQgCmlmIGJvdGggdGhlIGluaXRpYWwga2VybmVsIGFu
-ZCBwb3N0LXBhbmljIGtlcm5lbCBzdGFydGVkIGJ5IGtleGVjIGhhdmUgCnRoZSBzYW1lIGNvbmZp
-Z3VyYXRpb24gZm9yIGFuIGVtdWxhdGVkIFBNRU0gZGV2aWNlIHVzaW5nIHRoZSBtZW1tYXAgCnBh
-cmFtZW50ZXIgWzIsM10gdGhhdCByZWdpb24gb2YgbWVtb3J5IGNhbiBoYXZlIGEgZGF4ZnMgY3Jl
-YXRlZCBpbiBpdCAKcG9zdC1jbGVhbiBib290LgoKTm90ZTogc29tZSBzeXN0ZW1zIG1heSBub3Qg
-Zmx1c2ggdGhlIG1lbW9yeSBkdXJpbmcgYSB3YXJtIHJlYm9vdCwgYnV0IAp0aGlzIGlzIGRlcGVu
-ZGVudCBvbiB0aGUgQklPUy4KCldoZW4geW91ciBzeXN0ZW0gYm9vdHMgeW91IGNvdWxkIGRvIHNv
-bWV0aGluZyBsaWtlIHRoZSBmb2xsb3dpbmc6CgogICogSWYgaXQncyBhIGNsZWFuIGJvb3QsIGNy
-ZWF0ZSB0aGUgZGF4ZnMKICAqIElmIGl0J3MgYW4gInVuY2xlYW4iIGJvb3QgKGUuZy4gdGhlIGRh
-eGZzIGFscmVhZHkgZXhpc3RzLCBvciBhIAprZXJuZWwgcGFyYW1ldGVyIGluZm9ybXMgeW91IHRo
-YXQgaXQgc3RhcnRlZCBwb3N0LXBhbmljKSB0aGVuIHlvdSBjYW4gCmNvcHkvbW92ZS91c2UgbHR0
-bmctY3Jhc2ggdG8gcGVyc2lzdGVudCBzdG9yYWdlIGZvciBhbmFseXNpcwogICogU3RhcnQgdHJh
-Y2luZyB1c2luZyBhIHNuYXBzaG90IHNlc3Npb24gYW5kIHRoZSB1c2Vyc3BhY2UgYnVmZmVycyBv
-biAKdGhlIGRheGZzLgoKSW4gdGhpcyB0eXBlIG9mIHNpdHVhdGlvbiB0aGUgInNuYXBzaG90IiBj
-b21tYW5kIGlzIG5ldmVyIGludm9rZWQgCmRpcmVjdGx5LCBidXQgdGhlIHJlY292ZXJ5IG9mIHRo
-ZSBidWZmZXJzIHRvIGNyZWF0ZSBhIHNuYXBzaG90IGlzIHBvc3NpYmxlLgoKWzFdOiBodHRwczov
-L3d3dy5rZXJuZWwub3JnL2RvYy9odG1sL2xhdGVzdC9hZG1pbi1ndWlkZS9rZHVtcC9rZHVtcC5o
-dG1sClsyXTogCmh0dHBzOi8vd3d3Lmtlcm5lbC5vcmcvZG9jL2h0bWwvbGF0ZXN0L2FkbWluLWd1
-aWRlL2tlcm5lbC1wYXJhbWV0ZXJzLmh0bWwKWzNdOiAKaHR0cHM6Ly9kb2NzLnBtZW0uaW8vcGVy
-c2lzdGVudC1tZW1vcnkvZ2V0dGluZy1zdGFydGVkLWd1aWRlL2NyZWF0aW5nLWRldmVsb3BtZW50
-LWVudmlyb25tZW50cy9saW51eC1lbnZpcm9ubWVudHMvbGludXgtbWVtbWFwCgp0aGFua3MsCmtp
-ZW5hbgoKPj4gTG9va2luZyBhdCBhdmFpbGFibGUga2VybmVsIHN5c2NhbGwsIHRoZSAicmVib290
-IiBvbmUgc2VlbXMgbGlrZSBhIAo+PiBnb29kIGNhbmRpZGF0ZSwgaG93ZXZlciBJIHdhcyBub3Qg
-YWJsZSB0byBjYXB0dXJlIGEgc25hcHNob3Qgb24gaXQuIEkgCj4+IGhhdmUgdGVzdGVkIHRoZSBz
-ZXR1cCBiZWxvdyB3aXRoICItLW5hbWU9Y2hkaXIiIHN5c2NhbGwgYW5kIGl0IAo+PiB3b3JrcyzC
-oCJjZCIgdG8gYSBkaXJlY3Rvcnkgd2lsbMKgY3JlYXRlIGEgdHJhY2UuIEJ1dCBubyBkaWNlIHdp
-dGggcmVib290Lgo+Pgo+IAo+IFRoZSBkZXRhaWxzIG9mIGhvdyB0aGlzIHdvcmsgd2lsbCBkZXBl
-bmQgb24geW91ciBzeXN0ZW0uIEZvciBleGFtcGxlLCBteSAKPiBpbnN0YWxsYXRpb25zIHRlbmQg
-dG8gdXNlIHN5c3RlbWQgYXMgUElEIDEuIFRoZSBicm9hZCBzdHJva2VzIHNlZW0gdG8gCj4gYmU6
-IGAvdXNyL3NiaW4vcmVib290YCBpcyBhY3R1YWxseSBhIGxpbmsgdG8gYHN5c3RlbWN0bGAsIHdo
-aWNoIEkgCj4gYmVsaWV2ZSB0aGVuIGtpY2tzIG9mZiB0aGUgcmVib290LnNlcnZpY2UsIHRoZSBQ
-SUQgMSBpcyBzd2FwcGVkIHRvIAo+IC91c3IvbGliL3N5c3RlbWQvc3lzdGVtZC1zaHV0ZG93biwg
-c2lndGVybSB0aGVuIHNpZ2tpbGwgYXJlIHNlbnQgdG8gYWxsIAo+IHByb2Nlc3NlcywgdW5tb3Vu
-dHMsIHN5bmNzLCBjYWxscyB0aGUgcmVib290IHN5c3RlbSBjYWxsIFsyLDNdLgo+IAo+IEFzIGJv
-dGggdGhlIHNpZ3Rlcm0gYW5kIHRoZSB1bm1vdW50cyBhcmUgZG9uZSBiZWZvcmUgdGhlIHN5c2Nh
-bGwsIAo+IGx0dG5nLXNlc3Npb25kIGFuZCB0aGUgY29uc3VtZXJzIHdpbGwgaGF2ZSBhbHJlYWR5
-IHNodXRkb3duIGJ5IHRoZSB0aW1lIAo+IGl0IGVudGVycy4KPiAKPiBXaGlsZSB0aGlzIGRvZXNu
-J3QgbmVjZXNzYXJpbHkgaGVscCB5b3VyIG9yaWdpbmFsIHF1ZXN0aW9uIG9mIHBhbmljcywgaWYg
-Cj4geW91IHdhbnQgdG8gc25hcHNob3QgYmVmb3JlIHNodXRkb3duIG9yIHJlYm9vdCBhbmQgYXJl
-IHVzaW5nIHN5c3RlbWQsIAo+IGl0J3MgcG9zc2libGUgdG8gbGVhdmUgYSBzY3JpcHQgb3IgYmlu
-YXJ5IGluIGEga25vd24gZGlyZWN0b3J5IHNvIHRoYXQgCj4gaXQncyBpbnZva2VkIHByaW9yIHRv
-IHRoZSByZXN0IG9mIHRoZSBzaHV0ZG93biBzZXF1ZW5jZVs0XS4KPiAKPiBbMV06IGh0dHBzOi8v
-bHR0bmcub3JnL2RvY3MvdjIuMTMvI2RvYy1wZXJzaXN0ZW50LW1lbW9yeS1maWxlLXN5c3RlbXMK
-PiBbMl06IAo+IGh0dHBzOi8vZ2l0aHViLmNvbS9zeXN0ZW1kL3N5c3RlbWQvYmxvYi82NTMzYzE0
-OTk3NzAwZjc0ZTllYTQyMTIxMzAzZmMxZjVjNjNlNjJiL3NyYy9zaHV0ZG93bi9zaHV0ZG93bi5j
-Cj4gWzNdOiAKPiBodHRwczovL2dpdGh1Yi5jb20vc3lzdGVtZC9zeXN0ZW1kL2Jsb2IvbWFpbi9z
-cmMvc2hhcmVkL3JlYm9vdC11dGlsLmMjTDc3Cj4gWzRdOiBodHRwczovL3d3dy5zeXN0dXRvcmlh
-bHMuY29tL2RvY3MvbGludXgvbWFuLzgtc3lzdGVtZC1yZWJvb3QvCj4gCj4gaG9wZSB0aGlzIGhl
-bHBzLAo+IGtpZW5hbgo+IAo+PiBXb3VsZCB5b3UgaGF2ZSBhbnkgc3VnZ2VzdGlvbnM/Cj4+IFRo
-YW5rcyBmb3IgeW91ciBoZWxwLAo+PiBDaGVlcnMKPj4gRGFtaWVuCj4+Cj4+ID09PT09PT09PT09
-PT09PT09PT09PT09PT09PT0KPj4KPj4gIyBQcmVwIG91dHB1dCBkaXIKPj4gbWtkaXIgL2FwcGxp
-Y2F0aW9uL3RyYWNlLwo+PiBybSAtcmYgL2FwcGxpY2F0aW9uL3RyYWNlLyoKPj4KPj4gIyBDcmVh
-dGUgc2Vzc2lvbgo+PiBzdWRvIGx0dG5nIGRlc3Ryb3kgc25hcHNob3QtdHJhY2Utc2Vzc2lvbgo+
-PiBzdWRvIGx0dG5nIGNyZWF0ZSBzbmFwc2hvdC10cmFjZS1zZXNzaW9uIC0tc25hcHNob3QgCj4+
-IC0tb3V0cHV0PSIvYXBwbGljYXRpb24vdHJhY2UvIgo+PiBzdWRvIGx0dG5nIGVuYWJsZS1jaGFu
-bmVsIC0ta2VybmVsIC0tbnVtLXN1YmJ1Zj04IGNoYW5uZWxrCj4+IHN1ZG8gbHR0bmcgZW5hYmxl
-LWNoYW5uZWwgLS11c2Vyc3BhY2UgLS1udW0tc3ViYnVmPTggY2hhbm5lbHUKPj4KPj4gIyBDb25m
-aWd1cmUgc2Vzc2lvbgo+PiBzdWRvIGx0dG5nIGVuYWJsZS1ldmVudCAtLWtlcm5lbCAtLXN5c2Nh
-bGwgLS1hbGwgLS1jaGFubmVsIGNoYW5uZWxrCj4+IHN1ZG8gbHR0bmcgZW5hYmxlLWV2ZW50IC0t
-a2VybmVsIC0tdHJhY2Vwb2ludCAic2NoZWQqIiAtLWNoYW5uZWwgY2hhbm5lbGsKPj4gc3VkbyBs
-dHRuZyBlbmFibGUtZXZlbnQgLS11c2Vyc3BhY2UgLS1hbGwgLS1jaGFubmVsIGNoYW5uZWx1Cj4+
-IHN1ZG8gbHR0bmcgYWRkLWNvbnRleHQgLXUgLXQgdnRpZCAtdCBwcm9jbmFtZQo+PiBzdWRvIGx0
-dG5nIHJlbW92ZS10cmlnZ2VyIHRyaWdfcmVib290Cj4+IHN1ZG8gbHR0bmcgYWRkLXRyaWdnZXIg
-LS1uYW1lPXRyaWdfcmVib290IFwKPj4gwqDCoCDCoCDCoCDCoCAtLWNvbmRpdGlvbj1ldmVudC1y
-dWxlLW1hdGNoZXMgLS10eXBlPWtlcm5lbDpzeXNjYWxsOmVudHJ5IFwKPj4gwqDCoCDCoCDCoCDC
-oCAtLW5hbWU9cmVib290XAo+PiDCoMKgIMKgIMKgIMKgIC0tYWN0aW9uPXNuYXBzaG90LXNlc3Np
-b24gc25hcHNob3QtdHJhY2Utc2Vzc2lvbiBcCj4+IMKgwqAgwqAgwqAgwqAgLS1yYXRlLXBvbGlj
-eT1vbmNlLWFmdGVyOjEKPj4KPj4gIyBzdGFydCAmIGxpc3QgaW5mbwo+PiBzdWRvIGx0dG5nIHN0
-YXJ0Cj4+IHN1ZG8gbHR0bmcgbGlzdCBzbmFwc2hvdC10cmFjZS1zZXNzaW9uCj4+IHN1ZG8gbHR0
-bmcgbGlzdC10cmlnZ2Vycwo+Pgo+PiAjPT09PT09PT0gdGVzdCBpdC4uLgo+PiBzdWRvIHJlYm9v
-dAo+Pgo+PiAjPT09PT09PSByZWNvbm5lY3QgYW5kwqBOb3RoaW5nIDooCj4+ICQgbHMgLWFsdSAv
-YXBwbGljYXRpb24vdHJhY2UvCj4+IGRyd3hyLXhyLXggwqAgwqAyIHUgwqB1IMKgIMKgIMKgIDQw
-OTYgTWF5IDE1IMKgMjAyNCAuCj4+IGRyd3hyLXhyLXggwqAgMTAgdSDCoHUgwqAgwqAgwqAgNDA5
-NiBNYXkgMTUgwqAyMDI0IC4uCj4+Cj4+Cj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwo+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============7043627842448215477==
+Content-Type: multipart/alternative; boundary="0000000000005c728106189653e7"
+
+--0000000000005c728106189653e7
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Thanks Kienan for these quick suggestions,
+we'll investigate the pmem route (I was not aware of the lttng-cash
+utility, it's pretty nice) even if I'm not sure how fast it would burn
+through our SSD, it might still be worth trying.
+As for kexec-tool, it's not officially supported on our embedded modules
+unfortunately, so we might be SOL there. We may have to try to add our own
+trace-point in kernel to use as trigger.
+Cheers
+Damien
+
+On Thu, May 16, 2024 at 8:12=E2=80=AFAM Kienan Stewart <kstewart@efficios.c=
+om>
+wrote:
+
+> Hi Damien,
+>
+> I want to expand on one of the options that could work for your case.
+>
+> On 5/16/24 9:37 AM, Kienan Stewart via lttng-dev wrote:
+> > Hi Damien,
+> >
+> >
+> > On 5/15/24 6:24 PM, Damien Berget via lttng-dev wrote:
+> >> Good day,
+> >> we have been using LTTng successfully to capture snapshots on user
+> >> defined tracepoints and it did provide invaluable to debug our issues.
+> >> Thanks to all the contributors of this project!
+> >>
+> >> We'd like to know if it would be possible to trigger on a kernel
+> >> panic? I might be dubiously possible as you would still need to have
+> >> the file-system working to write the results but I should ask.
+> >>
+> >
+> > For userspace tracing, I think the recommendation is usually to use a
+> > dax/pmem device and have the buffers for the session mapped there. Afte=
+r
+> > a panic, the contents of the buffers can be restored using
+> lttng-crash[1].
+> >
+> > Note that dax/pem isn't supported by the kernel space tracer at this
+> time.
+> >
+> > If I recall, there are other ways to things in the panic sequence (that
+> > aren't lttng specific), but I'm personally not as familiar with the
+> > details of that stage of linux.
+> >
+>
+> It's possible to kexec-tools to load a new kernel post-panic[1]. If your
+> system uses kexec, the contents of RAM aren't necessarily flushed, and
+> if both the initial kernel and post-panic kernel started by kexec have
+> the same configuration for an emulated PMEM device using the memmap
+> paramenter [2,3] that region of memory can have a daxfs created in it
+> post-clean boot.
+>
+> Note: some systems may not flush the memory during a warm reboot, but
+> this is dependent on the BIOS.
+>
+> When your system boots you could do something like the following:
+>
+>   * If it's a clean boot, create the daxfs
+>   * If it's an "unclean" boot (e.g. the daxfs already exists, or a
+> kernel parameter informs you that it started post-panic) then you can
+> copy/move/use lttng-crash to persistent storage for analysis
+>   * Start tracing using a snapshot session and the userspace buffers on
+> the daxfs.
+>
+> In this type of situation the "snapshot" command is never invoked
+> directly, but the recovery of the buffers to create a snapshot is possibl=
+e.
+>
+> [1]: https://www.kernel.org/doc/html/latest/admin-guide/kdump/kdump.html
+> [2]:
+> https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
+> [3]:
+>
+> https://docs.pmem.io/persistent-memory/getting-started-guide/creating-dev=
+elopment-environments/linux-environments/linux-memmap
+>
+> thanks,
+> kienan
+>
+> >> Looking at available kernel syscall, the "reboot" one seems like a
+> >> good candidate, however I was not able to capture a snapshot on it. I
+> >> have tested the setup below with "--name=3Dchdir" syscall and it
+> >> works, "cd" to a directory will create a trace. But no dice with reboo=
+t.
+> >>
+> >
+> > The details of how this work will depend on your system. For example, m=
+y
+> > installations tend to use systemd as PID 1. The broad strokes seem to
+> > be: `/usr/sbin/reboot` is actually a link to `systemctl`, which I
+> > believe then kicks off the reboot.service, the PID 1 is swapped to
+> > /usr/lib/systemd/systemd-shutdown, sigterm then sigkill are sent to all
+> > processes, unmounts, syncs, calls the reboot system call [2,3].
+> >
+> > As both the sigterm and the unmounts are done before the syscall,
+> > lttng-sessiond and the consumers will have already shutdown by the time
+> > it enters.
+> >
+> > While this doesn't necessarily help your original question of panics, i=
+f
+> > you want to snapshot before shutdown or reboot and are using systemd,
+> > it's possible to leave a script or binary in a known directory so that
+> > it's invoked prior to the rest of the shutdown sequence[4].
+> >
+> > [1]: https://lttng.org/docs/v2.13/#doc-persistent-memory-file-systems
+> > [2]:
+> >
+> https://github.com/systemd/systemd/blob/6533c14997700f74e9ea42121303fc1f5=
+c63e62b/src/shutdown/shutdown.c
+> > [3]:
+> >
+> https://github.com/systemd/systemd/blob/main/src/shared/reboot-util.c#L77
+> > [4]: https://www.systutorials.com/docs/linux/man/8-systemd-reboot/
+> >
+> > hope this helps,
+> > kienan
+> >
+> >> Would you have any suggestions?
+> >> Thanks for your help,
+> >> Cheers
+> >> Damien
+> >>
+> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> >>
+> >> # Prep output dir
+> >> mkdir /application/trace/
+> >> rm -rf /application/trace/*
+> >>
+> >> # Create session
+> >> sudo lttng destroy snapshot-trace-session
+> >> sudo lttng create snapshot-trace-session --snapshot
+> >> --output=3D"/application/trace/"
+> >> sudo lttng enable-channel --kernel --num-subbuf=3D8 channelk
+> >> sudo lttng enable-channel --userspace --num-subbuf=3D8 channelu
+> >>
+> >> # Configure session
+> >> sudo lttng enable-event --kernel --syscall --all --channel channelk
+> >> sudo lttng enable-event --kernel --tracepoint "sched*" --channel
+> channelk
+> >> sudo lttng enable-event --userspace --all --channel channelu
+> >> sudo lttng add-context -u -t vtid -t procname
+> >> sudo lttng remove-trigger trig_reboot
+> >> sudo lttng add-trigger --name=3Dtrig_reboot \
+> >>          --condition=3Devent-rule-matches --type=3Dkernel:syscall:entr=
+y \
+> >>          --name=3Dreboot\
+> >>          --action=3Dsnapshot-session snapshot-trace-session \
+> >>          --rate-policy=3Donce-after:1
+> >>
+> >> # start & list info
+> >> sudo lttng start
+> >> sudo lttng list snapshot-trace-session
+> >> sudo lttng list-triggers
+> >>
+> >> #=3D=3D=3D=3D=3D=3D=3D=3D test it...
+> >> sudo reboot
+> >>
+> >> #=3D=3D=3D=3D=3D=3D=3D reconnect and Nothing :(
+> >> $ ls -alu /application/trace/
+> >> drwxr-xr-x    2 u  u       4096 May 15  2024 .
+> >> drwxr-xr-x   10 u  u       4096 May 15  2024 ..
+> >>
+> >>
+> >> _______________________________________________
+> >> lttng-dev mailing list
+> >> lttng-dev@lists.lttng.org
+> >> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+
+
+--=20
+*Damien Berget*
+
+--0000000000005c728106189653e7
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Thanks=C2=A0Kienan for these quick suggestions, <br>we&#39=
+;ll investigate the pmem route (I was not aware of the=C2=A0lttng-cash util=
+ity, it&#39;s pretty nice) even if I&#39;m not sure how fast it would burn =
+through our SSD, it might still be worth=C2=A0trying.<br>As for kexec-tool,=
+ it&#39;s not officially supported=C2=A0on our embedded modules unfortunate=
+ly, so we might be SOL there. We may have to try to add our own trace-point=
+ in kernel to use as trigger.<br>Cheers<div>Damien</div></div><br><div clas=
+s=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Thu, May 16, 202=
+4 at 8:12=E2=80=AFAM Kienan Stewart &lt;<a href=3D"mailto:kstewart@efficios=
+.com">kstewart@efficios.com</a>&gt; wrote:<br></div><blockquote class=3D"gm=
+ail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,=
+204,204);padding-left:1ex">Hi Damien,<br>
+<br>
+I want to expand on one of the options that could work for your case.<br>
+<br>
+On 5/16/24 9:37 AM, Kienan Stewart via lttng-dev wrote:<br>
+&gt; Hi Damien,<br>
+&gt; <br>
+&gt; <br>
+&gt; On 5/15/24 6:24 PM, Damien Berget via lttng-dev wrote:<br>
+&gt;&gt; Good day,<br>
+&gt;&gt; we have been using LTTng successfully=C2=A0to capture snapshots on=
+ user <br>
+&gt;&gt; defined tracepoints and it did provide invaluable to debug our iss=
+ues. <br>
+&gt;&gt; Thanks to all the contributors of this project!<br>
+&gt;&gt;<br>
+&gt;&gt; We&#39;d like to know if it would be possible to trigger on a kern=
+el <br>
+&gt;&gt; panic? I might be dubiously possible as you would still need to ha=
+ve <br>
+&gt;&gt; the file-system working to write the results but I should ask.<br>
+&gt;&gt;<br>
+&gt; <br>
+&gt; For userspace tracing, I think the recommendation is usually to use a =
+<br>
+&gt; dax/pmem device and have the buffers for the session mapped there. Aft=
+er <br>
+&gt; a panic, the contents of the buffers can be restored using lttng-crash=
+[1].<br>
+&gt; <br>
+&gt; Note that dax/pem isn&#39;t supported by the kernel space tracer at th=
+is time.<br>
+&gt; <br>
+&gt; If I recall, there are other ways to things in the panic sequence (tha=
+t <br>
+&gt; aren&#39;t lttng specific), but I&#39;m personally not as familiar wit=
+h the <br>
+&gt; details of that stage of linux.<br>
+&gt; <br>
+<br>
+It&#39;s possible to kexec-tools to load a new kernel post-panic[1]. If you=
+r <br>
+system uses kexec, the contents of RAM aren&#39;t necessarily flushed, and =
+<br>
+if both the initial kernel and post-panic kernel started by kexec have <br>
+the same configuration for an emulated PMEM device using the memmap <br>
+paramenter [2,3] that region of memory can have a daxfs created in it <br>
+post-clean boot.<br>
+<br>
+Note: some systems may not flush the memory during a warm reboot, but <br>
+this is dependent on the BIOS.<br>
+<br>
+When your system boots you could do something like the following:<br>
+<br>
+=C2=A0 * If it&#39;s a clean boot, create the daxfs<br>
+=C2=A0 * If it&#39;s an &quot;unclean&quot; boot (e.g. the daxfs already ex=
+ists, or a <br>
+kernel parameter informs you that it started post-panic) then you can <br>
+copy/move/use lttng-crash to persistent storage for analysis<br>
+=C2=A0 * Start tracing using a snapshot session and the userspace buffers o=
+n <br>
+the daxfs.<br>
+<br>
+In this type of situation the &quot;snapshot&quot; command is never invoked=
+ <br>
+directly, but the recovery of the buffers to create a snapshot is possible.=
+<br>
+<br>
+[1]: <a href=3D"https://www.kernel.org/doc/html/latest/admin-guide/kdump/kd=
+ump.html" rel=3D"noreferrer" target=3D"_blank">https://www.kernel.org/doc/h=
+tml/latest/admin-guide/kdump/kdump.html</a><br>
+[2]: <br>
+<a href=3D"https://www.kernel.org/doc/html/latest/admin-guide/kernel-parame=
+ters.html" rel=3D"noreferrer" target=3D"_blank">https://www.kernel.org/doc/=
+html/latest/admin-guide/kernel-parameters.html</a><br>
+[3]: <br>
+<a href=3D"https://docs.pmem.io/persistent-memory/getting-started-guide/cre=
+ating-development-environments/linux-environments/linux-memmap" rel=3D"nore=
+ferrer" target=3D"_blank">https://docs.pmem.io/persistent-memory/getting-st=
+arted-guide/creating-development-environments/linux-environments/linux-memm=
+ap</a><br>
+<br>
+thanks,<br>
+kienan<br>
+<br>
+&gt;&gt; Looking at available kernel syscall, the &quot;reboot&quot; one se=
+ems like a <br>
+&gt;&gt; good candidate, however I was not able to capture a snapshot on it=
+. I <br>
+&gt;&gt; have tested the setup below with &quot;--name=3Dchdir&quot; syscal=
+l and it <br>
+&gt;&gt; works,=C2=A0&quot;cd&quot; to a directory will=C2=A0create a trace=
+. But no dice with reboot.<br>
+&gt;&gt;<br>
+&gt; <br>
+&gt; The details of how this work will depend on your system. For example, =
+my <br>
+&gt; installations tend to use systemd as PID 1. The broad strokes seem to =
+<br>
+&gt; be: `/usr/sbin/reboot` is actually a link to `systemctl`, which I <br>
+&gt; believe then kicks off the reboot.service, the PID 1 is swapped to <br=
+>
+&gt; /usr/lib/systemd/systemd-shutdown, sigterm then sigkill are sent to al=
+l <br>
+&gt; processes, unmounts, syncs, calls the reboot system call [2,3].<br>
+&gt; <br>
+&gt; As both the sigterm and the unmounts are done before the syscall, <br>
+&gt; lttng-sessiond and the consumers will have already shutdown by the tim=
+e <br>
+&gt; it enters.<br>
+&gt; <br>
+&gt; While this doesn&#39;t necessarily help your original question of pani=
+cs, if <br>
+&gt; you want to snapshot before shutdown or reboot and are using systemd, =
+<br>
+&gt; it&#39;s possible to leave a script or binary in a known directory so =
+that <br>
+&gt; it&#39;s invoked prior to the rest of the shutdown sequence[4].<br>
+&gt; <br>
+&gt; [1]: <a href=3D"https://lttng.org/docs/v2.13/#doc-persistent-memory-fi=
+le-systems" rel=3D"noreferrer" target=3D"_blank">https://lttng.org/docs/v2.=
+13/#doc-persistent-memory-file-systems</a><br>
+&gt; [2]: <br>
+&gt; <a href=3D"https://github.com/systemd/systemd/blob/6533c14997700f74e9e=
+a42121303fc1f5c63e62b/src/shutdown/shutdown.c" rel=3D"noreferrer" target=3D=
+"_blank">https://github.com/systemd/systemd/blob/6533c14997700f74e9ea421213=
+03fc1f5c63e62b/src/shutdown/shutdown.c</a><br>
+&gt; [3]: <br>
+&gt; <a href=3D"https://github.com/systemd/systemd/blob/main/src/shared/reb=
+oot-util.c#L77" rel=3D"noreferrer" target=3D"_blank">https://github.com/sys=
+temd/systemd/blob/main/src/shared/reboot-util.c#L77</a><br>
+&gt; [4]: <a href=3D"https://www.systutorials.com/docs/linux/man/8-systemd-=
+reboot/" rel=3D"noreferrer" target=3D"_blank">https://www.systutorials.com/=
+docs/linux/man/8-systemd-reboot/</a><br>
+&gt; <br>
+&gt; hope this helps,<br>
+&gt; kienan<br>
+&gt; <br>
+&gt;&gt; Would you have any suggestions?<br>
+&gt;&gt; Thanks for your help,<br>
+&gt;&gt; Cheers<br>
+&gt;&gt; Damien<br>
+&gt;&gt;<br>
+&gt;&gt; =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D<br>
+&gt;&gt;<br>
+&gt;&gt; # Prep output dir<br>
+&gt;&gt; mkdir /application/trace/<br>
+&gt;&gt; rm -rf /application/trace/*<br>
+&gt;&gt;<br>
+&gt;&gt; # Create session<br>
+&gt;&gt; sudo lttng destroy snapshot-trace-session<br>
+&gt;&gt; sudo lttng create snapshot-trace-session --snapshot <br>
+&gt;&gt; --output=3D&quot;/application/trace/&quot;<br>
+&gt;&gt; sudo lttng enable-channel --kernel --num-subbuf=3D8 channelk<br>
+&gt;&gt; sudo lttng enable-channel --userspace --num-subbuf=3D8 channelu<br=
+>
+&gt;&gt;<br>
+&gt;&gt; # Configure session<br>
+&gt;&gt; sudo lttng enable-event --kernel --syscall --all --channel channel=
+k<br>
+&gt;&gt; sudo lttng enable-event --kernel --tracepoint &quot;sched*&quot; -=
+-channel channelk<br>
+&gt;&gt; sudo lttng enable-event --userspace --all --channel channelu<br>
+&gt;&gt; sudo lttng add-context -u -t vtid -t procname<br>
+&gt;&gt; sudo lttng remove-trigger trig_reboot<br>
+&gt;&gt; sudo lttng add-trigger --name=3Dtrig_reboot \<br>
+&gt;&gt; =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 --condition=3Devent-rule-matches=
+ --type=3Dkernel:syscall:entry \<br>
+&gt;&gt; =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 --name=3Dreboot\<br>
+&gt;&gt; =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 --action=3Dsnapshot-session snap=
+shot-trace-session \<br>
+&gt;&gt; =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 --rate-policy=3Donce-after:1<br>
+&gt;&gt;<br>
+&gt;&gt; # start &amp; list info<br>
+&gt;&gt; sudo lttng start<br>
+&gt;&gt; sudo lttng list snapshot-trace-session<br>
+&gt;&gt; sudo lttng list-triggers<br>
+&gt;&gt;<br>
+&gt;&gt; #=3D=3D=3D=3D=3D=3D=3D=3D test it...<br>
+&gt;&gt; sudo reboot<br>
+&gt;&gt;<br>
+&gt;&gt; #=3D=3D=3D=3D=3D=3D=3D reconnect and=C2=A0Nothing :(<br>
+&gt;&gt; $ ls -alu /application/trace/<br>
+&gt;&gt; drwxr-xr-x =C2=A0 =C2=A02 u =C2=A0u =C2=A0 =C2=A0 =C2=A0 4096 May =
+15 =C2=A02024 .<br>
+&gt;&gt; drwxr-xr-x =C2=A0 10 u =C2=A0u =C2=A0 =C2=A0 =C2=A0 4096 May 15 =
+=C2=A02024 ..<br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt; _______________________________________________<br>
+&gt;&gt; lttng-dev mailing list<br>
+&gt;&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">ltt=
+ng-dev@lists.lttng.org</a><br>
+&gt;&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-=
+dev" rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/m=
+ailman/listinfo/lttng-dev</a><br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
+ev@lists.lttng.org</a><br>
+&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
+ rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
+an/listinfo/lttng-dev</a><br>
+</blockquote></div><br clear=3D"all"><div><br></div><span class=3D"gmail_si=
+gnature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_signature"><d=
+iv dir=3D"ltr"><b>Damien Berget</b></div></div>
+
+--0000000000005c728106189653e7--
+
+--===============7043627842448215477==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============7043627842448215477==--
