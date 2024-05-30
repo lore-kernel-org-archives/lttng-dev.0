@@ -4,43 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B33DDC25B78
-	for <lttng-dev@archiver.kernel.org>; Wed, 22 May 2024 20:08:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70736C25B74
+	for <lttng-dev@archiver.kernel.org>; Thu, 30 May 2024 05:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1716408529;
-	bh=a8SsPMYXTaFCL8JFuT3ikmikO0CeXAxR9oHAW9kLyDA=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=kF+s9TF8mfYPXXnLfIC0436l1XwSGe7wPwj0Ot0nclETImPoZPdEV7JAQfrnMqtND
-	 5QLaJQyfeqppRvVq262sNdAq2j9VrXSOCsjqkI+vUnPApp26IYYRfxUSAo5wKiKXyZ
-	 KBgWtjF5Vk950jG73PnwXAHkbMejVVC7/qKF1mufTjUC2VBZPyNx3L3MFJ1ipa1P18
-	 SUDAB6CZooHBUklhJ2tlYKShqCNFFqBG+ZUeGcWpfij03gu3Zi0xHpxI9nNCvLC2iZ
-	 RX4j3VP1YicFoWkH5sjSuIOSrJiOlhVPMUXs/RdAKT0mO9zABACmqxiy2xwKg14G8g
-	 zNkmcfCPplu/w==
+	s=default; t=1717048394;
+	bh=kYQNlpED4JGQXqp101BAoMBdXIIBi5D+pergpsJdNZE=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=y8FAPJnsKa25Jmt9dFFYfkW8oKDj+jEPxptdIM2Dty9YPiRPRC+w/yBwcUlZb/wEn
+	 GEXiXn+ggnAvoydohNeCwMHhysId1Xd9A1pQ7VOq9HNyWr6UOl/aymZnVnu8eXO0zm
+	 hz6oCnMnPTT5Npc2zCK7bR9jGoCJf59MxlEvo2uOVG2rtxNZtClnv6Xk+09D+cBvy3
+	 Z9U3AXOPPRkzBbkTaXme8yH5B7PFRliBuykIRRRCblZ45rzptBpEGrKq3sp7AYqbZd
+	 5I7MKvUfrz1+4193+BI2m+WSYAop1F2YEMBh0LID2XSzz+1pcawfk4HmmiRssZG3PP
+	 6UueArJX5J/xg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Vl2SJ3DShz2pqC;
-	Wed, 22 May 2024 16:08:48 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com
- [IPv6:2607:5300:203:b2ee::31e5])
- by lists.lttng.org (Postfix) with ESMTPS id 4Vl2SH1QG8z2q26
- for <lttng-dev@lists.lttng.org>; Wed, 22 May 2024 16:08:46 -0400 (EDT)
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4Vl2SF2BStz10hJ;
- Wed, 22 May 2024 16:08:45 -0400 (EDT)
-Message-ID: <4aff9f86-0c2c-430e-8749-786bc94fd750@efficios.com>
-Date: Wed, 22 May 2024 16:09:20 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Kienan Stewart <kstewart@efficios.com>,
- Martin Hicks <martin@sr-research.com>, lttng-dev@lists.lttng.org
-References: <ZkdnIf/OX995MndN@t14.bork.org>
- <9e00bf4e-1059-402b-9be2-ef407dbdf039@efficios.com>
+	by lists.lttng.org (Postfix) with ESMTP id 4Vqb5P3qlwz2rWy;
+	Thu, 30 May 2024 01:53:13 -0400 (EDT)
+Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com
+ [99.78.197.219])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Vqb5L666mz2rkp
+ for <lttng-dev@lists.lttng.org>; Thu, 30 May 2024 01:53:10 -0400 (EDT)
+X-IronPort-AV: E=Sophos;i="6.08,199,1712620800"; d="scan'208,217";a="92865310"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO
+ smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+ by smtp-border-fw-80008.pdx80.corp.amazon.com with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2024 05:53:07 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [10.0.21.151:58030]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.43.143:2525]
+ with esmtp (Farcaster)
+ id c62057e2-328f-44c5-8b3a-a524fd8ae1f4; Thu, 30 May 2024 05:53:07 +0000 (UTC)
+X-Farcaster-Flow-ID: c62057e2-328f-44c5-8b3a-a524fd8ae1f4
+Received: from EX19D003ANC004.ant.amazon.com (10.37.240.207) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Thu, 30 May 2024 05:53:06 +0000
+Received: from EX19D003ANC001.ant.amazon.com (10.37.240.216) by
+ EX19D003ANC004.ant.amazon.com (10.37.240.207) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.28;
+ Thu, 30 May 2024 05:53:05 +0000
+Received: from EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8]) by
+ EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8%5]) with
+ mapi id 15.02.1258.028; Thu, 30 May 2024 05:53:05 +0000
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Thread-Topic: [lttng-relayd] is there existing cases for relayd to stream over
+ Android usb based adb?
+Thread-Index: AQHaslKH7CI0j5/u4E6iXx4NZ5jN4Q==
+Date: Thu, 30 May 2024 05:53:05 +0000
+Message-ID: <b2e9c32fbcbe4067a64fd831bac70d81@amazon.com>
+Accept-Language: en-US
 Content-Language: en-US
-In-Reply-To: <9e00bf4e-1059-402b-9be2-ef407dbdf039@efficios.com>
-Subject: Re: [lttng-dev] [PATCH] Fix mm_vmscan_lru_isolate tracepoint for
- RHEL 9.4 kernel
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.135.234.192]
+MIME-Version: 1.0
+Subject: [lttng-dev] [lttng-relayd] is there existing cases for relayd to
+ stream over Android usb based adb?
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -52,44 +70,121 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: "Wu, Yannan via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: "Wu, Yannan" <yannanwu@amazon.com>
+Content-Type: multipart/mixed; boundary="===============0304910612282499374=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-T24gMjAyNC0wNS0xNyAxMjowNCwgS2llbmFuIFN0ZXdhcnQgdmlhIGx0dG5nLWRldiB3cm90ZToK
-PiBIaSBNYXJ0aW4sCj4gCj4gdGhhbmtzIGZvciB0aGUgcGF0Y2guCj4gCj4gSSBjaGFuZ2VkIHRo
-ZSB2ZXJzaW9uIHJhbmdlIHNsaWdodGx5LiBUaGUgUkhFTCBrZXJuZWwgNS4xNC4wLTQyNy4xMy4x
-IAo+IHN0aWxsIGhhcyB0aGUgYGlzb2xhdGVfbW9kZWAgcGFyYW1ldGVyIGluIHRoZSBgbW1fdm1z
-Y2FuX2xydV9pc29sYXRlYCAKPiB0cmFjZXBvaW50OyBpdCB3YXMgb25seSByZW1vdmVkIGluIDUu
-MTQuMC00MjcuMTYuMS4KPiAKPiBJIGFsc28gZm9yd2FyZCBwb3J0ZWQgdGhlIHBhdGNoIHRvIHRo
-ZSBtYXN0ZXIgYnJhbmNoLgo+IAo+IFRoZSB1cGRhdGVkIHBhdGNoZXMgd2lsbCBiZSByZXZpZXdl
-ZCBhdDogCj4gaHR0cHM6Ly9yZXZpZXcubHR0bmcub3JnL3EvdG9waWM6JTIyYnVpbGRmaXgtZWw5
-LjQlMjIKCk1lcmdlZCBpbnRvIGx0dG5nLW1vZHVsZXMgbWFzdGVyIGFuZCBzdGFibGUtMi4xMywg
-dGhhbmtzIQoKTWF0aGlldQoKPiAKPiB0aGFua3MsCj4ga2llbmFuCj4gCj4gT24gNS8xNy8yNCAx
-MDozMCBBTSwgTWFydGluIEhpY2tzIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4+Cj4+Cj4+IFJlZGhh
-dCBoYXMgbW92ZWQgdG8gdXNpbmcgdGhlIGZvcm1hdCBmaXJzdCBmb3VuZCBpbiB0aGUgNi43IGtl
-cm5lbAo+PiBmb3IgdGhlIG1tX3Ztc2Nhbl9scnVfaXNvbGF0ZSB0cmFjZXBvaW50Lgo+Pgo+PiBT
-aWduZWQtb2ZmLWJ5OiBNYXJ0aW4gSGlja3MgPG1hcnRpbkBzci1yZXNlYXJjaC5jb20+Cj4+IC0t
-LQo+PiDCoCBpbmNsdWRlL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbW1fdm1zY2FuLmggfCA0ICsr
-Ky0KPj4gwqAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+
-Pgo+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9pbnN0cnVtZW50YXRpb24vZXZlbnRzL21tX3Ztc2Nh
-bi5oIAo+PiBiL2luY2x1ZGUvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9tbV92bXNjYW4uaAo+PiBp
-bmRleCBlYTZmNGI3Li40OWE5ZWFlIDEwMDY0NAo+PiAtLS0gYS9pbmNsdWRlL2luc3RydW1lbnRh
-dGlvbi9ldmVudHMvbW1fdm1zY2FuLmgKPj4gKysrIGIvaW5jbHVkZS9pbnN0cnVtZW50YXRpb24v
-ZXZlbnRzL21tX3Ztc2Nhbi5oCj4+IEBAIC0zNjksNyArMzY5LDkgQEAgTFRUTkdfVFJBQ0VQT0lO
-VF9FVkVOVF9NQVAobW1fc2hyaW5rX3NsYWJfZW5kLAo+PiDCoCApCj4+IMKgICNlbmRpZgo+PiAt
-I2lmIChMVFROR19MSU5VWF9WRVJTSU9OX0NPREUgPj0gTFRUTkdfS0VSTkVMX1ZFUlNJT04oNiw3
-LDApKQo+PiArI2lmIChMVFROR19MSU5VWF9WRVJTSU9OX0NPREUgPj0gTFRUTkdfS0VSTkVMX1ZF
-UlNJT04oNiw3LDApIHx8IFwKPj4gK8KgwqDCoMKgIExUVE5HX1JIRUxfS0VSTkVMX1JBTkdFKDUs
-MTQsMCw0MjcsMCwwLCA1LDE1LDAsMCwwLDApKQo+PiArCj4+IMKgIExUVE5HX1RSQUNFUE9JTlRf
-RVZFTlQobW1fdm1zY2FuX2xydV9pc29sYXRlLAo+PiDCoMKgwqDCoMKgIFRQX1BST1RPKGludCBj
-bGFzc3pvbmVfaWR4LAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
-bmctZGV2CgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwczovL3d3dy5l
-ZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
-czovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============0304910612282499374==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_b2e9c32fbcbe4067a64fd831bac70d81amazoncom_"
+
+--_000_b2e9c32fbcbe4067a64fd831bac70d81amazoncom_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hihi, there,
+
+I am currently working on enabling lttng live mode over android usb adb. He=
+re is the situation, during debugging some network related issues, we dont =
+want the trace data to be streamed via network to cause extra load to the s=
+ystem being profiled. Then we select to connect lttng-relayd with adb via p=
+ort forwarding so that the data is "forward" to the host.
+
+Here is the set up and the problem:
+
+for the device:  adb reverse tcp:5342 tcp:5342; adb reverse tcp:5343 tcp:53=
+43; adb reverse tcp:5344 tcp:5344
+Then starting up lttng with --live enabled.
+
+What is expected:
+lttng start streaming to the localhost.
+What is seen:
+the lttng-relayd failed to start. For unable binding to the socket.
+
+The cause of this issue:
+
+both adb reverse and lttng relayd need binding to the socket which is confl=
+ict with each other.
+
+
+So what I wanna ask is, for embedded system use cases, do we have successfu=
+l use cases among team that could stream the trace data in live mode to the=
+ host with usb based adb? If not, any idea or suggestion to me on how to pr=
+ocess forward?
+
+Amanda
+
+
+
+
+--_000_b2e9c32fbcbe4067a64fd831bac70d81amazoncom_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
+n-bottom:0;} --></style>
+</head>
+<body dir=3D"ltr">
+<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
+-family:Calibri,Helvetica,sans-serif;" dir=3D"ltr">
+<p>Hihi, there,</p>
+<p>I am currently working on enabling lttng live mode over android usb adb.=
+ Here is the situation, during debugging some network related issues, we do=
+nt want the trace data to be streamed via network to cause extra load to th=
+e system being profiled. Then we
+ select to connect lttng-relayd with adb via port forwarding so that the da=
+ta is &quot;forward&quot; to the host.</p>
+<p><b>Here is the set up and the problem:</b></p>
+<p>for the device:&nbsp; adb reverse tcp:5342 tcp:5342;&nbsp;<span>adb reve=
+rse tcp:5343 tcp:5343</span>;&nbsp;<span>adb reverse tcp:5344 tcp:5344</spa=
+n><br>
+Then starting up lttng with --live enabled.</p>
+<p><b>What is expected:</b><br>
+lttng start streaming to the localhost.<br>
+<b>What is seen: </b><span><br>
+the lttng-relayd failed to start. </span>For unable binding to the socket.<=
+/p>
+<p><b>The cause of this issue: </b><br>
+</p>
+<p>both adb reverse and lttng relayd need binding to the socket which is co=
+nflict with each other.</p>
+<p><br>
+</p>
+<p>So what I wanna ask is, for embedded system use cases, do we have succes=
+sful use cases among team that could stream the trace data in live mode to =
+the host with usb based adb? If not, any idea or suggestion to me on how to=
+ process forward?<br>
+</p>
+<p>Amanda<br>
+</p>
+<p><br>
+</p>
+<p><br>
+</p>
+<p><br>
+</p>
+</div>
+</body>
+</html>
+
+--_000_b2e9c32fbcbe4067a64fd831bac70d81amazoncom_--
+
+--===============0304910612282499374==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0304910612282499374==--
