@@ -4,56 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17D15C25B74
-	for <lttng-dev@archiver.kernel.org>; Mon,  3 Jun 2024 02:56:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C3FEC25B7E
+	for <lttng-dev@archiver.kernel.org>; Mon,  3 Jun 2024 03:01:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1717383369;
-	bh=tLuCBSGgD469TMsfSE/v2oYh6qsl3fONrOF+k0jycu8=;
+	s=default; t=1717383699;
+	bh=yO8mvWT7BUBueWDPlsVPXLnyZj1LQT0h9O9FKZY/bOQ=;
 	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=aCqRfx4aMZ0yiO5jBO+Xc4ix1yJrgk0JEpz5KD57M44C9yQKrR+CfsYJFXIx/Tfe+
-	 URsNAP7xy8/ACQgTwPixf495WHOoAJ75ftkYyow0sWeL83/sl7ApZNAXa4Zj32OejG
-	 2ZARp+sQlPglse+VAxk9AFVRU1pn4daUuDSDDibYl2GOchk/ZOYIEJaGWtrdQR09dg
-	 oR8kgirdDZqrG36bZb9LgvSqMsPxDSgR1CaNCJArUVKaQfcP30a6D+aEpQh5sRYR49
-	 4+zLZFOjSXiBp7Fhdx5P8E/pdvV1aPX/eAmmjZPhPQ5Unpf3x3guf5WeL6rMo8d5Xo
-	 c5EjzPwG0sPlg==
+	b=wNxyZ4KeVbm2tqgm7rcXorsqVvbAAQ7EXZAwVyWXGnC0/azQKtmHzK/+ivHGbXcn/
+	 LxVl0wjlHzEwy/ptyjXmmEPqUwfxB0cxkmwyfdlJhBCkkt20UiKD2uazYqQ6QT+aX/
+	 XhsrktBa6ZRX4feaRMTIwtfGkv4x5gaZ10mESfEkywDfQENebU7x6BDbe3SUI323pS
+	 lzlfZgCd2/gOLs8mXEPY/aAVWXjSyS87Tn5HbfyttS9uCT2jPYcVC8OiwJI0tRpPCx
+	 OIKpGxZ8NcbmO6j96XoX4yfHXLKF1a6bb7ShWnaCxrNCf4oIMUCsoy/ZovskZCbvld
+	 hvmLUYxr3wooA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4VsyzD5hwDz2sZQ;
-	Sun,  2 Jun 2024 22:56:08 -0400 (EDT)
-Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com
- [207.171.188.206])
- by lists.lttng.org (Postfix) with ESMTPS id 4Vsyz723lsz2sZP
- for <lttng-dev@lists.lttng.org>; Sun,  2 Jun 2024 22:56:03 -0400 (EDT)
-X-IronPort-AV: E=Sophos;i="6.08,210,1712620800"; 
- d="scan'208,217";a="729964940"
+	by lists.lttng.org (Postfix) with ESMTP id 4Vsz5b0qMQz2s7B;
+	Sun,  2 Jun 2024 23:01:39 -0400 (EDT)
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com
+ [99.78.197.220])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Vsz5Y0R03z2s79
+ for <lttng-dev@lists.lttng.org>; Sun,  2 Jun 2024 23:01:36 -0400 (EDT)
+X-IronPort-AV: E=Sophos;i="6.08,210,1712620800"; d="scan'208,217";a="93660630"
 Thread-Topic: [lttng-dev] [lttng-relayd] is there existing cases for relayd to
  stream over Android usb based adb?
 Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO
  smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
- by smtp-border-fw-9106.sea19.amazon.com with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 02:55:57 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [10.0.21.151:22932]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.31.236:2525]
+ by smtp-border-fw-80009.pdx80.corp.amazon.com with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 03:01:34 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [10.0.21.151:58463]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.22.28:2525]
  with esmtp (Farcaster)
- id 2fae7a9e-dd17-45d0-8794-be96c200481c; Mon, 3 Jun 2024 02:55:56 +0000 (UTC)
-X-Farcaster-Flow-ID: 2fae7a9e-dd17-45d0-8794-be96c200481c
-Received: from EX19D003ANC003.ant.amazon.com (10.37.240.197) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Mon, 3 Jun 2024 02:55:56 +0000
+ id 28b32230-6a4a-4345-8000-394ae293b20b; Mon, 3 Jun 2024 03:01:33 +0000 (UTC)
+X-Farcaster-Flow-ID: 28b32230-6a4a-4345-8000-394ae293b20b
 Received: from EX19D003ANC001.ant.amazon.com (10.37.240.216) by
- EX19D003ANC003.ant.amazon.com (10.37.240.197) with Microsoft SMTP Server
+ EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Mon, 3 Jun 2024 03:01:32 +0000
+Received: from EX19D003ANC001.ant.amazon.com (10.37.240.216) by
+ EX19D003ANC001.ant.amazon.com (10.37.240.216) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.28;
- Mon, 3 Jun 2024 02:55:54 +0000
+ Mon, 3 Jun 2024 03:01:31 +0000
 Received: from EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8]) by
  EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8%5]) with
- mapi id 15.02.1258.028; Mon, 3 Jun 2024 02:55:54 +0000
+ mapi id 15.02.1258.028; Mon, 3 Jun 2024 03:01:31 +0000
 To: Kienan Stewart <kstewart@efficios.com>, "lttng-dev@lists.lttng.org"
  <lttng-dev@lists.lttng.org>
-Thread-Index: AQHaslKH7CI0j5/u4E6iXx4NZ5jN4bGwJewAgAU3Kcw=
-Date: Mon, 3 Jun 2024 02:55:54 +0000
-Message-ID: <92cc12a956e1404691519a7f02b7607d@amazon.com>
+Thread-Index: AQHaslKH7CI0j5/u4E6iXx4NZ5jN4bGwJewAgAU50fQ=
+Date: Mon, 3 Jun 2024 03:01:31 +0000
+Message-ID: <e3420bc8ac2f4ad8911eb91bbca7aa82@amazon.com>
 References: <b2e9c32fbcbe4067a64fd831bac70d81@amazon.com>,
  <b974bf9f-b511-4fdb-8d67-93a6c1b273ab@efficios.com>
 In-Reply-To: <b974bf9f-b511-4fdb-8d67-93a6c1b273ab@efficios.com>
@@ -78,35 +77,22 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 From: "Wu, Yannan via lttng-dev" <lttng-dev@lists.lttng.org>
 Reply-To: "Wu, Yannan" <yannanwu@amazon.com>
-Content-Type: multipart/mixed; boundary="===============8333387275601088798=="
+Content-Type: multipart/mixed; boundary="===============5939134720063065134=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============8333387275601088798==
+--===============5939134720063065134==
 Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="_000_92cc12a956e1404691519a7f02b7607damazoncom_"
+	boundary="_000_e3420bc8ac2f4ad8911eb91bbca7aa82amazoncom_"
 
---_000_92cc12a956e1404691519a7f02b7607damazoncom_
+--_000_e3420bc8ac2f4ad8911eb91bbca7aa82amazoncom_
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
-Yes. My test command is like below:
-
-  1.  lttng-sessiond --d --no-kernel
-  2.
-
-yannanwu@ue91e96f2951b5c:~/trees/lttng_test_run$ lttng create my-user-space=
--live-session --live
-Live session my-user-space-live-session created.
-Traces will be output to tcp4://127.0.0.1:5342/ [data: 5343]
-Live timer interval set to 1000000 us
-
-  3.  After this, I could "ps -Ax|grep lttng" and see lttng-relayd started.=
- But once I start adb reverse, it will failed for failed binding to socket.
-  4.  In the other order, if I start adb reverse first and lttng-create lat=
-er, lttng-create will not fail but lttng-relayd is not started. By manually=
- start lttng-relayd it will also failed for unable binding to socket.
+I checked lttng-relayd source code, we do need to bind to the exact socket =
+for further process. As adb reverse bind to the socket as well there is a c=
+onflict in-between. Do we have any other way to workaround it?
 
 Amanda
 
@@ -212,7 +198,7 @@ On 5/30/24 1:53 AM, Wu, Yannan via lttng-dev wrote:
 > lttng-dev@lists.lttng.org
 > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---_000_92cc12a956e1404691519a7f02b7607damazoncom_
+--_000_e3420bc8ac2f4ad8911eb91bbca7aa82amazoncom_
 Content-Type: text/html; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
@@ -236,22 +222,11 @@ p
 <div dir=3D"ltr">
 <div id=3D"x_divtagdefaultwrapper" dir=3D"ltr" style=3D"font-size:12pt; col=
 or:#000000; font-family:Calibri,Helvetica,sans-serif">
-<p>Yes. My test command is like below:</p>
-<p></p>
-<ol style=3D"margin-bottom:0px; margin-top:0px">
-<li>lttng-sessiond --d --no-kernel</li><li>
-<pre>yannanwu@ue91e96f2951b5c:~/trees/lttng_test_run$ lttng create my-user-=
-space-live-session --live <br>Live session my-user-space-live-session creat=
-ed.<br>Traces will be output to tcp4://127.0.0.1:5342/ [data: 5343]<br>Live=
- timer interval set to 1000000 us</pre>
-</li><li>After this, I could &quot;ps -Ax|grep lttng&quot; and see lttng-re=
-layd started. But once I start adb reverse, it will failed for failed bindi=
-ng to socket.</li><li>In the other order, if I start adb reverse first and =
-lttng-create later, lttng-create will not fail but lttng-relayd is not star=
-ted. By manually start lttng-relayd it will also failed for unable binding =
-to socket.</li></ol>
-<div>Amanda</div>
-<p></p>
+<p>I checked lttng-relayd source code, we do need to bind to the exact sock=
+et for further process. As adb reverse bind to the socket as well there is =
+a conflict in-between. Do we have any other way to workaround it?</p>
+<p>Amanda<br>
+</p>
 </div>
 <hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
 <div id=3D"x_divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" =
@@ -386,9 +361,9 @@ ve<br>
 </body>
 </html>
 
---_000_92cc12a956e1404691519a7f02b7607damazoncom_--
+--_000_e3420bc8ac2f4ad8911eb91bbca7aa82amazoncom_--
 
---===============8333387275601088798==
+--===============5939134720063065134==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -399,4 +374,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============8333387275601088798==--
+--===============5939134720063065134==--
