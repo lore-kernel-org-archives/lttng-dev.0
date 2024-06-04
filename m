@@ -4,64 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C3FEC25B7E
-	for <lttng-dev@archiver.kernel.org>; Mon,  3 Jun 2024 03:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 927E1C25B78
+	for <lttng-dev@archiver.kernel.org>; Tue,  4 Jun 2024 15:09:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1717383699;
-	bh=yO8mvWT7BUBueWDPlsVPXLnyZj1LQT0h9O9FKZY/bOQ=;
-	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1717513742;
+	bh=y9e8JP+vnllGDEm5F0YC26TxUYFStJ/itdL+pPWGl7I=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=wNxyZ4KeVbm2tqgm7rcXorsqVvbAAQ7EXZAwVyWXGnC0/azQKtmHzK/+ivHGbXcn/
-	 LxVl0wjlHzEwy/ptyjXmmEPqUwfxB0cxkmwyfdlJhBCkkt20UiKD2uazYqQ6QT+aX/
-	 XhsrktBa6ZRX4feaRMTIwtfGkv4x5gaZ10mESfEkywDfQENebU7x6BDbe3SUI323pS
-	 lzlfZgCd2/gOLs8mXEPY/aAVWXjSyS87Tn5HbfyttS9uCT2jPYcVC8OiwJI0tRpPCx
-	 OIKpGxZ8NcbmO6j96XoX4yfHXLKF1a6bb7ShWnaCxrNCf4oIMUCsoy/ZovskZCbvld
-	 hvmLUYxr3wooA==
+	b=WEbXx/brC5p/7TZc/ZjgIgiE6NzGwG2sfFPemtd1aYnJCvQz6RW3/DyOzVLxfbJ69
+	 9sH1TFYELEftz00f9XDF9ylNCX0EwsbNQJxrEQpkSM6iCN2Ga61KgN4xxyLMjixCuE
+	 ae3dCU82dslvxomolysvNgh4HJTh1ntQrSykRvJOqg6krEPpdDIHH67yKVNdyChkPa
+	 UJN8FgE83GwWVkjQBcYHCQAxJw+fYbdh+nyOPEpbYCaMvURcOOCxVWUPQxhJF6s67P
+	 4T+8OZMkMRy+RBqQaizhjaXrQHh1RGnlil3Fg2ouGTOFVK/6mpt1GHDecGyHgqay+F
+	 ANLMXhI2VtzTA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Vsz5b0qMQz2s7B;
-	Sun,  2 Jun 2024 23:01:39 -0400 (EDT)
-Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com
- [99.78.197.220])
- by lists.lttng.org (Postfix) with ESMTPS id 4Vsz5Y0R03z2s79
- for <lttng-dev@lists.lttng.org>; Sun,  2 Jun 2024 23:01:36 -0400 (EDT)
-X-IronPort-AV: E=Sophos;i="6.08,210,1712620800"; d="scan'208,217";a="93660630"
-Thread-Topic: [lttng-dev] [lttng-relayd] is there existing cases for relayd to
- stream over Android usb based adb?
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO
- smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
- by smtp-border-fw-80009.pdx80.corp.amazon.com with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2024 03:01:34 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.21.151:58463]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.22.28:2525]
- with esmtp (Farcaster)
- id 28b32230-6a4a-4345-8000-394ae293b20b; Mon, 3 Jun 2024 03:01:33 +0000 (UTC)
-X-Farcaster-Flow-ID: 28b32230-6a4a-4345-8000-394ae293b20b
-Received: from EX19D003ANC001.ant.amazon.com (10.37.240.216) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Mon, 3 Jun 2024 03:01:32 +0000
-Received: from EX19D003ANC001.ant.amazon.com (10.37.240.216) by
- EX19D003ANC001.ant.amazon.com (10.37.240.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.28;
- Mon, 3 Jun 2024 03:01:31 +0000
-Received: from EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8]) by
- EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8%5]) with
- mapi id 15.02.1258.028; Mon, 3 Jun 2024 03:01:31 +0000
-To: Kienan Stewart <kstewart@efficios.com>, "lttng-dev@lists.lttng.org"
- <lttng-dev@lists.lttng.org>
-Thread-Index: AQHaslKH7CI0j5/u4E6iXx4NZ5jN4bGwJewAgAU50fQ=
-Date: Mon, 3 Jun 2024 03:01:31 +0000
-Message-ID: <e3420bc8ac2f4ad8911eb91bbca7aa82@amazon.com>
-References: <b2e9c32fbcbe4067a64fd831bac70d81@amazon.com>,
- <b974bf9f-b511-4fdb-8d67-93a6c1b273ab@efficios.com>
-In-Reply-To: <b974bf9f-b511-4fdb-8d67-93a6c1b273ab@efficios.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.119.100.232]
+	by lists.lttng.org (Postfix) with ESMTP id 4VtvBP44vRz2syn;
+	Tue,  4 Jun 2024 11:09:01 -0400 (EDT)
+Received: from smtpout.efficios.com (smtpout.efficios.com
+ [IPv6:2607:5300:203:b2ee::31e5])
+ by lists.lttng.org (Postfix) with ESMTPS id 4VtvBN1f8Bz2sf8
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Jun 2024 11:08:59 -0400 (EDT)
+Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net
+ [192.222.143.198])
+ by smtpout.efficios.com (Postfix) with ESMTPSA id 4VtvBF3QLZz12nj;
+ Tue,  4 Jun 2024 11:08:53 -0400 (EDT)
+Message-ID: <0d226e1c-ff15-47f1-a902-bad362053903@efficios.com>
+Date: Tue, 4 Jun 2024 11:09:40 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: "Wu, Yannan" <yannanwu@amazon.com>, Kienan Stewart <kstewart@efficios.com>,
+ "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+References: <b2e9c32fbcbe4067a64fd831bac70d81@amazon.com>
+ <b974bf9f-b511-4fdb-8d67-93a6c1b273ab@efficios.com>
+ <92cc12a956e1404691519a7f02b7607d@amazon.com>
+Content-Language: en-US
+In-Reply-To: <92cc12a956e1404691519a7f02b7607d@amazon.com>
 Subject: Re: [lttng-dev] [lttng-relayd] is there existing cases for relayd
  to stream over Android usb based adb?
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -75,303 +53,106 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: "Wu, Yannan via lttng-dev" <lttng-dev@lists.lttng.org>
-Reply-To: "Wu, Yannan" <yannanwu@amazon.com>
-Content-Type: multipart/mixed; boundary="===============5939134720063065134=="
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============5939134720063065134==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_e3420bc8ac2f4ad8911eb91bbca7aa82amazoncom_"
-
---_000_e3420bc8ac2f4ad8911eb91bbca7aa82amazoncom_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-I checked lttng-relayd source code, we do need to bind to the exact socket =
-for further process. As adb reverse bind to the socket as well there is a c=
-onflict in-between. Do we have any other way to workaround it?
-
-Amanda
-
-________________________________
-From: Kienan Stewart <kstewart@efficios.com>
-Sent: Friday, May 31, 2024 3:12:16 AM
-To: Wu, Yannan; lttng-dev@lists.lttng.org
-Subject: RE: [EXTERNAL] [lttng-dev] [lttng-relayd] is there existing cases =
-for relayd to stream over Android usb based adb?
-
-CAUTION: This email originated from outside of the organization. Do not cli=
-ck links or open attachments unless you can confirm the sender and know the=
- content is safe.
-
-
-
-Hi Amanda,
-
-I'd like to confirm my understanding the situation.
-
-Android device
-   - Running lttng-sessiond with one or more configured sessions
-
-Development device
-   - Connected to the android device over usb using adb
-
-You want want the data captured on the android device to be streamed via
-the usb connection rather than the other networks on the android device.
-
-Could you expand on the commands you used to set up the tracing sessions
-and relay, and where each of those commands were run?
-
-It sounds to me like you might want to be doing something like the
-following:
-
-(Development device) Start lttng-relayd:
-   - tcp://0.0.0.0:5342 and :5343 will be bound on the development device
-   - tcp://127.0.0.1:5344 will be available for the live reader
-
-(Development device) Create the reverses for the following ports: 5342
-and 5343
-   - At this point :5342 and :5343 should be available on the android
-device and reach the relayd running on the development device
-
-(Android device) Start lttng-sessiond
-(Android device) Create session(s): `lttng create -U tcp://localhost/
-   - Using `-U/--set-url`, no relayd will be spawned on the android device
-(Android device) Start session(s)
-
-This setup should have the relayd running on the development and writing
-the traces there and/or viewing them with a live viewer. On the android
-device, the UST applications (if any) will connect to the local sessiond
-and consumers, which will shuttle the information over :5342 and :5343
-to the developer device via the reverse sockets.
-
-Please note that I didn't have time to test this, so there might be some
-mistakes. As I requested above, clear details of the exact commands you
-use for the tracing setup would be very helpful to have the clearest
-understanding of what you're doing.
-
-hope this helps,
-kienan
-
-On 5/30/24 1:53 AM, Wu, Yannan via lttng-dev wrote:
-> Hihi, there,
->
-> I am currently working on enabling lttng live mode over android usb adb.
-> Here is the situation, during debugging some network related issues, we
-> dont want the trace data to be streamed via network to cause extra load
-> to the system being profiled. Then we select to connect lttng-relayd
-> with adb via port forwarding so that the data is "forward" to the host.
->
-> *Here is the set up and the problem:*
->
-> for the device:  adb reverse tcp:5342 tcp:5342; adb reverse tcp:5343
-> tcp:5343; adb reverse tcp:5344 tcp:5344
-> Then starting up lttng with --live enabled.
->
-> *What is expected:*
-> lttng start streaming to the localhost.
-> *What is seen: *
-> the lttng-relayd failed to start. For unable binding to the socket.
->
-> *The cause of this issue: *
->
-> both adb reverse and lttng relayd need binding to the socket which is
-> conflict with each other.
->
->
-> So what I wanna ask is, for embedded system use cases, do we have
-> successful use cases among team that could stream the trace data in live
-> mode to the host with usb based adb? If not, any idea or suggestion to
-> me on how to process forward?
->
-> Amanda
->
->
->
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---_000_e3420bc8ac2f4ad8911eb91bbca7aa82amazoncom_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Exchange Server">
-<!-- converted from text --><style><!-- .EmailQuote { margin-left: 1pt; pad=
-ding-left: 4pt; border-left: #800000 2px solid; } --></style>
-</head>
-<body>
-<meta content=3D"text/html; charset=3DUTF-8">
-<style type=3D"text/css" style=3D"">
-<!--
-p
-	{margin-top:0;
-	margin-bottom:0}
--->
-</style>
-<div dir=3D"ltr">
-<div id=3D"x_divtagdefaultwrapper" dir=3D"ltr" style=3D"font-size:12pt; col=
-or:#000000; font-family:Calibri,Helvetica,sans-serif">
-<p>I checked lttng-relayd source code, we do need to bind to the exact sock=
-et for further process. As adb reverse bind to the socket as well there is =
-a conflict in-between. Do we have any other way to workaround it?</p>
-<p>Amanda<br>
-</p>
-</div>
-<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
-<div id=3D"x_divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" =
-color=3D"#000000" style=3D"font-size:11pt"><b>From:</b> Kienan Stewart &lt;=
-kstewart@efficios.com&gt;<br>
-<b>Sent:</b> Friday, May 31, 2024 3:12:16 AM<br>
-<b>To:</b> Wu, Yannan; lttng-dev@lists.lttng.org<br>
-<b>Subject:</b> RE: [EXTERNAL] [lttng-dev] [lttng-relayd] is there existing=
- cases for relayd to stream over Android usb based adb?</font>
-<div>&nbsp;</div>
-</div>
-</div>
-<font size=3D"2"><span style=3D"font-size:10pt;">
-<div class=3D"PlainText">CAUTION: This email originated from outside of the=
- organization. Do not click links or open attachments unless you can confir=
-m the sender and know the content is safe.<br>
-<br>
-<br>
-<br>
-Hi Amanda,<br>
-<br>
-I'd like to confirm my understanding the situation.<br>
-<br>
-Android device<br>
-&nbsp;&nbsp; - Running lttng-sessiond with one or more configured sessions<=
-br>
-<br>
-Development device<br>
-&nbsp;&nbsp; - Connected to the android device over usb using adb<br>
-<br>
-You want want the data captured on the android device to be streamed via<br=
->
-the usb connection rather than the other networks on the android device.<br=
->
-<br>
-Could you expand on the commands you used to set up the tracing sessions<br=
->
-and relay, and where each of those commands were run?<br>
-<br>
-It sounds to me like you might want to be doing something like the<br>
-following:<br>
-<br>
-(Development device) Start lttng-relayd:<br>
-&nbsp;&nbsp; - tcp://0.0.0.0:5342 and :5343 will be bound on the developmen=
-t device<br>
-&nbsp;&nbsp; - tcp://127.0.0.1:5344 will be available for the live reader<b=
-r>
-<br>
-(Development device) Create the reverses for the following ports: 5342<br>
-and 5343<br>
-&nbsp;&nbsp; - At this point :5342 and :5343 should be available on the and=
-roid<br>
-device and reach the relayd running on the development device<br>
-<br>
-(Android device) Start lttng-sessiond<br>
-(Android device) Create session(s): `lttng create -U tcp://localhost/<br>
-&nbsp;&nbsp; - Using `-U/--set-url`, no relayd will be spawned on the andro=
-id device<br>
-(Android device) Start session(s)<br>
-<br>
-This setup should have the relayd running on the development and writing<br=
->
-the traces there and/or viewing them with a live viewer. On the android<br>
-device, the UST applications (if any) will connect to the local sessiond<br=
->
-and consumers, which will shuttle the information over :5342 and :5343<br>
-to the developer device via the reverse sockets.<br>
-<br>
-Please note that I didn't have time to test this, so there might be some<br=
->
-mistakes. As I requested above, clear details of the exact commands you<br>
-use for the tracing setup would be very helpful to have the clearest<br>
-understanding of what you're doing.<br>
-<br>
-hope this helps,<br>
-kienan<br>
-<br>
-On 5/30/24 1:53 AM, Wu, Yannan via lttng-dev wrote:<br>
-&gt; Hihi, there,<br>
-&gt;<br>
-&gt; I am currently working on enabling lttng live mode over android usb ad=
-b.<br>
-&gt; Here is the situation, during debugging some network related issues, w=
-e<br>
-&gt; dont want the trace data to be streamed via network to cause extra loa=
-d<br>
-&gt; to the system being profiled. Then we select to connect lttng-relayd<b=
-r>
-&gt; with adb via port forwarding so that the data is &quot;forward&quot; t=
-o the host.<br>
-&gt;<br>
-&gt; *Here is the set up and the problem:*<br>
-&gt;<br>
-&gt; for the device:&nbsp; adb reverse tcp:5342 tcp:5342; adb reverse tcp:5=
-343<br>
-&gt; tcp:5343; adb reverse tcp:5344 tcp:5344<br>
-&gt; Then starting up lttng with --live enabled.<br>
-&gt;<br>
-&gt; *What is expected:*<br>
-&gt; lttng start streaming to the localhost.<br>
-&gt; *What is seen: *<br>
-&gt; the lttng-relayd failed to start. For unable binding to the socket.<br=
->
-&gt;<br>
-&gt; *The cause of this issue: *<br>
-&gt;<br>
-&gt; both adb reverse and lttng relayd need binding to the socket which is<=
-br>
-&gt; conflict with each other.<br>
-&gt;<br>
-&gt;<br>
-&gt; So what I wanna ask is, for embedded system use cases, do we have<br>
-&gt; successful use cases among team that could stream the trace data in li=
-ve<br>
-&gt; mode to the host with usb based adb? If not, any idea or suggestion to=
-<br>
-&gt; me on how to process forward?<br>
-&gt;<br>
-&gt; Amanda<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; lttng-dev@lists.lttng.org<br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
->https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
-</div>
-</span></font>
-</body>
-</html>
-
---_000_e3420bc8ac2f4ad8911eb91bbca7aa82amazoncom_--
-
---===============5939134720063065134==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5939134720063065134==--
+SGkgQW1hbmRhLAoKRm9yIGVhY2ggb2YgdGhlIDQgY29tbWFuZHMgZGVzY3JpYmVkIGJlbG93LCBw
+bGVhc2UgY2xhcmlmeSBvbgp3aGljaCBkZXZpY2UgdGhleSBhcmUgZXhlY3V0ZWQsIHdoZXRoZXIg
+b24gdGhlIEFuZHJvaWQgZGV2aWNlCm9yIG9uIHRoZSBEZXZlbG9wbWVudCBkZXZpY2UuCgpQbGVh
+c2UgbWFrZSBzdXJlIHRvIGZvbGxvdyB0byB0aGUgbGV0dGVyIHRoZSBjb21tYW5kcyBwcm9wb3Nl
+ZApieSBLaWVuYW46IGluIHRoZSBjb3JyZWN0IG9yZGVyLCBhbmQgb24gdGhlIGFwcHJvcHJpYXRl
+IGRldmljZS4KClRoYW5rcywKCk1hdGhpZXUKCgpPbiAyMDI0LTA2LTAyIDIyOjU1LCBXdSwgWWFu
+bmFuIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4gWWVzLiBNeSB0ZXN0IGNvbW1hbmQgaXMgbGlrZSBi
+ZWxvdzoKPiAKPiAgMS4gbHR0bmctc2Vzc2lvbmQgLS1kIC0tbm8ta2VybmVsCj4gIDIuCj4gCj4g
+ICAgIHlhbm5hbnd1QHVlOTFlOTZmMjk1MWI1Yzp+L3RyZWVzL2x0dG5nX3Rlc3RfcnVuJCBsdHRu
+ZyBjcmVhdGUgbXktdXNlci1zcGFjZS1saXZlLXNlc3Npb24gLS1saXZlCj4gICAgIExpdmUgc2Vz
+c2lvbiBteS11c2VyLXNwYWNlLWxpdmUtc2Vzc2lvbiBjcmVhdGVkLgo+ICAgICBUcmFjZXMgd2ls
+bCBiZSBvdXRwdXQgdG8gdGNwNDovLzEyNy4wLjAuMTo1MzQyLyBbZGF0YTogNTM0M10KPiAgICAg
+TGl2ZSB0aW1lciBpbnRlcnZhbCBzZXQgdG8gMTAwMDAwMCB1cwo+IAo+ICAzLiBBZnRlciB0aGlz
+LCBJIGNvdWxkICJwcyAtQXh8Z3JlcCBsdHRuZyIgYW5kIHNlZSBsdHRuZy1yZWxheWQKPiAgICAg
+c3RhcnRlZC4gQnV0IG9uY2UgSSBzdGFydCBhZGIgcmV2ZXJzZSwgaXQgd2lsbCBmYWlsZWQgZm9y
+IGZhaWxlZAo+ICAgICBiaW5kaW5nIHRvIHNvY2tldC4KPiAgNC4gSW4gdGhlIG90aGVyIG9yZGVy
+LCBpZiBJIHN0YXJ0IGFkYiByZXZlcnNlIGZpcnN0IGFuZCBsdHRuZy1jcmVhdGUKPiAgICAgbGF0
+ZXIsIGx0dG5nLWNyZWF0ZSB3aWxsIG5vdCBmYWlsIGJ1dCBsdHRuZy1yZWxheWQgaXMgbm90IHN0
+YXJ0ZWQuCj4gICAgIEJ5IG1hbnVhbGx5IHN0YXJ0IGx0dG5nLXJlbGF5ZCBpdCB3aWxsIGFsc28g
+ZmFpbGVkIGZvciB1bmFibGUKPiAgICAgYmluZGluZyB0byBzb2NrZXQuCj4gCj4gQW1hbmRhCj4g
+Cj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tCj4gKkZyb206KiBLaWVuYW4gU3Rld2FydCA8a3N0ZXdhcnRAZWZm
+aWNpb3MuY29tPgo+ICpTZW50OiogRnJpZGF5LCBNYXkgMzEsIDIwMjQgMzoxMjoxNiBBTQo+ICpU
+bzoqIFd1LCBZYW5uYW47IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiAqU3ViamVjdDoqIFJF
+OiBbRVhURVJOQUxdIFtsdHRuZy1kZXZdIFtsdHRuZy1yZWxheWRdIGlzIHRoZXJlIGV4aXN0aW5n
+IAo+IGNhc2VzIGZvciByZWxheWQgdG8gc3RyZWFtIG92ZXIgQW5kcm9pZCB1c2IgYmFzZWQgYWRi
+Pwo+IENBVVRJT046IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgdGhlIG9y
+Z2FuaXphdGlvbi4gRG8gbm90IAo+IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5s
+ZXNzIHlvdSBjYW4gY29uZmlybSB0aGUgc2VuZGVyIGFuZCAKPiBrbm93IHRoZSBjb250ZW50IGlz
+IHNhZmUuCj4gCj4gCj4gCj4gSGkgQW1hbmRhLAo+IAo+IEknZCBsaWtlIHRvIGNvbmZpcm0gbXkg
+dW5kZXJzdGFuZGluZyB0aGUgc2l0dWF0aW9uLgo+IAo+IEFuZHJvaWQgZGV2aWNlCj4gIMKgwqAg
+LSBSdW5uaW5nIGx0dG5nLXNlc3Npb25kIHdpdGggb25lIG9yIG1vcmUgY29uZmlndXJlZCBzZXNz
+aW9ucwo+IAo+IERldmVsb3BtZW50IGRldmljZQo+ICDCoMKgIC0gQ29ubmVjdGVkIHRvIHRoZSBh
+bmRyb2lkIGRldmljZSBvdmVyIHVzYiB1c2luZyBhZGIKPiAKPiBZb3Ugd2FudCB3YW50IHRoZSBk
+YXRhIGNhcHR1cmVkIG9uIHRoZSBhbmRyb2lkIGRldmljZSB0byBiZSBzdHJlYW1lZCB2aWEKPiB0
+aGUgdXNiIGNvbm5lY3Rpb24gcmF0aGVyIHRoYW4gdGhlIG90aGVyIG5ldHdvcmtzIG9uIHRoZSBh
+bmRyb2lkIGRldmljZS4KPiAKPiBDb3VsZCB5b3UgZXhwYW5kIG9uIHRoZSBjb21tYW5kcyB5b3Ug
+dXNlZCB0byBzZXQgdXAgdGhlIHRyYWNpbmcgc2Vzc2lvbnMKPiBhbmQgcmVsYXksIGFuZCB3aGVy
+ZSBlYWNoIG9mIHRob3NlIGNvbW1hbmRzIHdlcmUgcnVuPwo+IAo+IEl0IHNvdW5kcyB0byBtZSBs
+aWtlIHlvdSBtaWdodCB3YW50IHRvIGJlIGRvaW5nIHNvbWV0aGluZyBsaWtlIHRoZQo+IGZvbGxv
+d2luZzoKPiAKPiAoRGV2ZWxvcG1lbnQgZGV2aWNlKSBTdGFydCBsdHRuZy1yZWxheWQ6Cj4gIMKg
+wqAgLSB0Y3A6Ly8wLjAuMC4wOjUzNDIgYW5kIDo1MzQzIHdpbGwgYmUgYm91bmQgb24gdGhlIGRl
+dmVsb3BtZW50IGRldmljZQo+ICDCoMKgIC0gdGNwOi8vMTI3LjAuMC4xOjUzNDQgd2lsbCBiZSBh
+dmFpbGFibGUgZm9yIHRoZSBsaXZlIHJlYWRlcgo+IAo+IChEZXZlbG9wbWVudCBkZXZpY2UpIENy
+ZWF0ZSB0aGUgcmV2ZXJzZXMgZm9yIHRoZSBmb2xsb3dpbmcgcG9ydHM6IDUzNDIKPiBhbmQgNTM0
+Mwo+ICDCoMKgIC0gQXQgdGhpcyBwb2ludCA6NTM0MiBhbmQgOjUzNDMgc2hvdWxkIGJlIGF2YWls
+YWJsZSBvbiB0aGUgYW5kcm9pZAo+IGRldmljZSBhbmQgcmVhY2ggdGhlIHJlbGF5ZCBydW5uaW5n
+IG9uIHRoZSBkZXZlbG9wbWVudCBkZXZpY2UKPiAKPiAoQW5kcm9pZCBkZXZpY2UpIFN0YXJ0IGx0
+dG5nLXNlc3Npb25kCj4gKEFuZHJvaWQgZGV2aWNlKSBDcmVhdGUgc2Vzc2lvbihzKTogYGx0dG5n
+IGNyZWF0ZSAtVSB0Y3A6Ly9sb2NhbGhvc3QvCj4gIMKgwqAgLSBVc2luZyBgLVUvLS1zZXQtdXJs
+YCwgbm8gcmVsYXlkIHdpbGwgYmUgc3Bhd25lZCBvbiB0aGUgYW5kcm9pZCBkZXZpY2UKPiAoQW5k
+cm9pZCBkZXZpY2UpIFN0YXJ0IHNlc3Npb24ocykKPiAKPiBUaGlzIHNldHVwIHNob3VsZCBoYXZl
+IHRoZSByZWxheWQgcnVubmluZyBvbiB0aGUgZGV2ZWxvcG1lbnQgYW5kIHdyaXRpbmcKPiB0aGUg
+dHJhY2VzIHRoZXJlIGFuZC9vciB2aWV3aW5nIHRoZW0gd2l0aCBhIGxpdmUgdmlld2VyLiBPbiB0
+aGUgYW5kcm9pZAo+IGRldmljZSwgdGhlIFVTVCBhcHBsaWNhdGlvbnMgKGlmIGFueSkgd2lsbCBj
+b25uZWN0IHRvIHRoZSBsb2NhbCBzZXNzaW9uZAo+IGFuZCBjb25zdW1lcnMsIHdoaWNoIHdpbGwg
+c2h1dHRsZSB0aGUgaW5mb3JtYXRpb24gb3ZlciA6NTM0MiBhbmQgOjUzNDMKPiB0byB0aGUgZGV2
+ZWxvcGVyIGRldmljZSB2aWEgdGhlIHJldmVyc2Ugc29ja2V0cy4KPiAKPiBQbGVhc2Ugbm90ZSB0
+aGF0IEkgZGlkbid0IGhhdmUgdGltZSB0byB0ZXN0IHRoaXMsIHNvIHRoZXJlIG1pZ2h0IGJlIHNv
+bWUKPiBtaXN0YWtlcy4gQXMgSSByZXF1ZXN0ZWQgYWJvdmUsIGNsZWFyIGRldGFpbHMgb2YgdGhl
+IGV4YWN0IGNvbW1hbmRzIHlvdQo+IHVzZSBmb3IgdGhlIHRyYWNpbmcgc2V0dXAgd291bGQgYmUg
+dmVyeSBoZWxwZnVsIHRvIGhhdmUgdGhlIGNsZWFyZXN0Cj4gdW5kZXJzdGFuZGluZyBvZiB3aGF0
+IHlvdSdyZSBkb2luZy4KPiAKPiBob3BlIHRoaXMgaGVscHMsCj4ga2llbmFuCj4gCj4gT24gNS8z
+MC8yNCAxOjUzIEFNLCBXdSwgWWFubmFuIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4+IEhpaGksIHRo
+ZXJlLAo+Pgo+PiBJIGFtIGN1cnJlbnRseSB3b3JraW5nIG9uIGVuYWJsaW5nIGx0dG5nIGxpdmUg
+bW9kZSBvdmVyIGFuZHJvaWQgdXNiIGFkYi4KPj4gSGVyZSBpcyB0aGUgc2l0dWF0aW9uLCBkdXJp
+bmcgZGVidWdnaW5nIHNvbWUgbmV0d29yayByZWxhdGVkIGlzc3Vlcywgd2UKPj4gZG9udCB3YW50
+IHRoZSB0cmFjZSBkYXRhIHRvIGJlIHN0cmVhbWVkIHZpYSBuZXR3b3JrIHRvIGNhdXNlIGV4dHJh
+IGxvYWQKPj4gdG8gdGhlIHN5c3RlbSBiZWluZyBwcm9maWxlZC4gVGhlbiB3ZSBzZWxlY3QgdG8g
+Y29ubmVjdCBsdHRuZy1yZWxheWQKPj4gd2l0aCBhZGIgdmlhIHBvcnQgZm9yd2FyZGluZyBzbyB0
+aGF0IHRoZSBkYXRhIGlzICJmb3J3YXJkIiB0byB0aGUgaG9zdC4KPj4KPj4gKkhlcmUgaXMgdGhl
+IHNldCB1cCBhbmQgdGhlIHByb2JsZW06Kgo+Pgo+PiBmb3IgdGhlIGRldmljZTrCoCBhZGIgcmV2
+ZXJzZSB0Y3A6NTM0MiB0Y3A6NTM0MjsgYWRiIHJldmVyc2UgdGNwOjUzNDMKPj4gdGNwOjUzNDM7
+IGFkYiByZXZlcnNlIHRjcDo1MzQ0IHRjcDo1MzQ0Cj4+IFRoZW4gc3RhcnRpbmcgdXAgbHR0bmcg
+d2l0aCAtLWxpdmUgZW5hYmxlZC4KPj4KPj4gKldoYXQgaXMgZXhwZWN0ZWQ6Kgo+PiBsdHRuZyBz
+dGFydCBzdHJlYW1pbmcgdG8gdGhlIGxvY2FsaG9zdC4KPj4gKldoYXQgaXMgc2VlbjogKgo+PiB0
+aGUgbHR0bmctcmVsYXlkIGZhaWxlZCB0byBzdGFydC4gRm9yIHVuYWJsZSBiaW5kaW5nIHRvIHRo
+ZSBzb2NrZXQuCj4+Cj4+ICpUaGUgY2F1c2Ugb2YgdGhpcyBpc3N1ZTogKgo+Pgo+PiBib3RoIGFk
+YiByZXZlcnNlIGFuZCBsdHRuZyByZWxheWQgbmVlZCBiaW5kaW5nIHRvIHRoZSBzb2NrZXQgd2hp
+Y2ggaXMKPj4gY29uZmxpY3Qgd2l0aCBlYWNoIG90aGVyLgo+Pgo+Pgo+PiBTbyB3aGF0IEkgd2Fu
+bmEgYXNrIGlzLCBmb3IgZW1iZWRkZWQgc3lzdGVtIHVzZSBjYXNlcywgZG8gd2UgaGF2ZQo+PiBz
+dWNjZXNzZnVsIHVzZSBjYXNlcyBhbW9uZyB0ZWFtIHRoYXQgY291bGQgc3RyZWFtIHRoZSB0cmFj
+ZSBkYXRhIGluIGxpdmUKPj4gbW9kZSB0byB0aGUgaG9zdCB3aXRoIHVzYiBiYXNlZCBhZGI/IElm
+IG5vdCwgYW55IGlkZWEgb3Igc3VnZ2VzdGlvbiB0bwo+PiBtZSBvbiBob3cgdG8gcHJvY2VzcyBm
+b3J3YXJkPwo+Pgo+PiBBbWFuZGEKPj4KPj4KPj4KPj4KPj4KPj4gX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+
+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYgCj4gPGh0dHBzOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXY+Cj4gCj4gX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBs
+aXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3Jn
+L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0tIApNYXRoaWV1IERlc25veWVy
+cwpFZmZpY2lPUyBJbmMuCmh0dHBzOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
+bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
