@@ -4,42 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 927E1C25B78
-	for <lttng-dev@archiver.kernel.org>; Tue,  4 Jun 2024 15:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5ABAC25B78
+	for <lttng-dev@archiver.kernel.org>; Tue,  4 Jun 2024 15:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1717513742;
-	bh=y9e8JP+vnllGDEm5F0YC26TxUYFStJ/itdL+pPWGl7I=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	s=default; t=1717514761;
+	bh=26XaNL6R5gyJ5y5VZOhX8JbOKvPm5SOw/QZEXiTW3tI=;
+	h=To:Date:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=WEbXx/brC5p/7TZc/ZjgIgiE6NzGwG2sfFPemtd1aYnJCvQz6RW3/DyOzVLxfbJ69
-	 9sH1TFYELEftz00f9XDF9ylNCX0EwsbNQJxrEQpkSM6iCN2Ga61KgN4xxyLMjixCuE
-	 ae3dCU82dslvxomolysvNgh4HJTh1ntQrSykRvJOqg6krEPpdDIHH67yKVNdyChkPa
-	 UJN8FgE83GwWVkjQBcYHCQAxJw+fYbdh+nyOPEpbYCaMvURcOOCxVWUPQxhJF6s67P
-	 4T+8OZMkMRy+RBqQaizhjaXrQHh1RGnlil3Fg2ouGTOFVK/6mpt1GHDecGyHgqay+F
-	 ANLMXhI2VtzTA==
+	b=aADKODb0nAGO2QgvEocWvc/z4mZ8gD6oLsjaqtqjQnHOjJWCc62YMzo178gKJsSRN
+	 fFrFWGDOgDJsLNvgaPqPjnNr+3RRc7NyLe9EYKftAMI1xdd4sJk/HEiht9cUJle89p
+	 a4mE26k7f2yDK6bwgboaavzILZRPqb/rXvN+8oDqOdtAwYbmRD5KfmD8jzn90h3W4x
+	 f95QtxftZcnxmMgvDn40xpsneCMW33Gr7fQ9WtmKTQvXDLW9Kjp4a6X9SKc5bB7ctz
+	 Hn7hGrZFKxjiufUlpp1PV3uKNLUH07FmAxhtcTgDKOeqesPp7GqucaI7aaMDgjoG9i
+	 LbNh6izqlDZ8w==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4VtvBP44vRz2syn;
-	Tue,  4 Jun 2024 11:09:01 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com
- [IPv6:2607:5300:203:b2ee::31e5])
- by lists.lttng.org (Postfix) with ESMTPS id 4VtvBN1f8Bz2sf8
- for <lttng-dev@lists.lttng.org>; Tue,  4 Jun 2024 11:08:59 -0400 (EDT)
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net
- [192.222.143.198])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4VtvBF3QLZz12nj;
- Tue,  4 Jun 2024 11:08:53 -0400 (EDT)
-Message-ID: <0d226e1c-ff15-47f1-a902-bad362053903@efficios.com>
-Date: Tue, 4 Jun 2024 11:09:40 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: "Wu, Yannan" <yannanwu@amazon.com>, Kienan Stewart <kstewart@efficios.com>,
- "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+	by lists.lttng.org (Postfix) with ESMTP id 4VtvZ15s7tz2svn;
+	Tue,  4 Jun 2024 11:26:01 -0400 (EDT)
+Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com
+ [52.119.213.150])
+ by lists.lttng.org (Postfix) with ESMTPS id 4VtvZ01jDRz2sq7
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Jun 2024 11:26:00 -0400 (EDT)
+X-IronPort-AV: E=Sophos;i="6.08,214,1712620800"; 
+ d="scan'208,217";a="637164509"
+Thread-Topic: [lttng-dev] [lttng-relayd] is there existing cases for relayd to
+ stream over Android usb based adb?
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO
+ smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+ by smtp-border-fw-52002.iad7.amazon.com with
+ ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2024 15:25:58 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [10.0.21.151:26081]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.23.252:2525]
+ with esmtp (Farcaster)
+ id ded56566-6005-4263-a4ce-3581d2aea46a; Tue, 4 Jun 2024 15:25:57 +0000 (UTC)
+X-Farcaster-Flow-ID: ded56566-6005-4263-a4ce-3581d2aea46a
+Received: from EX19D003ANC002.ant.amazon.com (10.37.240.215) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Tue, 4 Jun 2024 15:25:57 +0000
+Received: from EX19D003ANC001.ant.amazon.com (10.37.240.216) by
+ EX19D003ANC002.ant.amazon.com (10.37.240.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Tue, 4 Jun 2024 15:25:56 +0000
+Received: from EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8]) by
+ EX19D003ANC001.ant.amazon.com ([fe80::ed4e:7258:fa8c:17e8%5]) with
+ mapi id 15.02.1258.034; Tue, 4 Jun 2024 15:25:56 +0000
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Kienan Stewart
+ <kstewart@efficios.com>, "lttng-dev@lists.lttng.org"
+ <lttng-dev@lists.lttng.org>
+Thread-Index: AQHaslKH7CI0j5/u4E6iXx4NZ5jN4bGwJewAgAU3KcyAAmC3AIAAAmEo
+Date: Tue, 4 Jun 2024 15:25:55 +0000
+Message-ID: <9c0522c7090b4523aac4166a232ca50a@amazon.com>
 References: <b2e9c32fbcbe4067a64fd831bac70d81@amazon.com>
  <b974bf9f-b511-4fdb-8d67-93a6c1b273ab@efficios.com>
- <92cc12a956e1404691519a7f02b7607d@amazon.com>
+ <92cc12a956e1404691519a7f02b7607d@amazon.com>,
+ <0d226e1c-ff15-47f1-a902-bad362053903@efficios.com>
+In-Reply-To: <0d226e1c-ff15-47f1-a902-bad362053903@efficios.com>
+Accept-Language: en-US
 Content-Language: en-US
-In-Reply-To: <92cc12a956e1404691519a7f02b7607d@amazon.com>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.187.170.41]
+MIME-Version: 1.0
 Subject: Re: [lttng-dev] [lttng-relayd] is there existing cases for relayd
  to stream over Android usb based adb?
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -53,106 +79,500 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: "Wu, Yannan via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: "Wu, Yannan" <yannanwu@amazon.com>
+Content-Type: multipart/mixed; boundary="===============2710909978227420475=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGkgQW1hbmRhLAoKRm9yIGVhY2ggb2YgdGhlIDQgY29tbWFuZHMgZGVzY3JpYmVkIGJlbG93LCBw
-bGVhc2UgY2xhcmlmeSBvbgp3aGljaCBkZXZpY2UgdGhleSBhcmUgZXhlY3V0ZWQsIHdoZXRoZXIg
-b24gdGhlIEFuZHJvaWQgZGV2aWNlCm9yIG9uIHRoZSBEZXZlbG9wbWVudCBkZXZpY2UuCgpQbGVh
-c2UgbWFrZSBzdXJlIHRvIGZvbGxvdyB0byB0aGUgbGV0dGVyIHRoZSBjb21tYW5kcyBwcm9wb3Nl
-ZApieSBLaWVuYW46IGluIHRoZSBjb3JyZWN0IG9yZGVyLCBhbmQgb24gdGhlIGFwcHJvcHJpYXRl
-IGRldmljZS4KClRoYW5rcywKCk1hdGhpZXUKCgpPbiAyMDI0LTA2LTAyIDIyOjU1LCBXdSwgWWFu
-bmFuIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4gWWVzLiBNeSB0ZXN0IGNvbW1hbmQgaXMgbGlrZSBi
-ZWxvdzoKPiAKPiAgMS4gbHR0bmctc2Vzc2lvbmQgLS1kIC0tbm8ta2VybmVsCj4gIDIuCj4gCj4g
-ICAgIHlhbm5hbnd1QHVlOTFlOTZmMjk1MWI1Yzp+L3RyZWVzL2x0dG5nX3Rlc3RfcnVuJCBsdHRu
-ZyBjcmVhdGUgbXktdXNlci1zcGFjZS1saXZlLXNlc3Npb24gLS1saXZlCj4gICAgIExpdmUgc2Vz
-c2lvbiBteS11c2VyLXNwYWNlLWxpdmUtc2Vzc2lvbiBjcmVhdGVkLgo+ICAgICBUcmFjZXMgd2ls
-bCBiZSBvdXRwdXQgdG8gdGNwNDovLzEyNy4wLjAuMTo1MzQyLyBbZGF0YTogNTM0M10KPiAgICAg
-TGl2ZSB0aW1lciBpbnRlcnZhbCBzZXQgdG8gMTAwMDAwMCB1cwo+IAo+ICAzLiBBZnRlciB0aGlz
-LCBJIGNvdWxkICJwcyAtQXh8Z3JlcCBsdHRuZyIgYW5kIHNlZSBsdHRuZy1yZWxheWQKPiAgICAg
-c3RhcnRlZC4gQnV0IG9uY2UgSSBzdGFydCBhZGIgcmV2ZXJzZSwgaXQgd2lsbCBmYWlsZWQgZm9y
-IGZhaWxlZAo+ICAgICBiaW5kaW5nIHRvIHNvY2tldC4KPiAgNC4gSW4gdGhlIG90aGVyIG9yZGVy
-LCBpZiBJIHN0YXJ0IGFkYiByZXZlcnNlIGZpcnN0IGFuZCBsdHRuZy1jcmVhdGUKPiAgICAgbGF0
-ZXIsIGx0dG5nLWNyZWF0ZSB3aWxsIG5vdCBmYWlsIGJ1dCBsdHRuZy1yZWxheWQgaXMgbm90IHN0
-YXJ0ZWQuCj4gICAgIEJ5IG1hbnVhbGx5IHN0YXJ0IGx0dG5nLXJlbGF5ZCBpdCB3aWxsIGFsc28g
-ZmFpbGVkIGZvciB1bmFibGUKPiAgICAgYmluZGluZyB0byBzb2NrZXQuCj4gCj4gQW1hbmRhCj4g
-Cj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tCj4gKkZyb206KiBLaWVuYW4gU3Rld2FydCA8a3N0ZXdhcnRAZWZm
-aWNpb3MuY29tPgo+ICpTZW50OiogRnJpZGF5LCBNYXkgMzEsIDIwMjQgMzoxMjoxNiBBTQo+ICpU
-bzoqIFd1LCBZYW5uYW47IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiAqU3ViamVjdDoqIFJF
-OiBbRVhURVJOQUxdIFtsdHRuZy1kZXZdIFtsdHRuZy1yZWxheWRdIGlzIHRoZXJlIGV4aXN0aW5n
-IAo+IGNhc2VzIGZvciByZWxheWQgdG8gc3RyZWFtIG92ZXIgQW5kcm9pZCB1c2IgYmFzZWQgYWRi
-Pwo+IENBVVRJT046IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgdGhlIG9y
-Z2FuaXphdGlvbi4gRG8gbm90IAo+IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5s
-ZXNzIHlvdSBjYW4gY29uZmlybSB0aGUgc2VuZGVyIGFuZCAKPiBrbm93IHRoZSBjb250ZW50IGlz
-IHNhZmUuCj4gCj4gCj4gCj4gSGkgQW1hbmRhLAo+IAo+IEknZCBsaWtlIHRvIGNvbmZpcm0gbXkg
-dW5kZXJzdGFuZGluZyB0aGUgc2l0dWF0aW9uLgo+IAo+IEFuZHJvaWQgZGV2aWNlCj4gIMKgwqAg
-LSBSdW5uaW5nIGx0dG5nLXNlc3Npb25kIHdpdGggb25lIG9yIG1vcmUgY29uZmlndXJlZCBzZXNz
-aW9ucwo+IAo+IERldmVsb3BtZW50IGRldmljZQo+ICDCoMKgIC0gQ29ubmVjdGVkIHRvIHRoZSBh
-bmRyb2lkIGRldmljZSBvdmVyIHVzYiB1c2luZyBhZGIKPiAKPiBZb3Ugd2FudCB3YW50IHRoZSBk
-YXRhIGNhcHR1cmVkIG9uIHRoZSBhbmRyb2lkIGRldmljZSB0byBiZSBzdHJlYW1lZCB2aWEKPiB0
-aGUgdXNiIGNvbm5lY3Rpb24gcmF0aGVyIHRoYW4gdGhlIG90aGVyIG5ldHdvcmtzIG9uIHRoZSBh
-bmRyb2lkIGRldmljZS4KPiAKPiBDb3VsZCB5b3UgZXhwYW5kIG9uIHRoZSBjb21tYW5kcyB5b3Ug
-dXNlZCB0byBzZXQgdXAgdGhlIHRyYWNpbmcgc2Vzc2lvbnMKPiBhbmQgcmVsYXksIGFuZCB3aGVy
-ZSBlYWNoIG9mIHRob3NlIGNvbW1hbmRzIHdlcmUgcnVuPwo+IAo+IEl0IHNvdW5kcyB0byBtZSBs
-aWtlIHlvdSBtaWdodCB3YW50IHRvIGJlIGRvaW5nIHNvbWV0aGluZyBsaWtlIHRoZQo+IGZvbGxv
-d2luZzoKPiAKPiAoRGV2ZWxvcG1lbnQgZGV2aWNlKSBTdGFydCBsdHRuZy1yZWxheWQ6Cj4gIMKg
-wqAgLSB0Y3A6Ly8wLjAuMC4wOjUzNDIgYW5kIDo1MzQzIHdpbGwgYmUgYm91bmQgb24gdGhlIGRl
-dmVsb3BtZW50IGRldmljZQo+ICDCoMKgIC0gdGNwOi8vMTI3LjAuMC4xOjUzNDQgd2lsbCBiZSBh
-dmFpbGFibGUgZm9yIHRoZSBsaXZlIHJlYWRlcgo+IAo+IChEZXZlbG9wbWVudCBkZXZpY2UpIENy
-ZWF0ZSB0aGUgcmV2ZXJzZXMgZm9yIHRoZSBmb2xsb3dpbmcgcG9ydHM6IDUzNDIKPiBhbmQgNTM0
-Mwo+ICDCoMKgIC0gQXQgdGhpcyBwb2ludCA6NTM0MiBhbmQgOjUzNDMgc2hvdWxkIGJlIGF2YWls
-YWJsZSBvbiB0aGUgYW5kcm9pZAo+IGRldmljZSBhbmQgcmVhY2ggdGhlIHJlbGF5ZCBydW5uaW5n
-IG9uIHRoZSBkZXZlbG9wbWVudCBkZXZpY2UKPiAKPiAoQW5kcm9pZCBkZXZpY2UpIFN0YXJ0IGx0
-dG5nLXNlc3Npb25kCj4gKEFuZHJvaWQgZGV2aWNlKSBDcmVhdGUgc2Vzc2lvbihzKTogYGx0dG5n
-IGNyZWF0ZSAtVSB0Y3A6Ly9sb2NhbGhvc3QvCj4gIMKgwqAgLSBVc2luZyBgLVUvLS1zZXQtdXJs
-YCwgbm8gcmVsYXlkIHdpbGwgYmUgc3Bhd25lZCBvbiB0aGUgYW5kcm9pZCBkZXZpY2UKPiAoQW5k
-cm9pZCBkZXZpY2UpIFN0YXJ0IHNlc3Npb24ocykKPiAKPiBUaGlzIHNldHVwIHNob3VsZCBoYXZl
-IHRoZSByZWxheWQgcnVubmluZyBvbiB0aGUgZGV2ZWxvcG1lbnQgYW5kIHdyaXRpbmcKPiB0aGUg
-dHJhY2VzIHRoZXJlIGFuZC9vciB2aWV3aW5nIHRoZW0gd2l0aCBhIGxpdmUgdmlld2VyLiBPbiB0
-aGUgYW5kcm9pZAo+IGRldmljZSwgdGhlIFVTVCBhcHBsaWNhdGlvbnMgKGlmIGFueSkgd2lsbCBj
-b25uZWN0IHRvIHRoZSBsb2NhbCBzZXNzaW9uZAo+IGFuZCBjb25zdW1lcnMsIHdoaWNoIHdpbGwg
-c2h1dHRsZSB0aGUgaW5mb3JtYXRpb24gb3ZlciA6NTM0MiBhbmQgOjUzNDMKPiB0byB0aGUgZGV2
-ZWxvcGVyIGRldmljZSB2aWEgdGhlIHJldmVyc2Ugc29ja2V0cy4KPiAKPiBQbGVhc2Ugbm90ZSB0
-aGF0IEkgZGlkbid0IGhhdmUgdGltZSB0byB0ZXN0IHRoaXMsIHNvIHRoZXJlIG1pZ2h0IGJlIHNv
-bWUKPiBtaXN0YWtlcy4gQXMgSSByZXF1ZXN0ZWQgYWJvdmUsIGNsZWFyIGRldGFpbHMgb2YgdGhl
-IGV4YWN0IGNvbW1hbmRzIHlvdQo+IHVzZSBmb3IgdGhlIHRyYWNpbmcgc2V0dXAgd291bGQgYmUg
-dmVyeSBoZWxwZnVsIHRvIGhhdmUgdGhlIGNsZWFyZXN0Cj4gdW5kZXJzdGFuZGluZyBvZiB3aGF0
-IHlvdSdyZSBkb2luZy4KPiAKPiBob3BlIHRoaXMgaGVscHMsCj4ga2llbmFuCj4gCj4gT24gNS8z
-MC8yNCAxOjUzIEFNLCBXdSwgWWFubmFuIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4+IEhpaGksIHRo
-ZXJlLAo+Pgo+PiBJIGFtIGN1cnJlbnRseSB3b3JraW5nIG9uIGVuYWJsaW5nIGx0dG5nIGxpdmUg
-bW9kZSBvdmVyIGFuZHJvaWQgdXNiIGFkYi4KPj4gSGVyZSBpcyB0aGUgc2l0dWF0aW9uLCBkdXJp
-bmcgZGVidWdnaW5nIHNvbWUgbmV0d29yayByZWxhdGVkIGlzc3Vlcywgd2UKPj4gZG9udCB3YW50
-IHRoZSB0cmFjZSBkYXRhIHRvIGJlIHN0cmVhbWVkIHZpYSBuZXR3b3JrIHRvIGNhdXNlIGV4dHJh
-IGxvYWQKPj4gdG8gdGhlIHN5c3RlbSBiZWluZyBwcm9maWxlZC4gVGhlbiB3ZSBzZWxlY3QgdG8g
-Y29ubmVjdCBsdHRuZy1yZWxheWQKPj4gd2l0aCBhZGIgdmlhIHBvcnQgZm9yd2FyZGluZyBzbyB0
-aGF0IHRoZSBkYXRhIGlzICJmb3J3YXJkIiB0byB0aGUgaG9zdC4KPj4KPj4gKkhlcmUgaXMgdGhl
-IHNldCB1cCBhbmQgdGhlIHByb2JsZW06Kgo+Pgo+PiBmb3IgdGhlIGRldmljZTrCoCBhZGIgcmV2
-ZXJzZSB0Y3A6NTM0MiB0Y3A6NTM0MjsgYWRiIHJldmVyc2UgdGNwOjUzNDMKPj4gdGNwOjUzNDM7
-IGFkYiByZXZlcnNlIHRjcDo1MzQ0IHRjcDo1MzQ0Cj4+IFRoZW4gc3RhcnRpbmcgdXAgbHR0bmcg
-d2l0aCAtLWxpdmUgZW5hYmxlZC4KPj4KPj4gKldoYXQgaXMgZXhwZWN0ZWQ6Kgo+PiBsdHRuZyBz
-dGFydCBzdHJlYW1pbmcgdG8gdGhlIGxvY2FsaG9zdC4KPj4gKldoYXQgaXMgc2VlbjogKgo+PiB0
-aGUgbHR0bmctcmVsYXlkIGZhaWxlZCB0byBzdGFydC4gRm9yIHVuYWJsZSBiaW5kaW5nIHRvIHRo
-ZSBzb2NrZXQuCj4+Cj4+ICpUaGUgY2F1c2Ugb2YgdGhpcyBpc3N1ZTogKgo+Pgo+PiBib3RoIGFk
-YiByZXZlcnNlIGFuZCBsdHRuZyByZWxheWQgbmVlZCBiaW5kaW5nIHRvIHRoZSBzb2NrZXQgd2hp
-Y2ggaXMKPj4gY29uZmxpY3Qgd2l0aCBlYWNoIG90aGVyLgo+Pgo+Pgo+PiBTbyB3aGF0IEkgd2Fu
-bmEgYXNrIGlzLCBmb3IgZW1iZWRkZWQgc3lzdGVtIHVzZSBjYXNlcywgZG8gd2UgaGF2ZQo+PiBz
-dWNjZXNzZnVsIHVzZSBjYXNlcyBhbW9uZyB0ZWFtIHRoYXQgY291bGQgc3RyZWFtIHRoZSB0cmFj
-ZSBkYXRhIGluIGxpdmUKPj4gbW9kZSB0byB0aGUgaG9zdCB3aXRoIHVzYiBiYXNlZCBhZGI/IElm
-IG5vdCwgYW55IGlkZWEgb3Igc3VnZ2VzdGlvbiB0bwo+PiBtZSBvbiBob3cgdG8gcHJvY2VzcyBm
-b3J3YXJkPwo+Pgo+PiBBbWFuZGEKPj4KPj4KPj4KPj4KPj4KPj4gX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+
-PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYgCj4gPGh0dHBzOi8vbGlzdHMubHR0bmcu
-b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXY+Cj4gCj4gX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0tIApNYXRoaWV1IERlc25veWVy
-cwpFZmZpY2lPUyBJbmMuCmh0dHBzOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
-bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============2710909978227420475==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_9c0522c7090b4523aac4166a232ca50aamazoncom_"
+
+--_000_9c0522c7090b4523aac4166a232ca50aamazoncom_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+The device is a rooted android device
+
+On the device:
+
+lttng-sessiond -d --no-kernel
+
+lttng create my-live-session --live
+
+lttng enable-event -u <mu customized event>
+
+lttng start
+
+
+On the host:
+
+adb reverse tcp:5343 tcp:5343
+
+The adb reverse will fail for "adb.exe: error: cannot bind to socket"
+
+
+In the reversed order, if set up adb reverse from the host first and create=
+ the live session after, lttng-relayd on device cannot be started.
+Here is the error message:
+
+PERROR - 15:23:30.915938387 [9813/9829]: Failed to bind socket: Address alr=
+eady in use (in relay_socket_create() at /src/VodkaLttngTool/build/private/=
+source/src/bin/lttng-relayd/main.c:1036)
+Error: Health error occurred in relay_thread_listener
+Error: A file descriptor leak has been detected: 1 tracked file descriptors=
+ are still being tracked
+
+
+
+
+________________________________
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Sent: Tuesday, June 4, 2024 11:09:40 PM
+To: Wu, Yannan; Kienan Stewart; lttng-dev@lists.lttng.org
+Subject: RE: [EXTERNAL] [lttng-dev] [lttng-relayd] is there existing cases =
+for relayd to stream over Android usb based adb?
+
+CAUTION: This email originated from outside of the organization. Do not cli=
+ck links or open attachments unless you can confirm the sender and know the=
+ content is safe.
+
+
+
+Hi Amanda,
+
+For each of the 4 commands described below, please clarify on
+which device they are executed, whether on the Android device
+or on the Development device.
+
+Please make sure to follow to the letter the commands proposed
+by Kienan: in the correct order, and on the appropriate device.
+
+Thanks,
+
+Mathieu
+
+
+On 2024-06-02 22:55, Wu, Yannan via lttng-dev wrote:
+> Yes. My test command is like below:
+>
+>  1. lttng-sessiond --d --no-kernel
+>  2.
+>
+>     yannanwu@ue91e96f2951b5c:~/trees/lttng_test_run$ lttng create my-user=
+-space-live-session --live
+>     Live session my-user-space-live-session created.
+>     Traces will be output to tcp4://127.0.0.1:5342/ [data: 5343]
+>     Live timer interval set to 1000000 us
+>
+>  3. After this, I could "ps -Ax|grep lttng" and see lttng-relayd
+>     started. But once I start adb reverse, it will failed for failed
+>     binding to socket.
+>  4. In the other order, if I start adb reverse first and lttng-create
+>     later, lttng-create will not fail but lttng-relayd is not started.
+>     By manually start lttng-relayd it will also failed for unable
+>     binding to socket.
+>
+> Amanda
+>
+> ------------------------------------------------------------------------
+> *From:* Kienan Stewart <kstewart@efficios.com>
+> *Sent:* Friday, May 31, 2024 3:12:16 AM
+> *To:* Wu, Yannan; lttng-dev@lists.lttng.org
+> *Subject:* RE: [EXTERNAL] [lttng-dev] [lttng-relayd] is there existing
+> cases for relayd to stream over Android usb based adb?
+> CAUTION: This email originated from outside of the organization. Do not
+> click links or open attachments unless you can confirm the sender and
+> know the content is safe.
+>
+>
+>
+> Hi Amanda,
+>
+> I'd like to confirm my understanding the situation.
+>
+> Android device
+>     - Running lttng-sessiond with one or more configured sessions
+>
+> Development device
+>     - Connected to the android device over usb using adb
+>
+> You want want the data captured on the android device to be streamed via
+> the usb connection rather than the other networks on the android device.
+>
+> Could you expand on the commands you used to set up the tracing sessions
+> and relay, and where each of those commands were run?
+>
+> It sounds to me like you might want to be doing something like the
+> following:
+>
+> (Development device) Start lttng-relayd:
+>     - tcp://0.0.0.0:5342 and :5343 will be bound on the development devic=
+e
+>     - tcp://127.0.0.1:5344 will be available for the live reader
+>
+> (Development device) Create the reverses for the following ports: 5342
+> and 5343
+>     - At this point :5342 and :5343 should be available on the android
+> device and reach the relayd running on the development device
+>
+> (Android device) Start lttng-sessiond
+> (Android device) Create session(s): `lttng create -U tcp://localhost/
+>     - Using `-U/--set-url`, no relayd will be spawned on the android devi=
+ce
+> (Android device) Start session(s)
+>
+> This setup should have the relayd running on the development and writing
+> the traces there and/or viewing them with a live viewer. On the android
+> device, the UST applications (if any) will connect to the local sessiond
+> and consumers, which will shuttle the information over :5342 and :5343
+> to the developer device via the reverse sockets.
+>
+> Please note that I didn't have time to test this, so there might be some
+> mistakes. As I requested above, clear details of the exact commands you
+> use for the tracing setup would be very helpful to have the clearest
+> understanding of what you're doing.
+>
+> hope this helps,
+> kienan
+>
+> On 5/30/24 1:53 AM, Wu, Yannan via lttng-dev wrote:
+>> Hihi, there,
+>>
+>> I am currently working on enabling lttng live mode over android usb adb.
+>> Here is the situation, during debugging some network related issues, we
+>> dont want the trace data to be streamed via network to cause extra load
+>> to the system being profiled. Then we select to connect lttng-relayd
+>> with adb via port forwarding so that the data is "forward" to the host.
+>>
+>> *Here is the set up and the problem:*
+>>
+>> for the device:  adb reverse tcp:5342 tcp:5342; adb reverse tcp:5343
+>> tcp:5343; adb reverse tcp:5344 tcp:5344
+>> Then starting up lttng with --live enabled.
+>>
+>> *What is expected:*
+>> lttng start streaming to the localhost.
+>> *What is seen: *
+>> the lttng-relayd failed to start. For unable binding to the socket.
+>>
+>> *The cause of this issue: *
+>>
+>> both adb reverse and lttng relayd need binding to the socket which is
+>> conflict with each other.
+>>
+>>
+>> So what I wanna ask is, for embedded system use cases, do we have
+>> successful use cases among team that could stream the trace data in live
+>> mode to the host with usb based adb? If not, any idea or suggestion to
+>> me on how to process forward?
+>>
+>> Amanda
+>>
+>>
+>>
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
+
+--_000_9c0522c7090b4523aac4166a232ca50aamazoncom_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Exchange Server">
+<!-- converted from text --><style><!-- .EmailQuote { margin-left: 1pt; pad=
+ding-left: 4pt; border-left: #800000 2px solid; } --></style>
+</head>
+<body>
+<meta content=3D"text/html; charset=3DUTF-8">
+<style type=3D"text/css" style=3D"">
+<!--
+p
+	{margin-top:0;
+	margin-bottom:0}
+-->
+</style>
+<div dir=3D"ltr">
+<div id=3D"x_divtagdefaultwrapper" dir=3D"ltr" style=3D"font-size:12pt; col=
+or:#000000; font-family:Calibri,Helvetica,sans-serif">
+<p>The device is a rooted android device</p>
+<p><b>On the device:</b></p>
+<p><span style=3D"font-size:12pt">lttng-sessiond -d --no-kernel</span></p>
+<p>lttng create my-live-session --live</p>
+<p>lttng enable-event -u &lt;mu customized event&gt;</p>
+<p>lttng start</p>
+<p><br>
+</p>
+<p><b>On the host:</b></p>
+<p>adb reverse tcp:5343 tcp:5343</p>
+<p>The adb reverse will fail for &quot;<span><i>adb.exe: error: cannot bind=
+ to socket</i></span>&quot;</p>
+<p><br>
+</p>
+<p>In the reversed&nbsp;order, if set up adb reverse from the host first an=
+d create the live session after, lttng-relayd on device cannot be started.&=
+nbsp;<br>
+Here is the error message:</p>
+<p></p>
+<div><i>PERROR - 15:23:30.915938387 [9813/9829]: Failed to bind socket: Add=
+ress already in use (in relay_socket_create() at /src/VodkaLttngTool/build/=
+private/source/src/bin/lttng-relayd/main.c:1036)</i></div>
+<div><i>Error: Health error occurred in relay_thread_listener</i></div>
+<div><i>Error: A file descriptor leak has been detected: 1 tracked file des=
+criptors are still being tracked</i></div>
+<br>
+<p></p>
+<p><br>
+</p>
+<p><br>
+</p>
+</div>
+<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
+<div id=3D"x_divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" =
+color=3D"#000000" style=3D"font-size:11pt"><b>From:</b> Mathieu Desnoyers &=
+lt;mathieu.desnoyers@efficios.com&gt;<br>
+<b>Sent:</b> Tuesday, June 4, 2024 11:09:40 PM<br>
+<b>To:</b> Wu, Yannan; Kienan Stewart; lttng-dev@lists.lttng.org<br>
+<b>Subject:</b> RE: [EXTERNAL] [lttng-dev] [lttng-relayd] is there existing=
+ cases for relayd to stream over Android usb based adb?</font>
+<div>&nbsp;</div>
+</div>
+</div>
+<font size=3D"2"><span style=3D"font-size:10pt;">
+<div class=3D"PlainText">CAUTION: This email originated from outside of the=
+ organization. Do not click links or open attachments unless you can confir=
+m the sender and know the content is safe.<br>
+<br>
+<br>
+<br>
+Hi Amanda,<br>
+<br>
+For each of the 4 commands described below, please clarify on<br>
+which device they are executed, whether on the Android device<br>
+or on the Development device.<br>
+<br>
+Please make sure to follow to the letter the commands proposed<br>
+by Kienan: in the correct order, and on the appropriate device.<br>
+<br>
+Thanks,<br>
+<br>
+Mathieu<br>
+<br>
+<br>
+On 2024-06-02 22:55, Wu, Yannan via lttng-dev wrote:<br>
+&gt; Yes. My test command is like below:<br>
+&gt;<br>
+&gt;&nbsp; 1. lttng-sessiond --d --no-kernel<br>
+&gt;&nbsp; 2.<br>
+&gt;<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; yannanwu@ue91e96f2951b5c:~/trees/lttng_test_ru=
+n$ lttng create my-user-space-live-session --live<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; Live session my-user-space-live-session create=
+d.<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; Traces will be output to tcp4://127.0.0.1:5342=
+/ [data: 5343]<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; Live timer interval set to 1000000 us<br>
+&gt;<br>
+&gt;&nbsp; 3. After this, I could &quot;ps -Ax|grep lttng&quot; and see ltt=
+ng-relayd<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; started. But once I start adb reverse, it will=
+ failed for failed<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; binding to socket.<br>
+&gt;&nbsp; 4. In the other order, if I start adb reverse first and lttng-cr=
+eate<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; later, lttng-create will not fail but lttng-re=
+layd is not started.<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; By manually start lttng-relayd it will also fa=
+iled for unable<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; binding to socket.<br>
+&gt;<br>
+&gt; Amanda<br>
+&gt;<br>
+&gt; ----------------------------------------------------------------------=
+--<br>
+&gt; *From:* Kienan Stewart &lt;kstewart@efficios.com&gt;<br>
+&gt; *Sent:* Friday, May 31, 2024 3:12:16 AM<br>
+&gt; *To:* Wu, Yannan; lttng-dev@lists.lttng.org<br>
+&gt; *Subject:* RE: [EXTERNAL] [lttng-dev] [lttng-relayd] is there existing=
+<br>
+&gt; cases for relayd to stream over Android usb based adb?<br>
+&gt; CAUTION: This email originated from outside of the organization. Do no=
+t<br>
+&gt; click links or open attachments unless you can confirm the sender and<=
+br>
+&gt; know the content is safe.<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt; Hi Amanda,<br>
+&gt;<br>
+&gt; I'd like to confirm my understanding the situation.<br>
+&gt;<br>
+&gt; Android device<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; - Running lttng-sessiond with one or more conf=
+igured sessions<br>
+&gt;<br>
+&gt; Development device<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; - Connected to the android device over usb usi=
+ng adb<br>
+&gt;<br>
+&gt; You want want the data captured on the android device to be streamed v=
+ia<br>
+&gt; the usb connection rather than the other networks on the android devic=
+e.<br>
+&gt;<br>
+&gt; Could you expand on the commands you used to set up the tracing sessio=
+ns<br>
+&gt; and relay, and where each of those commands were run?<br>
+&gt;<br>
+&gt; It sounds to me like you might want to be doing something like the<br>
+&gt; following:<br>
+&gt;<br>
+&gt; (Development device) Start lttng-relayd:<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; - tcp://0.0.0.0:5342 and :5343 will be bound o=
+n the development device<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; - tcp://127.0.0.1:5344 will be available for t=
+he live reader<br>
+&gt;<br>
+&gt; (Development device) Create the reverses for the following ports: 5342=
+<br>
+&gt; and 5343<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; - At this point :5342 and :5343 should be avai=
+lable on the android<br>
+&gt; device and reach the relayd running on the development device<br>
+&gt;<br>
+&gt; (Android device) Start lttng-sessiond<br>
+&gt; (Android device) Create session(s): `lttng create -U tcp://localhost/<=
+br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; - Using `-U/--set-url`, no relayd will be spaw=
+ned on the android device<br>
+&gt; (Android device) Start session(s)<br>
+&gt;<br>
+&gt; This setup should have the relayd running on the development and writi=
+ng<br>
+&gt; the traces there and/or viewing them with a live viewer. On the androi=
+d<br>
+&gt; device, the UST applications (if any) will connect to the local sessio=
+nd<br>
+&gt; and consumers, which will shuttle the information over :5342 and :5343=
+<br>
+&gt; to the developer device via the reverse sockets.<br>
+&gt;<br>
+&gt; Please note that I didn't have time to test this, so there might be so=
+me<br>
+&gt; mistakes. As I requested above, clear details of the exact commands yo=
+u<br>
+&gt; use for the tracing setup would be very helpful to have the clearest<b=
+r>
+&gt; understanding of what you're doing.<br>
+&gt;<br>
+&gt; hope this helps,<br>
+&gt; kienan<br>
+&gt;<br>
+&gt; On 5/30/24 1:53 AM, Wu, Yannan via lttng-dev wrote:<br>
+&gt;&gt; Hihi, there,<br>
+&gt;&gt;<br>
+&gt;&gt; I am currently working on enabling lttng live mode over android us=
+b adb.<br>
+&gt;&gt; Here is the situation, during debugging some network related issue=
+s, we<br>
+&gt;&gt; dont want the trace data to be streamed via network to cause extra=
+ load<br>
+&gt;&gt; to the system being profiled. Then we select to connect lttng-rela=
+yd<br>
+&gt;&gt; with adb via port forwarding so that the data is &quot;forward&quo=
+t; to the host.<br>
+&gt;&gt;<br>
+&gt;&gt; *Here is the set up and the problem:*<br>
+&gt;&gt;<br>
+&gt;&gt; for the device:&nbsp; adb reverse tcp:5342 tcp:5342; adb reverse t=
+cp:5343<br>
+&gt;&gt; tcp:5343; adb reverse tcp:5344 tcp:5344<br>
+&gt;&gt; Then starting up lttng with --live enabled.<br>
+&gt;&gt;<br>
+&gt;&gt; *What is expected:*<br>
+&gt;&gt; lttng start streaming to the localhost.<br>
+&gt;&gt; *What is seen: *<br>
+&gt;&gt; the lttng-relayd failed to start. For unable binding to the socket=
+.<br>
+&gt;&gt;<br>
+&gt;&gt; *The cause of this issue: *<br>
+&gt;&gt;<br>
+&gt;&gt; both adb reverse and lttng relayd need binding to the socket which=
+ is<br>
+&gt;&gt; conflict with each other.<br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt; So what I wanna ask is, for embedded system use cases, do we have<=
+br>
+&gt;&gt; successful use cases among team that could stream the trace data i=
+n live<br>
+&gt;&gt; mode to the host with usb based adb? If not, any idea or suggestio=
+n to<br>
+&gt;&gt; me on how to process forward?<br>
+&gt;&gt;<br>
+&gt;&gt; Amanda<br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt; _______________________________________________<br>
+&gt;&gt; lttng-dev mailing list<br>
+&gt;&gt; lttng-dev@lists.lttng.org<br>
+&gt;&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-=
+dev">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
+&gt; &lt;<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-=
+dev">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>&gt;<br>
+&gt;<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; lttng-dev@lists.lttng.org<br>
+&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
+>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
+<br>
+--<br>
+Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"https://www.efficios.com">https://www.efficios.com</a><br>
+<br>
+</div>
+</span></font>
+</body>
+</html>
+
+--_000_9c0522c7090b4523aac4166a232ca50aamazoncom_--
+
+--===============2710909978227420475==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2710909978227420475==--
