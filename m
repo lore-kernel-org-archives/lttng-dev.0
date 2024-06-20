@@ -4,42 +4,145 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96883C41513
-	for <lttng-dev@archiver.kernel.org>; Wed, 19 Jun 2024 15:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63D58C2BA1A
+	for <lttng-dev@archiver.kernel.org>; Thu, 20 Jun 2024 15:26:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1718812359;
-	bh=WDLIKjNn1j65hhzjOduW3Az6McFYwkDyjVij3U6tcrE=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=B6jwx/Gv13L9gP/q+3DfmfttJ7Zvu+G3asnEpy1mhTHNs+wQImoIHJxRorREnQo69
-	 6jCTOsjvdHdHKbfBur0X/Gyu48XWm1qc54nw2LD9MF9/9D0pGZEMk+Ppa6eaFoUa48
-	 QHIvLKWdUhfFpONYXzR7jZCmpWVnhl701opCqGgyok6o9I/ZrP38WLwT7v7tX5jnzy
-	 rbyaR0+CZeQOcSCrYO6yDFg0IPnDa4Sjoj5mn9UgmjT0QPs6K7xGQg92gazw4htAGH
-	 ZCGIj+g/EGV6V3kBPfwJMoSRXnr2WIEf8z9YgQejuMczRuuJv/ox60xHbingIpdlMb
-	 6WnBqolehElgg==
+	s=default; t=1718897191;
+	bh=2lccLXTap0t+eNi6OpGhxc/kElM1KLVEk1TEKXqejKc=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=0cTDH1uh7PKtbDGb02AqlFSkIXvSgCESy8lR83IchN6cpxNLjsjDNp2cExdxVBI5e
+	 eyoIE3/X0/0mE17YlzWP7FAn1bz36EeXDeacLlMN40N+iv/Ygs92D1pPencnnAdgRf
+	 YvmU5QWSHfMHOkeMGps1fDJr+ipwat2vdYcL0F8+c/3jxBJaTdrXS3LgfzrvgWKSPW
+	 n82qZPZWdJhGcwosqHYoeAQnJiIicXOFQ3tWSWtkSfgcKHMZn6GozdMIDahV7TPJ4b
+	 1HFcZaoxPFbdFEGmK95eWBy9++HTsPOhwhzDUJicyQycM4kLqqYhWP3Yfl8rpYnmPn
+	 Dok9Qk7Qt1rbg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4W47Rp4DxDz4fh;
-	Wed, 19 Jun 2024 11:52:38 -0400 (EDT)
-Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
- by lists.lttng.org (Postfix) with ESMTPS id 4W47Rn4TxGz4XL
- for <lttng-dev@lists.lttng.org>; Wed, 19 Jun 2024 11:52:37 -0400 (EDT)
-Received: from zimbra-s2.polymtl.ca (zimbra-s2.polymtl.ca [132.207.23.204])
- by smtp.polymtl.ca (8.14.7/8.14.7) with ESMTP id 45JFfuQg078754;
- Wed, 19 Jun 2024 11:41:57 -0400
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp.polymtl.ca 45JFfuQg078754
-Date: Wed, 19 Jun 2024 11:41:56 -0400 (EDT)
-To: lttng-dev@lists.lttng.org
-Message-ID: <364622686.75839325.1718811716721.JavaMail.zimbra@polymtl.ca>
+	by lists.lttng.org (Postfix) with ESMTP id 4W4kqB5JFWz4nw;
+	Thu, 20 Jun 2024 11:26:30 -0400 (EDT)
+Received: from CAN01-YQB-obe.outbound.protection.outlook.com
+ (mail-yqbcan01on2108.outbound.protection.outlook.com [40.107.116.108])
+ by lists.lttng.org (Postfix) with ESMTPS id 4W4kq84zhwz4rP
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Jun 2024 11:26:28 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P6yU26sCFDvuen0vyYpZxeoxbCxKkegkOZPczN0iVBH8TCMwUVpKGJbLIYQcWRvS6x0e3T4s1T63wpjlq5Xt/SFLMmZdhc7C8L/W7xmONoZ5tsiO8b/npSRuwD3rGO512N2Hk3e6UOASFR6kr0cYaVHU/oUgoaQ8zpLDOU7QyKXfocMlAvMeHgKu/BaY9yiNseJQRIm3aY0R6sjrNdPE5hlaknvKRb/e5ZDXRMMQWJ7OLR00gEc6Vavl4IEP2O2oK2dZvJJxsvAZcXbGc+ssy9dkhPTkSttA97CExJHSSw/K6n3Y0BLy8saRLEwL/zzMDnRJyReZ14KFga/wgclN/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HEWLc3L9AEQBckCSsk+HLBlh1afWD72EII8oZ/jvxxE=;
+ b=QmLV10gFCNBMUzW21XLONdE3OeVXIXXAJPtEq1kbfC8P31gyVoX0uHCz54AZnNTdkQEGURwyueITHZdlmxAKbimDpeB4YVym+7+95yTdLFZNGFGtkQhQ0wMy3yaqXcYq5fHw7l+7IJqqxlovTUToekFVFjPm3zBmiuY7vPvylKFP8EjIzQDHDE4LjiwGCPJWUV6F7MF1pN/thsSHiqw1joBzZOjrg9HMt92k2dMuPtDXRlJI7RVn9+ig+LJzDpRhkku8hAMkREgk0RBsYnt0ROqXORJNOte4h+hBoStslOuTEBkl6r363uJ+sML8DHe39I6S+WhDFmyBoQouwNcTBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::14)
+ by YT3PR01MB9250.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:a2::22)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.21; Thu, 20 Jun
+ 2024 15:26:26 +0000
+Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e27c:c1e2:e6e:9256]) by YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e27c:c1e2:e6e:9256%2]) with mapi id 15.20.7698.019; Thu, 20 Jun 2024
+ 15:26:26 +0000
+Message-ID: <ff7f120d-8d44-427b-9c46-1809378c9203@efficios.com>
+Date: Thu, 20 Jun 2024 11:26:25 -0400
+User-Agent: Mozilla Thunderbird
+To: Jean-Marc Chevalier <jean-marc.chevalier@polymtl.ca>,
+ lttng-dev@lists.lttng.org
+References: <364622686.75839325.1718811716721.JavaMail.zimbra@polymtl.ca>
+Content-Language: en-US
+In-Reply-To: <364622686.75839325.1718811716721.JavaMail.zimbra@polymtl.ca>
+X-ClientProxiedBy: YQ1P288CA0003.CANP288.PROD.OUTLOOK.COM
+ (2603:10b6:c01:9e::25) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:e8::14)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
- boundary="----=_Part_75839321_2114178019.1718811716718"
-X-Originating-IP: [132.207.169.227]
-X-Mailer: Zimbra 9.0.0_GA_4583 (ZimbraWebClient - GC126 (Win)/9.0.0_GA_4583)
-Thread-Index: CVL1bwIDCF2cZxPJrOj3/EsJzfkdOg==
-Thread-Topic: Compile modules on Centos Stream 9
-X-Poly-FromMTA: (zimbra-s2.polymtl.ca [132.207.23.204]) at Wed,
- 19 Jun 2024 15:41:56 +0000
-Subject: [lttng-dev] Compile modules on Centos Stream 9
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YT3PR01MB9250:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ddde08b-8ea9-4011-48ac-08dc913d59e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230037|1800799021|376011|366013;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?aVJOWVR4MlZMd01weWFKT3JYNS94TXhIU08vbVcrYmgySDBxUmFVN0N5Q2Zz?=
+ =?utf-8?B?UWpGRis3ZXg0NUxjejJSMkhudWFUN282RGFoaUE2NmpjMVRyNTN2NFMydVZP?=
+ =?utf-8?B?TVpYOWduaTRpWnJxTDlKc0JYOUw5K1dMRDlnaFV3cFFLUEZXQmllQjhBUFE1?=
+ =?utf-8?B?dzExdFQzbW9DOG5SSE1mSUNUdzV1b0IyenBRUFRsbDBHM0RxL29IbTd6UldK?=
+ =?utf-8?B?bllwTUd4TFVBNmZIT0ZaUTY2NTFmb1ZrVTJRb1FLUTVMZXpJMmNxVEx4M2wx?=
+ =?utf-8?B?Wlh2VzBnY216WkpBbm8rdWZQbEY5MFdkQ2hCM21wbWJhRkpEZmxGcW9NUXg5?=
+ =?utf-8?B?YlhWRFl4bExlczcxUnFDSXlDdkRNUnBSN0VJYnJjVVdZZVM5NXMwS1d1OU1O?=
+ =?utf-8?B?REozZXVsdmg3SXBsOUtXb2JmcmNUM3lRK2V5TmJNNmpWYlZCNHFyS1pqYVRJ?=
+ =?utf-8?B?TnZER3dnM25nNC9IWTh0N3JVY3N4MnJXYzBSQ3VmNkhDQmc3WTYyREdCbHI1?=
+ =?utf-8?B?UXIzVDkyMlJEcmordm5NSnNncnRtN3pGVUhqUk9CVFV3UG5VN3JoMWh3TkN6?=
+ =?utf-8?B?Vm9FbHZFRWxkNjl4NXNNTnNsamhiMUVNUnF6eksrRW43U3JRTnlsaEM5TjVY?=
+ =?utf-8?B?L0pabUZlc2psMm1RRzByS1NPeTNuemIrUTlXbTAyM0VUd2dvdnh2T3lkL2Y5?=
+ =?utf-8?B?RG9ZTzUxa0RoclBnMGRhU0dwTnV6d2ZUUHJmM3ZqbTViVVBXTlFWdThSaXg1?=
+ =?utf-8?B?TjJHOHVFY29QZVB3bUtHQlJGM01YaFJPbyt2Zlp1TXRxcnlEOXk1dkxCV3Bk?=
+ =?utf-8?B?VTJ4Ymh2NFhESlNWcTgybVMvYTg1UjZPeEt1d1NPY3JDcU9UdWhjR2I1cEdK?=
+ =?utf-8?B?NDJVZURUNiszZHNMUWl5WGJVbVZTdEJ2ZXFlK1JSeXlXZHFMczVURkllOUlR?=
+ =?utf-8?B?MEY5Y244Zy9CbmRsNTM1RTY2TFJJWDg5YUZDMWR2VXdDbnB5RzJLaDBQUGd6?=
+ =?utf-8?B?cS95em9uUUVEMVBpYUZQRm11SnM2a2MzcUlobHJ1WUhEbDFWOWcyQmp3MzNJ?=
+ =?utf-8?B?M0t0R3pyNFBIYVZkTUZnQmNwZ2tVVXZITHVxZk9aZUcwSVczZkdnQlZNVml4?=
+ =?utf-8?B?L3BaK1RRTFkxY1RwcHgzdWhwVkJ1NklJWEw5WGJlaURVK2dFbktkdmtCUHBl?=
+ =?utf-8?B?ZUNWNStoZEtJQmU4TUhveERYUzRTN3Z4MzhaTVBMMG9yZDdUekhEc3RVbXRN?=
+ =?utf-8?B?TGVPUHNYUndOZ3pQZFFsTzY2cWw5U2dacFZMRWJaVEp2bFduUzhUR3NsaGRZ?=
+ =?utf-8?B?Y0E4aWFGdDlNYS9KODhqRnM5bUZkK0lER2FpVDI4bUthSnB3RVY2aTlKVVlW?=
+ =?utf-8?B?NkF3VzUybHk4RFVES1FESVZtQy9DMWo1T1dWazJJUFRtbXU0U0dQWUJGbmpq?=
+ =?utf-8?B?R2FGUmxaS2xuWHkreE5HQ2N0c1QyOUdYV21WUkpoN3hoYkxueEs0S2FzcHpu?=
+ =?utf-8?B?WW85NXRPbWhtZCsrNVBRTDg4SjFsbjRLTDNrT1lGaEFDSU90ME9pQ0x0ZUdO?=
+ =?utf-8?B?bklBNjBqY0pIQ0NVczZzZFk1dmljaXBkVW54U3BxTFF1b3NlS1hoYzk1V0c2?=
+ =?utf-8?B?ckVuMWhuRm5nZnZvdlNWVjNEdXl6MzVwUkNvSGZ4V3YrWDJWKytDQWJFNWdM?=
+ =?utf-8?Q?0V6Cza9Md9Op/0BV56gc?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230037)(1800799021)(376011)(366013); DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WmFMeEswZTFjYlFOSnJHMTlldm1KdkNJeUY2NnZhOTBDemxVMUlQRi8rS0I3?=
+ =?utf-8?B?akU3RzBacjdFaUhIMmRnOXpEcm9IOW9aakhZUDYwOXA5OEpRZm9iQkJHbWpj?=
+ =?utf-8?B?UHRDeldWRFc3bTk2VFp0bFJwSVdsYmliNE5MY1JKbVJDdURnaGdpVEs1bVYy?=
+ =?utf-8?B?em54bUQ5d25RZkNxOHhaZlRSakxPcGNSOHpnWFByM3JEUFhlejhieEFmeVVr?=
+ =?utf-8?B?L0hqYU52NjJhWC9sRHE5UkczUVdkUFdETzRRZTVWeUZraEJHVVFxUWxxcDhh?=
+ =?utf-8?B?VWR1N2tWT0dUOVZFRlB6SDJ6eW9lK2lNS1R2c3dDNmdYM1dPR3hsT3VVb2VU?=
+ =?utf-8?B?NlVpNDZBbHh3UU5mV2NaZm5uOVFRZUdYL1NhRlpLK0pETzlZamRFUW1lTmJH?=
+ =?utf-8?B?Ui9BSDA0elVsZHg2cUVEUXovM3FlRmI5aEJ4S2VCZ3o0djh4U2ZNMENDNXB0?=
+ =?utf-8?B?RFF6WjV4TXI0dzZTblAxYXE4TkR5UGdHSCtQWnNTQzZSaU55RisrVEE0eHlI?=
+ =?utf-8?B?bEZIdWdGdDFEZEpyUkhtbmNEWmlrakxmU0k4M0x2eVF6azBKdGtPRVZYSUxT?=
+ =?utf-8?B?aC9iZ0NreHdMWkdoZDExdndCSnFwa3ZaWXY2YnM2enlPMFA3OHlYdi9nM1ha?=
+ =?utf-8?B?a3UzMFllSzVkVFpSV2ZXa3FDMVVzby80cVVuaFVYVitEVE94b3ZDbXkvN3dL?=
+ =?utf-8?B?WnNTWkNGT0xZai9Eb1J0MmJyaWRReHB2ZE1GaDFmaGNtTnBVanlXNkFrK0ZZ?=
+ =?utf-8?B?dGhzTGVzVTVYN3pSOS9mckNjaFdDNFVZNVRVNXhBelV4ZFBsd1UvdDZLcVVO?=
+ =?utf-8?B?bU1NZ0x6WVBPeitUaVVCdlJCd21kbHAzcG94ZW1QdEV6V1Z3eVlTaDRzT09y?=
+ =?utf-8?B?QTRHU25TOW1yT1gzeDh2TElLUy9NSnphZmtvZjdUeHlCY1c2cnNDVWlRbWVU?=
+ =?utf-8?B?dDVka1Z4S2xJZ1ZoYzE1OGhUK3ZHUlAzZDlCWTEzVlBwVnFxendkN2JDaU5M?=
+ =?utf-8?B?aXlqNnVMY1RKQUJTMXRpNjRublhGZEhZVVlKck9kYUxQbWRwNWkvbk9nN0VK?=
+ =?utf-8?B?TjZBYThUWFVRYzh4Qy84REhQRzZhSGljTElUWGN5U1U2cjRoTjhKV085M05y?=
+ =?utf-8?B?MWpvYk1EZ2xIb2czc05iTW9QczlXZFB3UlR2MlhpMUZKVVFUTU51QTRjeHB0?=
+ =?utf-8?B?Z005Z08zZlNoRVFhMEtiQXlKNkJSdnFuN0tuU3ZhZWlHTGUwQ2I1TWNCdytu?=
+ =?utf-8?B?dHBySWRpYkN5ckZOWWhhYTNoUjdzSWowR2FDL2l3RFNTblUvcExnY1dRS0Mr?=
+ =?utf-8?B?S0dXSDE3QUcwdUVHMzRQZVNUNENrMDU4Q1hPMHFTTTQ1TytoQldod2RHbWFl?=
+ =?utf-8?B?U0NNQ2xrUlNLd3pzbGc4ekIvdzdBTkpKcm1IUmpHVk5XbHVDVDRoN1hUOThx?=
+ =?utf-8?B?bUZPTnFTcEh5Y0Nqc1VJU2VRRm1YTFp0ZGpGVng0b2x6RlB3OUp6d0s1VS9F?=
+ =?utf-8?B?eklvbEFrcDA2QWh6WWM5cEozTFBJU01KakpQb1VsWGQ0N2VlU1dieVZvZjNG?=
+ =?utf-8?B?ak5IRXYyYXpUOTRRemRSZkxhV09uaklSQi9zT3llbHdkUTFVVWxHcjRJZlA4?=
+ =?utf-8?B?WU1qYkV4QkpYMUdxeTVxSWtXM2pDb0NtTGp6Mm5xOVZhczY4YyttTjg3Myt6?=
+ =?utf-8?B?dFlibGJCVDljOVJEOTVmOWs2OUM0VmxacE5OU1NUME5nWmJwRXE1dUV4cnRa?=
+ =?utf-8?B?WTJWNm0yaXViWWtEUWhEMkgvNTNFRkdEQjdtMHhod3BPOE1nNFlQbStEVWI0?=
+ =?utf-8?B?eUo2NnRVY2R5MnBwQ0lkTm54c3lmRXdmNzdydmtwRjlLdkdmQ1dHWlJPdWYw?=
+ =?utf-8?B?V3VsNkFwUitTU1pQZlgwUlIxazgwZ2lKSUQ4NmRFdGYzSVgvOTY0VDNOVHlL?=
+ =?utf-8?B?bTJrWEF1RHhZWEdPYmZML1p2WjhBR0thbkoxdnM2VUpWUy9KR2VoWWZtRlYv?=
+ =?utf-8?B?WGFVSWhNTThUSzRRUi80dFF2cXVWaUxkb1hLV2VzTXlBYlhObnV6REhPbVUx?=
+ =?utf-8?B?R3FCUlBvL0o4alFnejdhTnpJdXhQczhnb0plUDRvbjBUbGZCSWRNR1ZWcUlV?=
+ =?utf-8?B?U2pFRHdabjdKdVI0Wit4blp1aVh2YVgvc0pRVHhnd0tPVW94ZXZzVzJnWkp4?=
+ =?utf-8?B?R1E9PQ==?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ddde08b-8ea9-4011-48ac-08dc913d59e5
+X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2024 15:26:26.7935 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Mgs1HYtK02UvcbPqmWPyDlxPKocH2YOr6ZNa7om1ihRbjX8nLNt2SU+0eyOML9W00YnvMlUVscwmeH0VF68iiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB9250
+Subject: Re: [lttng-dev] Compile modules on Centos Stream 9
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -51,181 +154,49 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Jean-Marc Chevalier via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Jean-Marc Chevalier <jean-marc.chevalier@polymtl.ca>
+From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Kienan Stewart <kstewart@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-------=_Part_75839321_2114178019.1718811716718
-Content-Type: multipart/alternative; 
-	boundary="=_88fe1f91-8011-48da-98cf-d2a02de418d3"
-
---=_88fe1f91-8011-48da-98cf-d2a02de418d3
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi,=20
-
-Is it possible to build the lttng modules againt Centos Stream 9 kernels? I=
- see these warnings at the top when attempting to compile:=20
-
-make[1]: Entering directory '/usr/src/kernels/5.14.0-452.el9.x86_64'=20
-/home/tmp/git/lttng-modules/src/probes/Kbuild:28: File ./mm/slab.h not foun=
-d. Probe "kmem" is disabled. Use full kernel source tree to enable it.=20
-/home/tmp/git/lttng-modules/src/probes/Kbuild:79: File ./arch/x86/kvm/lapic=
-.h not found. Probe "kvm" x86-specific is disabled. Use full kernel source =
-tree to enable it.=20
-/home/tmp/git/lttng-modules/src/probes/Kbuild:181: Files ./mm/internal.h no=
-t found. Probe "compaction" is disabled. Use full kernel source tree to ena=
-ble it.=20
-/home/tmp/git/lttng-modules/src/probes/Kbuild:190: Files ./fs/ext4/*.h not =
-found. Probe "ext4" is disabled. Use full kernel source tree to enable it.=
-=20
-/home/tmp/git/lttng-modules/src/probes/Kbuild:213: File ./drivers/base/regm=
-ap/trace.h not found. Probe "regmap" is disabled. Use full kernel source tr=
-ee to enable it.=20
-
-I tried with module versions 2.12.17 and 2.13.13 against the kernel 5.14.0-=
-452.el9.x86_64 and I obtain this error:=20
-
-/home/tmp/git/lttng-modules/src/probes/../../include/lttng/tracepoint-event=
--impl.h:133:6: error: conflicting types for 'trace_sched_stat_runtime'; hav=
-e 'void(struct task_struct *, u64, u64)' {aka 'void(struct task_struct *, l=
-ong long unsigned int, long long unsigned int)'}=20
-
-Any help would be greatly appreciated.=20
-
-- JM=20
-
---=20
-- Jean-Marc Chevalier=20
-Technicien=20
-G=C3=A9nie informatique G=C3=A9nie logiciel=20
-Local: M-4002=20
-T=C3=A9l=C3=A9phone: 514-340-4711 x4266=20
-
---=_88fe1f91-8011-48da-98cf-d2a02de418d3
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>Hi,</div><div><br data-mce-bogus=3D"1"></di=
-v><div>Is it possible to build the lttng modules againt Centos Stream 9 ker=
-nels? I see these warnings at the top when attempting to compile:</div><div=
-><br data-mce-bogus=3D"1"></div><div><div>make[1]: Entering directory '/usr=
-/src/kernels/5.14.0-452.el9.x86_64'</div><div>/home/tmp/git/lttng-modules/s=
-rc/probes/Kbuild:28: File ./mm/slab.h not found. Probe "kmem" is disabled. =
-Use full kernel source tree to enable it.</div><div>/home/tmp/git/lttng-mod=
-ules/src/probes/Kbuild:79: File ./arch/x86/kvm/lapic.h not found. Probe "kv=
-m" x86-specific is disabled. Use full kernel source tree to enable it.</div=
-><div>/home/tmp/git/lttng-modules/src/probes/Kbuild:181: Files ./mm/interna=
-l.h not found. Probe "compaction" is disabled. Use full kernel source tree =
-to enable it.</div><div>/home/tmp/git/lttng-modules/src/probes/Kbuild:190: =
-Files ./fs/ext4/*.h not found. Probe "ext4" is disabled. Use full kernel so=
-urce tree to enable it.</div><div>/home/tmp/git/lttng-modules/src/probes/Kb=
-uild:213: File ./drivers/base/regmap/trace.h not found. Probe "regmap" is d=
-isabled. Use full kernel source tree to enable it.</div></div><div><br data=
--mce-bogus=3D"1"></div><div>I tried with module versions 2.12.17 and 2.13.1=
-3 against the kernel 5.14.0-452.el9.x86_64 and I obtain this error:</div><d=
-iv><br data-mce-bogus=3D"1"></div><div>/home/tmp/git/lttng-modules/src/prob=
-es/../../include/lttng/tracepoint-event-impl.h:133:6: error: conflicting ty=
-pes for 'trace_sched_stat_runtime'; have 'void(struct task_struct *, u64,&n=
-bsp; u64)' {aka 'void(struct task_struct *, long long unsigned int,&nbsp; l=
-ong long unsigned int)'}<br data-mce-bogus=3D"1"></div><div><br data-mce-bo=
-gus=3D"1"></div><div>Any help would be greatly appreciated.</div><div><br d=
-ata-mce-bogus=3D"1"></div><div>- JM</div><div><br></div><div data-marker=3D=
-"__SIG_PRE__">-- <br>- Jean-Marc Chevalier<br>&nbsp;&nbsp;Technicien<br>&nb=
-sp;&nbsp;G=C3=A9nie informatique G=C3=A9nie logiciel<br>&nbsp;&nbsp;Local: =
-&nbsp; &nbsp; M-4002&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nb=
-sp;&nbsp;T=C3=A9l=C3=A9phone: 514-340-4711 x4266<br></div></div></body></ht=
-ml>
---=_88fe1f91-8011-48da-98cf-d2a02de418d3--
-
-------=_Part_75839321_2114178019.1718811716718
-Content-Type: text/plain; name=make-lttng-2-13-13.txt
-Content-Disposition: attachment; filename=make-lttng-2-13-13.txt
-Content-Transfer-Encoding: base64
-
-bWFrZSAtQyAvbGliL21vZHVsZXMvNS4xNC4wLTQ1Mi5lbDkueDg2XzY0L2J1aWxkIE09L2hvbWUv
-dG1wL2x0dG5nLW1vZHVsZXMtMi4xMy4xMy9zcmMgXA0KCUNPTkZJR19MVFRORz1tIENPTkZJR19M
-VFROR19DTE9DS19QTFVHSU5fVEVTVD1tIFwNCglLQ1BQRkxBR1M9JycgXA0KCW1vZHVsZXMNCm1h
-a2VbMV06IEVudGVyaW5nIGRpcmVjdG9yeSAnL3Vzci9zcmMva2VybmVscy81LjE0LjAtNDUyLmVs
-OS54ODZfNjQnDQovaG9tZS90bXAvbHR0bmctbW9kdWxlcy0yLjEzLjEzL3NyYy9wcm9iZXMvS2J1
-aWxkOjI4OiBGaWxlIC4vbW0vc2xhYi5oIG5vdCBmb3VuZC4gUHJvYmUgImttZW0iIGlzIGRpc2Fi
-bGVkLiBVc2UgZnVsbCBrZXJuZWwgc291cmNlIHRyZWUgdG8gZW5hYmxlIGl0Lg0KL2hvbWUvdG1w
-L2x0dG5nLW1vZHVsZXMtMi4xMy4xMy9zcmMvcHJvYmVzL0tidWlsZDo4MzogRmlsZSAuL2FyY2gv
-eDg2L2t2bS9sYXBpYy5oIG5vdCBmb3VuZC4gUHJvYmUgImt2bSIgeDg2LXNwZWNpZmljIGlzIGRp
-c2FibGVkLiBVc2UgZnVsbCBrZXJuZWwgc291cmNlIHRyZWUgdG8gZW5hYmxlIGl0Lg0KL2hvbWUv
-dG1wL2x0dG5nLW1vZHVsZXMtMi4xMy4xMy9zcmMvcHJvYmVzL0tidWlsZDoyMTA6IEZpbGVzIC4v
-bW0vaW50ZXJuYWwuaCBub3QgZm91bmQuIFByb2JlICJjb21wYWN0aW9uIiBpcyBkaXNhYmxlZC4g
-VXNlIGZ1bGwga2VybmVsIHNvdXJjZSB0cmVlIHRvIGVuYWJsZSBpdC4NCi9ob21lL3RtcC9sdHRu
-Zy1tb2R1bGVzLTIuMTMuMTMvc3JjL3Byb2Jlcy9LYnVpbGQ6MjE5OiBGaWxlcyAuL2ZzL2V4dDQv
-Ki5oIG5vdCBmb3VuZC4gUHJvYmUgImV4dDQiIGlzIGRpc2FibGVkLiBVc2UgZnVsbCBrZXJuZWwg
-c291cmNlIHRyZWUgdG8gZW5hYmxlIGl0Lg0KL2hvbWUvdG1wL2x0dG5nLW1vZHVsZXMtMi4xMy4x
-My9zcmMvcHJvYmVzL0tidWlsZDoyNDg6IEZpbGUgLi9kcml2ZXJzL2Jhc2UvcmVnbWFwL3RyYWNl
-Lmggbm90IGZvdW5kLiBQcm9iZSAicmVnbWFwIiBpcyBkaXNhYmxlZC4gTmVlZCBMaW51eCA0LjEr
-IGtlcm5lbCBzb3VyY2UgdHJlZSB0byBlbmFibGUgaXQuDQogIENDIFtNXSAgL2hvbWUvdG1wL2x0
-dG5nLW1vZHVsZXMtMi4xMy4xMy9zcmMvcHJvYmVzL2x0dG5nLXByb2JlLXNjaGVkLm8NCkluIGZp
-bGUgaW5jbHVkZWQgZnJvbSAvaG9tZS90bXAvbHR0bmctbW9kdWxlcy0yLjEzLjEzL3NyYy9wcm9i
-ZXMvLi4vLi4vaW5jbHVkZS9sdHRuZy9kZWZpbmVfdHJhY2UuaDo4NywNCiAgICAgICAgICAgICAg
-ICAgZnJvbSAvaG9tZS90bXAvbHR0bmctbW9kdWxlcy0yLjEzLjEzL3NyYy9wcm9iZXMvLi4vLi4v
-aW5jbHVkZS9pbnN0cnVtZW50YXRpb24vZXZlbnRzL3NjaGVkLmg6NzI5LA0KICAgICAgICAgICAg
-ICAgICBmcm9tIC9ob21lL3RtcC9sdHRuZy1tb2R1bGVzLTIuMTMuMTMvc3JjL3Byb2Jlcy9sdHRu
-Zy1wcm9iZS1zY2hlZC5jOjI4Og0KL2hvbWUvdG1wL2x0dG5nLW1vZHVsZXMtMi4xMy4xMy9zcmMv
-cHJvYmVzLy4uLy4uL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC1ldmVudC1pbXBsLmg6MTMzOjY6
-IGVycm9yOiBjb25mbGljdGluZyB0eXBlcyBmb3IgJ3RyYWNlX3NjaGVkX3N0YXRfcnVudGltZSc7
-IGhhdmUgJ3ZvaWQoc3RydWN0IHRhc2tfc3RydWN0ICosIHU2NCwgIHU2NCknIHtha2EgJ3ZvaWQo
-c3RydWN0IHRhc2tfc3RydWN0ICosIGxvbmcgbG9uZyB1bnNpZ25lZCBpbnQsICBsb25nIGxvbmcg
-dW5zaWduZWQgaW50KSd9DQogIDEzMyB8IHZvaWQgdHJhY2VfIyNfbmFtZShfcHJvdG8pOw0KICAg
-ICAgfCAgICAgIF5+fn5+fg0KL2hvbWUvdG1wL2x0dG5nLW1vZHVsZXMtMi4xMy4xMy9zcmMvcHJv
-YmVzLy4uLy4uL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC1ldmVudC1pbXBsLmg6NDU6OTogbm90
-ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvICdMVFROR19UUkFDRVBPSU5UX0VWRU5UX0lOU1RBTkNF
-X01BUCcNCiAgIDQ1IHwgICAgICAgICBMVFROR19UUkFDRVBPSU5UX0VWRU5UX0lOU1RBTkNFX01B
-UChtYXAsIG5hbWUsIG1hcCwgUEFSQU1TKHByb3RvKSwgUEFSQU1TKGFyZ3MpKQ0KICAgICAgfCAg
-ICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQovaG9tZS90bXAvbHR0
-bmctbW9kdWxlcy0yLjEzLjEzL3NyYy9wcm9iZXMvLi4vLi4vaW5jbHVkZS9sdHRuZy90cmFjZXBv
-aW50LWV2ZW50LWltcGwuaDo4Nzo5OiBub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8gJ0xUVE5H
-X1RSQUNFUE9JTlRfRVZFTlRfTUFQJw0KICAgODcgfCAgICAgICAgIExUVE5HX1RSQUNFUE9JTlRf
-RVZFTlRfTUFQKG5hbWUsIG5hbWUsICAgICAgICAgICAgICAgICAgICAgICAgICBcDQogICAgICB8
-ICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCi9ob21lL3RtcC9sdHRuZy1tb2R1
-bGVzLTIuMTMuMTMvc3JjL3Byb2Jlcy8uLi8uLi9pbmNsdWRlL2luc3RydW1lbnRhdGlvbi9ldmVu
-dHMvc2NoZWQuaDo2NzE6MTogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvICdMVFROR19UUkFD
-RVBPSU5UX0VWRU5UJw0KICA2NzEgfCBMVFROR19UUkFDRVBPSU5UX0VWRU5UKHNjaGVkX3N0YXRf
-cnVudGltZSwNCiAgICAgIHwgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fg0KSW4gZmlsZSBpbmNsdWRl
-ZCBmcm9tIC4vaW5jbHVkZS90cmFjZS9ldmVudHMvc2NoZWQuaDoxMCwNCiAgICAgICAgICAgICAg
-ICAgZnJvbSAvaG9tZS90bXAvbHR0bmctbW9kdWxlcy0yLjEzLjEzL3NyYy9wcm9iZXMvbHR0bmct
-cHJvYmUtc2NoZWQuYzoxNzoNCi4vaW5jbHVkZS9saW51eC90cmFjZXBvaW50Lmg6MjU2OjI4OiBu
-b3RlOiBwcmV2aW91cyBkZWZpbml0aW9uIG9mICd0cmFjZV9zY2hlZF9zdGF0X3J1bnRpbWUnIHdp
-dGggdHlwZSAndm9pZChzdHJ1Y3QgdGFza19zdHJ1Y3QgKiwgdTY0KScge2FrYSAndm9pZChzdHJ1
-Y3QgdGFza19zdHJ1Y3QgKiwgbG9uZyBsb25nIHVuc2lnbmVkIGludCknfQ0KICAyNTYgfCAgICAg
-ICAgIHN0YXRpYyBpbmxpbmUgdm9pZCB0cmFjZV8jI25hbWUocHJvdG8pICAgICAgICAgICAgICAg
-ICAgICAgICAgICBcDQogICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fg0K
-Li9pbmNsdWRlL2xpbnV4L3RyYWNlcG9pbnQuaDo0MzA6OTogbm90ZTogaW4gZXhwYW5zaW9uIG9m
-IG1hY3JvICdfX0RFQ0xBUkVfVFJBQ0UnDQogIDQzMCB8ICAgICAgICAgX19ERUNMQVJFX1RSQUNF
-KG5hbWUsIFBBUkFNUyhwcm90byksIFBBUkFNUyhhcmdzKSwgICAgICAgICAgICAgIFwNCiAgICAg
-IHwgICAgICAgICBefn5+fn5+fn5+fn5+fn4NCi4vaW5jbHVkZS9saW51eC90cmFjZXBvaW50Lmg6
-NTUzOjk6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyAnREVDTEFSRV9UUkFDRScNCiAgNTUz
-IHwgICAgICAgICBERUNMQVJFX1RSQUNFKG5hbWUsIFBBUkFNUyhwcm90byksIFBBUkFNUyhhcmdz
-KSkNCiAgICAgIHwgICAgICAgICBefn5+fn5+fn5+fn5+DQouL2luY2x1ZGUvdHJhY2UvZXZlbnRz
-L3NjaGVkLmg6NTE3OjE6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyAnREVGSU5FX0VWRU5U
-Jw0KICA1MTcgfCBERUZJTkVfRVZFTlQoc2NoZWRfc3RhdF9ydW50aW1lLCBzY2hlZF9zdGF0X3J1
-bnRpbWUsDQogICAgICB8IF5+fn5+fn5+fn5+fg0KbWFrZVszXTogKioqIFtzY3JpcHRzL01ha2Vm
-aWxlLmJ1aWxkOjI5NjogL2hvbWUvdG1wL2x0dG5nLW1vZHVsZXMtMi4xMy4xMy9zcmMvcHJvYmVz
-L2x0dG5nLXByb2JlLXNjaGVkLm9dIEVycm9yIDENCm1ha2VbMl06ICoqKiBbc2NyaXB0cy9NYWtl
-ZmlsZS5idWlsZDo1ODQ6IC9ob21lL3RtcC9sdHRuZy1tb2R1bGVzLTIuMTMuMTMvc3JjL3Byb2Jl
-c10gRXJyb3IgMg0KbWFrZVsxXTogKioqIFtNYWtlZmlsZToxOTQyOiAvaG9tZS90bXAvbHR0bmct
-bW9kdWxlcy0yLjEzLjEzL3NyY10gRXJyb3IgMg0KbWFrZVsxXTogTGVhdmluZyBkaXJlY3Rvcnkg
-Jy91c3Ivc3JjL2tlcm5lbHMvNS4xNC4wLTQ1Mi5lbDkueDg2XzY0Jw0KbWFrZTogKioqIFtNYWtl
-ZmlsZTozMTogbW9kdWxlc10gRXJyb3IgMg0K
-------=_Part_75839321_2114178019.1718811716718
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-------=_Part_75839321_2114178019.1718811716718--
+SGkgSmVhbi1NYXJjLAoKZm9yIHRoZSBidWlsZCBlcnJvcnMgY291bGQgeW91IHRyeSB0aGUgZm9s
+bG93aW5nIHBhdGNoOiAKaHR0cHM6Ly9yZXZpZXcubHR0bmcub3JnL2MvbHR0bmctbW9kdWxlcy8r
+LzEyODg1ID8KCnRoYW5rcywKa2llbmFuCgpPbiA2LzE5LzI0IDExOjQxIEFNLCBKZWFuLU1hcmMg
+Q2hldmFsaWVyIHZpYSBsdHRuZy1kZXYgd3JvdGU6Cj4gSGksCj4gCj4gSXMgaXQgcG9zc2libGUg
+dG8gYnVpbGQgdGhlIGx0dG5nIG1vZHVsZXMgYWdhaW50IENlbnRvcyBTdHJlYW0gOSAKPiBrZXJu
+ZWxzPyBJIHNlZSB0aGVzZSB3YXJuaW5ncyBhdCB0aGUgdG9wIHdoZW4gYXR0ZW1wdGluZyB0byBj
+b21waWxlOgo+IAo+IG1ha2VbMV06IEVudGVyaW5nIGRpcmVjdG9yeSAnL3Vzci9zcmMva2VybmVs
+cy81LjE0LjAtNDUyLmVsOS54ODZfNjQnCj4gL2hvbWUvdG1wL2dpdC9sdHRuZy1tb2R1bGVzL3Ny
+Yy9wcm9iZXMvS2J1aWxkOjI4OiBGaWxlIC4vbW0vc2xhYi5oIG5vdCAKPiBmb3VuZC4gUHJvYmUg
+ImttZW0iIGlzIGRpc2FibGVkLiBVc2UgZnVsbCBrZXJuZWwgc291cmNlIHRyZWUgdG8gZW5hYmxl
+IGl0Lgo+IC9ob21lL3RtcC9naXQvbHR0bmctbW9kdWxlcy9zcmMvcHJvYmVzL0tidWlsZDo3OTog
+RmlsZSAKPiAuL2FyY2gveDg2L2t2bS9sYXBpYy5oIG5vdCBmb3VuZC4gUHJvYmUgImt2bSIgeDg2
+LXNwZWNpZmljIGlzIGRpc2FibGVkLiAKPiBVc2UgZnVsbCBrZXJuZWwgc291cmNlIHRyZWUgdG8g
+ZW5hYmxlIGl0Lgo+IC9ob21lL3RtcC9naXQvbHR0bmctbW9kdWxlcy9zcmMvcHJvYmVzL0tidWls
+ZDoxODE6IEZpbGVzIC4vbW0vaW50ZXJuYWwuaCAKPiBub3QgZm91bmQuIFByb2JlICJjb21wYWN0
+aW9uIiBpcyBkaXNhYmxlZC4gVXNlIGZ1bGwga2VybmVsIHNvdXJjZSB0cmVlIAo+IHRvIGVuYWJs
+ZSBpdC4KPiAvaG9tZS90bXAvZ2l0L2x0dG5nLW1vZHVsZXMvc3JjL3Byb2Jlcy9LYnVpbGQ6MTkw
+OiBGaWxlcyAuL2ZzL2V4dDQvKi5oIAo+IG5vdCBmb3VuZC4gUHJvYmUgImV4dDQiIGlzIGRpc2Fi
+bGVkLiBVc2UgZnVsbCBrZXJuZWwgc291cmNlIHRyZWUgdG8gCj4gZW5hYmxlIGl0Lgo+IC9ob21l
+L3RtcC9naXQvbHR0bmctbW9kdWxlcy9zcmMvcHJvYmVzL0tidWlsZDoyMTM6IEZpbGUgCj4gLi9k
+cml2ZXJzL2Jhc2UvcmVnbWFwL3RyYWNlLmggbm90IGZvdW5kLiBQcm9iZSAicmVnbWFwIiBpcyBk
+aXNhYmxlZC4gVXNlIAo+IGZ1bGwga2VybmVsIHNvdXJjZSB0cmVlIHRvIGVuYWJsZSBpdC4KPiAK
+PiBJIHRyaWVkIHdpdGggbW9kdWxlIHZlcnNpb25zIDIuMTIuMTcgYW5kIDIuMTMuMTMgYWdhaW5z
+dCB0aGUga2VybmVsIAo+IDUuMTQuMC00NTIuZWw5Lng4Nl82NCBhbmQgSSBvYnRhaW4gdGhpcyBl
+cnJvcjoKPiAKPiAvaG9tZS90bXAvZ2l0L2x0dG5nLW1vZHVsZXMvc3JjL3Byb2Jlcy8uLi8uLi9p
+bmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQtZXZlbnQtaW1wbC5oOjEzMzo2OiBlcnJvcjogY29uZmxp
+Y3RpbmcgdHlwZXMgZm9yICd0cmFjZV9zY2hlZF9zdGF0X3J1bnRpbWUnOyBoYXZlICd2b2lkKHN0
+cnVjdCB0YXNrX3N0cnVjdCAqLCB1NjQswqAgdTY0KScge2FrYSAndm9pZChzdHJ1Y3QgdGFza19z
+dHJ1Y3QgKiwgbG9uZyBsb25nIHVuc2lnbmVkIGludCzCoCBsb25nIGxvbmcgdW5zaWduZWQgaW50
+KSd9Cj4gCj4gQW55IGhlbHAgd291bGQgYmUgZ3JlYXRseSBhcHByZWNpYXRlZC4KPiAKPiAtIEpN
+Cj4gCj4gLS0gCj4gLSBKZWFuLU1hcmMgQ2hldmFsaWVyCj4gIMKgwqBUZWNobmljaWVuCj4gIMKg
+wqBHw6luaWUgaW5mb3JtYXRpcXVlIEfDqW5pZSBsb2dpY2llbAo+ICDCoMKgTG9jYWw6IMKgIMKg
+IE0tNDAwMgo+ICDCoMKgVMOpbMOpcGhvbmU6IDUxNC0zNDAtNDcxMSB4NDI2Ngo+IAo+IF9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1h
+aWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0
+dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
+L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
