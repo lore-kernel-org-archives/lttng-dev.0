@@ -4,57 +4,148 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63E70C3DA59
-	for <lttng-dev@archiver.kernel.org>; Tue, 16 Jul 2024 19:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBA4AC3DA49
+	for <lttng-dev@archiver.kernel.org>; Tue, 16 Jul 2024 19:41:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1721156495;
-	bh=1n8LNyYoUY05hu91ZIvaDmiWelNsUY6bT1otlUbf6iA=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	s=default; t=1721158883;
+	bh=2EZ4pH5/Ta1hyOrvd0ifrZlqGrHdJlsZjgDbf1DaxN4=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=VX5m4Xi7XBp3rIac5hGYSt6i3cxpAUWhgxbj5tngA6IY3WmkDrVBQDYjpBVNC1Zbk
-	 CjPgSAzXbpirXewXAi3TGIQaQScNujqn/yoaUNBKvbBCknF9AegG+7ExE0rzZZR+fG
-	 2zXEg8hvwEitpR7TECaBg8yprAcPzwi9wS1tT7lS4MSRQspiExD5DqQq/+gJjiDnlF
-	 /ELp/OdcfFxpyD6rPheyow6qsAMaBGLbpqFtQ2ZFxlOf10wnoP1bh2Ikpqh8lk/H6i
-	 j5rvHqbT3BgVPdOuBZ14o6KdSLFFliiXxAmHk9jeNpj8nNFTcoryLdcmsw1QnRmDor
-	 IGzqPGTkXTB+w==
+	b=DmUaByPTOnuvrm5wNVKFwqFTRjrNzDlrbH5se5b++QECFvoOE+UQoe/vhRvHjcscb
+	 QRWnQ8A3puA8Vach1Ic9zN+WQnBDaLqYj4ldznO/mR5fdJU5uh7dsiNEbqKMpNxhnB
+	 XGFg5HMj7CBEnBjgO9KS1ezEivo/jWkaA+7sfgZVg03+6beJRfMoX/vSbuTkM/wlf3
+	 h2INK90rEUTtQxS3dNm/au2WDuGzJP6TTBpLlNg+GmTO8MNkq6VJd0IyUfJw+EXXts
+	 6sq84sClWNlNuWu9+/LvQgqsH/U8fej68/GgtV2EWIDwEEEw0py9xvvMo06FSfGWx/
+	 RECHKgDHnI2ag==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4WNpML5NCFz11lx;
-	Tue, 16 Jul 2024 15:01:34 -0400 (EDT)
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by lists.lttng.org (Postfix) with ESMTPS id 4WNpMJ3N7Cz126H
- for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2024 15:01:32 -0400 (EDT)
-Received: by mail-pl1-x62f.google.com with SMTP id
- d9443c01a7336-1fbc0a1494dso35532405ad.3
- for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2024 12:01:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721156491; x=1721761291;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=vGpZS1MpMFOweYWe61grn9CdDxZ6gkbDf3sv+krhvbs=;
- b=d6yXMtwLRNFSdrQMps7omG296rGZtk1bjWiDp3A/z+iIfi5bKqxFBdZiU9eK/MYSTC
- roLIfvkx3kGTOe76umY2v7ESBlN0bCMu0LXbhaY3iBDhz9XKStDv5osQ65PksbdWgIkV
- cLyqpd7QBYpWk1mpPgLJUvT0T/pn1eFiu6Zmgqa/Z4O700Yv629xZtWkjzsPBCQ3VwiO
- Cjz4UO4qyG7gbZ87GZ1mRCMuqqoTRWmw8ENrApeAYYEq+DZ/goraGoy26nQQ9fzHlWLu
- CRiXVsV3N/WoktuFooMm4OQoX2huHqtS4tIb0fDvGsHHCHK0Mx4G1KujyO9VA0XVDTf5
- rAXQ==
-X-Gm-Message-State: AOJu0YzeFnhIchJFJElE/t+qoo3jUCnRPtMXLEwGJcN32BVQcLJNu3st
- 2Ig4oQm63W5aph1SOyuoIaTrV0OYYM4VesbF9x0GPdBwRYhhB1ODdATKfExlFziYBwHGn+qu4UG
- /MKmzT3MmZg7ynTsLVYWxw0IAtVU=
-X-Google-Smtp-Source: AGHT+IG9FtNsR6xCuQ/yPUjHxQJjBPOpVezCgL35GzmwJL78jR1wCDt72t/DNCDG7R4/bYZbo6am2BWcOKvIjlH5EHc=
-X-Received: by 2002:a17:903:1110:b0:1fb:719a:28cc with SMTP id
- d9443c01a7336-1fc3cb37b6fmr29961925ad.18.1721156490778; Tue, 16 Jul 2024
- 12:01:30 -0700 (PDT)
-MIME-Version: 1.0
+	by lists.lttng.org (Postfix) with ESMTP id 4WNqFH3rMdz12Dm;
+	Tue, 16 Jul 2024 15:41:23 -0400 (EDT)
+Received: from YT3PR01CU008.outbound.protection.outlook.com
+ (mail-canadacentralazon11020137.outbound.protection.outlook.com
+ [52.101.189.137])
+ by lists.lttng.org (Postfix) with ESMTPS id 4WNqFG2qrwz12Dk
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2024 15:41:22 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xj15WvZ9cLjVJTnWDfFDvKpwsFy2ipP3ebXRb4PaROd83h+w0D38/7VGLvuHersOhygY8pycCCbJk20WZXBpcBEeMR327xRJJ1R1vN4KsrgkQfCGVAGRutOLv4MNkXZPasmLE4iKzVqlhDHUCMXR3VGS2e/BcMWKzJ2hU+WD9i42DSplOgQ+RA8ZtS+uyneptaGm4k1/2xzCGM0RhApEwGrSrYYdKip/ZzC2mGCMFXQePDnOp1XEdq7uhdrm0815Q4JbaFrq4K5b/RAASaqwoQ8mcuUBwVtHqAqSLghQQESdm1tLJIKHmLNrUNM1BLdMax1TFme2ZR3FOpmSFX9quQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h/WjDxCEPD1IR/mnGf3cnzXTLqoIYEPrTbFWAdnkj0w=;
+ b=VrCmQ1RV7Anb1qj98KyhXHvmrqo2Z8QWQLSZEto75pkB5qpChErm7zly6agfrCrhQMKZXS38EP+aU7aPOgYTCWtccmYtFpNfaV0LnwETod0lcmd8ZFy+uRDY4UZHgHUjo37y0aXD+7b3W0oO7KBntaimFdUJqzmuqF1M6lHe/9K3vnNs8aaluZSiol4kIUIBf4lFPgR8HULgdT8KMAWZSKxRC4Ew78nSwEemYmnzjH4RcPpxiZ3Tx4jQcBsxpqWd0kbk0PgPAZyjZ4ixqYEpj7sqBR/jJi8LjvesvazTh9IJ0/mX+p9dVauhvRcvkl30j9P4re2vcMOBTpKTJKxdsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::14)
+ by YT3PR01MB8289.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:9a::17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.14; Tue, 16 Jul
+ 2024 19:41:20 +0000
+Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e27c:c1e2:e6e:9256]) by YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e27c:c1e2:e6e:9256%4]) with mapi id 15.20.7762.030; Tue, 16 Jul 2024
+ 19:41:20 +0000
+Message-ID: <211e6d9f-834d-4511-b315-7844a5c04824@efficios.com>
+Date: Tue, 16 Jul 2024 15:41:18 -0400
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Fran=C3=A7ois_Belias?= <beliasossim@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 References: <CAHD10UjoaOjqZUH4j55Ra7zJ2HVRLOyk7xnjv+BjnJxs6rN6Aw@mail.gmail.com>
  <6deffa1d-4d46-4445-a510-a3aac271cc80@efficios.com>
-In-Reply-To: <6deffa1d-4d46-4445-a510-a3aac271cc80@efficios.com>
-Date: Tue, 16 Jul 2024 15:01:19 -0400
-Message-ID: <CAHD10Ui_JkP9hRirGUvKBgHhWX48r26+M2_zTyOD_cMLnSDGCg@mail.gmail.com>
-To: Kienan Stewart <kstewart@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+ <CAHD10Ui_JkP9hRirGUvKBgHhWX48r26+M2_zTyOD_cMLnSDGCg@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAHD10Ui_JkP9hRirGUvKBgHhWX48r26+M2_zTyOD_cMLnSDGCg@mail.gmail.com>
+X-ClientProxiedBy: YQBPR0101CA0202.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:67::24) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:e8::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YT3PR01MB8289:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9ed8c74-a647-4aae-56bb-08dca5cf442c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?THhOcnRQNkZIZmd0elVmbHJ1cXIyOHpoanpvUGtFejJTTnR1ZjF2OFl3NWFP?=
+ =?utf-8?B?b054aWJvVWxrNW8yUHQyRzFsMkFkbXpTQjZyV04vWG5TUnYycnZKeGljcVFl?=
+ =?utf-8?B?Mys2N0FGclI1SEU2RVArd1d0dFN3VzE0RGxFYU05WXRiRkxzWENteld4UmlY?=
+ =?utf-8?B?aVI5UTU1WG5tU1FrNjJ1QTFWS0RYNE9yRXRvT3duQWw4VXdRVFI4ZC9JdEpV?=
+ =?utf-8?B?bCtZL3hwSmpSQTVlUkI1RjlwNGxwRHRZR3Evb0FvQ2wxWmo5UEs0TS8xUnRK?=
+ =?utf-8?B?ajIyY3FGZkxyMFRTOHdjdTJWOGV6R1l0TStOWlRwV0pQWHdQcWdsTVZPcUJK?=
+ =?utf-8?B?VHQwNUtzK2thTmdsKzE5dGZjZGYyT0xHNGh4eE4xUlA2Vko0NE9nQlk5VUcy?=
+ =?utf-8?B?N3ljWEhmT01ILzJMNElETWdBOXJEU3BuRzdXQTNwNUFna3cvekFPSENjZFFQ?=
+ =?utf-8?B?VTU0Y3VxOTQySHltSldCVkszTkU1OGdBdG1EWDM1WFVwSkNMOXFrODhzYmtF?=
+ =?utf-8?B?RTFCT0ZndEswOVZTanZFT0hqNlMxTWxuZXIvYzNsTGhNV0RWaDlBeFhhYVJr?=
+ =?utf-8?B?TmtoZTZkWWRHbE5EQmNiOFVnSWFickJ6ZWJlbkVESmxvcllsemo1cnl5UTlP?=
+ =?utf-8?B?ZHYxTFlnOTU4RWJIRHhMSThzTUVRejQ5L3VnZVcyU1R0YlQwUEVEQWtsUkxh?=
+ =?utf-8?B?czdjOFl2ZzAvTUg0bmdvRzZiaXk1dHFXZzNZR2JTL2JqcWo5R25uZFZaSUlk?=
+ =?utf-8?B?dDdtS213bVNsOS9rdmxyQ2pJeXhCNWxEclFmQ2FwR2JrTVE3RXAvS3ZlMHZW?=
+ =?utf-8?B?M1FVVS9zdEZKYUtxVjV1SGxXQngxYnJqVm9JM3FGNGF0QitNOHhpOTluRHNV?=
+ =?utf-8?B?TktENFNZNUh3Rk5QZ095ZFI3WlBralJnUHhGTjAwNHVuY21lMnJCQkZZcFls?=
+ =?utf-8?B?N1B2UTdmcnhvSllscU9pU3lVQzdPbVFwbTlGem84OTNod0orOUZGazRBU1NE?=
+ =?utf-8?B?YTZMZEdHWGw4cmZ3eFdFWndMd1ppeHl1d3E2RXFlUzMwMHlTMEdURlFQNkpI?=
+ =?utf-8?B?clJydVRmOU9KYmtUU1YwRE9MVGR0L0Z1S2ZxWnJlb3B0eitmcGthQTlxcnBH?=
+ =?utf-8?B?VGljYng2b21PVVZDVUNhY3djTjFhczB6QUxLSTFGWkt6cXhmcnNxVTlrUXZW?=
+ =?utf-8?B?Nm1oWXlUTlNNRkNxcDExUkNZbnZLKzQrQ29lODg4emovcGIwZ1FXRHhvYTYz?=
+ =?utf-8?B?VDdHR3BMNWphOWZWWmpyYmNiQWNBUlFheWs0ZjVyVmg0emZZWVd0MjBvbkp0?=
+ =?utf-8?B?MFNrOTJlbVpaSk5ZNGgwcXhOYWVmcC9RbjBuaUVNNmFjNllsaCtEbVFDdk1U?=
+ =?utf-8?B?ZFMydVplVmwwT2cxVjF2WXFjR2l1ZEF3QVdIdDBZTVVLUVQxaVNaYklGWmV2?=
+ =?utf-8?B?Wk4zWmhhcG81emVaMmcvS3VzcFM3MVN3cEJPN2F0OWNvVk9KV05uZTVJT21K?=
+ =?utf-8?B?OHdGcExXRDdrTm5qa2poSUsrc1RFaG5NV1JNcWNaQnVzeVU2c1Y2Vm9xM1Vq?=
+ =?utf-8?B?VGplMlBKYlBXc3I1MGk2M2F0Myt0VTR5MmhveExpZWYwaFNQdHJQWENDM1lV?=
+ =?utf-8?B?U0J3MFo5VXoxYnRuMjZtZzhLVmJXY2FrY1k5aCtPTGNaWW1UVlE4M0ZuS2dU?=
+ =?utf-8?B?R2liczRnN2hib0tzWjJmUnFmUjgxNjR0R3VqSUx6RlpwZURKREp0Sm9IUVhL?=
+ =?utf-8?Q?8IfLMQD6ljcxJrzIsA=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(1800799024)(366016); DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1dUL2EyRjFZb3FIaEJaak95MCs1UDZtVGxWYVlDMDFad1BxcUFlQ28rZGhw?=
+ =?utf-8?B?VEFYb0JpYkhpQUVYN0RhdURvNDBiSzVISkpKTTJuQURNcEFENHFPWVMzV0pR?=
+ =?utf-8?B?ZGdTbEs4YmtTZkFyWVRSMytLWXVpM2ZDQmFCZDNpUjFxYStodFVqOHFsbEFK?=
+ =?utf-8?B?elNYbXN5Y3pzYzFiL3FyOS9LR3FOeHFxZVFSNC9OM0RRT3pHSG5KaVZlVUtN?=
+ =?utf-8?B?aEM5NlNteDBLdWpaY2V0UGZYdGhaRGxiM0M2dHhCLzlPZzJZaUJKN0Q2OGsx?=
+ =?utf-8?B?ZzUzYWQrTFZwTDc1eWxBTkhkVmlTdXQzbDJxN3kwaCtmRXg1Q1lnS2xGNG14?=
+ =?utf-8?B?aE5kN3E4eE9kZ2lPTkJlZlRJSkNIdk9qYjJHclRobVF3b05sMlVRTlR6UlRX?=
+ =?utf-8?B?K2EvQXMxaHFPVXQ5VHlTZTNPeVRYUUd2ZHUrQytJeEJDYXkxUVhBRHZ1b0hQ?=
+ =?utf-8?B?bXM0YnFuc1RESXZpUHYxY3RLNXJ2TWE3Y0dTdmk1ZFlPUjVmUDVKckE0MS9X?=
+ =?utf-8?B?c3B1ek9KMFEzSXFrY0ZPZkprZktZeE5ZOGJ3V1ltRXBkbkRQaTBYTlREV1Fl?=
+ =?utf-8?B?NStDREZzRkt2ZVcwOEhqWnlIQjkwZWpxalB4WDFrSWR6ZjZXWEY4YUIzWWRm?=
+ =?utf-8?B?dE1yVm5oZkVpUDNCYVRhb1dLdWo2R3p6QkJWd0NDbXF6QkdYUTF6NkwxZ3hC?=
+ =?utf-8?B?UkFzb3pRRk5XZyt6TktuUUpoNmRrL0lSZ3M3K1ZaTW8wanVNN3pzdnFKZVda?=
+ =?utf-8?B?YmdkdW1nc21RcUdmSWxJd0FmTzBVVWswTGt4ZGhTZE83UkkrVVl5cElib2tB?=
+ =?utf-8?B?ZUUrV1NiQ25URWpSS3JjZ054aWVpVG8vOUxqZFlCN1NTZEFmNC90elowaHNL?=
+ =?utf-8?B?UE4xYTM2TGVMUFlmK3JvUGw5dW9xMnB5cnU2S1JLdDVDZndVZ2g0ZnJFNVNE?=
+ =?utf-8?B?SFJPNTNrQmlzY0tMcFJLb1RqSTVCU3ZtMUlFaVl6S2pDbi94SkpqVGg0QW9R?=
+ =?utf-8?B?alQ2cjZoMVhjcG5qN1Zyc0UvR3daWCtZK1ZsVWhyOFFjZXd5RzU1VEI5L0Nl?=
+ =?utf-8?B?LzJtM1lydmlNT1Y2OUVXSEFYa3Y5N2ZYVnRDMk1DWXBQRmlXbnRvMEFxWTFt?=
+ =?utf-8?B?K2xBTlpiSnpqVHFQTWVnbVo3cC95dG1TNHZOdUlEL3o2NFlwdEFsZGVHSTBv?=
+ =?utf-8?B?OWpJZmRaRW5ISEhjY0Q2VFo1M1J5Uy9qK2EwMldCaDdwL3JkR202SzV2anZj?=
+ =?utf-8?B?ZkJpOTBrS0x0dmRUaWhjOXoraTRjMzl0bHBNMTdMKzV3RlBZQysyMEd2Qk5L?=
+ =?utf-8?B?SldXMmp2WmNXTnZ5WlZsZjc5R0dYdURQSmRiUmxjUXhjM0NKblJGb1E0b1VK?=
+ =?utf-8?B?cXVXWFk3Q3pYNUdvczhxbC9JUEZIWlpRYy9nZ3VkVjdqZWc4amhsclprVDlY?=
+ =?utf-8?B?QkVGSmNXbWhuWlkxdzdkVjZ4QWVNSm5WeWNzSEdHeXRhdnlFTS9QenRmelJ6?=
+ =?utf-8?B?KzR2emJMR1p5V0N4bVVHVktiM1hGT0RzdkN0NG43NU1qL3AvQ2RldnViVTdS?=
+ =?utf-8?B?Vlovd0ZlZVZzdFlhbW95eW03VmRnYXB5c2VhR0E5eHd4dDNtL1JvTXpNS1lD?=
+ =?utf-8?B?Uzg2bWhTRWxydVUvaWNZeTNWWmVORnptbjJWb0lmZGJUT0VVeFBaOFVlcTJw?=
+ =?utf-8?B?ejF2SnU0UUhnSEpDeTIyR2Z0OGd4STJkR2dFOWsxVlVBVWxla21SbjI1TUY3?=
+ =?utf-8?B?bnpPaWUwTzV3V1JaV0RmYlY4NGxlZ2RueUt4MXZ4MTAyMytkZVo4N2ZYYk5z?=
+ =?utf-8?B?MkFzSlQ4dm9HdCtWMDg1NzQzQjRiSnJremRQaHZ6cytZeHc3d3RrUkxUdUxx?=
+ =?utf-8?B?UExwTzJBZmtjcytTVmFBZXl1QXJpRnhQbHpVN3FJbVJObkJVS05SRklleXkr?=
+ =?utf-8?B?TnkwTFFnK1Zuak9IUFJqR0tmTnc4YVR2MW5YY2VyWnRRNE4xTjRRQnVDcy9R?=
+ =?utf-8?B?em5vTzlUdHdETVpLNmx2ak9HQzYvakFqdHR6UklLV3RFVUFWTGZJbUVORXRi?=
+ =?utf-8?B?c0RlVVdrWmVSMjJCcVNFWk1sK2RRN250TnhiZ3JxaVovaWZLRUNTSDVYQzNV?=
+ =?utf-8?B?VUVJU0RleVE0aDJzVWFtWW1vUENwQllrZ2Y5cW94dUxBelZCeDgwTytNM1Jr?=
+ =?utf-8?B?bEE9PQ==?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9ed8c74-a647-4aae-56bb-08dca5cf442c
+X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2024 19:41:20.1389 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mxUjyL4OLtzYbOscRm7JDyfe7oaNBKS9uzpyGpSW9n0Npb2fgVsA5kjlCRrlBx2RxKRBzyg+eblwzyzCXrK2rQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB8289
 Subject: Re: [lttng-dev] loading modules with modprobe
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -67,299 +158,124 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?q?Fran=C3=A7ois_Belias_via_lttng-dev?=
- <lttng-dev@lists.lttng.org>
-Reply-To: =?UTF-8?Q?Fran=C3=A7ois_Belias?= <beliasossim@gmail.com>
-Content-Type: multipart/mixed; boundary="===============5970068450124397604=="
+From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Kienan Stewart <kstewart@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============5970068450124397604==
-Content-Type: multipart/alternative; boundary="0000000000003c5fe6061d61f96a"
-
---0000000000003c5fe6061d61f96a
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hello Kienan,
-
-I've continued investigating my issue and discovered something new that
-might shed some light. Here's the rundown:
-
-1. To ensure my add-ons weren't causing problems, deleted all old modules
-and I followed the documentation on the LTTng website (
-https://lttng.org/docs/v2.13/#doc-building-from-source) and downloaded
-`lttng-modules-2.13.13`.
-
-2. Inside the downloaded folder, I successfully executed `make
-KERNELDIR=3D/usr/src/linux-source-6.5.0` without any issues.
-
-3. Subsequently, I ran `make KERNELDIR=3D/usr/src/linux-source-6.5.0
-modules_install`, which also completed successfully.
-
-4. After that, I updated the module dependencies using `sudo depmod -a`,
-which went fine.
-
-However, when I tried to load a module, such as `sudo modprobe
-lttng-probe-kvm`, it reported that the module couldn't be found at
-`/lib/modules/6.5.0-41-generic/`. Upon checking the logs, I confirmed that
-step 3 had installed the modules in `/lib/modules/6.5.0/`.
-
-To address this, I modified step 3 to simply `make modules_install`, which
-then installed the modules correctly at `/lib/modules/6.5.0-41-generic/`
-and ran again step 4. But now, when attempting to load a module, I'm
-encountering the error `modprobe: ERROR: could not insert
-'lttng_probe_kvm': Exec format error`.
-
-Do you have any insights or ideas on what might be causing this issue?
-
-Thanks again for your assistance.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Le mar. 16 juill. 2024, =C3=A0 09 h 05, Kienan Stewart <kstewart@efficios.c=
-om> a
-=C3=A9crit :
-
-> Hi Fran=C3=A7ois,
->
-> On 7/15/24 6:10 PM, Fran=C3=A7ois Belias via lttng-dev wrote:
-> > Hello,
-> >
-> > I'm currently running Linux kernel version 6.5.0-41-generic and
-> > attempting to install LTTng from source. Here are the steps I followed:
-> >
-> >   - I cloned the LTTng git repository to my computer from
-> > [
-> https://github.com/lttng/lttng-modules.git](https://github.com/lttng/lttn=
-g-modules.git)
-> <
-> https://github.com/lttng/lttng-modules.git](https://github.com/lttng/lttn=
-g-modules.git)
-> >.
-> > - Downloaded the kernel source tree corresponding to my kernel version
-> > to enable compilation.
-> > - Executed `make KERNELDIR=3D/path/to/my/linux/source`, which was
-> > completed successfully.
-> > - Ran `make KERNELDIR=3D/path/to/my/linux/source modules_install`, also
-> > without any issues.
-> > - Finally, I executed `sudo depmod -a`, which was completed successfull=
-y.
-> >
-> > However, when I attempt to load a module with commands like `sudo
-> > modprobe lttng-ketprobes` or "sudo modprobe lttng-tracer", I encounter
-> > the following errors:
-> >
-> > - For `lttng-ketprobes`: `modprobe: FATAL: Module lttng-ketprobes not
-> > found in directory /lib/modules/6.5.0-41-generic`.
-> > - For `lttng-tracer`: `modprobe: ERROR: could not insert 'lttng_tracer'=
-:
-> > Exec format error`.
->
-> If you rebuilt modules on the master branch as of yesterday you may need
-> to clean the LTTng modules install directory, rebuild, and reinstall.
->
-> This is due to kprobes, kretprobes, and uprobes modules being included
-> in the tracer core module. C.f.
->
-> https://github.com/lttng/lttng-modules/commit/0c2c6606eb66cb5222ab7a2a4f8=
-329fd5dfdef70
->
-> You may want to stick with running lttng-modules 2.13.x which will not
-> have breaking changes merged in.
->
-> The exec format error also could be due to modules that are installed
-> but built against a different version of the Linux kernel.
->
-> A few things to check
->
-> - If your kernel has been upgraded recently, ensure the new kernel is
-> the one actually running
-> - If the modules haven't been rebuilt since the upgrade, they should be
-> rebuilt and reinstalled
-> - As I recall, you are playing around with some addon modules - do any
-> of those modules define dependencies on the kprobes, kretprobes, or
-> uprobes modules which now are no longer produced by builds of the master
-> branch
->
-> Is there further information in dmesg or journalctl regarding the module
-> loading?
->
-> hope this helps.
->
-> thanks,
-> kienan
->
-> >
-> > I've confirmed that the modules exist but can't load them. I'm unsure
-> > how to resolve these issues. Could someone please assist me?
-> >
-> > Thank you.
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
---0000000000003c5fe6061d61f96a
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hello Kienan,<br><br>I&#39;ve continued investigating=
- my issue and discovered something new that might shed some light. Here&#39=
-;s the rundown:<br><br>1. To ensure my add-ons weren&#39;t causing problems=
-, deleted all old modules and I followed the documentation on the LTTng web=
-site (<a href=3D"https://lttng.org/docs/v2.13/#doc-building-from-source">ht=
-tps://lttng.org/docs/v2.13/#doc-building-from-source</a>) and downloaded `l=
-ttng-modules-2.13.13`.<br><br>2. Inside the downloaded folder, I successful=
-ly executed `make KERNELDIR=3D/usr/src/linux-source-6.5.0` without any issu=
-es.<br><br>3. Subsequently, I ran `make KERNELDIR=3D/usr/src/linux-source-6=
-.5.0 modules_install`, which also completed successfully.<br><br>4. After t=
-hat, I updated the module dependencies using `sudo depmod -a`, which went f=
-ine.<br><br>However, when I tried to load a module, such as `sudo modprobe =
-lttng-probe-kvm`, it reported that the module couldn&#39;t be found at `/li=
-b/modules/6.5.0-41-generic/`. Upon checking the logs, I confirmed that step=
- 3 had installed the modules in `/lib/modules/6.5.0/`.<br><br>To address th=
-is, I modified step 3 to simply `make modules_install`, which then installe=
-d the modules correctly at `/lib/modules/6.5.0-41-generic/` and ran again s=
-tep=C2=A04. But now, when attempting to load a module, I&#39;m encountering=
- the error `modprobe: ERROR: could not insert &#39;lttng_probe_kvm&#39;: Ex=
-ec format error`.<br><br>Do you have any insights or ideas on what might be=
- causing this issue?<br><br>Thanks again for your assistance.<br></div><div=
-><br></div><div><br></div><div><br></div><div>=C2=A0</div><div><br></div><d=
-iv><br></div><div><br></div><div><br></div><div><br></div><div><br></div><d=
-iv><br></div><div><br></div><div><br></div><div><br></div><div><br></div><d=
-iv><br></div><div><br></div><div><br></div><div><br></div></div><br><div cl=
-ass=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le mar. 16 juill.=
- 2024, =C3=A0 09 h 05, Kienan Stewart &lt;<a href=3D"mailto:kstewart@effici=
-os.com">kstewart@efficios.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockqu=
-ote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px=
- solid rgb(204,204,204);padding-left:1ex">Hi Fran=C3=A7ois,<br>
-<br>
-On 7/15/24 6:10 PM, Fran=C3=A7ois Belias via lttng-dev wrote:<br>
-&gt; Hello,<br>
-&gt; <br>
-&gt; I&#39;m currently running Linux kernel version 6.5.0-41-generic and <b=
-r>
-&gt; attempting to install LTTng from source. Here are the steps I followed=
-:<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0- I cloned the LTTng git repository to my computer from <b=
-r>
-&gt; [<a href=3D"https://github.com/lttng/lttng-modules.git%5D(https://gith=
-ub.com/lttng/lttng-modules.git)" rel=3D"noreferrer" target=3D"_blank">https=
-://github.com/lttng/lttng-modules.git](https://github.com/lttng/lttng-modul=
-es.git)</a> &lt;<a href=3D"https://github.com/lttng/lttng-modules.git%5D(ht=
-tps://github.com/lttng/lttng-modules.git)" rel=3D"noreferrer" target=3D"_bl=
-ank">https://github.com/lttng/lttng-modules.git](https://github.com/lttng/l=
-ttng-modules.git)</a>&gt;.<br>
-&gt; - Downloaded the kernel source tree corresponding to my kernel version=
- <br>
-&gt; to enable compilation.<br>
-&gt; - Executed `make KERNELDIR=3D/path/to/my/linux/source`, which was <br>
-&gt; completed successfully.<br>
-&gt; - Ran `make KERNELDIR=3D/path/to/my/linux/source modules_install`, als=
-o <br>
-&gt; without any issues.<br>
-&gt; - Finally, I executed `sudo depmod -a`, which was completed successful=
-ly.<br>
-&gt; <br>
-&gt; However, when I attempt to load a module with commands like `sudo <br>
-&gt; modprobe lttng-ketprobes` or &quot;sudo modprobe lttng-tracer&quot;, I=
- encounter <br>
-&gt; the following errors:<br>
-&gt; <br>
-&gt; - For `lttng-ketprobes`: `modprobe: FATAL: Module lttng-ketprobes not =
-<br>
-&gt; found in directory /lib/modules/6.5.0-41-generic`.<br>
-&gt; - For `lttng-tracer`: `modprobe: ERROR: could not insert &#39;lttng_tr=
-acer&#39;: <br>
-&gt; Exec format error`.<br>
-<br>
-If you rebuilt modules on the master branch as of yesterday you may need <b=
-r>
-to clean the LTTng modules install directory, rebuild, and reinstall.<br>
-<br>
-This is due to kprobes, kretprobes, and uprobes modules being included <br>
-in the tracer core module. C.f. <br>
-<a href=3D"https://github.com/lttng/lttng-modules/commit/0c2c6606eb66cb5222=
-ab7a2a4f8329fd5dfdef70" rel=3D"noreferrer" target=3D"_blank">https://github=
-.com/lttng/lttng-modules/commit/0c2c6606eb66cb5222ab7a2a4f8329fd5dfdef70</a=
-><br>
-<br>
-You may want to stick with running lttng-modules 2.13.x which will not <br>
-have breaking changes merged in.<br>
-<br>
-The exec format error also could be due to modules that are installed <br>
-but built against a different version of the Linux kernel.<br>
-<br>
-A few things to check<br>
-<br>
-- If your kernel has been upgraded recently, ensure the new kernel is <br>
-the one actually running<br>
-- If the modules haven&#39;t been rebuilt since the upgrade, they should be=
- <br>
-rebuilt and reinstalled<br>
-- As I recall, you are playing around with some addon modules - do any <br>
-of those modules define dependencies on the kprobes, kretprobes, or <br>
-uprobes modules which now are no longer produced by builds of the master <b=
-r>
-branch<br>
-<br>
-Is there further information in dmesg or journalctl regarding the module <b=
-r>
-loading?<br>
-<br>
-hope this helps.<br>
-<br>
-thanks,<br>
-kienan<br>
-<br>
-&gt; <br>
-&gt; I&#39;ve confirmed that the modules exist but can&#39;t load them. I&#=
-39;m unsure <br>
-&gt; how to resolve these issues. Could someone please assist me?<br>
-&gt; <br>
-&gt; Thank you.<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev</a><br>
-</blockquote></div>
-
---0000000000003c5fe6061d61f96a--
-
---===============5970068450124397604==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5970068450124397604==--
+SGkgRnJhbsOnb2lzLAoKT24gNy8xNi8yNCAzOjAxIFBNLCBGcmFuw6dvaXMgQmVsaWFzIHdyb3Rl
+Ogo+IEhlbGxvIEtpZW5hbiwKPiAKPiBJJ3ZlIGNvbnRpbnVlZCBpbnZlc3RpZ2F0aW5nIG15IGlz
+c3VlIGFuZCBkaXNjb3ZlcmVkIHNvbWV0aGluZyBuZXcgdGhhdCAKPiBtaWdodCBzaGVkIHNvbWUg
+bGlnaHQuIEhlcmUncyB0aGUgcnVuZG93bjoKPiAKPiAxLiBUbyBlbnN1cmUgbXkgYWRkLW9ucyB3
+ZXJlbid0IGNhdXNpbmcgcHJvYmxlbXMsIGRlbGV0ZWQgYWxsIG9sZCAKPiBtb2R1bGVzIGFuZCBJ
+IGZvbGxvd2VkIHRoZSBkb2N1bWVudGF0aW9uIG9uIHRoZSBMVFRuZyB3ZWJzaXRlIAo+IChodHRw
+czovL2x0dG5nLm9yZy9kb2NzL3YyLjEzLyNkb2MtYnVpbGRpbmctZnJvbS1zb3VyY2UgCj4gPGh0
+dHBzOi8vbHR0bmcub3JnL2RvY3MvdjIuMTMvI2RvYy1idWlsZGluZy1mcm9tLXNvdXJjZT4pIGFu
+ZCBkb3dubG9hZGVkIAo+IGBsdHRuZy1tb2R1bGVzLTIuMTMuMTNgLgo+IAo+IDIuIEluc2lkZSB0
+aGUgZG93bmxvYWRlZCBmb2xkZXIsIEkgc3VjY2Vzc2Z1bGx5IGV4ZWN1dGVkIGBtYWtlIAo+IEtF
+Uk5FTERJUj0vdXNyL3NyYy9saW51eC1zb3VyY2UtNi41LjBgIHdpdGhvdXQgYW55IGlzc3Vlcy4K
+PiAKPiAzLiBTdWJzZXF1ZW50bHksIEkgcmFuIGBtYWtlIEtFUk5FTERJUj0vdXNyL3NyYy9saW51
+eC1zb3VyY2UtNi41LjAgCj4gbW9kdWxlc19pbnN0YWxsYCwgd2hpY2ggYWxzbyBjb21wbGV0ZWQg
+c3VjY2Vzc2Z1bGx5Lgo+IAo+IDQuIEFmdGVyIHRoYXQsIEkgdXBkYXRlZCB0aGUgbW9kdWxlIGRl
+cGVuZGVuY2llcyB1c2luZyBgc3VkbyBkZXBtb2QgLWFgLCAKPiB3aGljaCB3ZW50IGZpbmUuCj4g
+Cj4gSG93ZXZlciwgd2hlbiBJIHRyaWVkIHRvIGxvYWQgYSBtb2R1bGUsIHN1Y2ggYXMgYHN1ZG8g
+bW9kcHJvYmUgCj4gbHR0bmctcHJvYmUta3ZtYCwgaXQgcmVwb3J0ZWQgdGhhdCB0aGUgbW9kdWxl
+IGNvdWxkbid0IGJlIGZvdW5kIGF0IAo+IGAvbGliL21vZHVsZXMvNi41LjAtNDEtZ2VuZXJpYy9g
+LiBVcG9uIGNoZWNraW5nIHRoZSBsb2dzLCBJIGNvbmZpcm1lZCAKPiB0aGF0IHN0ZXAgMyBoYWQg
+aW5zdGFsbGVkIHRoZSBtb2R1bGVzIGluIGAvbGliL21vZHVsZXMvNi41LjAvYC4KPiAKPiBUbyBh
+ZGRyZXNzIHRoaXMsIEkgbW9kaWZpZWQgc3RlcCAzIHRvIHNpbXBseSBgbWFrZSBtb2R1bGVzX2lu
+c3RhbGxgLCAKPiB3aGljaCB0aGVuIGluc3RhbGxlZCB0aGUgbW9kdWxlcyBjb3JyZWN0bHkgYXQg
+Cj4gYC9saWIvbW9kdWxlcy82LjUuMC00MS1nZW5lcmljL2AgYW5kIHJhbiBhZ2FpbiBzdGVwwqA0
+LiBCdXQgbm93LCB3aGVuIAo+IGF0dGVtcHRpbmcgdG8gbG9hZCBhIG1vZHVsZSwgSSdtIGVuY291
+bnRlcmluZyB0aGUgZXJyb3IgYG1vZHByb2JlOiAKPiBFUlJPUjogY291bGQgbm90IGluc2VydCAn
+bHR0bmdfcHJvYmVfa3ZtJzogRXhlYyBmb3JtYXQgZXJyb3JgLgo+IAo+IERvIHlvdSBoYXZlIGFu
+eSBpbnNpZ2h0cyBvciBpZGVhcyBvbiB3aGF0IG1pZ2h0IGJlIGNhdXNpbmcgdGhpcyBpc3N1ZT8K
+PiAKCkl0IHNvdW5kcyBsaWtlIC91c3Ivc3JjL2xpbnV4LXNvdXJjZS02LjUuMCBpcyBub3QgY29y
+cmVjdCBzb3VyY2UgZm9yIHRoZSAKa2VybmVsIHRoYXQgeW91IGFyZSBjdXJyZW50bHkgcnVubmlu
+Zy4KCldoZW4gcnVubmluZyBgbWFrZSBtb2R1bGVzX2luc3RhbGxgIGluIHlvdXIgbW9kaWZpZWQg
+c3RlcCAzICh3aXRob3V0IApLRVJORUxESVIgc2V0KSwgdGhlIG1vZHVsZXMgd2VyZSBpbnN0YWxs
+ZWQgZm9yIHlvdXIgY3VycmVudCBrZXJuZWwgCmRpcmVjdG9yeSBhcyBhdXRvLWRldGVjdGVkIGJ5
+IHRoZSBidWlsZCBzY3JpcHQuCgpXaGF0IGhhcHBlbnMgaWYgeW91IGRvIHRoZSBmb2xsb3dpbmcK
+CmBgYAp1bnNldCBLRVJORUxESVIKCiMgV2FybmluZzogdGhpcyByZW1vdmVzIGFsbCB1bnRyYWNr
+ZWQgY29udGVudCBmcm9tIHRoZSBsdHRuZy1tb2R1bGVzIApkaXJlY3RvcnkKY2QgL3BhdGgvdG8v
+bHR0bmctbW9kdWxlcy1zb3VyY2UKZ2l0IGNsZWFuIC1keGYKCm1ha2UKc3VkbyBtYWtlIG1vZHVs
+ZXNfaW5zdGFsbApzdWRvIGRlcG1vZCAtYQpgYGAKCktFUk5FTERJUiBpcyBzZXQgYmFzZWQgb24g
+dGhlIGN1cnJlbnQgcnVubmluZyBrZXJuZWw6IGB1bmFtZSAtcmAuIEMuZi4gCmh0dHBzOi8vZ2l0
+aHViLmNvbS9sdHRuZy9sdHRuZy1tb2R1bGVzL2Jsb2IvNDM0ZTg2ZWVhODQ2YjMzY2FkNTdmMWQ4
+MTA1MDg5OTA1ZjU0MTg1My9NYWtlZmlsZSNMMTZDMS1MMTZDNTAKCkEgY291cGxlIG9mIHF1ZXN0
+aW9ucyBmb3IgeW91OgoKLSBXaGVyZSBkaWQgL3Vzci9zcmMvbGludXgtc291cmNlLTYuNS4wIGNv
+bWUgZnJvbT8KLSBXaGljaCBsaW51eCBkaXN0cmlidXRpb24gKyB2ZXJzaW9uIGFyZSB5b3UgdXNp
+bmc/Ci0gQXNzdW1pbmcgeW91ciBkaXN0cmlidXRpb24gaGFzIGtlcm5lbCBwYWNrYWdlcywgd2hp
+Y2ggZG8geW91IGhhdmUgCmluc3RhbGxlZCwgYW5kIGRvIHlvdSBoYXZlIHRoZSBjb3JyZXNwb25k
+aW5nIGtlcm5lbCBoZWFkZXJzIHBhY2thZ2UgCmluc3RhbGxlZD8KCnRoYW5rcywKa2llbmFuCgo+
+IFRoYW5rcyBhZ2FpbiBmb3IgeW91ciBhc3Npc3RhbmNlLgo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+
+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IExlIG1hci4gMTYganVpbGwuIDIw
+MjQsIMOgIDA5IGggMDUsIEtpZW5hbiBTdGV3YXJ0IDxrc3Rld2FydEBlZmZpY2lvcy5jb20gCj4g
+PG1haWx0bzprc3Rld2FydEBlZmZpY2lvcy5jb20+PiBhIMOpY3JpdMKgOgo+IAo+ICAgICBIaSBG
+cmFuw6dvaXMsCj4gCj4gICAgIE9uIDcvMTUvMjQgNjoxMCBQTSwgRnJhbsOnb2lzIEJlbGlhcyB2
+aWEgbHR0bmctZGV2IHdyb3RlOgo+ICAgICAgPiBIZWxsbywKPiAgICAgID4KPiAgICAgID4gSSdt
+IGN1cnJlbnRseSBydW5uaW5nIExpbnV4IGtlcm5lbCB2ZXJzaW9uIDYuNS4wLTQxLWdlbmVyaWMg
+YW5kCj4gICAgICA+IGF0dGVtcHRpbmcgdG8gaW5zdGFsbCBMVFRuZyBmcm9tIHNvdXJjZS4gSGVy
+ZSBhcmUgdGhlIHN0ZXBzIEkKPiAgICAgZm9sbG93ZWQ6Cj4gICAgICA+Cj4gICAgICA+wqAgwqAt
+IEkgY2xvbmVkIHRoZSBMVFRuZyBnaXQgcmVwb3NpdG9yeSB0byBteSBjb21wdXRlciBmcm9tCj4g
+ICAgICA+Cj4gICAgIFtodHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctbW9kdWxlcy5naXRd
+KGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy1tb2R1bGVzLmdpdCkgPGh0dHBzOi8vZ2l0
+aHViLmNvbS9sdHRuZy9sdHRuZy1tb2R1bGVzLmdpdCU1RChodHRwczovL2dpdGh1Yi5jb20vbHR0
+bmcvbHR0bmctbW9kdWxlcy5naXQpPiA8aHR0cHM6Ly9naXRodWIuY29tL2x0dG5nL2x0dG5nLW1v
+ZHVsZXMuZ2l0XShodHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctbW9kdWxlcy5naXQpIDxo
+dHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctbW9kdWxlcy5naXQlNUQoaHR0cHM6Ly9naXRo
+dWIuY29tL2x0dG5nL2x0dG5nLW1vZHVsZXMuZ2l0KT4+Lgo+ICAgICAgPiAtIERvd25sb2FkZWQg
+dGhlIGtlcm5lbCBzb3VyY2UgdHJlZSBjb3JyZXNwb25kaW5nIHRvIG15IGtlcm5lbAo+ICAgICB2
+ZXJzaW9uCj4gICAgICA+IHRvIGVuYWJsZSBjb21waWxhdGlvbi4KPiAgICAgID4gLSBFeGVjdXRl
+ZCBgbWFrZSBLRVJORUxESVI9L3BhdGgvdG8vbXkvbGludXgvc291cmNlYCwgd2hpY2ggd2FzCj4g
+ICAgICA+IGNvbXBsZXRlZCBzdWNjZXNzZnVsbHkuCj4gICAgICA+IC0gUmFuIGBtYWtlIEtFUk5F
+TERJUj0vcGF0aC90by9teS9saW51eC9zb3VyY2UgbW9kdWxlc19pbnN0YWxsYCwKPiAgICAgYWxz
+bwo+ICAgICAgPiB3aXRob3V0IGFueSBpc3N1ZXMuCj4gICAgICA+IC0gRmluYWxseSwgSSBleGVj
+dXRlZCBgc3VkbyBkZXBtb2QgLWFgLCB3aGljaCB3YXMgY29tcGxldGVkCj4gICAgIHN1Y2Nlc3Nm
+dWxseS4KPiAgICAgID4KPiAgICAgID4gSG93ZXZlciwgd2hlbiBJIGF0dGVtcHQgdG8gbG9hZCBh
+IG1vZHVsZSB3aXRoIGNvbW1hbmRzIGxpa2UgYHN1ZG8KPiAgICAgID4gbW9kcHJvYmUgbHR0bmct
+a2V0cHJvYmVzYCBvciAic3VkbyBtb2Rwcm9iZSBsdHRuZy10cmFjZXIiLCBJCj4gICAgIGVuY291
+bnRlcgo+ICAgICAgPiB0aGUgZm9sbG93aW5nIGVycm9yczoKPiAgICAgID4KPiAgICAgID4gLSBG
+b3IgYGx0dG5nLWtldHByb2Jlc2A6IGBtb2Rwcm9iZTogRkFUQUw6IE1vZHVsZSBsdHRuZy1rZXRw
+cm9iZXMKPiAgICAgbm90Cj4gICAgICA+IGZvdW5kIGluIGRpcmVjdG9yeSAvbGliL21vZHVsZXMv
+Ni41LjAtNDEtZ2VuZXJpY2AuCj4gICAgICA+IC0gRm9yIGBsdHRuZy10cmFjZXJgOiBgbW9kcHJv
+YmU6IEVSUk9SOiBjb3VsZCBub3QgaW5zZXJ0Cj4gICAgICdsdHRuZ190cmFjZXInOgo+ICAgICAg
+PiBFeGVjIGZvcm1hdCBlcnJvcmAuCj4gCj4gICAgIElmIHlvdSByZWJ1aWx0IG1vZHVsZXMgb24g
+dGhlIG1hc3RlciBicmFuY2ggYXMgb2YgeWVzdGVyZGF5IHlvdSBtYXkKPiAgICAgbmVlZAo+ICAg
+ICB0byBjbGVhbiB0aGUgTFRUbmcgbW9kdWxlcyBpbnN0YWxsIGRpcmVjdG9yeSwgcmVidWlsZCwg
+YW5kIHJlaW5zdGFsbC4KPiAKPiAgICAgVGhpcyBpcyBkdWUgdG8ga3Byb2Jlcywga3JldHByb2Jl
+cywgYW5kIHVwcm9iZXMgbW9kdWxlcyBiZWluZyBpbmNsdWRlZAo+ICAgICBpbiB0aGUgdHJhY2Vy
+IGNvcmUgbW9kdWxlLiBDLmYuCj4gICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy1t
+b2R1bGVzL2NvbW1pdC8wYzJjNjYwNmViNjZjYjUyMjJhYjdhMmE0ZjgzMjlmZDVkZmRlZjcwIDxo
+dHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctbW9kdWxlcy9jb21taXQvMGMyYzY2MDZlYjY2
+Y2I1MjIyYWI3YTJhNGY4MzI5ZmQ1ZGZkZWY3MD4KPiAKPiAgICAgWW91IG1heSB3YW50IHRvIHN0
+aWNrIHdpdGggcnVubmluZyBsdHRuZy1tb2R1bGVzIDIuMTMueCB3aGljaCB3aWxsIG5vdAo+ICAg
+ICBoYXZlIGJyZWFraW5nIGNoYW5nZXMgbWVyZ2VkIGluLgo+IAo+ICAgICBUaGUgZXhlYyBmb3Jt
+YXQgZXJyb3IgYWxzbyBjb3VsZCBiZSBkdWUgdG8gbW9kdWxlcyB0aGF0IGFyZSBpbnN0YWxsZWQK
+PiAgICAgYnV0IGJ1aWx0IGFnYWluc3QgYSBkaWZmZXJlbnQgdmVyc2lvbiBvZiB0aGUgTGludXgg
+a2VybmVsLgo+IAo+ICAgICBBIGZldyB0aGluZ3MgdG8gY2hlY2sKPiAKPiAgICAgLSBJZiB5b3Vy
+IGtlcm5lbCBoYXMgYmVlbiB1cGdyYWRlZCByZWNlbnRseSwgZW5zdXJlIHRoZSBuZXcga2VybmVs
+IGlzCj4gICAgIHRoZSBvbmUgYWN0dWFsbHkgcnVubmluZwo+ICAgICAtIElmIHRoZSBtb2R1bGVz
+IGhhdmVuJ3QgYmVlbiByZWJ1aWx0IHNpbmNlIHRoZSB1cGdyYWRlLCB0aGV5IHNob3VsZCBiZQo+
+ICAgICByZWJ1aWx0IGFuZCByZWluc3RhbGxlZAo+ICAgICAtIEFzIEkgcmVjYWxsLCB5b3UgYXJl
+IHBsYXlpbmcgYXJvdW5kIHdpdGggc29tZSBhZGRvbiBtb2R1bGVzIC0gZG8gYW55Cj4gICAgIG9m
+IHRob3NlIG1vZHVsZXMgZGVmaW5lIGRlcGVuZGVuY2llcyBvbiB0aGUga3Byb2Jlcywga3JldHBy
+b2Jlcywgb3IKPiAgICAgdXByb2JlcyBtb2R1bGVzIHdoaWNoIG5vdyBhcmUgbm8gbG9uZ2VyIHBy
+b2R1Y2VkIGJ5IGJ1aWxkcyBvZiB0aGUKPiAgICAgbWFzdGVyCj4gICAgIGJyYW5jaAo+IAo+ICAg
+ICBJcyB0aGVyZSBmdXJ0aGVyIGluZm9ybWF0aW9uIGluIGRtZXNnIG9yIGpvdXJuYWxjdGwgcmVn
+YXJkaW5nIHRoZQo+ICAgICBtb2R1bGUKPiAgICAgbG9hZGluZz8KPiAKPiAgICAgaG9wZSB0aGlz
+IGhlbHBzLgo+IAo+ICAgICB0aGFua3MsCj4gICAgIGtpZW5hbgo+IAo+ICAgICAgPgo+ICAgICAg
+PiBJJ3ZlIGNvbmZpcm1lZCB0aGF0IHRoZSBtb2R1bGVzIGV4aXN0IGJ1dCBjYW4ndCBsb2FkIHRo
+ZW0uIEknbQo+ICAgICB1bnN1cmUKPiAgICAgID4gaG93IHRvIHJlc29sdmUgdGhlc2UgaXNzdWVz
+LiBDb3VsZCBzb21lb25lIHBsZWFzZSBhc3Npc3QgbWU/Cj4gICAgICA+Cj4gICAgICA+IFRoYW5r
+IHlvdS4KPiAgICAgID4KPiAgICAgID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KPiAgICAgID4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+ICAgICAgPiBs
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+Zz4KPiAgICAgID4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo+ICAgICA8aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldj4KPiAKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
