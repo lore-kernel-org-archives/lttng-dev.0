@@ -4,148 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBA4AC3DA49
-	for <lttng-dev@archiver.kernel.org>; Tue, 16 Jul 2024 19:41:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 994BDC3DA59
+	for <lttng-dev@archiver.kernel.org>; Tue, 16 Jul 2024 20:34:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1721158883;
-	bh=2EZ4pH5/Ta1hyOrvd0ifrZlqGrHdJlsZjgDbf1DaxN4=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1721162063;
+	bh=GnCJp3vxj/rL3b07g4ZCo6/ZWed7XQA2jOIIHvzr+sg=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=DmUaByPTOnuvrm5wNVKFwqFTRjrNzDlrbH5se5b++QECFvoOE+UQoe/vhRvHjcscb
-	 QRWnQ8A3puA8Vach1Ic9zN+WQnBDaLqYj4ldznO/mR5fdJU5uh7dsiNEbqKMpNxhnB
-	 XGFg5HMj7CBEnBjgO9KS1ezEivo/jWkaA+7sfgZVg03+6beJRfMoX/vSbuTkM/wlf3
-	 h2INK90rEUTtQxS3dNm/au2WDuGzJP6TTBpLlNg+GmTO8MNkq6VJd0IyUfJw+EXXts
-	 6sq84sClWNlNuWu9+/LvQgqsH/U8fej68/GgtV2EWIDwEEEw0py9xvvMo06FSfGWx/
-	 RECHKgDHnI2ag==
+	b=j1JMH6HMpbrVSOHqN2T4WP6pWlySrpU0fyuUYgjFUsK/WWBKfBHbL8qkg7a2USpKJ
+	 mIGmSQTOaKK/FSbZp9QmxwiX/4lTKRgRtgMvrfZDZ5V8qXy9GOaCw9gqgsGG43+iXf
+	 bKKMxRZjLVIjczsi2qsBpxbW0yHD/hq5oTRNRg+DjJASQq+vNby7JtNy3cTkI1gvPN
+	 zaspCE4RUeVLlNaACmzfoRnH4k28kI24t5p7jFoUyLcCQKtARHz+HLCQUM547SRQzq
+	 nXe/z85aTYOU5qU0FcBvnwMzaaHVmt2rJNMo1suTaToeR9vZjx+IOfFpBkzHhj+ntk
+	 1pTlX3xB0aQXA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4WNqFH3rMdz12Dm;
-	Tue, 16 Jul 2024 15:41:23 -0400 (EDT)
-Received: from YT3PR01CU008.outbound.protection.outlook.com
- (mail-canadacentralazon11020137.outbound.protection.outlook.com
- [52.101.189.137])
- by lists.lttng.org (Postfix) with ESMTPS id 4WNqFG2qrwz12Dk
- for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2024 15:41:22 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xj15WvZ9cLjVJTnWDfFDvKpwsFy2ipP3ebXRb4PaROd83h+w0D38/7VGLvuHersOhygY8pycCCbJk20WZXBpcBEeMR327xRJJ1R1vN4KsrgkQfCGVAGRutOLv4MNkXZPasmLE4iKzVqlhDHUCMXR3VGS2e/BcMWKzJ2hU+WD9i42DSplOgQ+RA8ZtS+uyneptaGm4k1/2xzCGM0RhApEwGrSrYYdKip/ZzC2mGCMFXQePDnOp1XEdq7uhdrm0815Q4JbaFrq4K5b/RAASaqwoQ8mcuUBwVtHqAqSLghQQESdm1tLJIKHmLNrUNM1BLdMax1TFme2ZR3FOpmSFX9quQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h/WjDxCEPD1IR/mnGf3cnzXTLqoIYEPrTbFWAdnkj0w=;
- b=VrCmQ1RV7Anb1qj98KyhXHvmrqo2Z8QWQLSZEto75pkB5qpChErm7zly6agfrCrhQMKZXS38EP+aU7aPOgYTCWtccmYtFpNfaV0LnwETod0lcmd8ZFy+uRDY4UZHgHUjo37y0aXD+7b3W0oO7KBntaimFdUJqzmuqF1M6lHe/9K3vnNs8aaluZSiol4kIUIBf4lFPgR8HULgdT8KMAWZSKxRC4Ew78nSwEemYmnzjH4RcPpxiZ3Tx4jQcBsxpqWd0kbk0PgPAZyjZ4ixqYEpj7sqBR/jJi8LjvesvazTh9IJ0/mX+p9dVauhvRcvkl30j9P4re2vcMOBTpKTJKxdsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::14)
- by YT3PR01MB8289.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:9a::17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.14; Tue, 16 Jul
- 2024 19:41:20 +0000
-Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e27c:c1e2:e6e:9256]) by YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e27c:c1e2:e6e:9256%4]) with mapi id 15.20.7762.030; Tue, 16 Jul 2024
- 19:41:20 +0000
-Message-ID: <211e6d9f-834d-4511-b315-7844a5c04824@efficios.com>
-Date: Tue, 16 Jul 2024 15:41:18 -0400
-User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?Fran=C3=A7ois_Belias?= <beliasossim@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+	by lists.lttng.org (Postfix) with ESMTP id 4WNrQR2qPQz12Dx;
+	Tue, 16 Jul 2024 16:34:23 -0400 (EDT)
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
+ [IPv6:2607:f8b0:4864:20::536])
+ by lists.lttng.org (Postfix) with ESMTPS id 4WNrQQ0Brfz129Y
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2024 16:34:21 -0400 (EDT)
+Received: by mail-pg1-x536.google.com with SMTP id
+ 41be03b00d2f7-78c84837564so2380897a12.3
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2024 13:34:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721162061; x=1721766861;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=rDHOsaYXhoZsQBHX8E5duuuS6ArYSZgef8nvT344EQI=;
+ b=Kj7WjViBHopCrH6NbKpK3k984nmnEsGJqIHTBNgy1OR7CusocEzlnD7kM3tNc/j3l3
+ CJCCzX2fDzZE1WucybyWrYPv0X6f1PY/p/cipdAGldNxBA0NqEWUCWYnvzJ9qC8Y4Moq
+ uq2j+6eEf9vs+khg1/H2lD+7+2BSl6apPMtG+kJZSnA/Wjr5+5XzfHqxGGJqagSOflCL
+ jYMWv1KXmonP+w00/I6uZs2lmZqDOM6OB5sD4jpZcW6Lpopns5mmBH35smOxqgSAUZUG
+ t5IFyCZrVVANEDitshwxr6Z9ThXjtGrZHCXGD6+q20BKI7u6pOA9sq3NYctxWXVCK9O+
+ ywFQ==
+X-Gm-Message-State: AOJu0Yxje7GleN//BycPiVkTNa3cVBIgpfm28cijXGOi+ldtDEFyNH8Y
+ eErgtdyIPKytBEkOyarKz6pqY09irDEkYg4NYfzzBpwtqzcIsuPr5hpM8bGBwVyr7VvAJVdvKvp
+ X7G2YfDRUhpzo6NP5r+Hv/z+k1Jo=
+X-Google-Smtp-Source: AGHT+IG6Dra1LnwugSLPgKH5FaI4wz0iLS6grhkzDb6f90nhQeO14vsOeVF0Kt+imQfaye2fvOemlfrag7agdJQEuDk=
+X-Received: by 2002:a05:6a20:d43:b0:1bf:13f6:7220 with SMTP id
+ adf61e73a8af0-1c3f12a4e0bmr3339458637.56.1721162060563; Tue, 16 Jul 2024
+ 13:34:20 -0700 (PDT)
+MIME-Version: 1.0
 References: <CAHD10UjoaOjqZUH4j55Ra7zJ2HVRLOyk7xnjv+BjnJxs6rN6Aw@mail.gmail.com>
  <6deffa1d-4d46-4445-a510-a3aac271cc80@efficios.com>
  <CAHD10Ui_JkP9hRirGUvKBgHhWX48r26+M2_zTyOD_cMLnSDGCg@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAHD10Ui_JkP9hRirGUvKBgHhWX48r26+M2_zTyOD_cMLnSDGCg@mail.gmail.com>
-X-ClientProxiedBy: YQBPR0101CA0202.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:67::24) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:e8::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YT3PR01MB8289:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9ed8c74-a647-4aae-56bb-08dca5cf442c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?THhOcnRQNkZIZmd0elVmbHJ1cXIyOHpoanpvUGtFejJTTnR1ZjF2OFl3NWFP?=
- =?utf-8?B?b054aWJvVWxrNW8yUHQyRzFsMkFkbXpTQjZyV04vWG5TUnYycnZKeGljcVFl?=
- =?utf-8?B?Mys2N0FGclI1SEU2RVArd1d0dFN3VzE0RGxFYU05WXRiRkxzWENteld4UmlY?=
- =?utf-8?B?aVI5UTU1WG5tU1FrNjJ1QTFWS0RYNE9yRXRvT3duQWw4VXdRVFI4ZC9JdEpV?=
- =?utf-8?B?bCtZL3hwSmpSQTVlUkI1RjlwNGxwRHRZR3Evb0FvQ2wxWmo5UEs0TS8xUnRK?=
- =?utf-8?B?ajIyY3FGZkxyMFRTOHdjdTJWOGV6R1l0TStOWlRwV0pQWHdQcWdsTVZPcUJK?=
- =?utf-8?B?VHQwNUtzK2thTmdsKzE5dGZjZGYyT0xHNGh4eE4xUlA2Vko0NE9nQlk5VUcy?=
- =?utf-8?B?N3ljWEhmT01ILzJMNElETWdBOXJEU3BuRzdXQTNwNUFna3cvekFPSENjZFFQ?=
- =?utf-8?B?VTU0Y3VxOTQySHltSldCVkszTkU1OGdBdG1EWDM1WFVwSkNMOXFrODhzYmtF?=
- =?utf-8?B?RTFCT0ZndEswOVZTanZFT0hqNlMxTWxuZXIvYzNsTGhNV0RWaDlBeFhhYVJr?=
- =?utf-8?B?TmtoZTZkWWRHbE5EQmNiOFVnSWFickJ6ZWJlbkVESmxvcllsemo1cnl5UTlP?=
- =?utf-8?B?ZHYxTFlnOTU4RWJIRHhMSThzTUVRejQ5L3VnZVcyU1R0YlQwUEVEQWtsUkxh?=
- =?utf-8?B?czdjOFl2ZzAvTUg0bmdvRzZiaXk1dHFXZzNZR2JTL2JqcWo5R25uZFZaSUlk?=
- =?utf-8?B?dDdtS213bVNsOS9rdmxyQ2pJeXhCNWxEclFmQ2FwR2JrTVE3RXAvS3ZlMHZW?=
- =?utf-8?B?M1FVVS9zdEZKYUtxVjV1SGxXQngxYnJqVm9JM3FGNGF0QitNOHhpOTluRHNV?=
- =?utf-8?B?TktENFNZNUh3Rk5QZ095ZFI3WlBralJnUHhGTjAwNHVuY21lMnJCQkZZcFls?=
- =?utf-8?B?N1B2UTdmcnhvSllscU9pU3lVQzdPbVFwbTlGem84OTNod0orOUZGazRBU1NE?=
- =?utf-8?B?YTZMZEdHWGw4cmZ3eFdFWndMd1ppeHl1d3E2RXFlUzMwMHlTMEdURlFQNkpI?=
- =?utf-8?B?clJydVRmOU9KYmtUU1YwRE9MVGR0L0Z1S2ZxWnJlb3B0eitmcGthQTlxcnBH?=
- =?utf-8?B?VGljYng2b21PVVZDVUNhY3djTjFhczB6QUxLSTFGWkt6cXhmcnNxVTlrUXZW?=
- =?utf-8?B?Nm1oWXlUTlNNRkNxcDExUkNZbnZLKzQrQ29lODg4emovcGIwZ1FXRHhvYTYz?=
- =?utf-8?B?VDdHR3BMNWphOWZWWmpyYmNiQWNBUlFheWs0ZjVyVmg0emZZWVd0MjBvbkp0?=
- =?utf-8?B?MFNrOTJlbVpaSk5ZNGgwcXhOYWVmcC9RbjBuaUVNNmFjNllsaCtEbVFDdk1U?=
- =?utf-8?B?ZFMydVplVmwwT2cxVjF2WXFjR2l1ZEF3QVdIdDBZTVVLUVQxaVNaYklGWmV2?=
- =?utf-8?B?Wk4zWmhhcG81emVaMmcvS3VzcFM3MVN3cEJPN2F0OWNvVk9KV05uZTVJT21K?=
- =?utf-8?B?OHdGcExXRDdrTm5qa2poSUsrc1RFaG5NV1JNcWNaQnVzeVU2c1Y2Vm9xM1Vq?=
- =?utf-8?B?VGplMlBKYlBXc3I1MGk2M2F0Myt0VTR5MmhveExpZWYwaFNQdHJQWENDM1lV?=
- =?utf-8?B?U0J3MFo5VXoxYnRuMjZtZzhLVmJXY2FrY1k5aCtPTGNaWW1UVlE4M0ZuS2dU?=
- =?utf-8?B?R2liczRnN2hib0tzWjJmUnFmUjgxNjR0R3VqSUx6RlpwZURKREp0Sm9IUVhL?=
- =?utf-8?Q?8IfLMQD6ljcxJrzIsA=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(366016); DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1dUL2EyRjFZb3FIaEJaak95MCs1UDZtVGxWYVlDMDFad1BxcUFlQ28rZGhw?=
- =?utf-8?B?VEFYb0JpYkhpQUVYN0RhdURvNDBiSzVISkpKTTJuQURNcEFENHFPWVMzV0pR?=
- =?utf-8?B?ZGdTbEs4YmtTZkFyWVRSMytLWXVpM2ZDQmFCZDNpUjFxYStodFVqOHFsbEFK?=
- =?utf-8?B?elNYbXN5Y3pzYzFiL3FyOS9LR3FOeHFxZVFSNC9OM0RRT3pHSG5KaVZlVUtN?=
- =?utf-8?B?aEM5NlNteDBLdWpaY2V0UGZYdGhaRGxiM0M2dHhCLzlPZzJZaUJKN0Q2OGsx?=
- =?utf-8?B?ZzUzYWQrTFZwTDc1eWxBTkhkVmlTdXQzbDJxN3kwaCtmRXg1Q1lnS2xGNG14?=
- =?utf-8?B?aE5kN3E4eE9kZ2lPTkJlZlRJSkNIdk9qYjJHclRobVF3b05sMlVRTlR6UlRX?=
- =?utf-8?B?K2EvQXMxaHFPVXQ5VHlTZTNPeVRYUUd2ZHUrQytJeEJDYXkxUVhBRHZ1b0hQ?=
- =?utf-8?B?bXM0YnFuc1RESXZpUHYxY3RLNXJ2TWE3Y0dTdmk1ZFlPUjVmUDVKckE0MS9X?=
- =?utf-8?B?c3B1ek9KMFEzSXFrY0ZPZkprZktZeE5ZOGJ3V1ltRXBkbkRQaTBYTlREV1Fl?=
- =?utf-8?B?NStDREZzRkt2ZVcwOEhqWnlIQjkwZWpxalB4WDFrSWR6ZjZXWEY4YUIzWWRm?=
- =?utf-8?B?dE1yVm5oZkVpUDNCYVRhb1dLdWo2R3p6QkJWd0NDbXF6QkdYUTF6NkwxZ3hC?=
- =?utf-8?B?UkFzb3pRRk5XZyt6TktuUUpoNmRrL0lSZ3M3K1ZaTW8wanVNN3pzdnFKZVda?=
- =?utf-8?B?YmdkdW1nc21RcUdmSWxJd0FmTzBVVWswTGt4ZGhTZE83UkkrVVl5cElib2tB?=
- =?utf-8?B?ZUUrV1NiQ25URWpSS3JjZ054aWVpVG8vOUxqZFlCN1NTZEFmNC90elowaHNL?=
- =?utf-8?B?UE4xYTM2TGVMUFlmK3JvUGw5dW9xMnB5cnU2S1JLdDVDZndVZ2g0ZnJFNVNE?=
- =?utf-8?B?SFJPNTNrQmlzY0tMcFJLb1RqSTVCU3ZtMUlFaVl6S2pDbi94SkpqVGg0QW9R?=
- =?utf-8?B?alQ2cjZoMVhjcG5qN1Zyc0UvR3daWCtZK1ZsVWhyOFFjZXd5RzU1VEI5L0Nl?=
- =?utf-8?B?LzJtM1lydmlNT1Y2OUVXSEFYa3Y5N2ZYVnRDMk1DWXBQRmlXbnRvMEFxWTFt?=
- =?utf-8?B?K2xBTlpiSnpqVHFQTWVnbVo3cC95dG1TNHZOdUlEL3o2NFlwdEFsZGVHSTBv?=
- =?utf-8?B?OWpJZmRaRW5ISEhjY0Q2VFo1M1J5Uy9qK2EwMldCaDdwL3JkR202SzV2anZj?=
- =?utf-8?B?ZkJpOTBrS0x0dmRUaWhjOXoraTRjMzl0bHBNMTdMKzV3RlBZQysyMEd2Qk5L?=
- =?utf-8?B?SldXMmp2WmNXTnZ5WlZsZjc5R0dYdURQSmRiUmxjUXhjM0NKblJGb1E0b1VK?=
- =?utf-8?B?cXVXWFk3Q3pYNUdvczhxbC9JUEZIWlpRYy9nZ3VkVjdqZWc4amhsclprVDlY?=
- =?utf-8?B?QkVGSmNXbWhuWlkxdzdkVjZ4QWVNSm5WeWNzSEdHeXRhdnlFTS9QenRmelJ6?=
- =?utf-8?B?KzR2emJMR1p5V0N4bVVHVktiM1hGT0RzdkN0NG43NU1qL3AvQ2RldnViVTdS?=
- =?utf-8?B?Vlovd0ZlZVZzdFlhbW95eW03VmRnYXB5c2VhR0E5eHd4dDNtL1JvTXpNS1lD?=
- =?utf-8?B?Uzg2bWhTRWxydVUvaWNZeTNWWmVORnptbjJWb0lmZGJUT0VVeFBaOFVlcTJw?=
- =?utf-8?B?ejF2SnU0UUhnSEpDeTIyR2Z0OGd4STJkR2dFOWsxVlVBVWxla21SbjI1TUY3?=
- =?utf-8?B?bnpPaWUwTzV3V1JaV0RmYlY4NGxlZ2RueUt4MXZ4MTAyMytkZVo4N2ZYYk5z?=
- =?utf-8?B?MkFzSlQ4dm9HdCtWMDg1NzQzQjRiSnJremRQaHZ6cytZeHc3d3RrUkxUdUxx?=
- =?utf-8?B?UExwTzJBZmtjcytTVmFBZXl1QXJpRnhQbHpVN3FJbVJObkJVS05SRklleXkr?=
- =?utf-8?B?TnkwTFFnK1Zuak9IUFJqR0tmTnc4YVR2MW5YY2VyWnRRNE4xTjRRQnVDcy9R?=
- =?utf-8?B?em5vTzlUdHdETVpLNmx2ak9HQzYvakFqdHR6UklLV3RFVUFWTGZJbUVORXRi?=
- =?utf-8?B?c0RlVVdrWmVSMjJCcVNFWk1sK2RRN250TnhiZ3JxaVovaWZLRUNTSDVYQzNV?=
- =?utf-8?B?VUVJU0RleVE0aDJzVWFtWW1vUENwQllrZ2Y5cW94dUxBelZCeDgwTytNM1Jr?=
- =?utf-8?B?bEE9PQ==?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9ed8c74-a647-4aae-56bb-08dca5cf442c
-X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2024 19:41:20.1389 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mxUjyL4OLtzYbOscRm7JDyfe7oaNBKS9uzpyGpSW9n0Npb2fgVsA5kjlCRrlBx2RxKRBzyg+eblwzyzCXrK2rQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB8289
+ <211e6d9f-834d-4511-b315-7844a5c04824@efficios.com>
+In-Reply-To: <211e6d9f-834d-4511-b315-7844a5c04824@efficios.com>
+Date: Tue, 16 Jul 2024 16:34:09 -0400
+Message-ID: <CAHD10Ugvtu+wKGeRjujGgXbXrEqH-6OKHurJgMyf7CmUVjzRRQ@mail.gmail.com>
+To: Kienan Stewart <kstewart@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 Subject: Re: [lttng-dev] loading modules with modprobe
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -158,124 +69,677 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Kienan Stewart <kstewart@efficios.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: =?utf-8?q?Fran=C3=A7ois_Belias_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?UTF-8?Q?Fran=C3=A7ois_Belias?= <beliasossim@gmail.com>
+Content-Type: multipart/mixed; boundary="===============8460696637369104784=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGkgRnJhbsOnb2lzLAoKT24gNy8xNi8yNCAzOjAxIFBNLCBGcmFuw6dvaXMgQmVsaWFzIHdyb3Rl
-Ogo+IEhlbGxvIEtpZW5hbiwKPiAKPiBJJ3ZlIGNvbnRpbnVlZCBpbnZlc3RpZ2F0aW5nIG15IGlz
-c3VlIGFuZCBkaXNjb3ZlcmVkIHNvbWV0aGluZyBuZXcgdGhhdCAKPiBtaWdodCBzaGVkIHNvbWUg
-bGlnaHQuIEhlcmUncyB0aGUgcnVuZG93bjoKPiAKPiAxLiBUbyBlbnN1cmUgbXkgYWRkLW9ucyB3
-ZXJlbid0IGNhdXNpbmcgcHJvYmxlbXMsIGRlbGV0ZWQgYWxsIG9sZCAKPiBtb2R1bGVzIGFuZCBJ
-IGZvbGxvd2VkIHRoZSBkb2N1bWVudGF0aW9uIG9uIHRoZSBMVFRuZyB3ZWJzaXRlIAo+IChodHRw
-czovL2x0dG5nLm9yZy9kb2NzL3YyLjEzLyNkb2MtYnVpbGRpbmctZnJvbS1zb3VyY2UgCj4gPGh0
-dHBzOi8vbHR0bmcub3JnL2RvY3MvdjIuMTMvI2RvYy1idWlsZGluZy1mcm9tLXNvdXJjZT4pIGFu
-ZCBkb3dubG9hZGVkIAo+IGBsdHRuZy1tb2R1bGVzLTIuMTMuMTNgLgo+IAo+IDIuIEluc2lkZSB0
-aGUgZG93bmxvYWRlZCBmb2xkZXIsIEkgc3VjY2Vzc2Z1bGx5IGV4ZWN1dGVkIGBtYWtlIAo+IEtF
-Uk5FTERJUj0vdXNyL3NyYy9saW51eC1zb3VyY2UtNi41LjBgIHdpdGhvdXQgYW55IGlzc3Vlcy4K
-PiAKPiAzLiBTdWJzZXF1ZW50bHksIEkgcmFuIGBtYWtlIEtFUk5FTERJUj0vdXNyL3NyYy9saW51
-eC1zb3VyY2UtNi41LjAgCj4gbW9kdWxlc19pbnN0YWxsYCwgd2hpY2ggYWxzbyBjb21wbGV0ZWQg
-c3VjY2Vzc2Z1bGx5Lgo+IAo+IDQuIEFmdGVyIHRoYXQsIEkgdXBkYXRlZCB0aGUgbW9kdWxlIGRl
-cGVuZGVuY2llcyB1c2luZyBgc3VkbyBkZXBtb2QgLWFgLCAKPiB3aGljaCB3ZW50IGZpbmUuCj4g
-Cj4gSG93ZXZlciwgd2hlbiBJIHRyaWVkIHRvIGxvYWQgYSBtb2R1bGUsIHN1Y2ggYXMgYHN1ZG8g
-bW9kcHJvYmUgCj4gbHR0bmctcHJvYmUta3ZtYCwgaXQgcmVwb3J0ZWQgdGhhdCB0aGUgbW9kdWxl
-IGNvdWxkbid0IGJlIGZvdW5kIGF0IAo+IGAvbGliL21vZHVsZXMvNi41LjAtNDEtZ2VuZXJpYy9g
-LiBVcG9uIGNoZWNraW5nIHRoZSBsb2dzLCBJIGNvbmZpcm1lZCAKPiB0aGF0IHN0ZXAgMyBoYWQg
-aW5zdGFsbGVkIHRoZSBtb2R1bGVzIGluIGAvbGliL21vZHVsZXMvNi41LjAvYC4KPiAKPiBUbyBh
-ZGRyZXNzIHRoaXMsIEkgbW9kaWZpZWQgc3RlcCAzIHRvIHNpbXBseSBgbWFrZSBtb2R1bGVzX2lu
-c3RhbGxgLCAKPiB3aGljaCB0aGVuIGluc3RhbGxlZCB0aGUgbW9kdWxlcyBjb3JyZWN0bHkgYXQg
-Cj4gYC9saWIvbW9kdWxlcy82LjUuMC00MS1nZW5lcmljL2AgYW5kIHJhbiBhZ2FpbiBzdGVwwqA0
-LiBCdXQgbm93LCB3aGVuIAo+IGF0dGVtcHRpbmcgdG8gbG9hZCBhIG1vZHVsZSwgSSdtIGVuY291
-bnRlcmluZyB0aGUgZXJyb3IgYG1vZHByb2JlOiAKPiBFUlJPUjogY291bGQgbm90IGluc2VydCAn
-bHR0bmdfcHJvYmVfa3ZtJzogRXhlYyBmb3JtYXQgZXJyb3JgLgo+IAo+IERvIHlvdSBoYXZlIGFu
-eSBpbnNpZ2h0cyBvciBpZGVhcyBvbiB3aGF0IG1pZ2h0IGJlIGNhdXNpbmcgdGhpcyBpc3N1ZT8K
-PiAKCkl0IHNvdW5kcyBsaWtlIC91c3Ivc3JjL2xpbnV4LXNvdXJjZS02LjUuMCBpcyBub3QgY29y
-cmVjdCBzb3VyY2UgZm9yIHRoZSAKa2VybmVsIHRoYXQgeW91IGFyZSBjdXJyZW50bHkgcnVubmlu
-Zy4KCldoZW4gcnVubmluZyBgbWFrZSBtb2R1bGVzX2luc3RhbGxgIGluIHlvdXIgbW9kaWZpZWQg
-c3RlcCAzICh3aXRob3V0IApLRVJORUxESVIgc2V0KSwgdGhlIG1vZHVsZXMgd2VyZSBpbnN0YWxs
-ZWQgZm9yIHlvdXIgY3VycmVudCBrZXJuZWwgCmRpcmVjdG9yeSBhcyBhdXRvLWRldGVjdGVkIGJ5
-IHRoZSBidWlsZCBzY3JpcHQuCgpXaGF0IGhhcHBlbnMgaWYgeW91IGRvIHRoZSBmb2xsb3dpbmcK
-CmBgYAp1bnNldCBLRVJORUxESVIKCiMgV2FybmluZzogdGhpcyByZW1vdmVzIGFsbCB1bnRyYWNr
-ZWQgY29udGVudCBmcm9tIHRoZSBsdHRuZy1tb2R1bGVzIApkaXJlY3RvcnkKY2QgL3BhdGgvdG8v
-bHR0bmctbW9kdWxlcy1zb3VyY2UKZ2l0IGNsZWFuIC1keGYKCm1ha2UKc3VkbyBtYWtlIG1vZHVs
-ZXNfaW5zdGFsbApzdWRvIGRlcG1vZCAtYQpgYGAKCktFUk5FTERJUiBpcyBzZXQgYmFzZWQgb24g
-dGhlIGN1cnJlbnQgcnVubmluZyBrZXJuZWw6IGB1bmFtZSAtcmAuIEMuZi4gCmh0dHBzOi8vZ2l0
-aHViLmNvbS9sdHRuZy9sdHRuZy1tb2R1bGVzL2Jsb2IvNDM0ZTg2ZWVhODQ2YjMzY2FkNTdmMWQ4
-MTA1MDg5OTA1ZjU0MTg1My9NYWtlZmlsZSNMMTZDMS1MMTZDNTAKCkEgY291cGxlIG9mIHF1ZXN0
-aW9ucyBmb3IgeW91OgoKLSBXaGVyZSBkaWQgL3Vzci9zcmMvbGludXgtc291cmNlLTYuNS4wIGNv
-bWUgZnJvbT8KLSBXaGljaCBsaW51eCBkaXN0cmlidXRpb24gKyB2ZXJzaW9uIGFyZSB5b3UgdXNp
-bmc/Ci0gQXNzdW1pbmcgeW91ciBkaXN0cmlidXRpb24gaGFzIGtlcm5lbCBwYWNrYWdlcywgd2hp
-Y2ggZG8geW91IGhhdmUgCmluc3RhbGxlZCwgYW5kIGRvIHlvdSBoYXZlIHRoZSBjb3JyZXNwb25k
-aW5nIGtlcm5lbCBoZWFkZXJzIHBhY2thZ2UgCmluc3RhbGxlZD8KCnRoYW5rcywKa2llbmFuCgo+
-IFRoYW5rcyBhZ2FpbiBmb3IgeW91ciBhc3Npc3RhbmNlLgo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+
-IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IAo+IExlIG1hci4gMTYganVpbGwuIDIw
-MjQsIMOgIDA5IGggMDUsIEtpZW5hbiBTdGV3YXJ0IDxrc3Rld2FydEBlZmZpY2lvcy5jb20gCj4g
-PG1haWx0bzprc3Rld2FydEBlZmZpY2lvcy5jb20+PiBhIMOpY3JpdMKgOgo+IAo+ICAgICBIaSBG
-cmFuw6dvaXMsCj4gCj4gICAgIE9uIDcvMTUvMjQgNjoxMCBQTSwgRnJhbsOnb2lzIEJlbGlhcyB2
-aWEgbHR0bmctZGV2IHdyb3RlOgo+ICAgICAgPiBIZWxsbywKPiAgICAgID4KPiAgICAgID4gSSdt
-IGN1cnJlbnRseSBydW5uaW5nIExpbnV4IGtlcm5lbCB2ZXJzaW9uIDYuNS4wLTQxLWdlbmVyaWMg
-YW5kCj4gICAgICA+IGF0dGVtcHRpbmcgdG8gaW5zdGFsbCBMVFRuZyBmcm9tIHNvdXJjZS4gSGVy
-ZSBhcmUgdGhlIHN0ZXBzIEkKPiAgICAgZm9sbG93ZWQ6Cj4gICAgICA+Cj4gICAgICA+wqAgwqAt
-IEkgY2xvbmVkIHRoZSBMVFRuZyBnaXQgcmVwb3NpdG9yeSB0byBteSBjb21wdXRlciBmcm9tCj4g
-ICAgICA+Cj4gICAgIFtodHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctbW9kdWxlcy5naXRd
-KGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy1tb2R1bGVzLmdpdCkgPGh0dHBzOi8vZ2l0
-aHViLmNvbS9sdHRuZy9sdHRuZy1tb2R1bGVzLmdpdCU1RChodHRwczovL2dpdGh1Yi5jb20vbHR0
-bmcvbHR0bmctbW9kdWxlcy5naXQpPiA8aHR0cHM6Ly9naXRodWIuY29tL2x0dG5nL2x0dG5nLW1v
-ZHVsZXMuZ2l0XShodHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctbW9kdWxlcy5naXQpIDxo
-dHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctbW9kdWxlcy5naXQlNUQoaHR0cHM6Ly9naXRo
-dWIuY29tL2x0dG5nL2x0dG5nLW1vZHVsZXMuZ2l0KT4+Lgo+ICAgICAgPiAtIERvd25sb2FkZWQg
-dGhlIGtlcm5lbCBzb3VyY2UgdHJlZSBjb3JyZXNwb25kaW5nIHRvIG15IGtlcm5lbAo+ICAgICB2
-ZXJzaW9uCj4gICAgICA+IHRvIGVuYWJsZSBjb21waWxhdGlvbi4KPiAgICAgID4gLSBFeGVjdXRl
-ZCBgbWFrZSBLRVJORUxESVI9L3BhdGgvdG8vbXkvbGludXgvc291cmNlYCwgd2hpY2ggd2FzCj4g
-ICAgICA+IGNvbXBsZXRlZCBzdWNjZXNzZnVsbHkuCj4gICAgICA+IC0gUmFuIGBtYWtlIEtFUk5F
-TERJUj0vcGF0aC90by9teS9saW51eC9zb3VyY2UgbW9kdWxlc19pbnN0YWxsYCwKPiAgICAgYWxz
-bwo+ICAgICAgPiB3aXRob3V0IGFueSBpc3N1ZXMuCj4gICAgICA+IC0gRmluYWxseSwgSSBleGVj
-dXRlZCBgc3VkbyBkZXBtb2QgLWFgLCB3aGljaCB3YXMgY29tcGxldGVkCj4gICAgIHN1Y2Nlc3Nm
-dWxseS4KPiAgICAgID4KPiAgICAgID4gSG93ZXZlciwgd2hlbiBJIGF0dGVtcHQgdG8gbG9hZCBh
-IG1vZHVsZSB3aXRoIGNvbW1hbmRzIGxpa2UgYHN1ZG8KPiAgICAgID4gbW9kcHJvYmUgbHR0bmct
-a2V0cHJvYmVzYCBvciAic3VkbyBtb2Rwcm9iZSBsdHRuZy10cmFjZXIiLCBJCj4gICAgIGVuY291
-bnRlcgo+ICAgICAgPiB0aGUgZm9sbG93aW5nIGVycm9yczoKPiAgICAgID4KPiAgICAgID4gLSBG
-b3IgYGx0dG5nLWtldHByb2Jlc2A6IGBtb2Rwcm9iZTogRkFUQUw6IE1vZHVsZSBsdHRuZy1rZXRw
-cm9iZXMKPiAgICAgbm90Cj4gICAgICA+IGZvdW5kIGluIGRpcmVjdG9yeSAvbGliL21vZHVsZXMv
-Ni41LjAtNDEtZ2VuZXJpY2AuCj4gICAgICA+IC0gRm9yIGBsdHRuZy10cmFjZXJgOiBgbW9kcHJv
-YmU6IEVSUk9SOiBjb3VsZCBub3QgaW5zZXJ0Cj4gICAgICdsdHRuZ190cmFjZXInOgo+ICAgICAg
-PiBFeGVjIGZvcm1hdCBlcnJvcmAuCj4gCj4gICAgIElmIHlvdSByZWJ1aWx0IG1vZHVsZXMgb24g
-dGhlIG1hc3RlciBicmFuY2ggYXMgb2YgeWVzdGVyZGF5IHlvdSBtYXkKPiAgICAgbmVlZAo+ICAg
-ICB0byBjbGVhbiB0aGUgTFRUbmcgbW9kdWxlcyBpbnN0YWxsIGRpcmVjdG9yeSwgcmVidWlsZCwg
-YW5kIHJlaW5zdGFsbC4KPiAKPiAgICAgVGhpcyBpcyBkdWUgdG8ga3Byb2Jlcywga3JldHByb2Jl
-cywgYW5kIHVwcm9iZXMgbW9kdWxlcyBiZWluZyBpbmNsdWRlZAo+ICAgICBpbiB0aGUgdHJhY2Vy
-IGNvcmUgbW9kdWxlLiBDLmYuCj4gICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy1t
-b2R1bGVzL2NvbW1pdC8wYzJjNjYwNmViNjZjYjUyMjJhYjdhMmE0ZjgzMjlmZDVkZmRlZjcwIDxo
-dHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctbW9kdWxlcy9jb21taXQvMGMyYzY2MDZlYjY2
-Y2I1MjIyYWI3YTJhNGY4MzI5ZmQ1ZGZkZWY3MD4KPiAKPiAgICAgWW91IG1heSB3YW50IHRvIHN0
-aWNrIHdpdGggcnVubmluZyBsdHRuZy1tb2R1bGVzIDIuMTMueCB3aGljaCB3aWxsIG5vdAo+ICAg
-ICBoYXZlIGJyZWFraW5nIGNoYW5nZXMgbWVyZ2VkIGluLgo+IAo+ICAgICBUaGUgZXhlYyBmb3Jt
-YXQgZXJyb3IgYWxzbyBjb3VsZCBiZSBkdWUgdG8gbW9kdWxlcyB0aGF0IGFyZSBpbnN0YWxsZWQK
-PiAgICAgYnV0IGJ1aWx0IGFnYWluc3QgYSBkaWZmZXJlbnQgdmVyc2lvbiBvZiB0aGUgTGludXgg
-a2VybmVsLgo+IAo+ICAgICBBIGZldyB0aGluZ3MgdG8gY2hlY2sKPiAKPiAgICAgLSBJZiB5b3Vy
-IGtlcm5lbCBoYXMgYmVlbiB1cGdyYWRlZCByZWNlbnRseSwgZW5zdXJlIHRoZSBuZXcga2VybmVs
-IGlzCj4gICAgIHRoZSBvbmUgYWN0dWFsbHkgcnVubmluZwo+ICAgICAtIElmIHRoZSBtb2R1bGVz
-IGhhdmVuJ3QgYmVlbiByZWJ1aWx0IHNpbmNlIHRoZSB1cGdyYWRlLCB0aGV5IHNob3VsZCBiZQo+
-ICAgICByZWJ1aWx0IGFuZCByZWluc3RhbGxlZAo+ICAgICAtIEFzIEkgcmVjYWxsLCB5b3UgYXJl
-IHBsYXlpbmcgYXJvdW5kIHdpdGggc29tZSBhZGRvbiBtb2R1bGVzIC0gZG8gYW55Cj4gICAgIG9m
-IHRob3NlIG1vZHVsZXMgZGVmaW5lIGRlcGVuZGVuY2llcyBvbiB0aGUga3Byb2Jlcywga3JldHBy
-b2Jlcywgb3IKPiAgICAgdXByb2JlcyBtb2R1bGVzIHdoaWNoIG5vdyBhcmUgbm8gbG9uZ2VyIHBy
-b2R1Y2VkIGJ5IGJ1aWxkcyBvZiB0aGUKPiAgICAgbWFzdGVyCj4gICAgIGJyYW5jaAo+IAo+ICAg
-ICBJcyB0aGVyZSBmdXJ0aGVyIGluZm9ybWF0aW9uIGluIGRtZXNnIG9yIGpvdXJuYWxjdGwgcmVn
-YXJkaW5nIHRoZQo+ICAgICBtb2R1bGUKPiAgICAgbG9hZGluZz8KPiAKPiAgICAgaG9wZSB0aGlz
-IGhlbHBzLgo+IAo+ICAgICB0aGFua3MsCj4gICAgIGtpZW5hbgo+IAo+ICAgICAgPgo+ICAgICAg
-PiBJJ3ZlIGNvbmZpcm1lZCB0aGF0IHRoZSBtb2R1bGVzIGV4aXN0IGJ1dCBjYW4ndCBsb2FkIHRo
-ZW0uIEknbQo+ICAgICB1bnN1cmUKPiAgICAgID4gaG93IHRvIHJlc29sdmUgdGhlc2UgaXNzdWVz
-LiBDb3VsZCBzb21lb25lIHBsZWFzZSBhc3Npc3QgbWU/Cj4gICAgICA+Cj4gICAgICA+IFRoYW5r
-IHlvdS4KPiAgICAgID4KPiAgICAgID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KPiAgICAgID4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+ICAgICAgPiBs
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zz4KPiAgICAgID4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo+ICAgICA8aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldj4KPiAKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+--===============8460696637369104784==
+Content-Type: multipart/alternative; boundary="000000000000388e5d061d634598"
+
+--000000000000388e5d061d634598
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello Kienan,
+
+When I proceed with the following steps:
+
+```
+# Warning: this removes all untracked content from the lttng-modules
+directory
+cd /path/to/lttng-modules-source
+git clean -dxf
+
+make
+sudo make modules_install
+sudo depmod -a
+```
+
+I encounter a warning in
+`/home/philippe/lttng-modules/src/probes/Kbuild:79` stating "File
+./arch/x86/kvm/lapic.h not found. Probe 'kvm' x86-specific is disabled. Use
+full kernel source tree to enable it." Although everything compiles fine
+and I'm able to load modules, when I execute `sudo lttng list -k`, I don't
+see the tracepoints `kvm_entry` and `kvm_exit`, which I believe should be
+available. Could this be due to not using my full kernel tree during
+compilation?
+
+Here are the answers to your questions:
+
+- *Where did `/usr/src/linux-source-6.5.0` come from?*
+  I initially attempted `sudo apt-get update && sudo apt-get install
+linux-source`, but it gave me this answer *linux-source is already the
+newest version (5.15.0.116.116)*`, which doesn't match my current kernel
+version. So, I downloaded it directly from kernel.org using this command:
+`wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz`.
+
+- *Which Linux distribution and version are you using?*
+  Running `lsb_release -a` gives me:
+  ```
+  No LSB modules are available.
+  Distributor ID: Ubuntu
+  Description:    Ubuntu 22.04.4 LTS
+  Release:        22.04
+  Codename:       jammy
+  ```
+
+- *Assuming your distribution has kernel packages, which do you have
+installed, and do you have the corresponding kernel headers package
+installed?*
+
+  Running `dpkg -l | grep linux-image` shows these installed packages:
+  ```
+  ii  linux-image-5.15.0-116-generic           5.15.0-116.126      amd64
+Signed kernel image generic
+  ii  linux-image-6.5.0-28-generic             6.5.0-28.29~22.04.1  amd64
+Signed kernel image generic
+  ii  linux-image-6.5.0-41-generic             6.5.0-41.41~22.04.2  amd64
+Signed kernel image generic
+  ii  linux-image-6.5.0-44-generic             6.5.0-44.44~22.04.1  amd64
+Signed kernel image generic
+  ii  linux-image-generic                      5.15.0.116.116      amd64
+Generic Linux kernel image
+  ii  linux-image-generic-hwe-22.04            6.5.0.44.44~22.04.1  amd64
+Generic Linux kernel image
+  ```
+
+  And `dpkg -l | grep linux-headers` shows these installed header packages:
+  ```
+  ii  linux-headers-5.15.0-116                 5.15.0-116.126      all
+Header files related to Linux kernel version 5.15.0
+  ii  linux-headers-5.15.0-116-generic         5.15.0-116.126      amd64
+Linux kernel headers for version 5.15.0 on 64 bit x86 SMP
+  ii  linux-headers-6.5.0-28-generic           6.5.0-28.29~22.04.1  amd64
+Linux kernel headers for version 6.5.0 on 64 bit x86 SMP
+  ii  linux-headers-6.5.0-41-generic           6.5.0-41.41~22.04.2  amd64
+Linux kernel headers for version 6.5.0 on 64 bit x86 SMP
+  ii  linux-headers-6.5.0-44-generic           6.5.0-44.44~22.04.1  amd64
+Linux kernel headers for version 6.5.0 on 64 bit x86 SMP
+  ii  linux-headers-generic                    5.15.0.116.116      amd64
+Generic Linux kernel headers
+  ii  linux-headers-generic-hwe-22.04          6.5.0.44.44~22.04.1  amd64
+Generic Linux kernel headers
+  ```
+
+Thanks.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Le mar. 16 juill. 2024, =C3=A0 15 h 41, Kienan Stewart <kstewart@efficios.c=
+om> a
+=C3=A9crit :
+
+> Hi Fran=C3=A7ois,
+>
+> On 7/16/24 3:01 PM, Fran=C3=A7ois Belias wrote:
+> > Hello Kienan,
+> >
+> > I've continued investigating my issue and discovered something new that
+> > might shed some light. Here's the rundown:
+> >
+> > 1. To ensure my add-ons weren't causing problems, deleted all old
+> > modules and I followed the documentation on the LTTng website
+> > (https://lttng.org/docs/v2.13/#doc-building-from-source
+> > <https://lttng.org/docs/v2.13/#doc-building-from-source>) and
+> downloaded
+> > `lttng-modules-2.13.13`.
+> >
+> > 2. Inside the downloaded folder, I successfully executed `make
+> > KERNELDIR=3D/usr/src/linux-source-6.5.0` without any issues.
+> >
+> > 3. Subsequently, I ran `make KERNELDIR=3D/usr/src/linux-source-6.5.0
+> > modules_install`, which also completed successfully.
+> >
+> > 4. After that, I updated the module dependencies using `sudo depmod -a`=
+,
+> > which went fine.
+> >
+> > However, when I tried to load a module, such as `sudo modprobe
+> > lttng-probe-kvm`, it reported that the module couldn't be found at
+> > `/lib/modules/6.5.0-41-generic/`. Upon checking the logs, I confirmed
+> > that step 3 had installed the modules in `/lib/modules/6.5.0/`.
+> >
+> > To address this, I modified step 3 to simply `make modules_install`,
+> > which then installed the modules correctly at
+> > `/lib/modules/6.5.0-41-generic/` and ran again step 4. But now, when
+> > attempting to load a module, I'm encountering the error `modprobe:
+> > ERROR: could not insert 'lttng_probe_kvm': Exec format error`.
+> >
+> > Do you have any insights or ideas on what might be causing this issue?
+> >
+>
+> It sounds like /usr/src/linux-source-6.5.0 is not correct source for the
+> kernel that you are currently running.
+>
+> When running `make modules_install` in your modified step 3 (without
+> KERNELDIR set), the modules were installed for your current kernel
+> directory as auto-detected by the build script.
+>
+> What happens if you do the following
+>
+> ```
+> unset KERNELDIR
+>
+> # Warning: this removes all untracked content from the lttng-modules
+> directory
+> cd /path/to/lttng-modules-source
+> git clean -dxf
+>
+> make
+> sudo make modules_install
+> sudo depmod -a
+> ```
+>
+> KERNELDIR is set based on the current running kernel: `uname -r`. C.f.
+>
+> https://github.com/lttng/lttng-modules/blob/434e86eea846b33cad57f1d810508=
+9905f541853/Makefile#L16C1-L16C50
+>
+> A couple of questions for you:
+>
+> - Where did /usr/src/linux-source-6.5.0 come from?
+> - Which linux distribution + version are you using?
+> - Assuming your distribution has kernel packages, which do you have
+> installed, and do you have the corresponding kernel headers package
+> installed?
+>
+> thanks,
+> kienan
+>
+> > Thanks again for your assistance.
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> >
+> > Le mar. 16 juill. 2024, =C3=A0 09 h 05, Kienan Stewart <kstewart@effici=
+os.com
+> > <mailto:kstewart@efficios.com>> a =C3=A9crit :
+> >
+> >     Hi Fran=C3=A7ois,
+> >
+> >     On 7/15/24 6:10 PM, Fran=C3=A7ois Belias via lttng-dev wrote:
+> >      > Hello,
+> >      >
+> >      > I'm currently running Linux kernel version 6.5.0-41-generic and
+> >      > attempting to install LTTng from source. Here are the steps I
+> >     followed:
+> >      >
+> >      >   - I cloned the LTTng git repository to my computer from
+> >      >
+> >     [
+> https://github.com/lttng/lttng-modules.git](https://github.com/lttng/lttn=
+g-modules.git)
+> <
+> https://github.com/lttng/lttng-modules.git%5D(https://github.com/lttng/lt=
+tng-modules.git)>
+> <
+> https://github.com/lttng/lttng-modules.git](https://github.com/lttng/lttn=
+g-modules.git)
+> <
+> https://github.com/lttng/lttng-modules.git%5D(https://github.com/lttng/lt=
+tng-modules.git)
+> >>.
+> >      > - Downloaded the kernel source tree corresponding to my kernel
+> >     version
+> >      > to enable compilation.
+> >      > - Executed `make KERNELDIR=3D/path/to/my/linux/source`, which wa=
+s
+> >      > completed successfully.
+> >      > - Ran `make KERNELDIR=3D/path/to/my/linux/source modules_install=
+`,
+> >     also
+> >      > without any issues.
+> >      > - Finally, I executed `sudo depmod -a`, which was completed
+> >     successfully.
+> >      >
+> >      > However, when I attempt to load a module with commands like `sud=
+o
+> >      > modprobe lttng-ketprobes` or "sudo modprobe lttng-tracer", I
+> >     encounter
+> >      > the following errors:
+> >      >
+> >      > - For `lttng-ketprobes`: `modprobe: FATAL: Module lttng-ketprobe=
+s
+> >     not
+> >      > found in directory /lib/modules/6.5.0-41-generic`.
+> >      > - For `lttng-tracer`: `modprobe: ERROR: could not insert
+> >     'lttng_tracer':
+> >      > Exec format error`.
+> >
+> >     If you rebuilt modules on the master branch as of yesterday you may
+> >     need
+> >     to clean the LTTng modules install directory, rebuild, and reinstal=
+l.
+> >
+> >     This is due to kprobes, kretprobes, and uprobes modules being
+> included
+> >     in the tracer core module. C.f.
+> >
+> https://github.com/lttng/lttng-modules/commit/0c2c6606eb66cb5222ab7a2a4f8=
+329fd5dfdef70
+> <
+> https://github.com/lttng/lttng-modules/commit/0c2c6606eb66cb5222ab7a2a4f8=
+329fd5dfdef70
+> >
+> >
+> >     You may want to stick with running lttng-modules 2.13.x which will
+> not
+> >     have breaking changes merged in.
+> >
+> >     The exec format error also could be due to modules that are install=
+ed
+> >     but built against a different version of the Linux kernel.
+> >
+> >     A few things to check
+> >
+> >     - If your kernel has been upgraded recently, ensure the new kernel =
+is
+> >     the one actually running
+> >     - If the modules haven't been rebuilt since the upgrade, they shoul=
+d
+> be
+> >     rebuilt and reinstalled
+> >     - As I recall, you are playing around with some addon modules - do
+> any
+> >     of those modules define dependencies on the kprobes, kretprobes, or
+> >     uprobes modules which now are no longer produced by builds of the
+> >     master
+> >     branch
+> >
+> >     Is there further information in dmesg or journalctl regarding the
+> >     module
+> >     loading?
+> >
+> >     hope this helps.
+> >
+> >     thanks,
+> >     kienan
+> >
+> >      >
+> >      > I've confirmed that the modules exist but can't load them. I'm
+> >     unsure
+> >      > how to resolve these issues. Could someone please assist me?
+> >      >
+> >      > Thank you.
+> >      >
+> >      > _______________________________________________
+> >      > lttng-dev mailing list
+> >      > lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
+> >      > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >     <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>
+> >
+>
+
+--000000000000388e5d061d634598
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello Kienan,<br><br>When I proceed with the following ste=
+ps:<br><br>```<br># Warning: this removes all untracked content from the lt=
+tng-modules directory<br>cd /path/to/lttng-modules-source<br>git clean -dxf=
+<br><br>make<br>sudo make modules_install<br>sudo depmod -a<br>```<br><br>I=
+ encounter a warning in `/home/philippe/lttng-modules/src/probes/Kbuild:79`=
+ stating &quot;File ./arch/x86/kvm/lapic.h not found. Probe &#39;kvm&#39; x=
+86-specific is disabled. Use full kernel source tree to enable it.&quot; Al=
+though everything compiles fine and I&#39;m able to load modules, when I ex=
+ecute `sudo lttng list -k`, I don&#39;t see the tracepoints `kvm_entry` and=
+ `kvm_exit`, which I believe should be available. Could this be due to not =
+using my full kernel tree during compilation?<br><br>Here are the answers t=
+o your questions:<br><br>- <b>Where did `/usr/src/linux-source-6.5.0` come =
+from?</b><br>=C2=A0 I initially attempted `sudo apt-get update &amp;&amp; s=
+udo apt-get install linux-source`, but it gave me this answer <b><i>linux-s=
+ource is already the newest version (5.15.0.116.116)</i></b>`, which doesn&=
+#39;t match my current kernel version. So, I downloaded it directly from <a=
+ href=3D"http://kernel.org">kernel.org</a> using this command: `wget <a hre=
+f=3D"https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz`">https:=
+//cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz`</a>.<br><br>- <b>W=
+hich Linux distribution and version are you using?</b><br>=C2=A0 Running `l=
+sb_release -a` gives me:<br>=C2=A0 ```<br>=C2=A0 No LSB modules are availab=
+le.<br>=C2=A0 Distributor ID: Ubuntu<br>=C2=A0 Description: =C2=A0 =C2=A0Ub=
+untu 22.04.4 LTS<br>=C2=A0 Release: =C2=A0 =C2=A0 =C2=A0 =C2=A022.04<br>=C2=
+=A0 Codename: =C2=A0 =C2=A0 =C2=A0 jammy<br>=C2=A0 ```<br><br>- <b>Assuming=
+ your distribution has kernel packages, which do you have installed, and do=
+ you have the corresponding kernel headers package installed?</b><br><br>=
+=C2=A0 Running `dpkg -l | grep linux-image` shows these installed packages:=
+<br>=C2=A0 ```<br>=C2=A0 ii =C2=A0linux-image-5.15.0-116-generic =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 5.15.0-116.126 =C2=A0 =C2=A0 =C2=A0amd64 =C2=A0 Si=
+gned kernel image generic<br>=C2=A0 ii =C2=A0linux-image-6.5.0-28-generic =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 6.5.0-28.29~22.04.1 =C2=A0amd64 =
+=C2=A0 Signed kernel image generic<br>=C2=A0 ii =C2=A0linux-image-6.5.0-41-=
+generic =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 6.5.0-41.41~22.04.2 =C2=
+=A0amd64 =C2=A0 Signed kernel image generic<br>=C2=A0 ii =C2=A0linux-image-=
+6.5.0-44-generic =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 6.5.0-44.44~22.0=
+4.1 =C2=A0amd64 =C2=A0 Signed kernel image generic<br>=C2=A0 ii =C2=A0linux=
+-image-generic =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A05.15.0.116.116 =C2=A0 =C2=A0 =C2=A0amd64 =C2=A0 Generic Li=
+nux kernel image<br>=C2=A0 ii =C2=A0linux-image-generic-hwe-22.04 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A06.5.0.44.44~22.04.1 =C2=A0amd64 =C2=A0 Ge=
+neric Linux kernel image<br>=C2=A0 ```<br><br>=C2=A0 And `dpkg -l | grep li=
+nux-headers` shows these installed header packages:<br>=C2=A0 ```<br>=C2=A0=
+ ii =C2=A0linux-headers-5.15.0-116 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 5.15.0-116.126 =C2=A0 =C2=A0 =C2=A0all =C2=A0 =C2=A0 Head=
+er files related to Linux kernel version 5.15.0<br>=C2=A0 ii =C2=A0linux-he=
+aders-5.15.0-116-generic =C2=A0 =C2=A0 =C2=A0 =C2=A0 5.15.0-116.126 =C2=A0 =
+=C2=A0 =C2=A0amd64 =C2=A0 Linux kernel headers for version 5.15.0 on 64 bit=
+ x86 SMP<br>=C2=A0 ii =C2=A0linux-headers-6.5.0-28-generic =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 6.5.0-28.29~22.04.1 =C2=A0amd64 =C2=A0 Linux kernel he=
+aders for version 6.5.0 on 64 bit x86 SMP<br>=C2=A0 ii =C2=A0linux-headers-=
+6.5.0-41-generic =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 6.5.0-41.41~22.04.2 =C2=
+=A0amd64 =C2=A0 Linux kernel headers for version 6.5.0 on 64 bit x86 SMP<br=
+>=C2=A0 ii =C2=A0linux-headers-6.5.0-44-generic =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 6.5.0-44.44~22.04.1 =C2=A0amd64 =C2=A0 Linux kernel headers for ver=
+sion 6.5.0 on 64 bit x86 SMP<br>=C2=A0 ii =C2=A0linux-headers-generic =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A05.15.0.11=
+6.116 =C2=A0 =C2=A0 =C2=A0amd64 =C2=A0 Generic Linux kernel headers<br>=C2=
+=A0 ii =C2=A0linux-headers-generic-hwe-22.04 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A06.5.0.44.44~22.04.1 =C2=A0amd64 =C2=A0 Generic Linux kernel headers<b=
+r>=C2=A0 ```<br><br>Thanks.<br><br><div><div><br></div><div><br></div><div>=
+<br></div><div><br></div><div><br></div><div><br></div><div><br></div><div>=
+<br></div><div><br></div><div><br></div><div><br></div><div><br></div><div>=
+<br></div><div><br></div></div></div><br><div class=3D"gmail_quote"><div di=
+r=3D"ltr" class=3D"gmail_attr">Le mar. 16 juill. 2024, =C3=A0 15 h 41, Kien=
+an Stewart &lt;<a href=3D"mailto:kstewart@efficios.com">kstewart@efficios.c=
+om</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" s=
+tyle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pad=
+ding-left:1ex">Hi Fran=C3=A7ois,<br>
+<br>
+On 7/16/24 3:01 PM, Fran=C3=A7ois Belias wrote:<br>
+&gt; Hello Kienan,<br>
+&gt; <br>
+&gt; I&#39;ve continued investigating my issue and discovered something new=
+ that <br>
+&gt; might shed some light. Here&#39;s the rundown:<br>
+&gt; <br>
+&gt; 1. To ensure my add-ons weren&#39;t causing problems, deleted all old =
+<br>
+&gt; modules and I followed the documentation on the LTTng website <br>
+&gt; (<a href=3D"https://lttng.org/docs/v2.13/#doc-building-from-source" re=
+l=3D"noreferrer" target=3D"_blank">https://lttng.org/docs/v2.13/#doc-buildi=
+ng-from-source</a> <br>
+&gt; &lt;<a href=3D"https://lttng.org/docs/v2.13/#doc-building-from-source"=
+ rel=3D"noreferrer" target=3D"_blank">https://lttng.org/docs/v2.13/#doc-bui=
+lding-from-source</a>&gt;) and downloaded <br>
+&gt; `lttng-modules-2.13.13`.<br>
+&gt; <br>
+&gt; 2. Inside the downloaded folder, I successfully executed `make <br>
+&gt; KERNELDIR=3D/usr/src/linux-source-6.5.0` without any issues.<br>
+&gt; <br>
+&gt; 3. Subsequently, I ran `make KERNELDIR=3D/usr/src/linux-source-6.5.0 <=
+br>
+&gt; modules_install`, which also completed successfully.<br>
+&gt; <br>
+&gt; 4. After that, I updated the module dependencies using `sudo depmod -a=
+`, <br>
+&gt; which went fine.<br>
+&gt; <br>
+&gt; However, when I tried to load a module, such as `sudo modprobe <br>
+&gt; lttng-probe-kvm`, it reported that the module couldn&#39;t be found at=
+ <br>
+&gt; `/lib/modules/6.5.0-41-generic/`. Upon checking the logs, I confirmed =
+<br>
+&gt; that step 3 had installed the modules in `/lib/modules/6.5.0/`.<br>
+&gt; <br>
+&gt; To address this, I modified step 3 to simply `make modules_install`, <=
+br>
+&gt; which then installed the modules correctly at <br>
+&gt; `/lib/modules/6.5.0-41-generic/` and ran again step=C2=A04. But now, w=
+hen <br>
+&gt; attempting to load a module, I&#39;m encountering the error `modprobe:=
+ <br>
+&gt; ERROR: could not insert &#39;lttng_probe_kvm&#39;: Exec format error`.=
+<br>
+&gt; <br>
+&gt; Do you have any insights or ideas on what might be causing this issue?=
+<br>
+&gt; <br>
+<br>
+It sounds like /usr/src/linux-source-6.5.0 is not correct source for the <b=
+r>
+kernel that you are currently running.<br>
+<br>
+When running `make modules_install` in your modified step 3 (without <br>
+KERNELDIR set), the modules were installed for your current kernel <br>
+directory as auto-detected by the build script.<br>
+<br>
+What happens if you do the following<br>
+<br>
+```<br>
+unset KERNELDIR<br>
+<br>
+# Warning: this removes all untracked content from the lttng-modules <br>
+directory<br>
+cd /path/to/lttng-modules-source<br>
+git clean -dxf<br>
+<br>
+make<br>
+sudo make modules_install<br>
+sudo depmod -a<br>
+```<br>
+<br>
+KERNELDIR is set based on the current running kernel: `uname -r`. C.f. <br>
+<a href=3D"https://github.com/lttng/lttng-modules/blob/434e86eea846b33cad57=
+f1d8105089905f541853/Makefile#L16C1-L16C50" rel=3D"noreferrer" target=3D"_b=
+lank">https://github.com/lttng/lttng-modules/blob/434e86eea846b33cad57f1d81=
+05089905f541853/Makefile#L16C1-L16C50</a><br>
+<br>
+A couple of questions for you:<br>
+<br>
+- Where did /usr/src/linux-source-6.5.0 come from?<br>
+- Which linux distribution + version are you using?<br>
+- Assuming your distribution has kernel packages, which do you have <br>
+installed, and do you have the corresponding kernel headers package <br>
+installed?<br>
+<br>
+thanks,<br>
+kienan<br>
+<br>
+&gt; Thanks again for your assistance.<br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; <br>
+&gt; Le mar. 16 juill. 2024, =C3=A0 09 h 05, Kienan Stewart &lt;<a href=3D"=
+mailto:kstewart@efficios.com" target=3D"_blank">kstewart@efficios.com</a> <=
+br>
+&gt; &lt;mailto:<a href=3D"mailto:kstewart@efficios.com" target=3D"_blank">=
+kstewart@efficios.com</a>&gt;&gt; a =C3=A9crit=C2=A0:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Hi Fran=C3=A7ois,<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0On 7/15/24 6:10 PM, Fran=C3=A7ois Belias via lttng-=
+dev wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Hello,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; I&#39;m currently running Linux kernel versio=
+n 6.5.0-41-generic and<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; attempting to install LTTng from source. Here=
+ are the steps I<br>
+&gt;=C2=A0 =C2=A0 =C2=A0followed:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0- I cloned the LTTng git reposito=
+ry to my computer from<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[<a href=3D"https://github.com/lttng/lttng-modules.=
+git%5D(https://github.com/lttng/lttng-modules.git)" rel=3D"noreferrer" targ=
+et=3D"_blank">https://github.com/lttng/lttng-modules.git](https://github.co=
+m/lttng/lttng-modules.git)</a> &lt;<a href=3D"https://github.com/lttng/lttn=
+g-modules.git%5D(https://github.com/lttng/lttng-modules.git)" rel=3D"norefe=
+rrer" target=3D"_blank">https://github.com/lttng/lttng-modules.git%5D(https=
+://github.com/lttng/lttng-modules.git)</a>&gt; &lt;<a href=3D"https://githu=
+b.com/lttng/lttng-modules.git%5D(https://github.com/lttng/lttng-modules.git=
+)" rel=3D"noreferrer" target=3D"_blank">https://github.com/lttng/lttng-modu=
+les.git](https://github.com/lttng/lttng-modules.git)</a> &lt;<a href=3D"htt=
+ps://github.com/lttng/lttng-modules.git%5D(https://github.com/lttng/lttng-m=
+odules.git)" rel=3D"noreferrer" target=3D"_blank">https://github.com/lttng/=
+lttng-modules.git%5D(https://github.com/lttng/lttng-modules.git)</a>&gt;&gt=
+;.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; - Downloaded the kernel source tree correspon=
+ding to my kernel<br>
+&gt;=C2=A0 =C2=A0 =C2=A0version<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; to enable compilation.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; - Executed `make KERNELDIR=3D/path/to/my/linu=
+x/source`, which was<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; completed successfully.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; - Ran `make KERNELDIR=3D/path/to/my/linux/sou=
+rce modules_install`,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0also<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; without any issues.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; - Finally, I executed `sudo depmod -a`, which=
+ was completed<br>
+&gt;=C2=A0 =C2=A0 =C2=A0successfully.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; However, when I attempt to load a module with=
+ commands like `sudo<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; modprobe lttng-ketprobes` or &quot;sudo modpr=
+obe lttng-tracer&quot;, I<br>
+&gt;=C2=A0 =C2=A0 =C2=A0encounter<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; the following errors:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; - For `lttng-ketprobes`: `modprobe: FATAL: Mo=
+dule lttng-ketprobes<br>
+&gt;=C2=A0 =C2=A0 =C2=A0not<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; found in directory /lib/modules/6.5.0-41-gene=
+ric`.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; - For `lttng-tracer`: `modprobe: ERROR: could=
+ not insert<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&#39;lttng_tracer&#39;:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Exec format error`.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0If you rebuilt modules on the master branch as of y=
+esterday you may<br>
+&gt;=C2=A0 =C2=A0 =C2=A0need<br>
+&gt;=C2=A0 =C2=A0 =C2=A0to clean the LTTng modules install directory, rebui=
+ld, and reinstall.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0This is due to kprobes, kretprobes, and uprobes mod=
+ules being included<br>
+&gt;=C2=A0 =C2=A0 =C2=A0in the tracer core module. C.f.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/lttng/lttng-modules/c=
+ommit/0c2c6606eb66cb5222ab7a2a4f8329fd5dfdef70" rel=3D"noreferrer" target=
+=3D"_blank">https://github.com/lttng/lttng-modules/commit/0c2c6606eb66cb522=
+2ab7a2a4f8329fd5dfdef70</a> &lt;<a href=3D"https://github.com/lttng/lttng-m=
+odules/commit/0c2c6606eb66cb5222ab7a2a4f8329fd5dfdef70" rel=3D"noreferrer" =
+target=3D"_blank">https://github.com/lttng/lttng-modules/commit/0c2c6606eb6=
+6cb5222ab7a2a4f8329fd5dfdef70</a>&gt;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0You may want to stick with running lttng-modules 2.=
+13.x which will not<br>
+&gt;=C2=A0 =C2=A0 =C2=A0have breaking changes merged in.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0The exec format error also could be due to modules =
+that are installed<br>
+&gt;=C2=A0 =C2=A0 =C2=A0but built against a different version of the Linux =
+kernel.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0A few things to check<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0- If your kernel has been upgraded recently, ensure=
+ the new kernel is<br>
+&gt;=C2=A0 =C2=A0 =C2=A0the one actually running<br>
+&gt;=C2=A0 =C2=A0 =C2=A0- If the modules haven&#39;t been rebuilt since the=
+ upgrade, they should be<br>
+&gt;=C2=A0 =C2=A0 =C2=A0rebuilt and reinstalled<br>
+&gt;=C2=A0 =C2=A0 =C2=A0- As I recall, you are playing around with some add=
+on modules - do any<br>
+&gt;=C2=A0 =C2=A0 =C2=A0of those modules define dependencies on the kprobes=
+, kretprobes, or<br>
+&gt;=C2=A0 =C2=A0 =C2=A0uprobes modules which now are no longer produced by=
+ builds of the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0master<br>
+&gt;=C2=A0 =C2=A0 =C2=A0branch<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Is there further information in dmesg or journalctl=
+ regarding the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0module<br>
+&gt;=C2=A0 =C2=A0 =C2=A0loading?<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0hope this helps.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0thanks,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0kienan<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; I&#39;ve confirmed that the modules exist but=
+ can&#39;t load them. I&#39;m<br>
+&gt;=C2=A0 =C2=A0 =C2=A0unsure<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; how to resolve these issues. Could someone pl=
+ease assist me?<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Thank you.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; _____________________________________________=
+__<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; lttng-dev mailing list<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" =
+target=3D"_blank">lttng-dev@lists.lttng.org</a> &lt;mailto:<a href=3D"mailt=
+o:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a=
+>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; <a href=3D"https://lists.lttng.org/cgi-bin/ma=
+ilman/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">https://list=
+s.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://lists.lttng.org/cgi-bin/mail=
+man/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">https://lists.=
+lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>&gt;<br>
+&gt; <br>
+</blockquote></div>
+
+--000000000000388e5d061d634598--
+
+--===============8460696637369104784==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============8460696637369104784==--
