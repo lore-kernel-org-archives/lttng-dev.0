@@ -4,154 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21339C3DA4B
-	for <lttng-dev@archiver.kernel.org>; Wed, 17 Jul 2024 16:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98177C3DA42
+	for <lttng-dev@archiver.kernel.org>; Wed, 17 Jul 2024 16:27:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1721232538;
-	bh=cfF+KX0I+H+Yf05InO7to/v+DZtO3r5Tjbm41H4k2YE=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1721233669;
+	bh=eWsdpmKE6yGeVLdxl4o2Y+UAf+kQ0uaFZ7WFbstHjjQ=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Pr72Mp/uVcAOfWumLjsXeZ4fYF+W8Tzm6mihEMvbDQ+XSfNNd9orOa8+unCEmW7bT
-	 xxfPNcjPMyd9kFrmLceZleMTQZJ4h0c5TasCkbO+F/Be2zo32D1vPkyGkwm/D8A2ZZ
-	 s/1luy/JAP0lrdcDhDITtvv4liW/bLZLHTGkeQTRCwv3QEnCYb3hLY2q1Z70yW2hu2
-	 92MLCNyGQh+3mTnVmHwPEBDvUD2Ba/1dV/kjjW1mh7Zj5Z1hQgM5b14K3WY1D7YEZJ
-	 XN3y4LBwWVqOKJeSF0KGwOr3E+REBBhb+uqhbA2lQD/yKrS4Sl4fNej0PCzjTzJhh4
-	 Ascfq2o5gaHKA==
+	b=VOevKXKADvnLNLIqfkk62N/QYhKCfPvT+3cs6W0oxubwRJouWfvURt18QS8ulmC4C
+	 1QQ8LGhVh2G77hCg0oobzMxl2Fa3luiktysoEjjNyr0OpWJ8YzxofaHHI8ea2mX59F
+	 7NN30XrMFfxOkrBCPWo/8WU8jAJ9EvwNlMeKazbpLBEV7TCoiUC/uGvVm6ivXPHOiJ
+	 OFPbkIkyK5FyCGn7TI7vt81fRzPLpO2DUOuVZOad+Zq3EwIuuvG7C46vkS0a8rrPyT
+	 PsEt6VcMoRmjnNL541lHhBMocxx0lpfGo3EqHJ3A1IQzChumvvFrdW8e5BlxzVHXn6
+	 siWaypMRRI1Lw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4WPLTk27R9z1277;
-	Wed, 17 Jul 2024 12:08:58 -0400 (EDT)
-Received: from YQZPR01CU011.outbound.protection.outlook.com
- (mail-canadaeastazlp170100001.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c104::1])
- by lists.lttng.org (Postfix) with ESMTPS id 4WPLTh5tsBz12K9
- for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2024 12:08:56 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=q6Fo+dv5oQBNk+fCANKHpXF7UA3ytO7BPpC+4gjLkCd/McSwLt/8LWXr99NVu80QNDlwts54K+1+VctqDGgSbPxUvzCPRAQHXEUlgIYM1sIv0fEKTqJGo+PdWEYkaMKzsz9Jy03Jqb1jGQ7xmIWeb+yr1u+z4vg2b27IdaH3S/SFhkIptGYYKoywjmPC0aEXuw+/m7LzF163jAPas3aPpj9Y+YS4dZQzxz3yaPYytXrWHPnhSAxtZ3KoXZ4PRpcVSC1lSDQsvNsukV9+sLJXZL4Nzm+gjDozCkEGlQnpDzlZcYst0LbNEcmBQcKyOhcjH5B2EMtRl0crhryCUq5sVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PeC1+VqhMgzPjuKoa8xvgAweRt4w1Biz5sLUN96D9sI=;
- b=HN7UNwuQ7/tEEK3P34Esah0LThPJDxUKrkyv52L6qoLqsYUqTGSX/Y6ObQmB9JPd3CtaX8jhFoAZ03aTo0W5CDwVwMK5lcUS/txzxTpVnERA0TZD4SUO2Q2+nXliKcALDglPIFx8yhbOfywmDGG4xm1U5n/a/XT1MeV6gIlQTG1PJf9rAag2H7XMaMag8t8CtBtbi9lz55bkxhLDd0Z3mheMJZ8E5p6GcTga9OFRxDdvAko8ap28icm0FlbayUQuxtaUeMZyfpifqcFnChVM/a2vtsDHkfwx5klwnILujTrH8NlX0yyWPga7s40ACYCDRAoNM2tbKdznnlqmQjnLZw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::14)
- by YQXPR01MB6416.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:43::17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.17; Wed, 17 Jul
- 2024 16:08:52 +0000
-Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e27c:c1e2:e6e:9256]) by YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e27c:c1e2:e6e:9256%4]) with mapi id 15.20.7762.030; Wed, 17 Jul 2024
- 16:08:52 +0000
-Message-ID: <02547951-d7df-4006-853a-521b057e9b3f@efficios.com>
-Date: Wed, 17 Jul 2024 12:08:50 -0400
-User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?Fran=C3=A7ois_Belias?= <beliasossim@gmail.com>
-Cc: lttng-dev@lists.lttng.org
-References: <CAHD10UjoaOjqZUH4j55Ra7zJ2HVRLOyk7xnjv+BjnJxs6rN6Aw@mail.gmail.com>
- <6deffa1d-4d46-4445-a510-a3aac271cc80@efficios.com>
- <CAHD10Ui_JkP9hRirGUvKBgHhWX48r26+M2_zTyOD_cMLnSDGCg@mail.gmail.com>
- <211e6d9f-834d-4511-b315-7844a5c04824@efficios.com>
- <CAHD10Ugvtu+wKGeRjujGgXbXrEqH-6OKHurJgMyf7CmUVjzRRQ@mail.gmail.com>
- <5b7fc307-a52a-4e54-84df-294600454686@efficios.com>
- <CAHD10UgTthGz7gcgcga6W4xxjiKHfuZgM9uCjEkViKsVUnDF8A@mail.gmail.com>
- <CAHD10UhNDKo=4Kk-Z_mBG3PMm=1KgX9L0mjgTS+ZfrT4Xbmn9w@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAHD10UhNDKo=4Kk-Z_mBG3PMm=1KgX9L0mjgTS+ZfrT4Xbmn9w@mail.gmail.com>
-X-ClientProxiedBy: YQBPR01CA0160.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:7e::29) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:e8::14)
+	by lists.lttng.org (Postfix) with ESMTP id 4WPLvT27Kdz12QJ;
+	Wed, 17 Jul 2024 12:27:49 -0400 (EDT)
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
+ [IPv6:2607:f8b0:4864:20::42b])
+ by lists.lttng.org (Postfix) with ESMTPS id 4WPLvS2VYSz12QG
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2024 12:27:48 -0400 (EDT)
+Received: by mail-pf1-x42b.google.com with SMTP id
+ d2e1a72fcca58-70b1808dee9so4791586b3a.2
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2024 09:27:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721233667; x=1721838467;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0s4sW351UOPO15pV5RatoSfGBqOCIp0ZGc0ktkI/WBY=;
+ b=BG2FrR7qXYbe1JECuGELqs3l+OhdjrGvNhABh/kb/QgzPCTbFtbvZ+yrhQnz8+u5eb
+ HwtM6X+1IiqPdzSRfhple1rT65Vt+M5bCdVjCgaA/QEKi7OiqzumqnBc5ClvHaUyqzBv
+ NrFnjYDYawAFXPTv8y0WTx3hpa2iId6hb6IIpf4PwDb4CMAyDrQmXXUMgssF2eHQGrEf
+ aWV5hTe9PZBtQWND+AZZcUGgrOO4rWM3Ia+UtPNumAIherTwwcdrit/e5HYhmqSfgSZ4
+ t/NQEn3TK+zRRckbWFkBAjK7jAwdOm6YTwvjdmRRBmfWlSIWcoN7vgmkiAtedkq//isc
+ lsuw==
+X-Gm-Message-State: AOJu0Ywa4txVC9jqu2jC+R5pgc4dnMoYhpy6PK4NZ6GA8myG9ZPe6r4b
+ RTVDzILpXo4VDRl0wy1QTVXPbBX/UYKzq9KsVbKthm6WDuMcqDSu7jYG4fI2Z9Gh1CB402d6+yb
+ vN9NlrXPw59jLgfFygRAoFMFfiQs=
+X-Google-Smtp-Source: AGHT+IHVUXsm8v4Et5ZUaohFmSMxDnkQdqIZ5ztJ6a8RtVrlRf8XyuTYaXrY+NMIXwqrljYTFOLssYuk3lVrMtQLwB4=
+X-Received: by 2002:a05:6a20:2d06:b0:1c0:e4d6:9c05 with SMTP id
+ adf61e73a8af0-1c3fdd0fa8emr2145003637.32.1721233666809; Wed, 17 Jul 2024
+ 09:27:46 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YQXPR01MB6416:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31864538-59bb-492d-6d13-08dca67ac032
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?d2wzQVJScFV1MkVMc1pNTzluTVc4c0h5U0JVRHVDcE5sdUVIcDZoZS8wVUhR?=
- =?utf-8?B?VVh5YVJlY3Z5M0tnUWNGT1JXQzNxYjVCZHFvZkZjdjVGNHJsb01qSmwveEpl?=
- =?utf-8?B?eEhBdGZtaTJEM1JMVkh2anNIeHVTSTJiNlVSMkUyc3Z2SlNQc3JPSTJJMDd4?=
- =?utf-8?B?VDM1cDNqMitJVG5KcVdVTWFvSWVQODJkSFdzYlVqd1dUSGlYaFBTb1NNbGhK?=
- =?utf-8?B?L3p6TWc2RUx3WTY3RlFzU3BlZ0NwNzRzMTMzcCtySSsxZHV1YWs2cS9ucllk?=
- =?utf-8?B?dmJkM2NDYW5EM3VMckFndDMvTFBjNE53UlEzdWJxQWw3Yi9NMHlZb1ZLT3VG?=
- =?utf-8?B?cTRzZFJlYTZGTHhZc2V6cUgvV3c5cmZuZ1VhbUFjQTRsVDNaRTJRNHcvUldy?=
- =?utf-8?B?ZHRzbXB6NklPRzIzYjJFTGxoaEpoWGlXdXl6ZWdQVGJEbWl6VDh4MVZ4TEpn?=
- =?utf-8?B?YTY3Z0NCd3dyVVVaWE9vUVZVMXhnR3dtRlZCY2V1ZW9wZDRhcHN1ZVZtdDR1?=
- =?utf-8?B?UkF5M0NYTTdGcG1iOVduSCtvMExudVUybGlaVC9qNGdBZFB0bVVEWlpoVzk4?=
- =?utf-8?B?Qi8zR1B2bHFtbGZkVGplT1MxL2tVK3UwVVd3SUVDeWtBTWduQU8rK0VlRFR5?=
- =?utf-8?B?TFZpUkpRaVc2T0ExdVJoWXBWeXBUKzVRMFBORnNsSmloUXBOcE5BUDBIaEp3?=
- =?utf-8?B?VmozSVhpeVFxVENiNjl3a0huNWs0NXVQMW5WTjY3SlNmVnF1WFpJS2NZNFR2?=
- =?utf-8?B?YzF5RDBJd3hJdm5aQjhxN3ZJVGxHblE4aEcvZTVXdVd3N3dHa3IrUXMvNzln?=
- =?utf-8?B?bk5Hd21BcmticEsrcXZnSUsyNWZKcmdGeld2QWtxdkdiV3UzbWJZSXFEMnhS?=
- =?utf-8?B?VUVZUGRrM28xc1hxM25tQVdXc0RzYjdCUDNjZnBzNTIyK1prWUdSbFJBdVRm?=
- =?utf-8?B?QXZQYW43NDRLK290RTA2YlBVaHJkYlE0dHFxS2oxM3BUYjFXdmJTRmkwRXhJ?=
- =?utf-8?B?SjhuZ1R1OW9Eb3Zic2JoTmcycmVBMXBTc0U2RWcydW5RL1NsRmpYSUlzU3dG?=
- =?utf-8?B?M0hSaGdRT1k4Z0JXd1l3UEYxdFNSRytCNnhqQWJWd2hLWU1nUWhkbzNxMis2?=
- =?utf-8?B?NFRlS3p5Uk1qcjl5cGRYQnVmN2dNMk5Ma3hFYkc0L2xFbVJYNi96MmZCTm9G?=
- =?utf-8?B?R0g0czVMQkc1S3JBMFhpZ3g0bTcyZERDYUxlL2dNb2ZtM0pVa3h3OXkrSndv?=
- =?utf-8?B?OHpjWmdvWEQ3UThDZllFQ1FOb0VibXpyTE5vS0JpQkJ5STZ2OFNXenZva3FO?=
- =?utf-8?B?ZGRxMFVscnozQXN1UlFrN0lhVDFrZmtzUUs1QWlYU0R3VWZCODFUNGI5NFli?=
- =?utf-8?B?ei8xVUhnV1Bzb05xQ1pCM211M0VPdVhuTCt3YVp0NXZHU0hrbFh4ZDNOQ0ww?=
- =?utf-8?B?QzFTMDltR3A3TUVmT0xqRFowUFNsRUhFVFNrek53elVaOG5BeWYzbTlpZ0l3?=
- =?utf-8?B?WUxPYlNZaWdSOE1CMS9TRDkwU0oyMWRRdWQ2aTA5TEVqVmVOanptWE9aTXhG?=
- =?utf-8?B?UDJhSUJLd0Y0Q21YSVRGR3hCZ2t0VXB3bUVyVWxOWUhOVXZMemh2Wk5SK2Nx?=
- =?utf-8?B?enh4NU1GTjZ3K0FCS3lkakdHRi9MU0l4bWt3Sk0xWDhjTTBDUDlFcjB0VTVo?=
- =?utf-8?B?eXo2d3h3cHhIQk9BeERObXg2OVVEMFY3MUkwZjFSYUE0MXd0elVNRVQxWnFq?=
- =?utf-8?Q?OsGfER6mQcs3aS4wCM=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(1800799024)(376014); DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TjY3WG5xUS80OHNwWjFaREgvTTRiOVRYNlo3TmRsSU1RVmdpY1lzdEVJdGNX?=
- =?utf-8?B?bC9XZHJsN1NxeTh6V2tnakNqb0g0S0ZydDNUVVU1aGxKWWZRTWNwSEMxVWhS?=
- =?utf-8?B?R3R3ZkFuMGcrSzFQRFJzeVNLb3EvbE1lZWpCLzE1QlJPK2pRNWh2TVJZN2tk?=
- =?utf-8?B?SEJyOTJwdXh4ZVJ1NTk3eWIxVjA3ZHFwOGVnWU1XOUZLbDNnYXJNc1pDN25r?=
- =?utf-8?B?RUxOOFZQbmowT0REMXJ4UUt2WWNPckVrWUN6d3lZRHlBOG02SllmaW15MDRq?=
- =?utf-8?B?ZzdYUVJLVWg4ZlVIclUwSnk1K1hFMWh6VkNmNmhPQnBpOCtVcWM3aVphMFFz?=
- =?utf-8?B?R2xVaVVhR0ppbEFJaW5KNmtvYlFJQUxvRXd1T3ViTjcvVnFvaGhLdGphUjhP?=
- =?utf-8?B?RlpVb0NQVFBxalUyOS91VzhXVzRJOFpUd3FUeTFPR2ZpdEo4c1lzRW1hZzZG?=
- =?utf-8?B?ZkxSZVBKaU5rY2xLd08wdSs2dWtyN0F2b2tqemtsK1pXZW95dU5XNW15Nmxj?=
- =?utf-8?B?UHlybEZUKzVVOTBNeEFxNVVrRk9jQUlHQW9RSVNibWE3NFQzUytKN1R5YVY0?=
- =?utf-8?B?WHpzc2FuWDBkejM2MmJUdHZETHRDRGZiWjBucU9Qbmc2OHI1OVVpR012Wlg1?=
- =?utf-8?B?U2VPVlFhQmFPdHdONmUxQzhRRFRmWWNGdFY0aFhOL3FCb3UwTWl6cVdLdEp1?=
- =?utf-8?B?MHZLekxsNW1XbmpiMVNoelBJa05KUWRnS1V1b2NZb1QvZzUwWlNBWVBpcmlh?=
- =?utf-8?B?cGxIeTJOZEIwRjQybzhwWnFIWGxobGcwWGtKUUJDQitlVDNPanhBTmVrbEJm?=
- =?utf-8?B?M2p6dGtGSHZhc1loZkl3RFpZVkdUSk91UmZtb0Mza1BrS3FRRnlmazF0QStW?=
- =?utf-8?B?QjNSUFhvL3RraWZZUEJjMVNYOEVwdi9ScTZObXRCRitRaFZkOGFyU1RsZldr?=
- =?utf-8?B?djJlMHgrdnBLWmp3MFRKcXlsdjN1RHZFOHdxbXQrSTROaWpEaHdvUnI5Umda?=
- =?utf-8?B?Y1dWUEJ3L2J4dGJLdGp5WXV1VDFlRWswaWluUUFlS284ZkVUMXkvRURxNFNq?=
- =?utf-8?B?VjZXNjcvQ21Dd21YQSs5SDRMUGtBb0xHVVR0a3diY2xzZXNvUWo4SmxraGIy?=
- =?utf-8?B?eTJld0ozeko2Vm1PeDlsV1lqLzRLQkhsc2E2bTFmV0NleTV6b29NTkc4MHlC?=
- =?utf-8?B?Q0k0ZGsyKzdhdG5LcTIvOTA0dFlZSk9pd1pmOTNiaUd3SnR4MmFUbUNUR09F?=
- =?utf-8?B?QnhCakFsVG5EVmE0ZG5ZbFRwQkUrTnBGeFdDT1BmblRyZ0VKdzhkVGFqM2x2?=
- =?utf-8?B?RUtsT1pUdkpEdkZKVkFGUG5KSktRZ0l1MUdzSEJhK1Z0M0F3NTlHSEZFNmI3?=
- =?utf-8?B?bkRQRGNTN3k2WkdnYkZNLytaT3dxeXNISmRJVUJXSnNXaG9IQkRwSVYyNFNs?=
- =?utf-8?B?TVRPZTl5bHg3bGh0ZW5iZndDZzBGR0x2VXlCd0RDY2J0dks5T1ZFOXRlaGpD?=
- =?utf-8?B?alo5UERzaEFlWnNJMzhPWldUakpZSlVFUlJCN0ZNcnc4MFFibjJOZE5VQndY?=
- =?utf-8?B?RnIybERsZjhmTDRWY080NFE5emVGVUd3Zyt1eUtrWXdrZXpxa0U1VE1wWEY0?=
- =?utf-8?B?OXJKNml2eFk1SlJ3ZXV0a1I5ZUJUK2loMUh0cFp3M2RhNGNKR3JnRmxpQmdq?=
- =?utf-8?B?VS8yVzNUZUFJVFhYWjZkRHp3R1F3WnhWN3pZdGNxRTBLRWM5RkNNZ1p4MnJk?=
- =?utf-8?B?cEN1VVY5R3Nkb015R0NSa3BqU0YvUDVxSXZQZWpROUtlWkJlL2E5Sk1NYVRu?=
- =?utf-8?B?LzVVU2NZb3NTNWR0TDdVditDRW9mV2xLWGlBb0gxaTlvUUlhZmh2NUs3dVVX?=
- =?utf-8?B?OUdoZXc2c3YyeVQzemdaUWdlMjkwTVlsbS9mY3U5VnROYkpVSU9ubnhFdEpM?=
- =?utf-8?B?YWdCa3kyWk1KZ2xrUU03WWllOVNhWVdoSmFYWHRiL2x5SEN3OUllYktzSHI1?=
- =?utf-8?B?ZWNNYkJQOEpJT1hQUHEvanpSMWUrems3VDJCM2Uzd1J3djljdTZDK3Fxc2V3?=
- =?utf-8?B?Mm9FTERSOTIxdS9pMEFpa2FYbWYxV0xxcUg2a2R5VzVTM29CdG1xa2FoVmxO?=
- =?utf-8?B?RzBIT0RpQlZ5cytsVEpJdFBMckc2aXdJQm5zdEVUemxWejBwbGV5ek5OdXNK?=
- =?utf-8?B?cnc9PQ==?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31864538-59bb-492d-6d13-08dca67ac032
-X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 16:08:52.1917 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xDSDgvuTxSC1J0G9wIx1b/G5xEwLjX8Ar36yO+FWWi8faSVQ6Ml6pC3A5+8G8CsJdT+/2oXVF/voFI2G+c9+JQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQXPR01MB6416
-Subject: Re: [lttng-dev] loading modules with modprobe
+References: <CAFZh4h_wh01sjAar-QqHsQ=KY4zLjmpmXuJc83OeYue7YyYW3A@mail.gmail.com>
+ <CAFZh4h9iaCGdnDhxik9Qtq82f0MGU2eL+8nBa8qoCCJrH-xsGQ@mail.gmail.com>
+ <d30f1655-0efa-440a-ac17-fe82342f4556@efficios.com>
+ <CAFZh4h_pOCzpJ6ssdZ7ts3vSdJNfEtS+d+2Foi4qAY6oH0+VKw@mail.gmail.com>
+ <33527830-3bf3-4bc3-a53d-55eaefb74902@efficios.com>
+In-Reply-To: <33527830-3bf3-4bc3-a53d-55eaefb74902@efficios.com>
+Date: Wed, 17 Jul 2024 12:27:35 -0400
+Message-ID: <CAFZh4h8k+eGuVJLJ_1vA1_P7+3Hi7h+UgUSmoN51Paxyypw-fA@mail.gmail.com>
+To: Kienan Stewart <kstewart@efficios.com>
+Cc: lttng-dev@lists.lttng.org, yocto@lists.yoctoproject.org
+Subject: Re: [lttng-dev] Using lttng-ust 2.13.6 from Yocto Kirkstone and
+ getting weird segfault saying strlen_asimd.S can't be found.
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -163,217 +71,609 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Kienan Stewart <kstewart@efficios.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Brian Hutchinson via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Brian Hutchinson <b.hutchman@gmail.com>
+Content-Type: multipart/mixed; boundary="===============1071897157144700149=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-SGkgRnJhbsOnb2lzLAoKT24gNy8xNy8yNCAxMTo0NyBBTSwgRnJhbsOnb2lzIEJlbGlhcyB3cm90
-ZToKPiBIZWxsbywgS2llbmFuCj4gCj4gCj4gKlJpZ2h0LiBXaGljaCBrZXJuZWwgYXJlIHlvdSBh
-Y3R1YWxseSBydW5uaW5nIGF0IHRoaXMgdGltZT8gWW91IGNhbiBjaGVjawo+IHVzaW5nOiBgdW5h
-bWUgLWFgKgo+IExpbnV4IHBoaWxpcHBlIDYuNS4wLTQxLWdlbmVyaWMgIzQxfjIyLjA0LjItVWJ1
-bnR1IFNNUCBQUkVFTVBUX0RZTkFNSUMgCj4gTW9uIEp1biDCoDMgMTE6MzI6NTUgVVRDIDIgeDg2
-XzY0IHg4Nl82NCB4ODZfNjQgR05VL0xpbnV4Cj4gCj4gKlNpbmNlIHlvdSd2ZSBnb3QgYSBmZXcg
-ZGlmZmVyZW50IGltYWdlcyBhbmQgaGVhZGVycyBpbnN0YWxsZWQsIGl0IGlzCj4gcG9zc2libGUg
-dG8gY2hlY2sgdGhhdCBzYW1lIGluZm8gdGhlIGxpbnV4LXNvdXJjZSBwYWNrYWdlOiBgZHBrZyAt
-bCB8Cj4gZ3JlcCBsaW51eC1zb3VyY2VgLioKPiBpaSDCoGxpbnV4LXNvdXJjZcKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgNS4xNS4wLjExNi4xMTYg
-ICAgICAgCj4gIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgYWxs
-IMKgIMKgIMKgIMKgIMKgTGludXgga2VybmVsIHNvdXJjZSB3aXRoIAo+IFVidW50dSBwYXRjaGVz
-Cj4gaWkgwqBsaW51eC1zb3VyY2UtNS4xNS4wwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqA1LjE1LjAtMTE2LjEyNiAgICAgICAgICAgICAKPiAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqBhbGwgwqAgwqAgwqAgwqAgwqBMaW51eCBrZXJuZWwgc291cmNlIGZvciB2
-ZXJzaW9uIAo+IDUuMTUuMCB3aXRoIFVidW50dSBwYXRjaGVzCj4gaWkgwqBsaW51eC1zb3VyY2Ut
-Ni41LjDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA2LjUuMC00NC40NH4yMi4wNC4x
-ICAgICAgICAgCj4gIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIGFsbCDCoCDCoCDC
-oCDCoCDCoExpbnV4IGtlcm5lbCBzb3VyY2UgZm9yIHZlcnNpb24gCgpZb3VyIGN1cnJlbnRseSBy
-dW5uaW5nIGA2LjUuMC00MS1nZW5lcmljICM0MX4yMi4wNC4yLVVidW50dWAKCllvdSBoYXZlIHNv
-dXJjZSBpbnN0YWxsZWQgZm9yIGA2LjUuMC00NC40NH4yMi4wNC4xYC4gRnJvbSB5b3VyIHByZXZp
-b3VzIAplLW1haWwsIHRoZXJlIGlzIGFsc28gYSBsaW51eCBpbWFnZSBpbnN0YWxsZWQ6CgpgYGAK
-bGludXgtaW1hZ2UtNi41LjAtNDQtZ2VuZXJpYyA2LjUuMC00NC40NH4yMi4wNC4xCmBgYAoKQXNz
-dW1pbmcgeW91IGFyZSB1c2luZyBncnViLCBjb3VsZCB5b3UgdmVyaWZ5IHRoYXQgb25lIG9mIHRo
-ZSBvcHRpb25zIApmb3IgYm9vdGluZyBpbiBgL2Jvb3QvZ3J1Yi9ncnViLmNmZ2AgaXMgbGludXgg
-Ni41LjAtNDQuNDQuIExvb2sgZm9yIHRoZSAKbGluZXMgc2ltaWxhciB0byB0aGUgZm9sbG93aW5n
-IGluc2lkZSBhIG1lbnUgZW50cnkgYmxvY2s6CgooTm90ZSBteSBleGFtcGxlIGlzIDUuMTUuMC0x
-MTYsIGJ1dCB5b3Ugd2lsbCBiZSBsb29rbmcgZm9yIDYuNS4wLTQ0IG9yIAo2LjUuMC00NC40NCkK
-CmBgYApsaW51eCAgIC9ib290L3ZtbGludXotNS4xNS4wLTExNi1nZW5lcmljIHJvb3Q9Li4uLgpp
-bml0cmQgIC9ib290L2luaXRyZC5pbWctNS4xNS4wLTExNi1nZW5lcmljCmBgYAoKSWYgeW91IGhh
-dmUgYSBncnViIGVudHJ5IGZvciBsaW51eCA2LjUuMC00NC40NCwgY291bGQgeW91IHJlYm9vdCB0
-byBydW4gCm9uIHRoZSBsaW51eCA2LjUuMC00NC40NC4KCkFmdGVyIHJlYm9vdGluZyB2ZXJpZnkg
-d2l0aCBgdW5hbWUgLWFgIHRoYXQgeW91ciBrZXJuZWwgdmVyc2lvbiBpcyAKNi41LjAtNDQuNDQu
-CgpNYWtlIHN1cmUgeW91IGhhdmUgdW5wYWNrZWQgdGhlIGxpbnV4IHNvdXJjZXM6CgpgYGAKIyBB
-cHByb3hpbWF0aW5nIHRoZSB2ZXJzaW9uIG51bWJlcnMsIHNpbmNlIEkgZG9uJ3QgaGF2ZSA2LjUu
-MCBpbnN0YWxsZWQKY2QgL3Vzci9zcmMvbGludXgtc291cmNlLTYuNS4wCmJ1bnppcDIgbGludXgt
-c291cmNlLTYuNS4wLnRhci5iejIKdGFyIC14ZiBsaW51eC1zb3VyY2UtNi41LjAudGFyCmBgYAoK
-VGhlbiByZXRyeSB0aGUgYnVpbGQgd2l0aCAKYEtFUk5FTERJUj0vdXNyL3NyYy9saW51eC1zb3Vy
-Y2UtNi41LjAvbGludXgtc291cmNlLTYuNS4wL2AKCkkgaGF2ZW4ndCBwZXJzb25hbGx5IHRyaWVk
-IHRoZSBmdWxsIHN0ZXBzIG9uIGFuIFVidW50dSBpbnN0YWxsYXRpb24gc28gCnlvdSBtYXkgc3Rp
-bGwgbmVlZCB0byB0d2VhayBhIGNvdXBsZSBvZiB0aGluZ3MsIGJ1dCBJIHRoaW5rIHRoaXMgc2hv
-dWxkIApnZXQgeW91IG9uIHRoZSByaWdodCBwYXRoLgoKUmVhbGx5IHRoZSBpbXBvcnRhbnQgdGhp
-bmcgaXMgdG8gbWFrZSBzdXJlIHRoYXQgdGhlIGtlcm5lbCBzb3VyY2UgY29kZSAKbWF0Y2hlcyB0
-aGUga2VybmVsIHlvdSBhcmUgcnVubmluZy4KCj4gNi41LjAgd2l0aCBVYnVudHUgcGF0Y2hlcwo+
-ICpDb3VsZCB5b3UgcnVuIGVpdGhlciBgYXB0LWNhY2hlIHBvbGljeWAgb3IgYGFwdCBwb2xpY3lg
-IGFuZCBgYXB0LW1hcmsKPiBzaG93aG9sZGAgaW4gb3JkZXIgdG8ga25vdyB3aGljaCBzb3VyY2Vz
-IHlvdSBoYXZlIGNvbmZpZ3VyZWQuKgo+IEZvciB0aGlzIHBhcnQsIC8qYXB0LW1hcmsgc2hvd2hv
-bGQqL8KgZ2F2ZSBtZSBub3RoaW5nIEkgZG9uJ3Qga25vdyB3aGF0IAo+IGlzIG1lYW5zLgoKYGFw
-dC1tYXJrIHNob3dob2xkYCB3aWxsIHNob3cgYW55IHBhY2thZ2VzIHRoYXQgYXJlIG9uIGhvbGQg
-LSBpdCBpcyBhIAp3YXkgb2YgbWFya2luZyBwYWNrYWdlcyB0aGF0IHNob3VsZG4ndCBiZSB1cGRh
-dGVkLgoKQXMgeW91IGhhdmUgdGhlIGxpbnV4LXNvdXJjZSBmb3IgNi41LjAtNDQuNDR+MjIuMDQu
-MSwgSSBkb24ndCB0aGluayBpdCAKd2lsbCBiZSBuZWNlc3NhcnkgdG8gaGF2ZSB0aGUgb3V0cHV0
-IG9mIGBhcHQtY2FjaGUgcG9saWN5YC4KCnRoYW5rcywKa2llbmFuCgo+IAo+IEkgYW0gbG9va2lu
-ZyBhdCB0aGUgbGlua3MsIGJ1dCBub3RoaW5nIHNlZW1zIHRvIG1hdGNoIG15IGtlcm5lbCB2ZXJz
-aW9uLgo+IAo+IFRoYW5rcyBmb3IgeW91ciBhc3Npc3RhbmNlLgo+IAo+IExlIG1lci4gMTcganVp
-bGwuIDIwMjQsIMOgIDExIGggNDYsIEZyYW7Dp29pcyBCZWxpYXMgCj4gPGJlbGlhc29zc2ltQGdt
-YWlsLmNvbSA8bWFpbHRvOmJlbGlhc29zc2ltQGdtYWlsLmNvbT4+IGEgw6ljcml0wqA6Cj4gCj4g
-ICAgIEhlbGxvLCBLaWVuYW4KPiAKPiAKPiAgICAgKlJpZ2h0LiBXaGljaCBrZXJuZWwgYXJlIHlv
-dSBhY3R1YWxseSBydW5uaW5nIGF0IHRoaXMgdGltZT8gWW91IGNhbgo+ICAgICBjaGVjawo+ICAg
-ICB1c2luZzogYHVuYW1lIC1hYCoKPiAgICAgTGludXggcGhpbGlwcGUgNi41LjAtNDEtZ2VuZXJp
-YyAjNDF+MjIuMDQuMi1VYnVudHUgU01QCj4gICAgIFBSRUVNUFRfRFlOQU1JQyBNb24gSnVuIMKg
-MyAxMTozMjo1NSBVVEMgMiB4ODZfNjQgeDg2XzY0IHg4Nl82NCBHTlUvTGludXgKPiAKPiAgICAg
-KlNpbmNlIHlvdSd2ZSBnb3QgYSBmZXcgZGlmZmVyZW50IGltYWdlcyBhbmQgaGVhZGVycyBpbnN0
-YWxsZWQsIGl0IGlzCj4gICAgIHBvc3NpYmxlIHRvIGNoZWNrIHRoYXQgc2FtZSBpbmZvIHRoZSBs
-aW51eC1zb3VyY2UgcGFja2FnZTogYGRwa2cgLWwgfAo+ICAgICBncmVwIGxpbnV4LXNvdXJjZWAu
-Kgo+ICAgICBpaSDCoGxpbnV4LXNvdXJjZcKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgNS4xNS4wLjExNi4xMTYgIAo+ICAgICAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBhbGwgwqAgwqAgwqAgwqAgwqBM
-aW51eCBrZXJuZWwgc291cmNlCj4gICAgIHdpdGggVWJ1bnR1IHBhdGNoZXMKPiAgICAgaWkgwqBs
-aW51eC1zb3VyY2UtNS4xNS4wwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA1LjE1
-LjAtMTE2LjEyNiAgICAgICAgCj4gICAgICDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoGFsbCDCoCDCoCDCoCDCoCDCoExpbnV4IGtlcm5lbCBzb3VyY2UgZm9yCj4gICAg
-IHZlcnNpb24gNS4xNS4wIHdpdGggVWJ1bnR1IHBhdGNoZXMKPiAgICAgaWkgwqBsaW51eC1zb3Vy
-Y2UtNi41LjDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA2LjUuMC00NC40NH4yMi4w
-NC4xICAgIAo+ICAgICAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgYWxs
-IMKgIMKgIMKgIMKgIMKgTGludXgga2VybmVsIHNvdXJjZSBmb3IKPiAgICAgdmVyc2lvbiA2LjUu
-MCB3aXRoIFVidW50dSBwYXRjaGVzCj4gICAgICpDb3VsZCB5b3UgcnVuIGVpdGhlciBgYXB0LWNh
-Y2hlIHBvbGljeWAgb3IgYGFwdCBwb2xpY3lgIGFuZCBgYXB0LW1hcmsKPiAgICAgc2hvd2hvbGRg
-IGluIG9yZGVyIHRvIGtub3cgd2hpY2ggc291cmNlcyB5b3UgaGF2ZSBjb25maWd1cmVkLioKPiAg
-ICAgRm9yIHRoaXMgcGFydCwgLyphcHQtbWFyayBzaG93aG9sZCovIGdhdmUgbWUgbm90aGluZyBJ
-IGRvbid0IGtub3cKPiAgICAgd2hhdCBpcyBtZWFucy4KPiAKPiAgICAgSSBhbSBsb29raW5nIGF0
-IHRoZSBsaW5rcywgYnV0IG5vdGhpbmcgc2VlbXMgdG8gbWF0Y2ggbXkga2VybmVsCj4gICAgIHZl
-cnNpb24uCj4gCj4gICAgIFRoYW5rcyBmb3IgeW91ciBhc3Npc3RhbmNlLgo+IAo+ICAgICBMZSBt
-ZXIuIDE3IGp1aWxsLiAyMDI0LCDDoCAxMCBoIDU1LCBLaWVuYW4gU3Rld2FydAo+ICAgICA8a3N0
-ZXdhcnRAZWZmaWNpb3MuY29tIDxtYWlsdG86a3N0ZXdhcnRAZWZmaWNpb3MuY29tPj4gYSDDqWNy
-aXTCoDoKPiAKPiAgICAgICAgIEhpIEZyYW7Dp29pcywKPiAKPiAgICAgICAgIE9uIDcvMTYvMjQg
-NDozNCBQTSwgRnJhbsOnb2lzIEJlbGlhcyB3cm90ZToKPiAgICAgICAgICA+IEhlbGxvIEtpZW5h
-biwKPiAgICAgICAgICA+Cj4gICAgICAgICAgPiBXaGVuIEkgcHJvY2VlZCB3aXRoIHRoZSBmb2xs
-b3dpbmcgc3RlcHM6Cj4gICAgICAgICAgPgo+ICAgICAgICAgID4gYGBgCj4gICAgICAgICAgPiAj
-IFdhcm5pbmc6IHRoaXMgcmVtb3ZlcyBhbGwgdW50cmFja2VkIGNvbnRlbnQgZnJvbSB0aGUKPiAg
-ICAgICAgIGx0dG5nLW1vZHVsZXMKPiAgICAgICAgICA+IGRpcmVjdG9yeQo+ICAgICAgICAgID4g
-Y2QgL3BhdGgvdG8vbHR0bmctbW9kdWxlcy1zb3VyY2UKPiAgICAgICAgICA+IGdpdCBjbGVhbiAt
-ZHhmCj4gICAgICAgICAgPgo+ICAgICAgICAgID4gbWFrZQo+ICAgICAgICAgID4gc3VkbyBtYWtl
-IG1vZHVsZXNfaW5zdGFsbAo+ICAgICAgICAgID4gc3VkbyBkZXBtb2QgLWEKPiAgICAgICAgICA+
-IGBgYAo+ICAgICAgICAgID4KPiAgICAgICAgICA+IEkgZW5jb3VudGVyIGEgd2FybmluZyBpbgo+
-ICAgICAgICAgID4gYC9ob21lL3BoaWxpcHBlL2x0dG5nLW1vZHVsZXMvc3JjL3Byb2Jlcy9LYnVp
-bGQ6NzlgIHN0YXRpbmcKPiAgICAgICAgICJGaWxlCj4gICAgICAgICAgPiAuL2FyY2gveDg2L2t2
-bS9sYXBpYy5oIG5vdCBmb3VuZC4gUHJvYmUgJ2t2bScgeDg2LXNwZWNpZmljIGlzCj4gICAgICAg
-ICBkaXNhYmxlZC4KPiAgICAgICAgICA+IFVzZSBmdWxsIGtlcm5lbCBzb3VyY2UgdHJlZSB0byBl
-bmFibGUgaXQuIiBBbHRob3VnaAo+ICAgICAgICAgZXZlcnl0aGluZyBjb21waWxlcwo+ICAgICAg
-ICAgID4gZmluZSBhbmQgSSdtIGFibGUgdG8gbG9hZCBtb2R1bGVzLCB3aGVuIEkgZXhlY3V0ZSBg
-c3VkbyBsdHRuZwo+ICAgICAgICAgbGlzdCAta2AsCj4gICAgICAgICAgPiBJIGRvbid0IHNlZSB0
-aGUgdHJhY2Vwb2ludHMgYGt2bV9lbnRyeWAgYW5kIGBrdm1fZXhpdGAsIHdoaWNoCj4gICAgICAg
-ICBJIGJlbGlldmUKPiAgICAgICAgICA+IHNob3VsZCBiZSBhdmFpbGFibGUuIENvdWxkIHRoaXMg
-YmUgZHVlIHRvIG5vdCB1c2luZyBteSBmdWxsCj4gICAgICAgICBrZXJuZWwgdHJlZQo+ICAgICAg
-ICAgID4gZHVyaW5nIGNvbXBpbGF0aW9uPwo+IAo+IAo+ICAgICAgICAgRXhhY3RseS4gVGhvc2Ug
-cHJvYmVzIGRlcGVuZCBvbiBoYXZpbmcgdGhlIGZ1bGwga2VybmVsIHNvdXJjZSBhcwo+ICAgICAg
-ICAgdGhleQo+ICAgICAgICAgcmVxdWlyZSBwcml2YXRlIGhlYWRlcnMgd2hpY2ggYXJlbid0IHNo
-aXBwZWQgYXMgcGFydCBvZiB0aGUKPiAgICAgICAgIGBsaW51eC1oZWFkZXJzYCBwYWNrYWdlLgo+
-IAo+ICAgICAgICAgID4KPiAgICAgICAgICA+IEhlcmUgYXJlIHRoZSBhbnN3ZXJzIHRvIHlvdXIg
-cXVlc3Rpb25zOgo+ICAgICAgICAgID4KPiAgICAgICAgICA+IC0gKldoZXJlIGRpZCBgL3Vzci9z
-cmMvbGludXgtc291cmNlLTYuNS4wYCBjb21lIGZyb20/Kgo+ICAgICAgICAgID7CoCDCoCBJIGlu
-aXRpYWxseSBhdHRlbXB0ZWQgYHN1ZG8gYXB0LWdldCB1cGRhdGUgJiYgc3VkbyBhcHQtZ2V0Cj4g
-ICAgICAgICBpbnN0YWxsCj4gICAgICAgICAgPiBsaW51eC1zb3VyY2VgLCBidXQgaXQgZ2F2ZSBt
-ZSB0aGlzIGFuc3dlciAqL2xpbnV4LXNvdXJjZSBpcwo+ICAgICAgICAgYWxyZWFkeSB0aGUKPiAg
-ICAgICAgICA+IG5ld2VzdCB2ZXJzaW9uICg1LjE1LjAuMTE2LjExNikvKmAsIHdoaWNoIGRvZXNu
-J3QgbWF0Y2ggbXkKPiAgICAgICAgIGN1cnJlbnQKPiAgICAgICAgICA+IGtlcm5lbCB2ZXJzaW9u
-LiBTbywgSSBkb3dubG9hZGVkIGl0IGRpcmVjdGx5IGZyb20ga2VybmVsLm9yZwo+ICAgICAgICAg
-PGh0dHA6Ly9rZXJuZWwub3JnPgo+ICAgICAgICAgID4gPGh0dHA6Ly9rZXJuZWwub3JnIDxodHRw
-Oi8va2VybmVsLm9yZz4+IHVzaW5nIHRoaXMgY29tbWFuZDoKPiAgICAgICAgIGB3Z2V0Cj4gICAg
-ICAgICAgPgo+ICAgICAgICAgaHR0cHM6Ly9jZG4ua2VybmVsLm9yZy9wdWIvbGludXgva2VybmVs
-L3Y2LngvbGludXgtNi41LnRhci54emAKPiAgICAgICAgIDxodHRwczovL2Nkbi5rZXJuZWwub3Jn
-L3B1Yi9saW51eC9rZXJuZWwvdjYueC9saW51eC02LjUudGFyLnh6Pgo+ICAgICAgICAgID4KPiAg
-ICAgICAgIDxodHRwczovL2Nkbi5rZXJuZWwub3JnL3B1Yi9saW51eC9rZXJuZWwvdjYueC9saW51
-eC02LjUudGFyLnh6YAo+ICAgICAgICAgPGh0dHBzOi8vY2RuLmtlcm5lbC5vcmcvcHViL2xpbnV4
-L2tlcm5lbC92Ni54L2xpbnV4LTYuNS50YXIueHo+Pi4KPiAgICAgICAgICA+Cj4gCj4gICAgICAg
-ICBSaWdodC4gV2hpY2gga2VybmVsIGFyZSB5b3UgYWN0dWFsbHkgcnVubmluZyBhdCB0aGlzIHRp
-bWU/IFlvdQo+ICAgICAgICAgY2FuIGNoZWNrCj4gICAgICAgICB1c2luZzogYHVuYW1lIC1hYAo+
-IAo+ICAgICAgICAgSW4gYW55IGNhc2UsIExpbnV4IHVwc3RyZWFtIDYuNSBpcyBub3QgdGhlIHNh
-bWUgYXMgVWJ1bnR1cydzIDYuNS4KPiAKPiAgICAgICAgICA+IC0gKldoaWNoIExpbnV4IGRpc3Ry
-aWJ1dGlvbiBhbmQgdmVyc2lvbiBhcmUgeW91IHVzaW5nPyoKPiAgICAgICAgICA+wqAgwqAgUnVu
-bmluZyBgbHNiX3JlbGVhc2UgLWFgIGdpdmVzIG1lOgo+ICAgICAgICAgID7CoCDCoCBgYGAKPiAg
-ICAgICAgICA+wqAgwqAgTm8gTFNCIG1vZHVsZXMgYXJlIGF2YWlsYWJsZS4KPiAgICAgICAgICA+
-wqAgwqAgRGlzdHJpYnV0b3IgSUQ6IFVidW50dQo+ICAgICAgICAgID7CoCDCoCBEZXNjcmlwdGlv
-bjogwqAgwqBVYnVudHUgMjIuMDQuNCBMVFMKPiAgICAgICAgICA+wqAgwqAgUmVsZWFzZTogwqAg
-wqAgwqAgwqAyMi4wNAo+ICAgICAgICAgID7CoCDCoCBDb2RlbmFtZTogwqAgwqAgwqAgamFtbXkK
-PiAgICAgICAgICA+wqAgwqAgYGBgCj4gICAgICAgICAgPgo+ICAgICAgICAgID4gLSAqQXNzdW1p
-bmcgeW91ciBkaXN0cmlidXRpb24gaGFzIGtlcm5lbCBwYWNrYWdlcywgd2hpY2ggZG8KPiAgICAg
-ICAgIHlvdSBoYXZlCj4gICAgICAgICAgPiBpbnN0YWxsZWQsIGFuZCBkbyB5b3UgaGF2ZSB0aGUg
-Y29ycmVzcG9uZGluZyBrZXJuZWwgaGVhZGVycwo+ICAgICAgICAgcGFja2FnZQo+ICAgICAgICAg
-ID4gaW5zdGFsbGVkPyoKPiAgICAgICAgICA+Cj4gICAgICAgICAgPsKgIMKgIFJ1bm5pbmcgYGRw
-a2cgLWwgfCBncmVwIGxpbnV4LWltYWdlYCBzaG93cyB0aGVzZSBpbnN0YWxsZWQKPiAgICAgICAg
-IHBhY2thZ2VzOgo+ICAgICAgICAgID7CoCDCoCBgYGAKPiAgICAgICAgICA+wqAgwqAgaWkgwqBs
-aW51eC1pbWFnZS01LjE1LjAtMTE2LWdlbmVyaWMgwqAgwqAgwqAgwqAgwqAgNS4xNS4wLTExNi4x
-MjYKPiAgICAgICAgICA+wqAgwqBhbWQ2NCDCoCBTaWduZWQga2VybmVsIGltYWdlIGdlbmVyaWMK
-PiAgICAgICAgICA+wqAgwqAgaWkgwqBsaW51eC1pbWFnZS02LjUuMC0yOC1nZW5lcmljICAgICAg
-ICAgICAgCj4gICAgICAgICA2LjUuMC0yOC4yOX4yMi4wNC4xCj4gICAgICAgICAgPsKgIMKgYW1k
-NjQgwqAgU2lnbmVkIGtlcm5lbCBpbWFnZSBnZW5lcmljCj4gICAgICAgICAgPsKgIMKgIGlpIMKg
-bGludXgtaW1hZ2UtNi41LjAtNDEtZ2VuZXJpYyAgICAgICAgICAgIAo+ICAgICAgICAgNi41LjAt
-NDEuNDF+MjIuMDQuMgo+ICAgICAgICAgID7CoCDCoGFtZDY0IMKgIFNpZ25lZCBrZXJuZWwgaW1h
-Z2UgZ2VuZXJpYwo+ICAgICAgICAgID7CoCDCoCBpaSDCoGxpbnV4LWltYWdlLTYuNS4wLTQ0LWdl
-bmVyaWMgICAgICAgICAgICAKPiAgICAgICAgIDYuNS4wLTQ0LjQ0fjIyLjA0LjEKPiAgICAgICAg
-ICA+wqAgwqBhbWQ2NCDCoCBTaWduZWQga2VybmVsIGltYWdlIGdlbmVyaWMKPiAgICAgICAgICA+
-wqAgwqAgaWkgwqBsaW51eC1pbWFnZS1nZW5lcmljIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgNS4xNS4wLjExNi4xMTYKPiAgICAgICAgICA+wqAgwqBhbWQ2NCDCoCBHZW5lcmljIExp
-bnV4IGtlcm5lbCBpbWFnZQo+ICAgICAgICAgID7CoCDCoCBpaSDCoGxpbnV4LWltYWdlLWdlbmVy
-aWMtaHdlLTIyLjA0ICAgICAgICAgIAo+ICAgICAgICAgIMKgNi41LjAuNDQuNDR+MjIuMDQuMQo+
-ICAgICAgICAgID7CoCDCoGFtZDY0IMKgIEdlbmVyaWMgTGludXgga2VybmVsIGltYWdlCj4gICAg
-ICAgICAgPsKgIMKgIGBgYAo+ICAgICAgICAgID4KPiAgICAgICAgICA+wqAgwqAgQW5kIGBkcGtn
-IC1sIHwgZ3JlcCBsaW51eC1oZWFkZXJzYCBzaG93cyB0aGVzZSBpbnN0YWxsZWQKPiAgICAgICAg
-IGhlYWRlciBwYWNrYWdlczoKPiAgICAgICAgICA+wqAgwqAgYGBgCj4gICAgICAgICAgPsKgIMKg
-IGlpIMKgbGludXgtaGVhZGVycy01LjE1LjAtMTE2ICAgICAgICAgICAgICAgIAo+ICAgICAgICAg
-NS4xNS4wLTExNi4xMjYgwqAgwqAgwqBhbGwKPiAgICAgICAgICA+wqAgwqAgwqAgSGVhZGVyIGZp
-bGVzIHJlbGF0ZWQgdG8gTGludXgga2VybmVsIHZlcnNpb24gNS4xNS4wCj4gICAgICAgICAgPsKg
-IMKgIGlpIMKgbGludXgtaGVhZGVycy01LjE1LjAtMTE2LWdlbmVyaWMgwqAgwqAgwqAgwqAgNS4x
-NS4wLTExNi4xMjYKPiAgICAgICAgICA+wqAgwqBhbWQ2NCDCoCBMaW51eCBrZXJuZWwgaGVhZGVy
-cyBmb3IgdmVyc2lvbiA1LjE1LjAgb24gNjQgYml0Cj4gICAgICAgICB4ODYgU01QCj4gICAgICAg
-ICAgPsKgIMKgIGlpIMKgbGludXgtaGVhZGVycy02LjUuMC0yOC1nZW5lcmljICAgICAgICAgIAo+
-ICAgICAgICAgNi41LjAtMjguMjl+MjIuMDQuMQo+ICAgICAgICAgID7CoCDCoGFtZDY0IMKgIExp
-bnV4IGtlcm5lbCBoZWFkZXJzIGZvciB2ZXJzaW9uIDYuNS4wIG9uIDY0IGJpdAo+ICAgICAgICAg
-eDg2IFNNUAo+ICAgICAgICAgID7CoCDCoCBpaSDCoGxpbnV4LWhlYWRlcnMtNi41LjAtNDEtZ2Vu
-ZXJpYyAgICAgICAgICAKPiAgICAgICAgIDYuNS4wLTQxLjQxfjIyLjA0LjIKPiAgICAgICAgICA+
-wqAgwqBhbWQ2NCDCoCBMaW51eCBrZXJuZWwgaGVhZGVycyBmb3IgdmVyc2lvbiA2LjUuMCBvbiA2
-NCBiaXQKPiAgICAgICAgIHg4NiBTTVAKPiAgICAgICAgICA+wqAgwqAgaWkgwqBsaW51eC1oZWFk
-ZXJzLTYuNS4wLTQ0LWdlbmVyaWMgICAgICAgICAgCj4gICAgICAgICA2LjUuMC00NC40NH4yMi4w
-NC4xCj4gICAgICAgICAgPsKgIMKgYW1kNjQgwqAgTGludXgga2VybmVsIGhlYWRlcnMgZm9yIHZl
-cnNpb24gNi41LjAgb24gNjQgYml0Cj4gICAgICAgICB4ODYgU01QCj4gICAgICAgICAgPsKgIMKg
-IGlpIMKgbGludXgtaGVhZGVycy1nZW5lcmljIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-NS4xNS4wLjExNi4xMTYKPiAgICAgICAgICA+wqAgwqBhbWQ2NCDCoCBHZW5lcmljIExpbnV4IGtl
-cm5lbCBoZWFkZXJzCj4gICAgICAgICAgPsKgIMKgIGlpIMKgbGludXgtaGVhZGVycy1nZW5lcmlj
-LWh3ZS0yMi4wNCAgICAgICAgCj4gICAgICAgICAgwqA2LjUuMC40NC40NH4yMi4wNC4xCj4gICAg
-ICAgICAgPsKgIMKgYW1kNjQgwqAgR2VuZXJpYyBMaW51eCBrZXJuZWwgaGVhZGVycwo+ICAgICAg
-ICAgID7CoCDCoCBgYGAKPiAgICAgICAgICA+Cj4gCj4gICAgICAgICBTaW5jZSB5b3UndmUgZ290
-IGEgZmV3IGRpZmZlcmVudCBpbWFnZXMgYW5kIGhlYWRlcnMgaW5zdGFsbGVkLAo+ICAgICAgICAg
-aXQgaXMKPiAgICAgICAgIHBvc3NpYmxlIHRvIGNoZWNrIHRoYXQgc2FtZSBpbmZvIHRoZSBsaW51
-eC1zb3VyY2UgcGFja2FnZTogYGRwa2cKPiAgICAgICAgIC1sIHwKPiAgICAgICAgIGdyZXAgbGlu
-dXgtc291cmNlYC4KPiAKPiAgICAgICAgIE1heWJlIG9uZSB0aGluZyB0cmlwcGluZyB0aGlzIHBy
-b2Nlc3MgdXAgaXMgdGhhdCB5b3UgZG9uJ3QgaGF2ZQo+ICAgICAgICAgYW4gYXB0Cj4gICAgICAg
-ICBzb3VyY2UgdGhhdCBwcm92aWRlcyBsaW51eC1zb3VyY2UgdGhhdCBtYXRjaGVzIHRoZSBrZXJu
-ZWwgeW91Cj4gICAgICAgICBhcmUgdXNpbmcuCj4gICAgICAgICBDb3VsZCB5b3UgcnVuIGVpdGhl
-ciBgYXB0LWNhY2hlIHBvbGljeWAgb3IgYGFwdCBwb2xpY3lgIGFuZAo+ICAgICAgICAgYGFwdC1t
-YXJrCj4gICAgICAgICBzaG93aG9sZGAgaW4gb3JkZXIgdG8ga25vdyB3aGljaCBzb3VyY2VzIHlv
-dSBoYXZlIGNvbmZpZ3VyZWQuCj4gCj4gICAgICAgICBUaGVyZSBhcmUgYWxzbyBhbHRlcm5hdGl2
-ZSBzb3VyY2VzIGZvciB0aGUgZnVsbCBzb3VyY2UgdHJlZToKPiAKPiAgICAgICAgIC0gWW91IGNv
-dWxkIGRvd25sb2FkIHRoZSBzcGVjaWZpYyBwYWNrYWdlIGZyb20KPiAgICAgICAgIHBhY2thZ2Vz
-LnVidW50dS5jb20gPGh0dHA6Ly9wYWNrYWdlcy51YnVudHUuY29tPi4gU2VlCj4gICAgICAgICBo
-dHRwczovL3BhY2thZ2VzLnVidW50dS5jb20gPGh0dHBzOi8vcGFja2FnZXMudWJ1bnR1LmNvbT4g
-YW5kCj4gICAgICAgICB1c2UgYGFwdCBpbnN0YWxsIC4vZG93bmxvYWRlZF9wYWNrYWdlLmRlYmAK
-PiAKPiAgICAgICAgIC0gWW91IGNvdWxkIGNsb25lIHRoZSBrZXJuZWwgc291cmNlIGZvciBVYnVu
-dHUgYW5kIGNoZWNrb3V0IHRoZQo+ICAgICAgICAgYXBwcm9wcmlhdGUgdGFnLiBTZWUKPiAgICAg
-ICAgIGh0dHBzOi8vZ2l0LmxhdW5jaHBhZC5uZXQvfnVidW50dS1rZXJuZWwvdWJ1bnR1Lytzb3Vy
-Y2UvbGludXgvK2dpdC9qYW1teS9yZWZzL3RhZ3MgPGh0dHBzOi8vZ2l0LmxhdW5jaHBhZC5uZXQv
-fnVidW50dS1rZXJuZWwvdWJ1bnR1Lytzb3VyY2UvbGludXgvK2dpdC9qYW1teS9yZWZzL3RhZ3M+
-Cj4gCj4gICAgICAgICB0aGFua3MsCj4gICAgICAgICBraWVuYW4KPiAKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
-bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============1071897157144700149==
+Content-Type: multipart/alternative; boundary="000000000000492929061d73f16f"
+
+--000000000000492929061d73f16f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jul 17, 2024 at 10:13=E2=80=AFAM Kienan Stewart <kstewart@efficios.=
+com>
+wrote:
+
+> Hi Brian,
+>
+> thanks! I'll take a look at these and see if I can get any ideas from the=
+m.
+>
+> To go back to your original e-mail, a detail that I hadn't noticed in
+> your original backtrace was pointed out to me and I'd like to verify
+> with you:
+>
+> ```
+> Core was generated by `./my_app'.
+> Program terminated with signal SIGSEGV, Segmentation fault.
+> #0  __strlen_asimd () at ../sysdeps/aarch64/multiarch/strlen_asimd.S:96
+> 96      ../sysdeps/aarch64/multiarch/strlen_asimd.S: No such file or
+> directory.
+> [Current thread is 1 (Thread 0xffffb8e2d040 (LWP 757))]
+> (gdb) bt
+> #0  __strlen_asimd () at ../sysdeps/aarch64/multiarch/strlen_asimd.S:96
+> #1  0x0000ffffb86c5330 in lttng_ust_tracepoint_module_register () from
+> /usr/lib/liblttng-ust-tracepoint.so.1
+> #2  0x0000aaaab4c8da18 in lttng_ust__tracepoints__ptrs_init () at
+>
+> /opt/poky/4.0.18/sysroots/cortexa53-crypto-poky-linux/usr/include/lttng/t=
+racepoint.h:629
+> #3  0x0000ffffb872b30c in call_init (env=3D<optimized out>,
+> argv=3D0xffffe2d66098, argc=3D1) at ../csu/libc-start.c:145
+> #4  __libc_start_main_impl (main=3D0xaaaab4bd94e0 <main>, argc=3D1,
+> argv=3D0xffffe2d66098, init=3D<optimized out>, fini=3D<optimized out>,
+> rtld_fini=3D<optimized out>, stack_end=3D<optimized out>) at
+> ../csu/libc-start.c:376
+> #5  0x0000aaaab4bd9230 in _start () at ../sysdeps/aarch64/start.S:81
+> ```
+>
+> The library loaded at frame 1 is
+> `/usr/lib/liblttng-ust-tracepoint.so.1`; however, in frame 2 the
+> reference is from
+>
+> `/opt/poky/4.0.18/sysroots/cortexa53-crypto-poky-linux/usr/include/lttng/=
+tracepoint.h`.
+
+
+> Are the LTTng libraries in `/usr/lib` the exact same version as the
+> headers in
+> `/opt/poky/4.0.18/sysroots/cortexa53-cryptop-poky-linux/usr/include/lttng=
+`?
+>
+
+Yes.  The sdk was created by yocto using populate_sdk which includes the
+target image sysroot in the sdk.  Hopefully I explained that right. The
+target image drives the contents of the sdk and the generated sdk is what
+is used to cross compile the application specifically for the target we are
+running on (NXP imx8mm).
+
+
+> If some of your app is compiled using one version of headers and a
+> different version of the library is loaded at runtime, there could be an
+> ABI mismatch.
+>
+
+> You could check what the include paths are during compilation and
+> `LD_LIBRARY_PATH` at runtime. Running with the environment variable
+> `LD_DEBUG=3Dbindings,libs` (see `man ld.so` for more info).
+>
+
+I've been down that road a few times before with the same line of thinking
+(ABI issue) and believe I've proven I don't have those issues.  That's one
+of the reasons I hand built lttng-ust in native environment (on the actual
+target) to verify it wasn't an issue with a yocto recipe, cross compiling
+etc..
+
+I've been thru this process with different OS versions (yocto Dunfell
+before), kernel version, toolchain version etc., and now the same with
+Kirkstone based components.
+
+
+> In any case, I'll take a look over the most recent backtraces and see if
+> anything else jumps out.
+>
+
+Thanks!  I'm running out of things to try.
+
+I don't fully understand the implications of some of this documentation,
+but I have learned enough to know LD_PRELOAD means nothing if everything is
+static built.  Our application is heavily multi threaded, uses fork, clone
+and who knows if it's doing double closes or not ... so I've tried these
+LD_PRELOAD "helpers" or whatever they are, before and didn't get a
+different result, but now know it's only for shared library object.  So now
+I will experiment with making our tpp a shared object and try LD_PRELOAD of
+fork, fd and pthread helpers and starting my app that way.
+
+This is what I'm referring to above from the lttng docs:
+Use LTTng-UST with daemons
+<https://lttng.org/docs/v2.13/#doc-using-lttng-ust-with-daemons>
+
+If your instrumented application calls fork(2)
+<https://man7.org/linux/man-pages/man2/fork.2.html>, clone(2)
+<https://man7.org/linux/man-pages/man2/clone.2.html>, or BSD=E2=80=99s rfor=
+k(2)
+<http://www.freebsd.org/cgi/man.cgi?query=3Drfork&sektion=3D2&manpath=3DFre=
+eBSD+4.10-RELEASE>,
+without a following exec(3)
+<https://man7.org/linux/man-pages/man3/exec.3.html>-family system call, you
+must preload the liblttng-ust-fork.so shared object when you start the
+application.
+
+LD_PRELOAD=3Dliblttng-ust-fork.so ./my-app
+
+If your tracepoint provider package is a shared library which you also
+preload, you must put both shared objects in LD_PRELOAD:
+
+LD_PRELOAD=3Dliblttng-ust-fork.so:/path/to/tp.so ./my-app
+
+Use LTTng-UST with applications which close file descriptors that don=E2=80=
+=99t
+belong to them <https://lttng.org/docs/v2.13/#doc-liblttng-ust-fd>
+Since 2.9
+
+If your instrumented application closes one or more file descriptors which
+it did not open itself, you must preload the liblttng-ust-fd.so shared
+object when you start the application:
+
+LD_PRELOAD=3Dliblttng-ust-fd.so ./my-app
+
+Typical use cases include closing all the file descriptors after fork(2)
+<https://man7.org/linux/man-pages/man2/fork.2.html> or rfork(2)
+<http://www.freebsd.org/cgi/man.cgi?query=3Drfork&sektion=3D2&manpath=3DFre=
+eBSD+4.10-RELEASE>
+and buggy applications doing =E2=80=9Cdouble closes=E2=80=9D.
+
+
+Thanks,
+
+Brian
+
+
+>
+>
+> On 7/16/24 9:27 PM, Brian Hutchinson wrote:
+> > Hi Kienan,
+> >
+> > On Thu, Jul 11, 2024 at 8:38=E2=80=AFAM Kienan Stewart <kstewart@effici=
+os.com
+> > <mailto:kstewart@efficios.com>> wrote:
+> >
+> >     Hi Brian,
+> >
+> >     On 7/11/24 8:33 AM, Brian Hutchinson via lttng-dev wrote:
+> >       > ...
+> >       >
+> >       > I'm not sure about this, still trying to comprehend everything,
+> >     but I
+> >       > think my issue could be related to all this gcc TLS, heap,
+> >     trampoline
+> >       > talk here:
+> >       >
+> >       >
+> >     https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.htm=
+l
+> >     <
+> https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.html>
+> >       >
+> >     <
+> https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.html <
+> https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.html>>
+> >       >
+> >       > Regards,
+> >       >
+> >       > Brian
+> >       >
+> >
+> >     You could try using lttng-ust 2.13.8, which includes a fix for the
+> >     discussion you referenced.
+> >
+> >
+> https://github.com/lttng/lttng-ust/commit/5db715e800d9b721f48495a987cd26c=
+25965e836
+> <
+> https://github.com/lttng/lttng-ust/commit/5db715e800d9b721f48495a987cd26c=
+25965e836
+> >
+> >
+> >     Please let us know if it doesn't solve it.
+> >
+> >     thanks,
+> >     kienan
+> >
+> >
+> > I updated to lttng-ust 2.13.8 as you suggested.  At first, I pulled in
+> > the recipe from master branch of Yocto, but had the same problem as
+> > before after rebuilding.
+> >
+> > Next, I downloaded the 2.13.8 lttng-ust tarball from the lttng site and
+> > setup a native build environment on my target and built lttng-ust 2.13.=
+8
+> > and my app as a second independent build method for sanity check.  I ca=
+n
+> > report that I get the exact same result as before this way too.
+> >
+> > In both cases, I verified that I had the commit you referenced above.
+> >
+> > I did a backtrace of the three threads captured in the coredump and sho=
+w
+> > them below in hopes it will shed light on what I need to try next.
+> >
+> > (gdb) thread apply all backtrace
+> >
+> > Thread 3 (Thread 0xffffbe7de7e0 (LWP 559)):
+> > #0  syscall () at ../sysdeps/unix/sysv/linux/aarch64/syscall.S:38
+> > #1  0x0000ffffbeef1bb8 in lttng_ust_futex (val3=3D0, uaddr2=3D0x0,
+> > timeout=3D0x0, val=3D0, op=3D0, uaddr=3D0xffffbefd8000) at
+> > ../../../src/lib/lttng-ust/futex.h:56
+> > #2  lttng_ust_futex_async (op=3D0, val=3D0, timeout=3D0x0, uaddr2=3D0x0=
+, val3=3D0,
+> > uaddr=3D0xffffbefd8000) at ../../../src/lib/lttng-ust/futex.h:88
+> > #3  wait_for_sessiond (sock_info=3D0xffffbef6b638 <global_apps>) at
+> > lttng-ust-comm.c:1761
+> > #4  ust_listener_thread (arg=3D0xffffbef6b638 <global_apps>) at
+> > lttng-ust-comm.c:1832
+> > #5  0x0000ffffbe9206a8 in start_thread (arg=3D0xffffc1bd8687) at
+> > pthread_create.c:442
+> > #6  0x0000ffffbe98801c in thread_start () at
+> > ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+> >
+> > Thread 2 (Thread 0xffffbdfce7e0 (LWP 560)):
+> > #0  syscall () at ../sysdeps/unix/sysv/linux/aarch64/syscall.S:38
+> > #1  0x0000ffffbeef1bb8 in lttng_ust_futex (val3=3D0, uaddr2=3D0x0,
+> > timeout=3D0x0, val=3D0, op=3D0, uaddr=3D0xffffbefd7000) at
+> > ../../../src/lib/lttng-ust/futex.h:56
+> > #2  lttng_ust_futex_async (op=3D0, val=3D0, timeout=3D0x0, uaddr2=3D0x0=
+, val3=3D0,
+> > uaddr=3D0xffffbefd7000) at ../../../src/lib/lttng-ust/futex.h:88
+> > #3  wait_for_sessiond (sock_info=3D0xffffbef695e0 <local_apps>) at
+> > lttng-ust-comm.c:1761
+> > #4  ust_listener_thread (arg=3D0xffffbef695e0 <local_apps>) at
+> > lttng-ust-comm.c:1832
+> > #5  0x0000ffffbe9206a8 in start_thread (arg=3D0xffffc1bd8687) at
+> > pthread_create.c:442
+> > #6  0x0000ffffbe98801c in thread_start () at
+> > ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+> >
+> > Thread 1 (Thread 0xffffbefcf460 (LWP 545)):
+> > #0  __strlen_asimd () at ../sysdeps/aarch64/multiarch/strlen_asimd.S:96
+> > #1  0x0000ffffbe834bd0 in lttng_ust_tp_validate_event_name
+> > (tp=3D0xaaaab8f14de0
+> > <lttng_ust_tracepoint_hello_world___my_first_tracepoint>,
+> > tp=3D0xaaaab8f14de0
+> > <lttng_ust_tracepoint_hello_world___my_first_tracepoint>) at
+> > tracepoint.c:143
+> > #2  add_callsite (tp=3D0xaaaab8f14de0
+> > <lttng_ust_tracepoint_hello_world___my_first_tracepoint>,
+> > lib=3D0xaaaae74fad30) at tracepoint.c:412
+> > #3  lib_register_callsites (lib=3D0xaaaae74fad30) at tracepoint.c:552
+> > #4  lttng_ust_tracepoint_module_register (tracepoints_start=3D<optimize=
+d
+> > out>, tracepoints_count=3D<optimized out>) at tracepoint.c:956
+> > #5  0x0000aaaab8758204 in lttng_ust.tracepoints.ptrs_init ()
+> > #6  0x0000ffffbe8cb30c in call_init (env=3D<optimized out>,
+> > argv=3D0xffffc1bd8c88, argc=3D1) at ../csu/libc-start.c:145
+> > #7  __libc_start_main_impl (main=3D0xaaaab867aabc <main>, argc=3D1,
+> > argv=3D0xffffc1bd8c88, init=3D<optimized out>, fini=3D<optimized out>,
+> > rtld_fini=3D<optimized out>, stack_end=3D<optimized out>) at
+> > ../csu/libc-start.c:376
+> > #8  0x0000aaaab867a7f0 in _start () at ../sysdeps/aarch64/start.S:81
+> >
+> > Regards,
+> >
+> > Brian
+>
+
+--000000000000492929061d73f16f
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Jul 17, 2024 at 10:13=E2=80=
+=AFAM Kienan Stewart &lt;<a href=3D"mailto:kstewart@efficios.com" target=3D=
+"_blank">kstewart@efficios.com</a>&gt; wrote:<br></div><blockquote class=3D=
+"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(2=
+04,204,204);padding-left:1ex">Hi Brian,<br>
+<br>
+thanks! I&#39;ll take a look at these and see if I can get any ideas from t=
+hem.<br>
+<br>
+To go back to your original e-mail, a detail that I hadn&#39;t noticed in <=
+br>
+your original backtrace was pointed out to me and I&#39;d like to verify <b=
+r>
+with you:<br>
+<br>
+```<br>
+Core was generated by `./my_app&#39;.<br>
+Program terminated with signal SIGSEGV, Segmentation fault.<br>
+#0=C2=A0 __strlen_asimd () at ../sysdeps/aarch64/multiarch/strlen_asimd.S:9=
+6<br>
+96=C2=A0 =C2=A0 =C2=A0 ../sysdeps/aarch64/multiarch/strlen_asimd.S: No such=
+ file or <br>
+directory.<br>
+[Current thread is 1 (Thread 0xffffb8e2d040 (LWP 757))]<br>
+(gdb) bt<br>
+#0=C2=A0 __strlen_asimd () at ../sysdeps/aarch64/multiarch/strlen_asimd.S:9=
+6<br>
+#1=C2=A0 0x0000ffffb86c5330 in lttng_ust_tracepoint_module_register () from=
+ <br>
+/usr/lib/liblttng-ust-tracepoint.so.1<br>
+#2=C2=A0 0x0000aaaab4c8da18 in lttng_ust__tracepoints__ptrs_init () at <br>
+/opt/poky/4.0.18/sysroots/cortexa53-crypto-poky-linux/usr/include/lttng/tra=
+cepoint.h:629<br>
+#3=C2=A0 0x0000ffffb872b30c in call_init (env=3D&lt;optimized out&gt;, <br>
+argv=3D0xffffe2d66098, argc=3D1) at ../csu/libc-start.c:145<br>
+#4=C2=A0 __libc_start_main_impl (main=3D0xaaaab4bd94e0 &lt;main&gt;, argc=
+=3D1, <br>
+argv=3D0xffffe2d66098, init=3D&lt;optimized out&gt;, fini=3D&lt;optimized o=
+ut&gt;, <br>
+rtld_fini=3D&lt;optimized out&gt;, stack_end=3D&lt;optimized out&gt;) at <b=
+r>
+../csu/libc-start.c:376<br>
+#5=C2=A0 0x0000aaaab4bd9230 in _start () at ../sysdeps/aarch64/start.S:81<b=
+r>
+```<br>
+<br>
+The library loaded at frame 1 is <br>
+`/usr/lib/liblttng-ust-tracepoint.so.1`; however, in frame 2 the <br>
+reference is from <br>
+`/opt/poky/4.0.18/sysroots/cortexa53-crypto-poky-linux/usr/include/lttng/tr=
+acepoint.h`.</blockquote><blockquote class=3D"gmail_quote" style=3D"margin:=
+0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+Are the LTTng libraries in `/usr/lib` the exact same version as the <br>
+headers in <br>
+`/opt/poky/4.0.18/sysroots/cortexa53-cryptop-poky-linux/usr/include/lttng`?=
+<br></blockquote><div><br></div><div>Yes.=C2=A0 The sdk was created by yoct=
+o using populate_sdk which includes the
+ target image sysroot in the sdk.=C2=A0 Hopefully I explained that right. T=
+he target image drives the contents of the sdk and the generated sdk is wha=
+t is used to cross compile the application specifically for the target we a=
+re running on (NXP imx8mm).<br></div><div><br></div><blockquote class=3D"gm=
+ail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,=
+204,204);padding-left:1ex">
+<br>
+If some of your app is compiled using one version of headers and a <br>
+different version of the library is loaded at runtime, there could be an <b=
+r>
+ABI mismatch.<br></blockquote><div></div><div></div><blockquote class=3D"gm=
+ail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,=
+204,204);padding-left:1ex">
+<br>
+You could check what the include paths are during compilation and <br>
+`LD_LIBRARY_PATH` at runtime. Running with the environment variable <br>
+`LD_DEBUG=3Dbindings,libs` (see `man ld.so` for more info).<br></blockquote=
+><div>=C2=A0</div><div>I&#39;ve been down that road a few times before with=
+ the same line of thinking (ABI issue) and believe I&#39;ve proven I don&#3=
+9;t have those issues.=C2=A0 That&#39;s one of the reasons I hand built ltt=
+ng-ust in native environment (on the actual target) to verify it wasn&#39;t=
+ an issue with a yocto recipe, cross compiling etc..<br></div><div><br></di=
+v><div>I&#39;ve been thru this process with different OS versions (yocto Du=
+nfell before), kernel version, toolchain version etc., and now the same wit=
+h Kirkstone based components.<br></div><div>=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">
+In any case, I&#39;ll take a look over the most recent backtraces and see i=
+f <br>
+anything else jumps out.<br></blockquote><div><br></div><div>Thanks!=C2=A0 =
+I&#39;m running out of things to try.</div><div></div><div><br></div><div>I=
+ don&#39;t fully understand the implications of some of this documentation,=
+ but I have learned enough to know LD_PRELOAD means nothing if everything i=
+s static built.=C2=A0 Our application is heavily multi threaded, uses fork,=
+ clone and who knows if it&#39;s doing double closes or not ... so I&#39;ve=
+ tried these LD_PRELOAD &quot;helpers&quot; or whatever they are, before an=
+d didn&#39;t get a different result, but now know it&#39;s only for shared =
+library object.=C2=A0 So now I will experiment with making our tpp a shared=
+ object and try LD_PRELOAD of fork, fd and pthread helpers and starting my =
+app that way.</div><div><br></div><div>This is what I&#39;m referring to ab=
+ove from the lttng docs:<br></div><div><h5><a href=3D"https://lttng.org/doc=
+s/v2.13/#doc-using-lttng-ust-with-daemons" target=3D"_blank">Use <span>LTTn=
+g-UST</span> with daemons</a></h5><p>If your instrumented application calls=
+ <a href=3D"https://man7.org/linux/man-pages/man2/fork.2.html" target=3D"_b=
+lank">fork<span>(2)</span></a>, <a href=3D"https://man7.org/linux/man-pages=
+/man2/clone.2.html" target=3D"_blank">clone<span>(2)</span></a>,
+or BSD=E2=80=99s <a href=3D"http://www.freebsd.org/cgi/man.cgi?query=3Drfor=
+k&amp;sektion=3D2&amp;manpath=3DFreeBSD+4.10-RELEASE" target=3D"_blank">rfo=
+rk<span>(2)</span></a>, without a following <a href=3D"https://man7.org/lin=
+ux/man-pages/man3/exec.3.html" target=3D"_blank">exec<span>(3)</span></a>-f=
+amily
+system call, you must preload the <code>liblttng-ust-fork.so</code> shared
+object when you start the application.</p><div></div><div><pre>LD_PRELOAD=
+=3Dliblttng-ust-fork.so ./my-app</pre></div><p>If your tracepoint provider =
+package is
+a shared library which you also preload, you must put both
+shared objects in <code>LD_PRELOAD</code>:</p><div></div><div><pre>LD_PRELO=
+AD=3Dliblttng-ust-fork.so:/path/to/tp.so ./my-app</pre></div><h5><a href=3D=
+"https://lttng.org/docs/v2.13/#doc-liblttng-ust-fd" target=3D"_blank">Use <=
+span>LTTng-UST</span> with applications which close file descriptors that d=
+on=E2=80=99t belong to them</a></h5><div>Since 2.9</div><p>If your instrume=
+nted application closes one or more file descriptors
+which it did not open itself, you must preload the
+<code>liblttng-ust-fd.so</code> shared object when you start the applicatio=
+n:</p><div></div><div><pre>LD_PRELOAD=3Dliblttng-ust-fd.so ./my-app</pre></=
+div><p>Typical use cases include closing all the file descriptors after
+<a href=3D"https://man7.org/linux/man-pages/man2/fork.2.html" target=3D"_bl=
+ank">fork<span>(2)</span></a> or <a href=3D"http://www.freebsd.org/cgi/man.=
+cgi?query=3Drfork&amp;sektion=3D2&amp;manpath=3DFreeBSD+4.10-RELEASE" targe=
+t=3D"_blank">rfork<span>(2)</span></a> and buggy applications doing
+=E2=80=9Cdouble closes=E2=80=9D.</p><p><br></p><p></p><p>Thanks,</p><p></p>=
+<p>Brian<br></p></div><div>=C2=A0<br></div><blockquote class=3D"gmail_quote=
+" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);=
+padding-left:1ex">
+<br>
+<br>
+On 7/16/24 9:27 PM, Brian Hutchinson wrote:<br>
+&gt; Hi Kienan,<br>
+&gt; <br>
+&gt; On Thu, Jul 11, 2024 at 8:38=E2=80=AFAM Kienan Stewart &lt;<a href=3D"=
+mailto:kstewart@efficios.com" target=3D"_blank">kstewart@efficios.com</a> <=
+br>
+&gt; &lt;mailto:<a href=3D"mailto:kstewart@efficios.com" target=3D"_blank">=
+kstewart@efficios.com</a>&gt;&gt; wrote:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Hi Brian,<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0On 7/11/24 8:33 AM, Brian Hutchinson via lttng-dev =
+wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; ...<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; I&#39;m not sure about this, still tryi=
+ng to comprehend everything,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0but I<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; think my issue could be related to all =
+this gcc TLS, heap,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0trampoline<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; talk here:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://www.mail-archive.com/lttng-dev@l=
+ists.lttng.org/msg13584.html" rel=3D"noreferrer" target=3D"_blank">https://=
+www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.html</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://www.mail-archive.com/lttng-d=
+ev@lists.lttng.org/msg13584.html" rel=3D"noreferrer" target=3D"_blank">http=
+s://www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.html</a>&gt;<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://www.mail-archive.com/lttng-d=
+ev@lists.lttng.org/msg13584.html" rel=3D"noreferrer" target=3D"_blank">http=
+s://www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.html</a> &lt;<a=
+ href=3D"https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.ht=
+ml" rel=3D"noreferrer" target=3D"_blank">https://www.mail-archive.com/lttng=
+-dev@lists.lttng.org/msg13584.html</a>&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; Regards,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; Brian<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0You could try using lttng-ust 2.13.8, which include=
+s a fix for the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0discussion you referenced.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://github.com/lttng/lttng-ust/commi=
+t/5db715e800d9b721f48495a987cd26c25965e836" rel=3D"noreferrer" target=3D"_b=
+lank">https://github.com/lttng/lttng-ust/commit/5db715e800d9b721f48495a987c=
+d26c25965e836</a> &lt;<a href=3D"https://github.com/lttng/lttng-ust/commit/=
+5db715e800d9b721f48495a987cd26c25965e836" rel=3D"noreferrer" target=3D"_bla=
+nk">https://github.com/lttng/lttng-ust/commit/5db715e800d9b721f48495a987cd2=
+6c25965e836</a>&gt;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Please let us know if it doesn&#39;t solve it.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0thanks,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0kienan<br>
+&gt; <br>
+&gt; <br>
+&gt; I updated to lttng-ust 2.13.8 as you suggested.=C2=A0 At first, I pull=
+ed in <br>
+&gt; the recipe from master branch of Yocto, but had the same problem as <b=
+r>
+&gt; before after rebuilding.<br>
+&gt; <br>
+&gt; Next, I downloaded the 2.13.8 lttng-ust tarball from the lttng site an=
+d <br>
+&gt; setup a native build environment on my target and built lttng-ust 2.13=
+.8 <br>
+&gt; and my app as a second independent build method for sanity check.=C2=
+=A0 I can <br>
+&gt; report that I get the exact same result as before this way too.<br>
+&gt; <br>
+&gt; In both cases, I verified that I had the commit you referenced above.<=
+br>
+&gt; <br>
+&gt; I did a backtrace of the three threads captured in the coredump and sh=
+ow <br>
+&gt; them below in hopes it will shed light on what I need to try next.<br>
+&gt; <br>
+&gt; (gdb) thread apply all backtrace<br>
+&gt; <br>
+&gt; Thread 3 (Thread 0xffffbe7de7e0 (LWP 559)):<br>
+&gt; #0 =C2=A0syscall () at ../sysdeps/unix/sysv/linux/aarch64/syscall.S:38=
+<br>
+&gt; #1 =C2=A00x0000ffffbeef1bb8 in lttng_ust_futex (val3=3D0, uaddr2=3D0x0=
+, <br>
+&gt; timeout=3D0x0, val=3D0, op=3D0, uaddr=3D0xffffbefd8000) at <br>
+&gt; ../../../src/lib/lttng-ust/futex.h:56<br>
+&gt; #2 =C2=A0lttng_ust_futex_async (op=3D0, val=3D0, timeout=3D0x0, uaddr2=
+=3D0x0, val3=3D0, <br>
+&gt; uaddr=3D0xffffbefd8000) at ../../../src/lib/lttng-ust/futex.h:88<br>
+&gt; #3 =C2=A0wait_for_sessiond (sock_info=3D0xffffbef6b638 &lt;global_apps=
+&gt;) at <br>
+&gt; lttng-ust-comm.c:1761<br>
+&gt; #4 =C2=A0ust_listener_thread (arg=3D0xffffbef6b638 &lt;global_apps&gt;=
+) at <br>
+&gt; lttng-ust-comm.c:1832<br>
+&gt; #5 =C2=A00x0000ffffbe9206a8 in start_thread (arg=3D0xffffc1bd8687) at =
+<br>
+&gt; pthread_create.c:442<br>
+&gt; #6 =C2=A00x0000ffffbe98801c in thread_start () at <br>
+&gt; ../sysdeps/unix/sysv/linux/aarch64/clone.S:79<br>
+&gt; <br>
+&gt; Thread 2 (Thread 0xffffbdfce7e0 (LWP 560)):<br>
+&gt; #0 =C2=A0syscall () at ../sysdeps/unix/sysv/linux/aarch64/syscall.S:38=
+<br>
+&gt; #1 =C2=A00x0000ffffbeef1bb8 in lttng_ust_futex (val3=3D0, uaddr2=3D0x0=
+, <br>
+&gt; timeout=3D0x0, val=3D0, op=3D0, uaddr=3D0xffffbefd7000) at <br>
+&gt; ../../../src/lib/lttng-ust/futex.h:56<br>
+&gt; #2 =C2=A0lttng_ust_futex_async (op=3D0, val=3D0, timeout=3D0x0, uaddr2=
+=3D0x0, val3=3D0, <br>
+&gt; uaddr=3D0xffffbefd7000) at ../../../src/lib/lttng-ust/futex.h:88<br>
+&gt; #3 =C2=A0wait_for_sessiond (sock_info=3D0xffffbef695e0 &lt;local_apps&=
+gt;) at <br>
+&gt; lttng-ust-comm.c:1761<br>
+&gt; #4 =C2=A0ust_listener_thread (arg=3D0xffffbef695e0 &lt;local_apps&gt;)=
+ at <br>
+&gt; lttng-ust-comm.c:1832<br>
+&gt; #5 =C2=A00x0000ffffbe9206a8 in start_thread (arg=3D0xffffc1bd8687) at =
+<br>
+&gt; pthread_create.c:442<br>
+&gt; #6 =C2=A00x0000ffffbe98801c in thread_start () at <br>
+&gt; ../sysdeps/unix/sysv/linux/aarch64/clone.S:79<br>
+&gt; <br>
+&gt; Thread 1 (Thread 0xffffbefcf460 (LWP 545)):<br>
+&gt; #0 =C2=A0__strlen_asimd () at ../sysdeps/aarch64/multiarch/strlen_asim=
+d.S:96<br>
+&gt; #1 =C2=A00x0000ffffbe834bd0 in lttng_ust_tp_validate_event_name <br>
+&gt; (tp=3D0xaaaab8f14de0 <br>
+&gt; &lt;lttng_ust_tracepoint_hello_world___my_first_tracepoint&gt;, <br>
+&gt; tp=3D0xaaaab8f14de0 <br>
+&gt; &lt;lttng_ust_tracepoint_hello_world___my_first_tracepoint&gt;) at <br=
+>
+&gt; tracepoint.c:143<br>
+&gt; #2 =C2=A0add_callsite (tp=3D0xaaaab8f14de0 <br>
+&gt; &lt;lttng_ust_tracepoint_hello_world___my_first_tracepoint&gt;, <br>
+&gt; lib=3D0xaaaae74fad30) at tracepoint.c:412<br>
+&gt; #3 =C2=A0lib_register_callsites (lib=3D0xaaaae74fad30) at tracepoint.c=
+:552<br>
+&gt; #4 =C2=A0lttng_ust_tracepoint_module_register (tracepoints_start=3D&lt=
+;optimized <br>
+&gt; out&gt;, tracepoints_count=3D&lt;optimized out&gt;) at tracepoint.c:95=
+6<br>
+&gt; #5 =C2=A00x0000aaaab8758204 in lttng_ust.tracepoints.ptrs_init ()<br>
+&gt; #6 =C2=A00x0000ffffbe8cb30c in call_init (env=3D&lt;optimized out&gt;,=
+ <br>
+&gt; argv=3D0xffffc1bd8c88, argc=3D1) at ../csu/libc-start.c:145<br>
+&gt; #7 =C2=A0__libc_start_main_impl (main=3D0xaaaab867aabc &lt;main&gt;, a=
+rgc=3D1, <br>
+&gt; argv=3D0xffffc1bd8c88, init=3D&lt;optimized out&gt;, fini=3D&lt;optimi=
+zed out&gt;, <br>
+&gt; rtld_fini=3D&lt;optimized out&gt;, stack_end=3D&lt;optimized out&gt;) =
+at <br>
+&gt; ../csu/libc-start.c:376<br>
+&gt; #8 =C2=A00x0000aaaab867a7f0 in _start () at ../sysdeps/aarch64/start.S=
+:81<br>
+&gt; <br>
+&gt; Regards,<br>
+&gt; <br>
+&gt; Brian<br>
+</blockquote></div></div>
+
+--000000000000492929061d73f16f--
+
+--===============1071897157144700149==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1071897157144700149==--
