@@ -4,58 +4,149 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3DC8C3DA59
-	for <lttng-dev@archiver.kernel.org>; Wed, 17 Jul 2024 01:27:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFD72C3DA42
+	for <lttng-dev@archiver.kernel.org>; Wed, 17 Jul 2024 14:13:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1721179660;
-	bh=kTQej5LxChHx6Jk+y9NBAezTht9mmOSCNxdkbyptduI=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	s=default; t=1721225607;
+	bh=vU/nQFuYhfA98ocv/UpicRHY/XsPsjfUoD1/J7Ueg7I=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=X9H0N0XwNupvt+NuiYnYbkMoCTY8MUIj/5LULvv86HHO8VfPzyWgmg7KaMKsKzK/u
-	 bMIFQdRqswb8YEr1MJd7JREwpLf5R/aOhqyez6EbXFfRo9PFxKdzMdff9yZkk9d+LB
-	 WntVZ3RPaMPNBE7r9U2yB6ppcNoWWgcBWstrwUSJGrzzCGL8LupbrxVfZOc0QBEavu
-	 6GD+6d20aydKNUVlK6XxST+BpjXn/zoA3S27rZJdwqTmTVL0mdcScX2D60ik8kQ1WO
-	 EZxFaPmUVxxVzQNy3Wyz0/dH4G3WMLaEPJTGzdncry1IZZCmijGHOI+J5ZdWxYiPNJ
-	 RxoMK2makEahw==
+	b=JjIntDhyCHKIp89aB85q7hEbOAwh7vN71IJiI2UcOYeyp/V+sx5XIvzJrhDVpTHh4
+	 mMZ8WHRv8WuoUigm9WMqvpwVTmHuPMGxsJ9KPOIE99y5/TSnpHukezMmgxshWOlBlY
+	 EodvWDqscVt2YYriJ9lsOcwXB4VOOQS8aIv6oHB93z1Go9ULNvPEQoEA2K5yD1fOLj
+	 h9j4RgMWu7i5VtJzQNdTrro2D9LAL5yf7MSKmbHZFR5WxxMCNKWLN2t5MSBG7sIR2y
+	 gOqPZBzdZ58rSduczYttTDc45KwV6JMUVtwvGiVHGHTnudEZUtz240RDsWQVfj5wtb
+	 +R2mDH79qo4mQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4WNywr0nKRz126R;
-	Tue, 16 Jul 2024 21:27:40 -0400 (EDT)
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com
- [IPv6:2607:f8b0:4864:20::1029])
- by lists.lttng.org (Postfix) with ESMTPS id 4WNywp4wlVz121m
- for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2024 21:27:38 -0400 (EDT)
-Received: by mail-pj1-x1029.google.com with SMTP id
- 98e67ed59e1d1-2c964f5a037so4085938a91.0
- for <lttng-dev@lists.lttng.org>; Tue, 16 Jul 2024 18:27:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721179657; x=1721784457;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gmV7EP5HgZEgVDadm85hqcrZfsbpRjWden+kBwDUWyE=;
- b=l058+mJY2w4Tft2l7yEIVmLL312ldNEGq7unNXaNJ6v3m8Lr/0/3YeFPs1x/JEznMz
- T7lmbOO9SOX9SPbdKg4vYrarV444ZIIQQCLzYk02+ifNe62QmVpNtuhJVvaMugoF/1Vz
- KwVLznj50z/Xfz7C/yiL9fF69y47+XDVH/slRH88+bPQWmr7jim3HnaXdf/3lsQxlV4s
- fnnNGUjie8zH+1B9vd10ca5DSTILF+ba+tO7kDNjpDH6BLR4HOwGu5ZUjwdAXomRxERx
- ihW/CLW1Rr/4i4Img29mU4Fk9qefWhb3MAAtJEX1xFNdtHd6w8g4Iz1C9VoRWoPIDg0m
- XLPA==
-X-Gm-Message-State: AOJu0YyaC/hJlOuOroS8Ov3Slm3ErbXt7bw65Jp7VwevEDFEQcxgoUQc
- r4Lo/aASJ7XkA8yDERgsKM81na8k4dHW5AIl9ghDhdmI77Grh4xIt+WuW4pVy1O3poFZlC95NB8
- y8btLvZbX2D9zoW0AMQgjp+KorNc=
-X-Google-Smtp-Source: AGHT+IHyM3PKomaKwT5wHcTvzKSD2ZraMWFSXgPnO/VZSsuAYVNeasLqaegx/dNdQcPzO48bLBc4lnoUdHjI6DpBnwQ=
-X-Received: by 2002:a17:90a:ea0f:b0:2c9:6cd2:1732 with SMTP id
- 98e67ed59e1d1-2cb51e52059mr144574a91.0.1721179657108; Tue, 16 Jul 2024
- 18:27:37 -0700 (PDT)
-MIME-Version: 1.0
+	by lists.lttng.org (Postfix) with ESMTP id 4WPHwQ6lr3z11wT;
+	Wed, 17 Jul 2024 10:13:26 -0400 (EDT)
+Received: from YT5PR01CU002.outbound.protection.outlook.com
+ (mail-canadacentralazon11021140.outbound.protection.outlook.com
+ [40.107.192.140])
+ by lists.lttng.org (Postfix) with ESMTPS id 4WPHwP5hpmz11qM
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2024 10:13:25 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=AhxrQp4TyGfn4A4UMo9Otjaod4J6XLAWphw6YwSXE+gA4smRUGEi23cAzdXem8ccny6o6XBJ8HCNJPi5eaa5B/fggwhma5a6FyWfgNnACg/S2uH4DvWGIZFl0aKiMyrsm7h09yaBtyd2dGRVacK8Sk+5XBsniA0DPwSUcTwEbDKR4f2BJQIPX9xekIP0QMZaCr15bckcsD27o3+Gvfe+nt6eqYQ7VLG6kyzJ0ryJzdrAGYmj6wOOo+xTeimfmZdNqIAiZx9ryikrycdMusmFUa/b38/+J3Fjy6hp7QRb4MwmyMHa6yRkB/qtUmIx5hdsAF9dnxUUv+Ve46ItezJiBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ku3eiw1y3Y6xW712/bA2cMezd56TUk7xtddIZoJxZL8=;
+ b=eooO380IchnVVV/50NzboMHLCfnsQtbFohb6ux7UkzjTM3kDuC2CHyx8TR8gbmfPD698Ir1+EQJRNvKJHmjFyvdXZAI1hS00bzXog7eiso6aUwyhvNLuvvrFRK0+FF64Q2uauhryJwd6Ml/u62s+jp1AGyPYj3/kg/6MSH11JTPWbq0/Njc+Iid0Y4L46xzY3eWvLeoCOg9VVfG19HsHKYrtDS/HB1BrS7pHp8Wvhh8K/hx3NRGUQXYa7V2Xa30Ww70Jg/MCNNB1FAU7+WfmQ5z+R2QcDjck2oWx1pxwQb6vXB+HMPAE9qBQVE1Ji3DAbtu6o4+GwOECxe1uSd/wRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::14)
+ by YT3PR01MB6259.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:5c::14)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.15; Wed, 17 Jul
+ 2024 14:13:23 +0000
+Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e27c:c1e2:e6e:9256]) by YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e27c:c1e2:e6e:9256%4]) with mapi id 15.20.7762.030; Wed, 17 Jul 2024
+ 14:13:23 +0000
+Message-ID: <33527830-3bf3-4bc3-a53d-55eaefb74902@efficios.com>
+Date: Wed, 17 Jul 2024 10:13:21 -0400
+User-Agent: Mozilla Thunderbird
+To: Brian Hutchinson <b.hutchman@gmail.com>
+Cc: lttng-dev@lists.lttng.org, yocto@lists.yoctoproject.org
 References: <CAFZh4h_wh01sjAar-QqHsQ=KY4zLjmpmXuJc83OeYue7YyYW3A@mail.gmail.com>
  <CAFZh4h9iaCGdnDhxik9Qtq82f0MGU2eL+8nBa8qoCCJrH-xsGQ@mail.gmail.com>
  <d30f1655-0efa-440a-ac17-fe82342f4556@efficios.com>
-In-Reply-To: <d30f1655-0efa-440a-ac17-fe82342f4556@efficios.com>
-Date: Tue, 16 Jul 2024 21:27:25 -0400
-Message-ID: <CAFZh4h_pOCzpJ6ssdZ7ts3vSdJNfEtS+d+2Foi4qAY6oH0+VKw@mail.gmail.com>
-To: Kienan Stewart <kstewart@efficios.com>
-Cc: lttng-dev@lists.lttng.org, yocto@lists.yoctoproject.org
+ <CAFZh4h_pOCzpJ6ssdZ7ts3vSdJNfEtS+d+2Foi4qAY6oH0+VKw@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAFZh4h_pOCzpJ6ssdZ7ts3vSdJNfEtS+d+2Foi4qAY6oH0+VKw@mail.gmail.com>
+X-ClientProxiedBy: YQBPR0101CA0160.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:e::33) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:e8::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YT3PR01MB6259:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ee12ed3-e939-4489-c8b8-08dca66a9e45
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?MHRYL3lrTUdBdHBoQnZxLzI0Y3gwV3hoR09xNTk5T0wyK2lxamZYM0JXcm1Z?=
+ =?utf-8?B?MWh6WE5uczU0VWRWZ0N1MDJDeDFvSVFhZklrREdOU2pvb1ZtblUxS1B3bmx4?=
+ =?utf-8?B?L01FcjJWTXA1bUpnRGVKeWlKYnBLWWwzVkt3VVVsL1VsUmc3M1RVa2FOWmdS?=
+ =?utf-8?B?MHdZWUNVTEV2UUZzbUZvRGJxVkd5R0pXRm1LeU8xbCsyYjZoUWVBcEhQZUhQ?=
+ =?utf-8?B?QmdqVmcybElqOFZGY3ljZ2tOM1k1ZnJLTFFZbTk0YlFYOHdyRkpMbkpZbTNi?=
+ =?utf-8?B?NitXZFBEL0RmYUNlMis2THZuRjdGNmcwaUw2TTg3YTJxc2p6NmRvT25KTWtz?=
+ =?utf-8?B?WXpyQ3Z4bWhreFE2aEVsbDZZNXlnNWljZkRMZXFvaEZrQ2tsTXhicWMzSnU3?=
+ =?utf-8?B?TEpqMEx0MWtyMU85REowOG1NZjVhL2tSdXBFWGROeGZpRXlOYXpHZTByZ0Ra?=
+ =?utf-8?B?RWtoTWlkSlh0aU94MlljU1cvRitzdWFlYVlENUhYTU9NMWI5SzlqNnBkZ0Ja?=
+ =?utf-8?B?QVhTSVQ3MGFXN3JqWkxhWm9RK2VkWHR3N05rMDl5TlF2cXFZQnovaU1tZHpu?=
+ =?utf-8?B?OXFtdUVLeWFNYUYrVzhtOGpXQTdSVzg0SGN0bTRjUTI0N3JLdTgyTnZvcHlL?=
+ =?utf-8?B?cHVJRFo2c0h5OWtzUmljZE5nYndCK0F1YWJJRkpya01GOXRiRUI5NFdpZ3Rw?=
+ =?utf-8?B?Y2RQaEFFOEpYMmo1YkFncGRjZmRnY0pQVnc3YTJ2TjR3Sms1bmhjZzZ2VGlu?=
+ =?utf-8?B?ZXZ1QnI4Zkk2MDhpeVh4a05LNDJsKzY2UkNhNmxaTCtOdlJZNS9XR3dUR3ZV?=
+ =?utf-8?B?MnI5MUZyNWdSSUdwUDBSVHBaaEY0QXEyT1dVN0swemNTeWZKSmJiQXkyTUc2?=
+ =?utf-8?B?UG0raU1mUUVXZlJDODFEMWl2bkVFWEtaMWxiaXRWdDNJemVWVmV4M0pDTnVa?=
+ =?utf-8?B?ME1DN2FONGFWQklFMW1BVXRwUm5Ka1RRUzdUdkNZNzNnMG5KZGNKc1RGTDFi?=
+ =?utf-8?B?eGR2c095MDNhME9OMy9KdWxmcGZiMlkzTjliZ2FqZFE5WC9YRytKNC9sSXdm?=
+ =?utf-8?B?NUNDOXVacXhQeXgyUHo3YUNGMWh1REJqUmdGdDFEVkgrTTR3eUQyYlZLbHF6?=
+ =?utf-8?B?cU1CdmpxdStPcUhIMGp6My9yL2RBWUMzaWVsRFNMQTZza1k3RWJjSWtiZEls?=
+ =?utf-8?B?Y2ozQWxybDhIR1RSWkR0ZHVoZE5seHhLUXMwUHFrVTk4UVErcFR2NFpvbit4?=
+ =?utf-8?B?RkI4N0RSdlgxRDkySVFUVjhzeUMxWUUybWhJU2tJRUJMK3J2UkI3Zi9HZW9R?=
+ =?utf-8?B?eUdHQSt1ZklUM1JoaUJZK2syQ3VBQ0Z0M213bjh3ZkdKOEtXd2ZsaG1saWo4?=
+ =?utf-8?B?RXFHenF2TXlaRXFqZEZESWRkdGRhWEY3M0x2T1RlbmdVeEZ5ekdnc1hUdEZB?=
+ =?utf-8?B?TjJlUzdWdzhkY2k5U2RRQUJFaWEzMWdHdmpQczd2SStDd0Rmc1BaS1B3bXB4?=
+ =?utf-8?B?N0toNlhDZlNyeVQ4TVlzRHZSekEwWndGK2VaSWRldmpuUU9aeWpCVzJTekI4?=
+ =?utf-8?B?SHZPRSttT25DZUVTWHdpMldnSEFJK1ZYOHlMeVJQbkRPUEJoQ0xiSVhIaHJ1?=
+ =?utf-8?B?c1RnTXpDUGZ3ZFBxemFOWGJnMXZnM1dQdEFsS2Y1a2lZQ0U1RGlwUGhnVGJR?=
+ =?utf-8?B?Z1V6RFBveGZnR0hqKzhKdmEvVFZzdFBUVE1MRUdDN0hkaDZRUGJlWWdCVXdN?=
+ =?utf-8?Q?ypAEujkv1h7hO4pdwo=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(1800799024)(366016)(376014); DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WnlDQkVWblVkV1BReUFENVFPOTdHTXZ6YWYxZTdob1FaWGR0U0VuMlo3RDZB?=
+ =?utf-8?B?S0pCSS9hODJiTy9GT0w3dDl5a2lER2RkSlZMMUtJQzJqZlUrNUloZExDUDhy?=
+ =?utf-8?B?YkpQeDFpN0tmTzdZeDZQdVFIWFpBbjl6VzFnM244NWhQYVBabGRGSDNwWGgz?=
+ =?utf-8?B?VzRGa2pPeWovZWE1QUMzcEpkU0xwdy9FV01pVUdYYS8vWEJYNWMwMjNqb0ly?=
+ =?utf-8?B?NGl5blNWNGNFQ2EzTXFCNTBFeEFtRUJOUy8xREFTWGVod1I3VlRBNUJrNGU4?=
+ =?utf-8?B?dEwzdks3Z3hyZnpMYzJJNzl3NDlGNGpuZi8vNUo5T2xobUdEaEZwbVFZRWJS?=
+ =?utf-8?B?S3ZxdWVhVVpwWWtiZHMzMmtROXVKUnFhK2x2NVV4NmdSTmcyRGVRMUR4OXdp?=
+ =?utf-8?B?RDErM0JudUJzWnN4TWpmRGpURDRwNk5aa2RLV2RDWlR3RkRYSnFrY0NMa0Ns?=
+ =?utf-8?B?VHVVK0V3VEdPS2hvZ1RFUUxLQmh0RWdjWGVsak5WY1p5WXZVRGNDY3B5ZHRz?=
+ =?utf-8?B?azdSMjlxZWlwNGxJMTc5YkJrMTV1citKaHJrNFdXQnVuNVlpd2FESTRyczZH?=
+ =?utf-8?B?MHlYQmY2eStYNGpKNExYVkJVR241TkpmRHIxa3FJcjRnanNqSnNlSjMzTmpV?=
+ =?utf-8?B?eWdpTUpLdWdrSFZTRXhibVdDcFRpRG9HSzc5aHcwVldJNjFpOU41WVJZQTg1?=
+ =?utf-8?B?Q0FzbFhpQzBOOXpSVEJDYktabkllTUlnZGsxc2k0VFU2ZGJEVkNOMXFQcDJC?=
+ =?utf-8?B?d1QraGJGbzg1NFBEOFE2aGlaS3pCTDFPbWVKMHpPaThaQ3lQL0FQQVpvUytv?=
+ =?utf-8?B?MVhJTzFmSTRGa2lodVJta2R2VzdEUXQyaHV1aDZYTHpCa2Z4NVZMZjh6NU14?=
+ =?utf-8?B?SmtBT3NZb0VhSkRzUUxnNEZnNENKVWx3Yk45NzE5K1cwYUM2bFliaFdIYTFI?=
+ =?utf-8?B?b2N1TkluZ3hRaldiSUxqYjF5U2d3U2puT1FRdW03V1RWOTlHbFQrK3JQSkpU?=
+ =?utf-8?B?cXVDenVXTVFQejdmUTRoOGk1QS9ZNlRNTzBhekpBbHUwbFRtRng0eDF4Um13?=
+ =?utf-8?B?Q21aOUg5U2dHNDdITHMrYUd4S3o1OTNOU3JpanZRM2VCalU0Ly9ZZ2ZTU2Jr?=
+ =?utf-8?B?eUhJaERZRzZ4OHNWKzlVWkVGbDZBd2NLL2grcHRxNzJFNUFuVkpDMG9qOVdh?=
+ =?utf-8?B?dGJjTVc0eVNnTlBBZjRBWlAvTWRHUEsyUkZMSllZMVVJU0RFRE5VSm84YklZ?=
+ =?utf-8?B?OStyVUxXZmdtaFZJdWlTRSt3TCsxUS9ZS3VkTjRuM1pIT1prK1BoalhVdm1S?=
+ =?utf-8?B?TERDYmw3bXc1aUNyUVhSczVuQnFMYXpySGVaam1tR1VhVXdiR21Sa3ZnUEN3?=
+ =?utf-8?B?cDRqZ3hUbCt2L0lzeE55QnROOVVacUI2VW9CSXBuM3VnT3lQcFp1NkVVZmMv?=
+ =?utf-8?B?M2UycE8zVUlQWVY0b010RGpxZlJBTEk2SUtpMlhnNlVVNjI4MkJoZVJQWU5T?=
+ =?utf-8?B?YjNreFhpdlVLVjRENVdTTDlQVnovblJvelEzQWIvdmNVaThsRjZKQVBOeFRo?=
+ =?utf-8?B?WVBlRlkrd2hKZjZnMzRaL0xhaU8vWlNqVjBibllLQTlzMlpZcTBWd25Yc0px?=
+ =?utf-8?B?ZXNZOWJ3bE00d05TTHdmWnBVYWMrY3hoYktTRHhsbzBZV3lWalIvRVJEZi92?=
+ =?utf-8?B?K3dYYjU5bUk3RktxRmcxOTd0elZKOGlUbGk0dkVrL2RSYUQ1L1Y5RUQwamdO?=
+ =?utf-8?B?RlZQKzF6QjZiVDlHejlTOEFhcGtUdlBQKzhhQWhGWjR6REdNbWV2clVGSVQ2?=
+ =?utf-8?B?bHVrcnJMUFAzU2ZOdU5yT3k0eHBWdEtXc2FlQ2lFMTFpN2hjdUNBZG1vWFV1?=
+ =?utf-8?B?bXVHV01vd3JFK091ckt0Rk5TNzhDMkZ1WjMxRjhRVEx6Z1g0c0dQWWE3UUgz?=
+ =?utf-8?B?eGg1SVpnVFRpUjlFWWkwTzJsaC9SVDE3WU9sOHpFRjFEK2MxSlN6S3dVVkl5?=
+ =?utf-8?B?NmU5a01QT3poWTQvR0c4SW95MUYyWW4xZ0JKbTNjdDhrQzFqdVhYZGk1NU42?=
+ =?utf-8?B?azJUVnRWOE1jLzFKNkpjMGtFcU1hSjdMUzkzdWF1RlFjNnZlRzFsUCtFOElq?=
+ =?utf-8?B?ZlpXR0U0dEw4cmRIcDRhUC9uZFFtb2V0bHJXTjJjWjVuRkZiMDFGcmdhNml4?=
+ =?utf-8?B?Tmc9PQ==?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ee12ed3-e939-4489-c8b8-08dca66a9e45
+X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 14:13:23.2781 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QNzaPeoKkOr5wmYbHtKlBMcTiV3a9dJd6loxxQ9UEj9A8Dr3Na768/W+pNpWjeeO4dNRdOhA+R4dFuHnoJtkbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB6259
 Subject: Re: [lttng-dev] Using lttng-ust 2.13.6 from Yocto Kirkstone and
  getting weird segfault saying strlen_asimd.S can't be found.
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -69,266 +160,135 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Brian Hutchinson via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Brian Hutchinson <b.hutchman@gmail.com>
-Content-Type: multipart/mixed; boundary="===============7015148040933196878=="
+From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Kienan Stewart <kstewart@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============7015148040933196878==
-Content-Type: multipart/alternative; boundary="0000000000000e867e061d675e52"
-
---0000000000000e867e061d675e52
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Kienan,
-
-On Thu, Jul 11, 2024 at 8:38=E2=80=AFAM Kienan Stewart <kstewart@efficios.c=
-om>
-wrote:
-
-> Hi Brian,
->
-> On 7/11/24 8:33 AM, Brian Hutchinson via lttng-dev wrote:
->  > ...
->  >
->  > I'm not sure about this, still trying to comprehend everything, but I
->  > think my issue could be related to all this gcc TLS, heap, trampoline
->  > talk here:
->  >
->  > https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.html
->  > <https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg13584.html>
->  >
->  > Regards,
->  >
->  > Brian
->  >
->
-> You could try using lttng-ust 2.13.8, which includes a fix for the
-> discussion you referenced.
->
->
-> https://github.com/lttng/lttng-ust/commit/5db715e800d9b721f48495a987cd26c=
-25965e836
->
-> Please let us know if it doesn't solve it.
->
-> thanks,
-> kienan
->
-
-I updated to lttng-ust 2.13.8 as you suggested.  At first, I pulled in the
-recipe from master branch of Yocto, but had the same problem as before
-after rebuilding.
-
-Next, I downloaded the 2.13.8 lttng-ust tarball from the lttng site and
-setup a native build environment on my target and built lttng-ust 2.13.8
-and my app as a second independent build method for sanity check.  I can
-report that I get the exact same result as before this way too.
-
-In both cases, I verified that I had the commit you referenced above.
-
-I did a backtrace of the three threads captured in the coredump and show
-them below in hopes it will shed light on what I need to try next.
-
-(gdb) thread apply all backtrace
-
-Thread 3 (Thread 0xffffbe7de7e0 (LWP 559)):
-#0  syscall () at ../sysdeps/unix/sysv/linux/aarch64/syscall.S:38
-#1  0x0000ffffbeef1bb8 in lttng_ust_futex (val3=3D0, uaddr2=3D0x0, timeout=
-=3D0x0,
-val=3D0, op=3D0, uaddr=3D0xffffbefd8000) at ../../../src/lib/lttng-ust/fute=
-x.h:56
-#2  lttng_ust_futex_async (op=3D0, val=3D0, timeout=3D0x0, uaddr2=3D0x0, va=
-l3=3D0,
-uaddr=3D0xffffbefd8000) at ../../../src/lib/lttng-ust/futex.h:88
-#3  wait_for_sessiond (sock_info=3D0xffffbef6b638 <global_apps>) at
-lttng-ust-comm.c:1761
-#4  ust_listener_thread (arg=3D0xffffbef6b638 <global_apps>) at
-lttng-ust-comm.c:1832
-#5  0x0000ffffbe9206a8 in start_thread (arg=3D0xffffc1bd8687) at
-pthread_create.c:442
-#6  0x0000ffffbe98801c in thread_start () at
-../sysdeps/unix/sysv/linux/aarch64/clone.S:79
-
-Thread 2 (Thread 0xffffbdfce7e0 (LWP 560)):
-#0  syscall () at ../sysdeps/unix/sysv/linux/aarch64/syscall.S:38
-#1  0x0000ffffbeef1bb8 in lttng_ust_futex (val3=3D0, uaddr2=3D0x0, timeout=
-=3D0x0,
-val=3D0, op=3D0, uaddr=3D0xffffbefd7000) at ../../../src/lib/lttng-ust/fute=
-x.h:56
-#2  lttng_ust_futex_async (op=3D0, val=3D0, timeout=3D0x0, uaddr2=3D0x0, va=
-l3=3D0,
-uaddr=3D0xffffbefd7000) at ../../../src/lib/lttng-ust/futex.h:88
-#3  wait_for_sessiond (sock_info=3D0xffffbef695e0 <local_apps>) at
-lttng-ust-comm.c:1761
-#4  ust_listener_thread (arg=3D0xffffbef695e0 <local_apps>) at
-lttng-ust-comm.c:1832
-#5  0x0000ffffbe9206a8 in start_thread (arg=3D0xffffc1bd8687) at
-pthread_create.c:442
-#6  0x0000ffffbe98801c in thread_start () at
-../sysdeps/unix/sysv/linux/aarch64/clone.S:79
-
-Thread 1 (Thread 0xffffbefcf460 (LWP 545)):
-#0  __strlen_asimd () at ../sysdeps/aarch64/multiarch/strlen_asimd.S:96
-#1  0x0000ffffbe834bd0 in lttng_ust_tp_validate_event_name
-(tp=3D0xaaaab8f14de0
-<lttng_ust_tracepoint_hello_world___my_first_tracepoint>, tp=3D0xaaaab8f14d=
-e0
-<lttng_ust_tracepoint_hello_world___my_first_tracepoint>) at
-tracepoint.c:143
-#2  add_callsite (tp=3D0xaaaab8f14de0
-<lttng_ust_tracepoint_hello_world___my_first_tracepoint>,
-lib=3D0xaaaae74fad30) at tracepoint.c:412
-#3  lib_register_callsites (lib=3D0xaaaae74fad30) at tracepoint.c:552
-#4  lttng_ust_tracepoint_module_register (tracepoints_start=3D<optimized
-out>, tracepoints_count=3D<optimized out>) at tracepoint.c:956
-#5  0x0000aaaab8758204 in lttng_ust.tracepoints.ptrs_init ()
-#6  0x0000ffffbe8cb30c in call_init (env=3D<optimized out>,
-argv=3D0xffffc1bd8c88, argc=3D1) at ../csu/libc-start.c:145
-#7  __libc_start_main_impl (main=3D0xaaaab867aabc <main>, argc=3D1,
-argv=3D0xffffc1bd8c88, init=3D<optimized out>, fini=3D<optimized out>,
-rtld_fini=3D<optimized out>, stack_end=3D<optimized out>) at
-../csu/libc-start.c:376
-#8  0x0000aaaab867a7f0 in _start () at ../sysdeps/aarch64/start.S:81
-
-Regards,
-
-Brian
-
---0000000000000e867e061d675e52
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><div>Hi Kienan,</div><div></div><div></di=
-v></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr=
-">On Thu, Jul 11, 2024 at 8:38=E2=80=AFAM Kienan Stewart &lt;<a href=3D"mai=
-lto:kstewart@efficios.com" target=3D"_blank">kstewart@efficios.com</a>&gt; =
-wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
-px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi Brian,=
-<br>
-<br>
-On 7/11/24 8:33 AM, Brian Hutchinson via lttng-dev wrote:<br>
-=C2=A0&gt; ...<br>
-=C2=A0&gt;<br>
-=C2=A0&gt; I&#39;m not sure about this, still trying to comprehend everythi=
-ng, but I<br>
-=C2=A0&gt; think my issue could be related to all this gcc TLS, heap, tramp=
-oline<br>
-=C2=A0&gt; talk here:<br>
-=C2=A0&gt;<br>
-=C2=A0&gt; <a href=3D"https://www.mail-archive.com/lttng-dev@lists.lttng.or=
-g/msg13584.html" rel=3D"noreferrer" target=3D"_blank">https://www.mail-arch=
-ive.com/lttng-dev@lists.lttng.org/msg13584.html</a><br>
-=C2=A0&gt; &lt;<a href=3D"https://www.mail-archive.com/lttng-dev@lists.lttn=
-g.org/msg13584.html" rel=3D"noreferrer" target=3D"_blank">https://www.mail-=
-archive.com/lttng-dev@lists.lttng.org/msg13584.html</a>&gt;<br>
-=C2=A0&gt;<br>
-=C2=A0&gt; Regards,<br>
-=C2=A0&gt;<br>
-=C2=A0&gt; Brian<br>
-=C2=A0&gt;<br>
-<br>
-You could try using lttng-ust 2.13.8, which includes a fix for the <br>
-discussion you referenced.<br>
-<br>
-<a href=3D"https://github.com/lttng/lttng-ust/commit/5db715e800d9b721f48495=
-a987cd26c25965e836" rel=3D"noreferrer" target=3D"_blank">https://github.com=
-/lttng/lttng-ust/commit/5db715e800d9b721f48495a987cd26c25965e836</a><br>
-<br>
-Please let us know if it doesn&#39;t solve it.<br>
-<br>
-thanks,<br>
-kienan<br></blockquote><div><br></div><div>I updated to lttng-ust 2.13.8 as=
- you suggested.=C2=A0 At first, I pulled in the recipe from master branch o=
-f Yocto, but had the same problem as before after rebuilding.<br></div><div=
-><br></div><div>Next, I downloaded the 2.13.8 lttng-ust tarball from the lt=
-tng site and setup a native build environment on my target and built lttng-=
-ust 2.13.8 and my app as a second independent build method for sanity check=
-.=C2=A0 I can report that I get the exact same result as before this way to=
-o. <br></div><div><br></div><div>In both cases, I verified that I had the c=
-ommit you referenced above.</div><div><br></div><div>I did a backtrace of t=
-he three threads captured in the coredump and show them below in hopes it w=
-ill shed light on what I need to try next.</div><div><br></div><div><span s=
-tyle=3D"font-family:monospace"><span style=3D"color:rgb(0,0,0);background-c=
-olor:rgb(255,255,255)">(gdb) thread apply all backtrace
-</span><br>
-<br>Thread 3 (Thread 0xffffbe7de7e0 (LWP 559)):
-<br>#0 =C2=A0syscall () at ../sysdeps/unix/sysv/linux/aarch64/syscall.S:38
-<br>#1 =C2=A00x0000ffffbeef1bb8 in lttng_ust_futex (val3=3D0, uaddr2=3D0x0,=
-=20
-timeout=3D0x0, val=3D0, op=3D0, uaddr=3D0xffffbefd8000) at=20
-../../../src/lib/lttng-ust/futex.h:56
-<br>#2 =C2=A0lttng_ust_futex_async (op=3D0, val=3D0, timeout=3D0x0, uaddr2=
-=3D0x0, val3=3D0, uaddr=3D0xffffbefd8000) at ../../../src/lib/lttng-ust/fut=
-ex.h:88
-<br>#3 =C2=A0wait_for_sessiond (sock_info=3D0xffffbef6b638 &lt;global_apps&=
-gt;) at lttng-ust-comm.c:1761
-<br>#4 =C2=A0ust_listener_thread (arg=3D0xffffbef6b638 &lt;global_apps&gt;)=
- at lttng-ust-comm.c:1832
-<br>#5 =C2=A00x0000ffffbe9206a8 in start_thread (arg=3D0xffffc1bd8687) at p=
-thread_create.c:442
-<br>#6 =C2=A00x0000ffffbe98801c in thread_start () at ../sysdeps/unix/sysv/=
-linux/aarch64/clone.S:79
-<br>
-<br>Thread 2 (Thread 0xffffbdfce7e0 (LWP 560)):
-<br>#0 =C2=A0syscall () at ../sysdeps/unix/sysv/linux/aarch64/syscall.S:38
-<br>#1 =C2=A00x0000ffffbeef1bb8 in lttng_ust_futex (val3=3D0, uaddr2=3D0x0,=
-=20
-timeout=3D0x0, val=3D0, op=3D0, uaddr=3D0xffffbefd7000) at=20
-../../../src/lib/lttng-ust/futex.h:56
-<br>#2 =C2=A0lttng_ust_futex_async (op=3D0, val=3D0, timeout=3D0x0, uaddr2=
-=3D0x0, val3=3D0, uaddr=3D0xffffbefd7000) at ../../../src/lib/lttng-ust/fut=
-ex.h:88
-<br>#3 =C2=A0wait_for_sessiond (sock_info=3D0xffffbef695e0 &lt;local_apps&g=
-t;) at lttng-ust-comm.c:1761
-<br>#4 =C2=A0ust_listener_thread (arg=3D0xffffbef695e0 &lt;local_apps&gt;) =
-at lttng-ust-comm.c:1832
-<br>#5 =C2=A00x0000ffffbe9206a8 in start_thread (arg=3D0xffffc1bd8687) at p=
-thread_create.c:442
-<br>#6 =C2=A00x0000ffffbe98801c in thread_start () at ../sysdeps/unix/sysv/=
-linux/aarch64/clone.S:79
-<br>
-<br>Thread 1 (Thread 0xffffbefcf460 (LWP 545)):
-<br>#0 =C2=A0__strlen_asimd () at ../sysdeps/aarch64/multiarch/strlen_asimd=
-.S:96
-<br>#1 =C2=A00x0000ffffbe834bd0 in lttng_ust_tp_validate_event_name (tp=3D0=
-xaaaab8f14de0 &lt;lttng_ust_tracepoint_hello_world___my_first_tracepoint&gt=
-;, tp=3D0xaaaab8f14de0 &lt;lttng_ust_tracepoint_hello_world___my_first_trac=
-epoint&gt;) at tracepoint.c:143
-<br>#2 =C2=A0add_callsite (tp=3D0xaaaab8f14de0 &lt;lttng_ust_tracepoint_hel=
-lo_world___my_first_tracepoint&gt;, lib=3D0xaaaae74fad30) at tracepoint.c:4=
-12
-<br>#3 =C2=A0lib_register_callsites (lib=3D0xaaaae74fad30) at tracepoint.c:=
-552
-<br>#4 =C2=A0lttng_ust_tracepoint_module_register (tracepoints_start=3D&lt;=
-optimized out&gt;, tracepoints_count=3D&lt;optimized out&gt;) at tracepoint=
-.c:956
-<br>#5 =C2=A00x0000aaaab8758204 in lttng_ust.tracepoints.ptrs_init ()
-<br>#6 =C2=A00x0000ffffbe8cb30c in call_init (env=3D&lt;optimized out&gt;, =
-argv=3D0xffffc1bd8c88, argc=3D1) at ../csu/libc-start.c:145
-<br>#7 =C2=A0__libc_start_main_impl (main=3D0xaaaab867aabc &lt;main&gt;,=20
-argc=3D1, argv=3D0xffffc1bd8c88, init=3D&lt;optimized out&gt;,=20
-fini=3D&lt;optimized out&gt;, rtld_fini=3D&lt;optimized out&gt;,=20
-stack_end=3D&lt;optimized out&gt;) at ../csu/libc-start.c:376
-<br>#8 =C2=A00x0000aaaab867a7f0 in _start () at ../sysdeps/aarch64/start.S:=
-81</span></div><div><span style=3D"font-family:monospace"><br></span></div>=
-<div><span style=3D"font-family:monospace">Regards,</span></div><div><span =
-style=3D"font-family:monospace"><br></span></div><div><span style=3D"font-f=
-amily:monospace">Brian<br></span></div></div></div>
-
---0000000000000e867e061d675e52--
-
---===============7015148040933196878==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============7015148040933196878==--
+SGkgQnJpYW4sCgp0aGFua3MhIEknbGwgdGFrZSBhIGxvb2sgYXQgdGhlc2UgYW5kIHNlZSBpZiBJ
+IGNhbiBnZXQgYW55IGlkZWFzIGZyb20gdGhlbS4KClRvIGdvIGJhY2sgdG8geW91ciBvcmlnaW5h
+bCBlLW1haWwsIGEgZGV0YWlsIHRoYXQgSSBoYWRuJ3Qgbm90aWNlZCBpbiAKeW91ciBvcmlnaW5h
+bCBiYWNrdHJhY2Ugd2FzIHBvaW50ZWQgb3V0IHRvIG1lIGFuZCBJJ2QgbGlrZSB0byB2ZXJpZnkg
+CndpdGggeW91OgoKYGBgCkNvcmUgd2FzIGdlbmVyYXRlZCBieSBgLi9teV9hcHAnLgpQcm9ncmFt
+IHRlcm1pbmF0ZWQgd2l0aCBzaWduYWwgU0lHU0VHViwgU2VnbWVudGF0aW9uIGZhdWx0LgojMCAg
+X19zdHJsZW5fYXNpbWQgKCkgYXQgLi4vc3lzZGVwcy9hYXJjaDY0L211bHRpYXJjaC9zdHJsZW5f
+YXNpbWQuUzo5Ngo5NiAgICAgIC4uL3N5c2RlcHMvYWFyY2g2NC9tdWx0aWFyY2gvc3RybGVuX2Fz
+aW1kLlM6IE5vIHN1Y2ggZmlsZSBvciAKZGlyZWN0b3J5LgpbQ3VycmVudCB0aHJlYWQgaXMgMSAo
+VGhyZWFkIDB4ZmZmZmI4ZTJkMDQwIChMV1AgNzU3KSldCihnZGIpIGJ0CiMwICBfX3N0cmxlbl9h
+c2ltZCAoKSBhdCAuLi9zeXNkZXBzL2FhcmNoNjQvbXVsdGlhcmNoL3N0cmxlbl9hc2ltZC5TOjk2
+CiMxICAweDAwMDBmZmZmYjg2YzUzMzAgaW4gbHR0bmdfdXN0X3RyYWNlcG9pbnRfbW9kdWxlX3Jl
+Z2lzdGVyICgpIGZyb20gCi91c3IvbGliL2xpYmx0dG5nLXVzdC10cmFjZXBvaW50LnNvLjEKIzIg
+IDB4MDAwMGFhYWFiNGM4ZGExOCBpbiBsdHRuZ191c3RfX3RyYWNlcG9pbnRzX19wdHJzX2luaXQg
+KCkgYXQgCi9vcHQvcG9reS80LjAuMTgvc3lzcm9vdHMvY29ydGV4YTUzLWNyeXB0by1wb2t5LWxp
+bnV4L3Vzci9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDo2MjkKIzMgIDB4MDAwMGZmZmZiODcy
+YjMwYyBpbiBjYWxsX2luaXQgKGVudj08b3B0aW1pemVkIG91dD4sIAphcmd2PTB4ZmZmZmUyZDY2
+MDk4LCBhcmdjPTEpIGF0IC4uL2NzdS9saWJjLXN0YXJ0LmM6MTQ1CiM0ICBfX2xpYmNfc3RhcnRf
+bWFpbl9pbXBsIChtYWluPTB4YWFhYWI0YmQ5NGUwIDxtYWluPiwgYXJnYz0xLCAKYXJndj0weGZm
+ZmZlMmQ2NjA5OCwgaW5pdD08b3B0aW1pemVkIG91dD4sIGZpbmk9PG9wdGltaXplZCBvdXQ+LCAK
+cnRsZF9maW5pPTxvcHRpbWl6ZWQgb3V0Piwgc3RhY2tfZW5kPTxvcHRpbWl6ZWQgb3V0PikgYXQg
+Ci4uL2NzdS9saWJjLXN0YXJ0LmM6Mzc2CiM1ICAweDAwMDBhYWFhYjRiZDkyMzAgaW4gX3N0YXJ0
+ICgpIGF0IC4uL3N5c2RlcHMvYWFyY2g2NC9zdGFydC5TOjgxCmBgYAoKVGhlIGxpYnJhcnkgbG9h
+ZGVkIGF0IGZyYW1lIDEgaXMgCmAvdXNyL2xpYi9saWJsdHRuZy11c3QtdHJhY2Vwb2ludC5zby4x
+YDsgaG93ZXZlciwgaW4gZnJhbWUgMiB0aGUgCnJlZmVyZW5jZSBpcyBmcm9tIApgL29wdC9wb2t5
+LzQuMC4xOC9zeXNyb290cy9jb3J0ZXhhNTMtY3J5cHRvLXBva3ktbGludXgvdXNyL2luY2x1ZGUv
+bHR0bmcvdHJhY2Vwb2ludC5oYC4KCkFyZSB0aGUgTFRUbmcgbGlicmFyaWVzIGluIGAvdXNyL2xp
+YmAgdGhlIGV4YWN0IHNhbWUgdmVyc2lvbiBhcyB0aGUgCmhlYWRlcnMgaW4gCmAvb3B0L3Bva3kv
+NC4wLjE4L3N5c3Jvb3RzL2NvcnRleGE1My1jcnlwdG9wLXBva3ktbGludXgvdXNyL2luY2x1ZGUv
+bHR0bmdgPwoKSWYgc29tZSBvZiB5b3VyIGFwcCBpcyBjb21waWxlZCB1c2luZyBvbmUgdmVyc2lv
+biBvZiBoZWFkZXJzIGFuZCBhIApkaWZmZXJlbnQgdmVyc2lvbiBvZiB0aGUgbGlicmFyeSBpcyBs
+b2FkZWQgYXQgcnVudGltZSwgdGhlcmUgY291bGQgYmUgYW4gCkFCSSBtaXNtYXRjaC4KCllvdSBj
+b3VsZCBjaGVjayB3aGF0IHRoZSBpbmNsdWRlIHBhdGhzIGFyZSBkdXJpbmcgY29tcGlsYXRpb24g
+YW5kIApgTERfTElCUkFSWV9QQVRIYCBhdCBydW50aW1lLiBSdW5uaW5nIHdpdGggdGhlIGVudmly
+b25tZW50IHZhcmlhYmxlIApgTERfREVCVUc9YmluZGluZ3MsbGlic2AgKHNlZSBgbWFuIGxkLnNv
+YCBmb3IgbW9yZSBpbmZvKS4KCkluIGFueSBjYXNlLCBJJ2xsIHRha2UgYSBsb29rIG92ZXIgdGhl
+IG1vc3QgcmVjZW50IGJhY2t0cmFjZXMgYW5kIHNlZSBpZiAKYW55dGhpbmcgZWxzZSBqdW1wcyBv
+dXQuCgp0aGFua3MsCmtpZW5hbgoKCk9uIDcvMTYvMjQgOToyNyBQTSwgQnJpYW4gSHV0Y2hpbnNv
+biB3cm90ZToKPiBIaSBLaWVuYW4sCj4gCj4gT24gVGh1LCBKdWwgMTEsIDIwMjQgYXQgODozOOKA
+r0FNIEtpZW5hbiBTdGV3YXJ0IDxrc3Rld2FydEBlZmZpY2lvcy5jb20gCj4gPG1haWx0bzprc3Rl
+d2FydEBlZmZpY2lvcy5jb20+PiB3cm90ZToKPiAKPiAgICAgSGkgQnJpYW4sCj4gCj4gICAgIE9u
+IDcvMTEvMjQgODozMyBBTSwgQnJpYW4gSHV0Y2hpbnNvbiB2aWEgbHR0bmctZGV2IHdyb3RlOgo+
+ICAgICAgwqA+IC4uLgo+ICAgICAgwqA+Cj4gICAgICDCoD4gSSdtIG5vdCBzdXJlIGFib3V0IHRo
+aXMsIHN0aWxsIHRyeWluZyB0byBjb21wcmVoZW5kIGV2ZXJ5dGhpbmcsCj4gICAgIGJ1dCBJCj4g
+ICAgICDCoD4gdGhpbmsgbXkgaXNzdWUgY291bGQgYmUgcmVsYXRlZCB0byBhbGwgdGhpcyBnY2Mg
+VExTLCBoZWFwLAo+ICAgICB0cmFtcG9saW5lCj4gICAgICDCoD4gdGFsayBoZXJlOgo+ICAgICAg
+wqA+Cj4gICAgICDCoD4KPiAgICAgaHR0cHM6Ly93d3cubWFpbC1hcmNoaXZlLmNvbS9sdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnL21zZzEzNTg0Lmh0bWwKPiAgICAgPGh0dHBzOi8vd3d3Lm1haWwt
+YXJjaGl2ZS5jb20vbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZy9tc2cxMzU4NC5odG1sPgo+ICAg
+ICAgwqA+Cj4gICAgIDxodHRwczovL3d3dy5tYWlsLWFyY2hpdmUuY29tL2x0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcvbXNnMTM1ODQuaHRtbCA8aHR0cHM6Ly93d3cubWFpbC1hcmNoaXZlLmNvbS9s
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnL21zZzEzNTg0Lmh0bWw+Pgo+ICAgICAgwqA+Cj4gICAg
+ICDCoD4gUmVnYXJkcywKPiAgICAgIMKgPgo+ICAgICAgwqA+IEJyaWFuCj4gICAgICDCoD4KPiAK
+PiAgICAgWW91IGNvdWxkIHRyeSB1c2luZyBsdHRuZy11c3QgMi4xMy44LCB3aGljaCBpbmNsdWRl
+cyBhIGZpeCBmb3IgdGhlCj4gICAgIGRpc2N1c3Npb24geW91IHJlZmVyZW5jZWQuCj4gCj4gICAg
+IGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy11c3QvY29tbWl0LzVkYjcxNWU4MDBkOWI3
+MjFmNDg0OTVhOTg3Y2QyNmMyNTk2NWU4MzYgPGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRu
+Zy11c3QvY29tbWl0LzVkYjcxNWU4MDBkOWI3MjFmNDg0OTVhOTg3Y2QyNmMyNTk2NWU4MzY+Cj4g
+Cj4gICAgIFBsZWFzZSBsZXQgdXMga25vdyBpZiBpdCBkb2Vzbid0IHNvbHZlIGl0Lgo+IAo+ICAg
+ICB0aGFua3MsCj4gICAgIGtpZW5hbgo+IAo+IAo+IEkgdXBkYXRlZCB0byBsdHRuZy11c3QgMi4x
+My44IGFzIHlvdSBzdWdnZXN0ZWQuwqAgQXQgZmlyc3QsIEkgcHVsbGVkIGluIAo+IHRoZSByZWNp
+cGUgZnJvbSBtYXN0ZXIgYnJhbmNoIG9mIFlvY3RvLCBidXQgaGFkIHRoZSBzYW1lIHByb2JsZW0g
+YXMgCj4gYmVmb3JlIGFmdGVyIHJlYnVpbGRpbmcuCj4gCj4gTmV4dCwgSSBkb3dubG9hZGVkIHRo
+ZSAyLjEzLjggbHR0bmctdXN0IHRhcmJhbGwgZnJvbSB0aGUgbHR0bmcgc2l0ZSBhbmQgCj4gc2V0
+dXAgYSBuYXRpdmUgYnVpbGQgZW52aXJvbm1lbnQgb24gbXkgdGFyZ2V0IGFuZCBidWlsdCBsdHRu
+Zy11c3QgMi4xMy44IAo+IGFuZCBteSBhcHAgYXMgYSBzZWNvbmQgaW5kZXBlbmRlbnQgYnVpbGQg
+bWV0aG9kIGZvciBzYW5pdHkgY2hlY2suwqAgSSBjYW4gCj4gcmVwb3J0IHRoYXQgSSBnZXQgdGhl
+IGV4YWN0IHNhbWUgcmVzdWx0IGFzIGJlZm9yZSB0aGlzIHdheSB0b28uCj4gCj4gSW4gYm90aCBj
+YXNlcywgSSB2ZXJpZmllZCB0aGF0IEkgaGFkIHRoZSBjb21taXQgeW91IHJlZmVyZW5jZWQgYWJv
+dmUuCj4gCj4gSSBkaWQgYSBiYWNrdHJhY2Ugb2YgdGhlIHRocmVlIHRocmVhZHMgY2FwdHVyZWQg
+aW4gdGhlIGNvcmVkdW1wIGFuZCBzaG93IAo+IHRoZW0gYmVsb3cgaW4gaG9wZXMgaXQgd2lsbCBz
+aGVkIGxpZ2h0IG9uIHdoYXQgSSBuZWVkIHRvIHRyeSBuZXh0Lgo+IAo+IChnZGIpIHRocmVhZCBh
+cHBseSBhbGwgYmFja3RyYWNlCj4gCj4gVGhyZWFkIDMgKFRocmVhZCAweGZmZmZiZTdkZTdlMCAo
+TFdQIDU1OSkpOgo+ICMwIMKgc3lzY2FsbCAoKSBhdCAuLi9zeXNkZXBzL3VuaXgvc3lzdi9saW51
+eC9hYXJjaDY0L3N5c2NhbGwuUzozOAo+ICMxIMKgMHgwMDAwZmZmZmJlZWYxYmI4IGluIGx0dG5n
+X3VzdF9mdXRleCAodmFsMz0wLCB1YWRkcjI9MHgwLCAKPiB0aW1lb3V0PTB4MCwgdmFsPTAsIG9w
+PTAsIHVhZGRyPTB4ZmZmZmJlZmQ4MDAwKSBhdCAKPiAuLi8uLi8uLi9zcmMvbGliL2x0dG5nLXVz
+dC9mdXRleC5oOjU2Cj4gIzIgwqBsdHRuZ191c3RfZnV0ZXhfYXN5bmMgKG9wPTAsIHZhbD0wLCB0
+aW1lb3V0PTB4MCwgdWFkZHIyPTB4MCwgdmFsMz0wLCAKPiB1YWRkcj0weGZmZmZiZWZkODAwMCkg
+YXQgLi4vLi4vLi4vc3JjL2xpYi9sdHRuZy11c3QvZnV0ZXguaDo4OAo+ICMzIMKgd2FpdF9mb3Jf
+c2Vzc2lvbmQgKHNvY2tfaW5mbz0weGZmZmZiZWY2YjYzOCA8Z2xvYmFsX2FwcHM+KSBhdCAKPiBs
+dHRuZy11c3QtY29tbS5jOjE3NjEKPiAjNCDCoHVzdF9saXN0ZW5lcl90aHJlYWQgKGFyZz0weGZm
+ZmZiZWY2YjYzOCA8Z2xvYmFsX2FwcHM+KSBhdCAKPiBsdHRuZy11c3QtY29tbS5jOjE4MzIKPiAj
+NSDCoDB4MDAwMGZmZmZiZTkyMDZhOCBpbiBzdGFydF90aHJlYWQgKGFyZz0weGZmZmZjMWJkODY4
+NykgYXQgCj4gcHRocmVhZF9jcmVhdGUuYzo0NDIKPiAjNiDCoDB4MDAwMGZmZmZiZTk4ODAxYyBp
+biB0aHJlYWRfc3RhcnQgKCkgYXQgCj4gLi4vc3lzZGVwcy91bml4L3N5c3YvbGludXgvYWFyY2g2
+NC9jbG9uZS5TOjc5Cj4gCj4gVGhyZWFkIDIgKFRocmVhZCAweGZmZmZiZGZjZTdlMCAoTFdQIDU2
+MCkpOgo+ICMwIMKgc3lzY2FsbCAoKSBhdCAuLi9zeXNkZXBzL3VuaXgvc3lzdi9saW51eC9hYXJj
+aDY0L3N5c2NhbGwuUzozOAo+ICMxIMKgMHgwMDAwZmZmZmJlZWYxYmI4IGluIGx0dG5nX3VzdF9m
+dXRleCAodmFsMz0wLCB1YWRkcjI9MHgwLCAKPiB0aW1lb3V0PTB4MCwgdmFsPTAsIG9wPTAsIHVh
+ZGRyPTB4ZmZmZmJlZmQ3MDAwKSBhdCAKPiAuLi8uLi8uLi9zcmMvbGliL2x0dG5nLXVzdC9mdXRl
+eC5oOjU2Cj4gIzIgwqBsdHRuZ191c3RfZnV0ZXhfYXN5bmMgKG9wPTAsIHZhbD0wLCB0aW1lb3V0
+PTB4MCwgdWFkZHIyPTB4MCwgdmFsMz0wLCAKPiB1YWRkcj0weGZmZmZiZWZkNzAwMCkgYXQgLi4v
+Li4vLi4vc3JjL2xpYi9sdHRuZy11c3QvZnV0ZXguaDo4OAo+ICMzIMKgd2FpdF9mb3Jfc2Vzc2lv
+bmQgKHNvY2tfaW5mbz0weGZmZmZiZWY2OTVlMCA8bG9jYWxfYXBwcz4pIGF0IAo+IGx0dG5nLXVz
+dC1jb21tLmM6MTc2MQo+ICM0IMKgdXN0X2xpc3RlbmVyX3RocmVhZCAoYXJnPTB4ZmZmZmJlZjY5
+NWUwIDxsb2NhbF9hcHBzPikgYXQgCj4gbHR0bmctdXN0LWNvbW0uYzoxODMyCj4gIzUgwqAweDAw
+MDBmZmZmYmU5MjA2YTggaW4gc3RhcnRfdGhyZWFkIChhcmc9MHhmZmZmYzFiZDg2ODcpIGF0IAo+
+IHB0aHJlYWRfY3JlYXRlLmM6NDQyCj4gIzYgwqAweDAwMDBmZmZmYmU5ODgwMWMgaW4gdGhyZWFk
+X3N0YXJ0ICgpIGF0IAo+IC4uL3N5c2RlcHMvdW5peC9zeXN2L2xpbnV4L2FhcmNoNjQvY2xvbmUu
+Uzo3OQo+IAo+IFRocmVhZCAxIChUaHJlYWQgMHhmZmZmYmVmY2Y0NjAgKExXUCA1NDUpKToKPiAj
+MCDCoF9fc3RybGVuX2FzaW1kICgpIGF0IC4uL3N5c2RlcHMvYWFyY2g2NC9tdWx0aWFyY2gvc3Ry
+bGVuX2FzaW1kLlM6OTYKPiAjMSDCoDB4MDAwMGZmZmZiZTgzNGJkMCBpbiBsdHRuZ191c3RfdHBf
+dmFsaWRhdGVfZXZlbnRfbmFtZSAKPiAodHA9MHhhYWFhYjhmMTRkZTAgCj4gPGx0dG5nX3VzdF90
+cmFjZXBvaW50X2hlbGxvX3dvcmxkX19fbXlfZmlyc3RfdHJhY2Vwb2ludD4sIAo+IHRwPTB4YWFh
+YWI4ZjE0ZGUwIAo+IDxsdHRuZ191c3RfdHJhY2Vwb2ludF9oZWxsb193b3JsZF9fX215X2ZpcnN0
+X3RyYWNlcG9pbnQ+KSBhdCAKPiB0cmFjZXBvaW50LmM6MTQzCj4gIzIgwqBhZGRfY2FsbHNpdGUg
+KHRwPTB4YWFhYWI4ZjE0ZGUwIAo+IDxsdHRuZ191c3RfdHJhY2Vwb2ludF9oZWxsb193b3JsZF9f
+X215X2ZpcnN0X3RyYWNlcG9pbnQ+LCAKPiBsaWI9MHhhYWFhZTc0ZmFkMzApIGF0IHRyYWNlcG9p
+bnQuYzo0MTIKPiAjMyDCoGxpYl9yZWdpc3Rlcl9jYWxsc2l0ZXMgKGxpYj0weGFhYWFlNzRmYWQz
+MCkgYXQgdHJhY2Vwb2ludC5jOjU1Mgo+ICM0IMKgbHR0bmdfdXN0X3RyYWNlcG9pbnRfbW9kdWxl
+X3JlZ2lzdGVyICh0cmFjZXBvaW50c19zdGFydD08b3B0aW1pemVkIAo+IG91dD4sIHRyYWNlcG9p
+bnRzX2NvdW50PTxvcHRpbWl6ZWQgb3V0PikgYXQgdHJhY2Vwb2ludC5jOjk1Ngo+ICM1IMKgMHgw
+MDAwYWFhYWI4NzU4MjA0IGluIGx0dG5nX3VzdC50cmFjZXBvaW50cy5wdHJzX2luaXQgKCkKPiAj
+NiDCoDB4MDAwMGZmZmZiZThjYjMwYyBpbiBjYWxsX2luaXQgKGVudj08b3B0aW1pemVkIG91dD4s
+IAo+IGFyZ3Y9MHhmZmZmYzFiZDhjODgsIGFyZ2M9MSkgYXQgLi4vY3N1L2xpYmMtc3RhcnQuYzox
+NDUKPiAjNyDCoF9fbGliY19zdGFydF9tYWluX2ltcGwgKG1haW49MHhhYWFhYjg2N2FhYmMgPG1h
+aW4+LCBhcmdjPTEsIAo+IGFyZ3Y9MHhmZmZmYzFiZDhjODgsIGluaXQ9PG9wdGltaXplZCBvdXQ+
+LCBmaW5pPTxvcHRpbWl6ZWQgb3V0PiwgCj4gcnRsZF9maW5pPTxvcHRpbWl6ZWQgb3V0Piwgc3Rh
+Y2tfZW5kPTxvcHRpbWl6ZWQgb3V0PikgYXQgCj4gLi4vY3N1L2xpYmMtc3RhcnQuYzozNzYKPiAj
+OCDCoDB4MDAwMGFhYWFiODY3YTdmMCBpbiBfc3RhcnQgKCkgYXQgLi4vc3lzZGVwcy9hYXJjaDY0
+L3N0YXJ0LlM6ODEKPiAKPiBSZWdhcmRzLAo+IAo+IEJyaWFuCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmct
+ZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
