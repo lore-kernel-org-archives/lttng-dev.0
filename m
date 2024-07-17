@@ -4,50 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 947E6C3DA42
-	for <lttng-dev@archiver.kernel.org>; Wed, 17 Jul 2024 15:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21339C3DA4B
+	for <lttng-dev@archiver.kernel.org>; Wed, 17 Jul 2024 16:08:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1721231246;
-	bh=QwwKUDHbJA/0fmzbLUc0T8FWOMpd8+0/u4amsLjgrWg=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	s=default; t=1721232538;
+	bh=cfF+KX0I+H+Yf05InO7to/v+DZtO3r5Tjbm41H4k2YE=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=n/uUoXt/1wjexbCvpxf9Vc3FozAp70AN5feVKlAYl3trvB4+SfqOscLIwJBH5Qopm
-	 hXVODnzHk2avMoF1Ki++zk9jPiKMm0QdoaD45sQQQ5J3WQQUx3erpDrj4BbzquKgpu
-	 4cGtnAvZDUSmoHrqZIVn7sJMnxlMNtoRiao8RWO1jYqVbtuwYWjCZ9zkl0geH+yVIZ
-	 1SYR1nTnPovsjLfbVaBsDf/5wjyHfh5o7No64hptvSTHxarUm7exBXtOew6pFWWGaP
-	 xuGMbrZwo9MQUTpkCOpBa83X/qZEwc0wFTmaHBY0DgmaezKKdeTnZ4xhbmrr3KTK1B
-	 L1SJxSFRFbLWQ==
+	b=Pr72Mp/uVcAOfWumLjsXeZ4fYF+W8Tzm6mihEMvbDQ+XSfNNd9orOa8+unCEmW7bT
+	 xxfPNcjPMyd9kFrmLceZleMTQZJ4h0c5TasCkbO+F/Be2zo32D1vPkyGkwm/D8A2ZZ
+	 s/1luy/JAP0lrdcDhDITtvv4liW/bLZLHTGkeQTRCwv3QEnCYb3hLY2q1Z70yW2hu2
+	 92MLCNyGQh+3mTnVmHwPEBDvUD2Ba/1dV/kjjW1mh7Zj5Z1hQgM5b14K3WY1D7YEZJ
+	 XN3y4LBwWVqOKJeSF0KGwOr3E+REBBhb+uqhbA2lQD/yKrS4Sl4fNej0PCzjTzJhh4
+	 Ascfq2o5gaHKA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4WPL0s6xXvz12FY;
-	Wed, 17 Jul 2024 11:47:25 -0400 (EDT)
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com
- [IPv6:2607:f8b0:4864:20::532])
- by lists.lttng.org (Postfix) with ESMTPS id 4WPL0r2MZkz12LG
- for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2024 11:47:24 -0400 (EDT)
-Received: by mail-pg1-x532.google.com with SMTP id
- 41be03b00d2f7-6bce380eb9bso3860104a12.0
- for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2024 08:47:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721231243; x=1721836043;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=YLtVy7CTmxschaaiyd7xHNqZXEu0DgitUj7UTtgDAbY=;
- b=HEkXDdEFS9W5qw2k0RZtVMpaCicv4EbaOAMxaQxkRCn+6cJK+xqVjykJn3BBf8Sq9K
- eIPntOw5ri4z4dU+K6j28uEGDn+4tFwoRyLnGpFgLpoYc4CPjXg0Rjuf5txNUnDNvb2W
- dB1Jk5ygoS9DDMwqq9g9/ucwlwxCln4UPyFPRVrnt3W7Ye1QTqCL5qbxn03W49Sc8RYb
- MCOwILkGzU+EQXw/2ra2W3S/SOdrDwtgNKe3//fJkF9Vz+5Cy2SI276P4nPeQh285I92
- XXfEECUTkoaMnwb07LGsw71/yL6TvajxjuRysQEg6PYQPdMF+D9kt4B7N67QcpYmypJa
- I0OQ==
-X-Gm-Message-State: AOJu0YwHn/q3hvmsL4c8hu90pqf/r9bzdp1U1PulWB/3bwMvLh5Hf+ea
- /45qcv/7bjWHYkxi5fwl/VqK9vv1TUqthmX9F3bvCCfVWNNxzDNGRh4xaIXRaH0HUgNhXVCRGrA
- 8spPc0/iyVqUKFoAcyxcPNS7+1QWkyiAa
-X-Google-Smtp-Source: AGHT+IFBw2SckO6KnlgF82WrCt0bt9lKOtxfMjzjJ6b4SBKtFun3GPoSzCPZSCrsarhiBomDIMTpxUPDamP6GmcQJiM=
-X-Received: by 2002:a05:6a20:12c5:b0:1c0:ec1c:f4a0 with SMTP id
- adf61e73a8af0-1c3fdd6b4f2mr2765154637.38.1721231242797; Wed, 17 Jul 2024
- 08:47:22 -0700 (PDT)
-MIME-Version: 1.0
+	by lists.lttng.org (Postfix) with ESMTP id 4WPLTk27R9z1277;
+	Wed, 17 Jul 2024 12:08:58 -0400 (EDT)
+Received: from YQZPR01CU011.outbound.protection.outlook.com
+ (mail-canadaeastazlp170100001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c104::1])
+ by lists.lttng.org (Postfix) with ESMTPS id 4WPLTh5tsBz12K9
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2024 12:08:56 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=q6Fo+dv5oQBNk+fCANKHpXF7UA3ytO7BPpC+4gjLkCd/McSwLt/8LWXr99NVu80QNDlwts54K+1+VctqDGgSbPxUvzCPRAQHXEUlgIYM1sIv0fEKTqJGo+PdWEYkaMKzsz9Jy03Jqb1jGQ7xmIWeb+yr1u+z4vg2b27IdaH3S/SFhkIptGYYKoywjmPC0aEXuw+/m7LzF163jAPas3aPpj9Y+YS4dZQzxz3yaPYytXrWHPnhSAxtZ3KoXZ4PRpcVSC1lSDQsvNsukV9+sLJXZL4Nzm+gjDozCkEGlQnpDzlZcYst0LbNEcmBQcKyOhcjH5B2EMtRl0crhryCUq5sVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PeC1+VqhMgzPjuKoa8xvgAweRt4w1Biz5sLUN96D9sI=;
+ b=HN7UNwuQ7/tEEK3P34Esah0LThPJDxUKrkyv52L6qoLqsYUqTGSX/Y6ObQmB9JPd3CtaX8jhFoAZ03aTo0W5CDwVwMK5lcUS/txzxTpVnERA0TZD4SUO2Q2+nXliKcALDglPIFx8yhbOfywmDGG4xm1U5n/a/XT1MeV6gIlQTG1PJf9rAag2H7XMaMag8t8CtBtbi9lz55bkxhLDd0Z3mheMJZ8E5p6GcTga9OFRxDdvAko8ap28icm0FlbayUQuxtaUeMZyfpifqcFnChVM/a2vtsDHkfwx5klwnILujTrH8NlX0yyWPga7s40ACYCDRAoNM2tbKdznnlqmQjnLZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::14)
+ by YQXPR01MB6416.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:43::17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.17; Wed, 17 Jul
+ 2024 16:08:52 +0000
+Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e27c:c1e2:e6e:9256]) by YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e27c:c1e2:e6e:9256%4]) with mapi id 15.20.7762.030; Wed, 17 Jul 2024
+ 16:08:52 +0000
+Message-ID: <02547951-d7df-4006-853a-521b057e9b3f@efficios.com>
+Date: Wed, 17 Jul 2024 12:08:50 -0400
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Fran=C3=A7ois_Belias?= <beliasossim@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 References: <CAHD10UjoaOjqZUH4j55Ra7zJ2HVRLOyk7xnjv+BjnJxs6rN6Aw@mail.gmail.com>
  <6deffa1d-4d46-4445-a510-a3aac271cc80@efficios.com>
  <CAHD10Ui_JkP9hRirGUvKBgHhWX48r26+M2_zTyOD_cMLnSDGCg@mail.gmail.com>
@@ -55,11 +57,100 @@ References: <CAHD10UjoaOjqZUH4j55Ra7zJ2HVRLOyk7xnjv+BjnJxs6rN6Aw@mail.gmail.com>
  <CAHD10Ugvtu+wKGeRjujGgXbXrEqH-6OKHurJgMyf7CmUVjzRRQ@mail.gmail.com>
  <5b7fc307-a52a-4e54-84df-294600454686@efficios.com>
  <CAHD10UgTthGz7gcgcga6W4xxjiKHfuZgM9uCjEkViKsVUnDF8A@mail.gmail.com>
-In-Reply-To: <CAHD10UgTthGz7gcgcga6W4xxjiKHfuZgM9uCjEkViKsVUnDF8A@mail.gmail.com>
-Date: Wed, 17 Jul 2024 11:47:11 -0400
-Message-ID: <CAHD10UhNDKo=4Kk-Z_mBG3PMm=1KgX9L0mjgTS+ZfrT4Xbmn9w@mail.gmail.com>
-To: Kienan Stewart <kstewart@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+ <CAHD10UhNDKo=4Kk-Z_mBG3PMm=1KgX9L0mjgTS+ZfrT4Xbmn9w@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAHD10UhNDKo=4Kk-Z_mBG3PMm=1KgX9L0mjgTS+ZfrT4Xbmn9w@mail.gmail.com>
+X-ClientProxiedBy: YQBPR01CA0160.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:7e::29) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:e8::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YQXPR01MB6416:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31864538-59bb-492d-6d13-08dca67ac032
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?d2wzQVJScFV1MkVMc1pNTzluTVc4c0h5U0JVRHVDcE5sdUVIcDZoZS8wVUhR?=
+ =?utf-8?B?VVh5YVJlY3Z5M0tnUWNGT1JXQzNxYjVCZHFvZkZjdjVGNHJsb01qSmwveEpl?=
+ =?utf-8?B?eEhBdGZtaTJEM1JMVkh2anNIeHVTSTJiNlVSMkUyc3Z2SlNQc3JPSTJJMDd4?=
+ =?utf-8?B?VDM1cDNqMitJVG5KcVdVTWFvSWVQODJkSFdzYlVqd1dUSGlYaFBTb1NNbGhK?=
+ =?utf-8?B?L3p6TWc2RUx3WTY3RlFzU3BlZ0NwNzRzMTMzcCtySSsxZHV1YWs2cS9ucllk?=
+ =?utf-8?B?dmJkM2NDYW5EM3VMckFndDMvTFBjNE53UlEzdWJxQWw3Yi9NMHlZb1ZLT3VG?=
+ =?utf-8?B?cTRzZFJlYTZGTHhZc2V6cUgvV3c5cmZuZ1VhbUFjQTRsVDNaRTJRNHcvUldy?=
+ =?utf-8?B?ZHRzbXB6NklPRzIzYjJFTGxoaEpoWGlXdXl6ZWdQVGJEbWl6VDh4MVZ4TEpn?=
+ =?utf-8?B?YTY3Z0NCd3dyVVVaWE9vUVZVMXhnR3dtRlZCY2V1ZW9wZDRhcHN1ZVZtdDR1?=
+ =?utf-8?B?UkF5M0NYTTdGcG1iOVduSCtvMExudVUybGlaVC9qNGdBZFB0bVVEWlpoVzk4?=
+ =?utf-8?B?Qi8zR1B2bHFtbGZkVGplT1MxL2tVK3UwVVd3SUVDeWtBTWduQU8rK0VlRFR5?=
+ =?utf-8?B?TFZpUkpRaVc2T0ExdVJoWXBWeXBUKzVRMFBORnNsSmloUXBOcE5BUDBIaEp3?=
+ =?utf-8?B?VmozSVhpeVFxVENiNjl3a0huNWs0NXVQMW5WTjY3SlNmVnF1WFpJS2NZNFR2?=
+ =?utf-8?B?YzF5RDBJd3hJdm5aQjhxN3ZJVGxHblE4aEcvZTVXdVd3N3dHa3IrUXMvNzln?=
+ =?utf-8?B?bk5Hd21BcmticEsrcXZnSUsyNWZKcmdGeld2QWtxdkdiV3UzbWJZSXFEMnhS?=
+ =?utf-8?B?VUVZUGRrM28xc1hxM25tQVdXc0RzYjdCUDNjZnBzNTIyK1prWUdSbFJBdVRm?=
+ =?utf-8?B?QXZQYW43NDRLK290RTA2YlBVaHJkYlE0dHFxS2oxM3BUYjFXdmJTRmkwRXhJ?=
+ =?utf-8?B?SjhuZ1R1OW9Eb3Zic2JoTmcycmVBMXBTc0U2RWcydW5RL1NsRmpYSUlzU3dG?=
+ =?utf-8?B?M0hSaGdRT1k4Z0JXd1l3UEYxdFNSRytCNnhqQWJWd2hLWU1nUWhkbzNxMis2?=
+ =?utf-8?B?NFRlS3p5Uk1qcjl5cGRYQnVmN2dNMk5Ma3hFYkc0L2xFbVJYNi96MmZCTm9G?=
+ =?utf-8?B?R0g0czVMQkc1S3JBMFhpZ3g0bTcyZERDYUxlL2dNb2ZtM0pVa3h3OXkrSndv?=
+ =?utf-8?B?OHpjWmdvWEQ3UThDZllFQ1FOb0VibXpyTE5vS0JpQkJ5STZ2OFNXenZva3FO?=
+ =?utf-8?B?ZGRxMFVscnozQXN1UlFrN0lhVDFrZmtzUUs1QWlYU0R3VWZCODFUNGI5NFli?=
+ =?utf-8?B?ei8xVUhnV1Bzb05xQ1pCM211M0VPdVhuTCt3YVp0NXZHU0hrbFh4ZDNOQ0ww?=
+ =?utf-8?B?QzFTMDltR3A3TUVmT0xqRFowUFNsRUhFVFNrek53elVaOG5BeWYzbTlpZ0l3?=
+ =?utf-8?B?WUxPYlNZaWdSOE1CMS9TRDkwU0oyMWRRdWQ2aTA5TEVqVmVOanptWE9aTXhG?=
+ =?utf-8?B?UDJhSUJLd0Y0Q21YSVRGR3hCZ2t0VXB3bUVyVWxOWUhOVXZMemh2Wk5SK2Nx?=
+ =?utf-8?B?enh4NU1GTjZ3K0FCS3lkakdHRi9MU0l4bWt3Sk0xWDhjTTBDUDlFcjB0VTVo?=
+ =?utf-8?B?eXo2d3h3cHhIQk9BeERObXg2OVVEMFY3MUkwZjFSYUE0MXd0elVNRVQxWnFq?=
+ =?utf-8?Q?OsGfER6mQcs3aS4wCM=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(1800799024)(376014); DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TjY3WG5xUS80OHNwWjFaREgvTTRiOVRYNlo3TmRsSU1RVmdpY1lzdEVJdGNX?=
+ =?utf-8?B?bC9XZHJsN1NxeTh6V2tnakNqb0g0S0ZydDNUVVU1aGxKWWZRTWNwSEMxVWhS?=
+ =?utf-8?B?R3R3ZkFuMGcrSzFQRFJzeVNLb3EvbE1lZWpCLzE1QlJPK2pRNWh2TVJZN2tk?=
+ =?utf-8?B?SEJyOTJwdXh4ZVJ1NTk3eWIxVjA3ZHFwOGVnWU1XOUZLbDNnYXJNc1pDN25r?=
+ =?utf-8?B?RUxOOFZQbmowT0REMXJ4UUt2WWNPckVrWUN6d3lZRHlBOG02SllmaW15MDRq?=
+ =?utf-8?B?ZzdYUVJLVWg4ZlVIclUwSnk1K1hFMWh6VkNmNmhPQnBpOCtVcWM3aVphMFFz?=
+ =?utf-8?B?R2xVaVVhR0ppbEFJaW5KNmtvYlFJQUxvRXd1T3ViTjcvVnFvaGhLdGphUjhP?=
+ =?utf-8?B?RlpVb0NQVFBxalUyOS91VzhXVzRJOFpUd3FUeTFPR2ZpdEo4c1lzRW1hZzZG?=
+ =?utf-8?B?ZkxSZVBKaU5rY2xLd08wdSs2dWtyN0F2b2tqemtsK1pXZW95dU5XNW15Nmxj?=
+ =?utf-8?B?UHlybEZUKzVVOTBNeEFxNVVrRk9jQUlHQW9RSVNibWE3NFQzUytKN1R5YVY0?=
+ =?utf-8?B?WHpzc2FuWDBkejM2MmJUdHZETHRDRGZiWjBucU9Qbmc2OHI1OVVpR012Wlg1?=
+ =?utf-8?B?U2VPVlFhQmFPdHdONmUxQzhRRFRmWWNGdFY0aFhOL3FCb3UwTWl6cVdLdEp1?=
+ =?utf-8?B?MHZLekxsNW1XbmpiMVNoelBJa05KUWRnS1V1b2NZb1QvZzUwWlNBWVBpcmlh?=
+ =?utf-8?B?cGxIeTJOZEIwRjQybzhwWnFIWGxobGcwWGtKUUJDQitlVDNPanhBTmVrbEJm?=
+ =?utf-8?B?M2p6dGtGSHZhc1loZkl3RFpZVkdUSk91UmZtb0Mza1BrS3FRRnlmazF0QStW?=
+ =?utf-8?B?QjNSUFhvL3RraWZZUEJjMVNYOEVwdi9ScTZObXRCRitRaFZkOGFyU1RsZldr?=
+ =?utf-8?B?djJlMHgrdnBLWmp3MFRKcXlsdjN1RHZFOHdxbXQrSTROaWpEaHdvUnI5Umda?=
+ =?utf-8?B?Y1dWUEJ3L2J4dGJLdGp5WXV1VDFlRWswaWluUUFlS284ZkVUMXkvRURxNFNq?=
+ =?utf-8?B?VjZXNjcvQ21Dd21YQSs5SDRMUGtBb0xHVVR0a3diY2xzZXNvUWo4SmxraGIy?=
+ =?utf-8?B?eTJld0ozeko2Vm1PeDlsV1lqLzRLQkhsc2E2bTFmV0NleTV6b29NTkc4MHlC?=
+ =?utf-8?B?Q0k0ZGsyKzdhdG5LcTIvOTA0dFlZSk9pd1pmOTNiaUd3SnR4MmFUbUNUR09F?=
+ =?utf-8?B?QnhCakFsVG5EVmE0ZG5ZbFRwQkUrTnBGeFdDT1BmblRyZ0VKdzhkVGFqM2x2?=
+ =?utf-8?B?RUtsT1pUdkpEdkZKVkFGUG5KSktRZ0l1MUdzSEJhK1Z0M0F3NTlHSEZFNmI3?=
+ =?utf-8?B?bkRQRGNTN3k2WkdnYkZNLytaT3dxeXNISmRJVUJXSnNXaG9IQkRwSVYyNFNs?=
+ =?utf-8?B?TVRPZTl5bHg3bGh0ZW5iZndDZzBGR0x2VXlCd0RDY2J0dks5T1ZFOXRlaGpD?=
+ =?utf-8?B?alo5UERzaEFlWnNJMzhPWldUakpZSlVFUlJCN0ZNcnc4MFFibjJOZE5VQndY?=
+ =?utf-8?B?RnIybERsZjhmTDRWY080NFE5emVGVUd3Zyt1eUtrWXdrZXpxa0U1VE1wWEY0?=
+ =?utf-8?B?OXJKNml2eFk1SlJ3ZXV0a1I5ZUJUK2loMUh0cFp3M2RhNGNKR3JnRmxpQmdq?=
+ =?utf-8?B?VS8yVzNUZUFJVFhYWjZkRHp3R1F3WnhWN3pZdGNxRTBLRWM5RkNNZ1p4MnJk?=
+ =?utf-8?B?cEN1VVY5R3Nkb015R0NSa3BqU0YvUDVxSXZQZWpROUtlWkJlL2E5Sk1NYVRu?=
+ =?utf-8?B?LzVVU2NZb3NTNWR0TDdVditDRW9mV2xLWGlBb0gxaTlvUUlhZmh2NUs3dVVX?=
+ =?utf-8?B?OUdoZXc2c3YyeVQzemdaUWdlMjkwTVlsbS9mY3U5VnROYkpVSU9ubnhFdEpM?=
+ =?utf-8?B?YWdCa3kyWk1KZ2xrUU03WWllOVNhWVdoSmFYWHRiL2x5SEN3OUllYktzSHI1?=
+ =?utf-8?B?ZWNNYkJQOEpJT1hQUHEvanpSMWUrems3VDJCM2Uzd1J3djljdTZDK3Fxc2V3?=
+ =?utf-8?B?Mm9FTERSOTIxdS9pMEFpa2FYbWYxV0xxcUg2a2R5VzVTM29CdG1xa2FoVmxO?=
+ =?utf-8?B?RzBIT0RpQlZ5cytsVEpJdFBMckc2aXdJQm5zdEVUemxWejBwbGV5ek5OdXNK?=
+ =?utf-8?B?cnc9PQ==?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31864538-59bb-492d-6d13-08dca67ac032
+X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2024 16:08:52.1917 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xDSDgvuTxSC1J0G9wIx1b/G5xEwLjX8Ar36yO+FWWi8faSVQ6Ml6pC3A5+8G8CsJdT+/2oXVF/voFI2G+c9+JQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQXPR01MB6416
 Subject: Re: [lttng-dev] loading modules with modprobe
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
@@ -72,487 +163,217 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: =?utf-8?q?Fran=C3=A7ois_Belias_via_lttng-dev?=
- <lttng-dev@lists.lttng.org>
-Reply-To: =?UTF-8?Q?Fran=C3=A7ois_Belias?= <beliasossim@gmail.com>
-Content-Type: multipart/mixed; boundary="===============7787348023408380498=="
+From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Kienan Stewart <kstewart@efficios.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---===============7787348023408380498==
-Content-Type: multipart/alternative; boundary="000000000000cdaa67061d73608f"
-
---000000000000cdaa67061d73608f
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hello, Kienan
-
-
-
-*Right. Which kernel are you actually running at this time? You can
-checkusing: `uname -a`*
-Linux philippe 6.5.0-41-generic #41~22.04.2-Ubuntu SMP PREEMPT_DYNAMIC Mon
-Jun  3 11:32:55 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
-
-
-
-*Since you've got a few different images and headers installed, it
-ispossible to check that same info the linux-source package: `dpkg -l |grep
-linux-source`.*
-ii  linux-source                                   5.15.0.116.116
-                         all          Linux kernel source with Ubuntu
-patches
-ii  linux-source-5.15.0                       5.15.0-116.126
-                     all          Linux kernel source for version 5.15.0
-with Ubuntu patches
-ii  linux-source-6.5.0                      6.5.0-44.44~22.04.1
-                  all          Linux kernel source for version 6.5.0 with
-Ubuntu patches
-
-*Could you run either `apt-cache policy` or `apt policy` and
-`apt-markshowhold` in order to know which sources you have configured.*
-For this part, *apt-mark showhold* gave me nothing I don't know what is
-means.
-
-I am looking at the links, but nothing seems to match my kernel version.
-
-Thanks for your assistance.
-
-Le mer. 17 juill. 2024, =C3=A0 11 h 46, Fran=C3=A7ois Belias <beliasossim@g=
-mail.com>
-a =C3=A9crit :
-
-> Hello, Kienan
->
->
->
-> *Right. Which kernel are you actually running at this time? You can
-> checkusing: `uname -a`*
-> Linux philippe 6.5.0-41-generic #41~22.04.2-Ubuntu SMP PREEMPT_DYNAMIC Mo=
-n
-> Jun  3 11:32:55 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
->
->
->
-> *Since you've got a few different images and headers installed, it
-> ispossible to check that same info the linux-source package: `dpkg -l |gr=
-ep
-> linux-source`.*
-> ii  linux-source                                   5.15.0.116.116
->                            all          Linux kernel source with Ubuntu
-> patches
-> ii  linux-source-5.15.0                       5.15.0-116.126
->                      all          Linux kernel source for version 5.15.0
-> with Ubuntu patches
-> ii  linux-source-6.5.0                      6.5.0-44.44~22.04.1
->                     all          Linux kernel source for version 6.5.0 wi=
-th
-> Ubuntu patches
->
-> *Could you run either `apt-cache policy` or `apt policy` and
-> `apt-markshowhold` in order to know which sources you have configured.*
-> For this part, *apt-mark showhold* gave me nothing I don't know what is
-> means.
->
-> I am looking at the links, but nothing seems to match my kernel version.
->
-> Thanks for your assistance.
->
-> Le mer. 17 juill. 2024, =C3=A0 10 h 55, Kienan Stewart <kstewart@efficios=
-.com>
-> a =C3=A9crit :
->
->> Hi Fran=C3=A7ois,
->>
->> On 7/16/24 4:34 PM, Fran=C3=A7ois Belias wrote:
->> > Hello Kienan,
->> >
->> > When I proceed with the following steps:
->> >
->> > ```
->> > # Warning: this removes all untracked content from the lttng-modules
->> > directory
->> > cd /path/to/lttng-modules-source
->> > git clean -dxf
->> >
->> > make
->> > sudo make modules_install
->> > sudo depmod -a
->> > ```
->> >
->> > I encounter a warning in
->> > `/home/philippe/lttng-modules/src/probes/Kbuild:79` stating "File
->> > ./arch/x86/kvm/lapic.h not found. Probe 'kvm' x86-specific is disabled=
-.
->> > Use full kernel source tree to enable it." Although everything compile=
-s
->> > fine and I'm able to load modules, when I execute `sudo lttng list -k`=
-,
->> > I don't see the tracepoints `kvm_entry` and `kvm_exit`, which I believ=
-e
->> > should be available. Could this be due to not using my full kernel tre=
-e
->> > during compilation?
->>
->>
->> Exactly. Those probes depend on having the full kernel source as they
->> require private headers which aren't shipped as part of the
->> `linux-headers` package.
->>
->> >
->> > Here are the answers to your questions:
->> >
->> > - *Where did `/usr/src/linux-source-6.5.0` come from?*
->> >    I initially attempted `sudo apt-get update && sudo apt-get install
->> > linux-source`, but it gave me this answer */linux-source is already th=
-e
->> > newest version (5.15.0.116.116)/*`, which doesn't match my current
->> > kernel version. So, I downloaded it directly from kernel.org
->> > <http://kernel.org> using this command: `wget
->> > https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz`
->> <https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz>
->> > <https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz`
->> <https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.xz>>.
->> >
->>
->> Right. Which kernel are you actually running at this time? You can check
->> using: `uname -a`
->>
->> In any case, Linux upstream 6.5 is not the same as Ubuntus's 6.5.
->>
->> > - *Which Linux distribution and version are you using?*
->> >    Running `lsb_release -a` gives me:
->> >    ```
->> >    No LSB modules are available.
->> >    Distributor ID: Ubuntu
->> >    Description:    Ubuntu 22.04.4 LTS
->> >    Release:        22.04
->> >    Codename:       jammy
->> >    ```
->> >
->> > - *Assuming your distribution has kernel packages, which do you have
->> > installed, and do you have the corresponding kernel headers package
->> > installed?*
->> >
->> >    Running `dpkg -l | grep linux-image` shows these installed packages=
-:
->> >    ```
->> >    ii  linux-image-5.15.0-116-generic           5.15.0-116.126
->> >   amd64   Signed kernel image generic
->> >    ii  linux-image-6.5.0-28-generic             6.5.0-28.29~22.04.1
->> >   amd64   Signed kernel image generic
->> >    ii  linux-image-6.5.0-41-generic             6.5.0-41.41~22.04.2
->> >   amd64   Signed kernel image generic
->> >    ii  linux-image-6.5.0-44-generic             6.5.0-44.44~22.04.1
->> >   amd64   Signed kernel image generic
->> >    ii  linux-image-generic                      5.15.0.116.116
->> >   amd64   Generic Linux kernel image
->> >    ii  linux-image-generic-hwe-22.04            6.5.0.44.44~22.04.1
->> >   amd64   Generic Linux kernel image
->> >    ```
->> >
->> >    And `dpkg -l | grep linux-headers` shows these installed header
->> packages:
->> >    ```
->> >    ii  linux-headers-5.15.0-116                 5.15.0-116.126      al=
-l
->> >      Header files related to Linux kernel version 5.15.0
->> >    ii  linux-headers-5.15.0-116-generic         5.15.0-116.126
->> >   amd64   Linux kernel headers for version 5.15.0 on 64 bit x86 SMP
->> >    ii  linux-headers-6.5.0-28-generic           6.5.0-28.29~22.04.1
->> >   amd64   Linux kernel headers for version 6.5.0 on 64 bit x86 SMP
->> >    ii  linux-headers-6.5.0-41-generic           6.5.0-41.41~22.04.2
->> >   amd64   Linux kernel headers for version 6.5.0 on 64 bit x86 SMP
->> >    ii  linux-headers-6.5.0-44-generic           6.5.0-44.44~22.04.1
->> >   amd64   Linux kernel headers for version 6.5.0 on 64 bit x86 SMP
->> >    ii  linux-headers-generic                    5.15.0.116.116
->> >   amd64   Generic Linux kernel headers
->> >    ii  linux-headers-generic-hwe-22.04          6.5.0.44.44~22.04.1
->> >   amd64   Generic Linux kernel headers
->> >    ```
->> >
->>
->> Since you've got a few different images and headers installed, it is
->> possible to check that same info the linux-source package: `dpkg -l |
->> grep linux-source`.
->>
->> Maybe one thing tripping this process up is that you don't have an apt
->> source that provides linux-source that matches the kernel you are using.
->> Could you run either `apt-cache policy` or `apt policy` and `apt-mark
->> showhold` in order to know which sources you have configured.
->>
->> There are also alternative sources for the full source tree:
->>
->> - You could download the specific package from packages.ubuntu.com. See
->> https://packages.ubuntu.com and use `apt install
->> ./downloaded_package.deb`
->>
->> - You could clone the kernel source for Ubuntu and checkout the
->> appropriate tag. See
->>
->> https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy=
-/refs/tags
->>
->> thanks,
->> kienan
->>
->
-
---000000000000cdaa67061d73608f
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello, Kienan<span class=3D"gmail-im" style=3D"color:rgb(8=
-0,0,80)"><div><br></div><div><br></div><div><b>Right. Which kernel are you =
-actually running at this time? You can check<br>using: `uname -a`</b><br></=
-div></span><div>Linux philippe 6.5.0-41-generic #41~22.04.2-Ubuntu SMP PREE=
-MPT_DYNAMIC Mon Jun =C2=A03 11:32:55 UTC 2 x86_64 x86_64 x86_64 GNU/Linux<b=
-r></div><span class=3D"gmail-im" style=3D"color:rgb(80,0,80)"><div><br></di=
-v><div><b>Since you&#39;ve got a few different images and headers installed=
-, it is<br>possible to check that same info the linux-source package: `dpkg=
- -l |<br>grep linux-source`.</b><br></div></span><div>ii =C2=A0linux-source=
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A05.15.0.116.116 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0all =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0Linux kernel source with Ubuntu patches<br>ii =C2=A0linux-source-=
-5.15.0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A05.15.0-116.126 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0all =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Linux kernel source for version=
- 5.15.0 with Ubuntu patches<br>ii =C2=A0linux-source-6.5.0=C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 6.5.0-44.44~22.=
-04.1 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 all =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Li=
-nux kernel source for version 6.5.0 with Ubuntu patches<br></div><span clas=
-s=3D"gmail-im" style=3D"color:rgb(80,0,80)"><div><b>Could you run either `a=
-pt-cache policy` or `apt policy` and `apt-mark<br>showhold` in order to kno=
-w which sources you have configured.</b><br></div></span><div>For this part=
-,=C2=A0<i><b>apt-mark showhold</b></i>=C2=A0gave me nothing I don&#39;t kno=
-w what is means.</div><div><br></div><div>I am looking at the links, but no=
-thing seems to match my kernel version.=C2=A0</div><div><br></div><div>Than=
-ks for your assistance.</div></div><br><div class=3D"gmail_quote"><div dir=
-=3D"ltr" class=3D"gmail_attr">Le mer. 17 juill. 2024, =C3=A0 11 h 46, Fran=
-=C3=A7ois Belias &lt;<a href=3D"mailto:beliasossim@gmail.com">beliasossim@g=
-mail.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_qu=
-ote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,20=
-4);padding-left:1ex"><div dir=3D"ltr">Hello, Kienan<div><br></div><div><br>=
-</div><div><b>Right. Which kernel are you actually running at this time? Yo=
-u can check<br>using: `uname -a`</b><br></div><div>Linux philippe 6.5.0-41-=
-generic #41~22.04.2-Ubuntu SMP PREEMPT_DYNAMIC Mon Jun =C2=A03 11:32:55 UTC=
- 2 x86_64 x86_64 x86_64 GNU/Linux<br></div><div><br></div><div><b>Since you=
-&#39;ve got a few different images and headers installed, it is<br>possible=
- to check that same info the linux-source package: `dpkg -l |<br>grep linux=
--source`.</b><br></div><div>ii =C2=A0linux-source=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A05.15.0.116.116 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0all =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Linux kernel sour=
-ce with Ubuntu patches<br>ii =C2=A0linux-source-5.15.0=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A05.15.0-116.12=
-6 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0all =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0Linux kernel source for version 5.15.0 with Ubuntu patches=
-<br>ii =C2=A0linux-source-6.5.0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 6.5.0-44.44~22.04.1 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 all =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Linux kernel source for ve=
-rsion 6.5.0 with Ubuntu patches<br></div><div><b>Could you run either `apt-=
-cache policy` or `apt policy` and `apt-mark<br>showhold` in order to know w=
-hich sources you have configured.</b><br></div><div>For this part, <i><b>ap=
-t-mark showhold</b></i> gave me nothing I don&#39;t know what is means.</di=
-v><div><br></div><div>I am looking at the links, but nothing seems to match=
- my kernel version.=C2=A0</div><div><br></div><div>Thanks for your assistan=
-ce.</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gma=
-il_attr">Le mer. 17 juill. 2024, =C3=A0 10 h 55, Kienan Stewart &lt;<a href=
-=3D"mailto:kstewart@efficios.com" target=3D"_blank">kstewart@efficios.com</=
-a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex">Hi Fran=C3=A7ois,<br>
-<br>
-On 7/16/24 4:34 PM, Fran=C3=A7ois Belias wrote:<br>
-&gt; Hello Kienan,<br>
-&gt; <br>
-&gt; When I proceed with the following steps:<br>
-&gt; <br>
-&gt; ```<br>
-&gt; # Warning: this removes all untracked content from the lttng-modules <=
-br>
-&gt; directory<br>
-&gt; cd /path/to/lttng-modules-source<br>
-&gt; git clean -dxf<br>
-&gt; <br>
-&gt; make<br>
-&gt; sudo make modules_install<br>
-&gt; sudo depmod -a<br>
-&gt; ```<br>
-&gt; <br>
-&gt; I encounter a warning in <br>
-&gt; `/home/philippe/lttng-modules/src/probes/Kbuild:79` stating &quot;File=
- <br>
-&gt; ./arch/x86/kvm/lapic.h not found. Probe &#39;kvm&#39; x86-specific is =
-disabled. <br>
-&gt; Use full kernel source tree to enable it.&quot; Although everything co=
-mpiles <br>
-&gt; fine and I&#39;m able to load modules, when I execute `sudo lttng list=
- -k`, <br>
-&gt; I don&#39;t see the tracepoints `kvm_entry` and `kvm_exit`, which I be=
-lieve <br>
-&gt; should be available. Could this be due to not using my full kernel tre=
-e <br>
-&gt; during compilation?<br>
-<br>
-<br>
-Exactly. Those probes depend on having the full kernel source as they <br>
-require private headers which aren&#39;t shipped as part of the <br>
-`linux-headers` package.<br>
-<br>
-&gt; <br>
-&gt; Here are the answers to your questions:<br>
-&gt; <br>
-&gt; - *Where did `/usr/src/linux-source-6.5.0` come from?*<br>
-&gt;=C2=A0 =C2=A0 I initially attempted `sudo apt-get update &amp;&amp; sud=
-o apt-get install <br>
-&gt; linux-source`, but it gave me this answer */linux-source is already th=
-e <br>
-&gt; newest version (5.15.0.116.116)/*`, which doesn&#39;t match my current=
- <br>
-&gt; kernel version. So, I downloaded it directly from <a href=3D"http://ke=
-rnel.org" rel=3D"noreferrer" target=3D"_blank">kernel.org</a> <br>
-&gt; &lt;<a href=3D"http://kernel.org" rel=3D"noreferrer" target=3D"_blank"=
->http://kernel.org</a>&gt; using this command: `wget <br>
-&gt; <a href=3D"https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.tar.=
-xz" rel=3D"noreferrer" target=3D"_blank">https://cdn.kernel.org/pub/linux/k=
-ernel/v6.x/linux-6.5.tar.xz`</a> <br>
-&gt; &lt;<a href=3D"https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.5.=
-tar.xz" rel=3D"noreferrer" target=3D"_blank">https://cdn.kernel.org/pub/lin=
-ux/kernel/v6.x/linux-6.5.tar.xz`</a>&gt;.<br>
-&gt; <br>
-<br>
-Right. Which kernel are you actually running at this time? You can check <b=
-r>
-using: `uname -a`<br>
-<br>
-In any case, Linux upstream 6.5 is not the same as Ubuntus&#39;s 6.5.<br>
-<br>
-&gt; - *Which Linux distribution and version are you using?* <br>
-&gt;=C2=A0 =C2=A0 Running `lsb_release -a` gives me:<br>
-&gt;=C2=A0 =C2=A0 ```<br>
-&gt;=C2=A0 =C2=A0 No LSB modules are available.<br>
-&gt;=C2=A0 =C2=A0 Distributor ID: Ubuntu<br>
-&gt;=C2=A0 =C2=A0 Description: =C2=A0 =C2=A0Ubuntu 22.04.4 LTS<br>
-&gt;=C2=A0 =C2=A0 Release: =C2=A0 =C2=A0 =C2=A0 =C2=A022.04<br>
-&gt;=C2=A0 =C2=A0 Codename: =C2=A0 =C2=A0 =C2=A0 jammy<br>
-&gt;=C2=A0 =C2=A0 ```<br>
-&gt; <br>
-&gt; - *Assuming your distribution has kernel packages, which do you have <=
-br>
-&gt; installed, and do you have the corresponding kernel headers package <b=
-r>
-&gt; installed?*<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 Running `dpkg -l | grep linux-image` shows these installe=
-d packages:<br>
-&gt;=C2=A0 =C2=A0 ```<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-image-5.15.0-116-generic =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 5.15.0-116.126=C2=A0 =C2=A0 =C2=A0<br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Signed kernel image generic<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-image-6.5.0-28-generic =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 6.5.0-28.29~22.04.1 <br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Signed kernel image generic<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-image-6.5.0-41-generic =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 6.5.0-41.41~22.04.2 <br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Signed kernel image generic<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-image-6.5.0-44-generic =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 6.5.0-44.44~22.04.1 <br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Signed kernel image generic<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-image-generic =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A05.15.0.116.116=C2=A0 =C2=A0=
- =C2=A0<br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Generic Linux kernel image<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-image-generic-hwe-22.04 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A06.5.0.44.44~22.04.1 <br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Generic Linux kernel image<br>
-&gt;=C2=A0 =C2=A0 ```<br>
-&gt; <br>
-&gt;=C2=A0 =C2=A0 And `dpkg -l | grep linux-headers` shows these installed =
-header packages:<br>
-&gt;=C2=A0 =C2=A0 ```<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-headers-5.15.0-116 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 5.15.0-116.126 =C2=A0 =C2=A0 =C2=A0all <=
-br>
-&gt;=C2=A0 =C2=A0 =C2=A0 Header files related to Linux kernel version 5.15.=
-0<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-headers-5.15.0-116-generic =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 5.15.0-116.126=C2=A0 =C2=A0 =C2=A0<br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Linux kernel headers for version 5.15.0 on 64=
- bit x86 SMP<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-headers-6.5.0-28-generic =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 6.5.0-28.29~22.04.1 <br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Linux kernel headers for version 6.5.0 on 64 =
-bit x86 SMP<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-headers-6.5.0-41-generic =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 6.5.0-41.41~22.04.2 <br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Linux kernel headers for version 6.5.0 on 64 =
-bit x86 SMP<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-headers-6.5.0-44-generic =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 6.5.0-44.44~22.04.1 <br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Linux kernel headers for version 6.5.0 on 64 =
-bit x86 SMP<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-headers-generic =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A05.15.0.116.116=C2=A0 =C2=A0 =
-=C2=A0<br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Generic Linux kernel headers<br>
-&gt;=C2=A0 =C2=A0 ii =C2=A0linux-headers-generic-hwe-22.04 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A06.5.0.44.44~22.04.1 <br>
-&gt;=C2=A0 =C2=A0amd64 =C2=A0 Generic Linux kernel headers<br>
-&gt;=C2=A0 =C2=A0 ```<br>
-&gt; <br>
-<br>
-Since you&#39;ve got a few different images and headers installed, it is <b=
-r>
-possible to check that same info the linux-source package: `dpkg -l | <br>
-grep linux-source`.<br>
-<br>
-Maybe one thing tripping this process up is that you don&#39;t have an apt =
-<br>
-source that provides linux-source that matches the kernel you are using. <b=
-r>
-Could you run either `apt-cache policy` or `apt policy` and `apt-mark <br>
-showhold` in order to know which sources you have configured.<br>
-<br>
-There are also alternative sources for the full source tree:<br>
-<br>
-- You could download the specific package from <a href=3D"http://packages.u=
-buntu.com" rel=3D"noreferrer" target=3D"_blank">packages.ubuntu.com</a>. Se=
-e <br>
-<a href=3D"https://packages.ubuntu.com" rel=3D"noreferrer" target=3D"_blank=
-">https://packages.ubuntu.com</a> and use `apt install ./downloaded_package=
-.deb`<br>
-<br>
-- You could clone the kernel source for Ubuntu and checkout the <br>
-appropriate tag. See <br>
-<a href=3D"https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+g=
-it/jammy/refs/tags" rel=3D"noreferrer" target=3D"_blank">https://git.launch=
-pad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy/refs/tags</a><br>
-<br>
-thanks,<br>
-kienan<br>
-</blockquote></div>
-</blockquote></div>
-
---000000000000cdaa67061d73608f--
-
---===============7787348023408380498==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============7787348023408380498==--
+SGkgRnJhbsOnb2lzLAoKT24gNy8xNy8yNCAxMTo0NyBBTSwgRnJhbsOnb2lzIEJlbGlhcyB3cm90
+ZToKPiBIZWxsbywgS2llbmFuCj4gCj4gCj4gKlJpZ2h0LiBXaGljaCBrZXJuZWwgYXJlIHlvdSBh
+Y3R1YWxseSBydW5uaW5nIGF0IHRoaXMgdGltZT8gWW91IGNhbiBjaGVjawo+IHVzaW5nOiBgdW5h
+bWUgLWFgKgo+IExpbnV4IHBoaWxpcHBlIDYuNS4wLTQxLWdlbmVyaWMgIzQxfjIyLjA0LjItVWJ1
+bnR1IFNNUCBQUkVFTVBUX0RZTkFNSUMgCj4gTW9uIEp1biDCoDMgMTE6MzI6NTUgVVRDIDIgeDg2
+XzY0IHg4Nl82NCB4ODZfNjQgR05VL0xpbnV4Cj4gCj4gKlNpbmNlIHlvdSd2ZSBnb3QgYSBmZXcg
+ZGlmZmVyZW50IGltYWdlcyBhbmQgaGVhZGVycyBpbnN0YWxsZWQsIGl0IGlzCj4gcG9zc2libGUg
+dG8gY2hlY2sgdGhhdCBzYW1lIGluZm8gdGhlIGxpbnV4LXNvdXJjZSBwYWNrYWdlOiBgZHBrZyAt
+bCB8Cj4gZ3JlcCBsaW51eC1zb3VyY2VgLioKPiBpaSDCoGxpbnV4LXNvdXJjZcKgIMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgNS4xNS4wLjExNi4xMTYg
+ICAgICAgCj4gIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgYWxs
+IMKgIMKgIMKgIMKgIMKgTGludXgga2VybmVsIHNvdXJjZSB3aXRoIAo+IFVidW50dSBwYXRjaGVz
+Cj4gaWkgwqBsaW51eC1zb3VyY2UtNS4xNS4wwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqA1LjE1LjAtMTE2LjEyNiAgICAgICAgICAgICAKPiAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqBhbGwgwqAgwqAgwqAgwqAgwqBMaW51eCBrZXJuZWwgc291cmNlIGZvciB2
+ZXJzaW9uIAo+IDUuMTUuMCB3aXRoIFVidW50dSBwYXRjaGVzCj4gaWkgwqBsaW51eC1zb3VyY2Ut
+Ni41LjDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA2LjUuMC00NC40NH4yMi4wNC4x
+ICAgICAgICAgCj4gIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIGFsbCDCoCDCoCDC
+oCDCoCDCoExpbnV4IGtlcm5lbCBzb3VyY2UgZm9yIHZlcnNpb24gCgpZb3VyIGN1cnJlbnRseSBy
+dW5uaW5nIGA2LjUuMC00MS1nZW5lcmljICM0MX4yMi4wNC4yLVVidW50dWAKCllvdSBoYXZlIHNv
+dXJjZSBpbnN0YWxsZWQgZm9yIGA2LjUuMC00NC40NH4yMi4wNC4xYC4gRnJvbSB5b3VyIHByZXZp
+b3VzIAplLW1haWwsIHRoZXJlIGlzIGFsc28gYSBsaW51eCBpbWFnZSBpbnN0YWxsZWQ6CgpgYGAK
+bGludXgtaW1hZ2UtNi41LjAtNDQtZ2VuZXJpYyA2LjUuMC00NC40NH4yMi4wNC4xCmBgYAoKQXNz
+dW1pbmcgeW91IGFyZSB1c2luZyBncnViLCBjb3VsZCB5b3UgdmVyaWZ5IHRoYXQgb25lIG9mIHRo
+ZSBvcHRpb25zIApmb3IgYm9vdGluZyBpbiBgL2Jvb3QvZ3J1Yi9ncnViLmNmZ2AgaXMgbGludXgg
+Ni41LjAtNDQuNDQuIExvb2sgZm9yIHRoZSAKbGluZXMgc2ltaWxhciB0byB0aGUgZm9sbG93aW5n
+IGluc2lkZSBhIG1lbnUgZW50cnkgYmxvY2s6CgooTm90ZSBteSBleGFtcGxlIGlzIDUuMTUuMC0x
+MTYsIGJ1dCB5b3Ugd2lsbCBiZSBsb29rbmcgZm9yIDYuNS4wLTQ0IG9yIAo2LjUuMC00NC40NCkK
+CmBgYApsaW51eCAgIC9ib290L3ZtbGludXotNS4xNS4wLTExNi1nZW5lcmljIHJvb3Q9Li4uLgpp
+bml0cmQgIC9ib290L2luaXRyZC5pbWctNS4xNS4wLTExNi1nZW5lcmljCmBgYAoKSWYgeW91IGhh
+dmUgYSBncnViIGVudHJ5IGZvciBsaW51eCA2LjUuMC00NC40NCwgY291bGQgeW91IHJlYm9vdCB0
+byBydW4gCm9uIHRoZSBsaW51eCA2LjUuMC00NC40NC4KCkFmdGVyIHJlYm9vdGluZyB2ZXJpZnkg
+d2l0aCBgdW5hbWUgLWFgIHRoYXQgeW91ciBrZXJuZWwgdmVyc2lvbiBpcyAKNi41LjAtNDQuNDQu
+CgpNYWtlIHN1cmUgeW91IGhhdmUgdW5wYWNrZWQgdGhlIGxpbnV4IHNvdXJjZXM6CgpgYGAKIyBB
+cHByb3hpbWF0aW5nIHRoZSB2ZXJzaW9uIG51bWJlcnMsIHNpbmNlIEkgZG9uJ3QgaGF2ZSA2LjUu
+MCBpbnN0YWxsZWQKY2QgL3Vzci9zcmMvbGludXgtc291cmNlLTYuNS4wCmJ1bnppcDIgbGludXgt
+c291cmNlLTYuNS4wLnRhci5iejIKdGFyIC14ZiBsaW51eC1zb3VyY2UtNi41LjAudGFyCmBgYAoK
+VGhlbiByZXRyeSB0aGUgYnVpbGQgd2l0aCAKYEtFUk5FTERJUj0vdXNyL3NyYy9saW51eC1zb3Vy
+Y2UtNi41LjAvbGludXgtc291cmNlLTYuNS4wL2AKCkkgaGF2ZW4ndCBwZXJzb25hbGx5IHRyaWVk
+IHRoZSBmdWxsIHN0ZXBzIG9uIGFuIFVidW50dSBpbnN0YWxsYXRpb24gc28gCnlvdSBtYXkgc3Rp
+bGwgbmVlZCB0byB0d2VhayBhIGNvdXBsZSBvZiB0aGluZ3MsIGJ1dCBJIHRoaW5rIHRoaXMgc2hv
+dWxkIApnZXQgeW91IG9uIHRoZSByaWdodCBwYXRoLgoKUmVhbGx5IHRoZSBpbXBvcnRhbnQgdGhp
+bmcgaXMgdG8gbWFrZSBzdXJlIHRoYXQgdGhlIGtlcm5lbCBzb3VyY2UgY29kZSAKbWF0Y2hlcyB0
+aGUga2VybmVsIHlvdSBhcmUgcnVubmluZy4KCj4gNi41LjAgd2l0aCBVYnVudHUgcGF0Y2hlcwo+
+ICpDb3VsZCB5b3UgcnVuIGVpdGhlciBgYXB0LWNhY2hlIHBvbGljeWAgb3IgYGFwdCBwb2xpY3lg
+IGFuZCBgYXB0LW1hcmsKPiBzaG93aG9sZGAgaW4gb3JkZXIgdG8ga25vdyB3aGljaCBzb3VyY2Vz
+IHlvdSBoYXZlIGNvbmZpZ3VyZWQuKgo+IEZvciB0aGlzIHBhcnQsIC8qYXB0LW1hcmsgc2hvd2hv
+bGQqL8KgZ2F2ZSBtZSBub3RoaW5nIEkgZG9uJ3Qga25vdyB3aGF0IAo+IGlzIG1lYW5zLgoKYGFw
+dC1tYXJrIHNob3dob2xkYCB3aWxsIHNob3cgYW55IHBhY2thZ2VzIHRoYXQgYXJlIG9uIGhvbGQg
+LSBpdCBpcyBhIAp3YXkgb2YgbWFya2luZyBwYWNrYWdlcyB0aGF0IHNob3VsZG4ndCBiZSB1cGRh
+dGVkLgoKQXMgeW91IGhhdmUgdGhlIGxpbnV4LXNvdXJjZSBmb3IgNi41LjAtNDQuNDR+MjIuMDQu
+MSwgSSBkb24ndCB0aGluayBpdCAKd2lsbCBiZSBuZWNlc3NhcnkgdG8gaGF2ZSB0aGUgb3V0cHV0
+IG9mIGBhcHQtY2FjaGUgcG9saWN5YC4KCnRoYW5rcywKa2llbmFuCgo+IAo+IEkgYW0gbG9va2lu
+ZyBhdCB0aGUgbGlua3MsIGJ1dCBub3RoaW5nIHNlZW1zIHRvIG1hdGNoIG15IGtlcm5lbCB2ZXJz
+aW9uLgo+IAo+IFRoYW5rcyBmb3IgeW91ciBhc3Npc3RhbmNlLgo+IAo+IExlIG1lci4gMTcganVp
+bGwuIDIwMjQsIMOgIDExIGggNDYsIEZyYW7Dp29pcyBCZWxpYXMgCj4gPGJlbGlhc29zc2ltQGdt
+YWlsLmNvbSA8bWFpbHRvOmJlbGlhc29zc2ltQGdtYWlsLmNvbT4+IGEgw6ljcml0wqA6Cj4gCj4g
+ICAgIEhlbGxvLCBLaWVuYW4KPiAKPiAKPiAgICAgKlJpZ2h0LiBXaGljaCBrZXJuZWwgYXJlIHlv
+dSBhY3R1YWxseSBydW5uaW5nIGF0IHRoaXMgdGltZT8gWW91IGNhbgo+ICAgICBjaGVjawo+ICAg
+ICB1c2luZzogYHVuYW1lIC1hYCoKPiAgICAgTGludXggcGhpbGlwcGUgNi41LjAtNDEtZ2VuZXJp
+YyAjNDF+MjIuMDQuMi1VYnVudHUgU01QCj4gICAgIFBSRUVNUFRfRFlOQU1JQyBNb24gSnVuIMKg
+MyAxMTozMjo1NSBVVEMgMiB4ODZfNjQgeDg2XzY0IHg4Nl82NCBHTlUvTGludXgKPiAKPiAgICAg
+KlNpbmNlIHlvdSd2ZSBnb3QgYSBmZXcgZGlmZmVyZW50IGltYWdlcyBhbmQgaGVhZGVycyBpbnN0
+YWxsZWQsIGl0IGlzCj4gICAgIHBvc3NpYmxlIHRvIGNoZWNrIHRoYXQgc2FtZSBpbmZvIHRoZSBs
+aW51eC1zb3VyY2UgcGFja2FnZTogYGRwa2cgLWwgfAo+ICAgICBncmVwIGxpbnV4LXNvdXJjZWAu
+Kgo+ICAgICBpaSDCoGxpbnV4LXNvdXJjZcKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgNS4xNS4wLjExNi4xMTYgIAo+ICAgICAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBhbGwgwqAgwqAgwqAgwqAgwqBM
+aW51eCBrZXJuZWwgc291cmNlCj4gICAgIHdpdGggVWJ1bnR1IHBhdGNoZXMKPiAgICAgaWkgwqBs
+aW51eC1zb3VyY2UtNS4xNS4wwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA1LjE1
+LjAtMTE2LjEyNiAgICAgICAgCj4gICAgICDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoGFsbCDCoCDCoCDCoCDCoCDCoExpbnV4IGtlcm5lbCBzb3VyY2UgZm9yCj4gICAg
+IHZlcnNpb24gNS4xNS4wIHdpdGggVWJ1bnR1IHBhdGNoZXMKPiAgICAgaWkgwqBsaW51eC1zb3Vy
+Y2UtNi41LjDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA2LjUuMC00NC40NH4yMi4w
+NC4xICAgIAo+ICAgICAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgYWxs
+IMKgIMKgIMKgIMKgIMKgTGludXgga2VybmVsIHNvdXJjZSBmb3IKPiAgICAgdmVyc2lvbiA2LjUu
+MCB3aXRoIFVidW50dSBwYXRjaGVzCj4gICAgICpDb3VsZCB5b3UgcnVuIGVpdGhlciBgYXB0LWNh
+Y2hlIHBvbGljeWAgb3IgYGFwdCBwb2xpY3lgIGFuZCBgYXB0LW1hcmsKPiAgICAgc2hvd2hvbGRg
+IGluIG9yZGVyIHRvIGtub3cgd2hpY2ggc291cmNlcyB5b3UgaGF2ZSBjb25maWd1cmVkLioKPiAg
+ICAgRm9yIHRoaXMgcGFydCwgLyphcHQtbWFyayBzaG93aG9sZCovIGdhdmUgbWUgbm90aGluZyBJ
+IGRvbid0IGtub3cKPiAgICAgd2hhdCBpcyBtZWFucy4KPiAKPiAgICAgSSBhbSBsb29raW5nIGF0
+IHRoZSBsaW5rcywgYnV0IG5vdGhpbmcgc2VlbXMgdG8gbWF0Y2ggbXkga2VybmVsCj4gICAgIHZl
+cnNpb24uCj4gCj4gICAgIFRoYW5rcyBmb3IgeW91ciBhc3Npc3RhbmNlLgo+IAo+ICAgICBMZSBt
+ZXIuIDE3IGp1aWxsLiAyMDI0LCDDoCAxMCBoIDU1LCBLaWVuYW4gU3Rld2FydAo+ICAgICA8a3N0
+ZXdhcnRAZWZmaWNpb3MuY29tIDxtYWlsdG86a3N0ZXdhcnRAZWZmaWNpb3MuY29tPj4gYSDDqWNy
+aXTCoDoKPiAKPiAgICAgICAgIEhpIEZyYW7Dp29pcywKPiAKPiAgICAgICAgIE9uIDcvMTYvMjQg
+NDozNCBQTSwgRnJhbsOnb2lzIEJlbGlhcyB3cm90ZToKPiAgICAgICAgICA+IEhlbGxvIEtpZW5h
+biwKPiAgICAgICAgICA+Cj4gICAgICAgICAgPiBXaGVuIEkgcHJvY2VlZCB3aXRoIHRoZSBmb2xs
+b3dpbmcgc3RlcHM6Cj4gICAgICAgICAgPgo+ICAgICAgICAgID4gYGBgCj4gICAgICAgICAgPiAj
+IFdhcm5pbmc6IHRoaXMgcmVtb3ZlcyBhbGwgdW50cmFja2VkIGNvbnRlbnQgZnJvbSB0aGUKPiAg
+ICAgICAgIGx0dG5nLW1vZHVsZXMKPiAgICAgICAgICA+IGRpcmVjdG9yeQo+ICAgICAgICAgID4g
+Y2QgL3BhdGgvdG8vbHR0bmctbW9kdWxlcy1zb3VyY2UKPiAgICAgICAgICA+IGdpdCBjbGVhbiAt
+ZHhmCj4gICAgICAgICAgPgo+ICAgICAgICAgID4gbWFrZQo+ICAgICAgICAgID4gc3VkbyBtYWtl
+IG1vZHVsZXNfaW5zdGFsbAo+ICAgICAgICAgID4gc3VkbyBkZXBtb2QgLWEKPiAgICAgICAgICA+
+IGBgYAo+ICAgICAgICAgID4KPiAgICAgICAgICA+IEkgZW5jb3VudGVyIGEgd2FybmluZyBpbgo+
+ICAgICAgICAgID4gYC9ob21lL3BoaWxpcHBlL2x0dG5nLW1vZHVsZXMvc3JjL3Byb2Jlcy9LYnVp
+bGQ6NzlgIHN0YXRpbmcKPiAgICAgICAgICJGaWxlCj4gICAgICAgICAgPiAuL2FyY2gveDg2L2t2
+bS9sYXBpYy5oIG5vdCBmb3VuZC4gUHJvYmUgJ2t2bScgeDg2LXNwZWNpZmljIGlzCj4gICAgICAg
+ICBkaXNhYmxlZC4KPiAgICAgICAgICA+IFVzZSBmdWxsIGtlcm5lbCBzb3VyY2UgdHJlZSB0byBl
+bmFibGUgaXQuIiBBbHRob3VnaAo+ICAgICAgICAgZXZlcnl0aGluZyBjb21waWxlcwo+ICAgICAg
+ICAgID4gZmluZSBhbmQgSSdtIGFibGUgdG8gbG9hZCBtb2R1bGVzLCB3aGVuIEkgZXhlY3V0ZSBg
+c3VkbyBsdHRuZwo+ICAgICAgICAgbGlzdCAta2AsCj4gICAgICAgICAgPiBJIGRvbid0IHNlZSB0
+aGUgdHJhY2Vwb2ludHMgYGt2bV9lbnRyeWAgYW5kIGBrdm1fZXhpdGAsIHdoaWNoCj4gICAgICAg
+ICBJIGJlbGlldmUKPiAgICAgICAgICA+IHNob3VsZCBiZSBhdmFpbGFibGUuIENvdWxkIHRoaXMg
+YmUgZHVlIHRvIG5vdCB1c2luZyBteSBmdWxsCj4gICAgICAgICBrZXJuZWwgdHJlZQo+ICAgICAg
+ICAgID4gZHVyaW5nIGNvbXBpbGF0aW9uPwo+IAo+IAo+ICAgICAgICAgRXhhY3RseS4gVGhvc2Ug
+cHJvYmVzIGRlcGVuZCBvbiBoYXZpbmcgdGhlIGZ1bGwga2VybmVsIHNvdXJjZSBhcwo+ICAgICAg
+ICAgdGhleQo+ICAgICAgICAgcmVxdWlyZSBwcml2YXRlIGhlYWRlcnMgd2hpY2ggYXJlbid0IHNo
+aXBwZWQgYXMgcGFydCBvZiB0aGUKPiAgICAgICAgIGBsaW51eC1oZWFkZXJzYCBwYWNrYWdlLgo+
+IAo+ICAgICAgICAgID4KPiAgICAgICAgICA+IEhlcmUgYXJlIHRoZSBhbnN3ZXJzIHRvIHlvdXIg
+cXVlc3Rpb25zOgo+ICAgICAgICAgID4KPiAgICAgICAgICA+IC0gKldoZXJlIGRpZCBgL3Vzci9z
+cmMvbGludXgtc291cmNlLTYuNS4wYCBjb21lIGZyb20/Kgo+ICAgICAgICAgID7CoCDCoCBJIGlu
+aXRpYWxseSBhdHRlbXB0ZWQgYHN1ZG8gYXB0LWdldCB1cGRhdGUgJiYgc3VkbyBhcHQtZ2V0Cj4g
+ICAgICAgICBpbnN0YWxsCj4gICAgICAgICAgPiBsaW51eC1zb3VyY2VgLCBidXQgaXQgZ2F2ZSBt
+ZSB0aGlzIGFuc3dlciAqL2xpbnV4LXNvdXJjZSBpcwo+ICAgICAgICAgYWxyZWFkeSB0aGUKPiAg
+ICAgICAgICA+IG5ld2VzdCB2ZXJzaW9uICg1LjE1LjAuMTE2LjExNikvKmAsIHdoaWNoIGRvZXNu
+J3QgbWF0Y2ggbXkKPiAgICAgICAgIGN1cnJlbnQKPiAgICAgICAgICA+IGtlcm5lbCB2ZXJzaW9u
+LiBTbywgSSBkb3dubG9hZGVkIGl0IGRpcmVjdGx5IGZyb20ga2VybmVsLm9yZwo+ICAgICAgICAg
+PGh0dHA6Ly9rZXJuZWwub3JnPgo+ICAgICAgICAgID4gPGh0dHA6Ly9rZXJuZWwub3JnIDxodHRw
+Oi8va2VybmVsLm9yZz4+IHVzaW5nIHRoaXMgY29tbWFuZDoKPiAgICAgICAgIGB3Z2V0Cj4gICAg
+ICAgICAgPgo+ICAgICAgICAgaHR0cHM6Ly9jZG4ua2VybmVsLm9yZy9wdWIvbGludXgva2VybmVs
+L3Y2LngvbGludXgtNi41LnRhci54emAKPiAgICAgICAgIDxodHRwczovL2Nkbi5rZXJuZWwub3Jn
+L3B1Yi9saW51eC9rZXJuZWwvdjYueC9saW51eC02LjUudGFyLnh6Pgo+ICAgICAgICAgID4KPiAg
+ICAgICAgIDxodHRwczovL2Nkbi5rZXJuZWwub3JnL3B1Yi9saW51eC9rZXJuZWwvdjYueC9saW51
+eC02LjUudGFyLnh6YAo+ICAgICAgICAgPGh0dHBzOi8vY2RuLmtlcm5lbC5vcmcvcHViL2xpbnV4
+L2tlcm5lbC92Ni54L2xpbnV4LTYuNS50YXIueHo+Pi4KPiAgICAgICAgICA+Cj4gCj4gICAgICAg
+ICBSaWdodC4gV2hpY2gga2VybmVsIGFyZSB5b3UgYWN0dWFsbHkgcnVubmluZyBhdCB0aGlzIHRp
+bWU/IFlvdQo+ICAgICAgICAgY2FuIGNoZWNrCj4gICAgICAgICB1c2luZzogYHVuYW1lIC1hYAo+
+IAo+ICAgICAgICAgSW4gYW55IGNhc2UsIExpbnV4IHVwc3RyZWFtIDYuNSBpcyBub3QgdGhlIHNh
+bWUgYXMgVWJ1bnR1cydzIDYuNS4KPiAKPiAgICAgICAgICA+IC0gKldoaWNoIExpbnV4IGRpc3Ry
+aWJ1dGlvbiBhbmQgdmVyc2lvbiBhcmUgeW91IHVzaW5nPyoKPiAgICAgICAgICA+wqAgwqAgUnVu
+bmluZyBgbHNiX3JlbGVhc2UgLWFgIGdpdmVzIG1lOgo+ICAgICAgICAgID7CoCDCoCBgYGAKPiAg
+ICAgICAgICA+wqAgwqAgTm8gTFNCIG1vZHVsZXMgYXJlIGF2YWlsYWJsZS4KPiAgICAgICAgICA+
+wqAgwqAgRGlzdHJpYnV0b3IgSUQ6IFVidW50dQo+ICAgICAgICAgID7CoCDCoCBEZXNjcmlwdGlv
+bjogwqAgwqBVYnVudHUgMjIuMDQuNCBMVFMKPiAgICAgICAgICA+wqAgwqAgUmVsZWFzZTogwqAg
+wqAgwqAgwqAyMi4wNAo+ICAgICAgICAgID7CoCDCoCBDb2RlbmFtZTogwqAgwqAgwqAgamFtbXkK
+PiAgICAgICAgICA+wqAgwqAgYGBgCj4gICAgICAgICAgPgo+ICAgICAgICAgID4gLSAqQXNzdW1p
+bmcgeW91ciBkaXN0cmlidXRpb24gaGFzIGtlcm5lbCBwYWNrYWdlcywgd2hpY2ggZG8KPiAgICAg
+ICAgIHlvdSBoYXZlCj4gICAgICAgICAgPiBpbnN0YWxsZWQsIGFuZCBkbyB5b3UgaGF2ZSB0aGUg
+Y29ycmVzcG9uZGluZyBrZXJuZWwgaGVhZGVycwo+ICAgICAgICAgcGFja2FnZQo+ICAgICAgICAg
+ID4gaW5zdGFsbGVkPyoKPiAgICAgICAgICA+Cj4gICAgICAgICAgPsKgIMKgIFJ1bm5pbmcgYGRw
+a2cgLWwgfCBncmVwIGxpbnV4LWltYWdlYCBzaG93cyB0aGVzZSBpbnN0YWxsZWQKPiAgICAgICAg
+IHBhY2thZ2VzOgo+ICAgICAgICAgID7CoCDCoCBgYGAKPiAgICAgICAgICA+wqAgwqAgaWkgwqBs
+aW51eC1pbWFnZS01LjE1LjAtMTE2LWdlbmVyaWMgwqAgwqAgwqAgwqAgwqAgNS4xNS4wLTExNi4x
+MjYKPiAgICAgICAgICA+wqAgwqBhbWQ2NCDCoCBTaWduZWQga2VybmVsIGltYWdlIGdlbmVyaWMK
+PiAgICAgICAgICA+wqAgwqAgaWkgwqBsaW51eC1pbWFnZS02LjUuMC0yOC1nZW5lcmljICAgICAg
+ICAgICAgCj4gICAgICAgICA2LjUuMC0yOC4yOX4yMi4wNC4xCj4gICAgICAgICAgPsKgIMKgYW1k
+NjQgwqAgU2lnbmVkIGtlcm5lbCBpbWFnZSBnZW5lcmljCj4gICAgICAgICAgPsKgIMKgIGlpIMKg
+bGludXgtaW1hZ2UtNi41LjAtNDEtZ2VuZXJpYyAgICAgICAgICAgIAo+ICAgICAgICAgNi41LjAt
+NDEuNDF+MjIuMDQuMgo+ICAgICAgICAgID7CoCDCoGFtZDY0IMKgIFNpZ25lZCBrZXJuZWwgaW1h
+Z2UgZ2VuZXJpYwo+ICAgICAgICAgID7CoCDCoCBpaSDCoGxpbnV4LWltYWdlLTYuNS4wLTQ0LWdl
+bmVyaWMgICAgICAgICAgICAKPiAgICAgICAgIDYuNS4wLTQ0LjQ0fjIyLjA0LjEKPiAgICAgICAg
+ICA+wqAgwqBhbWQ2NCDCoCBTaWduZWQga2VybmVsIGltYWdlIGdlbmVyaWMKPiAgICAgICAgICA+
+wqAgwqAgaWkgwqBsaW51eC1pbWFnZS1nZW5lcmljIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIMKgNS4xNS4wLjExNi4xMTYKPiAgICAgICAgICA+wqAgwqBhbWQ2NCDCoCBHZW5lcmljIExp
+bnV4IGtlcm5lbCBpbWFnZQo+ICAgICAgICAgID7CoCDCoCBpaSDCoGxpbnV4LWltYWdlLWdlbmVy
+aWMtaHdlLTIyLjA0ICAgICAgICAgIAo+ICAgICAgICAgIMKgNi41LjAuNDQuNDR+MjIuMDQuMQo+
+ICAgICAgICAgID7CoCDCoGFtZDY0IMKgIEdlbmVyaWMgTGludXgga2VybmVsIGltYWdlCj4gICAg
+ICAgICAgPsKgIMKgIGBgYAo+ICAgICAgICAgID4KPiAgICAgICAgICA+wqAgwqAgQW5kIGBkcGtn
+IC1sIHwgZ3JlcCBsaW51eC1oZWFkZXJzYCBzaG93cyB0aGVzZSBpbnN0YWxsZWQKPiAgICAgICAg
+IGhlYWRlciBwYWNrYWdlczoKPiAgICAgICAgICA+wqAgwqAgYGBgCj4gICAgICAgICAgPsKgIMKg
+IGlpIMKgbGludXgtaGVhZGVycy01LjE1LjAtMTE2ICAgICAgICAgICAgICAgIAo+ICAgICAgICAg
+NS4xNS4wLTExNi4xMjYgwqAgwqAgwqBhbGwKPiAgICAgICAgICA+wqAgwqAgwqAgSGVhZGVyIGZp
+bGVzIHJlbGF0ZWQgdG8gTGludXgga2VybmVsIHZlcnNpb24gNS4xNS4wCj4gICAgICAgICAgPsKg
+IMKgIGlpIMKgbGludXgtaGVhZGVycy01LjE1LjAtMTE2LWdlbmVyaWMgwqAgwqAgwqAgwqAgNS4x
+NS4wLTExNi4xMjYKPiAgICAgICAgICA+wqAgwqBhbWQ2NCDCoCBMaW51eCBrZXJuZWwgaGVhZGVy
+cyBmb3IgdmVyc2lvbiA1LjE1LjAgb24gNjQgYml0Cj4gICAgICAgICB4ODYgU01QCj4gICAgICAg
+ICAgPsKgIMKgIGlpIMKgbGludXgtaGVhZGVycy02LjUuMC0yOC1nZW5lcmljICAgICAgICAgIAo+
+ICAgICAgICAgNi41LjAtMjguMjl+MjIuMDQuMQo+ICAgICAgICAgID7CoCDCoGFtZDY0IMKgIExp
+bnV4IGtlcm5lbCBoZWFkZXJzIGZvciB2ZXJzaW9uIDYuNS4wIG9uIDY0IGJpdAo+ICAgICAgICAg
+eDg2IFNNUAo+ICAgICAgICAgID7CoCDCoCBpaSDCoGxpbnV4LWhlYWRlcnMtNi41LjAtNDEtZ2Vu
+ZXJpYyAgICAgICAgICAKPiAgICAgICAgIDYuNS4wLTQxLjQxfjIyLjA0LjIKPiAgICAgICAgICA+
+wqAgwqBhbWQ2NCDCoCBMaW51eCBrZXJuZWwgaGVhZGVycyBmb3IgdmVyc2lvbiA2LjUuMCBvbiA2
+NCBiaXQKPiAgICAgICAgIHg4NiBTTVAKPiAgICAgICAgICA+wqAgwqAgaWkgwqBsaW51eC1oZWFk
+ZXJzLTYuNS4wLTQ0LWdlbmVyaWMgICAgICAgICAgCj4gICAgICAgICA2LjUuMC00NC40NH4yMi4w
+NC4xCj4gICAgICAgICAgPsKgIMKgYW1kNjQgwqAgTGludXgga2VybmVsIGhlYWRlcnMgZm9yIHZl
+cnNpb24gNi41LjAgb24gNjQgYml0Cj4gICAgICAgICB4ODYgU01QCj4gICAgICAgICAgPsKgIMKg
+IGlpIMKgbGludXgtaGVhZGVycy1nZW5lcmljIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+NS4xNS4wLjExNi4xMTYKPiAgICAgICAgICA+wqAgwqBhbWQ2NCDCoCBHZW5lcmljIExpbnV4IGtl
+cm5lbCBoZWFkZXJzCj4gICAgICAgICAgPsKgIMKgIGlpIMKgbGludXgtaGVhZGVycy1nZW5lcmlj
+LWh3ZS0yMi4wNCAgICAgICAgCj4gICAgICAgICAgwqA2LjUuMC40NC40NH4yMi4wNC4xCj4gICAg
+ICAgICAgPsKgIMKgYW1kNjQgwqAgR2VuZXJpYyBMaW51eCBrZXJuZWwgaGVhZGVycwo+ICAgICAg
+ICAgID7CoCDCoCBgYGAKPiAgICAgICAgICA+Cj4gCj4gICAgICAgICBTaW5jZSB5b3UndmUgZ290
+IGEgZmV3IGRpZmZlcmVudCBpbWFnZXMgYW5kIGhlYWRlcnMgaW5zdGFsbGVkLAo+ICAgICAgICAg
+aXQgaXMKPiAgICAgICAgIHBvc3NpYmxlIHRvIGNoZWNrIHRoYXQgc2FtZSBpbmZvIHRoZSBsaW51
+eC1zb3VyY2UgcGFja2FnZTogYGRwa2cKPiAgICAgICAgIC1sIHwKPiAgICAgICAgIGdyZXAgbGlu
+dXgtc291cmNlYC4KPiAKPiAgICAgICAgIE1heWJlIG9uZSB0aGluZyB0cmlwcGluZyB0aGlzIHBy
+b2Nlc3MgdXAgaXMgdGhhdCB5b3UgZG9uJ3QgaGF2ZQo+ICAgICAgICAgYW4gYXB0Cj4gICAgICAg
+ICBzb3VyY2UgdGhhdCBwcm92aWRlcyBsaW51eC1zb3VyY2UgdGhhdCBtYXRjaGVzIHRoZSBrZXJu
+ZWwgeW91Cj4gICAgICAgICBhcmUgdXNpbmcuCj4gICAgICAgICBDb3VsZCB5b3UgcnVuIGVpdGhl
+ciBgYXB0LWNhY2hlIHBvbGljeWAgb3IgYGFwdCBwb2xpY3lgIGFuZAo+ICAgICAgICAgYGFwdC1t
+YXJrCj4gICAgICAgICBzaG93aG9sZGAgaW4gb3JkZXIgdG8ga25vdyB3aGljaCBzb3VyY2VzIHlv
+dSBoYXZlIGNvbmZpZ3VyZWQuCj4gCj4gICAgICAgICBUaGVyZSBhcmUgYWxzbyBhbHRlcm5hdGl2
+ZSBzb3VyY2VzIGZvciB0aGUgZnVsbCBzb3VyY2UgdHJlZToKPiAKPiAgICAgICAgIC0gWW91IGNv
+dWxkIGRvd25sb2FkIHRoZSBzcGVjaWZpYyBwYWNrYWdlIGZyb20KPiAgICAgICAgIHBhY2thZ2Vz
+LnVidW50dS5jb20gPGh0dHA6Ly9wYWNrYWdlcy51YnVudHUuY29tPi4gU2VlCj4gICAgICAgICBo
+dHRwczovL3BhY2thZ2VzLnVidW50dS5jb20gPGh0dHBzOi8vcGFja2FnZXMudWJ1bnR1LmNvbT4g
+YW5kCj4gICAgICAgICB1c2UgYGFwdCBpbnN0YWxsIC4vZG93bmxvYWRlZF9wYWNrYWdlLmRlYmAK
+PiAKPiAgICAgICAgIC0gWW91IGNvdWxkIGNsb25lIHRoZSBrZXJuZWwgc291cmNlIGZvciBVYnVu
+dHUgYW5kIGNoZWNrb3V0IHRoZQo+ICAgICAgICAgYXBwcm9wcmlhdGUgdGFnLiBTZWUKPiAgICAg
+ICAgIGh0dHBzOi8vZ2l0LmxhdW5jaHBhZC5uZXQvfnVidW50dS1rZXJuZWwvdWJ1bnR1Lytzb3Vy
+Y2UvbGludXgvK2dpdC9qYW1teS9yZWZzL3RhZ3MgPGh0dHBzOi8vZ2l0LmxhdW5jaHBhZC5uZXQv
+fnVidW50dS1rZXJuZWwvdWJ1bnR1Lytzb3VyY2UvbGludXgvK2dpdC9qYW1teS9yZWZzL3RhZ3M+
+Cj4gCj4gICAgICAgICB0aGFua3MsCj4gICAgICAgICBraWVuYW4KPiAKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
+bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
