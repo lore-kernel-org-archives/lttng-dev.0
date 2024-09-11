@@ -4,39 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59D32C636F0
-	for <lttng-dev@archiver.kernel.org>; Wed, 28 Aug 2024 19:22:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43F07EE57D7
+	for <lttng-dev@archiver.kernel.org>; Wed, 11 Sep 2024 22:38:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1724872970;
-	bh=dqhDHnU+OmbistiZgDxHPqTB+BtQDy2vL1qbMstyTAY=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=E+YGFMTOBpeL2nfp2RKj5WceCsoGZHpxhKOqnJiTIz+Yvi1+qcJ2eGRjbLul0wdm1
-	 E1BAQU/w5mLQbLxxyzB0rffo+ahvUBq14x38Y2sQ6xYCypjVwy1NJx/tz72ChRt9qk
-	 PFhwft3T27SzARiL/uAaBI0UE+c31x68QcC5GLyuJy8jVmWsDgrrDZ85CLn1xr3cAJ
-	 U/+o/NAOhIEJyZEMtPLGlX/9Y/i5JVMFJZiXHHwr0sj95nBroF7iCyWo1Idjrbb0FY
-	 n45zzL9FyD45jMdQD4igNk0L/4d2ZyJb/2RHPn31HQ/E+VmDhjp0EukBVTW4EFWDzX
-	 m2MwbfKf9+VKg==
+	s=default; t=1726094318;
+	bh=ce9BjCBcvZzSoh3hXSll1xcAljic3K3Ij/skTKDwYYA=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Yfy63QRbVu2qJ1dgk0bW56GasMkZ8xyWU9ZbuIUzO8WbU+IhcYhGIzbWRMplS1SUr
+	 mtYGzCjWyEW6Kc4GVzgjN75DWfMsasJIuhRMkNPXF/Q4879rucgxpgiNQh5U6VQYZd
+	 YGrJekqKCu/G2ZNeowtFectbSuKOfgr8QM7uA+wIx0wmrW+n8G6MS851Fd6b2a6K8L
+	 tyqU7gkm723+gXCK/pDddJgf4Yz/0DSB4kLYbjGjt+P4c1SvMxVj8BVdQWlgEF0BJf
+	 KApGVll3ySaKhswMKVTRBcFdA4RNHhNHAuSifb1nMs+7Z7ewJbfRqzmB34Y+xuSTmf
+	 ahtGhCII1/1UQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4WvDp13pwLz1DNM;
-	Wed, 28 Aug 2024 15:22:49 -0400 (EDT)
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
- by lists.lttng.org (Postfix) with ESMTPS id 4WvDnz4kmKz1D5c
- for <lttng-dev@lists.lttng.org>; Wed, 28 Aug 2024 15:22:47 -0400 (EDT)
-Received: from [172.16.0.134] (96-127-217-162.qc.cable.ebox.net
- [96.127.217.162])
- by smtpout.efficios.com (Postfix) with ESMTPSA id 4WvDnr5Zckz1JQQ;
- Wed, 28 Aug 2024 15:22:40 -0400 (EDT)
-Message-ID: <aeb6373f-9bdb-4ae4-8740-c0dcdd825ea1@efficios.com>
-Date: Wed, 28 Aug 2024 15:22:16 -0400
+	by lists.lttng.org (Postfix) with ESMTP id 4X3wTT27Kfz1GqW;
+	Wed, 11 Sep 2024 18:38:37 -0400 (EDT)
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com
+ [IPv6:2607:f8b0:4864:20::1135])
+ by lists.lttng.org (Postfix) with ESMTPS id 4X3wTR3mdRz1GqT
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Sep 2024 18:38:35 -0400 (EDT)
+Received: by mail-yw1-x1135.google.com with SMTP id
+ 00721157ae682-6db4b602e38so2868697b3.1
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Sep 2024 15:38:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1726094315; x=1726699115;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=PKMXwY7KYv5nX2l9EB/lvE0LgA6Vk7uB59w3lLI11G0=;
+ b=ElaovLxUyE0xA34uzqJugRTmHzJU8+6SXuXs81SVO3sFQn3CqxRrA3Abv1glkGIWNL
+ su0SRuakrinN7LOPbrUOHqvtXoLacqkHVHsa5K5wbYiCJkhpC1DK7fnCowz//67Qp0ln
+ iqUKdwQ5WR6Zf+0Tt+rkv+zc4YmHOBwGojoDR2z5iMJS4bsciPB/stCFQ+RX3T9mTX8d
+ Im4qKx6Zom9+mYbFNm+pR6O7BQ7Pe4SHa4WkCGfpBB7XlGPU9yBPDZEZNo/GPZ/7Cfbj
+ g0VHn+dWi+jbqVAr0CkfRGiYcWXMjG1qI92ZddFgwNuZTZxPLrJ54L1M9Z4/xW7uFVOL
+ J4Uw==
+X-Gm-Message-State: AOJu0YzjBfM986SO+o9epgTnE2GDizoQhWWwv1PmOOSezh7Y2ph11MvR
+ U8uyxECN8rLrseKgY/jOBGnuir3TeTlws4/PfJoWgNNnBtLHVvmCxzolHU3CYTm6h3AtxtUcZiR
+ yJVf10RqKeDZgOx5CChKskgRWeTpsRQ0R5FMQ6iW1QUj1pJsZxyU=
+X-Google-Smtp-Source: AGHT+IEwnPadPQYjFV8D/3X4y/G7kEGU2MED568+eGw8a6W014WiLhjrSx46eDhS6r4LWHSC31MgfMnwOI42QtWThUE=
+X-Received: by 2002:a05:690c:23c2:b0:6d6:7c9a:bf5a with SMTP id
+ 00721157ae682-6dbb6b0d89cmr11914227b3.13.1726094314467; Wed, 11 Sep 2024
+ 15:38:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>,
- Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: [lttng-dev] [RELEASE] Userspace RCU 0.14.1 and 0.13.4
+Date: Wed, 11 Sep 2024 15:38:23 -0700
+Message-ID: <CAA1MA5f3JY7WCZbgKaC2gjagDY-eVdssg_iWEiWtop3zZM7WJQ@mail.gmail.com>
+To: lttng-dev@lists.lttng.org
+Subject: [lttng-dev] Trigger snapshots on a watchdog
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -48,101 +61,69 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Damien Berget via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Damien Berget <damien.berget@flyzipline.com>
+Content-Type: multipart/mixed; boundary="===============8699902008842354463=="
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi,
+--===============8699902008842354463==
+Content-Type: multipart/alternative; boundary="000000000000768aed0621dfa647"
 
-This is a release announcement for the version 0.14.1 and 0.13.4
-of the liburcu project.
+--000000000000768aed0621dfa647
+Content-Type: text/plain; charset="UTF-8"
 
-Included in those releases are bug fixes, new architecture support,
-OpenBSD support, and documentation updates.
+Good day,
+We are trying to see what it the best way to monitor some applications not
+hitting a deadline. Ideally something like a watchdog that needs to be pat
+regularly and if timeout is reached triggers the snapshot.
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiple
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
+Before we reinvent the wheel and code some userland applications, is there
+a canonical way in LTTng to do it? I found this
+<https://review.lttng.org/c/lttng-tools/+/9657/9> that is suspiciously
+close maybe?
 
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
+Thanks,
+Cheers
 
-* New in these releases:
-
-v0.14.1:
-
-2024-08-28 Userspace RCU 0.14.1
-         * Fix: missing typename in URCU_FORCE_CAST
-         * Allow building with GCC >= 13.3 on RISC-V
-         * pointer.h: Fix the rcu_cmpxchg_pointer documentation
-         * Adjust shell script to allow Bash in other locations
-         * fix: handle EINTR correctly in get_cpu_mask_from_sysfs
-         * Relicense src/compat-smp.h to MIT
-         * ppc.h: use mftb on ppc
-         * Fix: allow clang to build liburcu on RISC-V
-         * Fix -Walloc-size
-         * urcu/uatomic/riscv: Mark RISC-V as broken
-         * Fix: urcu-bp: misaligned reader accesses
-         * LoongArch: Document that byte and short atomics are implemented with LL/SC
-         * Add LoongArch support
-         * tests/regression/rcutorture: Add wait state
-         * urcu-wait: Initialize node in URCU_WAIT_NODE_INIT
-         * Fix: urcu-wait: add missing futex.h include
-         * Adjust shell scripts to allow Bash in other locations
-         * Add support for OpenBSD
-         * Revert "compiler.h: Introduce caa_unqual_scalar_typeof"
-         * rculfhash: Use caa_container_of_check_null in cds_lfht_entry
-         * compiler.h: Introduce caa_container_of_check_null
-         * compiler.h: Introduce caa_unqual_scalar_typeof
-         * Avoid calling caa_container_of on NULL pointer in cds_lfht macros
-         * Fix: revise urcu_read_lock_update() comment
-         * Fix: uatomic powerpc comment about lwsync
-         * fix: aarch64: allow RHEL7 gcc 4.8.5-11
-         * fix: warning 'noreturn' function does return on ppc
-         * Fix: use __noreturn__ for C11-compatibility
-
-v0.13.4:
-
-2024-08-28 Userspace RCU 0.13.4
-         * Allow building with GCC >= 13.3 on RISC-V
-         * pointer.h: Fix the rcu_cmpxchg_pointer documentation
-         * fix: handle EINTR correctly in get_cpu_mask_from_sysfs
-         * Relicense src/compat-smp.h to MIT
-         * ppc.h: use mftb on ppc
-         * Fix: allow clang to build liburcu on RISC-V
-         * Fix -Walloc-size
-         * urcu/uatomic/riscv: Mark RISC-V as broken
-         * Fix: urcu-bp: misaligned reader accesses
-         * tests/regression/rcutorture: Add wait state
-         * urcu-wait: Initialize node in URCU_WAIT_NODE_INIT
-         * Fix: urcu-wait: add missing futex.h include
-         * Adjust shell scripts to allow Bash in other locations
-         * Add support for OpenBSD
-         * Revert "compiler.h: Introduce caa_unqual_scalar_typeof"
-         * rculfhash: Use caa_container_of_check_null in cds_lfht_entry
-         * compiler.h: Introduce caa_container_of_check_null
-         * compiler.h: Introduce caa_unqual_scalar_typeof
-         * Avoid calling caa_container_of on NULL pointer in cds_lfht macros
-         * Fix: revise urcu_read_lock_update() comment
-         * Fix: uatomic powerpc comment about lwsync
-         * fix: aarch64: allow RHEL7 gcc 4.8.5-11
-         * fix: warning 'noreturn' function does return on ppc
-         * Fix: use __noreturn__ for C11-compatibility
-
-Project website: https://liburcu.org
-Git repository: git://git.liburcu.org/urcu.git
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+*Damien Berget*
+Embedded Platform Lead
+damien.berget@flyzipline.com
+
+--000000000000768aed0621dfa647
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Good day,<div>We are trying to see what it the best way to=
+ monitor some applications not hitting a deadline. Ideally something like a=
+ watchdog that needs to be pat regularly and if timeout is reached triggers=
+ the snapshot.<br><br>Before we reinvent the wheel and code some userland a=
+pplications, is there a canonical way in LTTng to do it? I found <a href=3D=
+"https://review.lttng.org/c/lttng-tools/+/9657/9">this</a>=C2=A0that is sus=
+piciously close maybe?<br><br>Thanks,<br>Cheers<br><div><br></div><span cla=
+ss=3D"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail=
+_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><b style=3D=
+"color:rgb(34,34,34)">Damien Berget</b><div style=3D"color:rgb(34,34,34)">E=
+mbedded Platform Lead<br></div><div style=3D"color:rgb(34,34,34)"><a href=
+=3D"mailto:damien.berget@flyzipline.com" style=3D"color:rgb(17,85,204)" tar=
+get=3D"_blank">damien.berget@flyzipline.com</a></div><div style=3D"color:rg=
+b(34,34,34)"><img src=3D"https://firebasestorage.googleapis.com/v0/b/standa=
+rds-site-beta.appspot.com/o/documents%2F8ftfgpz8uuw%2F2jdhsym7pmr%2Fhorizon=
+tal_black_1680025855220_2500x2500.png?alt=3Dmedia&amp;token=3Drb8o0zcdlb0" =
+width=3D"96" height=3D"54"></div></div></div></div></div>
+
+--000000000000768aed0621dfa647--
+
+--===============8699902008842354463==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============8699902008842354463==--
