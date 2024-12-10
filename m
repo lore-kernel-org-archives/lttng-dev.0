@@ -4,148 +4,150 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [167.114.26.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8B59E7717D
-	for <lttng-dev@archiver.kernel.org>; Mon,  9 Dec 2024 20:45:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55D86E7717F
+	for <lttng-dev@archiver.kernel.org>; Tue, 10 Dec 2024 16:41:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1733777102;
-	bh=z47kwipq/h+W+xUgzCwau1DmW3hty3F+2MuHw62XnLc=;
-	h=Date:Subject:To:References:In-Reply-To:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=frlpNsYh7pz6Uu4vBUOa9del8mIVCWP1sTWQH5KhxzfZrhn1A5Grn6PpSfsgWemTN
-	 HSPVUGVcqH5/4f6mqYYFMKuVyxe6+SxXFMYN851LY6NPxIey94ijl7iCXIvS6C7HO1
-	 cnW54BRbPhoYbuzmuiZjOWWosbhDE7SWGsvzFKn+XUQvX8VJ6MPcuKAudbS1lPal6R
-	 p2bpESz0E7B59YaFlM//bKf/UegTbb7138ScbOtfbrrQGdh/vBFvp4SCFvJs+hbmim
-	 9pdLWHf0hLZ9HlWzJhQeoSqlXC2sAgCie5hQ/fxiXEstGDgkqJbgaRi6zeESHeBI5G
-	 s9Gb00WuP846g==
+	s=default; t=1733848903;
+	bh=8ikyj34nG96pbfQMk76K/fB2yMReN6vSmYUrG7w96BA=;
+	h=Date:Subject:To:Cc:References:In-Reply-To:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=AMCjIcMqL0QvtDK45W4BlFpL1OihnZBcBG5ysWPQVwjTXAVjhJu825qwmP16AaNDO
+	 n9VvKeUKMHKkDtrg4jgoXXejf6pEXuDRyqWBa9IDhEOlhC1VNHjfNKqEeNBdf0wxNf
+	 z3UjMWs2ZYy2L1JeV+jKzfyj7uWpORCGOOeP1ji0cdi+7EV3H/qYX71TxD/JbOls9l
+	 tswtayrqjVZm6hOhmAAM03JgcehN1JmYisKTQsZamCYLWY+CGbJg3V/1Zkkn0Idj1d
+	 O6mSSbCW/tbbHvbQimcGSSUNUT59ygDEeRhdl027Dm9S0Qn/WWh/PhFNC00jHSYftu
+	 qjcc1ScaN6fCg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Y6YlL1Sp5z1wFy;
-	Mon,  9 Dec 2024 15:45:02 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4Y74J64Tzvz178v;
+	Tue, 10 Dec 2024 11:41:42 -0500 (EST)
 Received: from YQZPR01CU011.outbound.protection.outlook.com
- (mail-canadaeastazon11020080.outbound.protection.outlook.com [52.101.191.80])
- by lists.lttng.org (Postfix) with ESMTPS id 4Y6YlJ6ffmz1wFw
- for <lttng-dev@lists.lttng.org>; Mon,  9 Dec 2024 15:45:00 -0500 (EST)
+ (mail-canadaeastazlp170100001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c104::1])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Y74J46GQBz16tG
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Dec 2024 11:41:40 -0500 (EST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=P9IwnD9MrsrxLJGNJ7iPkjGC3XqR9Wk1+YaYagrnWxvvw+6VtR+FtgaSrgYbJEPw2LYKSi2H5eyOwnLlxRuxUdCqHKb32fhT9hOdwB0ji26Fj4SMvfQhL7+GM0v4RJuGQb9TFEWb+uu7KLVHzpKy7KDNA76/Peulc9IIT3exLEPu5hQYPk1Go5ooQFcCd4+CDM4vcM33ofWxNCv04bQ8j1Z+i+WUCmJrmRW9E/SUYReMUss1iXG4iYJqUAxLH+xD39wqYDO8tFqCCp/F1E6zswErR94Zlq1Q9L2MiOgVjtYrmy6S7PmGJFGOQtuh++OFoWefcTwkBesI5d0YwNxl3A==
+ b=IkwXkpnDEqRx9BDOj59DPZUQIO1rNAcFPgd7lcM19b3BHykZQt4ySvbtL8ns2KDGwRe0TwttX/iZPPIehVeHGbERH//bSbKMojbszJi1tyc/+n/wcpNOe8cDsH3GeGeOwRDyVCxWpicYBU8CzvBEdZDx4EL7jjctN5NG7TJfOeNhD44CIf39Sx2VJmXH2ZPP3csKQKJJz0GDKeV41BMUU0AbYzFq04QQUyZLr3+rBqF4aiyc80yUw7AB93bIRA9FTXK7HUS+vaGgdc7nFWJNeXBU5pQIw7Zqu6vEup46e3wxfHERX/5DBIgypRWnOmYG5N1/KU5H5k2/s+dggzw4KA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IGkb5x2n0qWc0vfMTUcpkOvhragNgx9W/82CEwgMoLI=;
- b=BTk7lQOBrTCBrHNMnW5uwn1tjQdRkoicguYFWrqNHLZJ8PUSl07nPp/Gix/MLfeD4v9LKbr9Lnxi60xvvxPONCiWJ8n3FRq96mMGi0vhGvsFn8VuIT/h1LUUFQZPyML8mbjT+xGW7IP4aLUbKVm2onogqH0d63oFvrNUpbJOctMRpZ35w5lhtX51HgLkXNgVdSiiPAAycjDkZ4NhKd2nrQbmunW4l0P/ZDh8xbWyVT9fRV4KnLN4whree6hyqX34OkfDHyDQgbYih+r/e/QH50fSsKQ0u5CE9PYoSE/UPYDqqWoR2f/ASXPfIxz5693vf6tAlDSXruB9191t/b1Pig==
+ bh=fLo9wMAJkLcdys4lC9fRBxhgJcmCnyFej33zseKQZjY=;
+ b=nAp0wJ/k4he0rpKxJwIloh7vLO22rNhHMyBYdpqAAKrc/YiCjraHbyNQ7cTqRQChTfxUkqSxbJ3xrMaXSISvzDSooVNZAJQoGXEbm5JdJxr7tb3kWEGEgwo0YuUYiHALh2G4sz7f3vsPVmeHhekPN34Dcptf9fp38bLnSwuH+/2ENbPZsyVSooLL1epizY6YLBoplWyxi9kDXu9pi6obzsMT1mBKvWjXsZ0lFUel83npKyR0jL0SbXTcEYA3+DHigH6roqbxX83se08bJJz4ZfB3eG0twOnxuWYp08svqwt6vXDWK/WHaYjZTNuzNSy1NJFbtKO92KZGI3ycUaPsmA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
  dkim=pass header.d=efficios.com; arc=none
 Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::14)
- by YT1PR01MB8617.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:c4::21)
+ by YT3PR01MB8135.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:7b::14)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.18; Mon, 9 Dec
- 2024 20:44:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.15; Tue, 10 Dec
+ 2024 16:41:39 +0000
 Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::e27c:c1e2:e6e:9256]) by YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e27c:c1e2:e6e:9256%6]) with mapi id 15.20.8230.016; Mon, 9 Dec 2024
- 20:44:59 +0000
-Message-ID: <7338127c-5f0f-4bcb-aeb9-ed29459e2424@efficios.com>
-Date: Mon, 9 Dec 2024 15:44:57 -0500
+ ([fe80::e27c:c1e2:e6e:9256%6]) with mapi id 15.20.8230.016; Tue, 10 Dec 2024
+ 16:41:38 +0000
+Message-ID: <7f722802-752f-4cf5-ad2f-cb60264d8091@efficios.com>
+Date: Tue, 10 Dec 2024 11:41:37 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [babeltrace2] Integration with Wireshark
-To: Gige Atanasoaie <Gige.Atanasoaie@bc-s.com>,
- "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-References: <KL1PR0601MB3987E8EC377E357825D82546C2312@KL1PR0601MB3987.apcprd06.prod.outlook.com>
+Subject: Re: [lttng-dev] Record stacktraces at userspace tracing domain
+To: =?UTF-8?Q?Christophe_B=C3=A9dard?= <bedard.christophe@gmail.com>,
+ Alexander Krabler <Alexander.Krabler@kuka.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+References: <VI1PR01MB6845D1C81221547CEC94B3A782352@VI1PR01MB6845.eurprd01.prod.exchangelabs.com>
+ <CAAS9dobC0wERGMQf9CLjhYY4ay_zSdAMAE9qxBezLtH-kL_1NQ@mail.gmail.com>
 Content-Language: en-US
-In-Reply-To: <KL1PR0601MB3987E8EC377E357825D82546C2312@KL1PR0601MB3987.apcprd06.prod.outlook.com>
+In-Reply-To: <CAAS9dobC0wERGMQf9CLjhYY4ay_zSdAMAE9qxBezLtH-kL_1NQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQ1P288CA0005.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:c01:9e::26) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+X-ClientProxiedBy: YQZPR01CA0134.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:87::11) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:b01:e8::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YT1PR01MB8617:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6ed74364-5209-48da-1be6-08dd189258a5
+X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YT3PR01MB8135:EE_
+X-MS-Office365-Filtering-Correlation-Id: 06cdb157-9db7-444c-433d-08dd19398476
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?MC8zZ0NleW53R3d5Z3dxVU5LSUdRUUVhOHhLOVR1VUhiNnpvZXN2NlI5eGhi?=
- =?utf-8?B?Zy9TdldpOUNKN1VCUUMrS3VaNWhGMkZ0RnpqL1ltczhGdWl2THRsUXBTbjBP?=
- =?utf-8?B?OVhxSU9xcytzT3BkL1hnaVhFejVBYks3T0lHREtlUytYNlkvOGRqd2F0d0Nt?=
- =?utf-8?B?Y2tKMzlWODZRUkZOZkJ2R2IrNEd5bnNtMXN5eU02bW9qMXZIQURXQnFZR3Vl?=
- =?utf-8?B?cEZINmZCUERJQmtSSnJJa212N1Q1ekhCT2IrZ0N2WXlxUjZFcUZwcFhEMUNQ?=
- =?utf-8?B?QmY2VUdFSlM0UE5id1V2ZGZOejM5ZlZYSDlWN2Y1eWovVnY5TU91dllKTlpm?=
- =?utf-8?B?SWZwcDhBMGY5RzNsS3lvSGJZY0xpbHkzV0tBYjVubTF0UWNNaFcvUHZrVzhz?=
- =?utf-8?B?U0JieHFrclNWZE9LNkMwdDBnc1FuUEpMbGF2aDZWNnFvdlJwbHNjMTZCdkRP?=
- =?utf-8?B?S24wbTZJY1VJYlJKeW1OUk5ReDdOUkRWamc4VXhUTGk1RWFreUUwNWlla2hH?=
- =?utf-8?B?MWtnU0dQSHQveEZGb3BtQU1SeTdXNjFNZ1hHZ0Q1cTI4a1JmRFdUdzMxaGdO?=
- =?utf-8?B?YXNwYk9GVkRsS2ZpZ1BnVllGaDlXY1phVERiUm5IekhnQmtUVkhxRmYyRFVs?=
- =?utf-8?B?Wk5UZTJ3UGdLVlpvOVBGQjl3ZjJ1dHlqUmZ2UnZZZ0doc01Wc0RmN0s5dXVZ?=
- =?utf-8?B?akVwSTIxcVhocmE2cCtVQjl5WEtjV3JKQlNtcStURHY4dXAxeldNTEtDaXJ0?=
- =?utf-8?B?U1NlbUZaeStxWCtFdWlpZENxa3BXRGYxcXJxM0dMRzZRNWlvOTF2bHZ4M0U5?=
- =?utf-8?B?eWhCdURYNjFWUzZDYWx0aVNYNm04akZYUC84U1JqUU9Dc0RLL2Z4TGNqZmlM?=
- =?utf-8?B?WVB4TzZCZEtRSEMyUElxSnZqODZuLzJNUWZyT0pOZENyYmIvZ2dGZDZ1UkRU?=
- =?utf-8?B?VDgwenhKWExDMjU5dVEvZEladnVhekZOdXFhcGcyVElWRTFEaE9WL1BRcWh5?=
- =?utf-8?B?aWdaUGwzRnFXSU4xdnBCcWVRcFl6TE12M0VWNDZDUHgvV0tzSUNkNWtFZEow?=
- =?utf-8?B?RG9WSm92MGlMRXV3ZFFjbEsrOGN4b3FhSWF2ZnZYdS8xRkRHeDgxb2hGT3RD?=
- =?utf-8?B?TEFkbG02dEtIK0o3Q0NWTmQ2MGhFM2xNNUlNSktjVXZFOURBNXdzTlowM0VP?=
- =?utf-8?B?anVZRjVvZG9MbWNoWGNud2duc1h0MzUyTHpaalpHbDA1Qk5WREhDNXVRa3VO?=
- =?utf-8?B?VUlabUo4ZDFnNHkvakZJeDZrVGNmemwyalRERFVPTFNuRWNLKzdYaThXeGlD?=
- =?utf-8?B?d01YcjNuY2p0WnMzZ0RGTXVjeTFzNjB4dk84N3dqOVlrR2hPVXN1WGNLT3Rr?=
- =?utf-8?B?NURIdm1rbWpKQURWQUtpeTFjYytyNldXOFM0TWtkcnRvTlFyWDVBNG0wV0x0?=
- =?utf-8?B?TW1UK3Bha0RKUEUyVlhNZXZiTmtyWUU2djRVazRPV01LMHRidHVZSFJLMEdr?=
- =?utf-8?B?Q1N2ekptOGNCZHZPa1Voc2V3TXdUY0ZvQUFwRXpqZ0FzL2VSazd1clU1TFc5?=
- =?utf-8?B?NUk1TEVWZTRtT1RkUEF4Rm5yM2JZaEhSdmM5dFl5KzFGWm9xU2llSlZhZEY3?=
- =?utf-8?B?UDhxQ3Y3RWhZaWhjbEI5TmJMZ0VMRkt0Y2tBSnJucTRXN0tWZHpkbFZOdVNr?=
- =?utf-8?B?K2NlanRuOGpuOWsrU1VKNVRwYm1iY0tzR294RDBqZjZuZ0hkSkhsUTNrQnlP?=
- =?utf-8?B?TnBvdVMzOXYvSWpwQUFTaXdEZDhmcUZkbFl4UWphNGVpL2ZMVTN2WVZEem9i?=
- =?utf-8?B?UjcwY2IxYm15bWd5NnVjQT09?=
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?d2tWQythMWFFUHZYZ2ZsZnVmeDIxUGp2dUJaMmI3NzRPK2VHcC9XNlBoMWcr?=
+ =?utf-8?B?ZGRwN3E1YlhhdzkveFpGb0pkT2t5aFJmRkE5WUlGZ0xtaDY2KzVCbWd2QjRJ?=
+ =?utf-8?B?NmQ2K2twTkVLSHhSR3BiVCsvTjkvV3FnUTdPOC8zVVBBdHg4NjVYT2xuSzVZ?=
+ =?utf-8?B?MXYxdzlqdEdQNTZwaVNOUk54eGE3Q2g5ODRBdVd5cmVjNGgyWXdpbExBRGlN?=
+ =?utf-8?B?aHpCMkJjVUhNbUxSNTV1UHQ5bHJJbGloNTNuT1ZqWmVIOUdIeElvYXBKWG9L?=
+ =?utf-8?B?QW52Mkh2R0wzb3hUWXRDVG9jbDFBNmRmN3Z1eDM0SGxRbm9ON3ovVVNpQ2xZ?=
+ =?utf-8?B?dFI2MjIrb0VDU0NNWGtoclcrT1k3ZC9rMkw3bFZMN2FpajRQMFF0aFExWnFG?=
+ =?utf-8?B?L01sUmxDNXRId29Xc0RXVXk5Z0Z4MllZL2FZY0tEN2VvVDlJdGRLR2R6TWFu?=
+ =?utf-8?B?WEF6c1Z5cmRva2pHZ0FNbk1JOUlYbnZlZEJ6QnBSZ2NBTGFtcXhVd1VHMi9F?=
+ =?utf-8?B?S1dxYlJHcFZUOVJCc3ZkTmNWKzZJWnFpTWhKa3VDYTg3YjF1UzJUaHZpNUli?=
+ =?utf-8?B?ZTBtcG1ycW5wNUg0R3J4blg2NTBaSi9WZmtVOXZSUzZmUjdxVDZ1M0YyUDJq?=
+ =?utf-8?B?Q2cvYVVoaDRRUWRSOTV5djVQalRCSDJySXZjMFRVcHo4YWFFa0Y4Wmd5V2xz?=
+ =?utf-8?B?Mzg1RE9YeGZNdjRIVVYzYjVyUnM5QjlWcVJ3Y2J4cXBmZlhKeGFWNEJqQ3pK?=
+ =?utf-8?B?aUx5NURNNkdXb2JkSElKaitYdGZFTHBhL3RUckRpZlZKcXdrck92RHMwb3Fs?=
+ =?utf-8?B?c3hkSzZYYWVaTDBWVFZvVjhHaTNtOFQwZ1drZDVjbHZtbFo3TDRFTEkrdWlw?=
+ =?utf-8?B?QlptLzZRVC9vdzZTaUV2UjQ4dWE4dGVuWGlRdXBGSXJBdVdJeGpFUTBOMkxu?=
+ =?utf-8?B?TUhGd20zTUJuL2JWczVEUlRxT0gzYk44SlR4UFJCa3p3WHJ3RzJlZVptYWcy?=
+ =?utf-8?B?K3JRc0RQbngwR29za3M4YVozdksyWGhjNyt4dnhuRzJhMDNNeENaUzNrVnNk?=
+ =?utf-8?B?Y0g4V050QmFsTXltZ0VqeGZiTGREanBSekNjZHRlNDVVbVptc3lyUUY5NkVi?=
+ =?utf-8?B?N2NiSE8zNlRHUkI1WFJhRXN4Qk4wVWtFZHRNaWtFc08zTWI2T1J4eENGZnlJ?=
+ =?utf-8?B?b0gvRCs5bWNhbzBoRHZjMHpCZUs3bE55RVRwQTNJeGp6eVUxRlJ4dXp4QW5F?=
+ =?utf-8?B?VXNhbmxSY05yVEFPWE9mKytZQmlGVC9VRnFTRUhkaXhsWWRSUWZMMmhhWE1P?=
+ =?utf-8?B?OHNSUm9aU2RQS1FoL2ZXcFdlRlUwUmd4ZnIwR1VINFBzSHlHc2pEMzI3Y1pW?=
+ =?utf-8?B?YVpwalZoZUhuRW11akhuZmxYSmNlUHdGVDJIWktnbk84WDMweHJCVlJSek1O?=
+ =?utf-8?B?cUNYR0NYcDhrankrcThjeWxQdnFiamlsY3JueUhyVjA5bENQQWZWUmJHa0NG?=
+ =?utf-8?B?c1NzMUtjaU1mUzNleEhaZW9qZGR2NTlRTGs2YVV0Z3p0QUVsbFdDbFoyTi92?=
+ =?utf-8?B?bFVhSzY3KytkczZUNmllVEk3NE1Tb2RNZUljeFRXcm1hQjdBYTBnMm5KUEhD?=
+ =?utf-8?B?aTNqblk4WVlxOGJQUS93MGxFU2x2MmU1YWdEcDU3aWtXYWlody9UN1M2bHAz?=
+ =?utf-8?B?bWtsdkNOL0c3dGdDZGVDQzFSTEJVVW92aVFLYnpLa1JEOWFEbzZ6d3B0RGVz?=
+ =?utf-8?Q?xG+WZQte+FstymFXmw=3D?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(366016)(376014); DIR:OUT; SFP:1102; 
+ SFS:(13230040)(1800799024)(376014)(366016); DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MXdHUmpnQmNENCtybUJ0TWNlanloSlVQdkg2MWRVNldxbE93NTJZdGRsY09W?=
- =?utf-8?B?SnlRMlR0WFpSUVBGS3FXczE5YjJiZ25DaWo3bm9iMm9YdHhVa0JPSUZ3clFJ?=
- =?utf-8?B?dThsQlNoUG5PaUltOWlGclh3SloxbTNNWmRZTmdpeDh5VmxzeXJWQW54bFZ6?=
- =?utf-8?B?TGN3c0FsMTZDSVJrRXRFano1UG9GbC9zS2g1WEoyU1JqZUJoOXJQQzc4SDMv?=
- =?utf-8?B?MVI0UTh0dFljVE1JWEdyd1dDcE54ODBLblk5UVBVcllUaHh2c1MvVitpNGdO?=
- =?utf-8?B?c2JTbVdpUndyYUxIRXJ1Wkk2VUhZRDEyK1JFYVpST2FMQmhWU2VPeU54Z2Rn?=
- =?utf-8?B?Y2dpMVBXT0JMTkFIUzUvb3pRa3l5dkZIODUyRXEyZVFlOW1ISDFDV2U1VDVR?=
- =?utf-8?B?NmN2czY0cDlwZHh3eUpKYVZieHIwalZlUXdaNFFzQXI5cXJBMWZWMzNhSEIw?=
- =?utf-8?B?THJ6RGE5RHdDeUMvd1hKR3FrcUhrRjNoZjFpUjVwWEx5Zm4yRXF1K2d1ZWRU?=
- =?utf-8?B?SWpNQ0VSdCtMeEQ3bWQ2QkdvcmRKN0FMejVDTTZSaW1DbzVXL0FXUzFaZ0tC?=
- =?utf-8?B?NFdibFowY1htdE1QcEpzVGEycGhJeWVRTFJud3FVdVBXUTRObDFoV3FZWGtR?=
- =?utf-8?B?ME5HQkp6TC9XTjFIbU5lbVFjRVcvaVg3UDdLeGNLTVF0a0FmNHNXNWRLTGhY?=
- =?utf-8?B?WUUrSXFTSGJIWHBSU0xVcmxwSElNQlJBcFVHZDFTUk5lb295Y0dENW1QSjU5?=
- =?utf-8?B?VmU5SzlvMVUyYndENGN4aUUzdzdJQ1hGd2NiVFpyZ0pNTnRSeHBPS3FyS0Q5?=
- =?utf-8?B?bHJoY1llcG03SVJlMUxONmNPbktxT3BSUno2eUlOYzliOGlvRUpzSzJGQkdm?=
- =?utf-8?B?aUx6NVhkZHFGSnp2MThQTkRjRExBVjA0NVhSdXFvVU93K0JqbURZOEp6NlhP?=
- =?utf-8?B?d2doaFBrcmw2OXRtcjBXK0RrNWlLc3hxOWNlUUJ1ZHpIWlEzUkRBdWptR1l4?=
- =?utf-8?B?UlpkbXdSV2hiV0lRcG9scC95MEhrdkdFbFJNUmpzZE5EejZDVEtUVXlJTE9B?=
- =?utf-8?B?enFlK2JYQ1ltSWYwMW00Smg5YVQvaXRrMEtMSnovN2tYL1NjZlNJU2MvbjBD?=
- =?utf-8?B?dWpoTU5qU3ZLV2hnTEFicEVIamhFY241SkVVWnRHUFE5Y2h3aC9vdUcwRXor?=
- =?utf-8?B?L1kyeUhxQVM1aFAxcDdOd0FtRUQyc3FOUE1TYm9kTURZS3NZbmFraURqZ1pt?=
- =?utf-8?B?cHVwNVgwQW1FVC9LS2dXZnkzV2ZPOXNoNDJ1RkJuMmUxS01CTnM2eWh1M25i?=
- =?utf-8?B?Wkt3eXAvR3g4QU9LQUZqSXA3azJ3b05ncG44U3RIZlFFMkNUbDUremhNczFm?=
- =?utf-8?B?bDlUWDFSczFLUiszWGRONzFRd3pNVXFsVWt2Sm8zRzZlN0hpYktkaDh6TDlT?=
- =?utf-8?B?NjlxbVBnb2piaDVWdUpOTVovWDFjQ2V3STZnaUpTVnV3ZWc3SEw4Q0cxVXVz?=
- =?utf-8?B?RjErK3U4WTVGV3FmaGtuQVY5MkhyQnNvMk1RbHplOFJuT1RsNmpibzU1dExW?=
- =?utf-8?B?UmlqWkZleVVVN3MvT21xTnl4SG1WeCtUL3ZWNUtPMHp0MEdMYXgzZFpIbkt1?=
- =?utf-8?B?ZWt5b3VQSmx2WW50ZTI1dG1UbXBFMVM2cmg0L214THI1L05lYzYyMzNmN3po?=
- =?utf-8?B?ZmNrcWJ3MHBmMUFLZnNlZ2FtWWx5aW9HUk9JTUJrYjM0SHlOb09VUFRBcmRI?=
- =?utf-8?B?dVdheEwzWCs0QSt1ZVRja0xjMWJaZ08vQ2RRd3pBTnhkU2hnS3V4c2NsSUpo?=
- =?utf-8?B?MEZhcS9XMXpUbXNXQ3VPK3Zja3VxdnhOODJ5WFE0VWo5SEU5SlFQWTV4VUtq?=
- =?utf-8?B?Z1hxYWZ4amYzZ2ZxQ1ZzZVFqRm43K1ZDU3pFRVA0NFljWUhZcVdKa24zK3FI?=
- =?utf-8?B?MEZQd2hJYVF5VXk5amY2dWplYVhuMDA5V0Q4bmkwZS9QNSt2M05NZkRwNEwy?=
- =?utf-8?B?VGlwVm5yRno1ZTJpSmxpVGJOUEdMRUM4OXVINXR2NzBJUHpORXhFTkhRVTJY?=
- =?utf-8?B?L0dEdnVxdStuK0Z5KzhMRXd0eUc4MHVkWHZkcmVEQlN6cDdlNGtOaE9VK0Nu?=
- =?utf-8?Q?Z2XOpMT+hnrgv7vqMIXB+6faM?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bUpxYmh6cklGbjhQZTdPamxQa2JwSGwwSXdmWGRTa1owVERSWUV0bzg4ME8w?=
+ =?utf-8?B?dzVLZERZdnBMN2xldTRoa0dlbWtkaTJSZ0pEbzJ6aXQ1b0VpeVJmK3FwOHlO?=
+ =?utf-8?B?cU1uQkRuajZzTkVSMmhkejhHcXlyL2VWaXlBQ2JKRFROU2tzNGNvbXYvRjlI?=
+ =?utf-8?B?UGxMN3hwTnBFWGRQdXROcFRDb2dpWHJIejREUjVUQ2dJeTZkUkErN3crazYr?=
+ =?utf-8?B?RWMwSUVobjAyb1Zvejh2Z21NcXRKc2RsZ2V6d3NiOERuY0RFMlgvdmJRMWVr?=
+ =?utf-8?B?d082NHpobVhJcVMxWStxM2ZXbWw3QVJyWW51ektxSmNhSnNoNWdoV2JKR0NP?=
+ =?utf-8?B?Wkp3Z2F5dHFHcXdxNkZGeFNtNndOT293WGFsbHJUb1RzQVNZRS8rRjFDcGRC?=
+ =?utf-8?B?ZXdjZS9BZm5obzdWdTFLYmhzcXc5Wi9TV0I1Z2ROMmRNZWZVc1V4QTZiV21J?=
+ =?utf-8?B?Y2p3QjB2ZnUwK0JFRmR0NXQwTzJ4K1JZbTB3R2NYRnUxVFNoMVREV2tyRWV6?=
+ =?utf-8?B?UEI2c2cxdWFjZUVBYWJOanEvR2k2b20rekZmMzVqT3ZXOUVkVWozbGhIckVo?=
+ =?utf-8?B?U1RvY1JQRGlCc09mMmNBblk4YkM5czBJK0lER1dnWDlZQ29vMkVNbzl0cTVM?=
+ =?utf-8?B?dGtMR0Rya2o0cTFQeEZUdXZUVS95ckNnMGNsdVloeUhyK0haQzg1Qll5eERG?=
+ =?utf-8?B?RDlXT0tPVElGcEt6dDVVTkJHL1FWdDRjMHdZOEgzQXBxVjBJdlBwMmJNQVNE?=
+ =?utf-8?B?N2QxQTZEb0p3T3NhYm9PUHpmcGRPL0VBQ3FLYmgwYlA1czF5akJpMzlOWjdP?=
+ =?utf-8?B?Y3ZDVEpmWVFMR0VNRkNMNHFqWnY4cmVQSEdCS3RRZ1o0bE1rQzNJbDRSdjFx?=
+ =?utf-8?B?TzVpUkRTbWxKTnZyTEVVdzl6aUI5bHJYQll6YnVMY1oxRzFwUjlhMlJyWm8z?=
+ =?utf-8?B?eUpjTElOdkRVc0ZnWFdIaXB6RG1FU2k3dkFjZUhHNW0yby9ua0dtaUZXTFVO?=
+ =?utf-8?B?ZHhpOWJvdmZzZXJiNWF5THlaVXozb1FqQnlJUlVMaHpWbEp6OW9rWTd4T2VV?=
+ =?utf-8?B?bWxnUDRtMHpERTVkRlQ5d2Z2R0x2TjJ2ZjdtdVhad1R4ZTB5Q1NiUjVLRHJ3?=
+ =?utf-8?B?UkllcWpWczlzSkhUVXovT29pYU55US9ZTkpWdnpSTlYvSzNhZDNyWGM0TGtu?=
+ =?utf-8?B?bmNoK240c0dvb2Y3Z0Q4Z0FMYmpkak9BcFFrckhjS1FKMmI0ZXhiaE9BU0Vh?=
+ =?utf-8?B?aWs1enQyWWFZY2dvaFdzeUlGNFo5M3orMG9SODRzU0xXUnVmdlNTRVhwZlVM?=
+ =?utf-8?B?OXQ5QVdnUStPQUx6RnBYMmZhMnJtaGxiVU5RaGt1cmhWRzFIMm5VZVE1TzhQ?=
+ =?utf-8?B?YXhHNDNJT1ZxMi9nY1NRRHVsZ0tLditERUxOblpnbG1NaGU5eVRrWmRzSzhX?=
+ =?utf-8?B?eFNaY05zd0svdG05YVE2ampyUkoya1V2cWJFcGU1b04wdHlFS0J3S0duY0RK?=
+ =?utf-8?B?TlNoczdNdzZLVUVmdmh2WS9ybkdBSGVzRklLQVpKWXQvUVZwOW5PdTFyc0RR?=
+ =?utf-8?B?aUZKNnJ1RVdMRU51VnoxMFNRWkN1dWpIVzVjeDJFcDRtcVBiYmJDSzRkYUdP?=
+ =?utf-8?B?SWZhaEx5SmZ0dm52VGc0dGxQc2NVVktWdTVCS1l3L2habEJic2FhSWxRWWQ4?=
+ =?utf-8?B?VVNrTUEwZ2ZkL2lMcHA0bzkxeHFEVitmV01VdXY3YjgxbnpNUnNxVW5uT095?=
+ =?utf-8?B?aFJwc24wYm8xZWhORHNJWUprN3c1ZldOR0M3ejJJT043cmliN0xheG5xK2cx?=
+ =?utf-8?B?UVV6dVZJdk8xenVIUTcvQUdJMWtzTm82TUQvcUUwNk82TVZoSUVJYkNCTGVS?=
+ =?utf-8?B?WnE0ZXFwek5YTG5qSkR2K2htaUk1bUtoYzBRZ1F0UnlwbERFSGlxbW5DZUww?=
+ =?utf-8?B?cWNFdEtYb2hHTW5WcHZHTTZsTG1OUkk5dEI4N3pMNVpCNzRzbDVuUVZLRG1t?=
+ =?utf-8?B?dHViM2lyUDd3cnVzc0p2blkweDNuQ3lYSmZBNU9EZkJrU2FQZ0ova2tIWDBZ?=
+ =?utf-8?B?V1VQdWNFZFBzQzFnV1ZkSUVBTjFCNXJCSEFEM3RhT1QyT1h3RllzSmd3NjlD?=
+ =?utf-8?Q?PyiM3VVZ7SDhCkNCBlTW0pVGo?=
 X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ed74364-5209-48da-1be6-08dd189258a5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06cdb157-9db7-444c-433d-08dd19398476
 X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2024 20:44:58.9383 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Dec 2024 16:41:38.3990 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nUUwKCH/uv6Fq7+diaJ8TnYvCyxkvmdnJxzbegGyByjB0uAMLb19KxzBd1YwY+gBc+ksnnTCRMbhNKJA6LB6fQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT1PR01MB8617
+X-MS-Exchange-CrossTenant-UserPrincipalName: uNVfqIOI+VjSFk/z2zWCGOMT2VAUg8oMnjAj0CxOQv7wAdPQRQeEo20PzdM5lSiJpNGpmE1RlpS7hUjgIqbIrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB8135
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -162,33 +164,90 @@ Reply-To: Kienan Stewart <kstewart@efficios.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi Gige,
+Hi Alexander, Christophe,
 
-On 12/6/24 1:48 AM, Gige Atanasoaie via lttng-dev wrote:
-> Hi,
-> 
-> First, I’d like to thank you for the CTF, barectf and babeltrace2 projects.
-> 
+On 12/2/24 4:17 PM, Christophe Bédard via lttng-dev wrote:
+ > Hi,
+ >
+ > I did the same thing a while ago, i.e., trigger tracepoints on
+ > malloc/free/etc. using liblttng-ust-libc-wrapper and collect userspace
+ > callstack information (so that the indirect calls to malloc/free can be
+ > removed from an application).
+ >
+ > There is a userspace callstack context implementation here for lttng-ust
+ > 2.10, see the last 3 commits:
+ > https://github.com/tahini/lttng-ust-1/commits/ust-callstack-2.10/. Here's
+ > the corresponding lttng-tools 2.10 branch needed to enable the userspace
+ > callstack context:
+ > https://github.com/tahini/lttng-tools/commits/ust-context-callstack/.
+ >
+ > I've rebased it on 2.11 here:
+ > https://github.com/ApexAI/lttng-ust/commits/ust-callstack-2.11/.
+ > lttng-tools:
+ > https://github.com/ApexAI/lttng-tools/commits/ust-callstack-2.11/. It
+ > shouldn't be too hard to rebase it all on a newer version.
+ >
+ > Hope that helps,
+ >
+ > Christophe
+ >
+ > On Mon, Dec 2, 2024 at 8:32 AM Alexander Krabler via lttng-dev <
+ > lttng-dev@lists.lttng.org> wrote:
+ >
+ >> Hello,
+ >>
+ >> we want to record stacktraces at specific userspace events like e.g. 
+calls
+ >> to malloc and free using liblttng-ust-libc-wrapper.so.
+ >> There is the callstack-user context to achieve this in general, however,
+ >> it seems like tracing of userspace stacktraces is only available in the
+ >> kernel tracing domain.
+ >>
+ >> Is there already a solution to achieve this goal?
 
-On behalf of the contributors, thanks :)
+Depending on the type of information you require, it could be possible 
+to use the instruction-pointer (ip) context[1], the statedump[2] and/or 
+lttng-ust-dl[3] for base addresses, and the symbol table in-order to 
+resolve ip -> symbol name in the offline analysis phase with the help of 
+babeltrace's debug-info plugin[4]. While a bit more work for the 
+analysis, this process reduces the impact of the tracing on the program 
+at run-time.
 
-> We’d like to use CTF in one of our projects (traces generated by barectf and lttng).
-> 
-> Wondering if someone tried to integrate libbabeltrace2 in Wireshark plugins (wiretap, epan), to get the CTF traces decoded together with other packet types by Wireshark.
-> Is any project of this type known by community?
-> 
+ >> If not, what would need to be done to achieve this?
 
-I'm not aware of any project that does this.
+The proof of concept suggested by Christophe has some limitations that 
+may make it unsuitable for use in a production environment notably lack 
+of testing - including corner cases such as emitting callstack traces 
+from noexcept regions or signal handlers. Run-time stack unwinding may 
+be expensive when frame pointers or hardware mechanisms aren't 
+available, and the typical work-around to that is to sample the stack 
+and unwind in post processing which is not a desirable solution in the 
+case of LTTng-UST. Future work could also include integration with 
+sframe[5], which aims to provide the information necessary for callstack 
+unwinding with a lower code-size cost than DWARF and without the 
+run-time cost of frame pointers.
 
-In the use-case you imagine, are you thinking of using Wireshark to 
-analyze network packets that contain trace data (e.g., from lttng-live), 
-or are you thinking more about opening a whole CTF trace with Wireshark?
+If your intention is to use the callstack recording in production, it 
+could also help to reduce the sampling rate. E.g., only sample every N 
+time units or every N calls, or sampling "overly large" allocations - 
+whatever that may be in your context.
+
+What is required to get this into upstream UST?
+
+  * Funding to work on making it production grade (robustness, testing, 
+performance, and integration with the other LTTng features)
 
 thanks,
 kienan
 
-> Thank you and best regards,
-> Gige
-> 
-> Confidentiality: This e-mail and any attachments are confidential and may also be privileged. If you are not the named recipient, please notify the sender immediately and do not disclose the contents to another person, use it for any purpose, or store or copy the information in any medium.
+[1]: https://lttng.org/man/3/lttng-ust/v2.13/#doc-_context_information
+[2]: https://lttng.org/man/3/lttng-ust/v2.13/#doc-state-dump
+[3]: https://lttng.org/man/3/lttng-ust/v2.13/#doc-ust-lib
+[4]: 
+https://babeltrace.org/docs/v2.0/man7/babeltrace2-filter.lttng-utils.debug-info.7/
+[5]: https://www.sourceware.org/binutils/docs/sframe-spec.html
 
+ >>
+ >> Thanks,
+ >> Alexander
+ >
