@@ -4,149 +4,149 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72118C282DE
-	for <lttng-dev@archiver.kernel.org>; Mon, 10 Mar 2025 15:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 776FAC282DE
+	for <lttng-dev@archiver.kernel.org>; Mon, 10 Mar 2025 17:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1741621244;
-	bh=UIb+9M1FoYtsWX9yPnowsTgDyMEA6LqBPX8s0leayAY=;
+	s=default; t=1741628224;
+	bh=pCimWH3AdsXAHdr62cHR//i1S9dcW33gJ83TFWBIm0o=;
 	h=Date:Subject:To:References:In-Reply-To:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=wzxtIPAo0hO9MAF9fLeKths5K1r0c6oI4flL92Uf+rwWrXGfke9bvUxZQ9y4v9cTN
-	 /rqE1xV3FalWRKh6lyEmgLunrSdYymDjl6Te1y0bvBkCpE6ukzqcVD+GuO9YD+J4Hq
-	 bY5u5wU+4/CKhR3PDlBfodckWpoqbl632l3xo7WL19zXlxiGOtcBjE0IDzt5NKTt+L
-	 fwnzl1zlw303r+/V3BKKEuIT2XL8HdhZ4AJtAznLkiSw3AOx12ikoIAdhMuQh2vWbt
-	 XKZuN5EoEXhoAfGOmRzV5ZsMv8PMIOsBUgmTGAfGbsRxDLaEFa5rSXJf7a0WO9JGMf
-	 dmSYF26MOB0aQ==
+	b=PZnRfkB7HxrK20dc9mvd1QY7IitoTScffhZSPvGmbjnR02hI/h4Hkc7ijo3kRAdEx
+	 Cd+KTQ9F2w+v66GHMvaTDgQbID+HaxvEmuFSsCJMu5UJd9cWlt+Q3mIB7Hd1P2KeMp
+	 MmyisJvSyB6w8aFDFN2lDr2TaAmKL49VMN5cXb+bKn8Iw8R6yIuuCoeGxYYW7nTkFd
+	 FeMsmsW/XwYZCoflU76sMSy4IaoY2GU9IEwMoM/YrxycMOsGg7XiQIxEtzGE/iR2T3
+	 WCWzlXHKyMTt6h9uSiCYNs9iGrZ6bl0xv+vlC52G7YEspCXNOgox35m3d/QjE0yQfL
+	 aI+CIyoMMn3yw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4ZBLhC6SvDz1khD;
-	Mon, 10 Mar 2025 11:40:43 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4ZBPGS1FGhz1mjv;
+	Mon, 10 Mar 2025 13:37:04 -0400 (EDT)
 Received: from YT3PR01CU008.outbound.protection.outlook.com
  (mail-canadacentralazlp170100000.outbound.protection.outlook.com
  [IPv6:2a01:111:f403:c103::])
- by lists.lttng.org (Postfix) with ESMTPS id 4ZBLhB69HLz1khB
- for <lttng-dev@lists.lttng.org>; Mon, 10 Mar 2025 11:40:42 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 4ZBPGR4jwFz1mgr
+ for <lttng-dev@lists.lttng.org>; Mon, 10 Mar 2025 13:37:03 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Pqar3OO5KYCm+wblgPW/Y0aLv5kIebtqwh8NeHePwbe0xg9rTxkMbK+HN/7FAc0C+Wj3TRJWbE4ASMEAa8GRCRhKmjTSJm9z7TePbSZC/XpcPEShfcR2cIKs9UgSFWPPWuHK+5HRD7EYz88fdfkAt0O5PyhjmfaSrZK5MWQINxdptCFdD4/N3YKf/XVwLPuoM1ELt+5im9+zVA5sWV1SEMWn+pmd6L/YUKbwz+fbZ32hE4mC71PcI17+6DpTfLQYn8C6VsZws5xVSg4mfrho71vcB49bs3320oG38Ddjq5gI8apqrc6n8M1+9elRkYJu5JhQCXSDOT4ZZlJMQBqRpA==
+ b=YuOjqUE/SGAHBzKdc37UVRt5fdWUMuJrxcKCGeYe0yuWiJbFX4AWCH1+tBtRlVHSakQiy7S74uinNTkNzO6f1skMF/ZJaghhw+a8E4ineyy00C9MLtC6U7d0ve25n2cfs+Fa+mEsVSgASIQ3Yr/T818pN/2dlsZrMHcN3C06phxXYPLvRVKr4jckZnh/ZLxSgLLKX/8o4vhytcsDROdw5OY5oHNiqiJee7d6xnCRO1+n9l/PBjFsoUJTuJCTTRhyqGVW/HhR7r+HMPESnScOof1gbf7jGM8d2370gFgYtt05qiQKL0AuUkAx0NrudNBmil4V8LIgPp21C/jophovjg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I6WWmLPBBpsE5k2TwDYSlf71y0OhpNkVCgA6SyPy91k=;
- b=mkLi3Db0SHsQXX0LGUhE2Q07nh+3cGi2dNAnQGnt/6PdS9VJt5I0aVwXTBpXb7CxbggNF15nSVXhMENX8STVWZzZV+gB5DtlqqPnJ23m3qSMCp+gQaMKx6idQBWQToq1GR/YOPK2kxi75O11b5rkHzrNhYjv5lV1sjO4KUMcrSPWYmLj4e4IjjzFKNs25MLgIFeBzTL8hp7w8aWtIdkxJGYCxdyU9L8Vu8s6Mh8xaRZB6Vcl1VL8Jw3sr3g+Ir/GHKrVNag5i08+sIDen6rPxRROXfVZbhNnFBs3UwUZ7zhD/sgXLE6VS6mhQZopfY9u5hI25eXu0JA0H5oep0YPfw==
+ bh=Q61QfOkPl0PYVI1l60CCErJwKvTHul1xaFH+Z3xylpg=;
+ b=USKuoWHhnkmcjwcpNAid/pbi94IHcqC5nv85WReCW8vk7MqFiFAGKrvW018UCgh+eIZJHLuIm1VtOWHTScePQlRJCGotVx0YdcOrtEd1DfGow7RpX9WscH+LN9qFfx14efdvMoeeTAhp0xxtsiXCIXMBg9PlGy5JxfdEMUbzG2gPeDo6bUfN7ckr7c9bjG+nj8qt7uxS/6odjqBCMEhDdUIcKCLbqRjMQHrjlUmKj8QKsSW//JWdIAkdi5U5KPjeSu9gLooDYMg6QcebrXxyXXDtdmQxIptSIOWAGJGzsIt7ikoxkED+1OOfePZDXNHxwqZbd6nvGk4K4rk4dsBMng==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
  dkim=pass header.d=efficios.com; arc=none
 Received: from YT3PR01MB10347.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:91::8)
- by YT3PR01MB9930.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:8e::15)
+ by YT6PR01MB11298.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:13c::16)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Mon, 10 Mar
- 2025 15:40:41 +0000
+ 2025 17:37:00 +0000
 Received: from YT3PR01MB10347.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::6d35:443f:e789:df9f]) by YT3PR01MB10347.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::6d35:443f:e789:df9f%7]) with mapi id 15.20.8511.026; Mon, 10 Mar 2025
- 15:40:40 +0000
-Message-ID: <18255819-12dd-4e44-9290-e47bb0f14fca@efficios.com>
-Date: Mon, 10 Mar 2025 11:40:39 -0400
+ 17:37:00 +0000
+Message-ID: <a1a58744-f98e-4498-9be2-f2d93288bd40@efficios.com>
+Date: Mon, 10 Mar 2025 13:36:59 -0400
 User-Agent: Mozilla Thunderbird
-Subject: Re: Memory Consumption High After Upgrading to 2.13 from 2.10
+Subject: Re: Github Action Runners creating world-writable shared memory
+ section: lttng-ust-wait-n
 To: lttng-dev@lists.lttng.org
-References: <CAE9JrziKKkMx4u2+whHKXF0zUK3R+y_v+qOS1cBi=GW6J9uj_w@mail.gmail.com>
+References: <CANTRYLg9VSJMeJ1XHcBCtUfiaGiyyigCoLcAdrX8r-CM+xeDEQ@mail.gmail.com>
 Content-Language: en-US
-In-Reply-To: <CAE9JrziKKkMx4u2+whHKXF0zUK3R+y_v+qOS1cBi=GW6J9uj_w@mail.gmail.com>
+In-Reply-To: <CANTRYLg9VSJMeJ1XHcBCtUfiaGiyyigCoLcAdrX8r-CM+xeDEQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQBPR01CA0071.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:2::43) To YT3PR01MB10347.CANPRD01.PROD.OUTLOOK.COM
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0297.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:6d::16) To YT3PR01MB10347.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:b01:91::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT3PR01MB10347:EE_|YT3PR01MB9930:EE_
-X-MS-Office365-Filtering-Correlation-Id: 09d851bd-efe2-49db-1257-08dd5fe9e988
+X-MS-TrafficTypeDiagnostic: YT3PR01MB10347:EE_|YT6PR01MB11298:EE_
+X-MS-Office365-Filtering-Correlation-Id: f899edd7-6390-465a-b9be-08dd5ffa29ce
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?L2N3T1JSTkVHa0JDMnVWdmRaRTQ2VEU5VnI3SGxpQWZNMnUvMktlL0t4UG5N?=
- =?utf-8?B?RGN1R0NmQVlyMUJkTEZ0UW5SUTRpLzlkZmpISm04Q2JDQjAzVkNHL3NEOVlQ?=
- =?utf-8?B?R21DdHdFQlpzbzNxZEdWUkNTaUFpUlBsT0xCWFo5ZEpFdCtOd2tUZ2l2SDlK?=
- =?utf-8?B?TEJxWiswUU9PVzhpWjNVeWdNQ2dySFJKS3VFV2pWMlBzTGdKeDRjU3FvL1hC?=
- =?utf-8?B?bFYyZWxtOUY2bEVYZ2hRUHdvOVBCQjRvaCt0NFZEYjlDQkNnNitYK0VMWXFZ?=
- =?utf-8?B?b0tOaFFoeEd0UlJzeGc4MjRwRS8vQVd0YlhFVHkxeTNKUXpGL2hyR0t3OU82?=
- =?utf-8?B?YXlNZXUyNmIyVjVCaEYzY2NkN1lnWCt1VlFYYk9LSHU3T2U1dTNWOU92WHBY?=
- =?utf-8?B?USs4ZEhOeWRDb3pablR5RkF1WU16UmNWYnJlbmF6dUJ5V2poZXJMZVE1MnpS?=
- =?utf-8?B?TVRDN2F3WlZIZkdoV08rVng4cmdXQW5veTMrcmVnVlJFbENXcEZMbUNpdVpw?=
- =?utf-8?B?R1lScEltbnNyZW1nQTlFaWxUenFydmNONmVUaVNyeXFteW82Z3BONnFuUmFF?=
- =?utf-8?B?b2NlbEJCSURXVndpS29WU1VrNnFnV3BsWkdsaEVYaGYra3Y3aTMwVkREMGFF?=
- =?utf-8?B?QTVPbmZpYjdYenVEUThFTnNZYUtPeUNza2x4T2UyNzB3WFdMSHgxZDJOSkN2?=
- =?utf-8?B?TVFmTlRNMW9COTVoL2dqbFgyb3htRmJkbklmWVZTMi82Z25DWGxIYVNKU3pI?=
- =?utf-8?B?cWl4VEcwOVNyMUdBS0pka25WRXM5a2Z4bTA3V1BKTFpxMU1FK053dEFwQUMv?=
- =?utf-8?B?UTFWRzM0YnBSV1pKeVFzcU9oNzIyWGUyUHJRTlh3RGVyWkN3YmhjWStvTHRx?=
- =?utf-8?B?M2NSQzlhK2p6MUpNblhSWjJSbU1KbWNPR0ZKdVQybUwzMzF6S1hGSzlhZVdh?=
- =?utf-8?B?ZG50K3dRcHExZDZRaTl6ZzZ0bnp1MTBQZUlrRTlMWUtBSmlhUnBDblFTN0Uw?=
- =?utf-8?B?bHRxblkyeXMvcTdNOGtvbS82T3Fua092cXZJa0hmQjRmTW8xSWcxL21keHZX?=
- =?utf-8?B?Mmc2VTBSUVpDVkJIbE9HVmNQbDE1TEhsNndjS1NLSjB6dDNReFRxOWdMVHNY?=
- =?utf-8?B?VlBVRjRTZS9HY2IzenRwOElySld4TE00T082dUxnL0kybFYwOHAwaEdBZm9U?=
- =?utf-8?B?NnRBVjIrbklBdFpuVjdCYm1sRDVWWTZuc0sxdGNXOFdQNHA4c0xTbXJCVXJV?=
- =?utf-8?B?QlRJVVg1ejdKMDVsT2pPVmFXRmxHSms1dXRoaTFjK0FDTVdkZVZwSW5QU05T?=
- =?utf-8?B?dTZZR2hxRVlvL21jVWhBa3pSOCtTNloxYkdNdjZRSVREdTFFa3N3c2JkNU1k?=
- =?utf-8?B?MHUzYjJBTkpQaVFjcTZ1ZjdtVnlBanlyRUgvOTVMUVBMK0JNdXlJSDg3dDZF?=
- =?utf-8?B?Q0R6OEQwaWJZMmVsY2RiNFo3M2ZHVEVndFdnK1pmU2QvRzFETDlhK2x3ejY0?=
- =?utf-8?B?am10TVp0c1NFS0pXWU12TThQeWpLLzlqKzNuRlJWMlRTTk1abG1aZFVYU1hv?=
- =?utf-8?B?V2UwT28wWWdUWHJFbGxueGdzZGhxUUIzQ2lWc0FVWlJHR001ZmlZOFg3Q0tE?=
- =?utf-8?B?SHR4MXhqOU9kZllXME5PS09OTFVNcEhhWTl0Y2lremhmYkRwTWxiRzBRM3RC?=
- =?utf-8?B?d2cvQVJYcUtyamNyMVpGZmRZSkViYWw0SzRaZ09WWmVYRkRHR25STnhnL1hk?=
- =?utf-8?B?YlRwTEZPTHhkQW1hTlNZMTh1VDYyL2lLYWIrdnZSdndzd1psY2htb3NNek1O?=
- =?utf-8?B?NnZvSmg4SDVML0dtZTdlbVQ2N042SzlTVjJzem9CSlpoZkxWZ3hzSU9SUDBv?=
- =?utf-8?Q?GtxTOGiorTtI8?=
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?aWl2WndMVU1hUU1UbFZaV0lHYnl1cEo5ZmlDMHovemtrKzRzUWF6USs2emMy?=
+ =?utf-8?B?M2JaSnovbmtNaFh1Z0tLRndYbFIxNUszUE90aUVDTkwyZzlFRzZTTXhEUXNJ?=
+ =?utf-8?B?YlMvR05PZUJLY2JOdk9zKy9aU3RIQlhVMGxxOGVBOHJnU1hPZE5QcXdSZU5p?=
+ =?utf-8?B?UjEwZjNrdnV2VHpLK0F4UHlKQi8zMUFDYUxaUTJOaW90dGIrck42WmVmLytP?=
+ =?utf-8?B?U3lpUENMMHJPV0RCeDltR1BueC9PbTA3UTNsdndudktSRWZ6SUZqay9JT1ZQ?=
+ =?utf-8?B?TlpmdS9UdnZwQ21qYkhOM0djNXVhb2hQMG95RzdzV1ZJNDhLcEJnR25pNloz?=
+ =?utf-8?B?Ukc2anlMeVdHbyt3RytLQzh1alZ1RmRuTUhWZlVPcWNHaWNUSHU4QUNPZGRP?=
+ =?utf-8?B?d3J3MWk3Yk9SeVgvWk93VGZsckhwQS9VSElVRjdYRDNzaTlMVlV3TXB6THVk?=
+ =?utf-8?B?WUU2cTBGVWFUOHhwN3JxZ09RaWgxY3VCa1BoVktzd2dUQmVrM3JiczJML1gx?=
+ =?utf-8?B?TytXNFA2MGgrQzZRM0F1cnF0UGhBSVRLc1dXeEgxZlFsdStYdUJKZzJIMUM2?=
+ =?utf-8?B?NTF5WFU0UXppaXQvbHpOWVdwK0Z6VWtINmhTQUxCb0xrOXVGci80WlNlWXBJ?=
+ =?utf-8?B?Yzd5UnhIMmx2NFJGaHBMNEFVQmtjYmdaczZwZThleG5tL3M5NVBIZmZ6MXh1?=
+ =?utf-8?B?ZVQwUzV5QlluUWFzcmpJcWxIVmdzbExUVUdCUEVjZUxLOEVvQXBQaGl5M1k0?=
+ =?utf-8?B?RGh2RzBGaVdLelgwYTUyRFJWWUgwUzYyWVlVUHFIODdLNnNGMW4rbFhqbGc0?=
+ =?utf-8?B?Y2tRUXk5MWp5WjB4QmtUekYrN010QitKRjR5ZW5oRmIxbmpQWU9TUXZiU283?=
+ =?utf-8?B?ZzBEa2NOcDBycUZFMWt5TWxqR2lJb3RaaGUxSjJyRGF5eDZrdjJxUmJ2UElx?=
+ =?utf-8?B?OFVHc2pXN0JuN1VsTmkwSFNFWWJzdXphanZkSS80WHBtQVU4TGg3NG1KUU9n?=
+ =?utf-8?B?NXI4NWRMNU5Fa29MeFNja3BjQlUvMk5pdFFVQkZ6blJMeGVCV2JHcWN5ZzJD?=
+ =?utf-8?B?YkYwRytQQThZR0s4S2NLNE9GSGorWTFHdDBqaGtrM0NzZVZoZnNvaFNySHFx?=
+ =?utf-8?B?MnUvRlFuMUlRVDJoaUV4cGl5M1JmR2M0K1VHazJHVjNxcWZ3YW1rY3RWbmNS?=
+ =?utf-8?B?OVNlbGxrOFJNOFI4ZHNMT1MzV0lCRzNxSlk4dDVybzRzNEdqKzU3OXR2Nm1W?=
+ =?utf-8?B?R2k0ZFN1QkFUeVhCNXVIMW01N3FMVUFJWEtYWkNtMTQrS0R0OHRZSW1qcjJ5?=
+ =?utf-8?B?RkluVklMNy9UU1BXOHZRU08wb2xXU2swei9GL2hFZXBoYnAxNzcwTUwyZ25r?=
+ =?utf-8?B?eUxZWXFVRmNYS05TeDJieHZ5KzBEYnZzcU5qN1VpOUo5aFVOU3dXVFJ4RDVy?=
+ =?utf-8?B?YS85OG52YXhxclNldldQNjRpWHN2VWpwZS9LMWRuNmRURW9ZK2hHRmdJM2Qw?=
+ =?utf-8?B?RS9QUExPZXRIRmtvZE5oaFk2OWV3eklVUWRUdFJ1dC96aDFWVTRTQk1vUzR1?=
+ =?utf-8?B?aDRkOU0wd0FlN1dFSG9kUUtuamRzQmNsUTNaOCs2Tzh5STZUUXhybjR1Znls?=
+ =?utf-8?B?UTk5OVY1Rkl2ZUJKTTRxNE1xOWMzbVF0NmU5eHJSRzZLZ2RIemp0UTE2TytH?=
+ =?utf-8?B?S2hkR252Tm5SZWNvQ3R6MXhZQ1RFbE4yOWlyaTNQZkNQNkllcXpOYksrSjFU?=
+ =?utf-8?B?YUtpSU9PUHJTMkZoSVdqLy9mcHJpMDlya0lTd2ZRNFN2MmlpNnI3YlpkZ3py?=
+ =?utf-8?B?cFpmWVY4WHpEV3ZwTDNKdz09?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:YT3PR01MB10347.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(366016)(376014); DIR:OUT; SFP:1102; 
+ SFS:(13230040)(376014)(366016)(1800799024); DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L0dWREoxZHNqTnBFTDk4Mm45enB5cXhmMFc5a1NNckVxZ2xYOU4xVXorZGN3?=
- =?utf-8?B?NjQ4V3IzTm04OE1oeWV1aXN0WkhHcFJBS0JaS094c00xaFNSV0VKcmd0dVJn?=
- =?utf-8?B?Q0s0NExzWGswZ0NNNFBtSjd1WVFPbWdHL0Z4NjVackI4WjJtOUxmWFhpdU5Q?=
- =?utf-8?B?WkQrZkpTelBPNi8rVWp2aGdWYTBMeXdya0V0bXJJUm5JWGRuZEY2ZGdPeUJV?=
- =?utf-8?B?Qmw3SXJpbnBNb0R2Q2hZT2E3VTZSYjJxZU9lU21SRDQrdUV0ak9rRVpXcklI?=
- =?utf-8?B?U2ZTek9SMlVNL0lwM1g2RVdGLzlJM242dWhNL25WYzNFcVhrODNURmJzeksx?=
- =?utf-8?B?Q3lObWIrZXFNSkxWSjB0UWZNUUFnMVkrQStsZGNmVEJzdTIxK3lSNUdJVFJU?=
- =?utf-8?B?a2thZzZCeDNoOUo5K1dSSTVLTE5RSlFBL1RQLzBkYjA1dEFRdnMwZjBrNnF4?=
- =?utf-8?B?aGQ4R2dUYW9TdlRySlM2QTlkTWdqSDMzRk9vT1NJaVZUdzkwUnNqQzZRVWky?=
- =?utf-8?B?ejdXRVlNcDF5eWltajViUWE2bUptYmtGcnU5NnBzSnhXQ3JibUxveGN6a2E4?=
- =?utf-8?B?VS9xNFUxbExIRURWZ09SaGtxSDcvamJWSkR4UXllNkJ4QzFxL3lSZDhKTzVh?=
- =?utf-8?B?WGVhK2hWYnAvZlNFQU5hdWQ4V0dxSm5PemJrMFV6VlBldE1IVXFFYmlKaGRB?=
- =?utf-8?B?RlRrRno1anh0WlJ4N1ZKREZCTThrMnUvRG1aaVhRVmNpTkJRODY2NW1zNGVl?=
- =?utf-8?B?RzBNbWJjVGNaSFZzMFZteEovaWhjWHhINW51Nk10NCtpTlRUREZyTkhqNmRJ?=
- =?utf-8?B?YzlkRm5VTjlZUjBEUnBCeWxLREFaUjFMRkZoK09GZ1E4RVQwbWhxUlhhWTVq?=
- =?utf-8?B?TlhwbXY5czJ5b1JSeTFtVEFlbnhvc0xUQjJpcWdvN2l6L2NKbGZHb1Z6R2lr?=
- =?utf-8?B?WHpHYjZsQVlMMlhIbVI1cy9aVFc2SHVjS0RHRTQ1Rk55WTg4TllBUWNJQlQr?=
- =?utf-8?B?VUtNNVQyK2t3V0d6MGJVLzdsZG1leE9pZGcwOHFzNktUU0srcCtWZDlubWRn?=
- =?utf-8?B?M3lLTVphUWNHN3FoMmE0aDNIODRNOVp5SE50S2VucGl5QjlVM0F5c1ZlOGY3?=
- =?utf-8?B?ZFNkMzZDS1lIN3hiZXZtNERYYTltVERwMGk0V2IramxyQmZCdEJOMzl1ZzNU?=
- =?utf-8?B?ZURVRDU2eE5scGJkY1hRdDAydnkzWFo1RmF6SEcrelFrc1hnelhiV2FMbVJY?=
- =?utf-8?B?aWNGdVBVRWlpSHgvWlhMd0lmUGxDWUhwTVJRbEtad2tzNHJRblA3TlRvZ1dy?=
- =?utf-8?B?MGdCamNzWjAzTVFzalRJMzE4UThiVitkV3hUOW1nMUFpeFpUTk9INkEwR3lZ?=
- =?utf-8?B?UE1ZNzdWSVRLbGlkYmJvMXNwQytzdmRGN1FWZ3pIdXpsYU5ta3ZLc2sxMWZv?=
- =?utf-8?B?bVptL2VNa0x5OWs4ajlsYllESWVwRkRISlp3S2wzZ3JuZ2hSaEZwSjBhcmwz?=
- =?utf-8?B?Q0NjS1lreExpK1RCMWdQZlNpdENSZTQ2OUNPM0FnR0tBRXdzTHh0c3FObTlK?=
- =?utf-8?B?NFViZURyTHFBaDNKK1ZyckJpNWtQaTJTaFhISGhueDhZeFMxTmdDT05jZW5R?=
- =?utf-8?B?ZTZtTVZpR3lwK2tvK0FqMm1kOXk1OXhvNHMxOXdmeHhwVDUrZW8xZDU2b1Q4?=
- =?utf-8?B?LzFTZm95Nkt3OE5JMnFXTzRjS2ZCZU5ETDQ3UzZJa1lFWFZ5SDNVSVcyUEhK?=
- =?utf-8?B?R1p0MEtTaFUxRlZzcnlJNWV1ZmZrdnNLMFZZN2NuN2d3WDA0RDgvV2wySEt0?=
- =?utf-8?B?Tkt1dXduZ0JuaFpyZzJieUxrU25PNm02NXRXSEt1bSsrY2dnVTJiVmhac01n?=
- =?utf-8?B?eWxzN0E3RzE4OEpjbnFSUHpHTkEyeFZjVS9jcVVldnZWbXgrVDExRmEzWkxY?=
- =?utf-8?B?cmRJSVJvQ1NnWUVFZmN1RzJoeE5XanlkdC9NMVJwNEg4TlFjTTBMNVgyRmtv?=
- =?utf-8?B?ZCszb2M5NkYrM2h4cEhxUGRIbDQvZHpHTFNuTWIyWkRhNFQrSW9ZSDQxQ1hB?=
- =?utf-8?B?NEtCZWpsazBxWEtPR2szbHlhS3N0NDNBcEo1T1dYMVhCanUzUGw1UURIcC9y?=
- =?utf-8?Q?YK6kfFDvPwGjPmUhOLevK82de?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aHN6RHBMU0x6emNrakFSc1dTaWdYeE95elVSdjBRZUZ4Yk5wSkY3MHFsSjJQ?=
+ =?utf-8?B?VEYyY1hUdk9HVHNqQ29leGk4LzlNZUdBVnJxRTYzQUV1cFV5UkhZOW1DTk1Z?=
+ =?utf-8?B?TUhmVGZ6a0JzTXV2NUFXc2UyRU1pVHNac3JHRjFWZnY4Q3ZJTEU1emFYUDl6?=
+ =?utf-8?B?TEJIZnVIeHd4d2p0SWJuOEpENC9zNE9ESXBseDNOVlRRNVVtVVN1d00zVjhX?=
+ =?utf-8?B?bDZqcGZKNnFITW9WVDlET3U0ZXJVeTZvWWNzQVFFK29VSGl4bHhpMGova2NR?=
+ =?utf-8?B?cEtwd1MrandWQnpIcENiQ1FGTVhWdm1HdUFCWVQwWXFDRWRTSkZoS3UzM0FW?=
+ =?utf-8?B?b25zcXE1ZU9pY0lVbE1yc2VZYWpZR01MWnZxdHhEaXJJZkJIcUJ0dlA1MGcz?=
+ =?utf-8?B?V0UzYUtKV3doQkFGdDR6QmJUQkcrUUxTRzNiek9hWGZzbzkrbmY5SERSaS8r?=
+ =?utf-8?B?QjdwV2RnSm44SmxPTVg2STdxV0huQXQ3c1dhRVRuZisyUWFyWWVkQkRTY2JW?=
+ =?utf-8?B?U3dxeEdkUlRBY2NjYnMvUDF3aWNDRWM4VjJIQWVvUTYyamJpdEY3NWVpTGo3?=
+ =?utf-8?B?R0gyUHErUFdNZnFzRi9kMzhtcnN6OGFYeUJtUkNQeDI1M0g5QWlaeGE1YXdx?=
+ =?utf-8?B?d09WYzE0V3hpZmsxYVlLdHBwcGxWbzBuRzhBY3FWN3pTWmpqMThQS29ORUs0?=
+ =?utf-8?B?OE5JOHIybERYakh5U0JtL3VDSDhrYW1sdVdKTDhUZFQwMmhybjU5SFliNnBm?=
+ =?utf-8?B?T1h5dEU4ejRXcm96NmthL0xpMjIrZFBXUmZEZm5jclRLbzQ0N3ArQnI1dUpi?=
+ =?utf-8?B?U1lTa0taTDZnbjhwbEU4NXpaRHNOelh1d0pSWmlpMHpxNHQrcXVZYUNlU1g4?=
+ =?utf-8?B?WnFVZTJTcmE2c0EvSTlzc21HOHo3dWM0dkZURGZTZy9UVEV1ZU96dmJvb0p3?=
+ =?utf-8?B?bHpGRnd3czdlalM2b0pORXRrSlVoakxqWmpDSkUyZUU5S1BkclBMYWxad015?=
+ =?utf-8?B?Zko5MVZEektXajYrc2JaTlNNYTE2UlR6Sy9sRUEySlp4allkY0FsNDNObklT?=
+ =?utf-8?B?RWNxUFltNHlSU0JvdExjQ0doQ2h1d0czRUdKMktVR1lmZU55U2VMOWlLWXVM?=
+ =?utf-8?B?aFgzbldhZkk1S0tycVFaQjk3SUQ2S0pveWhlZXZZQU9yKzVpalJqYjJvV2V5?=
+ =?utf-8?B?UWRVcnFZaDMwc2VReWQ2MUErNmtGZGZrdzNKTWxUSmd3ZFdUaW94N3lmM0J0?=
+ =?utf-8?B?a0Vqd2cxVG5VYVlLbVpTenRnbmVMdk9UamRDbGpubGY4aHk0RW1xajdSWTlG?=
+ =?utf-8?B?Qk0wL3JZUS91STNKMG1Tc2JJNzJQL2N6emU2TVFyUW1XMGE0Si9NYVdrWU9m?=
+ =?utf-8?B?QVk1K0l5UzhTUFRoMDNmN3h0c0R0eC9RSXFCSytUeTFpTXkwMUZkeFhyc0pX?=
+ =?utf-8?B?NkM2NlBMdTVIK0VrN2Fwbkdvd0s4aklWb01SZ0FZN2I5SUpZUXBRbWQ3WE9h?=
+ =?utf-8?B?djlONnB6dnljTmF2ZlhWbUpFUmp1SmFNL1RwYkVxWHNsQ3BacEF1SnFPWG9i?=
+ =?utf-8?B?bWZpS1V1Y1ZYM2VpaDdaUDdFQy9QVTRqOEF6M2ZiM3JzY2tsOU9oOGduZ3ZO?=
+ =?utf-8?B?QWJJWTB5bWtrRmxXVWRzSEwxWGJ4eEF4Z1ViOXdqbTdiVG51Q3ZWTzJTRm1Y?=
+ =?utf-8?B?K0w0MjJGbENrcEdIUW5ZMGNCd2MvSy9Bem9vcFdtSDBtZ3R2OGpMOXgwdFgx?=
+ =?utf-8?B?NlpscTJJNUdUK1FxeHlxd1M4RmIxeE1EZjU1YWtWVnBPMytwcG1MRVlpRnJ0?=
+ =?utf-8?B?M2hGS1FDZk5hNkVZSlNnSHp1VFhHbkg5WVF5b01ZS2NQUjZBTTVEeWdkYWdF?=
+ =?utf-8?B?cDBWQTFHaVh1a1BobFMwNEpUMi8rK1lOdW4wRXhDQ2Rsc2wxOHpQV1hScE40?=
+ =?utf-8?B?ZHFYQXRSV1phLy9BYWRZUUhyRGRoTDg5Y1RjUFFyangvaHE3Z0l2RVJvUVFi?=
+ =?utf-8?B?eVhyRTBmRXp4WDcyRTh0ZWlOQklGLzgrdjBraGVRNWZsbG00VklqT0hTM1I3?=
+ =?utf-8?B?QWlWdjRETENWaEtENmtmYUorMUU2M1BDTjRCYVFHMUpKR2Zyb0tvanI3SzRz?=
+ =?utf-8?Q?d5V06sRUzG77N1ITropMuH027?=
 X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09d851bd-efe2-49db-1257-08dd5fe9e988
+X-MS-Exchange-CrossTenant-Network-Message-Id: f899edd7-6390-465a-b9be-08dd5ffa29ce
 X-MS-Exchange-CrossTenant-AuthSource: YT3PR01MB10347.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2025 15:40:40.7937 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2025 17:37:00.5752 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u/YKRYpKlX7cCNQhv90R5OqZmu1hmXjv69LgBtIHClK34Y4xltbVELqTx4OmVNbh4eU+cK0zmJM+po6jAhht+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB9930
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZxhrGap2ea5yn+NLuXksxb2bW0t9Z8XD8189JbLZ/nRfmTFXtOrITeFKV9x44+u9/cEziFq7m7S2GoSsY1ZxoQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT6PR01MB11298
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -163,119 +163,75 @@ Reply-To: Kienan Stewart <kstewart@efficios.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi Lakshya,
+Hi Bill,
 
-what is the output of the following commands on both systems:
+I don't have the context about gha-runner to answer regarding their use 
+of LTTng.
 
-* nproc (32, I assume)
-* cat /sys/devices/system/cpu/possible
+I can however, give a bit of context about how the those shared memory 
+allocations are used within the scope of LTTng.
 
-On 3/10/25 10:02 AM, Gour DEV via lttng-dev wrote:
-> Hello,
-> 
-> I have recently upgraded from lttng 2.10 to 2.13 as part of servers
-> migration from buster to bookworm.
-> 
-> lttng 2.10.6 - KeKriek to lttng 2.13.9 - Nordicité
-> 
-> I see an increase in memory consumption upto 11Gig after my recent upgrade.
-> 
-> 
-> In buster
-> 
-> root@localhost:~# top -b -n 1 | grep lttng
-> PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND
-> 4296 root 20 0 1003676 19616 4608 S 0.0 0.1 0:00.67 lttng-sessiond
-> 4297 root 20 0 44260 800 0 S 0.0 0.0 0:00.00 lttng-runas
-> 4643 root 20 0 5838512 10396 9204 S 0.0 0.0 0:09.24 lttng-consumerd
-> 4646 root 20 0 48048 544 0 S 0.0 0.0 0:00.00 lttng-runas
-> 
-> 
-> In bookworm
-> In bookworm.
-> root@edgecore-40XKE-j2-101-32:~# top -b -n 1 | grep lttng
-> PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND
-> 4824 root 20 0 1098824 13336 5980 S 11.8 0.0 0:03.46 lttng-s+
-> 4825 root 20 0 48872 2188 1012 S 0.0 0.0 0:00.00 lttng-r+
-> 4841 root 20 0 11.5g 11.0g 11.0g S 0.0 35.4 2:33.33 lttng-c+
-> 4843 root 20 0 3680 1160 816 S 0.0 0.0 0:00.23 lttng-r+
-> 
-> 
-> I have a python script which was used to enable channels, these were the
-> parameters I was using
-> large_channels_sz = 4000000
-> medium_channels_sz = 200000
-> small_channels_sz = 10000
-> 
-> num_large = 4
-> num_medium = 4
-> num_small = 4
-> 
-> def enable_channel(channels, session, subbuf_size, subbuf_num):
-> for c in channels:
-> call(['lttng', 'enable-channel', '-u', c, '-s', session, '--subbuf-size',
-> str(subbuf_size), '--num-subbuf', str(subbuf_num),],
-> stdout=devnull, stderr=subprocess.STDOUT)
-> 
-> enable_channel(large_channels, def_session, large_channels_sz, num_large)
-> enable_channel(medium_channels, def_session, medium_channels_sz, num_medium)
-> enable_channel(small_channels, def_session, small_channels_sz, num_small)
-> 
-> 
-> 
-> there are total 16 large channels and 6 medium channels and no small
-> channels.
-> 
-> 
-> The total size for all these session cominded turn out to be machine
-> roughly 7GB on my 32 core machine, which is still less that the amount of
-> memory used by the lttng-consumerd.
-> 
-> I only have default session configured and nothing else
-> 
-> root@edgecore-40XKE-j2-101-32:~# lttng list
-> Available recording sessions:
-> 1) default [active snapshot]
-> 
-> 
-> 
-> 
-> I have seen that when only the channel are enable and no process which is
-> using lttng is running then, I see normal memory consumption.
-> 
-> 
-> root@edgecore-40XKE-j2-101-32:~# top -b -n 1 | grep lttng
-> 
-> PID USER PR NI VIRT RES SHR S %CPU %MEM TIME+ COMMAND
-> 4824 root 20 0 1098184 12732 5376 S 0.0 0.0 0:03.15 lttng-s+
-> 4825 root 20 0 48872 2188 1012 S 0.0 0.0 0:00.00 lttng-r+
-> 4841 root 20 0 536240 4284 2400 S 0.0 0.0 2:09.32 lttng-c+
-> 4843 root 20 0 3680 1160 816 S 0.0 0.0 0:00.23 lttng-r+
-> 
-> 
-> But, as soon as I run even an single process which is linked to lttng, and
-> which is *not* using any lttng channel
+These shared memory sections are used for presence/absence notifications 
+between lttng-sessiond and applications instrumented with LTTng-UST.
 
-With which user(s) are you running the instrumented applications?
+`lttng-ust-wait-8` is intended to be used for applications that are 
+running as root, or those run as non-root users that are members of the 
+tracing group (if configured).
+
+`lttng-ust-wait-8-NNN` is used for non-root instrumented applications 
+where NNN is the UID of the user.
+
+When either lttng-sessiond or an application instrumented with lttng-ust 
+starts, the shared memory sections will be allocated. There is special 
+treatment for `lttng-ust-wait-8` since it may be used to notify non-root 
+applications that are run by users that are members of the tracing 
+group. In that case, it is created with an extended mode[1], as you are 
+observing. Those permissions are updated when there is a root 
+lttng-sessiond that starts and opens or creates a shared memory section 
+at the same path[2].
+
+
+On 3/10/25 10:12 AM, bill robertson via lttng-dev wrote:
+> GHA runners appear to use lttng-ust for some sort of IPC between runners on
+> the same machine.
+> 
+> $ ll /dev/shm/
+> 
+> -rw-rw-rw- 1 gha-runner-7 gha-runner-7  4096 Feb 20 04:03 lttng-ust-wait-8
+> -rw-r----- 1 gha-runner-8 gha-runner-8  4096 Feb 20 04:03 lttng-ust-wait-8-558
+> -rw-r----- 1 gha-runner-7 gha-runner-7  4096 Feb 20 04:03 lttng-ust-wait-8-559
+> -rw-r----- 1 gha-runner-6 gha-runner-6  4096 Feb 20 04:03 lttng-ust-wait-8-560
+> -rw-r----- 1 gha-runner-5 gha-runner-5  4096 Feb 20 04:03 lttng-ust-wait-8-561
+> -rw-r----- 1 gha-runner-4 gha-runner-4  4096 Feb 20 04:03 lttng-ust-wait-8-562
+> -rw-r----- 1 gha-runner-3 gha-runner-3  4096 Feb 20 04:03 lttng-ust-wait-8-563
+> -rw-r----- 1 gha-runner-2 gha-runner-2  4096 Feb 20 04:03 lttng-ust-wait-8-564
+> -rw-r----- 1 gha-runner-1 gha-runner-1  4096 Feb 20 04:03 lttng-ust-wait-8-565
+> 
+> 
+> I assume that this is their code, and not some configuration issue on the
+> host machine, but if this may not be the case, can someone explain what can
+> be done or point me to information on the subject?
+
+Could you clarify what you are trying to achieve?
 
 > 
-> liblttng-ust.so.1 => /lib/x86_64-linux-gnu/liblttng-ust.so.1 (0x
-> 00007fa867ea3000)
-> liblttng-ust-common.so.1 => /lib/x86_64-linux-gnu/liblttng-ust-common.so.1 (
-> 0x00007fa86752d000)
-> liblttng-ust-tracepoint.so.1 =>
-> /lib/x86_64-linux-gnu/liblttng-ust-tracepoint.so.1
-> (0x00007fa86750b000)
+> Otherwise, is there some sort of environment variable or other setting that
+> lttng will reference when creating this shared memory section such that it
+> is not world-writable? All of the runners run under user accounts that are
+> in a common group.
+
+In LTTng-UST 2.14+, setting `LTTNG_UST_APP_PATH`[3] will disable 
+connections to root (global) lttng-sessionds for instrumented applications.
+
 > 
-> I see an very high memory consumption of 5.5g and when i run all the
-> process then i see the total memory consumption reaching uptop 11G.
-> 
-> 
-> Do you have any hints on why this could be happening,
-> 
-> Thank You.
+> Thanks!
+> Bill
 > 
 
-thanks,
-kienan
+[1]: 
+https://github.com/lttng/lttng-ust/blob/ce89cb05f0fc02b68396220815070996fa0bb4a5/src/lib/lttng-ust/lttng-ust-comm.c#L1705
+[2]: 
+https://github.com/lttng/lttng-tools/blob/e995b146f3456dd51fd76288db6dae9efdbce592/src/common/shm.cpp#L118
+[3]: 
+https://github.com/lttng/lttng-ust/blob/ce89cb05f0fc02b68396220815070996fa0bb4a5/src/lib/lttng-ust/lttng-ust-comm.c#L611C9-L611C27
 
