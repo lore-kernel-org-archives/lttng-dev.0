@@ -4,169 +4,166 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 760F1C28B20
-	for <lttng-dev@archiver.kernel.org>; Wed,  2 Apr 2025 14:37:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZSSB73KGKz1kTW
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1743604623;
-	b=QqlCY3pJlGZ0wzut0+ZMghCE/q/1yTqnlZHy2XGjsktB65HUV2qBnEAu4pR59WJ6V9m8
-	 5X7nIebGcUEduVljKAuwNa7WGigTYBw2nPDqktk2MY3FrT5BN2qB1mkjmmi94sncbf1lb
-	 xO6Xq5HJJND9B3qXWBHyevBOwRRJI03RNp1qy5HGNN2uDpxb0LMSKyYrtFEE/YqNIbQWz
-	 nK2p7R1b7vCTLTR7zILRm7cFe/jFiys3fgkdWR0/3ZUE+oLu/pKt1FOebadb2Tp/0cMdN
-	 0ztWRcGrWVdegb+lrIfd9tbayS1HUnt2Un5jfZANqBq4dmRxslcZoiaK9NvpjMaWauA==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F9B0C369A2
+	for <lttng-dev@archiver.kernel.org>; Mon, 14 Apr 2025 15:01:38 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Zbr8v3K5Kz1ZQw
+ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1744642897;
+	b=Hy47EC0Dt2lvnELTS78fT4UQ4RAcUbStKwS12mxTkTcB2ev/Olh3YHbBgdcffIkB/dk8
+	 S3bhfAgFZ/ZR+LXLTA93/V0FtDuDEyBRZej1zcJEujA0GDjIg37Tuq6JhhtYJNTDno7pR
+	 1/Hp5E8iv5aqXVJpL+a4i8WcZABo2DmtS2VP+isOa92XtgzvrMdr3oN1/zfJNn8FUv3Lm
+	 XT926SDs0/TwWhRU2Rf/uF3ejwA6rLIukEGcAyhJKN0oYEVcq2hWninnrOw3hiBrnYp0w
+	 I1sXf8G15H1c7iM5oLqt0SzqDUOZwQhIDvCLJt5pi4dVe7CGzs8vkpNa10ptftGshcQ==
 ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1743604623;
-	h=DKIM-Signature:Message-ID:Date:Subject:To:MIME-Version:From:From;
-	bh=pVFnHLWtDzhHNI/aNjvfi7GNJENAQoA7hYHylJiK3qc=;
-	b=CdsYWN3c9EOqdvrS2gWZ/33yT/wFDYbxvO77mfwl9gxeyvHMoZ7Xv6Ja6EdsjBlQQd9M
-	 0NYtYtQ3E4lqx0dMI4Sp6N+YUtQxtRB+0Vf+Rw1MZE5NAzvwkQ+5uUGyKIp3Gk5jGJ5vf
-	 Qlz8q4c+NswGtBJLzc3B8OKRfR75p623KBVJVKHjfkLq+idPtQoNkc39U6gIE1SEwctJD
-	 2r3sLTPFh7jcRtJQ0ixLXjxapu9qs2tsVP4H4QXde2KshKFegiUqt4GwI3UWxcHDRMaIM
-	 HlpinZNUOOzUOZ81ZzKF3IP+HnfMMFmTIapKvBkuIb1ld8WPJQB9KxWcyRPA2dJHcJA==
+	c=relaxed/simple; t=1744642897;
+	h=DKIM-Signature:Message-ID:Date:To:Subject:MIME-Version:From:From;
+	bh=Q+9WrxB59pvguiSr8d5PxtDVGBqE/X4Ge/JEST7+ggk=;
+	b=RC/KIwudPmXt00N1fta2WnD/IvRcLWwY14eiCaEWJpxpbcE3etgSZsKhpKqF3ea0F5qi
+	 /rsFazVY68k3OO1ccM0K+rx1ZZF0E7Ji++OuMbvL9gjduAgIdOJQQXiDPoNXpKouyE741
+	 UO2cTjpayZmysrO6glyEfACGvWgcUL2KqVLPSTWdTjuNdJcY0v7cjErh4LElbZKn3yba/
+	 orvLCo3gQRLfOuEzwNeowBudrh6HLKK/6M1YICh9QXbfrzu2yqZ7oaLttTQwtlbdqCTp0
+	 UwAnYlMR6mTGXFBwr8ONnn9A9c3V22wurK7CSCVUjD3REA6GrXS3p8pxV8BRbYpGGbQ==
 ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZSSB73KGKz1kTW
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Zbr8v3K5Kz1ZQw
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1743604623;
-	bh=pVFnHLWtDzhHNI/aNjvfi7GNJENAQoA7hYHylJiK3qc=;
-	h=Date:Subject:To:References:In-Reply-To:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=KJlY3FnF4I7iEn3qg0kDH7Y3mLCnXU3D8y8knmvjJs5Mcw7JEWVz3giVXkeIPLMiw
-	 q8TJpubtWX5pXbWP65K/15/0oe/ZikAcv7DGfpDh4hyru6G2YKFokCf//X/DNRMRSo
-	 GzI4Xtvf3cOVwpn6Vlrq6eDExBnGOfXjEDPUO5iUu/ClnXmVAOH8ZUQ/IyO0QrXg2V
-	 7+b00eKvy12E/QpOz1ucx4VwjS2mrgOOIs/VnxOlr5b4LcfEbPeB3Ai0y+3xTaTso4
-	 Q1VRMzG/5Z/HXzd72Zz9Dnla6QitqGa9lWm0h1yh5/T9WwAfSgHL6pwCPKNO1yWoKZ
-	 +ylzh1//s0Mhw==
+	s=default; t=1744642897;
+	bh=Q+9WrxB59pvguiSr8d5PxtDVGBqE/X4Ge/JEST7+ggk=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=P/t08Jsuy/JVP+G5kZppXUvMXFiIsz/80Hyd+xkRGjRV9QhsVHdp0TjGzErJOeDgE
+	 vJJRW+M9xyybk/WrxRr82KYP7t++XJHTLjpDJ3KtHuB4ztUtk0nRd5wSIw+1LQhsI5
+	 HHBOvjPFvUQPsZwieZG58qV7bMUTu+ewOyHvcHNC7/xt8bULgbdGiXcoSt5abQhpgE
+	 QCnnx4Mc5S6X9T3+TvJHIKesxIoxeNJ4amYIfW23g6ilaEEfuODPPSRAOZ5AJaYMcV
+	 XZvBOEBhKHUDp1UArh0tfvILivFb5FitkTctLhsXY/q5YfJmNMC4YR2or/j8fCr/Z5
+	 L53ofbH0uZlxw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4ZSSB73KGKz1kTW;
-	Wed,  2 Apr 2025 10:37:03 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZSSB53KZWz1kfN
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZSSB53KZWz1kfN
-Received: from YQZPR01CU011.outbound.protection.outlook.com
- (mail-canadaeastazlp170100001.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c104::1])
- by lists.lttng.org (Postfix) with ESMTPS id 4ZSSB53KZWz1kfN
- for <lttng-dev@lists.lttng.org>; Wed,  2 Apr 2025 10:37:01 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Zbr8v3K5Kz1ZQw;
+	Mon, 14 Apr 2025 11:01:35 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Zbr8s08xxz1YRM
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Zbr8s08xxz1YRM
+Received: from YT6PR01CU002.outbound.protection.outlook.com
+ (mail-canadacentralazlp170120003.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c103::3])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Zbr8s08xxz1YRM
+ for <lttng-dev@lists.lttng.org>; Mon, 14 Apr 2025 11:01:32 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kECDS8mLT8h5AU+M7JAwaTWj324s96c18pWUWMBmB+5g+163tV9e7mWQ4R6efU1NjnfsUDBPHObnIsh9xgWwrHOMHnKImdgX5kyC/vvER8FfWB34zk7oh60QTIo0C1mdJfCH4k0JPeNtN+aWEFzZfVq76iWua3MSfAooP2HANUebTGiHrYc2WuAo9F5v4pc9q2SCl2YsK1hkCoR5BBfN5IMzFXuA5JtxYE32hgYFcoQSXkHrLEidDgo94Mz4tKDAfTYDODa6yBfQwbXFLyWgAMSLE0gOV8xJsmWCjqg89O3mBBKPh7uqq7eR31fHvQfadI6cztMpTEfDph5DvsrZEQ==
+ b=hVLe5QmMl4z+CVlvJ7fSLFVIwC9EoPKBwIc0TgbMElG0ALtEHbXAQLWtGY4NX9A0KK193LZIkUU/E3Ir3UZw7KKfVfhFY/x1uKYq5/DViZzB17tqjCVGC+I2Jemsuk77WVsQ+cUEnYY10Umcl4aHorf9CAuOmc/J85p3S1x4a0tUUlmjsEOKDynJHrND5jALg6n4XApDIaKLJlCI8ovA1BF77CmciVfDENpyMcktLNcJOBnrli7fz1mFt7hS/epy+1TOztmbsNWrYzmYfl1cglCshcPMcLnjOc5DDv1r2rNyUebW0ZV2GUiI58L4IJs3EV3u26Ug8irkTrisuCrwbA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fym7sEn+TyDuRR8P0ihq9/Bp96zEa/BRRR0jFr0QF64=;
- b=E89VeCRSF9wtcsbs+D5lT+eySIAOLjEsmDK0kslH7xlVtQqehFxNlzwqYfFAM6i9uqvp3ubTJ5fQoEJ/rLzIOJf9sMlbzojOTszGGX2fy9vCv+jys5Zu/JPJLfVPXrgauMft4/Pqd7+AtTnrOa3rN/SL47wEVZ0k7lwry3nJvb6YG8WZnNG7p4qZLhWi2aOfUg326Lsf7hLPpPu53lbEEY4cg8r3R0hc3ejWlZ9DRgRMu4VqFNiEYMgGbjG1bUSBjIQxDNIJgjBzQkE3aGYOZ7JDNKJl0LchycU1S10qEZ25GNaKr0yA0Xje8PR+jLrVWu92INfh9D89W43hwaYuOg==
+ bh=AtFPoy/Cwi5Ubmyc9D4vA5fR2XqugSOTrhFAdpfvIpQ=;
+ b=e1AsVPdtt6l4r72e/fvd+d44KaYt8770CFmkevPZF5BkI+QX4oTJaUuc2BBhX+BHz6/hdQBixNeXNeNszhXMhO8p6aQeb8/i/+VR1GI5v8CbtwS2TYWejhbVM92u1m/bdci8/GDrmhFNOhE/9nGXZLpvtzvpm9zPJRw+N2w8evVMtHZ/hly8LZzoZvOO/PFIBD4GMx2K3qgbOGhgs+elJmpk5hUcbpkLa9U8mn6Abtb9pUgIoziapLn9i9Cx99Dgy+FGt1lGkYLJoIubNHjWVxco2YNnyQhQ8awv7cUhoEOz2b6ymEA3DutydvUFLEYVH4c7y8F7T6XdOtrvpHDsgg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
  dkim=pass header.d=efficios.com; arc=none
-Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:e8::14)
- by YT3PR01MB5432.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:64::8) with
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by TO1PPF49FA00C18.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b08::63d) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8583.41; Wed, 2 Apr
- 2025 14:36:35 +0000
-Received: from YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e27c:c1e2:e6e:9256]) by YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e27c:c1e2:e6e:9256%3]) with mapi id 15.20.8534.043; Wed, 2 Apr 2025
- 14:36:35 +0000
-Message-ID: <50d2bf88-05a1-4895-b8d5-72181a48d590@efficios.com>
-Date: Wed, 2 Apr 2025 10:36:33 -0400
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.35; Mon, 14 Apr
+ 2025 15:01:28 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4%7]) with mapi id 15.20.8632.035; Mon, 14 Apr 2025
+ 15:01:28 +0000
+Message-ID: <d57111ec-0743-4da2-a3b6-4b82994aa75a@efficios.com>
+Date: Mon, 14 Apr 2025 11:01:26 -0400
 User-Agent: Mozilla Thunderbird
-Subject: Re: LTTNG Session daemon is crashing when i launch lttng
-To: Deemanth P J <dputtaja@qti.qualcomm.com>,
- "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-References: <MW6PR02MB9671CDAF08B397819190B963F9AF2@MW6PR02MB9671.namprd02.prod.outlook.com>
 Content-Language: en-US
-In-Reply-To: <MW6PR02MB9671CDAF08B397819190B963F9AF2@MW6PR02MB9671.namprd02.prod.outlook.com>
+To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org
+Subject: [RELEASE] Userspace RCU 0.15.2
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR01CA0148.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:7e::10) To YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:e8::14)
+X-ClientProxiedBy: YQBPR0101CA0086.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:4::19) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT4PR01MB10341:EE_|YT3PR01MB5432:EE_
-X-MS-Office365-Filtering-Correlation-Id: 07e22757-0e15-4e56-4cb1-08dd71f3c4c2
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|TO1PPF49FA00C18:EE_
+X-MS-Office365-Filtering-Correlation-Id: 943905fb-00c5-4511-6324-08dd7b653ba6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?NGJLQ3NXVHBkbXVxYkUxbC9PZ1R4K0NlQTRqSmk2NW9kai9SZGRIeVVhYUNU?=
- =?utf-8?B?aFpnK0dRZjZvQUlwOVF5QUVFRWhCaHNvNDh3b0xGeFdEMkdCQnRHdHBkU2dH?=
- =?utf-8?B?N0pmY0dRMCszVEgraWF1SzJZQVgybWRRTFFFZmhnRUJWamkxY3ZCSWxQejMz?=
- =?utf-8?B?b0ZVZlRNUXZmUDVEclNzVnZTaTJSSENnZkM5MTA1dnByQ0d1V2FlS0hhc2Ev?=
- =?utf-8?B?azJvbHhzSmEzS3lkQkdWaFphbmxKQ1kxUXdmbDJnMExOMnJ2Wmc3Q0FQL0pO?=
- =?utf-8?B?c3Y4c3BsY2NxakJPVU9jRTFCRm9ZeDRHcThBeEZlUkY0M2xaVEhqUUNFT0ta?=
- =?utf-8?B?YTFnbHZFeFlORHIwSGcrVk9pZjhBd1dReDlGOXJldStWV054RUREK29WeEZE?=
- =?utf-8?B?bFNDbmEvQ21ndlpBS0szc2RhU1BwTXZLMS9lWVRnb2Y4dXgyVks4dFRmWnVo?=
- =?utf-8?B?OVViVVAxSDFDc095SFllRFFvQjBhZDZXcTR5VllURE56VEprV3laREQ4UC8r?=
- =?utf-8?B?aFpSck5FWHMyZGZrNXByZXhBWnVYTHNCTHlqZ0J6N2FvRWZEdlhpSER6UE50?=
- =?utf-8?B?SmQ4cERvc281SWxoRmtxa1dJTThXLzBleGdtZTlJdEU0a3BTeGw3NTZObFlu?=
- =?utf-8?B?ZnBJc3k0VmI1OUg2UWs0dXZOay92RDkxVTc2bmEvU2h1UWZvZU80L2pXRS9u?=
- =?utf-8?B?RlFDa3lieFhYWXlqZEVtKy9Pb2ExVUJZdk1KV3ZvaFdmSDFXOGR3WnpmTkhZ?=
- =?utf-8?B?RlpnY09oSWZXenh4L1lxS2FEVnVwQzJjWTdWSUtyRE5nd2F4eEltbGZSLytJ?=
- =?utf-8?B?bFUvQithMStGZ2NIby82UTNLNEZFMzZBN1BpSU1ZZlc1bWZnUFo2NzYzTjls?=
- =?utf-8?B?a0tsb3krWnoxdkcrdU5XRDJsdHdLd0crMVFyb0hWUEFoY3FYL1ZJajlxMGdi?=
- =?utf-8?B?MXh3ZG1KWVNsb0l6cVp3LzNmRUdqNVBMWmRjc0xhMGw0Q3ZKRjhtTCt0bzFL?=
- =?utf-8?B?MWZSSENSNTAvZkdOOFExd1VSRjNGbytDTVJZNU11dUs2eE90UmtZQzBmYi80?=
- =?utf-8?B?UG5ZUllFUnF3dkxYYzZHOVJ2TERrd0I2bTk1K1lsTkpGYlNGTUQ0RGxKc24v?=
- =?utf-8?B?UEFKamtueS9pWWVPWFhrL1ppbzZxcXF0Vk01bUdCVVJuRlVrQk1GOEpLQkdI?=
- =?utf-8?B?bmJBdjBtZ2wyUGt2TmZaVnlMWUF4Q1pQUjVLOGJFa0ozOUk4aHlETG5IQ3VI?=
- =?utf-8?B?d1BvWk5mQmxXVm1JTjBGdGRXQmpDOU1saWx0OUR2S0pMY0tWMWlVRmN0U2hq?=
- =?utf-8?B?dTZlajdQMXQ2TWhDZkdGUThkSUdjMkxVbmdLMm8rbk9hcGhTalpwRGI5blF6?=
- =?utf-8?B?NXJxWVJ1TWFhN25uN1Z4LzNZZHovS01sVG05S1hLb3dSemVkc1VIVGZTL0NR?=
- =?utf-8?B?VEVxbTl6elp3b21KY1EzVjdNVXpmczRuSzdZWThQazEwUGU0YjA3d2NGSHg3?=
- =?utf-8?B?TzV1VGNNOUpyeUpIKy91U1B6VFl0Qlp4cHhramhvUnRIbENvQUZKNGhlV292?=
- =?utf-8?B?Wm5PWCtEVmhtZFlGc0p1Z0dJUXNzdWgwYmZYVTY3ODhVNmpTWDVVUm9TSWRi?=
- =?utf-8?B?S1ZTTGNpL2R2M2poTS9SSjRrQkxXN0prSVhvSVNKUUFaMUNjelp5bFNQWnNY?=
- =?utf-8?B?YTl4VGpOeTF3SG4rSFY4OER2UGdnSlNLN0pBTUswZlk3Q1JxVnVQV1VUODNF?=
- =?utf-8?B?YWlBczR4b21LdXRTRU9tTUpVRmJiUkRHdWR6YzQvZ0VDZUE3dXB2OFYzcVhC?=
- =?utf-8?B?d2V0bzNzQmZqRVNSaTI5Zz09?=
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?bzQrQ0JFekFNWU1kN3huMmhRNlh5UlpQRTlIcEwvT3VuOVd3cTVWWU9sRG9u?=
+ =?utf-8?B?eTNvMFJOUjBvZzVmdVJGdlNudXAvOURzZEtjMmU5YTRtWFlZYmoxNHVlYTc5?=
+ =?utf-8?B?YU5wei9wdFFaQUVOTUpERXhyYjV3enZzNFpXRDdWZWFiejZmZlYydXJyeHY5?=
+ =?utf-8?B?bWVlS1FLYVk0Z01mN2Z5RnkwZU1RRWRrT0VibE44a2NGdnhVT2ZjU1hFVUZQ?=
+ =?utf-8?B?UWR3RlJ3Q1hNcXQ0aDBKbVAzL3lrSHRWV1NCVWYwTVc1Y0t6YkVXeWxndnlP?=
+ =?utf-8?B?c1dMNDhac05zQnlXUUVUMUp4VU5UMURyU2FUdFl1UlBlcDN4QUFIYWlQaXRp?=
+ =?utf-8?B?RXFPT0RaekhXYzVCbFBKbGh4K0JWMkRxcUhienovVThISllVMFZRSDVlOTdL?=
+ =?utf-8?B?Zk9kMDZpQmZxeDg5UXFFU1ZZaVVHTmxTSFdTeWpSbCszUHFpWEJ4SkVoeE5B?=
+ =?utf-8?B?c0l2TDBvbmp4N0wxa3FDVGxYU2U1bEdJMnk2RXYrYUJLemFVUlVVeGZuZ0dm?=
+ =?utf-8?B?NnVUTTFjQ3hKZWZTMW9SZGxocXhlQVdjNW9WSWc2bVhiQjBONVZEM21KU2hW?=
+ =?utf-8?B?WWxvcWtJaWR6QkxpclAzS2ZPZ2JVTi9qUUl6eDk1c1RtMmRtaVRyczF3TzR2?=
+ =?utf-8?B?TXRTYkNnRHZvcEhGNUZjeTVYS09FclVwd2JRT0tBUE16a1VyU1ZTb1F6ZXAx?=
+ =?utf-8?B?L2VSaE9icjIzOE5lQTg5S05JcHNwdVBOQzFhRDJ5djc0am0rQ2M2UXhMeENH?=
+ =?utf-8?B?NVhzYldUcG5sY0REM0IzekdUVXBraE5wK2ZiSitzYmVKR2NJRU9id2gzSk9a?=
+ =?utf-8?B?dXZaV2xWeldQS2p1YnBrN2V2dllmT215bzZ1TCtaNDBoNExNWC9ZUHZDdDJE?=
+ =?utf-8?B?OWpFM3ExQ1BJNDdwWGxPTVhFSWQ3V1krSTRCblZEWW9PeFI2ak9rOHlkVFBE?=
+ =?utf-8?B?YmM2UGxtbTc2bjdhTTM1eTM1QVpuR0NKTmZ6b3Exc1ZndS83RVFWZHc4TWtE?=
+ =?utf-8?B?WVBiQjMxUm5NVVNmYytGY2ViUE13VFZoQjg2c2FpdHduVE02WDZFZ1QrSks1?=
+ =?utf-8?B?WThuOFdlbld4MmVubkRjQU16dndtTWEveHNPNWJkeVkzR3dzOXhlRzRnVDNp?=
+ =?utf-8?B?RHJpdEtRZWgyRkZ3NnhkUzhkV21JbXE4NXhVdC8wTG1COW4wcnVmZDh1bUZW?=
+ =?utf-8?B?MVNGc3JCelh1VGRXbFN3TCtncmI3MGN0WEZMMnZ3VE5rVWR5Y0o0Nmx2cVV2?=
+ =?utf-8?B?VUpVUlY0d1A2M3lqRnBhbzZicmtSSTVKNXVzaExRcXhFU29XMEZnTEhzQU45?=
+ =?utf-8?B?UElzbVZQWEUyZld4L2wwMU1QSURKNytsMmZ4V0tWTkZYbDlaS056c1JXRnY0?=
+ =?utf-8?B?N2tyUXQ1OFZROFJGNHlVdXpwR3d4RS9vTnQxT2tSWHpIaUlGZFRCWUp4OWZn?=
+ =?utf-8?B?R3lHcmNXUHdzb01Xa3g1Z0I5ZFNZeTMyeUd0R0lPNnVDVlkvMmtkMTcrSC9a?=
+ =?utf-8?B?cVVuRnUxdlBuNkRsUXB1WWlobG5kYm5SZmp6OVkrZzNXK1REdGF5T1BySmV3?=
+ =?utf-8?B?NmkzdjdZNGdEdnNxTmJqbi9GdVRxT3U1dmhuUGNUTys0SWkwVXlrelNyZXpP?=
+ =?utf-8?B?MlZlUU5ETWxzVXRzSUV2d3BsTkRUaC9oVk5DVFI2eVNQM0lVVWFpd3hmNDRB?=
+ =?utf-8?B?ZThSeU45SjVKcnFVcldPZTU5cGl1b1B3UUozRkFKUk8ydXJSODFRTjc2N1Fk?=
+ =?utf-8?B?WmY5Vy85bHFNSks5ZEpOMVAvbHBnci8vRDhwUERja3FYWHJhZ2tlZXZQaC9V?=
+ =?utf-8?Q?qAdhhTN/Oh5wN+5H5Dn7H31S3vK3YOPKjRgbQ=3D?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(1800799024)(376014); DIR:OUT; SFP:1102; 
+ IPV:NLI; SFV:NSPM; H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(376014)(1800799024); DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VXVxMHZkRVNqMzM2THdsckV0cldOOXMvcjNVWE1ZbWIxa3FYSzdQK2V3TXo1?=
- =?utf-8?B?RUhTdC9mNS83a3RTYVRjSlFmTkdLYUM1L1d0OCtZc29CbUM1VjZBOEk3QkVF?=
- =?utf-8?B?TWlodU9SZFVOazFZakFVMm9nR2drRGduSno0ZHVuK2IvNEdlSzhndmxpa2FL?=
- =?utf-8?B?UjU3b1ByRFFDMTdkVDZnY3JXdnBHT1VBRHUvS1Q2bFZuOTlLbHFrTmdXSU4v?=
- =?utf-8?B?akEzbXZWNWJ4SEFUcUNkV2dZbmVrVEFzTUVTb2NUc0F1L1BTR0JLWkpWaU9t?=
- =?utf-8?B?SWV5QVVyZGFqNmk3L3JiclBGSXhzWnUzVnkxNHBEb2ltS2tCeTI4ZWN2ZGlL?=
- =?utf-8?B?L0MrOXJHczVVNzRjckRIMzBqclBwZTE5TDZiU3Nrd1ZTNktVVHpBVkFLdzYx?=
- =?utf-8?B?ODdRZGtGeE5LRHV2dUFSbDRHbkNtQit6NnQrVk9xY0VNRFBWYkhSL0k0MlZS?=
- =?utf-8?B?SUNUZzd2YktZdllhZDVwbnU0L1JQSEJ2R3lVZGpQSDVNTWJhSmhFSVc3VDBo?=
- =?utf-8?B?UjB4bVlveTI1RkorVS8ycU1xY2ZwRmw0STR4eUdocG9EUnlEU2dwRTJ4UHhN?=
- =?utf-8?B?VGNYYU9SMFdIdVJsTUdCdXhiRkZBMks4UjNKRVc2ei93ckhsd1JDZFFMSlhO?=
- =?utf-8?B?dU5TeWZMTld1MjQvQ29HMUQwTTRZYjUreGh2cEtkMkMvM0t3VzlBUkd1dFZQ?=
- =?utf-8?B?TmpZT09TNUNOR0MyOXhMMXFpRkZOVVdaUTFwWmd2MUFsUzF0Vjh0djdQa3Zy?=
- =?utf-8?B?NVltZ0hvL2pQdmsxM3lQU28vUWpMMUlTc3BpNEt2Q3VmMG9CSXlWTm9nUU9n?=
- =?utf-8?B?STVYMGdLWDhhMFF0azNocUN5aHpXbW1PM0svTFU0VTEyNkN1ekdocjNobEpq?=
- =?utf-8?B?Y1pZV1huQVFLTlpEY2tGUHNWQlR6REpjamlsMWpWdjV2eE1VazRmSFdJOEhP?=
- =?utf-8?B?ZHdyVnZINURrOG1JTlQ3SFZDcXpOMnVoVFp5ZWNoODd5K1N6SldzeGxtUWxQ?=
- =?utf-8?B?anhXSUw3ZWJvRmdMbkhxUU1vbEdRVWJ0cCsrTWhObWNPWlZxTFpnaXE1Q2pu?=
- =?utf-8?B?QU5nUGZjZGFSYnR5OVRoSSs4VHdBL1JXNWNYYkdiTXE0YittYjM0Z0xTMzNM?=
- =?utf-8?B?K0pjeGkvTjBCNUpjOGhMRHdTcGpzMGZOSnNzUkh0U2ZxMWFJeElsaWdPdG1V?=
- =?utf-8?B?TmZrZ1NkTlJ2WlZ0OHZuTmNyU1RZMDc4a3c0Z2VLK3RCZ3ZrcWYxZVNKZFB6?=
- =?utf-8?B?SnRIMFl2c1Rxdk5KUlFXcVhjdS9zZnkyMWEycDlVWTBIQXliVmtKRVpIR3pq?=
- =?utf-8?B?Vy9pOW5jS0dUMnpKM29NMllmU29ORVFsczVTOTRWdk5hZ1pmalRnUHFCN1hU?=
- =?utf-8?B?Zk9tbWJXSU14dnZPWTFqdWVJVXRubGUvM2pCVTI1emFuWGxhRXF1S1BpU05T?=
- =?utf-8?B?YUViODlJcU1HV1dhRFNsVkF0U2FNbDNSby85eDRrcWhjQnA2MWVnWllOWEEx?=
- =?utf-8?B?MzVuQVZyVHhyM1dqVmRKa0tTcXpaazN2eHB0N1V3R3BMV1AwT3AvRDFUZTVr?=
- =?utf-8?B?SXl5WXFsUmlWdHdYdzJwanEycHlWcjRTemg1aE41cTJrY2g1aGU0eTV4aDNM?=
- =?utf-8?B?dndxLzFNUmxWa0h4SElRWFZQQm9wNmhUY0JZNkZidDhiRmNVRktKWHd1SmZV?=
- =?utf-8?B?ZkYxUWhVWWlSa25vZ2txbm5IWXYxdmVXaVdET2VPL2wyL2paT0Zad0FvOXZy?=
- =?utf-8?B?RHVhWFhTNlBsREx6RGlxL1JjWEtwWjd4USthQVRTbTlvcHFyS2xLbWNDU1Zt?=
- =?utf-8?B?Y2pLNVg1N1JYaGlTY3ZneWpFWlVvS3krZDlnZ0M0Zm1NdFIwcHUzSW9BQTd1?=
- =?utf-8?B?dXJqcENodlZrU2JYcHZBeG9uVW1JN1VFdDhCNHJkbUxuNk5BSGVxa1hNVzU2?=
- =?utf-8?B?YWJuNkYzSkhjeVZPb053OHpLUGFONzNlMkZ2TzNndytTUFZ0Vm9DNWFXeXN6?=
- =?utf-8?B?M0xFUUFYd2luS3N3SzBseFlVSEF2T3Rjc0FhOEFLdmVHQnZuTzZFc0RISDFT?=
- =?utf-8?B?U0t0eVdVWWtaazdxRi9WQXNRV3pWbUVuRE9PU2grZXBVV3JOQk1MazZJUVhp?=
- =?utf-8?Q?U8EgrF3IiJSpn3UcXY55UQbSz?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WEtWQXlGTnJweGpCM3ZlRndxd01iZEZJU2Q0YmM1V3FwaWJPYVFNUGtIR2Q0?=
+ =?utf-8?B?SWVaTkFuNVY4Y2JCVk5NdFNkSCtRMjhIb1FHdVhZWDU5R25PWVQ0NEY5cnpt?=
+ =?utf-8?B?MVozMytmU0VRL1RlVnpETk5oVU45c205eDBQWGNBTklyTVJ6VURpSVdZb3g0?=
+ =?utf-8?B?Tk5hbmU4RytVNzRxQ1pXNkNjQ1NTeERKeDZ2VzMwV0VreG5kRlg1dUZMUllJ?=
+ =?utf-8?B?Z0JnOEE0Sy9kUEEzSmxaRmFOcCtpSXh5VHpYbERYOVU0cUpaeG9iK0JEaFRt?=
+ =?utf-8?B?Mk5YanQwdE1kOEp6djMremJ1NnRBUlBCRGl4NHk5dGYzcWtKdzhQT3A1RjVT?=
+ =?utf-8?B?VHBHUnVtNFdZTkVTcEpZMUZqRDZ1TGYxS3RkN0NFdlg5c2kxWXJ6VWtZT1M1?=
+ =?utf-8?B?R2ZlWExUZFJkTFkzOWk2TUpDWm5JMk1SVHJBSmcrMzJTRkFnc3VaMWRjVUlB?=
+ =?utf-8?B?Q0JHWGVybW8wVTM5bFpKeTYvTjYvSXVnN25PZ0FIVng0SjgwUjZSSG84R041?=
+ =?utf-8?B?bnZ4bDBtcno3NkpSbG9OWXB1blFZUGFKdHBkWXJEMnhOTlUyL3RKYytGVjQ3?=
+ =?utf-8?B?N0lXYTUxK1lZUG1oTjk5amtMci9XakxrMkJoTVlhTmpmVFZrOVcvY0MyK1Zu?=
+ =?utf-8?B?TFlpRlRUb2RhVmRqcll4U0VvU2liUUlCRW9rK05oOHlkS01YU0dVTGl2VUZ5?=
+ =?utf-8?B?bmIveDJTdDZqdEVwSW5hSDNDd0Z5QTFNaDVOQzlhT0RUMW00N3I4TW5SdFp2?=
+ =?utf-8?B?YTBUbGNCczFYWFpQUXkxMnFrWklESlFaU2ZWS09IQnp0eVpTUC9KeHZyQUtX?=
+ =?utf-8?B?TUJTbWpZNW9ZN2F2SXlNQmtVSTlQVStMUm84OGx6THJ2empTbFdjaDlrM1dj?=
+ =?utf-8?B?WGpGaGprRnIvcjBKRExSL25TRjVFZ0t0UG9CTGxZVkJWN0F3ckJuZ1FRSDVh?=
+ =?utf-8?B?bndnSndjYkMrY1Zpc2t1ditKVEdJd296NThYMDdtS0RIZW5JZXlIZTVMZFJt?=
+ =?utf-8?B?VHhwOHkyNkh4dzIyUm5vK0FjS3U4aE1JMHUwOGprVzBvalVqMUUySUN4cTBH?=
+ =?utf-8?B?Rnk5UWlUMm84VjNxOFlueGlhQ2hId29sTWl3UkNyNStaLzBPVS9odktKWi9w?=
+ =?utf-8?B?SFlDT3praUJncjcxQTlsTS9pS1hmK3RPR2QwREtKWGg4SUx5c0lSTmlsN0Z6?=
+ =?utf-8?B?T0ZLalJ2V1B6RDY3Wm5BcU9lUDJ6TUR0Rm5aMzhDY1UyMVVIZVR3L2dZQWo5?=
+ =?utf-8?B?WUdKb3VObjVZbzVld0J2K2FPK2ZPL2lLSEltdGppZm1kcVQ4K1NHWjUvY2ov?=
+ =?utf-8?B?S0JZdVJXNkVML1BncjZrR3BoeG1lTUpDbERvaTBXTnJidmNCQ1VsdldwTlNH?=
+ =?utf-8?B?ZEFKR1hLZ1RZcnJkc0x6T0hIUUFJSEUraXdTSFdvaHNJakJTM0V4OEl5RmRp?=
+ =?utf-8?B?RWY1RmNKNkl5VHlwL1lld1Ric2UxVXNYS09xd3c3MmJGR3Q3NDFVRGNyazMv?=
+ =?utf-8?B?MG54RWMrblpLSXUxcCt4a3VTdjBqTVgwaktFWGU5RDcrNjM3dStZRHlWejI4?=
+ =?utf-8?B?ZCt3Y3hORGhRRFlzQXdnN1UrcjNRMWExSnRhNnM3RUJZRHNUcGczdTlyTjFT?=
+ =?utf-8?B?ZHBvSWhDR3ZkYjhpZWxic0d6dzN5TUUxelBraVZqOVFjK1JDaURNVXBsalBt?=
+ =?utf-8?B?SkU2R0hQc1pKM2ZVdFNHeTZCTUVRK0dPcHQxRGFSTWNiUEdDRUQzQk9pbFlk?=
+ =?utf-8?B?WjYyNG9sVTdiWFg5MFV1MS9teFFZZ3JxbFNUQmtIRklOY1pXbnZ0NXk0M250?=
+ =?utf-8?B?aWRUcGoyYWJhY28vamFNK3JnYjh0QktGN2RUY0FsVjNyRitHcExad1drZDgv?=
+ =?utf-8?B?UTNUa256d1NnMGlDWjM3Zmg5M1Q1REhmRHlUdUV5QW5adTkzVSsrWW9aNys0?=
+ =?utf-8?B?L1hZN3dtNDJtY0dTbE5hN1UyYkNZSEhnMEExSkZYNnlQMlAzK1J0dE5ka1h3?=
+ =?utf-8?B?dnQ5cmtad0kzcDNiS01UMEtqUzZHa0xDYU5VNCsyNXNGZ1BYSHo3TlhpRUk0?=
+ =?utf-8?B?THZUVDQ1N3RTaTdvL3pVZ1l0M2k1QXlEcmcyVjM5SWsrRVMrbFQvbHJzd1Jl?=
+ =?utf-8?B?dVEyMkg5QldYdFBXUTJRTm5oK2Z6VXk5dXY5cWZNeWpDUTNxMzcwUXZNdUti?=
+ =?utf-8?Q?Rj2bNQ6tQ95OjOrrkioNZsk=3D?=
 X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07e22757-0e15-4e56-4cb1-08dd71f3c4c2
-X-MS-Exchange-CrossTenant-AuthSource: YT4PR01MB10341.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 943905fb-00c5-4511-6324-08dd7b653ba6
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2025 14:36:35.0958 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2025 15:01:28.1420 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6rUN1vAzk4eqfqHk3n/7KD37drLn3xO1PQ4BA+vnpgLIIv8AssDSo+x5GiVcCzR6ecqybFUupHhBA/JkWm6WTQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB5432
+X-MS-Exchange-CrossTenant-UserPrincipalName: n+VK6btbagCJOMjq2MCnCoEZP9lWId6CYqFxzMf4GJ+P2iUA+t3UAP3icLVqWuBPLCYeU6cuPyCZGpSa3oekma5XwHLoCRzCBuvsooCbm9M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TO1PPF49FA00C18
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -178,79 +175,146 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Kienan Stewart <kstewart@efficios.com>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Alan Stern <stern@rowland.harvard.edu>,
+ Olivier Dion <odion@efficios.com>,
+ =?UTF-8?B?T25kxZllaiBTdXLDvQ==?= <ondrej@isc.org>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi Deemanth,
+Hi,
 
-On 4/1/25 11:41 PM, Deemanth P J via lttng-dev wrote:
-> Hi all,
-> We are new to Lttng,
-> We have integrated lttng in my image ,
-> whenever I launch lttng we observe hung behavior,
-> So launched just lttng session daemon I observe crash,
-> Please help us in moving further
-> 
+This is a release announcement of Userspace RCU v0.15.2. The
+most noteworthy changes in this stable release are:
 
-The log you have sent doesn't appear to show a crash or a hang. Could 
-you describe in the detail the steps to reproduce the issue?
+* Tree-wide: Rename uatomic and CMM_*_SHARED callers to uatomic_load/uatomic_store
+     
+     This change renames all the following callers to uatomic_load()
+     (implicitly relaxed):
+     
+     - CMM_LOAD_SHARED(),
+     - _CMM_LOAD_SHARED(),
+     - uatomic_read(),
+     - uatomic_load with explicit CMM_RELAXED.
+     
+     It also renames all the following callers to uatomic_store()
+     (implicitly relaxed):
+     
+     - CMM_STORE_SHARED(),
+     - _CMM_STORE_SHARED(),
+     - uatomic_set(),
+     - uatomic_store with explicit CMM_RELAXED.
+     
+     This will allow moving the CMM_{LOAD,STORE}_SHARED() API back to a
+     volatile access, which is relevant in cases where it would be used
+     on data type sizes not supported by C11 atomics.
 
-Please consult the bug reporting guideline[1] to make sure you are 
-including as much useful information as possible.
+* Reintroduce read barrier depends in rcu_dereference on Alpha
+   for URCU_DEREFERENCE_USE_VOLATILE build.
 
-thanks,
-kienan
+* Use uatomic_load CMM_RELAXED when building with URCU_DEREFERENCE_USE_VOLATILE
 
-[1]: https://lttng.org/community/#bug-reporting-guidelines
+     This makes URCU_DEREFERENCE_USE_VOLATILE mark the rcu_dereference
+     memory read as atomic, which helps ThreadSanitizer not flag this
+     as a data race.
 
-> 
-> root@sa8797:/usr/bin# lttng-sessiond --verbose
-> DBG1 - 17:44:14.742294853 [Main]: [sessiond configuration]
-> DBG1 - 17:44:14.742326260 [Main]:       version                        2.13.9
-> DBG1 - 17:44:14.742350999 [Main]:       verbose:                       1
-> DBG1 - 17:44:14.742374333 [Main]:       verbose consumer:              0
-> DBG1 - 17:44:14.742516468 [Main]:       quiet mode:                    False
-> DBG1 - 17:44:14.742524437 [Main]:       agent_tcp_port:                [5345, 5354]
-> DBG1 - 17:44:14.742531572 [Main]:       application socket timeout:    5
-> DBG1 - 17:44:14.742538083 [Main]:       no-kernel:                     False
-> DBG1 - 17:44:14.742544645 [Main]:       background:                    False
-> DBG1 - 17:44:14.742551260 [Main]:       daemonize:                     False
-> DBG1 - 17:44:14.742558083 [Main]:       signal parent on start:        False
-> DBG1 - 17:44:14.742564645 [Main]:       tracing group name:            tracing
-> DBG1 - 17:44:14.742571885 [Main]:       kmod_probe_list:               None
-> DBG1 - 17:44:14.742578708 [Main]:       kmod_extra_probe_list:         None
-> DBG1 - 17:44:14.742585374 [Main]:       rundir:                        /var/run/lttng
-> DBG1 - 17:44:14.742591937 [Main]:       application socket path:       /var/run/lttng/lttng-ust-sock-8
-> DBG1 - 17:44:14.742599385 [Main]:       client socket path:            /var/run/lttng/client-lttng-sessiond
-> DBG1 - 17:44:14.742605999 [Main]:       wait shm path:                 /lttng-ust-wait-8
-> DBG1 - 17:44:14.742612978 [Main]:       health socket path:            /var/run/lttng/sessiond-health
-> DBG1 - 17:44:14.742619593 [Main]:       LTTNG_UST_CLOCK_PLUGIN:        None
-> DBG1 - 17:44:14.742626156 [Main]:       pid file path:                 /var/run/lttng/lttng-sessiond.pid
-> DBG1 - 17:44:14.742633551 [Main]:       lock file path:                /var/run/lttng/lttng-sessiond.lck
-> DBG1 - 17:44:14.742640166 [Main]:       session load path:             None
-> DBG1 - 17:44:14.742646728 [Main]:       agent port file path:          /var/run/lttng/agent.port
-> DBG1 - 17:44:14.742653551 [Main]:       consumerd32 path:              /var/run/lttng/ustconsumerd32
-> DBG1 - 17:44:14.742660114 [Main]:       consumerd32 bin path:          Unknown
-> DBG1 - 17:44:14.742666624 [Main]:       consumerd32 lib dir:           Unknown
-> DBG1 - 17:44:14.742673812 [Main]:       consumerd32 err unix sock path:/var/run/lttng/ustconsumerd32/error
-> DBG1 - 17:44:14.742680478 [Main]:       consumerd32 cmd unix sock path:/var/run/lttng/ustconsumerd32/command
-> DBG1 - 17:44:14.742688864 [Main]:       consumerd64 path:              /var/run/lttng/ustconsumerd64
-> DBG1 - 17:44:14.742698916 [Main]:       consumerd64 bin path:          /usr/lib/lttng/libexec/lttng-consumerd
-> DBG1 - 17:44:14.742705478 [Main]:       consumerd64 lib dir:           /usr/lib
-> DBG1 - 17:44:14.742712353 [Main]:       consumerd64 err unix sock path:/var/run/lttng/ustconsumerd64/error
-> DBG1 - 17:44:14.742719020 [Main]:       consumerd64 cmd unix sock path:/var/run/lttng/ustconsumerd64/command
-> DBG1 - 17:44:14.742725947 [Main]:       kconsumerd path:               /var/run/lttng/kconsumerd
-> DBG1 - 17:44:14.742732666 [Main]:       kconsumerd err unix sock path: /var/run/lttng/kconsumerd/error
-> DBG1 - 17:44:14.742739228 [Main]:       kconsumerd cmd unix sock path: /var/run/lttng/kconsumerd/command
-> DBG1 - 17:44:14.742748656 [Main]: Starting lttng-sessiond {3cf95868-38f8-494d-963a-0c83c13262dd} (in sessiond_uuid_log() at ../../../../lttng-tools-2.13.9/src/bin/lttng-sessiond/main.c:1437)
-> DBG1 - 17:44:14.743890166 [Main]: Resetting run_as worker signal handlers to default (in reset_sighandler() at ../../../lttng-tools-2.13.9/src/common/runas.c:1377)
-> DBG1 - 17:44:14.743934593 [Main]: run_as signal handler set for SIGTERM and SIGINT (in set_worker_sighandlers() at ../../../lttng-tools-2.13.9/src/common/runas.c:1438)
-> 
-> 
-> 
-> Thanks,
-> Deemanth PJ
-> 
+* Add cmm_annotate_mem_acquire() to URCU_DEREFERENCE_USE_VOLATILE rcu_dereference
+
+     This explicit dependency makes ThreadSanitizer understand the
+     happen-before relationship implied by the rcu_dereference
+     address dependency with URCU_DEREFERENCE_USE_VOLATILE.
+
+* Move back CMM_{LOAD,STORE}_SHARED to volatile access
+
+     The CMM_{LOAD,STORE}_SHARED() API is intended to be usable on types that
+     are not necessarily supported by atomic operations on all platforms.
+   
+     Move it back to a volatile access, all call sites both internal and in
+     the public headers that required ThreadSanitizer support were moved to
+     uatomic_load/store in 4d197dd19c44 ("Tree-wide: Rename to
+     uatomic_load/uatomic_store").
+
+* Only define UATOMIC_HAS_ATOMIC_BYTE and UATOMIC_HAS_ATOMIC_SHORT when the
+   builtin atomics support those as lock-free atomics.
+
+* Introduce static size assertions for uatomic checks
+
+     Move away from linker tricks for validation of uatomic API usage, and
+     use static assertions instead, which fails at compilation with a clearer
+     error message, and does not depend on compiling the code with
+     optimizations.
+
+     This introduces type size validation across the uatomic API, including
+     loads and stores, thus preventing the need to link against libatomic
+     for atomic builtin operations performed on types which are not
+     lock-free on the architecture.
+
+* Introduce UATOMIC_HAS_ATOMIC_INT/LLONG macros for various architectures.
+
+liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
+data synchronization library provides read-side access which scales
+linearly with the number of cores. It does so by allowing multiple
+copies of a given data structure to live at the same time, and by
+monitoring the data structure accesses to detect grace periods after
+which memory reclamation is possible.
+
+liburcu-cds provides efficient data structures based on RCU and
+lock-free algorithms. Those structures include hash tables, queues,
+stacks, and doubly-linked lists.
+
+Changelog:
+
+2025-04-14 Userspace RCU 0.15.2
+         * fix: __atomic_always_lock_free() not a constant expression on g++ < 5.1
+         * fix: urcu assert fallback for pre-C11 builds
+         * doc: update uatomic-api for static assert
+         * Add uatomic size static assert for 's390'
+         * Add uatomic size static assert for 'sparc64'
+         * Add uatomic size static assert for 'ppc'
+         * Add uatomic size static assert for 'x86'
+         * Add uatomic size static assert for 'generic'
+         * Add uatomic size static assert
+         * Use UATOMIC_HAS_ATOMIC_INT/LLONG in generic implementation
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for x86
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for tile
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for sparc64
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for s390
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for riscv
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for ppc
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for nios2
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for mips
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for m68k
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for loongarch
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for ia64
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for hppa
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for 'gcc' arch
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for arm
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for alpha
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for aarch64
+         * Add UATOMIC_HAS_ATOMIC_INT/LLONG for atomic builtins
+         * Add builtin atomics size static asserts
+         * cleanup: use URCU_GCC_VERSION from compiler.h
+         * fix: atomic builtins defines for type support
+         * Move back CMM_LOAD/STORE_SHARED to volatile access
+         * Add cmm_annotate_mem_acquire() to URCU_DEREFERENCE_USE_VOLATILE rcu_dereference
+         * Use uatomic_load CMM_RELAXED in URCU_DEREFERENCE_USE_VOLATILE
+         * Fix: Re-introduce URCU_DEREFERENCE_USE_VOLATILE read barrier depends for alpha
+         * Tree-wide: Rename to uatomic_load/uatomic_store
+         * src: Use __*__ for attribute names
+         * API: Use __*__ for attribute names
+         * Fix Changelog 0.15.1 date
+
+Project website: https://liburcu.org
+Git repository: git://git.liburcu.org/urcu.git
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
