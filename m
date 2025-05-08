@@ -4,79 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CE57C3ABC6
-	for <lttng-dev@archiver.kernel.org>; Thu,  8 May 2025 21:30:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Ztlfx6PH5z1qyd
-ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1746739851;
-	b=NSWbMtppqA6ftTMzzK1PCfFZp9A49W9HwL8RST/+HWc+aDvBzGnkSsYZRe0hYjhYACxJ
-	 Vd/ASgf0OmgmWtghUGptZ7Q68Nm+D/neywIaal6w8UaxgK0xpf62M0BgTFT5qpe8XzR4V
-	 TiHvb6nr+d62P193BZGC8oYHsgkPHil09Qe5JdcRPvlRLbOjsGNx5z6aZTtakfVanI5w3
-	 PLO9yj14k/NyEb2vrwBaWr8/qjyvJlRmIwyTprjmKbmHJWfsdJseKmh1jB3x/ddy2SMUw
-	 OEEDsoKyIyys9NvcLBrgiFTb1pYE7G/voKkp5XmuPF/6LtSySZqT9DHanUwAzPUo2Tw==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0500BC3ABBE
+	for <lttng-dev@archiver.kernel.org>; Thu,  8 May 2025 21:31:10 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZtlgL12CTz1r1r
+ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1746739870;
+	b=JMoSM36iwoZMjuVKFoWnRKYQcutL/cjTLfwCj2isR6B12cubpSk6XWPnFiOEdiHcTvtm
+	 sHKuNxOedk5xwilAnwioSN9XvmSdBiJlFetchDnE4+t10ieUh1Q8K8VmAfsFPABMi/vRN
+	 R9NrFgkZoie3Z1dE0i/usV9S5YueyHaHsEUzdNwsKfWDRt1fCrQ9/tmb1VN8rG2PeGLJH
+	 ti48bVIMfp0AIlka2dHX/JWcapzPJeD0E9p9nDSsOUh6pY3ZSPb+h4vdnCSJOGsEdSQMX
+	 EecsBkfYBneQYybRGOOP+K32VWOnX/5JOmg6wuLtcgvMC01QDrI7w46b/hLRo5iWCaQ==
 ARC-Message-Signature: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1746739851;
+	c=relaxed/simple; t=1746739870;
 	h=DKIM-Signature:MIME-Version:Date:Message-ID:Subject:To:From:From;
-	bh=1Ei5uPLrNdJbr800lZVeZkpNH6M5k3FSgv8aRyzwFUM=;
-	b=eebr8jdCtp3UPS9NTw50+pwT11MZE2is2CcPjMHB94a4fpKW1lcBE/SXwJgyP/ysDq+B
-	 eAynfa8gH2IkuKE1c5bVdEIfyC458q1sYm8NtMsVFZMdQjyo3ZZe1ct/GcPdplNYlEE2k
-	 96EXtON1WHeuGW+ptoUSX+YKEF5YS7pL/+9Im85jc+UtjcG6ljGrgUAasStQUz56MfCEV
-	 D3fIqSgZAjqIdSYH+c+/j6NgBmQRMhyVRSaBwMghcmQmrNNNHzGuP5Bc2NUQQqrDTrxPH
-	 6cqzBlhT39qpQGFaFgi963Hl6uePkkVbkiCC4nUoy2Tkf1KZ26nRof/0qv3q9ZAA38Q==
+	bh=obp1gm3d/ykg6A9eTT3dfSxwKKarECj4jwcw/vItkoo=;
+	b=N+Yv+WmQ4K0EtzfQd9oGnsxpHdRD3FVGQnT4vlmzFIohn4K43kROzg+WhTvirQEEhkPB
+	 Mpk/1Pia/ebm70lUzaAJNDD5qURaedG9tCKiC/l/9Wyrp1Jw+ZjaBgQ+KrOng5XHvoVHu
+	 4Zs99BV3TE7xYv6sD8aS+JoPPID7Vp+Du7db+rR8E4k9SFYBM4fdSV+LFfuG+/t0E9IL5
+	 4KqONcGAfSoPjOeaG6x48jopHdEU277mSes3ua852XtcjRIXR2hU8PP/7X7ZazWb+ldvI
+	 mtbIb2aZrrGmM4OfAu2wuOFAJw4ujjd09kE27zWjXxDl/lsHus4aTcSOm8u74DXp9Gg==
 ARC-Authentication-Results: i=1; lists.lttng.org; arc=none smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Ztlfx6PH5z1qyd
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZtlgL12CTz1r1r
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1746739851;
-	bh=1Ei5uPLrNdJbr800lZVeZkpNH6M5k3FSgv8aRyzwFUM=;
+	s=default; t=1746739870;
+	bh=obp1gm3d/ykg6A9eTT3dfSxwKKarECj4jwcw/vItkoo=;
 	h=References:In-Reply-To:Date:Subject:To:Cc:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=mvQG7oAQ6uQ5GqgDGzUNjbUIadzX2G8s89rdn1P28iORWW+Ne12aJk9v+4FbLgYiU
-	 UYOrr1dI4/eYXkD9Dfh0hG6oVNUD52hf5b+7IwyxA3ZIRmdg8VlJ6pON8lfTSkVFa2
-	 8NY1/qOLyHS2IU86HKL9AwvkLc/KI9eBWOSWFAWax3B8U46sYebClkhPyyV5t+OqY6
-	 htzU93AUjldq+e+P/5lqbunKm73Lh7utX4FiDyzi5o4MgoUujys2PJh6V9r/gyPcWo
-	 nxXtbjpMnzp0b926Tc5sDdTQljLR1R/XcszHYrXjhdl203lp4Ck3aoNzOxj2OxHlha
-	 4EVCk5C7jwF2w==
+	b=yrHuIvlEdlGisgiwtRCFGZU+YDTYTmMM9xxcJfoKSRTsdH/sDBxGeMbMR+CvwjtXD
+	 mIKn4hqZ4JTPYmJ+9ZitehfhXD4YxqI3LKjuztCjBfaUoNkNrwhCC6sVFvY0zILK0Z
+	 UmHNwnYB9PXtofmTsZ/lpMVg27yUWdWuI2d1/Fj8twUFPf3askt5B3U8rRz5FUvKAL
+	 W15yfx4dF5nLwgBxx7Shr+WzKnHn93nejfDNj4/8EvkoFxD/PBibHvVQg07Fr4uGI+
+	 Z+sKuPq3PkZCMhKO6LweNt1lcCo2T+uDt8KKo4XuBld0XOFxBE28jmiM4WNn8R748g
+	 MDojF2IOtp3uQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Ztlfx6PH5z1qyd;
-	Thu,  8 May 2025 17:30:49 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZtdjG6zrKz1lsZ
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZtdjG6zrKz1lsZ
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com
- [IPv6:2607:f8b0:4864:20::b2d])
- by lists.lttng.org (Postfix) with ESMTPS id 4ZtdjG6zrKz1lsZ
- for <lttng-dev@lists.lttng.org>; Thu,  8 May 2025 13:02:26 -0400 (EDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id
- 3f1490d57ef6-e78e6396d36so922486276.3
- for <lttng-dev@lists.lttng.org>; Thu, 08 May 2025 10:02:26 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4ZtlgL12CTz1r1r;
+	Thu,  8 May 2025 17:31:10 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Ztfzd5PN9z1nBb
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Ztfzd5PN9z1nBb
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com
+ [IPv6:2607:f8b0:4864:20::112e])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Ztfzd5PN9z1nBb
+ for <lttng-dev@lists.lttng.org>; Thu,  8 May 2025 13:59:57 -0400 (EDT)
+Received: by mail-yw1-x112e.google.com with SMTP id
+ 00721157ae682-70a1f2eb39aso12980897b3.1
+ for <lttng-dev@lists.lttng.org>; Thu, 08 May 2025 10:59:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1746723745; x=1747328545;
+ d=1e100.net; s=20230601; t=1746727196; x=1747331996;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qtmTYOERDTuEtvB4uUBK3X57/+xnTW7KlxJQMAJDjec=;
- b=i8gBca2xtCyVQX23e//EYbIDN7w/MRC7iMeTXhtRNV+bqHQ+oX976xmqflIQxhaV7u
- gdJmGoPEOcLxKysfYpsv3GBYUN++lpa/XXlC6/J78OVZ3bPpTtdti96m1AFuvTHzn09P
- RYjHfxAzCq3dbLfFxcrmtm/gbNH7eqCFWdU6eoNaBZL5f1KO6DeGK0aJRpyTWrOLTAkA
- ucum1/kbn8dejVB96xvkE6s9oT2/eKCFmfksPT/IAU/vAs5HMtFyxFYMlSAhO4wzkdyq
- 0k50OWx/rjGgMD1vMtWnHDs5Xz2JaGLUIGD5zuEF88gkgNDwPSKG4jlg0c0Xw5djpsfw
- l0qg==
-X-Gm-Message-State: AOJu0Yx4EhjzW0rVD20RQGu+AL6IYHqcrZftuBCdM8lSEAzn8tHegZW8
- vFs62gTmXpm8AQ9JGV/oUt+kdHXSN6KNYVergRItuRaqQarzNgf9lZ4JSVJnPDKbwYGOVzYV4nh
- +hEHeg33xkiQHgsvA3HDz7awQJYM=
-X-Gm-Gg: ASbGncuI2bp8NDu10l7lfDx/lmlF+ss4F5X7ZAGcKxKnEGURvhY39e7m2stsX+ahQwg
- euhm2oKDsviTm2qXSRfnWG5RZHrAIAafCo9i//5/8QyIr/uGcgVuHIerLLDocd6NVOgrSaxTJRG
- mLtzTsf/KvxMe9GgQQ70+g3E8S2e+W2Im52g==
-X-Google-Smtp-Source: AGHT+IHpzwXf6SSeBzgOuHYGz8QPu9xRh1fm6nLhyazk+7gbmK8/3UTcCIaXsCDaj4FMIc6wa/Au5NbhPucnHNu2aT4=
-X-Received: by 2002:a05:6902:2490:b0:e73:11a0:4b7c with SMTP id
- 3f1490d57ef6-e78fdba6f70mr266110276.4.1746723745059; Thu, 08 May 2025
- 10:02:25 -0700 (PDT)
+ bh=obp1gm3d/ykg6A9eTT3dfSxwKKarECj4jwcw/vItkoo=;
+ b=W19dXGyliEKc889hV18tzdHKm8qUn05xXYGbUTk4blyKrbQiRVIDReKf/tuyHvJd70
+ 2mN944RTU4jhAoUiSDiAlpimCed0cHwB64WKG+zIx5k6+hBZas39PJiqOXmobd9DlQom
+ OjpyZM1Blp1+T9MFddyoWhSfD/SlqpB1ghHs8eahU4SAo0Fy3M9yhHVDm8YwaIxQXY5a
+ /3EVQMVf9PUNGdVBACHrbz19A9/Ki3eFZNf4sNdKA7dAoAx+yoUb2qxqZ8ug/dB3YDNq
+ b8II0Q2AYB98cPc65ZAeOY605zd7dHDglDTNyOQhsz0U488GW+DLP7RI8ePkEfLwi2Kn
+ G/7Q==
+X-Gm-Message-State: AOJu0YytFsY4bzRdgZCbYrLYxNLjlPZfD72JPAVlzyW7aXfxRMhgQkct
+ Rn3LU197zdH7I3Fbf5exmRGMw1At4QFGITyw7lxUuKjwIFG13tEhBfXgjl7hjgyVXZtClBN+3aa
+ k5AiRZWHSIgrooTQwcJ2SKurTNaRQecvP
+X-Gm-Gg: ASbGncvGtZpvKuk+ie1NweO9a2bmzofd1iGH0Hbitdvh/M7XyIPfjM5g2nvuNa40KUA
+ 32PTFJRcEMy9U8OvvRn3nzi19XQCl7pdPCT0WHtEMowHKomXrG39s566b4Wdor85vdmmnmIDcsY
+ /fxcgRpdXRuZSFHTaSy+CBZiE=
+X-Google-Smtp-Source: AGHT+IGWa0KqlzHG/xrtyDq9FH4NXFO2FykcYLlgLU/cf4ZUV75pfdFE9EMJXyOkaeqYL/hmrdg/04wBq7JQq/of0Hs=
+X-Received: by 2002:a05:690c:6405:b0:709:176d:2b5 with SMTP id
+ 00721157ae682-70a3f9f371emr5710797b3.2.1746727196472; Thu, 08 May 2025
+ 10:59:56 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAJK_iejrz-U0-XK1hmoH9=TCLcErZTVE16XdyKzXX0buJuuoCQ@mail.gmail.com>
  <90aac2a4-0a4f-4d2a-a90f-c96c9be820af@efficios.com>
-In-Reply-To: <90aac2a4-0a4f-4d2a-a90f-c96c9be820af@efficios.com>
-Date: Thu, 8 May 2025 18:02:12 +0100
-X-Gm-Features: ATxdqUHVK2QVn1-2E_5iK9UsJn9qR5krnPklYTpAZf7ES6nUAJKkPQR9_fKkSnc
-Message-ID: <CAJK_ieibZJjJus6PdOnWAiLFOymm6D8AmkG3vdpDnuazG1wAbA@mail.gmail.com>
+ <CAJK_ieibZJjJus6PdOnWAiLFOymm6D8AmkG3vdpDnuazG1wAbA@mail.gmail.com>
+ <0e6f9c3b-8daa-43ae-a3ee-6d7917b05b2e@efficios.com>
+In-Reply-To: <0e6f9c3b-8daa-43ae-a3ee-6d7917b05b2e@efficios.com>
+Date: Thu, 8 May 2025 18:59:45 +0100
+X-Gm-Features: AX0GCFtHzr-BAjqfty49cDp_u6X--207kR4UI9SrLiqnNRMhB7wRGPQRb2qNUWE
+Message-ID: <CAJK_iehC35W7LUWkR4b-+TEuJTOTngzJ_0sV7LSvBT6WcDPN4w@mail.gmail.com>
 Subject: Re: Not capturing ust events
 To: Kienan Stewart <kstewart@efficios.com>
 Cc: lttng-dev@lists.lttng.org
@@ -100,26 +102,38 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
 Hi Kienan
 
-Thanks very much for your reply. I can now capture UST events. (My
-actual problem was that I was not linking to lttng-ust).
+Thanks again for replying.
 
-I am now using the method you described:
+> Glad you caught that. I had assumed it was linked in :)
 
+Yes, I should have spotted that earlier!
+
+> Assuming the user you are running the `lttng` commands with is a member
+> of the tracing group and a root lttng-sessiond is running, a complete
+> example might look like:
+>
+> ```
 > lttng create my_proj
-> lttng enable-event --userspace 'lttng_ust_tracef:*'
+> lttng enable-event --userspace 'lttng_ust_tracef:*' # this will
+> automatically create a channel if one doesn't exist in the session
+> lttng enable-channel --kernel --session my_proj kernel_channel # [1]
+> lttng enable-event --kernel --all --channel kernel_channel --session
+> my_proj # [2]
 > lttng start
 > ./my_app
 > lttng stop
-> lttng view # [Optional]
+> lttng view
+> ```
 
-This works and captures UST events but I am not capturing Kernel
-events.  My reason for running this experiment is that occasionally
-our application shows glitches where a task takes longer than
-expected. So I want to see what happens in that occurrence - perhaps
-an ISR is running or something like that. So I assume that I need to
-capture Kernel and UST events.
+I now see:
 
-Can you please advise me why Kernel events aren't being captured?
+$ lttng enable-channel --kernel --session my_proj kernel_channel
+Error: Channel kernel_channel: Tracing the kernel requires a root
+lttng-sessiond daemon, as well as "tracing" group membership or root
+user ID for the lttng client (session my_proj)
+
+I am a member of the tracing group, however I need to understand how
+to configure the daemon. I'll have another look at the docs.
 
 Best regards
 David
