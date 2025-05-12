@@ -4,169 +4,170 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37403C3ABCB
-	for <lttng-dev@archiver.kernel.org>; Sat, 10 May 2025 08:14:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Zvdv21SSJz1B97
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1746864864;
-	b=Ra+sFDMaO5bgmui2Qvs/nQzr6UHLEJp9EZOGfoN1bAmiqB365txRnTOYk9YkAGU1M0n7
-	 w2a62RBvEjJBscCExhVxCF3KtGNf6fBFGAj3/xpNcBjJql/ngerRbzmTO1BmW2hdZTrXW
-	 sw0ivw9dHTlw9m1ZeAQnSr8xW9im4/MKEArbWf6zGZRVHHSuriEzG8eP6HQc9P5X5J8X7
-	 eQbtHgvJiP5YOg4Kf78z2OiaLReHPCa2tESNT1Yb8HXOsny3hfsyIa56VjSbKEPx6SBlD
-	 d2Hy3NaDaPMT2oYT1F0YY8hXd0OTAq8VH9M1AqHMb813G+tySYExbmEAI4alSIztlYw==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E0F3C3ABD7
+	for <lttng-dev@archiver.kernel.org>; Mon, 12 May 2025 15:18:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Zx3Cy1BBQz1jGF
+ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1747063136;
+	b=eoBBQ9ytEYao73Nozhw7F1nh7JvT0xgrTeRcB1htFhYOx5R9F9to76FqaoYcxgFxgyOW
+	 SlcMwuZFZg936js3VCMscIZRLWJ4k1fQyMLcwb4IOtQGZi0Xait0R049XOXRQHo6oNy4v
+	 6F4A2DX9dV8mSSS63/2ku87rffxi+IgfLCZqUi7m5rO52qbVdQJfLrtNPVBaXS0RmYSGv
+	 ngxxiZ4FLAPCKV4PENNe2dO1YtHT2lnvOPlmRLIJOcSEMA3U5K5eI4xqlt7eeui9MUgca
+	 Br15IR9rtPlFyoZFQS2hCHfjUO+6Jcp2mSk48AUS3KcwZau0O1ZA7rUnm3htz+N0eow==
 ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1746864864;
-	h=DKIM-Signature:Date:To:Subject:Message-ID:MIME-Version:From:From;
-	bh=dLCkMxevCWKhb5k3cB+MMY2ugge4WYqEGgWEehyqxmc=;
-	b=VOSGIV1MOuBmdBDhAyPbCMbq9+1lW/JaWu3ITjgwefO3Pxt03PDw9XE5ztrNsodruHCW
-	 WtvMAV9ix5uofbY60tdgP+ILCF5K2z1nLg0ffGkOSKLfAVyeKzEQEl7iB5dURyaIFXPqL
-	 jWipOl1JzKSYSiEjStFuS81x7sOLaw1NeCI7zLLtazkqT4dDubHnVOB2/zY+W7fFTgO1a
-	 DlOjC1btdnz3dCIrNSRMcem5lU2iVF0NmxCC7PLvRp15Q2fiLFoXOE7Owhmu20NwJJ2QD
-	 U02RJyiFMJN22LvHks9l9CBhHBGcZQGihsoaqaWbchz03KJkTxChixdeyc4qCpg8jkA==
+	c=relaxed/simple; t=1747063136;
+	h=DKIM-Signature:Message-ID:Date:Subject:To:MIME-Version:From:From;
+	bh=bEFKwP6GNtpPh5oqrsW1olcafL0T/8dsxW3xz9zJnz8=;
+	b=ZBEPGMVgqcXwzjGjxcbutIMihG3zrhbdZ9mp9y7S4UGwD/Zbz8FkRT7jY0IqtTqSfFg2
+	 PeeuKIZn2E+LhdsME84MpXxlv2ds1ahww7ylh1pIbrEbgvNrutDjqe+/9uYLpS7kOwNRD
+	 JPSdgk7dVZoa1VPgvCrOK3h8CTf/I+s2ujSkKdj2DQfniskERLANsVMV6miF71SSuK3zI
+	 Tli7a3y9VtZD2QCpMqln6DaCHaD0TqoxQ1wV6/+YKjo7tqjRByxhiG2eHhTqPpbYXq/hs
+	 no3cAFSVgOBW0ZtdL0TCtz/J8Pk3oetH4x0RySyK5Gy94A3d2mY/ZggcoMXn2nLy08g==
 ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Zvdv21SSJz1B97
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Zx3Cy1BBQz1jGF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1746864864;
-	bh=dLCkMxevCWKhb5k3cB+MMY2ugge4WYqEGgWEehyqxmc=;
-	h=Date:To:Subject:In-Reply-To:References:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	s=default; t=1747063136;
+	bh=bEFKwP6GNtpPh5oqrsW1olcafL0T/8dsxW3xz9zJnz8=;
+	h=Date:Subject:To:References:In-Reply-To:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 From;
-	b=tT0czwzIrQTSOKIkdWYDygDv04koWI25dGyhLoEPg+cL1W8cSPZSkxAqC76T6asuH
-	 p6ECtkPJmCX3v5eaQofNUbFxJH8+bEyWorBvagsGPBT8BMCuXFaKhwKJzu/MgKWraC
-	 2fyr5aJoUHvHBKvJpa8Y0+DCw/bUBluOI2URcUgVkLAOWBQ8zd9trQsPWfw9kCp4wW
-	 5vusH1zE6EWLj1wyloDyHoSVubBHCkoPioq6Ay2huBaHtVHM9/YwZkvlUIYquhB7FY
-	 UylEUfVquJBQud2WY7VBfR8ReIDfKkAvqOTRwHF5anarO2yZCcnEiK6cYOcalLPtce
-	 Hi3V9Pv86NCQg==
+	b=i9M5+CiaTYzmn6rsAuyRW32a3MRD76BxtOOrXSE1wF0SuczesDnYfZyTBf9IufL3v
+	 /tSKePvT+nKCp/xR1Wd5GI+p9+yT9Q7+38fdLcL0mYe9fHqIY3rnZyUevGpnC57rp6
+	 q225qYolyuslCfVTNuC1G2g4vSs4gbTZjpoJahLNjG+4Z7gu3oVDabL6UoyLf9oY0J
+	 Zd/soDNKUEkOaP0Ex6BdxMkdnt0gJiOWff7HToYz2kUAQhgvOj5Wow2bWfc94H1nj9
+	 Rcz9uuEBF5MG/U7Y/b9RLxMrq9YGDMOrRHMaVpZNw1kFde5XbdEdB3mQ20kmVpR1Uu
+	 YZCJgNYMVB38A==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Zvdv21SSJz1B97;
-	Sat, 10 May 2025 04:14:22 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Zvdtz1Y7Cz19wB
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Zvdtz1Y7Cz19wB
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com
- (mail-am7eur03on2070c.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:260e::70c])
- by lists.lttng.org (Postfix) with ESMTPS id 4Zvdtz1Y7Cz19wB
- for <lttng-dev@lists.lttng.org>; Sat, 10 May 2025 04:14:18 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4Zx3Cy1BBQz1jGF;
+	Mon, 12 May 2025 11:18:54 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Zx3Cw2vHHz1jFY
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Zx3Cw2vHHz1jFY
+Received: from YT3PR01CU008.outbound.protection.outlook.com
+ (mail-canadacentralazon11020140.outbound.protection.outlook.com
+ [52.101.189.140])
+ by lists.lttng.org (Postfix) with ESMTPS id 4Zx3Cw2vHHz1jFY
+ for <lttng-dev@lists.lttng.org>; Mon, 12 May 2025 11:18:51 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SyqxyI0Z1Q1lQ9sO719LZMCq3hkGUicpVzVRmsUhR9cVF7b4PpKABdRFGQW/AMxTSrUEw+SFQlThjebuUdShDMPA2usNS8bmw69UWjR4widVfcfCRAubGMryZ3vmYVV9vFRY1Tv7P08eclAfg3ZFiJmBq+Jys5WtGgHihWve5gr2rPSWPhzmMkfeKa7c9yCccoQeUgCpiw6Tgvhri3XrJeN+T4XkMTTmTUH/ucqgT5AwhAiOYBepdAf4MGqexsbkF2I+I1+9mJXxii1IZ2qjba0ij7SCnuiZUJVviTSQqyJ7ZcVeDRIQ96sBeI7MhYhvHDSzBnF+8AKaqkjTJ2jiGQ==
+ b=WZxIP4TzGx0vPWiLKr59EIoJY6aCNyS2FjQR6sbD4cexR5qsOv3J4A9lQYVdHJmAOET/BWJCJbyEQnJkWdNViRsHLoK0iAcqUi8sIGXNdTOIKBZZCMjuUGQ7cMXdsUCYxnW9JjKLiKRrwk5wxaNz7FqCw/u0Qyrw4n30cyGFjaMhIGxGfvQyS9yZfAhugrrf3CngM7MjZfk8D5Kr/AWWEl75amcf8U18PhB+BVzLMyjRMbUsUblfiVUFFeVU4pFWhjk7zNuHj5wRaAF4VMBOegYLIsYcg+lGfLAdkI9UiIjS617i1X6/5YPOPuSYwTCy9e5iLJz4sHClPqC/tItt6g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Vyt57J/cpcgAVZmb8sx2RJpbt0tlZdebtqRjCWzwOv0=;
- b=WsJiomg3gxhdgQp4mMvqduzmq2J1OGTnM3Sh1/vpxX9xOHJglzzlxVUMu6Kt3wVFvgnro5Hp2Vyd7pdYn40KNYyTERHyeLtIKzFzxGZ22JympFGBucPCvIqDCWRsAoHNVJJ9p/0+tN1yiFXYRsL+jUhij12QYrTeXk6idVW+dyz4Db7RDN1iChbUrHel436Wl3Xop6zqaqcqxHLzlxbgR26cDOIhahZiFODPKWsUtVd8yyWsSWxOj1nH2ZatrYKT8WQQH4WGbKfSyXKSD5JiTydEar1hqJR/2omdAcQkkVxu4xwtOO8t0a1NCcHMO0fgaVFDtBaSNUY2g6o4CvCP8w==
+ bh=c/jU7RL1OHS+LSU5kVM8HiiwFrt2NbP64FV+/qyidfI=;
+ b=NVxrjIILyCXjb3VUGC8la+HWMmsDnMVkkVwcckKnddc6b2z03gXk21pSyxZjToUl9YUOLjF9akPJCxJ3G8UFLmJB0gs/plcrqkuysSc8dnD3lV3F2J62eFId3yMlismRxdpQkQrhQMhFwv/Jy/EPZvS+QUCAOaY8kx2DKBCmIReI6IW1mHmvTKgWcxEp6XpZ+H0NOu07EPIsdyXwtEL0JK9o27r/idxVX4/CeUob7QJ5o1pRFTfJACzgp5RmF0ovVVET5J38d4L4gHccYfK05TuE34loUM4gVOujIo3qRfD4tPLuyFS3w53r3zCYmTMzhBc2qwX6qJyzsl8yXszcXA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kuleuven.be; dmarc=pass action=none header.from=kuleuven.be;
- dkim=pass header.d=kuleuven.be; arc=none
-Received: from AM6PR08MB5013.eurprd08.prod.outlook.com (2603:10a6:20b:ef::21)
- by AS8PR08MB5989.eurprd08.prod.outlook.com (2603:10a6:20b:297::5)
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT3PR01MB9171.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:a0::18)
+ by YQXPR01MB6669.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:4e::20)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.26; Sat, 10 May
- 2025 08:14:11 +0000
-Received: from AM6PR08MB5013.eurprd08.prod.outlook.com
- ([fe80::2277:ee89:28ee:ac0a]) by AM6PR08MB5013.eurprd08.prod.outlook.com
- ([fe80::2277:ee89:28ee:ac0a%6]) with mapi id 15.20.8722.018; Sat, 10 May 2025
- 08:14:11 +0000
-Date: Sat, 10 May 2025 10:14:10 +0200 (CEST)
-To: Kienan Stewart <kstewart@efficios.com>
-Subject: Re: Problems with arrays of floats (lttng 2.13)
-In-Reply-To: <7078c448-41bb-4ec3-be56-cfd93ea94ce7@efficios.com>
-Message-ID: <c25050a5-9e48-1042-5428-a33c4602fcdf@kuleuven.be>
-References: <00f6c849-e4f6-396f-9f71-4b58bd203eda@kuleuven.be>
- <7078c448-41bb-4ec3-be56-cfd93ea94ce7@efficios.com>
-Content-Type: multipart/mixed;
- boundary="228850167-1171160360-1746864851=:354512"
-X-ClientProxiedBy: AM0PR02CA0024.eurprd02.prod.outlook.com
- (2603:10a6:208:3e::37) To AM6PR08MB5013.eurprd08.prod.outlook.com
- (2603:10a6:20b:ef::21)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.30; Mon, 12 May
+ 2025 15:18:46 +0000
+Received: from YT3PR01MB9171.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::5393:fe91:357f:3ccf]) by YT3PR01MB9171.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::5393:fe91:357f:3ccf%4]) with mapi id 15.20.8722.027; Mon, 12 May 2025
+ 15:18:46 +0000
+Message-ID: <c42f4ccd-5e16-4a7a-a9a8-19e61ee06b1b@efficios.com>
+Date: Mon, 12 May 2025 11:18:42 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: Understanding SOFT IRQ 1
+To: David Aldrich <david.aldrich.ntml@gmail.com>, lttng-dev@lists.lttng.org
+References: <CAJK_iegCiWpZcD8fyLCpkRtzOzv_nxyn8WBUs9gr5WDYQ1sK_w@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAJK_iegCiWpZcD8fyLCpkRtzOzv_nxyn8WBUs9gr5WDYQ1sK_w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0165.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:f::8) To YT3PR01MB9171.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:a0::18)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR08MB5013:EE_|AS8PR08MB5989:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba08170d-5e17-41c5-90e4-08dd8f9aa4e9
+X-MS-TrafficTypeDiagnostic: YT3PR01MB9171:EE_|YQXPR01MB6669:EE_
+X-MS-Office365-Filtering-Correlation-Id: 356226fd-4ede-4f4b-33a9-08dd916849a1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0; ARA:13230040|10070799003|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?R0hDYWVqSjluQ1ZrV0hEUTlZTXM1ZUhEQnpzb1IrYWpQSy9wOFdueTRsNzV4?=
- =?utf-8?B?OHRJVzJ5eGJQRzlsOUwwWjFPbHN2RUR1L2NBSldWeWs3R2dWYWdiVmhvL3hH?=
- =?utf-8?B?a2FRYkUwb2dQcUFEaWtuMEt6ejhUYlRFN1FKMWRyOVpFOUhsVFBUUEF3eHo3?=
- =?utf-8?B?eEZZUFExTFZsMC80bkdUM3ltb0FkaG1Jd25SeUl2Y3JaSHNwOXZ1cWVLaGQ2?=
- =?utf-8?B?Y1dyTldWbFNvOUVINTJ2VDdxWVZLdm91ZlpjRCtaY1dWNEZXVHlaNWFxbjFa?=
- =?utf-8?B?WEFUWWRNUE9GUVdTUGRTdWZvNGxqRUx6dkNQZFdKb1EwN3IrVHVPTjcvclUw?=
- =?utf-8?B?aDUwQ2g0ajdHT1M3SS91am44Kzd4NWVocndiaGhrUm9OblpPN2lOdVRJSXVY?=
- =?utf-8?B?dnBiZ3BLNzM4WE1ScWdsZUJNTVBkdFBLL1VZcVN2T1RTRFcxdElQbFRvbzFW?=
- =?utf-8?B?alpCbWkyNlo3WUMzcGVjSyttcVJiN0hRRnNaS2lNTTJYdU5rN052Nm5EN3RR?=
- =?utf-8?B?dURWeGd4WE9rV2ZGVDRMdGVlR3IxNGUzdWV6eEt5N0M0S1lYVkJ3WEpSV0lM?=
- =?utf-8?B?RUwxSUVxdlF0Z0QxUU9UeEZDU1hPYmRDampsa0czWC9ROUpqNkdSMFhyZ1k5?=
- =?utf-8?B?OVVtNEFSV2tiSkVBZktTVVBzcC9qY2s1YnNMV2tSMk9xTFVNVG10ZWU2SFUr?=
- =?utf-8?B?M0FzUWJrZzZveEZvaXN3UzJqLytWaSs1U0s5dzkvVWs1NkFwK1FDalpYNnBI?=
- =?utf-8?B?aGFLMkdtOWdKeVRjWnN1T2EzVXdkVnJvUXdMU3BOMjVyRHlCejk0NGpicG84?=
- =?utf-8?B?citWVzFaSFZrL1c5ZUZsUjJjNUdRQm8rMTlHNjN6SHhibHZROWxIWXZ5dmNl?=
- =?utf-8?B?ZHpKM0VSL0dobkNoc21STFJMeENnV0VBNUxuekZmY2c1eUFHZVVzcUdWTFBI?=
- =?utf-8?B?RjlKV3VQcGZTdWVMTmk2UEFtQlV1YVJrNkdUdVlmYjQ4b2hSK2xCb1lBL0JT?=
- =?utf-8?B?WnpRR0FqMUloeXc2UngrMlora2JWbE45N1ZtQ3F0SzZ6Y29Yai8reFlrQjJB?=
- =?utf-8?B?a01yV3F3OTBtL2ZQeU9saWJKS0FDRkQxOGMzeWp1b1puazFKVjM1bzgxL0ty?=
- =?utf-8?B?VEdSYi9XVmdSWmJncUhReDJnOHRvYjMxZG9wRHZDRU5MVFN1Y2VzeFlwaS9k?=
- =?utf-8?B?RzVMbEVha0cxenE0OGhGZUR5S0JNOFh1SFB5eXlocUhuenkvcDI2aldiSWZz?=
- =?utf-8?B?eXU5S1J3aWYrYkdWNEtUN1RSWVMyNFI3WjBMczhOUVJWTzFoMFMyVjNXVFNS?=
- =?utf-8?B?WHB5cGJEa1lqM29IcVljY1c3YVJITGxYbzl3SzdpamxZL29GMkh0SjJldzl6?=
- =?utf-8?B?Mmk5ck5GNHowMnBENnBmdXgybk1ZcnAzazlvS1EveGFFbTNkM052Ujc5alI3?=
- =?utf-8?B?VVN5SER3NVlqUDY5dHhTQlJ3VzN1QldxY3UyTDNKcGREMlhOdlpONTBhOE9m?=
- =?utf-8?B?Rk03V284aDlKcXRsc1NRdnlMOStBSXZrc1c4K2xpUGs5ZXoxMXZzYVlKcDAx?=
- =?utf-8?B?aWxuTkxGeVFOdUZJSlA1TllnQmZ5RU5sYjR0NFdiR29JTWJ0bVhKZ3hpaGx0?=
- =?utf-8?B?dkNVMk4xdnZIRFpaNXA1MHFoL01BY0oreXd0Mmt3S1JRY1c1aFd2b2VOU2pu?=
- =?utf-8?B?ZkN2bXlUdGMrNXZyMDBic2Z6MXZPU1Vnem1KYjhuRFJvK1lVYmtZWW9CNVBU?=
- =?utf-8?B?ZnZwbXdtWXRDcmZUVUg1VjFoQnhlclZZNXFtNU0vOVYyNVJrSGVNU2NVUmN4?=
- =?utf-8?Q?+0RdYj0lwUCKYq1gYQjvkuqLChPFMyTm8212A=3D?=
+X-Microsoft-Antispam: BCL:0; ARA:13230040|376014|10070799003|1800799024|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?QmU3UkZ2QUFjdElzVHowSzg4NkhIVTdZenlMcURFc29oQnJQTjhVZG5jbXg1?=
+ =?utf-8?B?RXphUFhUVFlSbmRiV0tNNGNENjBDSFNlTnl5M1F3ZkZtNnI4OGxzUUUybTJC?=
+ =?utf-8?B?U3ZHd2ZTU2dlU2RnQ3BMME0wenpmZVNnUlE2aSt3K3dQQkFxYTEyNEdDVy9I?=
+ =?utf-8?B?OXE1NVZ4YmZmdDlRNzBURmd6Q2JrTGdiTVRYZHc0ZnYzTkI5dXl1Q0lmNHVX?=
+ =?utf-8?B?TXFRbnN1ZXF1a09aWTR4SEJuMnAzWHE2SGVMbDhzSjJGRmpKT01lWDNuU3dz?=
+ =?utf-8?B?QzVQTXNBSjJFTmwxT2o2WW1KTkgvYThCVERHVGJ2SVAvVFduK2dYUXFTTnI0?=
+ =?utf-8?B?QmFURzVqQ1hIdHdTMCszV1duYVVYTkJlZjV6WFZqbitrRUd2TUptODgxbVhN?=
+ =?utf-8?B?VW51VzdxVDhudmJPK09lbThUZlNWVHlYS3BSeWtQU3J0Z0pubUIreG1OL1hS?=
+ =?utf-8?B?MDFhdzlMQ0dZTDkyN0E1Mk5nNlZrVVJkRXJ0eFdsWmxVcXo0TlZiL0xSVmEv?=
+ =?utf-8?B?SmozSWdqa1N5T2xCR2c1UDhhYVJzMmtRUjRJZzg1eTFFRlhQK1ZGR0E5d2tD?=
+ =?utf-8?B?dDAvbm9yTkJCTVZJOTIyc2paRXJMY3g1dVlhV2ovRlNXMUVFd0J3UmkrbTJy?=
+ =?utf-8?B?NEVOTHBIejJXMEdwUFVsbkYyOTA0NlpqSkRiYkVNQ1pLRWFOV1ZSUDB4anVG?=
+ =?utf-8?B?emk3bzZWaStxdXFvRnRCc2E3Q1d2T0pnYjc5bm5PdGN2K2xYZWZmYVRQd0t5?=
+ =?utf-8?B?ZmV3YlRQb1V2NVpYNWpDbGNJK2kxazI1ZDdOQ0xSTkVGQmZFWWwzMldRN2lq?=
+ =?utf-8?B?SGFldERuc0hLeUxXSUo1Tm1XM2FkdkZJWERhQllyZFhhN2pwOWRhbGRWRjRy?=
+ =?utf-8?B?dkpKR3YwOVk4ZDZRck4rM2lYZXBEdXBpOGRYZjBDZy9xaUJpR1Nmc3h6TjFl?=
+ =?utf-8?B?WjlZUThYTXVYSVhCOEJ0YnhOditCalRkYzc5ZGw1eFVRSXhZNURCNXhoMXAv?=
+ =?utf-8?B?L3JiUms0QzdrRXBYd2lNaGZKQ2dSUU5UQXpQYk9EZXBxcW9jSGZXR2I0Y1lv?=
+ =?utf-8?B?cm45WGRjV05jcW42WllWZ1J6M2F1cTFsNk5ZV2dEQnM1RjVldGpSbjJYUnFv?=
+ =?utf-8?B?T3lDK0NQWHRWWU1xRVlGUW8rZ1NSdnJxY0owMnJyU0xNcVRHeVl1VzlhVjN0?=
+ =?utf-8?B?bEtJOHJsdHBUTFZiTjVUcGFwNnFqNlF0dVhJZEtOVzh0WDZBb2kxZk9lSHhl?=
+ =?utf-8?B?eE45Y2R1Q3VaaUFKL08rTVRadzJoWHQ5Si9QbzZxM0xYR1NzaDZpR3pVckE4?=
+ =?utf-8?B?SitMZ200V1plTThWT0xWR0lKbFo0Z1p1aytXVHNaNTlEUS9vNnhMK0NGSm9C?=
+ =?utf-8?B?M0N4QXdDVkVJYkt6TUpESVF1QnZndGpRZ1NPTEVwc2tHSDZPUVJmTmU5ZDZC?=
+ =?utf-8?B?TmlXSGpmMFEvVUkvaXg0QnpVZDZ4NkJ4bnR1bHEzZWJEei9vaFZzN1Y0ODls?=
+ =?utf-8?B?SUJ4dnZ4NEw0VHpvWDJTYlBPWmJUdHZvZmJzeDlkUXlkNU1ZVGNTWTNlNDV4?=
+ =?utf-8?B?aFhJNDBFQnQ5RDFmd2FaWVdUWENYR1o4QlRibnpncHo0ZytaL0dTMzUxOFpn?=
+ =?utf-8?B?VDZCcDg1MVhwUWZSMGJkVld0dUxSVmh5eTlGMndnZkRVVmovSjUrclB4cEdP?=
+ =?utf-8?B?b2VlVXg2V1RHNWFJMzY4MlRZM0xwUVhFMzlSUEFaYlhwVzVoNVRFN3N3TEdG?=
+ =?utf-8?B?SGZjTWNhcXJJK0taV2todkllUExQZ3ZFVXYwNEZ5NGpOMGphT1BLSGErUEZV?=
+ =?utf-8?Q?AQ5jHw8OAT+eX07ZhAmGmXqIE8ySkVl2L/s4o=3D?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:AM6PR08MB5013.eurprd08.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(10070799003)(366016)(1800799024)(376014); DIR:OUT; SFP:1102; 
+ IPV:NLI; SFV:NSPM; H:YT3PR01MB9171.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(10070799003)(1800799024)(366016); DIR:OUT; SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RG9PTEkwelZ1MVh0S2V1MkVyaHdJQjZFQ0xPUmxrZ0dxWEovbG9VdzIrR2li?=
- =?utf-8?B?eHU2ejdjTWxoeGY5d0k2ZlA4V2dXQ0pDMG40c1RSbklNT29OM1pmNUEyWW5K?=
- =?utf-8?B?TllUUDVZNkhPSng0WndKc2ttMEFWM0pSaUs2bGIvM2gwK2FVZG1LVE5YTGZH?=
- =?utf-8?B?dDhGMUloK0RkUzArZHZIbzY0RnZIb21YUWpTVDBvNkp4elJDNmVwNlE3b2ZG?=
- =?utf-8?B?b3NWVUoxRDlILzlPeGE5bERjaXFaNUk0bXc1RUxNYUJhOW4ySEF1MTF5bFlu?=
- =?utf-8?B?Z0plM3BId0V1SnRIbFZHRUZiUTFJb3hTdmZhNTkrVEpnellQMjYrVUxUdlFW?=
- =?utf-8?B?VnpzQ2RuYkt6STQ4UkRVemlyNXpWOW4zQjMyU09qc2ZlUGdacjViOEUzczda?=
- =?utf-8?B?RE9lOEJaV29FQkxsKy9JNkwzTTJ5UERZUHp5SHdrRWgvUXVmditzeU9FcWRz?=
- =?utf-8?B?ckk0WkhjOXVGbURhSUFSNWtOY1IvU1BxQ0w3N0dQaHNGMitCa3pscUJLdENj?=
- =?utf-8?B?UUJsTi9JOHh6RkJBamhnTjd0QkdEUzZyWm1PQmpXaXQwOWc3eWVleFlVcysz?=
- =?utf-8?B?S1VpaEhydDVrU1FDcmFCUTE4SUt4SDhweWFQUmJlcExXNm95dU5La21jdkwr?=
- =?utf-8?B?L0hNUmd2MDJFMXgvT0FlYjlLV3JPcnltMmVrWXJ6ck92cjJUQXk4VWtHUU5E?=
- =?utf-8?B?SnhIbEtpWGNvN2ZaYVBmMGY3VEVhQmtuUHIwajFTZ2pPZ25XVWluTlkzdUxS?=
- =?utf-8?B?TkRKOGxjOTdBTjc1S1FFSEY3RTlUdFd2VlpzMVNWYTcvYTJkMEg3V0pCdzNQ?=
- =?utf-8?B?cFpjeXRVSnJqUjdoVUJGTGxoRXNFOFEya2t5UHNiNmxWZk0vdzd5c0RBTEM5?=
- =?utf-8?B?NnVTZkVBalhLcktRWmpFVkxncFQzZWRQQURvVFphZkxVbTg1NnhXZDhCWGsw?=
- =?utf-8?B?WUNDK2tZY1lDT3Y5eHFDbzd0YloyeGdKSlkxOUJvRmhUVzJjdWhaZThKd3Ra?=
- =?utf-8?B?QTNuYnE0bWxCMWZtbWRiN29vazhJZzdZb0xrNFBpdUxrQVdIVTc0dDRuVFJX?=
- =?utf-8?B?cGJGMnpnSjBYUFRMRVJ5bXZ4QUF5VHMxVXp1bEZEc2Z4eUFFclVLYUxCSFVP?=
- =?utf-8?B?eU1lSlNmS29OM1BkR3gzbWZINEw3VlJpdkVzenAySFR1bkMyNmx4bnQ2SEZ3?=
- =?utf-8?B?blF1WXh3KzJwK212dmFCMkNGV3REcWhONU9qeVhFamZRa3JLbldCK1JTNkZI?=
- =?utf-8?B?R2d5RDcvK1dtNTFla2FRbjNMMUg0NlVxZEVrY1grQmRPd0twcm51Z0ZLVnpq?=
- =?utf-8?B?SWUwRnBSRXNUeGRPVk1XTThRZWhadkdjaVFtZWpTZ1l2VjdYTHhzN1NocjRz?=
- =?utf-8?B?Q0o0aTdZUGVyYmR1azlHY0VQWVdMVFlzanF3SzJYWmZ5TTkzUUJ5emNvRzBX?=
- =?utf-8?B?Vnlab3c1U3gxcnJEaVlabUVqM09HbFBkZVZwZXhkQVJwYjZIQzJjdTRwa1o2?=
- =?utf-8?B?V3AvYTBwZmFzLzdLRzUvdmxkSkpxeW1qL2IzZC9IVzFLSDFMVEJRcTVJMkVa?=
- =?utf-8?B?cWVJK3RYd0NNclZuTWl4WXFYTExpOE9KdEh0K2V6dkttVXJUREc1cEdJOVY1?=
- =?utf-8?B?a0Q3aC9uNW5BRytMTHpjTzV3TzJKekp6bXJ2S29FSnY1TzJGK243Y1RtN1h4?=
- =?utf-8?B?RDNlNGJDeUlZOTVIVnJWZjd4Y1FyYnlQTkM5RzZUL05xdHRxdmNaV3dIL3di?=
- =?utf-8?B?WC9MRzB3eEdPZFp3ajkzZ3M5MlB2dDd0SjNUUjc4SElmSEtxQzgwVWtWTXBq?=
- =?utf-8?B?b1VuSzFhUS9LU3ZkaGJaRHVvY2hJaUg1dFVIMTdhUWNSaTllZk5KQXRYaWhN?=
- =?utf-8?B?dExXS3d4WUhieGhueklGbHFJUStMQm9VbXFSb2ZiWmNMQjcrUW1qMWZkYjNE?=
- =?utf-8?B?S3FyRGZqRkhJSHVwNyt5ZTUybndhSVREaDF3S04zb3BoUmhheTgya25lVDA3?=
- =?utf-8?B?cFZpeXVwQmZVOXVyNkIrQzlyTGdmTTNWbXIxRS8rVlY5T0xkZ2R6Y25nQW5K?=
- =?utf-8?B?cnI3Y1ZoYkFQMVJqeTRWVGtMVGN0eHc2MFg0UGhlNnVpcVpSdndFOHQzSWlI?=
- =?utf-8?B?b1ViNHVVWXptRkV5WkpxRXpjUDlZZ0tDN0RyUjRETTN3TXpUVTRzWTZyd3VU?=
- =?utf-8?B?WEt1QzFWNDFaWEp5Vm16ejBiMFJQMzBIaHY4RDlOdzNUQXJpOE1FV3Juc0tm?=
- =?utf-8?Q?zxgAR0BWeEpnKpM5TEROfAQfONMA3AU03P0et03lS4=3D?=
-X-OriginatorOrg: kuleuven.be
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba08170d-5e17-41c5-90e4-08dd8f9aa4e9
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR08MB5013.eurprd08.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MzVlNzhUaXVLZzR0Yy9qeGZtRjRkVjNtbk1QR053c0ZhZUJ4c1FrZGZEa0Nz?=
+ =?utf-8?B?ZEVjUC8wOVZMdG1BUWtUczJ3bjVLRzFLQjg4cEpYRVJkRHB4VjhEckI4Njdn?=
+ =?utf-8?B?bDdtQlJoN3JFdmtRai92VkV4TS9HVmg2d0ZkK3NwMjNVdGxBWkFZczZxMzR4?=
+ =?utf-8?B?dXZZWEorRkJLM3F6Z28raWM0Q2tWRkRaV2I3N3p4Ly8zNHFlYlZHL1c5RGJi?=
+ =?utf-8?B?L0FsU2lqTDJKV3kvWlNjbUdDbGJ4TFRBZ0tpRlBPWVkreEZPa2RGZ1JsbEp2?=
+ =?utf-8?B?alM5RDB3aHo4WkkxbGRWSEF5UnB5YUswdUMrZ0RjeUxWbGJ3eGZFbmVsZXNM?=
+ =?utf-8?B?WWxWay9TeWxtWlJyOC81N3FMSnZJeEpKWmpYQStoOWwrQXZmbWFJdDBJQmxB?=
+ =?utf-8?B?K0R1Z0tXamo5dVRnOEhkaHEzamtudVdLL1lLQ3NYR2JiVWRnaDRVK1dRUm01?=
+ =?utf-8?B?MkYyM2t4Tk9IdERhRGlZNi81ZWUyMDg4amFRZG1BY1YxQUpIV25yb0FoajBV?=
+ =?utf-8?B?T29NcENabzNaeUx3VEc5SDRJekhTVVAzcWJ5Q2J5YXBDRnlUZ0RRZlJ6U0xO?=
+ =?utf-8?B?S0lvK0tIWG50Mm4rLzJHY0d6eElsRVZ1dHdaRTZQcXgyVjZMbzBWVC9WZjB0?=
+ =?utf-8?B?d29LUEZxUzA2VjhWck5tekNPcmxKNVdXZVVZRXJNc3hpOWIwMFFvQWRKcmVX?=
+ =?utf-8?B?dWc1YmJoblpra1EzL3ZJQnQ2UEJpNE5DcTQ0SjNvVHVkS1FhWUZhdkQ5TXVi?=
+ =?utf-8?B?dVBNclNzWGhPSkZLYnMvQkMxTmM0dDBYemxHeVVqWUt0RkxyNXdvTTB2UjZU?=
+ =?utf-8?B?dTBEL2wyNVNaNTFES2hJbkcvU2xWdzAvUW5VcXJZSHNEMDZ5eklVRXhGSUtw?=
+ =?utf-8?B?R2FObkhCYzM3T3hNL2w3b3MyY0Q0cmFJRHB2eVJuTk1tZTVGU3EyTENlVXgz?=
+ =?utf-8?B?MG9SZUVwTG1IOHlZdCtBY25qdGdaUTQ1a210WjdROUxLUy9Va0FCVVV4TDhT?=
+ =?utf-8?B?VHlrdUM1SzhPeUNGZXI0S3Jjb3JydUN6QW5LczM1bGZ6Qzd2UDN5QWJjQitv?=
+ =?utf-8?B?WnhxOUs5Q0krSUgraUlDc2Uvek5kaXZNc3U2djM3N1pCOFd1MVhLbnFBckJl?=
+ =?utf-8?B?RzY3UVVMcldvZXZnYWV3ODJ2UzlGM2FIYlJPdzhuYjdTR0haQktWbHVIcmt5?=
+ =?utf-8?B?d2IvZk95SzB0T2ZCSkdVVlpkLzFXeGlGVmIrYW9YTTJlNVBESE1LUnBCeHl0?=
+ =?utf-8?B?K1NYUko2V1dOYnpPOFEwTjNQNExJWVM2S1JSMUUyY1BwVW1PYnQrR0Y2d081?=
+ =?utf-8?B?VGNTdWJ1cHh5cFBZdkdqdjRqRUljUEtTbkE5cFhYUURRYUhzMVd0dVZWZ1Vj?=
+ =?utf-8?B?cC9PbzV0WjdiZDVZbzBJRnQvdy9pUlp2cGdOYUJJaTA2RC8yb2tiWEc0Unlq?=
+ =?utf-8?B?ZzVhR0l6TTRjQ3dNWUw3aUl0TWZyTURleFFWMHVLTmFxakNOKytwMnJ4Q2sr?=
+ =?utf-8?B?eXVEMXpBeFcvZ0FKVm5zVUorMDFSME5DWnhRanJJdWg5Ymd2bEZIVU1CaFZK?=
+ =?utf-8?B?cWZ6SVg2aUpPRUFjSXVmNGJPekxFVEdjMWxQM0VvSlN2Uk5EbTdSVWFpMEl3?=
+ =?utf-8?B?Y1VYT2RjZm5VeCtXYjNlUlRFay90VitkUXV0YnZVeCtjZDNtQ1ppbTNqeFE1?=
+ =?utf-8?B?Y2paOWdtV08yRkdMTGh0M3NYUTZiUEk3anVZdVRKZmhFN3M2MmRTN21sbmdm?=
+ =?utf-8?B?KzRFeHRPOGplYTZxdlVsa0xiYVZiUXB6elBkNWR3TFpPcC85RjkvaVlJZk53?=
+ =?utf-8?B?WHFXSWJJMDNTVEJZaUpTQWZPaHdFaGU5MndRQ1BnNTRRTFF1NjF0RW02Y0d2?=
+ =?utf-8?B?b21JSmdiRFh0SlRNclJBWmdzRzlMWEV4SlpJdWtPbXdDcmFSQUhqa2NmVUlk?=
+ =?utf-8?B?VmIvamxHb0RqcVYvaXRIMUNwa3U4T1lHUlV4QnU0c3JPZWs5RVMxUDhXVnVw?=
+ =?utf-8?B?ODlIUy92QVV0SHhORFlTeVplUFNBSGNxL0c1cFM5YVFUU0Y4cDNoTVhDNE9E?=
+ =?utf-8?B?VWd3MmtIWndrTTdvZFpzWld0LzMyenpkbnV5VEgxV09jQ3BBUjVBcFpLQkJQ?=
+ =?utf-8?B?ZnhlcXdkckU1c1hUbUE5OVAvWkREc2VKYU5uWEI0bWZvRXluRDVRYW1CSDQw?=
+ =?utf-8?B?c01uRi9MNXoxcXEwWWMrdGI1S3dRU2dVV0pXVHpnZEN6MUdzQm4wcFpMZ3lJ?=
+ =?utf-8?Q?9XVujjd/t1TNlRpn4egkuwIOTSrI+JLhJQQNe+iwtA=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 356226fd-4ede-4f4b-33a9-08dd916849a1
+X-MS-Exchange-CrossTenant-AuthSource: YT3PR01MB9171.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2025 08:14:11.2801 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2025 15:18:45.7855 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3973589b-9e40-4eb5-800e-b0b6383d1621
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3f69+C6RnKq2/t6BmyrhgLMgWx6qk3ytpcX80IfeuFucgSa5g+0nql6Z+v8UXOX8BDHmLkD+xId9BPz7kM4CNpOoLjHwR0QLwzjPa2UPrXw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB5989
+X-MS-Exchange-CrossTenant-UserPrincipalName: E9706Ty0Rv5psCLen/9td0mTYNBl6cVBXWHCH/VMiQYA+aFK6C3To9w+GQHc84XJMIuYpZXEPCAW86o3V6i3ipya7NgLkTvZMb5IsDHaC+g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQXPR01MB6669
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -178,153 +179,66 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Herman Bruyninckx via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Herman Bruyninckx <herman.bruyninckx@kuleuven.be>
-Cc: lttng-dev@lists.lttng.org
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---228850167-1171160360-1746864851=:354512
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+On 2025-05-09 12:00, David Aldrich via lttng-dev wrote:
+> Hi
+> 
+> I am just getting started with LTTng and Trace Compass. I can capture
+> Kernel and UST events.
+> 
+> My purpose is to investigate why a periodic task, running on an
+> isolated core, has occasional blips i.e. it's period (duration)
+> extends.
+> 
+> I have inserted tracepoints to mark normal and extended durations. In
+> Trace Compass the blip tracepoint is preceded by a brown state that is
+> 'SOFT IRQ 1'. This extends down all cores. It lasts 105us and is
+> likely to be the reason for the blip.
+> 
+> Please could someone explain to me what may be happening here and how
+> can I find out the reason for this SOFT IRQ?
 
-On Fri, 9 May 2025, Kienan Stewart wrote:
+See include/linux/interrupt.h from the Linux kernel:
 
-> Hi Herman,
->
-> On 5/9/25 6:03 AM, Herman Bruyninckx via lttng-dev wrote:
->> Dear all,
->> 
->> I want to trace an array of floats, but I always get bogus output at the
->> (Python) Babeltrace2 site...
->
-> could you give an example of the tracepoint you have setup in your code that 
-> doesn't work, with the corresponding output?
+enum
+{
+         HI_SOFTIRQ=0,
+         TIMER_SOFTIRQ,
+         NET_TX_SOFTIRQ,
+         NET_RX_SOFTIRQ,
+         BLOCK_SOFTIRQ,
+         IRQ_POLL_SOFTIRQ,
+         TASKLET_SOFTIRQ,
+         SCHED_SOFTIRQ,
+         HRTIMER_SOFTIRQ,
+         RCU_SOFTIRQ,    /* Preferable RCU should always be the last softirq */
 
-Thank you for your swift reaction. Much appreaciated.
+         NR_SOFTIRQS
+};
 
-First of all, my apologies: I should have provided the required information the first time around already.
+So SOFT IRQ 1 would be TIMER_SOFTIRQ.
 
----
-This is the information about the installed versions of the relevant software:
+Note that we have a TODO in lttng-modules:
 
-$ uname -a
-Linux SET-L-ME-P22061 6.11.0-24-generic #24-Ubuntu SMP PREEMPT_DYNAMIC Fri Mar 14 18:13:56 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+lttng_dump_softirq_vec()
 
-$ lttng -V
-lttng (LTTng Trace Control) 2.13.13 - Nordicité
+Implementing this by dumping this softirq table mapping numbers to names
+would be a welcome contribution.
 
-$ babeltrace2 -V
-Babeltrace 2.0.6 "Amqui"
----
+Thanks,
 
+Mathieu
 
----
-My application code generates a trace as follows:
-
-Tracepoint "-tp.h":
-LTTNG_UST_TRACEPOINT_EVENT(
-     comm_activity,
-     range_scan,
-
-     /* Input arguments */
-     LTTNG_UST_TP_ARGS(
-         int *, distances,
-     ),
-
-     /* Output event fields */
-     LTTNG_UST_TP_FIELDS(
-         lttng_ust_field_array(int, distances,distances,5)
-)
+> 
+> Best regards
+> David
 
 
-int testmeas[5] = {1, 2, 3, 4, 5};
-// double testmeas[5] = {1., 2., 3., 4., 5.};
-// (one array for test with integers, one with doubles):
-
-lttng_ust_tracepoint(comm_activity,range_scan,5,testmeas, "range_scan");
-
----
-
-> Could you explain what you mean by (Python) babeltrace2 site?
-This is the Python code I use to display the trace generated above:
-(inspired by <https://babeltrace.org/docs/v2.0/python/bt2/examples.html>)
-
----
-file tt.py:
-
-import bt2
-import sys
-
-# Get the trace path from the first command-line argument.
-path = sys.argv[1]
-
-# Create a trace collection message iterator with this path.
-msg_it = bt2.TraceCollectionMessageIterator(path)
-
-# Iterate the trace messages.
-for msg in msg_it:
-     # `bt2._EventMessageConst` is the Python type of an event message.
-     if type(msg) is bt2._EventMessageConst:
-         # An event message holds a trace event.
-         event = msg.event
-         # Only check `range_scan` events.
-         if event.name != 'comm_activity:range_scan':
-             continue
-         print(event.payload_field)
----
-
-and these are the resulting traces (for int and double, respectively, and with the C and Python versions of Babeltrace):
-
-$ babeltrace2  ~/git-repositories/communication_5c/build/test_session/
-[12:19:11.381152129] (+?.?????????) SET-L-ME-P22061 comm_activity:range_scan: { cpu_id = 6 }, { distances = [ [0] = 1, [1] = 2, [2] = 3, [3] = 4, [4] = 5 ] }
-
-$ python3 tt.py  ~/git-repositories/communication_5c/build/test_session/
-{'distances': [1, 2, 3, 4, 5]}
-
-----
-
-bt2$ babeltrace2  ~/git-repositories/communication_5c/build/test_session/
-[10:04:51.068836215] (+?.?????????) SET-L-ME-P22061 comm_activity:range_scan: { cpu_id = 6 }, { distances = [ [0] = 0, [1] = 1072693248, [2] = 0, [3] = 1073741824, [4] = 0 ] }
-
-$ python3 tt.py  ~/git-repositories/communication_5c/build/test_session/
-{'distances': [0, 1072693248, 0, 1073741824, 0]}
-
-> Are you instrumenting python code, or are you instrumenting a C/C++ 
-> application with lttng-ust?
-
-The latter.
-
->> I have no problems with arrays of integers, though.
->> 
->> Is the float array feature not yet implemented in lttng 2.13?
->> Will it be in 2.14? (Also the "BLOB" feature is useful for me.)
->> 
->
-> I don't see any changes in lttng-ust for 2.14 that allow for tracepoints that 
-> have float arrays or blobs. lttng-modules 2.14 does add support for CTF 2. 
-> The support for CTF 2 in lttng-tools 2.14 will remain at an experimental 
-> level.
->
-> From the release notes:
->
->      CTF 2 output isn't enabled by default and is intended solely for
->      preview and feedback purposes: having an experimental support will
->      allow users to test and evaluate CTF 2 until we make it the
->      default output format.
->
->
->> Thanks for your help.
->> 
->> Herman
->
-> thanks,
-> kienan
-
-Herman
-
-> [1]: 
-> https://git.lttng.org/?p=lttng-tools.git;a=blob_plain;f=ChangeLog;hb=11f963148df9597de6d891d96d748bae5ced7149
->
->
---228850167-1171160360-1746864851=:354512--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
