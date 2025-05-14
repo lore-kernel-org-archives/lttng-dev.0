@@ -4,159 +4,169 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 520B0C3ABDA
-	for <lttng-dev@archiver.kernel.org>; Wed, 14 May 2025 19:16:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZyNPC1pY1z10rX
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1747250193;
-	b=qNz9UmZaxNFiLPWQjswC4yjYa93i9lr06PqdalZ0Zw9iTdZJ5liN9FkGEP6o8vRxqZGb
-	 U0OXC43ZTKTZNAEjWQBEPWF3Ec7DDTNw4piazTxE5CEvIHmEnKfaRXngpg/tTtpWb+aTp
-	 YYj6uvnqIJQLGBat1+z6XQJIi2rlJKE9cWUZM+9fcjcJFRZggPoAbTtO2olCdUpZ/AIBq
-	 rn3Hf37ZSBVgPHm82/lUchXoBTe3cNYviT6w86f/sD81kniDsa3ImcH3WnE/9olmv6H4r
-	 Zkjp0NmPooTYIKwsHxn6BzGtbJ7sqw4U/0FQpzBdnTNiHZiqGDtS/+v4+lbC5AJwKEQ==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97747C3ABDA
+	for <lttng-dev@archiver.kernel.org>; Wed, 14 May 2025 19:30:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZyNjq5RDWz10LT
+ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1747251055;
+	b=fED3dwsZyDmVqGnkBU0JonuMDbjZedIEYgrSnKNfvAYkcswMP5KksbrkUFw1kj1byahp
+	 EKtFDEwby5i1XFUEfC4aPHW81JQSlK7Brds6XI3cXpf4dRfvVXVitqA+xPM7LJ9mhNnsu
+	 hpIj42z9uL2D+fZaInFPQYfs0ps5IC2iJ8ozJCMs9Ix2wQAxMWveaoWpvQzPqsj7KgL8Y
+	 TdHu5q2Q1GAQJUpK7VPTEycM1mOOypDIai+8zxEZrpNzidi9fSWytnsPsDAHs+fs+gaw8
+	 Ux3948XNloXZlapoWNVdkW1pMhV3aViU6jHPWrKaiR/Irs+XeYxuIMmabYY7orZpjTQ==
 ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1747250193;
-	h=DKIM-Signature:To:Subject:Date:Message-ID:MIME-Version:From:From;
-	bh=jiH8UQyYBmoa0YkWteFua/N01US4colL8NaU9GMuuB0=;
-	b=P1dLaqRY98fk8EVZPpiDmxznF1MICnrh2z4TcVA0MBURgweIZagXpfWZpQ189zGgg+e2
-	 Nq6ZsGCsrf80Z1rQBu+OdnTaDt/LclhjBdyjRtdgtT/sHEOC9HV1/M/qIPdH4Q2OovD98
-	 /Vq3s4SihYtf/tkfjwVgpY9a0EbEV7CrcHwY2ar7xEEc2eJzOaFLF6ap+lk1ahdYlHTWM
-	 gAcAqU8j7thQX1ROrMFxCVgxwKqfS8RsmsVO1UIL7gDefZ3POVwFGYvwsJCtSl0+Kcta8
-	 zotLHmNo0q+omw1NUFcJ7wElXUkgS3zipoo77vkaqfSV+3cgUq/nR6cOxyr7FUlcSNg==
+	c=relaxed/simple; t=1747251055;
+	h=DKIM-Signature:Message-ID:Date:To:Subject:MIME-Version:From:From;
+	bh=bt8AjrS5pEVhxFtf4/Cg/tfZzV6kfF0Cm8q5qlZP104=;
+	b=McliU9y4T71ctq92304Th8tU3BTzgQ/jEnG3LP1v7guXEMPSuRF4kJXLI5xuMpp0EPGV
+	 GaQ0EnAdZK6t/HJg/YDNkE4xrvGIYeXH3MtBj1nQPU8MZRhpHyV/JoQHJmeWHhp1fkHwA
+	 cEBixON+oiFb75ZtpqB5XpGQIscgdIthmkb4xlsNeUeFzXJSdMFncXvcOEjk1RooyxXBz
+	 ch7ckr6vwbN6aZIRt6s8Stj969G+cOuRHxDrMJAp4qfjV+ln4ttjAUQAyGJHri5iPb9PM
+	 UasN3OUM2n0DQeqRAUVRkLyCjt01qgKH91OVbJlycuLVlHlodaGDQOt7ZEelV46wlaw==
 ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZyNPC1pY1z10rX
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZyNjq5RDWz10LT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1747250193;
-	bh=jiH8UQyYBmoa0YkWteFua/N01US4colL8NaU9GMuuB0=;
-	h=To:Subject:Date:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=07IUMLFyZdx41uz2//edQFs7dLkr1dAnJatWwvg3j9OjS2GnuaXnqummVInzgPFlw
-	 rEURBmnsQ5s/loSRgpkAFFAcm/ANfdGZr9pPege9GY9N89gDjlaLfI8fyqq32kx5kS
-	 /4P/w2n6gTilmeqfhsCh2pKTWRqu19SGCv9avAI6XTAN0AWT6oD5mB72x+kM5E2495
-	 Ke9d3evXMzvK4aFIAB1ree7kMvnAjjq4u/Wd8c+gfBKv1BHhWq7cquZajOM2t0Vu+U
-	 mqjxuSoITHwS7p2G4q11iZIxFz7yvX3APtuGODRCeaDutlUNm3v4jdYYpoigk2UIVI
-	 8ABkM3lYCwDww==
+	s=default; t=1747251055;
+	bh=bt8AjrS5pEVhxFtf4/Cg/tfZzV6kfF0Cm8q5qlZP104=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=wQ9XjA0vHgZaFQ66dnZhZcevbm7PkaPNOBKtzp34ZKkfisQR074tIjGmCRSidKCdD
+	 1tQrFUiCI9lq8atAa+dBY5wzSXEtl10sMbTJMZFqwSKhmQqCLIFSF+ewqJRUl929gt
+	 +cwX1RSP0nXfuQq9Ezgxu9oViWjPJyHswFTM/Gp+AvvC3PJ3bneoy6NzKKw07fY1yD
+	 oz/rMC+xllDV4JC00nfinfeXc4UzXD0Hahaw6ikIul6aj4ccERx6OxNCD7yJpEwQTr
+	 w7PXHM504gCqPnh0mD9kvwEl3rG1Y54YE1WJ8D7JEOOB/P6guIJezYSiVxpMBxDuoI
+	 xRDLoG5f/ytTQ==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4ZyNPC1pY1z10rX;
-	Wed, 14 May 2025 15:16:31 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZyNP914DFz10rV
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZyNP914DFz10rV
-Received: from YT3PR01CU008.outbound.protection.outlook.com
- (mail-canadacentralazlp170100000.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c103::])
- by lists.lttng.org (Postfix) with ESMTPS id 4ZyNP914DFz10rV
- for <lttng-dev@lists.lttng.org>; Wed, 14 May 2025 15:16:28 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4ZyNjq5RDWz10LT;
+	Wed, 14 May 2025 15:30:55 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZyNjm4B4bz10LR
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZyNjm4B4bz10LR
+Received: from YQZPR01CU011.outbound.protection.outlook.com
+ (mail-canadaeastazlp170100001.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c104::1])
+ by lists.lttng.org (Postfix) with ESMTPS id 4ZyNjm4B4bz10LR
+ for <lttng-dev@lists.lttng.org>; Wed, 14 May 2025 15:30:51 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XCJjhvQ7mc+oorxb8zXKVZ5FT3Y2A8YAXlwCaa526vyWavzBED9WKzx+MDMu0NWs3gJBMu1cmXe8g+ha8ld8l3q6Y/ZynE1S4o1nJp8pZMHIEweq1w124krlcA8NUJNQi3LyPUhRy+uhqK7w1jHchVNCzF8T+yN1Bvt5P3Qzi1pTy5ufdYaURnCeELQcrrCLah7aSEkkONs5Me77cpoNjcXlxZ5upQ7XpeJlUGEeUXpPKB4iEdB4irBWFbnzNvYwod/7RSB5RxaomHVr4tqJSNTB0pmsQSY+atfa3kaLmzJjolJyuJa12UA1eUNP1Sc0LGFKkgPNkoVfmJpK/+MsXQ==
+ b=R6B0nu7GI904nMWNOEn/lKPYaRshR6q+IuliI4yTtzwUPy85DeVSpTfZ4ZWCkMt6qZ5ok8yszFauztS9GXSHbVe6g848iyXjhGkfTL3miGTy6y0Y4A9W2C2jy7jChlP3iqqiDEw8EMlPeMFuE1jTH/Zi3V6+OVZyG3Q9c7kp9bWh4Y2Ca+lAUSuCDiK0xU72b6XCE4/kTZTJV27Sz95jHv6ouRzSfsQ8IqeJZUDBpdDqdoT+TdtY04Q3GgaI1clAsgSDaJ6d4i0DGZyTpHsetnkJHBMJX8ouL8bwVok+eEVWbVJMmL+NacP08hYXsuG4W/EHVfUX4HyMY0POThi9vg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FShucgMpGNuxcln9hXKZb40wgsnGU9EGZKNVgm0+sSc=;
- b=mer51aLMHpeqNtce8TeaJYWM3UMPuVY+q6BrMUlqYNm59aO6mAvJpEuehwjkss+BLNTD07TnMtm5Z75gV6W+5mdinVpguVddu/Rn1srRu5hF17BkllGUyg14TLkl+JUYBDxp0SykI+boBxjJjY4ZK55jxKBhFxlZQKM8C/i6EIN2ZoImUKeah9mFEqZdc1Qq1jHdx9bzWVpJCWK8dbhHw/3/z7FOsL4Z0dWRi7fa9CFt3GonxUk0QuGzmTbBMONEOIc85vz11M0pYNtcjZ5AMonFLh+iGP8MDfNdpScbERRerXyfiksejJMssHGpJ7y38uqjKSs8skVWcKXzBmbbvw==
+ bh=4Bv4H3tZGyvHEJ0V4ggzolkh052k2p1+NiJ6L6cuFy4=;
+ b=hKAx3zoK99prhLYzxw1tLO+fNWc8i2Y4w1GOWJixcIYFGfIDX/JZ3SEsgBeDy8pn/5vMvREFdd7dXMtbxZFPMGsOo7pA3+R0hYb1QTZzficMe2fm1T/B2NU6yN9hAut6jd9f2dm4zY67kiYEK9eUWGotwcx1xNhR4EJyZyMnl1+OCIkQ3s43z2CJebWdSW3b8ZACuuqbm8l9ZCZE0lWprbuyDcWP0dCiJJ2/a4XRrUT5WH53DXa0K4QrFVg/gonavUwF5vW6w3CUHQPi1/gsuRc72bUWd2I61wCtorUuF5FnKMAlOJo5lyioUZgaHq0iNsRDIk5nJS2/PMWEBugj1w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=polymtl.ca; dmarc=pass action=none header.from=polymtl.ca;
- dkim=pass header.d=polymtl.ca; arc=none
-Received: from YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:74::9)
- by YT3PR01MB5232.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:64::12) with
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT3PR01MB6535.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:72::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.32; Wed, 14 May
- 2025 19:16:24 +0000
-Received: from YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e832:2b7c:ee0e:fac6]) by YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::e832:2b7c:ee0e:fac6%5]) with mapi id 15.20.8722.031; Wed, 14 May 2025
- 19:16:24 +0000
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Subject: lttng-modules-2.13.18 Condition for Kernel 5.14.0-582.el9.x86_64 of
- Centos Stream 9.
-Thread-Topic: lttng-modules-2.13.18 Condition for Kernel 5.14.0-582.el9.x86_64
- of Centos Stream 9.
-Thread-Index: AQHbxQPBLYDL1W3OnUSDBRJT7PWG9A==
-Date: Wed, 14 May 2025 19:16:23 +0000
-Message-ID: <YT3PR01MB6421C77EF52F3D7A62651E93DC91A@YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM>
-Accept-Language: fr-CA, en-US
-Content-Language: fr-CA
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: YT3PR01MB6421:EE_|YT3PR01MB5232:EE_
-x-ms-office365-filtering-correlation-id: d3b2930e-a1ae-498e-521b-08dd931bd135
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|376014|1800799024|366016|8096899003|38070700018; 
-x-microsoft-antispam-message-info: =?iso-8859-1?Q?HeYifl7uch4Qif2Q7EsJwZ2fjCJJsSYWM5QH6LI4/KroBBjPyNrVZ+DszV?=
- =?iso-8859-1?Q?N2Qql6EfOwNgDWzYZ7lM3Oiidesq3nqOClE0xHWaS1xFskCILVaUJJvB+N?=
- =?iso-8859-1?Q?j00Ae6xRacDl32gtWUw7TmNT1fy6b7O00On4NST8C8U3irx5d8X5UlOLJj?=
- =?iso-8859-1?Q?7ZfkSYZ/oXssyJ7uWB8JMPreBz9kz77uCRq2KIsHoxud5+0hz4G1ghxCe3?=
- =?iso-8859-1?Q?7u30p/NY3Tk3NToGpGGZ0iE61lNXoSzVkQyCLr0fYtroqbjRLUUQuiNTGd?=
- =?iso-8859-1?Q?32rpXZWlDnXfw8HEnDldhHu8LiTFviAHgQOa20h/bfWapMOGHEhe4IlTxG?=
- =?iso-8859-1?Q?rZgATipKRoae9z9msgHrU3YNGbtMQRNX94VKlOL9h5X9v04setl7e5y2Q9?=
- =?iso-8859-1?Q?yAXFy+KlrR6XxhlN5xF7vycUGKYe8AQpc7RiLnwob+FEzvw2N5Nhxq16Fb?=
- =?iso-8859-1?Q?DD00jkFtCOJ7rA97AC6y85C8hERUDPoufEWHeKlFWc+XpEO/tw3qqUG2Rf?=
- =?iso-8859-1?Q?e4+k+NTpxeCWmeI+5y4Z0CHxAWRGWk/LApPhb+Qr6j/o5pQotA4b6ecdYg?=
- =?iso-8859-1?Q?8ftgjEMCUn6+ZQkYlT7G1s1X6+lHOmYgZwnvB9O8NXIV/rPtJZze1G/9mR?=
- =?iso-8859-1?Q?kpyl183N6bubgT716J5mmBhdmAi95+eKBCBOqUOpGK0lYPXNN/B+FF7bpv?=
- =?iso-8859-1?Q?Aw8B6rxOWBPAWRF7yKW1rSfvo/swyzrlTdBxtQLkybnOjUjykv2e7uVc/q?=
- =?iso-8859-1?Q?atNBMG88+QSfOKtQGhzaPfFrKez5rtttSdj2pi3AeA3w3Pli+tnhadTW+M?=
- =?iso-8859-1?Q?Uo4Tq75mdkD3+0kXLszOFjZtHEg2ZER1lCIr2abPI+cpsojMrdOVVjHdS3?=
- =?iso-8859-1?Q?Aj29k31qoOjrCAWmKV/yib7nAdkvPbALko+YZIeCxDrGb0l/tMhGMTm0zK?=
- =?iso-8859-1?Q?i0KKoWCVx7BwBZRHfFnIGCKx06XrbDneJbqswlq6rkSb7Kl713kVwj7BwX?=
- =?iso-8859-1?Q?PrIy6P8tb23Fo1eGj//2DYgT6gaDfezmzXK/DAlnP2WvnPBZN0E7VclCKe?=
- =?iso-8859-1?Q?s2X7ZfQ9rz5gYJ5/1SlCwtvkaOE+Ghgb3Hd5pFF8KqTTR0Y/9PyGtr1VGj?=
- =?iso-8859-1?Q?4pKFiW1N6i4XqOUMrybo9SwWTC6pgfgnAvgrhqiXZRooUxlGJDwhic6/ww?=
- =?iso-8859-1?Q?GOuMYmtiefxcCE8nuVuY38S6q8MXkATDFkbDQ3ckI53q9MKO8Zo7VAvQvr?=
- =?iso-8859-1?Q?aPFeNJYKOK+oYHnaRIvaFJrAUbVVs4uprQDf71qksOHzB1PSrYEbOujowp?=
- =?iso-8859-1?Q?eUjIX1lXHYUn2OjLJY6cVdSnqpcA8JTj9pfnXksFk3KUTOEYrZkxVKd9al?=
- =?iso-8859-1?Q?s9JKrIbtZ4XxS+Ndb3QSbebNCmWtMEOX1SrHFjPD7x128dbnxg0IEcCwgF?=
- =?iso-8859-1?Q?5GtlGzc78HX8EtNcEtGmmuNWsqNYBsmmte8ElofgEqJL8jhS7cbbU05iZb?=
- =?iso-8859-1?Q?p5Yy/B4JIGNqg4+EG4Pneh4sL6C4t0Vaomd0GjMrn+Jg=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(366016)(8096899003)(38070700018); DIR:OUT;
- SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?WMTIPfX1aY1qcq4XYjTxUt/tYy3iq59/eQ35+y1EhgXYs+zdNhE3GDAvbj?=
- =?iso-8859-1?Q?ROkKJGe3CCu4V7erL1hwuuCfGkWRJiZknl7eAUjQ83gcZkQjwy6Bs8CgEx?=
- =?iso-8859-1?Q?qsO/BNj43608qUfdRdhD1dqp3Ds4PAaPWTCgj+lUUsQwnqFA6/RsxScLZ/?=
- =?iso-8859-1?Q?x1vP88/qU/Qc5KZCGiIv5EswtqINgk30qFQ4K6cEyrVqVWeopyjoXCIG0q?=
- =?iso-8859-1?Q?FAE6Anbpdi4HJG9kGwH3aUjxdSkmVQ4+VA+9j1IxEIiFovbBIHEH+hO/8T?=
- =?iso-8859-1?Q?8IP0lEAGxu+csKy9pEalTBBQqpx1IYv/i2b0yuwpGtIweLOp4rb0MdaRAZ?=
- =?iso-8859-1?Q?Zq0aCJFQn+wNXWuv1/TtgP1OhGj1porSvAcbLehX86o9yFFOv1CuCmszno?=
- =?iso-8859-1?Q?a9ImS5oMDSPNYED9Yr4nVOk8FOaQBH6QevBkGeYVIHhAz9ECWb1myO6BCl?=
- =?iso-8859-1?Q?YkQYtx/omrzdi942/yJwgNQJPW/cUg2IFnJEAobD5vIqFQ2r4YUYZkf0NA?=
- =?iso-8859-1?Q?3w4ifiX9zwePq8nSukXDNKY+n4UmU1rv+c5k9KRxQxRTnfDqVXHsIQu6FJ?=
- =?iso-8859-1?Q?Xh2L61S/mLewYVRAE1EYm2omaBcuwTdE/GcFx+tVAxwgNhYEW4spBOCapI?=
- =?iso-8859-1?Q?MRfPg/ssP33aIB2eVdiU9PqIGWIoxgZC9/cz2o76Tf2sMFPPV3X34Upcq4?=
- =?iso-8859-1?Q?MMzL7Oxqk8py1cVRjW2Tr3LNREB0DxmS89d+n9OaDJ4t7ygWPwnVfR93mH?=
- =?iso-8859-1?Q?gjcfs9jCR8s/iQyt1qYc1N1wi0LC1n05149dGzKCfBsEDVt1rYurP4Pf+L?=
- =?iso-8859-1?Q?LU4k2NzryELogsyovcqOKr4MT6QY1shVQxc1FoYOFrRe/YyYYavdrU9EWE?=
- =?iso-8859-1?Q?HYAc4+rVQgxTbQnIahoBn8cT2Lqxqo9i7xjRxZ5MfVTlEFRDURBPRfivI6?=
- =?iso-8859-1?Q?tQot0Klkb9r7QYrXp3X0LRHGNyLMhqFwidF7HyMzQ0i4ZpnMKv+SXw4fFf?=
- =?iso-8859-1?Q?IZm07HIeioF1MtKslwhnrOg5SfLCZIOte+dZuxBf0mmfU5soD0W5Q4AHFe?=
- =?iso-8859-1?Q?yOP/46ZI4yehKI7If5JdlKORlkQLcyaY8YcElZkh8PTbuReWSzAq4mlTxt?=
- =?iso-8859-1?Q?f05WljgVUVRSixpuM3ybh2/JM7skOYXd71jMF50wiuB2FvfiT8f2Hv0yRh?=
- =?iso-8859-1?Q?DOueNS8VcuTpq79m5zQZ2WBDV/LkwFt57HAIehoBH7Avv2RVbfGN3i49MQ?=
- =?iso-8859-1?Q?gUgaT76dYZygJN7EqmbgwwHMW2adWfYyAtH1FqEli8VXdW2nR5pqd1dPgb?=
- =?iso-8859-1?Q?WOhoq5zqSzMO7O+A/Eb3e1zj+gfTVnjcMQD3Gw7wN+RFhfpSrijCXZClK3?=
- =?iso-8859-1?Q?78WvQGOILS3SDHo4WvC2Mi5ZTEd3nhQUVVZoTAkvq6gWEY2DUPe/v94p0c?=
- =?iso-8859-1?Q?FMARZer/fyVFam551jsZn9sSlRyLS5BQFd8LmUwAfb1RFXLIKpExgFTHp0?=
- =?iso-8859-1?Q?E/EhZI2cuJl6oiehtGv0FANp+vw45BpEsmCZgyVlCCZnFpvmODaiL1ejql?=
- =?iso-8859-1?Q?pgRGeBdBOPlRk908yMH+EvNUMa9goIJOePe3Wu7LKHCP0Hoo6wp07SxeBw?=
- =?iso-8859-1?Q?DgcRASA+oRn+kty8ezH33neKRSfAxmUI2z6PjudQY4QlaX5U+Ln8Uckg?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: multipart/alternative;
- boundary="_000_YT3PR01MB6421C77EF52F3D7A62651E93DC91AYT3PR01MB6421CANP_"
+ 2025 19:30:48 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4%4]) with mapi id 15.20.8722.031; Wed, 14 May 2025
+ 19:30:48 +0000
+Message-ID: <d45c0e0d-0470-4ff9-b85b-4d92a2879732@efficios.com>
+Date: Wed, 14 May 2025 15:30:47 -0400
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [RELEASE] Userspace RCU 0.15.3
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0169.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:f::12) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 MIME-Version: 1.0
-X-OriginatorOrg: polymtl.ca
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB6535:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6e9b8ce-9cc9-4663-dccc-08dd931dd41f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?aDFYNzBublRnK3hyNTVPRjQ0ekY4dnJncWRzTjlBVTFvZVNjWHc5OWplTXpl?=
+ =?utf-8?B?cmcxV0tBak9TYTR1V2J6emozWElLTGxhbXM3VEZZZ3RBYUYreGEydXNoVjc3?=
+ =?utf-8?B?VGVFM2NLS2dQSElreEN5d1VTTk9SRDRtdmFTNFpiTTBWdldTS0dzVmc3VERz?=
+ =?utf-8?B?ekowVVpJZko4SW9OY1NRUCtpNlM3MXRZL2x4RTA2ZE84WG80cktqNjJSSTZp?=
+ =?utf-8?B?dWxpS29MMm5IcXVMMUtLQVdlQmF6Rkg1VHR5NDN4RG5jODl4Vy9PekFpN1hL?=
+ =?utf-8?B?L0hvNXRINnM2SDluZHNIK1lrOGtnZ2Uyd0ExTXVkTzdWNkEvZm5EcWFFcys4?=
+ =?utf-8?B?YUJLVmxSTENrY0VtSjZJZFRUVlM5OGQzeEwwNzdjYUJ2bEltamZndS9GTUlC?=
+ =?utf-8?B?WWNTam9mY24xU0k4Sjk3S0ZEN3BDdkc3N1ZEV0pFVHVrV2xvWHpiMWRkQ01t?=
+ =?utf-8?B?K3h5aFZQYUJrb0lZWWh3S0YzdWN2a1FhSi84L0ExdXN1MnhRb1UzZUpCUWVV?=
+ =?utf-8?B?SVFsY28xMUFlNy9URzFpN1dPVmR3VXA1ZVpkSkhKWkRyK1hSRlp0WnhPNW81?=
+ =?utf-8?B?dHRVTlhaejBhM3lNbEVHMTlsNVd0KzdpTEk1TElLeW9INnk2Z2VMeU9DNlNv?=
+ =?utf-8?B?dnhJR2U1RFFjMEQ1bi8zbldyYnRSd1BuSVN2S3BGV0ZlaTZvbTM3cEFtbDVU?=
+ =?utf-8?B?L1lTbnhTTm8xbGpDemczK0NzUkRJcUx6cjR5V3ROaUw3UUdMVUdRUjJqR3g2?=
+ =?utf-8?B?UmlneW84Vld0NjhES2FiZ3BXTGprSkdhM2NTZVNhRHdXVStIMURYQWZ3YW84?=
+ =?utf-8?B?aGtpaUhMZUpKbUVhRlFUNHU2WEFtUDF5cHB2ZnB2MU9JL2w4aG5oY2dkcnFl?=
+ =?utf-8?B?ZWFUM2d2YTVsS2RVM0hoVngxbzIyWm1aRVNnQ0wrNDFRRi9NS1NlYXJ6dms2?=
+ =?utf-8?B?WHlhQzRzNUNpT0o5K1gra0k0d3BwU0lZMklIaVdFQWtMQ1U2SmhZTnpZUTFp?=
+ =?utf-8?B?aUNUcWhTWVBUMzVIRkw1ZUdTL08yOFBMMHVCekdXTEVueE1iekRlcmp2dDNj?=
+ =?utf-8?B?U0ZzOVptUWNDNkV0TEYwT0dWU3FOY3hXczEweUxZbGNDRFpoM2dvMHd6VHhH?=
+ =?utf-8?B?YURiR1pOYzBBY2VOazdad1NzY0IyTXRNWEs1VXUwSldBOHViajdXaDYzR3VP?=
+ =?utf-8?B?Ry9YenpQYlJFWFFZd1lZb0FWY3VyMEQxaGt2VUN2RmRKUkFqeDFxcFdFeGpK?=
+ =?utf-8?B?OWl1clEvZm8wbmVMSzZSRXA0YURwcmc1RDB6TmdaeFlYVnhPRnNOZGhIUlpv?=
+ =?utf-8?B?QXhGdyt0aStJVnlWRm9NS3F3Qkg5ZHMyWXlCc2NINjRTVDBYYlRJTE1scWpV?=
+ =?utf-8?B?eFNlQkgyR28rYVljOG5HY016cVVKU29XSUdVNzF4OERtbHV4K2x5dGtZTDdL?=
+ =?utf-8?B?YWQ5STVFaDVOSldWKzhRWjQ4bEp1NWpvYXNhQzhkazRzQTdiVFpEejI1MDJN?=
+ =?utf-8?B?M0Vmd0dwMEZtREx0ZFl0WGhMT0lhV1ZyM3NVRjZhMVZhV0RhUW9rZXpyTHdE?=
+ =?utf-8?B?Ry82bUdkRnhjS1NYNVdhdnk3ejZRQ3IzT0hpdWo4S1J3UDc0OGE3NkNMM25X?=
+ =?utf-8?B?NmZZMHg4UDMzT2Q4TE9DVlhjalk5YXAxOEV2RUZsbFdlcTBkKzdlNE5Dbmt6?=
+ =?utf-8?B?NHZObFM2eHAxZWZKUVNEekFjcUN6K3hVL0kvZVVpU3pBbkh4VzZ0bmtib2tv?=
+ =?utf-8?B?T0E4SVRQR0JUWFJLc0R4TjhHN3lHZTRUdzN6c3hLVWZtUkJ1OUlhSkVmVGgy?=
+ =?utf-8?Q?tnjf9zCpk9g53gb+eBwMSdH2qshKJOw4ws+N0=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(1800799024)(376014); DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?blliS05raWtjN2xvd1ZRVFBwSm05YlZrc2NpSjZiQzc2bFlES05LRGFDVmZO?=
+ =?utf-8?B?T1E1c05vb2hhL0k5TjNjaU8vMXpRdndVNTNVZVBqSHBqb0h5Z1BBVG41bDVT?=
+ =?utf-8?B?RU9NNXhUYXB1SFVXNVVWWTZSR1p3M0J2QUhXWGZuNTcxZTdhK1RuWS96aDVk?=
+ =?utf-8?B?dUtwY0tTKzJ1MExhWUFxaER3ZS9LYnB0RFdlVFgrWlNKY0JwRVBycGppYm1y?=
+ =?utf-8?B?NjFJME1BN3krWHZMMjBxQjlSZ0VzQnh2MXlsM3J1SXFMd3Izc2hNb1hsNUNs?=
+ =?utf-8?B?WjNoeTRqNFl6cW94UzdqWnh5dHhRRklvU256TmpoSC8zQ3VBc1lJYkJiSTVw?=
+ =?utf-8?B?cG1uUjJGVmxhWmpnSC9vamFIM2gxTkFKWGpQVHpXYllxenBYVWRkVDdjckQ1?=
+ =?utf-8?B?NGVJSk9DSDFFanZNRWUrQXd0T1EzTzhZTXM4Z01VS3dBcXI4QzhnYm93a3I0?=
+ =?utf-8?B?Vk8ya3BYNVc5SGdWSXVFNzk2b3RibExxTXE4dkJRc3VVeFk2dlpDaGNFVzRI?=
+ =?utf-8?B?UWZBb09SK2RyaDFLL0pmb1lFdnIwKzkrSHBnZ3lOUlRlUVFSa0tEdmVGU3p5?=
+ =?utf-8?B?NnRMM0ZTOGRzcTRFVnBiZnE3dzZOUTd0MWNqam5Fdzhqc3VweFdkTkR5cHFD?=
+ =?utf-8?B?cXM4YWVmbGwzYU92eU1IQS83YXArVytsNXBNUHB2L0kvYVZJc0N3R2hjdnVp?=
+ =?utf-8?B?aW9TOHgybXlVblZncytxWDk1ZzBGNkZhN1A1R2E4eWRSVUV4SU5DbUs4MW5C?=
+ =?utf-8?B?c1hhWVd1ZlZ1MDNMUytDVjRUb3ZrVXZ1ZUFwTm0xS0tFa0x1clpUZnlwQ1RY?=
+ =?utf-8?B?SWhPdGVST01GYTl0U3E1TWQvZEZEWnE3RmZIRzQydjNpZDArVy9acDJBc0xO?=
+ =?utf-8?B?MFYzT0dyVVRCNmpNWjNFWXVLOEc0T1dXWnorSVEzemI2QlVOMXd3bWZVbjdm?=
+ =?utf-8?B?Q2YyckxFeHdqL09VQVRBU1ZySnlyZm5rcUhxRG94Rm9BK1NnMDhWTE1hU2p1?=
+ =?utf-8?B?SjhONjhXMktIcHNVUlVWR1A2RlpPOURZMUtTZnhHdlJUQzI0bEZGMzBTTUph?=
+ =?utf-8?B?MUt0OEJvcnV6MU5lWGd0NzFKRjRsYmJHSGtJWHVXNFB2Qkl2NGU4WG1xUUVa?=
+ =?utf-8?B?SWh3OC9MUVJrMnNIMlNIUVRYTmlYMGpMcUM5dmY3ZERBdUdZN3R5VDA5OXEr?=
+ =?utf-8?B?UmdoTjgvQ2FLTUNXWTFTUVhoRTlhbi9yajVUNkFsMkpLZW1uTkRuekZSVTlq?=
+ =?utf-8?B?NWJiaXhtT3JXaEYrWWdsRlNYWTFYN2wrRG83RTdLT0NidHprZEd6R1BsOThP?=
+ =?utf-8?B?ZzJJbkJ3K21sZVVZU3hxdkJFQis2VDFwVHI3MnhyMFhaMW8rc21jMCt4dTVm?=
+ =?utf-8?B?bytVQWVNNTVVa0Z6eVFGNjMzRzRaR0E2UTZJQ2NaaER1ZERVYjJ3N1pPNVpV?=
+ =?utf-8?B?cEcwaDkzdE0vUDFlVHNrbFlISjBoQ3dMazJyNGdEaXlLR0NSYnFjMG5zbXRO?=
+ =?utf-8?B?UDN1RXFOSXRUWm51MjEyMjErVHpUTS9GMVU4aGdPbk51YjVnTUxVKytjMzM0?=
+ =?utf-8?B?OUUzV1ZEYjlmZnZ2ZHIydlhLZXNWY0FteXpOTTNIcUJocUVLQWw3WDJJUlB5?=
+ =?utf-8?B?UURvdEhZV0U0c3lXQ0JtUW9mcU5hNTJ0RHJvSDB1a1JrYmJwVmxlZHRubnBh?=
+ =?utf-8?B?SXByUFgybmU4aXprQ09sSGJmejl5Y0pkSmI1Z1FrOGZDZ3A4QUkvMzVRaGh2?=
+ =?utf-8?B?SG1GN0pDWjYyRkUweFplU21CQkczKzJjelNTaWNaUXkweks4UWswd2VhdXJo?=
+ =?utf-8?B?aDJnWlNOZUlSOFVFazJERzZXUzBUcThkZFBTVCtpem1mVW1XRWVobENnT2hN?=
+ =?utf-8?B?NjBQdUtvbkxQSXhWVEwxRjhudGFGRzVlczd0aVJoOElOaW43Q0IxaS9RWTlk?=
+ =?utf-8?B?SUMzSEVxVzRpQzFEQU5ybWJ2UlRHalhaSTk5SkZuelFTcDJZYTZoNC9VUDFO?=
+ =?utf-8?B?K0dyOHV6WlF5MW0xelRvT29uUVpQbVozU2kvejVlMEF0V0wyMHV5WDVJNjlN?=
+ =?utf-8?B?RktyU3BCV2xJWXUxcElGc09BWUloUXZ1dXpvS2RIb0lkYnBmaCtPd3BSZnEv?=
+ =?utf-8?B?aUJXa2lkSkt3Ty9ua3RuN05YdHpxdjdiVG9kclAxb0JtUjUwWUlPNTFOZW93?=
+ =?utf-8?Q?DT4Pe8Gb4RNxOpMGuKX+i3U=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6e9b8ce-9cc9-4663-dccc-08dd931dd41f
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3b2930e-a1ae-498e-521b-08dd931bd135
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2025 19:16:23.9431 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 253209e9-7731-40eb-96e1-6444a6823237
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dndpZQiGR1eTV4Ze2JJs+gG5vtuVd6hSq/hFYPPZ7JozSPOZe6WZYQXGNEgfSHW4c2ApNfcqrH3k/mPNEkuMZuVAVMBozWkQsTuWlK3AOiw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB5232
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2025 19:30:48.1249 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2EJGasLbJdflX1yy3RAXZvGQw9RkH7iR0gbYOQTlwYX+JO84swBgOLqXGlgV0nVN0q/fPvTXle7ZtKgXJ6jwOl2VGbPTvdX9fEuEi5qYCA4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB6535
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -168,167 +178,42 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Jean-Marc Chevalier via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Jean-Marc Chevalier <jean-marc.chevalier@polymtl.ca>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---_000_YT3PR01MB6421C77EF52F3D7A62651E93DC91AYT3PR01MB6421CANP_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-For lttng-modules-2.13.18
+This is release announcement of liburcu 0.15.3. It is straightforward
+a bug fix release for support of older compilers.
 
-I have this error with kernel version 5.14.0-582.el9.x86_64:
+liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
+data synchronization library provides read-side access which scales
+linearly with the number of cores. It does so by allowing multiple
+copies of a given data structure to live at the same time, and by
+monitoring the data structure accesses to detect grace periods after
+which memory reclamation is possible.
 
-lttng-modules-2.13.18/src/lttng-statedump-impl.c:415:20: error: 'dev_base_l=
-ock' undeclared (first use in this function); did you mean 'device_lock'?
+liburcu-cds provides efficient data structures based on RCU and
+lock-free algorithms. Those structures include hash tables, queues,
+stacks, and doubly-linked lists.
 
-I got it to create modules by changing the condition on line 396
+Changelog:
+2025-05-14 Userspace RCU 0.15.3
+         * Fix: Use bitfield static assert with GCC < 7.1.0
+         * Fix: Allow compile-time checks for GCC 5.1
 
-Original:
-#if (LTTNG_LINUX_VERSION_CODE >=3D LTTNG_KERNEL_VERSION(6,9,0))
+Thanks,
 
-Modification:
-#if (LTTNG_LINUX_VERSION_CODE >=3D LTTNG_KERNEL_VERSION(6,9,0)) || (LTTNG_L=
-INUX_VERSION_CODE =3D=3D LTTNG_KERNEL_VERSION(5,14,0))
+Mathieu
 
-I don't know how you distinguish the version after the dash character for R=
-HEL kernels.
+Project website: https://liburcu.org
+Git repository: https://git.liburcu.org/userspace-rcu.git
 
-- JM
 
---
-- Jean-Marc Chevalier
-  Technicien
-  G=E9nie informatique G=E9nie logiciel
-  Local:     M-4002
-  T=E9l=E9phone: 514-340-4711 x4266
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
---_000_YT3PR01MB6421C77EF52F3D7A62651E93DC91AYT3PR01MB6421CANP_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-For lttng-modules-2.13.18</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-I have this error with kernel version 5.14.0-582.el9.x86_64:</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-lttng-modules-2.13.18/src/lttng-statedump-impl.c:415:20: error: 'dev_base_l=
-ock' undeclared (first use in this function); did you mean 'device_lock'?</=
-div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-I got it to create modules by changing the condition on line 396</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-Original:</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-#if (LTTNG_LINUX_VERSION_CODE &gt;=3D LTTNG_KERNEL_VERSION(6,9,0))</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-Modification:</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-#if (LTTNG_LINUX_VERSION_CODE &gt;=3D LTTNG_KERNEL_VERSION(6,9,0)) || (LTTN=
-G_LINUX_VERSION_CODE =3D=3D LTTNG_KERNEL_VERSION(5,14,0))</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-I don't know how you distinguish the version after the dash character for R=
-HEL kernels.</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-- JM</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div id=3D"Signature">
-<div style=3D"font-family: arial, helvetica, sans-serif; font-size: 16px; c=
-olor: rgb(0, 0, 0);">
-<span style=3D"background-color: rgb(255, 255, 255);">--</span></div>
-<div style=3D"color: rgb(0, 0, 0);"><span style=3D"font-family: arial, helv=
-etica, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">=
-- Jean-Marc Chevalier</span><span style=3D"font-family: Aptos, Aptos_Embedd=
-edFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12p=
-t;"><br>
-</span><span style=3D"font-family: arial, helvetica, sans-serif; font-size:=
- 16px; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;Technicien</span>=
-<span style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService,=
- Calibri, Helvetica, sans-serif; font-size: 12pt;"><br>
-</span><span style=3D"font-family: arial, helvetica, sans-serif; font-size:=
- 16px; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;G=E9nie informati=
-que G=E9nie logiciel</span><span style=3D"font-family: Aptos, Aptos_Embedde=
-dFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt=
-;"><br>
-</span><span style=3D"font-family: arial, helvetica, sans-serif; font-size:=
- 16px; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;Local: &nbsp; &nb=
-sp; M-4002&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span styl=
-e=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, =
-Helvetica, sans-serif; font-size: 12pt;"><br>
-</span><span style=3D"font-family: arial, helvetica, sans-serif; font-size:=
- 16px; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;T=E9l=E9phone: 51=
-4-340-4711 x4266</span></div>
-</div>
-</body>
-</html>
-
---_000_YT3PR01MB6421C77EF52F3D7A62651E93DC91AYT3PR01MB6421CANP_--
