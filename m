@@ -4,170 +4,159 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21DC4C3ABC3
-	for <lttng-dev@archiver.kernel.org>; Tue, 13 May 2025 15:40:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Zxgf95qbMz1yYx
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1747150819;
-	b=IE6rK+K+4N5n/GGZ7CbCROLbB3nWNg1xs/4gXET0+EJyrInvqRLn9JJP886qNVTAqlbm
-	 FFNqg/Ux0iB65rXSsfgOdTeeqctxbC1gYBIFxLx/ZSO8q1kSTIj5T5G1cq3DfEQKAAcoa
-	 wZmQd0ovooZOU0El0ebTw55OXjLXno8ujcaDr51yFDfIezis1UfqsDRM2boGBX72mXMxm
-	 IiUGXzLzeOrlZdcYuD3ZWayCRH0tKYsTc+uuNu4aBLtQ8NY8NNO2hyKAvKqtlcnYJumyh
-	 qxVhBbVbKPUvmIokWcMHmD0P1Y/RtjW7vUQBsZ40lbeTcmfc9ST7DZBgfIztp10IdTA==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 520B0C3ABDA
+	for <lttng-dev@archiver.kernel.org>; Wed, 14 May 2025 19:16:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZyNPC1pY1z10rX
+ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1747250193;
+	b=qNz9UmZaxNFiLPWQjswC4yjYa93i9lr06PqdalZ0Zw9iTdZJ5liN9FkGEP6o8vRxqZGb
+	 U0OXC43ZTKTZNAEjWQBEPWF3Ec7DDTNw4piazTxE5CEvIHmEnKfaRXngpg/tTtpWb+aTp
+	 YYj6uvnqIJQLGBat1+z6XQJIi2rlJKE9cWUZM+9fcjcJFRZggPoAbTtO2olCdUpZ/AIBq
+	 rn3Hf37ZSBVgPHm82/lUchXoBTe3cNYviT6w86f/sD81kniDsa3ImcH3WnE/9olmv6H4r
+	 Zkjp0NmPooTYIKwsHxn6BzGtbJ7sqw4U/0FQpzBdnTNiHZiqGDtS/+v4+lbC5AJwKEQ==
 ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1747150819;
-	h=DKIM-Signature:Date:To:Subject:Message-ID:MIME-Version:From:From;
-	bh=DtXeYtGeUbGvsvjvbJ4mRm4CqgC5x8s+i0ZKPnt7+ic=;
-	b=Wp3UnGIrY8gPLgH9e1DU8Zi5nE00h5GJwyfLIDzdwwhJsTTQgnLigm15yCh9Rcr4GF+G
-	 JQL4rLT6qc9pZHfK7si26GnCpJRCyq5jXRP6KsoILTXtDf8HOk9ZDmhDrY3KKatFQR1+e
-	 3Bqt1z8iTOp0OpBcBvRzr8KvqVyf1Hm/aB4kD0imQjf5uSPOeYot+5Aliy3tamgHOGXZx
-	 PVbiljbbQs2u4WUSE3KAp8Qjn6nD4/J4r4MJqo3LDwS2qrFd7PF1mdTiY5cuXHxQWvqsE
-	 JQ5lrUbaxR7yXXYXF97UBfjV/eicoD1TjXbjRE0qfqB2h0k3J9YggK1beBArGDKpwdw==
+	c=relaxed/simple; t=1747250193;
+	h=DKIM-Signature:To:Subject:Date:Message-ID:MIME-Version:From:From;
+	bh=jiH8UQyYBmoa0YkWteFua/N01US4colL8NaU9GMuuB0=;
+	b=P1dLaqRY98fk8EVZPpiDmxznF1MICnrh2z4TcVA0MBURgweIZagXpfWZpQ189zGgg+e2
+	 Nq6ZsGCsrf80Z1rQBu+OdnTaDt/LclhjBdyjRtdgtT/sHEOC9HV1/M/qIPdH4Q2OovD98
+	 /Vq3s4SihYtf/tkfjwVgpY9a0EbEV7CrcHwY2ar7xEEc2eJzOaFLF6ap+lk1ahdYlHTWM
+	 gAcAqU8j7thQX1ROrMFxCVgxwKqfS8RsmsVO1UIL7gDefZ3POVwFGYvwsJCtSl0+Kcta8
+	 zotLHmNo0q+omw1NUFcJ7wElXUkgS3zipoo77vkaqfSV+3cgUq/nR6cOxyr7FUlcSNg==
 ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Zxgf95qbMz1yYx
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZyNPC1pY1z10rX
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1747150819;
-	bh=DtXeYtGeUbGvsvjvbJ4mRm4CqgC5x8s+i0ZKPnt7+ic=;
-	h=Date:To:Subject:In-Reply-To:References:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=dfLRMkHVn9zpS///EqwsgZS3CTLuvOXfEtlb+9V8xqMd2XXHk/hLkHGhkypSjTatx
-	 04+eNPJRp51cGdg1wpBTFJcFWd92+5ckx/Saa3J/hL0h17gKwaPTxJHFSH5nZGwiCT
-	 Vis3OTe4h+8bnlkV5Rx29H6qVissfF4eEuEOx7D6WlXIUY1fI+qqQksmTgpFD3XZSM
-	 JfXdkV98xNiqDP9axrEhoaJQMGh/Ff9AMga74MApHlDTOoVmCYrzev+NZK89yv8P5n
-	 JMh4R1phJ+gKJbZZ/owRsEDRlm3HnB7IahP7mTwtyw+/GEz9f9cXO/aNLMslk8hEEt
-	 BT5oi0cNWuWbQ==
+	s=default; t=1747250193;
+	bh=jiH8UQyYBmoa0YkWteFua/N01US4colL8NaU9GMuuB0=;
+	h=To:Subject:Date:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=07IUMLFyZdx41uz2//edQFs7dLkr1dAnJatWwvg3j9OjS2GnuaXnqummVInzgPFlw
+	 rEURBmnsQ5s/loSRgpkAFFAcm/ANfdGZr9pPege9GY9N89gDjlaLfI8fyqq32kx5kS
+	 /4P/w2n6gTilmeqfhsCh2pKTWRqu19SGCv9avAI6XTAN0AWT6oD5mB72x+kM5E2495
+	 Ke9d3evXMzvK4aFIAB1ree7kMvnAjjq4u/Wd8c+gfBKv1BHhWq7cquZajOM2t0Vu+U
+	 mqjxuSoITHwS7p2G4q11iZIxFz7yvX3APtuGODRCeaDutlUNm3v4jdYYpoigk2UIVI
+	 8ABkM3lYCwDww==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4Zxgf95qbMz1yYx;
-	Tue, 13 May 2025 11:40:17 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4Zxgf73Rwnz1yc5
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4Zxgf73Rwnz1yc5
-Received: from AM0PR02CU008.outbound.protection.outlook.com
- (mail-westeuropeazlp170130007.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c201::7])
- by lists.lttng.org (Postfix) with ESMTPS id 4Zxgf73Rwnz1yc5
- for <lttng-dev@lists.lttng.org>; Tue, 13 May 2025 11:40:14 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4ZyNPC1pY1z10rX;
+	Wed, 14 May 2025 15:16:31 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4ZyNP914DFz10rV
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4ZyNP914DFz10rV
+Received: from YT3PR01CU008.outbound.protection.outlook.com
+ (mail-canadacentralazlp170100000.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c103::])
+ by lists.lttng.org (Postfix) with ESMTPS id 4ZyNP914DFz10rV
+ for <lttng-dev@lists.lttng.org>; Wed, 14 May 2025 15:16:28 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qCHqnyXZ0i419XpM2tDhCZX9w5SPP7gBnVnzDdALApDD8RjUHCMLC4PPLng4wnJauHdn7pnCg/AP2pmb3Zm3tJq4d0t44DjOYF8lHEpY9JqEDQfA2ybdpxdzyS0BmevaQEr5DX/ZUjlSdpshz7P8tYfyuMmT6vUte9Psr/BOnjt/Cq3rd2wXltp9gnl12LhEgY9MlNKSEAKRj8/s2THEjwVyHU1KN5wysKAvf4w9ugqRNjZ2kYTstZ5MIEuQno6ZbDVdF6gpxYuYlU4K0XWqH6TqsL4Iv70Zwzgxf65jDXBxxxeDLCEpxZ7xqxiljLZQ8kOQNPmtS553PekAw1uYaQ==
+ b=XCJjhvQ7mc+oorxb8zXKVZ5FT3Y2A8YAXlwCaa526vyWavzBED9WKzx+MDMu0NWs3gJBMu1cmXe8g+ha8ld8l3q6Y/ZynE1S4o1nJp8pZMHIEweq1w124krlcA8NUJNQi3LyPUhRy+uhqK7w1jHchVNCzF8T+yN1Bvt5P3Qzi1pTy5ufdYaURnCeELQcrrCLah7aSEkkONs5Me77cpoNjcXlxZ5upQ7XpeJlUGEeUXpPKB4iEdB4irBWFbnzNvYwod/7RSB5RxaomHVr4tqJSNTB0pmsQSY+atfa3kaLmzJjolJyuJa12UA1eUNP1Sc0LGFKkgPNkoVfmJpK/+MsXQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gaXAJK3jdMZ8dWEYZR6ltFDFsuAq8Eg/rnWMI/XoFS0=;
- b=kv1C5p4zP7i7nZzvNTcnQwQvc8Y9nSSJlHMZ/h7TJRfSdkyurN2lvcQJ5eiRNLmzIETaf9AwDlZWOD/IIwTHrc1U+lKO7WtfjUQ3TXxZSAQHIodAcOanRBq2SV1dS/MGAoFDXCTmtAl9/rpmN5AhiB2BE4G2iWXIACjiLcZI3t9C3wwCB5Vw4IHJKd3r4KbWj/ifCi4nlQuk5YMn1FBYNyvl0Bc3WMnbHDTq797zZW2XuBG8mK/h38IjFqU/DiPkdQAv+aJItRexqjQ+PBxlXFYqVTqLBt81UTI3xIJiAem7RY/u54eYlzHT4v3bZyDyHljZ/Lle2nPVJzXHb2xsmQ==
+ bh=FShucgMpGNuxcln9hXKZb40wgsnGU9EGZKNVgm0+sSc=;
+ b=mer51aLMHpeqNtce8TeaJYWM3UMPuVY+q6BrMUlqYNm59aO6mAvJpEuehwjkss+BLNTD07TnMtm5Z75gV6W+5mdinVpguVddu/Rn1srRu5hF17BkllGUyg14TLkl+JUYBDxp0SykI+boBxjJjY4ZK55jxKBhFxlZQKM8C/i6EIN2ZoImUKeah9mFEqZdc1Qq1jHdx9bzWVpJCWK8dbhHw/3/z7FOsL4Z0dWRi7fa9CFt3GonxUk0QuGzmTbBMONEOIc85vz11M0pYNtcjZ5AMonFLh+iGP8MDfNdpScbERRerXyfiksejJMssHGpJ7y38uqjKSs8skVWcKXzBmbbvw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kuleuven.be; dmarc=pass action=none header.from=kuleuven.be;
- dkim=pass header.d=kuleuven.be; arc=none
-Received: from AM6PR08MB5013.eurprd08.prod.outlook.com (2603:10a6:20b:ef::21)
- by PAVPR08MB9698.eurprd08.prod.outlook.com (2603:10a6:102:31d::13)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.28; Tue, 13 May
- 2025 15:40:10 +0000
-Received: from AM6PR08MB5013.eurprd08.prod.outlook.com
- ([fe80::2277:ee89:28ee:ac0a]) by AM6PR08MB5013.eurprd08.prod.outlook.com
- ([fe80::2277:ee89:28ee:ac0a%6]) with mapi id 15.20.8722.027; Tue, 13 May 2025
- 15:40:10 +0000
-Date: Tue, 13 May 2025 17:40:09 +0200 (CEST)
-To: Kienan Stewart <kstewart@efficios.com>
-Subject: Re: Problems with arrays of floats (lttng 2.13)
-In-Reply-To: <6159fd56-a363-48f6-a3a5-b829fbaf313a@efficios.com>
-Message-ID: <a6cdd4fc-0454-3004-613a-ab7a231fc4ff@kuleuven.be>
-References: <00f6c849-e4f6-396f-9f71-4b58bd203eda@kuleuven.be>
- <7078c448-41bb-4ec3-be56-cfd93ea94ce7@efficios.com>
- <c25050a5-9e48-1042-5428-a33c4602fcdf@kuleuven.be>
- <6159fd56-a363-48f6-a3a5-b829fbaf313a@efficios.com>
-Content-Type: multipart/mixed;
- boundary="228850167-1891789462-1747150809=:19123"
-X-ClientProxiedBy: AS4P189CA0013.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d7::16) To AM6PR08MB5013.eurprd08.prod.outlook.com
- (2603:10a6:20b:ef::21)
+ smtp.mailfrom=polymtl.ca; dmarc=pass action=none header.from=polymtl.ca;
+ dkim=pass header.d=polymtl.ca; arc=none
+Received: from YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:74::9)
+ by YT3PR01MB5232.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:64::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.32; Wed, 14 May
+ 2025 19:16:24 +0000
+Received: from YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e832:2b7c:ee0e:fac6]) by YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::e832:2b7c:ee0e:fac6%5]) with mapi id 15.20.8722.031; Wed, 14 May 2025
+ 19:16:24 +0000
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Subject: lttng-modules-2.13.18 Condition for Kernel 5.14.0-582.el9.x86_64 of
+ Centos Stream 9.
+Thread-Topic: lttng-modules-2.13.18 Condition for Kernel 5.14.0-582.el9.x86_64
+ of Centos Stream 9.
+Thread-Index: AQHbxQPBLYDL1W3OnUSDBRJT7PWG9A==
+Date: Wed, 14 May 2025 19:16:23 +0000
+Message-ID: <YT3PR01MB6421C77EF52F3D7A62651E93DC91A@YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM>
+Accept-Language: fr-CA, en-US
+Content-Language: fr-CA
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: YT3PR01MB6421:EE_|YT3PR01MB5232:EE_
+x-ms-office365-filtering-correlation-id: d3b2930e-a1ae-498e-521b-08dd931bd135
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|376014|1800799024|366016|8096899003|38070700018; 
+x-microsoft-antispam-message-info: =?iso-8859-1?Q?HeYifl7uch4Qif2Q7EsJwZ2fjCJJsSYWM5QH6LI4/KroBBjPyNrVZ+DszV?=
+ =?iso-8859-1?Q?N2Qql6EfOwNgDWzYZ7lM3Oiidesq3nqOClE0xHWaS1xFskCILVaUJJvB+N?=
+ =?iso-8859-1?Q?j00Ae6xRacDl32gtWUw7TmNT1fy6b7O00On4NST8C8U3irx5d8X5UlOLJj?=
+ =?iso-8859-1?Q?7ZfkSYZ/oXssyJ7uWB8JMPreBz9kz77uCRq2KIsHoxud5+0hz4G1ghxCe3?=
+ =?iso-8859-1?Q?7u30p/NY3Tk3NToGpGGZ0iE61lNXoSzVkQyCLr0fYtroqbjRLUUQuiNTGd?=
+ =?iso-8859-1?Q?32rpXZWlDnXfw8HEnDldhHu8LiTFviAHgQOa20h/bfWapMOGHEhe4IlTxG?=
+ =?iso-8859-1?Q?rZgATipKRoae9z9msgHrU3YNGbtMQRNX94VKlOL9h5X9v04setl7e5y2Q9?=
+ =?iso-8859-1?Q?yAXFy+KlrR6XxhlN5xF7vycUGKYe8AQpc7RiLnwob+FEzvw2N5Nhxq16Fb?=
+ =?iso-8859-1?Q?DD00jkFtCOJ7rA97AC6y85C8hERUDPoufEWHeKlFWc+XpEO/tw3qqUG2Rf?=
+ =?iso-8859-1?Q?e4+k+NTpxeCWmeI+5y4Z0CHxAWRGWk/LApPhb+Qr6j/o5pQotA4b6ecdYg?=
+ =?iso-8859-1?Q?8ftgjEMCUn6+ZQkYlT7G1s1X6+lHOmYgZwnvB9O8NXIV/rPtJZze1G/9mR?=
+ =?iso-8859-1?Q?kpyl183N6bubgT716J5mmBhdmAi95+eKBCBOqUOpGK0lYPXNN/B+FF7bpv?=
+ =?iso-8859-1?Q?Aw8B6rxOWBPAWRF7yKW1rSfvo/swyzrlTdBxtQLkybnOjUjykv2e7uVc/q?=
+ =?iso-8859-1?Q?atNBMG88+QSfOKtQGhzaPfFrKez5rtttSdj2pi3AeA3w3Pli+tnhadTW+M?=
+ =?iso-8859-1?Q?Uo4Tq75mdkD3+0kXLszOFjZtHEg2ZER1lCIr2abPI+cpsojMrdOVVjHdS3?=
+ =?iso-8859-1?Q?Aj29k31qoOjrCAWmKV/yib7nAdkvPbALko+YZIeCxDrGb0l/tMhGMTm0zK?=
+ =?iso-8859-1?Q?i0KKoWCVx7BwBZRHfFnIGCKx06XrbDneJbqswlq6rkSb7Kl713kVwj7BwX?=
+ =?iso-8859-1?Q?PrIy6P8tb23Fo1eGj//2DYgT6gaDfezmzXK/DAlnP2WvnPBZN0E7VclCKe?=
+ =?iso-8859-1?Q?s2X7ZfQ9rz5gYJ5/1SlCwtvkaOE+Ghgb3Hd5pFF8KqTTR0Y/9PyGtr1VGj?=
+ =?iso-8859-1?Q?4pKFiW1N6i4XqOUMrybo9SwWTC6pgfgnAvgrhqiXZRooUxlGJDwhic6/ww?=
+ =?iso-8859-1?Q?GOuMYmtiefxcCE8nuVuY38S6q8MXkATDFkbDQ3ckI53q9MKO8Zo7VAvQvr?=
+ =?iso-8859-1?Q?aPFeNJYKOK+oYHnaRIvaFJrAUbVVs4uprQDf71qksOHzB1PSrYEbOujowp?=
+ =?iso-8859-1?Q?eUjIX1lXHYUn2OjLJY6cVdSnqpcA8JTj9pfnXksFk3KUTOEYrZkxVKd9al?=
+ =?iso-8859-1?Q?s9JKrIbtZ4XxS+Ndb3QSbebNCmWtMEOX1SrHFjPD7x128dbnxg0IEcCwgF?=
+ =?iso-8859-1?Q?5GtlGzc78HX8EtNcEtGmmuNWsqNYBsmmte8ElofgEqJL8jhS7cbbU05iZb?=
+ =?iso-8859-1?Q?p5Yy/B4JIGNqg4+EG4Pneh4sL6C4t0Vaomd0GjMrn+Jg=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(1800799024)(366016)(8096899003)(38070700018); DIR:OUT;
+ SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?WMTIPfX1aY1qcq4XYjTxUt/tYy3iq59/eQ35+y1EhgXYs+zdNhE3GDAvbj?=
+ =?iso-8859-1?Q?ROkKJGe3CCu4V7erL1hwuuCfGkWRJiZknl7eAUjQ83gcZkQjwy6Bs8CgEx?=
+ =?iso-8859-1?Q?qsO/BNj43608qUfdRdhD1dqp3Ds4PAaPWTCgj+lUUsQwnqFA6/RsxScLZ/?=
+ =?iso-8859-1?Q?x1vP88/qU/Qc5KZCGiIv5EswtqINgk30qFQ4K6cEyrVqVWeopyjoXCIG0q?=
+ =?iso-8859-1?Q?FAE6Anbpdi4HJG9kGwH3aUjxdSkmVQ4+VA+9j1IxEIiFovbBIHEH+hO/8T?=
+ =?iso-8859-1?Q?8IP0lEAGxu+csKy9pEalTBBQqpx1IYv/i2b0yuwpGtIweLOp4rb0MdaRAZ?=
+ =?iso-8859-1?Q?Zq0aCJFQn+wNXWuv1/TtgP1OhGj1porSvAcbLehX86o9yFFOv1CuCmszno?=
+ =?iso-8859-1?Q?a9ImS5oMDSPNYED9Yr4nVOk8FOaQBH6QevBkGeYVIHhAz9ECWb1myO6BCl?=
+ =?iso-8859-1?Q?YkQYtx/omrzdi942/yJwgNQJPW/cUg2IFnJEAobD5vIqFQ2r4YUYZkf0NA?=
+ =?iso-8859-1?Q?3w4ifiX9zwePq8nSukXDNKY+n4UmU1rv+c5k9KRxQxRTnfDqVXHsIQu6FJ?=
+ =?iso-8859-1?Q?Xh2L61S/mLewYVRAE1EYm2omaBcuwTdE/GcFx+tVAxwgNhYEW4spBOCapI?=
+ =?iso-8859-1?Q?MRfPg/ssP33aIB2eVdiU9PqIGWIoxgZC9/cz2o76Tf2sMFPPV3X34Upcq4?=
+ =?iso-8859-1?Q?MMzL7Oxqk8py1cVRjW2Tr3LNREB0DxmS89d+n9OaDJ4t7ygWPwnVfR93mH?=
+ =?iso-8859-1?Q?gjcfs9jCR8s/iQyt1qYc1N1wi0LC1n05149dGzKCfBsEDVt1rYurP4Pf+L?=
+ =?iso-8859-1?Q?LU4k2NzryELogsyovcqOKr4MT6QY1shVQxc1FoYOFrRe/YyYYavdrU9EWE?=
+ =?iso-8859-1?Q?HYAc4+rVQgxTbQnIahoBn8cT2Lqxqo9i7xjRxZ5MfVTlEFRDURBPRfivI6?=
+ =?iso-8859-1?Q?tQot0Klkb9r7QYrXp3X0LRHGNyLMhqFwidF7HyMzQ0i4ZpnMKv+SXw4fFf?=
+ =?iso-8859-1?Q?IZm07HIeioF1MtKslwhnrOg5SfLCZIOte+dZuxBf0mmfU5soD0W5Q4AHFe?=
+ =?iso-8859-1?Q?yOP/46ZI4yehKI7If5JdlKORlkQLcyaY8YcElZkh8PTbuReWSzAq4mlTxt?=
+ =?iso-8859-1?Q?f05WljgVUVRSixpuM3ybh2/JM7skOYXd71jMF50wiuB2FvfiT8f2Hv0yRh?=
+ =?iso-8859-1?Q?DOueNS8VcuTpq79m5zQZ2WBDV/LkwFt57HAIehoBH7Avv2RVbfGN3i49MQ?=
+ =?iso-8859-1?Q?gUgaT76dYZygJN7EqmbgwwHMW2adWfYyAtH1FqEli8VXdW2nR5pqd1dPgb?=
+ =?iso-8859-1?Q?WOhoq5zqSzMO7O+A/Eb3e1zj+gfTVnjcMQD3Gw7wN+RFhfpSrijCXZClK3?=
+ =?iso-8859-1?Q?78WvQGOILS3SDHo4WvC2Mi5ZTEd3nhQUVVZoTAkvq6gWEY2DUPe/v94p0c?=
+ =?iso-8859-1?Q?FMARZer/fyVFam551jsZn9sSlRyLS5BQFd8LmUwAfb1RFXLIKpExgFTHp0?=
+ =?iso-8859-1?Q?E/EhZI2cuJl6oiehtGv0FANp+vw45BpEsmCZgyVlCCZnFpvmODaiL1ejql?=
+ =?iso-8859-1?Q?pgRGeBdBOPlRk908yMH+EvNUMa9goIJOePe3Wu7LKHCP0Hoo6wp07SxeBw?=
+ =?iso-8859-1?Q?DgcRASA+oRn+kty8ezH33neKRSfAxmUI2z6PjudQY4QlaX5U+Ln8Uckg?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: multipart/alternative;
+ boundary="_000_YT3PR01MB6421C77EF52F3D7A62651E93DC91AYT3PR01MB6421CANP_"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR08MB5013:EE_|PAVPR08MB9698:EE_
-X-MS-Office365-Filtering-Correlation-Id: 297475af-7e95-44ac-7151-08dd923471a6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0; ARA:13230040|366016|10070799003|1800799024|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?OFhWRlR0eTY5VXdDSjJ2SWlLdEFHQnBrWXIwVkZ0d2tJbTM1dDNJM3JKeCtp?=
- =?utf-8?B?RHlZTlY0ODBGR0MxQkp3WUQ0L3VuMjI3a0hjdXJVSnJHaXA2bHdieWJFT0Fl?=
- =?utf-8?B?NVoyYzcrdGdRUGYvbG5xUEJsSjJYYkE0WlpGT1N4YmFJZ0xlRkRXbUxXdEwv?=
- =?utf-8?B?Vjl6UFRpR0h2UkhFUlRNaEJBN2dJbTJsb3BYZmdYUEZ3TTlkaDlYdFcraUUv?=
- =?utf-8?B?SGZzQ1lSUUI1aDNFYm5rVnZOL1kwdWgyaGRjbE1Ib0R0K0x5K0Z0M2pVVXNX?=
- =?utf-8?B?MTVvYVY2aitSK3dEcnRINFpDNm5GSWc3ZUxJcXBObWdvWjdma2xDS1U0R05v?=
- =?utf-8?B?THF5eUp3Q1FOVXZuT3RMSW1NNzFkQzV6NHoxaU1TbXQ2WVVycW5RN0Y4U29L?=
- =?utf-8?B?ZzZMK3E2cGpjNFJvd3ZERlBQOXM4N1dVZWhZbzA1RzBjcUlxRGhQZ3RHM0JH?=
- =?utf-8?B?TG1TUzBqSVJxaGdpRjI0N1BFN3kvREdpWkphNFZlcmZHVThDT2lMeGM2ZTRG?=
- =?utf-8?B?ajRDSm5FOXFoUFIvYVJUY1NxNU5PY3BnM1hjSFNYR1lJam5pN2xYUCt0eWxM?=
- =?utf-8?B?alI1Lzl6ZU1jMkNWblhoRlJGemlaS0hCWnNlRmFMNU9MU2dYODdEZXYzWmoz?=
- =?utf-8?B?SnlHU3diVS91L1g2dTJwTUNPUm1hV0IrQXBFbjVOb1J5N00xTkhjNnZDMlE1?=
- =?utf-8?B?bmtTRmF0Vk0vMHU4R1ZyQnYwengzZTJxaXcvbjZNTVlMRGRBYmFvVzZMcGZv?=
- =?utf-8?B?ZGhQYWlUQms4by9iMHlKa2ZpT1dUYkdzc1Vja21abzlnMnpvY0V4R2t3ckty?=
- =?utf-8?B?bGpvRzl3MCt6VUluQzkvU2I4dVgyUnU3S0tkMjZrajVwcHd4amQ1cFZZMktp?=
- =?utf-8?B?TGh0RUltczJzSU8zN0twZWcvbmwvNm1PSlNsdzBEMWpLbENNUml6bnY5SlVq?=
- =?utf-8?B?bS9LZEtPM1VTSHhZalN5YjkxU0pNdFJFUmJUMm5EZzd5Z0R1U0NSLzJQTlFo?=
- =?utf-8?B?VlNIcmVLeHFKanBuTUFOdFpUOE93MmlYOWd6ZldSSHFCSEY1UmdKTDFNMExI?=
- =?utf-8?B?WjIwZmZhaDB0UmtiQlQ4NHZ5UnlTRXNhekVNQ3ZyWklBSnFXTlNadHNCMjlh?=
- =?utf-8?B?MTNlb3lNemgzWk1SeU9FTzRjMUNSaG02dXBOczVlTVl6aFE1S3JiMnlodjVE?=
- =?utf-8?B?ckJXLzV2MEZwNGgxRTZyaTZOcDFnOFUwQlQvZklsbGREbEJzdTlLWnVkTWsy?=
- =?utf-8?B?bmlEZStCVmdSaDBuM3pRcERpYnpCUGdRWFh3OUMwYnVtUjJlV3YvZ1QvTGNa?=
- =?utf-8?B?MjBGeTZEOVVrc2FaaTRvdElPN0MrTXh3c08xR213UmE0UHYxSzlFKzkxRUF0?=
- =?utf-8?B?QlJsd3pPaUxyc3oyY1RzdEwranhtR3ZsWnRNcldycU1hanA5UXhTQVJkT2V6?=
- =?utf-8?B?cGNDazVyTUQ5WUtPSjBNZW5WTVV4UFdzY0ZuQTlKaFRINFM1NXg5L3RqZVI1?=
- =?utf-8?B?Uk5WMkc3YVFQUHJZRWtqeVBTTkVIL1I2QklhVkNZcjVYL1ZuMXdhVDY0Z3hi?=
- =?utf-8?B?aG9Pd1Q4ck43NmR4UEJMWXZ6aUFYVW5WdUVoeUdoeGFtWXJPQjVieVl6dVBy?=
- =?utf-8?B?RjNHTWRXb2tlR09EeFhVWHNmdEdGWk9sQTZaeXp3YURzbFBnMFNXZ2Zsd1l1?=
- =?utf-8?B?eGR1R0Y3dWhXVXNMS3F0WXVBbDQ5aklEelkyMktPV2tZZVhXM1N5RGlQOFB2?=
- =?utf-8?B?MEIwdlAxSHJGSmhiRU8wT20rZnpER0NxNnlrdlNtYjNoSDVUVnpqdGw4MUN0?=
- =?utf-8?Q?HFACWSCsze57FLy34XyLGnvqR3U8L1csXEFmg=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:AM6PR08MB5013.eurprd08.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(10070799003)(1800799024)(376014); DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NGtaWTJ3bzJvRU9xbVFicTYxUUVMVHFrenB4SEpRWkFkWTJGRCt5djExcEJ6?=
- =?utf-8?B?Y1RJck1nUHNtamNnT3RHNURPM0U5ZWl1MU5jVyt4azRxWEk2cUFCV1FMSUxl?=
- =?utf-8?B?c3pJR2ZZZDBJSnJvVUNzcHpScU9idExPVGY3SEl4YXZnU2MrckI2WGY5eHFt?=
- =?utf-8?B?dFZYVG9LRUxBVXNlN0pUSlhiYUV3TUttMisrNWUzVnpQblJDQ2R3WHVBczRQ?=
- =?utf-8?B?SktmTFkzUVZTMWQ5L2psODBkUHFZWm9yUmpabjNUVUtSYlFUUWdzbEFCUGpT?=
- =?utf-8?B?TVFyUkxINWJQVjlqYi9TdGRlNFB6b1l4KzNhRG5BcTRnSFhZSEFWZWVxYVJN?=
- =?utf-8?B?MzllQStBaERYTnpmbGtHK3lMMmZPaTdqcEJ3VmhwenI2dXlvYzVFM1MzMnVC?=
- =?utf-8?B?MGxBSUx4OUQ1RFhxMlBxWUVtQmd2eWN4RE8zeFJGU1ZuYWhHWVB2eURaS05Z?=
- =?utf-8?B?Z1JYY2ZPT08vaVBnR29uK0V5MEtoTHFNaGh1WkUrZ0wySEJHOTZGU29VRE9o?=
- =?utf-8?B?SEMrMVhxVlh3ZzhKT1RBS3JINXJ4VEozYW9WR1VFOG9aNVpyV0xVdkFZSVRx?=
- =?utf-8?B?SVJFL3RHNlNsYUQ3bmloekovOW1aYUFKYjVpY0VXVUlpalFQQzJOdEJ3aUgy?=
- =?utf-8?B?UWw1cEJPTTE2RnlraVN3VDV6elpqbysycnJ6ZGdHUWYyUmFMOVN3Vy9BWTBl?=
- =?utf-8?B?UWpyV1RzZXoweldGS0Q4YXhqNk9Xa3A3ZnhOckNJZldScUZkMXQ5K0RjTm45?=
- =?utf-8?B?U014VTVXR0QyRkhDZmxzbTFhUHFmZHFla255bXQyUVNrZEpKV1Q1SHJWcWN4?=
- =?utf-8?B?R0RwTlNDc3ZuVENtQ2xWWGJidUlITXEzNVhuclJ1Z0l4RmswcFBtZVRIYWFL?=
- =?utf-8?B?NHNFaVBzcGdrVjJSemFQWDROYzYrNlhlT2ZhVElJeWJDQWQ2VWRNYzZYeDVO?=
- =?utf-8?B?NHAyUXR4LzBwbytHZWFEbGJyZ1lBK0FKbGIraTBQMFE0eUJ5OVJLVnVVZEQ3?=
- =?utf-8?B?TUQ3REdkbGtzT0pCWFAxa2tVWWI2U3FEQkFxSEIxazNDdXpJSWtJQlJuRldz?=
- =?utf-8?B?a09JeVBkdW8zOE4wWGRmR1ZCb3VxQmdCNkJocFRKYWtoK1JocmFrVnZxU1JR?=
- =?utf-8?B?T3NvZWtoc1dTK3dRdkwzOW5GUTRXbzdiOHBXR3I3SHpYbkZqTTZuT3VMTFU5?=
- =?utf-8?B?Zm5SZTR4dUZHOWxsTU8vWC92RitJT0VSVnR6T3dPUkJMSkFLNXNoclNHY0Z6?=
- =?utf-8?B?M0ZZeTVvMDhQeHZCWUZHVFZQbjBxUHNSZFcycVNmMkdXS3h6emgySGtaSTd5?=
- =?utf-8?B?N3VnUlhyOXZ6enkyTFNTU1IrV212cUtBaFo5MTB5UnBKdHB2cWdSSjJLZ200?=
- =?utf-8?B?R3NuRi9aQWZsRE1RWWZHU2NSNnRIQnY4dnMzRzBZQ3lhM2E0VFhuVURZZzJK?=
- =?utf-8?B?SU9rcVN3MUJocnJqM2d0RU9CUzV1Ym5UbjJFek5nTkFaaXVIZC9NdzVZZU1C?=
- =?utf-8?B?ZERzN0ZSYnl3cDNSVkFEYUZSUHlaeTAxYldCUVFDY0ZWMzkrL3hqOWNPbmFu?=
- =?utf-8?B?Ky9oL1JKMXpKNzlEa0FQcnVqQ0VvUXBDc01mdVFEb0ZaNWFNd3JoTEJnbmh5?=
- =?utf-8?B?MitZeW13d1RHZENHTm9zZmpYem1tMlZIMlJPa0JaQ1pKMHBSNVRzc2lDcjV5?=
- =?utf-8?B?Uk5RblNVWXcyVlNDSnpDRlN4RkVJRGhMMU1PbzA0Vm9ETWhmMWJ2NFhHYmhv?=
- =?utf-8?B?OU01TEc0VDU4cnQxRnpFWGgyUm5xa01NbldrYXdDcVF5d3JNYzVSZkNEajF5?=
- =?utf-8?B?WlltZUpVamxXMW1qeGZqTnovZThlUnR1OE92Sm9ZYmdzelpIVXh5RUN4Wmhh?=
- =?utf-8?B?dHhiWXM2c1dzekdRRXJ3bDlMbnNsV3E3YmF3L1dMdFQycUIrbXJhSEF1M0hi?=
- =?utf-8?B?QlVHRmc1dUplcVV2RDRGLzhyT3EvVXMzUHNabGxURDV4UjV3VmM3R0RmN080?=
- =?utf-8?B?ZkVGYjM3UFNmZHhWT1BVVVRsQW1UNU51Vng4WWNqRXQ3R2lkVDlGbEZXUjlH?=
- =?utf-8?B?NGxJNDllUEJOSXhjVmFKQk5oMXVoak5DM2pGOEpmbVFDeVpFZ20wQ3R2aVN5?=
- =?utf-8?B?SlBoL2VZWmJZVE0vUXYvWmRtMHAxWkJ4TDZZS3pueEdXS1NUZlFVY3VYUktU?=
- =?utf-8?Q?aB9Cxv8kfG+JF4s/k1/CpT7V6hc5lVhjBe30SCnRxXdW?=
-X-OriginatorOrg: kuleuven.be
-X-MS-Exchange-CrossTenant-Network-Message-Id: 297475af-7e95-44ac-7151-08dd923471a6
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR08MB5013.eurprd08.prod.outlook.com
+X-OriginatorOrg: polymtl.ca
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2025 15:40:10.0830 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3973589b-9e40-4eb5-800e-b0b6383d1621
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: K5mFTTdUDpv0DBgXzm5D3x4yeLk/wlsn7LjsSDJ4Tev5Cy35zaum7vEcTGav4+vgtI/ODKjzYLZO7Z29HN6ocmH7H5tgqrdD5VuKtlfY2wg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9698
+X-MS-Exchange-CrossTenant-AuthSource: YT3PR01MB6421.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3b2930e-a1ae-498e-521b-08dd931bd135
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2025 19:16:23.9431 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 253209e9-7731-40eb-96e1-6444a6823237
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dndpZQiGR1eTV4Ze2JJs+gG5vtuVd6hSq/hFYPPZ7JozSPOZe6WZYQXGNEgfSHW4c2ApNfcqrH3k/mPNEkuMZuVAVMBozWkQsTuWlK3AOiw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB5232
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -179,247 +168,167 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Herman Bruyninckx via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Herman Bruyninckx <herman.bruyninckx@kuleuven.be>
-Cc: lttng-dev@lists.lttng.org
+From: Jean-Marc Chevalier via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Jean-Marc Chevalier <jean-marc.chevalier@polymtl.ca>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---228850167-1891789462-1747150809=:19123
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+--_000_YT3PR01MB6421C77EF52F3D7A62651E93DC91AYT3PR01MB6421CANP_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 13 May 2025, Kienan Stewart wrote:
+For lttng-modules-2.13.18
 
-> Hi Herman,
->
-> On 5/10/25 4:14 AM, Herman Bruyninckx wrote:
->> On Fri, 9 May 2025, Kienan Stewart wrote:
->> 
->>> Hi Herman,
->>> 
->>> On 5/9/25 6:03 AM, Herman Bruyninckx via lttng-dev wrote:
->>>> Dear all,
->>>> 
->>>> I want to trace an array of floats, but I always get bogus output at the
->>>> (Python) Babeltrace2 site...
->>> 
->>> could you give an example of the tracepoint you have setup in your code 
->>> that doesn't work, with the corresponding output?
->> 
->> Thank you for your swift reaction. Much appreaciated.
->> 
->> First of all, my apologies: I should have provided the required information 
->> the first time around already.
->> 
->> ---
->> This is the information about the installed versions of the relevant 
->> software:
->> 
->> $ uname -a
->> Linux SET-L-ME-P22061 6.11.0-24-generic #24-Ubuntu SMP PREEMPT_DYNAMIC Fri 
->> Mar 14 18:13:56 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
->> 
->> $ lttng -V
->> lttng (LTTng Trace Control) 2.13.13 - Nordicité
->> 
->> $ babeltrace2 -V
->> Babeltrace 2.0.6 "Amqui"
->> ---
->> 
->> 
->> ---
->> My application code generates a trace as follows:
->> 
->> Tracepoint "-tp.h":
->> LTTNG_UST_TRACEPOINT_EVENT(
->>      comm_activity,
->>      range_scan,
->>
->>      /* Input arguments */
->>      LTTNG_UST_TP_ARGS(
->>          int *, distances,
->>      ),
->>
->>      /* Output event fields */
->>      LTTNG_UST_TP_FIELDS(
->>          lttng_ust_field_array(int, distances,distances,5)
->> )
->> 
->> 
->> int testmeas[5] = {1, 2, 3, 4, 5};
->> // double testmeas[5] = {1., 2., 3., 4., 5.};
->> // (one array for test with integers, one with doubles):
->> 
->> lttng_ust_tracepoint(comm_activity,range_scan,5,testmeas, "range_scan");
->> 
->> ---
->> 
->>> Could you explain what you mean by (Python) babeltrace2 site?
->> This is the Python code I use to display the trace generated above:
->> (inspired by <https://babeltrace.org/docs/v2.0/python/bt2/examples.html>)
->> 
->> ---
->> file tt.py:
->> 
->> import bt2
->> import sys
->> 
->> # Get the trace path from the first command-line argument.
->> path = sys.argv[1]
->> 
->> # Create a trace collection message iterator with this path.
->> msg_it = bt2.TraceCollectionMessageIterator(path)
->> 
->> # Iterate the trace messages.
->> for msg in msg_it:
->>      # `bt2._EventMessageConst` is the Python type of an event message.
->>      if type(msg) is bt2._EventMessageConst:
->>          # An event message holds a trace event.
->>          event = msg.event
->>          # Only check `range_scan` events.
->>          if event.name != 'comm_activity:range_scan':
->>              continue
->>          print(event.payload_field)
->> ---
->> 
->> and these are the resulting traces (for int and double, respectively, and 
->> with the C and Python versions of Babeltrace):
->> 
->> $ babeltrace2  ~/git-repositories/communication_5c/build/test_session/
->> [12:19:11.381152129] (+?.?????????) SET-L-ME-P22061 
->> comm_activity:range_scan: { cpu_id = 6 }, { distances = [ [0] = 1, [1] = 2, 
->> [2] = 3, [3] = 4, [4] = 5 ] }
->> 
->> $ python3 tt.py  ~/git-repositories/communication_5c/build/test_session/
->> {'distances': [1, 2, 3, 4, 5]}
->> 
->> ----
->> 
->> bt2$ babeltrace2  ~/git-repositories/communication_5c/build/test_session/
->> [10:04:51.068836215] (+?.?????????) SET-L-ME-P22061 
->> comm_activity:range_scan: { cpu_id = 6 }, { distances = [ [0] = 0, [1] = 
->> 1072693248, [2] = 0, [3] = 1073741824, [4] = 0 ] }
->> 
->> $ python3 tt.py  ~/git-repositories/communication_5c/build/test_session/
->> {'distances': [0, 1072693248, 0, 1073741824, 0]}
->> 
->>> Are you instrumenting python code, or are you instrumenting a C/C++ 
->>> application with lttng-ust?
->> 
->> The latter.
->
-> thanks for the extra info, it's much clearer to me now!
->
-> When you're passing the pointer to the array of floats, you get the weird 
-> values because there's not an explicit type conversion so the raw data of the 
-> floats is being interpreted as integer values.
->
-> As there is no lttng-ust function to handle an array of floats at this point 
-> there's a few other options you could try.
->
-> In your example you're using a fixed length array, so it's possible to define 
-> a tracepoint with 5 floats like this
->
-> ```
-> /* note, this version isn't doing any bounds checking */
-> LTTNG_UST_TRACEPOINT_EVENT(
->  my_provider
->  my_tracepoint
->  LTTNG_UST_TP_ARGS(
->    float*, my_float_array_ptr
->  )
->  LTTNG_UST_TP_FIELDS(
->    lttng_ust_field_float(float, float0, my_float_array_ptr[0])
->    lttng_ust_field_float(float, float1, my_float_array_ptr[1])
->    ...
->    lttng_ust_field_float(float, float4, my_float_array_ptr[4])
->  )
-> )
-> ```
->
-> Here's a couple of ideas for a more general approach
->
-> 1. Define a tracepoint with an integer length, maybe the base pointer 
-> identifier (for correlation) and the offset. You'd have to have a smaller 
-> helper that calls the tracepoint one or more times depending on the length of 
-> your array.
->
-> Something a bit like the following. Note that I didn't do a full test.
->
-> ```
-> LTTNG_UST_TRACEPOINT_EVENT(
->  my_provider,
->  my_tracepoint,
->  LTTNG_UST_TP_ARGS(
->    float*, my_float_array_ptr,
->    size_t, my_float_array_len,
->    size_t, my_float_array_offset,
->  )
->  LTTNG_UST_TP_FIELDS(
->   lttng_ust_field_integer_hex(void*, array_ptr, my_float_array_ptr)
->   lttng_ust_field_integer(size_t, array_len, my_float_array_len,
->   lttng_ust_field_integer(size_t, array_offset, my_float_array_offset),
->   lttng_ust_field_float(float, float1, (my_float_array_offset + 0 >= 
-> my_float_array_len) ? 0.0 : my_float_array_ptr[my_float_array_offset + 0])
->   lttng_ust_field_float(float, float1, (my_float_array_offset + 1 >= 
-> my_float_array_len) ? 0.0 : my_float_array_ptr[my_float_array_offset + 1])
->   ...
->   lttng_ust_field_float(float, float1, (my_float_array_offset + n >= 
-> my_float_array_len) ? 0.0 : my_float_array_ptr[my_float_array_offset + n])
->  )
-> )
-> ```
->
-> 2. or, use a structure with N floats and a process similar to the above.
->
-> It's a bit inelegant until there is support for array of floats in lttng-ust.
->
-> 3. Use the int or char array and rebuild the float values in post
->
->
->
-> Hope this gives you an option to work with for the moment.
+I have this error with kernel version 5.14.0-582.el9.x86_64:
 
-Definitely! Much appreciated :-)
+lttng-modules-2.13.18/src/lttng-statedump-impl.c:415:20: error: 'dev_base_l=
+ock' undeclared (first use in this function); did you mean 'device_lock'?
 
-> thanks,
-> kienan
+I got it to create modules by changing the condition on line 396
 
-Herman
+Original:
+#if (LTTNG_LINUX_VERSION_CODE >=3D LTTNG_KERNEL_VERSION(6,9,0))
 
->>>> I have no problems with arrays of integers, though.
->>>> 
->>>> Is the float array feature not yet implemented in lttng 2.13?
->>>> Will it be in 2.14? (Also the "BLOB" feature is useful for me.)
->>>> 
->>> 
->>> I don't see any changes in lttng-ust for 2.14 that allow for tracepoints 
->>> that have float arrays or blobs. lttng-modules 2.14 does add support for 
->>> CTF 2. The support for CTF 2 in lttng-tools 2.14 will remain at an 
->>> experimental level.
->>> 
->>> From the release notes:
->>> 
->>>      CTF 2 output isn't enabled by default and is intended solely for
->>>      preview and feedback purposes: having an experimental support will
->>>      allow users to test and evaluate CTF 2 until we make it the
->>>      default output format.
->>> 
->>> 
->>>> Thanks for your help.
->>>> 
->>>> Herman
->>> 
->>> thanks,
->>> kienan
->> 
->> Herman
->> 
->>> [1]: https://git.lttng.org/?p=lttng- 
->>> tools.git;a=blob_plain;f=ChangeLog;hb=11f963148df9597de6d891d96d748bae5ced7149
->>> 
->>> 
->
->
---228850167-1891789462-1747150809=:19123--
+Modification:
+#if (LTTNG_LINUX_VERSION_CODE >=3D LTTNG_KERNEL_VERSION(6,9,0)) || (LTTNG_L=
+INUX_VERSION_CODE =3D=3D LTTNG_KERNEL_VERSION(5,14,0))
+
+I don't know how you distinguish the version after the dash character for R=
+HEL kernels.
+
+- JM
+
+--
+- Jean-Marc Chevalier
+  Technicien
+  G=E9nie informatique G=E9nie logiciel
+  Local:     M-4002
+  T=E9l=E9phone: 514-340-4711 x4266
+
+--_000_YT3PR01MB6421C77EF52F3D7A62651E93DC91AYT3PR01MB6421CANP_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+For lttng-modules-2.13.18</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+I have this error with kernel version 5.14.0-582.el9.x86_64:</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+lttng-modules-2.13.18/src/lttng-statedump-impl.c:415:20: error: 'dev_base_l=
+ock' undeclared (first use in this function); did you mean 'device_lock'?</=
+div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+I got it to create modules by changing the condition on line 396</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+Original:</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+#if (LTTNG_LINUX_VERSION_CODE &gt;=3D LTTNG_KERNEL_VERSION(6,9,0))</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+Modification:</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+#if (LTTNG_LINUX_VERSION_CODE &gt;=3D LTTNG_KERNEL_VERSION(6,9,0)) || (LTTN=
+G_LINUX_VERSION_CODE =3D=3D LTTNG_KERNEL_VERSION(5,14,0))</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+I don't know how you distinguish the version after the dash character for R=
+HEL kernels.</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+- JM</div>
+<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: rgb(0, 0, 0);">
+<br>
+</div>
+<div id=3D"Signature">
+<div style=3D"font-family: arial, helvetica, sans-serif; font-size: 16px; c=
+olor: rgb(0, 0, 0);">
+<span style=3D"background-color: rgb(255, 255, 255);">--</span></div>
+<div style=3D"color: rgb(0, 0, 0);"><span style=3D"font-family: arial, helv=
+etica, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">=
+- Jean-Marc Chevalier</span><span style=3D"font-family: Aptos, Aptos_Embedd=
+edFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12p=
+t;"><br>
+</span><span style=3D"font-family: arial, helvetica, sans-serif; font-size:=
+ 16px; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;Technicien</span>=
+<span style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService,=
+ Calibri, Helvetica, sans-serif; font-size: 12pt;"><br>
+</span><span style=3D"font-family: arial, helvetica, sans-serif; font-size:=
+ 16px; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;G=E9nie informati=
+que G=E9nie logiciel</span><span style=3D"font-family: Aptos, Aptos_Embedde=
+dFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt=
+;"><br>
+</span><span style=3D"font-family: arial, helvetica, sans-serif; font-size:=
+ 16px; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;Local: &nbsp; &nb=
+sp; M-4002&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span styl=
+e=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, =
+Helvetica, sans-serif; font-size: 12pt;"><br>
+</span><span style=3D"font-family: arial, helvetica, sans-serif; font-size:=
+ 16px; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;T=E9l=E9phone: 51=
+4-340-4711 x4266</span></div>
+</div>
+</body>
+</html>
+
+--_000_YT3PR01MB6421C77EF52F3D7A62651E93DC91AYT3PR01MB6421CANP_--
