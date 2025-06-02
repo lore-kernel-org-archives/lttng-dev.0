@@ -4,84 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F690C5AD49
-	for <lttng-dev@archiver.kernel.org>; Fri, 30 May 2025 15:02:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4b860p5bWkz26gV
-ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1748617355;
-	b=aeoEesf0f6+p94/W1MZ/YWCIwjNEvArsCOO+Wsh+Zr0Fpdkxn01+m+znAoNPq2NimcyZ
-	 sB1Uyu05BrvY6hGzsJ7I6utGsZxtGCsj/CtQbDDoYpk/p2Mn2mSrObkuEwPfEDCsv7IPo
-	 Oc3RSjsd2TV2QHdZ9Z/1uF8mTkO/EOUbn5IplNf6eC2OnkKtPfpr6VL7Xle8+6xweUfuO
-	 jEVb92skTP3LXWNxoHQJHojzGtI217zUBQOQL4+TP9RFWAbMi5y/OCbvLc4aRs7DpJ9Sm
-	 Y0ga4nuUFqUbi5c1KO99hNkN5YE5l8TMmMFGZmCqJBKullHHAGKjugTyN42W46A/Bhg==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26A2EC54FB3
+	for <lttng-dev@archiver.kernel.org>; Mon,  2 Jun 2025 14:41:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4b9xNq5Fc0z1HsC
+ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1748875278;
+	b=dS7vOLzVBDYfRqwCnV9Vb2chQH0RzWEjXG65nMIN8nOfuO2qAn27QKU31eD9ZO0sNexW
+	 2qz0FQF+5RKu0PKCbSlH3AFpIb3TTs1AjrIVwUxyWHBHlGmiTtApsHrctKH09ZIhPlKxn
+	 h8DDBKgVwtXnFsq4W+4HHYfcyiaJD0bvyJVvp2KUShdONDSsgHkG6PGVMD6gEVAE4Vy8Y
+	 FOMSDnjyKBZlLZAmyhnIKlmdjyfjFfbLEjHCnRSgpTFUI17cRTTE7yEOhWclfbDcUKKLK
+	 gSCWhPoaqIxrMbUMGZHtfpk1fs1y2eZxaVYeAtA4jpZxSwZXE9wol8A/R23rS05BV1g==
 ARC-Message-Signature: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1748617355;
+	c=relaxed/simple; t=1748875278;
 	h=DKIM-Signature:MIME-Version:Date:Message-ID:Subject:To:From:From;
-	bh=EXuiDbY9754NncHTIKa3IP17wpNQQ9aE/DgGDjKN6Vw=;
-	b=WB3v+Ze+h0haQRaXlnO7BD5KFQXe//IR4rPZA/JxMYg9SnFnaqI2iTh5KMeIOhIvQ4TM
-	 IfcneQszTOhF0RPBYAGhhY5xjf69/OaY6NowEJY6hqa5MIFckfTJfqXX97gYQIId0YFMj
-	 IrGxFjshMcA7wF0BhrN0rsFXtuB1CO69xqLYaWBAlTeY/aZ/SDSLZon4KHym0EBICRlEq
-	 CmXZHW5SSIg3eY7lGQj5Av5aYlIn4t75xWtOL95KdGZg1J3j+wTUIK796jMgfgLgf1Dhs
-	 Q7ziITCsDJ6x17GZu5qWrdM7XEYR1NwGzyH//FYsaoJQQl+rl/kGXLU5EWsIVlCtWlA==
+	bh=yxf42VREK2o8xXFVWDHHAqXJeVfqJnutI+EC/VcoWSo=;
+	b=IRuLGrxd6Q6uaBpTuuGWAMj1Dkx4ZZVzl55mXqgblATLM7hwiG7dJLjTGUM056HWascy
+	 pXJ4FNWz8eNMdN0+fXfTHxEpM6osgmUy+kQSlM8mmj3+ac9lrYIEZuL1VAJjXHP+oTNXV
+	 9s/8Nn6yKiYbH6A117T/1g+Bjzf/5JqyB0MEB+1lJLyQcva8jQaSkJJzv+pbxowiRRQ0+
+	 UkYuUz5hACRdJS7QwSB2JCvZGy995ycE0ynSoZZjgVCz88MFlvOVlEeckd5EZSFJibW7e
+	 e3A90AACF6GkwbzETY/ZqV0D+wIYUp5LMrM4p3uA0DHVi8qIKIVX0dOEZg/yrQrGVvw==
 ARC-Authentication-Results: i=1; lists.lttng.org; arc=none smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4b860p5bWkz26gV
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4b9xNq5Fc0z1HsC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1748617355;
-	bh=EXuiDbY9754NncHTIKa3IP17wpNQQ9aE/DgGDjKN6Vw=;
-	h=References:In-Reply-To:Date:Subject:To:Cc:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=RUDurcbs0AYG/bGTqWrbXSuPDUop49Aue2cILwgnPM3U3c8BLt3UKevzxHCKcuWxi
-	 c9txbYAx/Okbe8KZPewYIPx5RhXdBXLWNe0sN13655Wxneucbw+Q8eUFd/wwnZ7tFT
-	 xq5QYrg/PxSFHlpNEHHFLvAnrXMP8OA3qcaDT+R2vT9YaSr717Pn5vcc2G9zN1ZjJ8
-	 i/eapahjpgUXM/gtQ3s3iuHxzmDqhSX1ZeJA7R3GdDhLDD0D3Hth+GM0+XBDtPp3JS
-	 AY2jb2fEkR6DLLIe3cHqacySPyigL0rWr0soA81atZExdBmAaB6XNVcwh8uYa4REOl
-	 pWIW1AU4AptgA==
+	s=default; t=1748875278;
+	bh=yxf42VREK2o8xXFVWDHHAqXJeVfqJnutI+EC/VcoWSo=;
+	h=Date:Subject:To:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=S4elb/QrLzGXBK7FKAR3HqgeYWVk8xcuSI+BT9RGuQ/Jl6q9Q7VrJzxx8i1oou5Gv
+	 fiQ7ZZ6nt8KP7bihJ6qMsEnQG79yu06O+cemPWke7B2eP3odegqPLFFEKpwH/rzh9u
+	 KdHhdheSJJswFYw5GD7YesqeitfcIK4A53ZgdGlnmdbHx2mmbtBDbNlRDK7b1hnJ70
+	 YLqMoyOD/XkW5jKEbMm6aqJQCVqvxqvE5tcKz7HV5KgMFAbZ+w5tm5qKvgnj+u3qse
+	 n7j3VAodCdYdgSbsXXME+jxhphaQltEYuqEtyYHDWiLGl7B/F2QgP6sZIuHn8uvPEK
+	 kFaZ0Vs/EE0Ag==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4b860p5bWkz26gV;
-	Fri, 30 May 2025 11:02:34 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4b85yW27hWz270Q
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4b85yW27hWz270Q
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com
- [IPv6:2607:f8b0:4864:20::b2c])
- by lists.lttng.org (Postfix) with ESMTPS id 4b85yW27hWz270Q
- for <lttng-dev@lists.lttng.org>; Fri, 30 May 2025 11:00:34 -0400 (EDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id
- 3f1490d57ef6-e803de44b3bso601520276.1
- for <lttng-dev@lists.lttng.org>; Fri, 30 May 2025 08:00:34 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4b9xNq5Fc0z1HsC;
+	Mon,  2 Jun 2025 10:41:15 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4b9xK21sNzz1HRw
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4b9xK21sNzz1HRw
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com
+ [IPv6:2607:f8b0:4864:20::834])
+ by lists.lttng.org (Postfix) with ESMTPS id 4b9xK21sNzz1HRw
+ for <lttng-dev@lists.lttng.org>; Mon,  2 Jun 2025 10:37:57 -0400 (EDT)
+Received: by mail-qt1-x834.google.com with SMTP id
+ d75a77b69052e-4a588338015so25038061cf.0
+ for <lttng-dev@lists.lttng.org>; Mon, 02 Jun 2025 07:37:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1748617234; x=1749222034;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EXuiDbY9754NncHTIKa3IP17wpNQQ9aE/DgGDjKN6Vw=;
- b=SPtG+fMIsnc8WKWsZhQ6D9wZShOcHZFttitQZ03SWkAzm/ydCNSKowRgdxCqbWr/W5
- eCaH1oRd7FIdNx9/jTEBFalV4w7D6RevSikGM5xWHEl5GAXJqCCIrTN09KZt3mLNvhAV
- Gic01p7AilZzAFE4Euzk/J3wnLxq3jemrxjibHn8hkONsXr6Ly7vREn3NBvMUqtvhCUX
- w41aNkwJWw6Pf0v8cAABC5B/1wiZqQcvsk9tMBA2JmIgaILZu2yho4meAnNm74i6uXko
- kfwCWipGKTTNsvKR+0yEgsbmle1JTdRVv44827wssIRa87inp19NnK7bUYdIW+Op9qHR
- HmIw==
-X-Gm-Message-State: AOJu0YwB7EZeH2U+gE1Hm0Bid9ae2jt40/w7E44Or5ACL2jJzxe+ZCXS
- TeCG/Csw3gwO3NIXqVkfEOIZZmDBY9hcviT7nyGOyMO/zZev8GfnuBzhg6345DKY5bOeUB1tqBk
- WJ1N6uTU7ZW5a+zOD3LO7TYDPd/lPBxQ=
-X-Gm-Gg: ASbGncuXTKEmhQ6Jx2TLMoGOW6tEtvoHrTjqYdeqF2dBAEaepaukcsHbzllcNLgglr/
- IbIf0y07SQXuhayXQG/22WPFK7MQwWxPa61RhoPmitO+58KA4M2uogIUuJ/NIaAW7W+M+PdoYby
- CvHm8OoRsna+WxnXxVmu1Pe7yeil7pStPTTkMLaGm8DILp
-X-Google-Smtp-Source: AGHT+IEB+mKrmC3W3V/EmZvWyj/1kss93zFMEs445EUS43uro4msqFvgznty1VJyir+ya4z/VgV3rQ3g16RpoyYgKlA=
-X-Received: by 2002:a05:6902:f8a:b0:e7d:bf67:4688 with SMTP id
- 3f1490d57ef6-e7ff611dd43mr2476989276.23.1748617233842; Fri, 30 May 2025
- 08:00:33 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1748875072; x=1749479872;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=83WVKbvfXpL9QvquFE99ZdEcnQDXHRawufcMAEZT+tw=;
+ b=U9cx65Tnt6wA7teXspNgHB1MuMR0hRTKVnwcEC7t23Aet23BGQwrNgjDq5mo2WhhLQ
+ 57mv+7yPJrnlW/TDd0G0AZ4oDZPqxAVmJMPi1Y8R44JK5HyYvxN1PojlU4vrbNtHt4NQ
+ ycJiy1867CT3pv5kgRGeYt7pyguaI87xlzaOpZD9Fa+Kb0WCSCvJhvUqoXLGf3uCVBm7
+ JO22yJjkJMLV2BXD/bDKlBqSgU23Fp/THk/+szot+a7W/KXtXGpjg91tvlx5ioXGr33H
+ yDk74IP7dNYVdfNJW8lbyZypawxUkO6dIjfgGLpNY4wTzDTNl+UNGc1rZhunPXNMB7Ku
+ JvBQ==
+X-Gm-Message-State: AOJu0YxAORY4fN2iiwXhxU2SOf8e07gbQAm+Qim8KNuiE64MR4N1Z8lv
+ txmLSk2mXTMf0FjiKTjM050RY8nbVu314FRMFifPtFBcVTcuL3ib5XczezDHAxRxnYdkb7pwdo/
+ EWD76h7grRPZQAW84D8+LG0MYBTD0rHyZdMy/
+X-Gm-Gg: ASbGnctHzxslvQwZzCg1nxCGhcWDjZO//CuEQoLbW8beWt/usFd8hrg7eLjCy9SONxj
+ TxPD6K9atEvCkh5V4Nf6ihXMw8548qJAWHmQnVxCg07TQbhDpxLU9hLQVsTe/d3T1YcrWGf4om/
+ uLCueGZ96wAixT/jRV1LnDHeyrZKyXQbwvbg==
+X-Google-Smtp-Source: AGHT+IF4y7Ig/lR94FHcuApShko/RGmQG/9Ev43bShNh0an/golxn4AGE5nOaUIuzJTyPsypGO2ld3N3DxWbye6d1dg=
+X-Received: by 2002:a05:6902:4791:b0:e81:22c8:d217 with SMTP id
+ 3f1490d57ef6-e8122c8dbc3mr12345620276.8.1748875061086; Mon, 02 Jun 2025
+ 07:37:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAJK_iej1UnwTBaJCY0WwP2g=zqEMtphgM2DUJhtKmHxNceD3yw@mail.gmail.com>
- <93e83ed5-bcf3-4a5e-b713-4f9612ff7a6d@efficios.com>
-In-Reply-To: <93e83ed5-bcf3-4a5e-b713-4f9612ff7a6d@efficios.com>
-Date: Fri, 30 May 2025 16:00:23 +0100
-X-Gm-Features: AX0GCFsCqZPn0wD19btFcuUJvqFbqOy72kp-BPzIVHnG-QNLvH6z3A8F26mvAHo
-Message-ID: <CAJK_iehAs4seOuTxxrGtUmh92jA_kbwuphb=dcWm1DSDfpxEBw@mail.gmail.com>
-Subject: Re: A question regarding isolated cpus and software interrupts
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Frederic Weisbecker <frederic@kernel.org>
+Date: Mon, 2 Jun 2025 15:37:30 +0100
+X-Gm-Features: AX0GCFu_5E78sau6pTley7BbpxoRF7i85OuKqvKRJ_NodPDNKphyHa4_h2goS2w
+Message-ID: <CAJK_ieigCAaowdcwmLbkdL1J3eFgHE7t1W=ZKRvoKhgABM46yw@mail.gmail.com>
+Subject: Function tracing not working
+To: lttng-dev@lists.lttng.org
 Content-Type: text/plain; charset="UTF-8"
-X-Mailman-Approved-At: Fri, 30 May 2025 11:02:32 -0400
+X-Mailman-Approved-At: Mon, 02 Jun 2025 10:41:13 -0400
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -98,26 +92,35 @@ Reply-To: David Aldrich <david.aldrich.ntml@gmail.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi Mathieu
+Hi,
 
-Thanks for your reply.
+I am trying to use lttng-ust-cyg-profile.
 
-> How are the cores isolated on your system (exact kernel command line
-> options or commands issued) ? There are various degree of fine-tuning
-> to prevent disturbance from the tick (nohz full), scheduling, and
-> irqs that can be done explicitly. So depending on your specific
-> configuration, you may be missing isolation options that would
-> prevent the softirq from running on your isolated cpus.
+Our application is large so, so far, I only compile main.cpp with
+compiler option '-finstrument-functions' (I don't specify option
+'-pg').
 
-Our kernel parameters are:
+Our app must be run as root so I run it, and capture with lttng, like this:
 
-ro skew_tick=1 rcu_nocb_poll rcu_nocbs=4-31 nohz=on nohz_full=4-31
-kthread_cpus=0-3 irqaffinity=0-3 isolcpus=managed_irq,domain,4-31
-intel_pstate=passive nosoftlockup tsc=nowatchdog intel_iommu=on
-iommu=pt default_hugepagesz=1G hugepagesz=1G hugepages=4
-vfio_pci.enable_sriov=1 vfio_pci.disable_idle_d3=1
+lttng create app_trace
+lttng enable-event --userspace 'lttng_ust_tracef:*'
+lttng enable-channel --kernel --session app_trace kernel_channel
+lttng enable-event --kernel --all --channel kernel_channel --session app_trace
+export LD_PRELOAD=liblttng-ust-cyg-profile.so
+lttng start
+sudo -E ./myapp
+lttng stop
 
-(the affected thread runs on core 4).
+I notice that many events get discarded:
 
-Best regards
-David
+Warning: 198522 events were discarded, please refer to the
+documentation on channel configuration.
+
+I then import into TraceCompass.  I see the traces in the Resources
+View, but when I expand Experiment > Views, all 3 'LTTng-UST
+CallStack' entries are striked through so I can't select them. So I
+can't visualise the function calls.
+
+Any idea what I am doing wrong please?
+
+Best regards, David
