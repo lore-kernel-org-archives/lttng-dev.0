@@ -4,167 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCD69C71136
-	for <lttng-dev@archiver.kernel.org>; Tue, 17 Jun 2025 14:19:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bM8BR0sHtz222b
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1750169951;
-	b=UehcmpnuDtA94qGamXYrVkGuJJlY9UgJa9jmuvgcDsP2ksBplV8mXbP9WzcibfoEhaX4
-	 PEQnejhW3Z1ihHq/K9qHpwWn1aEHYwuYQhAQWe4aGYbCnSZHN3tzskUbrrNjlUowBRIxk
-	 tapVVSy7ByqakycoN9nB1Y8mUWrI2wDLSJbCKBRxiusxARn+Kda3QOrfx+K6dt94WsQ3v
-	 ruUwDaMki87LiAqYu9MjrtvONpfZZNd5vChI6V5eT84q+rXk4EXyEiZKJE0bpnY7uxPrp
-	 pIvmgrqUnFpb5sAtb0xjwLFuI8C7nLFSphKYW83C4Vs4jWvAcf5Ef0vLg+M1M88Qy/g==
-ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1750169951;
-	h=DKIM-Signature:Message-ID:Date:Subject:To:MIME-Version:From:From;
-	bh=hOBnvRZqm4oD8ohW5d7/rvcc8w/gNhevViKK4dpqoTc=;
-	b=gI1imX3QulwLmMFFfPppA3DEIrIJQBkcU54fcn8D3HLS24pi4wTmhqCLQF1QbP6PXpug
-	 B/5FDq2GN8Db1EXqoAl4vDtIPU7im//BIxrNFb986QUpJHOlsM0se3+je3n13/tYBk5uU
-	 3hWrh0F63Wo+fsh1W+oLPD26z4bcwLEpAug4FngPY4HPbXfNn1pAm5qxjAPzb9W1DiZd7
-	 dXMfp9/7cA/nNfN9OiAcEoI3N/B83Gvo/GRQGVWoSblh5vPDb7e272DkZYF158+EoyHKI
-	 uiD6/dNCwf6C20pUhX6RAKusREp/6Fy0E3HnB5po3jymg+YshdKQHdLGFMUflYNQU7Q==
-ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bM8BR0sHtz222b
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 117F1C71157
+	for <lttng-dev@archiver.kernel.org>; Tue, 17 Jun 2025 14:19:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bM8By35gHz227x
+ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1750169978;
+	b=qUYECaDhkEr36R0nF1u8dGIuEkm0vx5akVbeYZQogxnxCMoU8bvZsvu7ly7MQ+bz0EPW
+	 oEgSC/E6mRAXzwJzoDxtV+ySOX13RbYb4ZR8s32CuCa+nMMzhSGtuLcUMOZsjKbfRQNUK
+	 9+VWI7HPKISLKeIow5yO9W1mWVw6ZcVmQ3NE885DIcLf50OQWLGIkiYc3Sbv3w/0v+Cnt
+	 DvqO7irV+pyOmyLpKHXU7TE+SJ/hMDmcNebbR1OZ24z3nEHvLr1fIUm67SmSjxl6RHg6K
+	 J7CWvFJW13bVna0c3UdJaX3qeM6ahP/Pmr+6XkS2mBFeKbYGHpYXltx1MePrjwPa98w==
+ARC-Message-Signature: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256;
+	c=relaxed/simple; t=1750169978;
+	h=DKIM-Signature:MIME-Version:Date:Message-ID:Subject:To:From:From;
+	bh=a56wrbWI+ICLMM+fNz3qAQBeG+et5jY359IYaQ4fjUw=;
+	b=WuyTBzibnN+vTnbxilVo74llUZpfaieSX5yu+IkOJaOxuoT6WzU55nOa9kuU1yWL7ASF
+	 a8ChW2PzkvzxWflHFLsjyrt8raAkIrggOso91UCkOYEKOZ7L80mfdYTG3MyfZyaXAcvvD
+	 +0USPReXGi+RbmVQFZtesLZqvbN3cLW6u49hRNf2EQGQt6Wf2l3WSBOUpc2pMu+0PqhJI
+	 K0yyvoJgcUrdFcqgXaEjABbxJXLbwxhX9CzaM4g4HbiKHZ80rC3q/JYRuOGiXAvXrOtqe
+	 Af2UyKUY7agCeKPJZu98jlkGP+UcXDoitrEwW4+OxNLSBdb6Bgo2Z/P47dtrr+bzQMg==
+ARC-Authentication-Results: i=1; lists.lttng.org; arc=none smtp.remote-ip="::1"
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bM8By35gHz227x
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1750169951;
-	bh=hOBnvRZqm4oD8ohW5d7/rvcc8w/gNhevViKK4dpqoTc=;
-	h=Date:Subject:To:References:In-Reply-To:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=yUzI59bKDaGqVzPU0xXhlWRKLJy3w8LdwxqmdAaYzeOYgIBIG+VSyB1W0801gcmZP
-	 80UTZDTw+nK6rQhlhR2HVJmOPSgdsTa/32SotnnBWhBGsmK0LT1biB7TX0SKVY0kDn
-	 DO1jM+4tMC4WYKDDax/Bh01mrGLhIpIPIXxH1NIyladmwribgp6lMzq9Nm6eWhjdoD
-	 xsiSphlYalcJwn4EowFND45GZlqpe5FpnhNIp1zL0mHkfG8ykk1LnmfKHJYmq8KFgf
-	 HvYD/R3Ne0Mf/mnaONTX+xMTojuAUJqz2Zzb3BlOqnGg6SuylP+rTLVg1QSLNqxxU1
-	 6sDx17jQmvEQQ==
+	s=default; t=1750169978;
+	bh=a56wrbWI+ICLMM+fNz3qAQBeG+et5jY359IYaQ4fjUw=;
+	h=References:In-Reply-To:Date:Subject:To:Cc:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=rrnw9mrxPOzeSlMAzGnJGPk90aY8Csqa03qkVXBAgg5aiXfGJ1JG1DTCCMxAMWqhN
+	 qGA8nbheH58w9EiSxI20ijZ1bBhrEQq0F3zLzGbGHmn5oGRlqhDC4Vd8sDkrBz4dtB
+	 EJPmqTk4BlezVOeBGlVEYDJvPAY5zQgXXy5vNXH1qrskiXBXNLTJzjzW9GdHz2VeQ1
+	 65vYcbKhJEovdV8eqQ7izhKzGrAo12RCMlja15Ab/O63SMIXvxYNDIbdV4A26jBQrx
+	 fDqMAc98ISoS++8lf4COX/qh0dXsYbZwYGhdmRcSVE2sdvO49jEbt5MrJ2SMJEPqGw
+	 YzgOOaTh3D6Wg==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4bM8BR0sHtz222b;
-	Tue, 17 Jun 2025 10:19:11 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bM8BP6Pmjz227s
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bM8BP6Pmjz227s
-Received: from CAN01-YT3-obe.outbound.protection.outlook.com
- (mail-yt3can01on2110.outbound.protection.outlook.com [40.107.115.110])
- by lists.lttng.org (Postfix) with ESMTPS id 4bM8BP6Pmjz227s
- for <lttng-dev@lists.lttng.org>; Tue, 17 Jun 2025 10:19:09 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dnb/egmqazVORfcEZ32PGBoNtAGg9nCDIiKQZNnYDxk4aG/Tkf2opIDTz8xYEij2AhFERgypIE0Ni2Z8e0JFm4jo4hAls72YNBsRWdlk8rk+pHSQ0aSQ3V+iVjm0rbqCmSvA8b8lxvQ8/lG3SKAf0C8xD5tVp5a4eXNq/ls/af92K1Et/W0slqz7luAN78XDQ64ypJbw8wXlMWjwAwN8gAvgdlm6gia3k1Qre3fC7a0K3QNKCJlTjQtCqH4kFmeMJ/TMi6K0wXYKLCm6gjvYbeclmGuQmA/eWH4pzcxlsGvi0ATDTbplWfVMzTSoDLY6B5cApyi6SIbIuPZI2126qw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6SxRqIoSd+vOzOaKdn6utOkPtKrsLk2UyQED7hSp2FI=;
- b=ZNdHfvdFuwvh07ea8m7sQ5B3EBJgpYWCUlC9GTGmvc30tQao9ldCgkgZ0Vcb/zBgq2Eo6F27/rOPJ9qaP0x68TixuyrKSL4lR1GSjMPwgFO4Vy1LpnAIT+RdHki41vwQYyAFgVKwvuZ0CGNEpT1aWulNIfN3SMw81THAx18qnFHLUVowe45BJkOehZdaRKuDio5snA1ZN0Z7qwHYUrtxlEaLLvK8bcEpLGw4GQ7BiMvh47gI+QgzGVIRqxvjBjEP8FltFZPq/tIEqPGd3msBZROIayuTobzr5wRsZ00oZH1wks07Fb4YyQ9sVLyTNr1YmE1yt8CjA1tjRq/f1zHaWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YT3PR01MB6319.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:5d::22)
- by YT3PR01MB8930.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:7c::10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.18; Tue, 17 Jun
- 2025 14:19:05 +0000
-Received: from YT3PR01MB6319.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::b5fa:c0e6:e5b7:54a4]) by YT3PR01MB6319.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::b5fa:c0e6:e5b7:54a4%3]) with mapi id 15.20.8835.027; Tue, 17 Jun 2025
- 14:19:05 +0000
-Message-ID: <d7e4f68f-2942-474b-96f5-9dc669b1d109@efficios.com>
-Date: Tue, 17 Jun 2025 10:19:04 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: lttng-tools-2.14.0-rc1: fails to compile with libxml2-2.14.4
-To: Norbert Lange <nolange79@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>
-References: <CADYdroM27zgM1RWHoCocru7VY6kHi1=g3PK4QJ0D67Wra1tc8A@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CADYdroM27zgM1RWHoCocru7VY6kHi1=g3PK4QJ0D67Wra1tc8A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0052.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:1::29) To YT3PR01MB6319.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:5d::22)
+	by lists.lttng.org (Postfix) with ESMTP id 4bM8By35gHz227x;
+	Tue, 17 Jun 2025 10:19:38 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bM8Bw325Cz22Q9
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bM8Bw325Cz22Q9
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
+ [IPv6:2a00:1450:4864:20::22f])
+ by lists.lttng.org (Postfix) with ESMTPS id 4bM8Bw325Cz22Q9
+ for <lttng-dev@lists.lttng.org>; Tue, 17 Jun 2025 10:19:36 -0400 (EDT)
+Received: by mail-lj1-x22f.google.com with SMTP id
+ 38308e7fff4ca-32ae3e94e57so51119971fa.1
+ for <lttng-dev@lists.lttng.org>; Tue, 17 Jun 2025 07:19:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1750169975; x=1750774775;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=j5B8oXuMWBwpeiWXHl9012xJnK6v8JuxW9c5APRFmMM=;
+ b=QxxpY6Fvo4T1bGGWsLqcwV1HY5ipZnF9NDHOpBopdwng7uJArMiVKs1cwA/i3x5I05
+ k7HlQ0Udxf2RqWiBycvw7KYZuxjHFfthSwLdxr3bZK5dE5MDJL0kL23xmnDE5NmJlnhS
+ Pq299ur/3zMlIlfGInZkH71ASnD5R/jiWSJ3CDXxxaP43Or2mNZ+PahWbmflwebrXgkB
+ 9yxKaJlrjSFBk/8VvPTBMA2lGfLF3vxFoxotnROWE5Oh4MvvB60VKjylZM+LyM4FIbB0
+ WZRNGzTjyIqv3k4ciHfr5/jIC05dDP+uGPR5JI+XiKAkIe3WiG704ROf8mtn0dnb9dFS
+ JocQ==
+X-Gm-Message-State: AOJu0YwfDT8VdwL0euZzT/rF2bKt5F/oRd3/Eu7nemxpI9qvKUy5akFi
+ 3J5WM84ZnWieGgetnqma0+U0QHYRX1+VIDqLBYCmC2U/4dZLqEdvdlZD39RNjtOXIdUNJ72+UdZ
+ G3t+Qz4Q1NLCawt8fYTl3DPoBz7ORlFg=
+X-Gm-Gg: ASbGncsOaP+n8EL/n4fWpO84+IJDkq+ZnpVe+RTIF65n8L3Rld56XPbto0xgxLaFMtP
+ 3i5w3dtBD+g2UQSU1YU/1NVS+4DJZd/nGS/m4RKFV7h6QGvXB+Bot+lT2CqGjUGFwa53ovPjFEm
+ vLHVrqcmBHublNvknx6HpAXWtzSMlsZCgpyeZXEBhyVZk=
+X-Google-Smtp-Source: AGHT+IEoVC04mr0LjWmzRQBcaQj00RALHEuiuN82oCqornCoLPLEl4cXuVqI+Sg6xVS4t8y9Zjfk00LhFaIgymv75No=
+X-Received: by 2002:a05:651c:b0e:b0:32a:6c63:935 with SMTP id
+ 38308e7fff4ca-32b4a43374fmr32983481fa.4.1750169974610; Tue, 17 Jun 2025
+ 07:19:34 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT3PR01MB6319:EE_|YT3PR01MB8930:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd7a2052-93cd-4927-504c-08ddada9ea92
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?MTNRbGRuVkk4aWU2MGQzN2JMdEZwR1RiZjY4cWQwS3UvME5Xbjd6RXlsK2dp?=
- =?utf-8?B?MFVqaHdTNmFDZmNUek1KTHJaNnJMSFFtZWM3Y3dJdnk4MTgrYTdvQjNnRUFt?=
- =?utf-8?B?V1FDM2tIbHZOU1NUZkdjUWtma0JrY1drSlFZUDVrYm9LSnJMakcrYmRMeHRn?=
- =?utf-8?B?NURSYzlDYzg5VlhwWDVxKzBORlFWVERoYlVDQXpDMW1mNjZhYXZxV20zbmFm?=
- =?utf-8?B?NGlqVFZvajQ2cXZHSFhXalRFWnVSUTBBRHY0YUlhSlBhQXVMdXdPdmdFdTdj?=
- =?utf-8?B?SG9KNVZOdVpKVHVjNXpNQzlvcnpwTllWRWVUSjhpck9zdE9uUU5Zd3l1VWFh?=
- =?utf-8?B?ZDJOK2d0WENxQ254YWlyTjU5dGx1VmpXM2NkRmtOVUZ6dzNyalpINGxZTUoz?=
- =?utf-8?B?cXVTekIzaTkvWElTL3FJWnYreTYyejlIRGtFTkgvYXkyQUludHNTTW5vNjdi?=
- =?utf-8?B?SGN3aUN0OHJSYU9tSFNzcFFLMUlXdVE4T29kSlJzZGZ4OVp6dGhmaVI3OXpG?=
- =?utf-8?B?emdUS1VVaDRJWjJkQTlxZS9MRGdNZ2ZqdzVnWVJoTVVLMWZlaVlIVU91M21K?=
- =?utf-8?B?UU4wSDhWaGpQWEpPSkNYd1JuN0psK05NUDk3Qzh4empLTlQwcFB5R3Rpakpi?=
- =?utf-8?B?SmV3Q250K0RvMmNnMTd2NFVTZWxJanAwaWZpOGlaaXhHRlljdkFqQmIxTzhq?=
- =?utf-8?B?NC9lUVh2WU9laVRveDVaaDlFZU1RaTBtb1pIVC9TMGVhdnF6MU5sMW9SVmxS?=
- =?utf-8?B?c3dSVnZJTGZ5RFJ6ckZac1NLRjVFSUNDbC9RZzZXcDZCL3VhQ3QvSmtiQVpo?=
- =?utf-8?B?UHZMOFhTZHZMalhvK1JJelVPS3lNV2FIYnVETVk0MXg3WDZjMDUwdG90QjJO?=
- =?utf-8?B?UmNkUUJFcUg4Wm5QMzh5TVpwR3BxOVpnMzBTYmVNaEtvTUVjZTVlU3BQdURa?=
- =?utf-8?B?a25tQlBXYkpZVTRvTDd3cDUyZXlCVUY1S0NwZXE0OGtwWU1hUzBJdjBCY200?=
- =?utf-8?B?RllnZ2IxUzUrajBpM1VSRitMdEUwU0FrZjlzUGdES2RqdXRlanRKUkRqdEJj?=
- =?utf-8?B?d1NNWGFQN0UrcmhOcGIwM1FaTXp1WTd0ZVQxMUZhaFkrbUxUMW11UlZoU2pE?=
- =?utf-8?B?YllDcThJZ0xjNjFuTUxjei9DS0VRWitscDNZWFFmYU9IbmdRVTBBakZJdFIz?=
- =?utf-8?B?NVhLRVpwb1paUGd0aEtZdnFWL21DU243N3E3QXBWNEtpaWdvckljNG51emV6?=
- =?utf-8?B?Yk5tRG8rR1p2RFQ3ZzJlWXlFQVk3TkRGcnVMem5RK01lS3FxeXNwMzUzQTY5?=
- =?utf-8?B?ck5Pb2twU0VUUHpxNW1XOGxkUU52Rmd6TGxrVGJsUTQ0bnM2clFjY0tHMEtL?=
- =?utf-8?B?WGhKUDJVc1JMVDdSVndPV3JPaHFIdVYyaEJzTlFmQzZ3ZHBrakJDYlNnM2tN?=
- =?utf-8?B?NEhYeDhCSHVMV0NKNEwzd1ArbTJHM1J0R091bFgvZThzRWdlREVOZFV4aHZr?=
- =?utf-8?B?NUErTkNvRmFRdDkyUlgwbzhwZG45akFYRVRuZnpOaUdHYlRtcDlDMk85YVI2?=
- =?utf-8?B?cWZqblNoTmdHbW1sMlptc0I4UllZWUhrZEU2R1JiTm9vWTk1d2JrMm1Bdnln?=
- =?utf-8?B?blBHQzkzMzVtSHN3RGh2RWZYNzZ0bi84bHgxMUpjMGpvUkhoQ0h6bHhyK1li?=
- =?utf-8?B?M0ZlR0pGVFJoajEwTFpZalFieXlHNXpxVWgxMGQ1RTBaOGVhcnZrT1VNMC81?=
- =?utf-8?B?cThiTjJVbGQxVVZRdUtMQmdiazN4cVpqRDZmcVlJQVhleHFHbEkxVmlDazR6?=
- =?utf-8?Q?K4VeZAq/O2qfZOONhkeOiq0rh19AZlm82Wn+I=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT3PR01MB6319.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(376014)(366016); DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bVliQkpmU1hRTk1KZzU0RnowMGxNUEczck1rMGkwc0Z0dzY0anJaQ2pPVjBw?=
- =?utf-8?B?KzZjMy91ZHk2ZitDQ0lhM05kZjgxQit2VDlhcUNVUHRFU3cyZXdhQ3EwdmdD?=
- =?utf-8?B?UE5Ecnp0TVhlM3pTWmo1c1pLTzhJYlo1K1VxQUhOSkIzekI0R1d3bW81d2Mz?=
- =?utf-8?B?bE91NEtHSE8wSkRpbFVNUGRUclFrU25zNnlHWnlKRW9pTUlsc0hjNFBTZ3dv?=
- =?utf-8?B?Mnl1ajFkS1lwR3UzMFBzdGFkdlVZenY0VGlIcEIvYW9NdkJoeXJCUXVyR3Fz?=
- =?utf-8?B?VkkxNUVzSGRuVGxGYXlVRzlkeGd6cXdwNUhHR3BhVlVxbTl3UVVvcm1STDBj?=
- =?utf-8?B?Vkp5a3NuQlg1VVV4NVNJR3ZLRUJQbnVETFFwUy9XckJkVnlKRUxvS0o5WHpE?=
- =?utf-8?B?ZW1tdFdrOXFwRnBuU0xRVFRXeWhLWWtZVE5nZlFjNXBYZDZQQXpCUnc2WENm?=
- =?utf-8?B?a05qOUFQQ0UwTFM0WkU3NFRHb3gvQzJneC8yWng4UFRsQTgwMUN5anU5VUkw?=
- =?utf-8?B?bnMzd2VXVmhPQVdEN1BYcGlTUUlFZzcybGtwalN3eWJFaERyUkZJWHRYaEhj?=
- =?utf-8?B?Z0dZcFlqUEdjNkh4MTNkMzBNNU03OHBPeEVlOFJmRCtuTVo4SUdZaElrWkdD?=
- =?utf-8?B?dmtXQUhQc05ZNVdNcmVYeFphZmlhYUJoU0s2Wjc3djdyMk9Pd3BjTmhEd1pU?=
- =?utf-8?B?N0dXTzZjQWgrSnE2YnBXQnlDdmcveXdoa1lDRkNncDA1ZVNreDVLc254ODgw?=
- =?utf-8?B?MVV0SGFiN05KcFZPYm9KaGRvZXNmSFNNaXd5RnNBSzl0NktGWXkzTWtuaHl0?=
- =?utf-8?B?V25pZnorSDJYclQ4OFJRVzJCTGZGL0tydjBscndqOTZKQk92RFJtS0MwQXpR?=
- =?utf-8?B?VHl2ZHhLcHpJdHlHQkJNKzRmRXpjT1MyRjZHUTdXNkJYVlRlQ0xlN3Y2MkZU?=
- =?utf-8?B?RTZaN0ZKOE51UHJ3cytBYUtwM2taMzJWRFVZSVF5bTgwanMxOGJnOGF4UHVy?=
- =?utf-8?B?cDFJSVI5NkdCd0RjOCt0cmhUYjFTTzZHQ3hvbEcvNXFqYmFOU1BXd2Q3OGM3?=
- =?utf-8?B?emRWRWlmTWtqUjRINVZBaGc4OG9DLzVHT2kzaU9mNUpZZ0ZHN1VoZVdHb0VT?=
- =?utf-8?B?MmtDQVg2eEJETjhGNEh2bDZTRElpVFFQT3dqYVp3N1huajJDUG1RdE5oaXNl?=
- =?utf-8?B?NDA0UjRyOUZmVkhKNEhUQ2lQdjJyUEhSWTFxNUtabzlTdWZjbTR1SmEvSFF5?=
- =?utf-8?B?VHlJZHY1UnUxTGd6N1RWTU5zZ3RGV3REVkxCeWpIUnlXVXpTSUFESVRkWVhF?=
- =?utf-8?B?YkthZ3RYNnloMVlqMm45c21ZNEhobVJuYldXZlVyb0NXeENzZGE5dTA4Q1JQ?=
- =?utf-8?B?elV3OThPeFRZcXEvR1FPMngweEdleHhBNGhqYmxlc2gvMHRUYS9aNHVCdnNI?=
- =?utf-8?B?YWw2c2Mrek1ibzhlZTNJTGJ5R0tUQUdwUjlJSGxacTlmY0VYZllqdms1Z0c1?=
- =?utf-8?B?aDdQRGN6dkFmemlQd0E5cHZOeFZSUk1TbVNLTmx4dm4zZTVidlVsZTFuMzNY?=
- =?utf-8?B?anhRNUNhS05reUIwZlAwVTM3WUpoRU4zYlVKRC9kcUxhM1dEWk5HUzVjYXhC?=
- =?utf-8?B?M04rS2tmcXd6dzgrNnFJeURCSHA0cHpFZHZRaGJ6TmJ2cTJ6U2dZeGZ6bzly?=
- =?utf-8?B?QXhwN2RLVmpDVUdld3ZvV3RFRGd4Umh1a2hWT3hpdlVraWQrR2xocmRlT2cz?=
- =?utf-8?B?VkpheHA2cUVFZmZ2SmMzR3ZaMXdkeVlvVEJhWDdtTGNJWXp6T1ZHOThtc2NU?=
- =?utf-8?B?TGZ4QnYrcDBhQXlxUUFQNkZnUTA5QnBqb29vVEpQV1A4TTV0UDJRVlM0ei8x?=
- =?utf-8?B?bVhFcllkckUyNTByVk8rbFJ0eGZyYU1JNjNzNCszWFlSMjV3bU5XQWloVUxm?=
- =?utf-8?B?MkMzTi9SWHpvZWtMTFI5b2U3Y0lWUFN0Ny9YUmlOa3FrMzdwSTlVTXBWb2NC?=
- =?utf-8?B?eE1lL0NuT3NlUFBHWmNOVzZyVTRYQjNROUhvUEtseEIySm9YTFN5ejIzZWFr?=
- =?utf-8?B?Q04zVVhrRUJHazR4b3RWK2ZWN1hTaFNlVjhtSHZ0TjA0NjJrT29iQ0s5cDc2?=
- =?utf-8?Q?PvIuiKoRBaa+YkRUIG/nDd8Kw?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd7a2052-93cd-4927-504c-08ddada9ea92
-X-MS-Exchange-CrossTenant-AuthSource: YT3PR01MB6319.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2025 14:19:05.4869 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VSd6Disn/DS/EWUVBxeQ0HgyBahyjGp6MsRyGt2Eyb1ClasxDGOXpKPsjN8kKeaKbLaA2q8JthZaMDRgYkFV5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB8930
+References: <CADYdroMJgt=bMGWmxFV8YAKWouBJeL5244_RM1S-D0SDF+tkzg@mail.gmail.com>
+ <294104910.2889.1633458501063.JavaMail.zimbra@efficios.com>
+ <CADYdroN+AaoceVJy9-k9c=kAY8MdbQ_a=rE-KpPPULW7cpuPyQ@mail.gmail.com>
+In-Reply-To: <CADYdroN+AaoceVJy9-k9c=kAY8MdbQ_a=rE-KpPPULW7cpuPyQ@mail.gmail.com>
+Date: Tue, 17 Jun 2025 16:19:23 +0200
+X-Gm-Features: AX0GCFtibFPYCRN1aGtOc-4Wui2rIoXT10RAOkhCfXmWQRPCWSetZ9zwcCdilC0
+Message-ID: <CADYdroNTqyCnaNBS7RbMKGw-xZ+_YH3nsEr0k-VSjH5DaqntiQ@mail.gmail.com>
+Subject: Re: [lttng-dev] Feature request: dynamically load from prefix
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset="UTF-8"
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -176,41 +93,130 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Kienan Stewart <kstewart@efficios.com>
+From: Norbert Lange via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Norbert Lange <nolange79@gmail.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi Norbert,
+Am Fr., 10. Dez. 2021 um 23:43 Uhr schrieb Norbert Lange <nolange79@gmail.com>:
+>
+> Am Di., 5. Okt. 2021 um 20:28 Uhr schrieb Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com>:
+> >
+> > ----- On Jul 15, 2021, at 7:21 AM, lttng-dev lttng-dev@lists.lttng.org wrote:
+> >
+> > > Hello,
+> > >
+> > > The production rootfs should be untouched, ideally read-only,
+> > > for development/tests a subdirectory can be mounted (eg. /usr/local).
+> > > Idea is that the contents of that directory alone (and at most some
+> > > env variables)
+> > > should allow enabling development features.
+> > >
+> > > For lttng I would have wanted to add a library
+> > > '/usr/local/lib/libmyservice-tracepoints.so' with runpath
+> > > '/usr/local/lib' that would activate lttng tracing,
+> > > pulling in lttng libraries (ust, ust-tracepoint) from /usr/local/lib.
+> > >
+> > > There is a caveat though, unless 'libmyservice-tracepoints.so'' is
+> > > preloaded, the code in lttng/tracepoint.h will run constructor functions
+> > > to register the tracepoint probes, trying to dlopen the lttng-ust-tracepoint
+> > > library and fail at that because this is not in the library search paths.
+> > >
+> > > At a later time,  'libmyservice-tracepoints.so'' will be loaded, and
+> > > lttng-ust-tracepoint (along with lttng-ust) can be resolved. but the
+> > > tracepoints are not registered.
+> > >
+> > > So I guess what I would need is to either retrigger the registration
+> > > of tracepoints
+> > > (likely complicated with static and weak symbols potentially causing a mess), or
+> > > redirect the dlopen function.
+> > > Useful would be either try to find the library in /usr/local/lib or
+> > > use '/usr/local/lib/libmyservice-tracepoints.so''
+> > > instead of  lttng-ust-tracepoint (both have (dis)advantages).
+> > >
+> > > At any rate, I would welcome some customization macro.
+> >
+> > I'm currently working on improvements to the reporting of such scenario.
+> >
+> > See:
+> >
+> > https://review.lttng.org/c/lttng-ust/+/6480 tracepoints: print debug message when lttng-ust-tracepoint.so is not found
+> > https://review.lttng.org/c/lttng-ust/+/6484 tracepoints: increase dlopen failure message level from debug to critical
+> >
+> > With this in place, it should be easier for a lttng end-user to figure out that
+> > liblttng-ust-tracepoint.so cannot be found by dlopen() because it is not in the
+> > system's library search path.
+> >
+> > From that point, what is wrong with requesting the user to add the path towards
+> > liblttng-ust-tracepoint.so to the environment variable LD_LIBRARY_PATH when running
+> > the application ?
+>
+> Not feasible if this is a read-only rootfs, service configuration cant
+> be modified.
+> the idea is to have some trickery to allow /usr/local mounted to a NFS
+> or small rw filesystem,
+> then drop the files (libmyservice-tracepoints.so and
+> liblttng-ust-tracepoint.so and services) there.
+> then, the app can be instructed to load
+> /usr/local/lib/libmyservice-tracepoints.so
+>
+> /usr/local is not referenced anywhere in the rootfs and should not
+> affect anything,
+> if for ex I drop another libc.so.6 there it should not affect anything
+> normally running.
+> Ideally liblttng-ust-tracepoint.so could be loaded later and not
+> pulled in by the tracepoint stubs,
+> but I understand that this is complicated.
+>
+> Any good reason not to provide some customization point like
+> LTTNG_TRACEPOINT_PROBE_DLOPEN
+> for the stuff you locally include into your build?
+> Would meet me half-way ;)
+>
+> Norbert
+>
+>
+>
+> >
+> > Thanks,
+> >
+> > Mathieu
+> >
+> > >
+> > > For illustration the current hack-around is following
+> > >
+> > > Norbert Lange
+> > >
+> > > #define TRACEPOINT_DEFINE
+> > > #define TRACEPOINT_PROBE_DYNAMIC_LINKAGE
+> > >
+> > > #include <dlfcn.h>
+> > >
+> > > static inline void *s_remap_dlopen(const char *localfilename, int
+> > > flags, unsigned prelen) {
+> > >    void *md = (dlopen)(localfilename + prelen, flags);
+> > >    return md ? md : (dlopen)(localfilename, flags);
+> > > }
+> > >
+> > > # ideally this would be LTTNG_TRACEPOINT_PROBE_DLOPEN instead of the dlopen mess
+> > > #define dlopen(x, y) s_remap_dlopen("/usr/local/lib/" x, y,
+> > > (unsigned)sizeof("/usr/local/lib/") - 1U)
+> > >
+> > > #include "trace_mytracepoints.h"
+> > > _______________________________________________
+> > > lttng-dev mailing list
+> > > lttng-dev@lists.lttng.org
+> > > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
+> > --
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > http://www.efficios.com
 
-thanks for the report.
+Well, still no joy with lttng-ust-2.14.0-rc2.
 
-The libxml build failure is fixed in 
-2d2e77ddc9e3e63c3c658e824fb754f5a534a6ab, which in the stable-2.14 
-branch[1] post-rc1.
-
-thanks,
-kienan
-
-[1]: 
-https://github.com/lttng/lttng-tools/commit/2d2e77ddc9e3e63c3c658e824fb754f5a534a6ab
-
-On 6/17/25 10:15 AM, Norbert Lange via lttng-dev wrote:
-> /tmp/dev_develop_libxml2/usr/include/libxml2/libxml/encoding.h:173:7:
-> note: declared here
->    173 |     } input XML_DEPRECATED_MEMBER;
->        |       ^~~~~
-> ../../../src/common/config/session-config.cpp:297:75: error: no match
-> for call to '(_xmlCharEncodingHandler::<unnamed union>) (xmlChar*&,
-> int*, const xmlChar*, int*)'
->    297 |  ret = handler->input(out_str, &out_len, (const xmlChar *)
-> in_str, &in_len);
->        |
->             ^
-> 
-> Changing the call to handler->input.legacyFunc seems to fix it.
-> 
-> Also lttng seems to need libxml2, but doesnt add the necessary flags.
-> 
-> Regards, Norbert
-
+I would like either some MACRO like the above, or some way to make
+sure I can run code before lttng_ust__tracepoints__init is executed.
+Probably using a constructor with priority LTTNG_UST_CONSTRUCTOR_PRIO
+- 1 should suffice?
