@@ -4,75 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E19B5C7115A
-	for <lttng-dev@archiver.kernel.org>; Tue, 17 Jun 2025 10:55:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bM3fy0z46z20cY
-ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1750157706;
-	b=QqaQFSy7JNDYX7TyR1tb1hqj4sa1cuYoK3QqbZ8YX1vl+Gl2mfN/qbtIk0Ov6DhvPvhZ
-	 UeHK2JIo3qwgkOIeH3fHf4Pr4u83wrqSOWJF56NbJPP3f6j9bhhMqmDUQdl2D6BxNYIy0
-	 6edHcvhOzRMZ8vCYr5iiaka6Bs4RCr5SI35vb9c12jdGD/eG1D7wamf2dby3Sf+9qIdjA
-	 VXzSvPGO52hfA5NLmLQwOn7r+Ym+RAkBGqk0wO62naBQsXzJBd5UM4tc3V6aIdJV5Hivw
-	 V2qI5sm7FF5cdF908saY8u4LcNdtfnvbrivqHxxJOz0HIS3BYNn9fFEVlL4s0byywvg==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA65EC71157
+	for <lttng-dev@archiver.kernel.org>; Tue, 17 Jun 2025 11:01:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bM3nm19rpz20fj
+ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1750158060;
+	b=k4auTbaHbCnHFBGmVPAztROu3irhrFQjSSBFm33itJM/2fXHB0KMnDThU2fcMA9L3Nhn
+	 nl54z05L67WZabobRXj1ThN+5/e5k/zpiDZZ5Hy8XuRhyzoKwu8oQE/pxdMx2DCGl9QLl
+	 ziehMq2il5GB4PyXiWfKZIecOlYa7b3RsTCMS4il9p6ghn+kGfxvBaN7K44OeI6F+YIy8
+	 54RaSSquk6pI7gxW12hbQdjVYO+GurGRlgRoip4bZooScHc2Tfwoi5Di7w4MagzdCgRqi
+	 OFUON5mImcyKNleybdnA/LqBNTVFhneEVvvPZdtvMiWPH5b52FpCdbzjRPejxOjaBDg==
 ARC-Message-Signature: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1750157706;
+	c=relaxed/simple; t=1750158060;
 	h=DKIM-Signature:MIME-Version:Date:Message-ID:Subject:To:From:From;
-	bh=QMKP0nKD1TamuzPV4zJirnhDmqjc4zdtkI6pFwfbx3w=;
-	b=RSc9BNCaJqE6krSAWhj82uGm0hTq+hxtSN7X6sVnIRkeFxPssBNvJnfNiKNJlS43I0UF
-	 /dWtvECrAHdQT3Lb0MTbKo/c0nSCaAQ1X8XfqRJkwVUMwReF/2nSZQBFCcPfXSGwp5oN/
-	 FChZyDgVlRjuEi9Yoey1vG6XQ7OpR2dEqsDBzVyOCBnvldrm1WU/XM5RSq/xAyxyca0V+
-	 8CZNu1YKqtw02xlinqiwUY3acgOQ1Gt7FWMTqkE2YTymC5evGu9aix5nzPNTnMZvcr2Eu
-	 EGXZwdjBZYqIxmEGFOgzjVvW8cxUBbMXemTjX5wNun56CK7HAmGIlbsdmyxkM5MWJvA==
+	bh=rRWSqa2didnu5lHSjuLwaLBYpyyhbK6uEZlUxQRKwOQ=;
+	b=LKBRiry4YAqajfOJ+wwMFy7oM15nsqZjXiE0iJ8FtfAuPWLvoEEbgKHCqhK/SfC8zTTS
+	 xdEQtOVlW6z1hDPfdC9DM4zE8Eg9CXBNWVIduVZ7KOuv+YZWEHZqUPiscnCN8LcTgJB2G
+	 mFzO8qcK+iJvJnbJkl/VEDIABqUHh7QcS0N5bYwCf+kteZXpAnJ73rI15lA3KStm0JgD1
+	 A0yGxgegmuV88PTwOxvFsYkZOk033mSgStPDS7CD5JYBq86IDGC+zR2+BxVgJxQiYZVRU
+	 I1SEsYCrQiEZXYNAS3zmcT/4uE8Y0+3h9uXugjlR17AHmSnjtojupmqYUtIBwhhYSnA==
 ARC-Authentication-Results: i=1; lists.lttng.org; arc=none smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bM3fy0z46z20cY
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bM3nm19rpz20fj
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1750157706;
-	bh=QMKP0nKD1TamuzPV4zJirnhDmqjc4zdtkI6pFwfbx3w=;
+	s=default; t=1750158060;
+	bh=rRWSqa2didnu5lHSjuLwaLBYpyyhbK6uEZlUxQRKwOQ=;
 	h=Date:Subject:To:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aSusZbZ6XzxZQxmmqKN/Jdb+ujehhTKKWO8/FHk7Ycw7YPacUj8FsCv8MFGhWsP9d
-	 K9HmySTFz2aOSRGsMVG7++Fh3yW2NGj6JavaVFRnA0eQztzcN+eO1XuPI3ZbGO2MIp
-	 c1EtdmNH/53wnq7R2tI+oFxFXnu6i+CTmEHfVt+vhDYgDdZzLb+Ig4dsU0kwpozJ9o
-	 LwupSVXGlDRKXdG0FUTHTL6jUz6vvxnzRrWLJ1Pi98Z7766vIgOxh/RKAeu45Y4YVM
-	 vMB6kQD9F1gZmaleegCWHXpZhffVl3kyb0JS5YpI/ZZ5hjBCN3mibi5I6VjaALWmFm
-	 A0p2Xez48DWgQ==
+	b=VfXWb6NBmXST4wyDfSAUCRfWhFpxiyaP5Evshf2NFf4h8QMqvKQKdvpBvFnWSxYNl
+	 mMWVUHsx/9APvLXgCLmI40CSm4i38Nf37F2w8Aq3Cmd5HlSwTLnSTK5elLnR5EuQsC
+	 KCKBsW1pfHLTonaJ/doCaUU0q+Mm03JZ0y5w7LrulEK/KrIkoEOXdzqI2P+nbapqTY
+	 OHO9tZd1daS/M1EX0GUtQUcbHQFBDIs5eH8CLrufgI9ClC7dZfLbhhpsPN66ajXDq8
+	 NM82KZXwdubIQuc4Iu4b9nCqgM5BqPCB//tAmpIkB/TyhgQRtvwiWhoODp201wYebH
+	 srCI5+tg5nERA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4bM3fy0z46z20cY;
-	Tue, 17 Jun 2025 06:55:06 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bM3fw29XNz20cR
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bM3fw29XNz20cR
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com
- [IPv6:2a00:1450:4864:20::22a])
- by lists.lttng.org (Postfix) with ESMTPS id 4bM3fw29XNz20cR
- for <lttng-dev@lists.lttng.org>; Tue, 17 Jun 2025 06:55:04 -0400 (EDT)
-Received: by mail-lj1-x22a.google.com with SMTP id
- 38308e7fff4ca-32b43846e8cso30553841fa.0
- for <lttng-dev@lists.lttng.org>; Tue, 17 Jun 2025 03:55:03 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4bM3nm19rpz20fj;
+	Tue, 17 Jun 2025 07:01:00 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bM3nl1f9Zz20fW
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bM3nl1f9Zz20fW
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by lists.lttng.org (Postfix) with ESMTPS id 4bM3nl1f9Zz20fW
+ for <lttng-dev@lists.lttng.org>; Tue, 17 Jun 2025 07:00:58 -0400 (EDT)
+Received: by mail-lj1-x22e.google.com with SMTP id
+ 38308e7fff4ca-32b2e49b62fso34207151fa.1
+ for <lttng-dev@lists.lttng.org>; Tue, 17 Jun 2025 04:00:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750157702; x=1750762502;
+ d=1e100.net; s=20230601; t=1750158057; x=1750762857;
  h=to:subject:message-id:date:from:mime-version:x-gm-message-state
  :from:to:cc:subject:date:message-id:reply-to;
- bh=QMKP0nKD1TamuzPV4zJirnhDmqjc4zdtkI6pFwfbx3w=;
- b=cmrEW8vBa9JiX1DCVIWGYKskHpd54jkRI5updTcHVWg/Rmd5GwRDUnZVi1jhyCeMIY
- K99Xay/FekKssHF9sAcsHq748pI0jHZw0LfKpzgelOPXhKTfBg284g0t+Oc7R/7gohYm
- w5LdHzOre4M5FENXRjIhB5vroO5WFnQY1wucPUCKGyULuKU/bctH2Ef2b8a0by6JcMkh
- ScHN1DHIaJgu4Qfycf8Z0vcjgzKydDDrgTkzqC31yi5XcCI44FrZhFD5CszdZRq4Se6m
- m2AVlJGe+g/mEoTfyspV2ISjsbrFUb2UJcSPjvWT8F5iveCMSaOld92ICnAX0Bcjkapl
- LIsA==
-X-Gm-Message-State: AOJu0YxoutktBEYYRALoyibpSTL4l9XrGlWQb5Pe/WnBnEo/B604oQbP
- +/DVU3hvUwM+hhTPSEU5cGMiMCihXKCJbpJLrlAcrmjrlIEd+xbgiSwgB/z2FpZAzY6NLDG9pTS
- 178CigP6qbah9Twq+Frlm6ND0gQMH7uDQZa6N
-X-Gm-Gg: ASbGncuWGPO7ExWyPxsLQecBt9QaJEPOX8bf2e+bOCibNxUyNcNVwruShRIdxJGnyxP
- FhnynWfnVqHrmQeG3+BKAcsjJ3si4bUolyBmuTDvcO+2lrHQDHv/RXtQc1Vxcu7yw4EYzs6q5ud
- sSZ/sAePAaQGjC5wN7foVKG3fMTCeCcSF56YE7pa7f1tw=
-X-Google-Smtp-Source: AGHT+IF3Qt604Z9GjWWzsMzwy7mTdNek2/aGhNkcJGfs42usFOKu3eDIgER1Pc3Kkp5v/TXY/DKlQomAi5TE7da5j2Y=
-X-Received: by 2002:a05:651c:1a0a:b0:32b:50c5:2593 with SMTP id
- 38308e7fff4ca-32b50c52793mr26454851fa.18.1750157702337; Tue, 17 Jun 2025
- 03:55:02 -0700 (PDT)
+ bh=rVP8w9H7zpujj3Y9dEixoPtZi9gKPH917MSJ8EAz2vw=;
+ b=SCvGT1xGEyWRx6Mehezg8madBx9OAIojaU0bWan/B6ddwNM2xkGDBTICEHvZ6TAKPG
+ U6c5SszAmN1EeSykOfkget9vinW+qbikv3TaO2MkacDUiSCO3F+EipEJK/oLyeB17EHa
+ fmPW6XM5etTXyLlc2LjWZEddutRAn9mgNaVOPIjQoUUK39Kqe+Eyu7Z+U84dBbewgNHS
+ AinIeI/8ltMuIBfRF2XAM8hEN2nsfcOS1mNaIviRpvDJLxgIkMwuR6IOvy548onzkkFY
+ 9NWcr2L9vezgjR/a+sxnWeArsb/02vRJEokLfh4oCjiSGMtnI3ac8SmbTSzNM5/ypwoW
+ ysrg==
+X-Gm-Message-State: AOJu0YwCEwxhkmhO+tHiKOoXUKpL6waeYqdj48g5BdB27Ev0ZrL/5WrL
+ 83yGi9bPoVdmM1KSGIB1wf6b6ayqHB2LZpEePtof44T06S+19ckkb0O7eT+Lr3bNRCVwuMOi7ft
+ 6pu6J+XDyPaxteeIRmHn7W6JX4MZnv58zdekA
+X-Gm-Gg: ASbGncuYYfE/+MN+yNhCGWn8iKfG5N0MY+zA2cNY4Iui00eQKKrSwm0NGl4d5wVLQXQ
+ KO6ZEqyQRmUaJZtf1DfH0ZLfgR5hBgwtTfVuuN9OzLFMFFQQsUsR0NKqsQOVQUSHvotpnQD8utx
+ pEO5v8/5V3n576hZNjAElul1e0LC1wTcxMwAmvDfiuAD4hb3mPIunPKA==
+X-Google-Smtp-Source: AGHT+IEhOZwsKbq2YA2NZpoEH7fxm4nXXx9sOjsLIU/nlAcn42EJbu7I69xoms1WMVoJ3F8VM7mwpOJHrYBlgpbQ9oE=
+X-Received: by 2002:a05:651c:150b:b0:32b:5930:fd48 with SMTP id
+ 38308e7fff4ca-32b5931057amr33188441fa.28.1750158055954; Tue, 17 Jun 2025
+ 04:00:55 -0700 (PDT)
 MIME-Version: 1.0
-Date: Tue, 17 Jun 2025 12:54:51 +0200
-X-Gm-Features: AX0GCFueu-eKow-FJxUq1XYN4NQGdjiO9Yr37aIfI8nkTWxjx4lqel3zC7Y7pYM
-Message-ID: <CADYdroN6cD9sLE-8QMqFQiVB=RzPFav8owkuihZ-o7JxyK5uuQ@mail.gmail.com>
-Subject: lttng-tools-2.14.0-rc1: Not possible to disable babeltrace2 dependency
+Date: Tue, 17 Jun 2025 13:00:44 +0200
+X-Gm-Features: AX0GCFt7OK68QIxv4fEXAV7N9KgJUefotnbfn_1D-AMAyQcEXGu6DmUGAeRtkm8
+Message-ID: <CADYdroPQ-E4JGj=mhQkkRNv4PVgpXuN07fQpg9-r0TifsJpQ5w@mail.gmail.com>
+Subject: lttng-tools-2.14.0-rc1: ODR violation
 To: lttng-dev <lttng-dev@lists.lttng.org>
 Content-Type: text/plain; charset="UTF-8"
 X-BeenThere: lttng-dev@lists.lttng.org
@@ -93,10 +93,29 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
 Hello,
 
-I had to add babeltrace2_CFLAGS="-DA" babeltrace2_LIBS="-lm" to the
-configure line
-to be able to build.
+enum communication_state exists twice with already diverging definitions.
+I am not sure if its a functional issue now, but this sound like it
+can cause fun bughunts in the future.
 
-There should be a --without-babeltrace2 switch and possible automatic detection.
+(enabling lto helps finding that kinda stuff)
+
+../../../../src/lib/lttng-ctl/clear.cpp:26:6: warning: type
+'communication_state' violates the C++ One Definition Rule [-Wodr]
+   26 | enum communication_state {
+      |      ^
+../../../../src/lib/lttng-ctl/destruction-handle.cpp:25:6: note: an
+enum with different value name is defined in another translation unit
+   25 | enum communication_state {
+      |      ^
+../../../../src/lib/lttng-ctl/clear.cpp:29:2: note: name
+'COMMUNICATION_STATE_END' differs from name
+'COMMUNICATION_STATE_RECEIVE_PAYLOAD' defined in another translation
+unit
+   29 |  COMMUNICATION_STATE_END,
+      |  ^
+../../../../src/lib/lttng-ctl/destruction-handle.cpp:28:2: note:
+mismatching definition
+   28 |  COMMUNICATION_STATE_RECEIVE_PAYLOAD,
+      |  ^
 
 Regards, Norbert
