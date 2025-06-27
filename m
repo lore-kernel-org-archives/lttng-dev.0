@@ -4,87 +4,169 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 438DCC7115B
-	for <lttng-dev@archiver.kernel.org>; Thu, 26 Jun 2025 08:22:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bSWrp4K7Sz1d1c
-ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1750926156;
-	b=nP5Q5VgQCQrw+YTLoXFbRroTmR4W2LMhPKjkhd404TcJtxLKokloM6KU1UfKPcvAj6cW
-	 kTg080OmNlCh5o9uNst2+JDw3DeONC1Pg7LG3D1KJQ1VqaCh+WT4kCC6DyQ5ot2Ygg8fZ
-	 PL8ujLFiC1FPZ2l3vRY/wEz3Y1xnBx78scxFkrPR9hgxAE0tfIVa9xsvpUxQU1hV5k+N9
-	 hD+uhKBC4WDsVpOGaZhEuwhRbMrvnleaNUbChs0LGjuq3OqYgdlze1ta7vRFmGRFGDhsx
-	 uAYjgCWlKcLmiRh3gqFbehECNsdIyjKODyadZErxbhALJ3zi9msxQT3U1mcZ7e6vgdw==
-ARC-Message-Signature: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1750926156;
-	h=DKIM-Signature:MIME-Version:Date:Message-ID:Subject:To:From:From;
-	bh=PWPqAYBwdfuYtZtlyN58aNNJj9LcVhFoEABN32iIlWg=;
-	b=DSFqAHgcy2v1r/ZND4JWQFpMg0koZ2QsxyNckptXB+P5wuBJ3AdcH+hq6kkcNgvyQJ/v
-	 epY7yusUBxWP2uHjPVgib5taXOQCuzuK+t19Si8SQ97wrnoOjXLJ9BGI5UYgdkr8Ny1rN
-	 CV3QD7TJEu2VsgPLHzXlY3p7uWLSkEhNMJqDnXtaAj2+J6Ub9Fh7yfdcdMSkYItim61k8
-	 LhwddU6tGjABjO09G8XwRCpnprdNotxPaJXS7bneZeci6Kq4Pv/DCqUrNFGiCTbvszhsr
-	 IFQ8Cbr8xhVY0UhPrpGizkEjLCWvTs4+4so42HDl4kKuUdsoWybiokNjw6nJkLdp9TQ==
-ARC-Authentication-Results: i=1; lists.lttng.org; arc=none smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bSWrp4K7Sz1d1c
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB11C77B7F
+	for <lttng-dev@archiver.kernel.org>; Fri, 27 Jun 2025 19:50:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bTR3y3g8qz13Zh
+ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1751053824;
+	b=nqOpUHiE9Wnt2q5lwprnFsXyRp1QDnkSIdrXuyG7ZTR1ujrDxyEbzJ6UZAPkg/3SyQ1X
+	 1gA/BoAmkblXjha9CxVJ8dR6DtQYAD0GBGJxh6es6oslXHATJR2adDALqLvs5WvWMJdja
+	 sOLcEQFiDdoTeXefj/DzteGwmzZ980uzL6EBTkNOLVj348UZY8n6TH740EmiWUTme1izu
+	 ToDZVSIc9CLU4eHKx0S74dl/9cNWT7E/i6hTIq9z8CA6qJ6zUMJgCvaVPoYoub6/sy5sH
+	 54XhTRN6D/qt9ILCZysWWyo+vOJRmsjkLFWXLEDTAoRH924g80WiRlkrRWqbQRsw6oA==
+ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
+	c=relaxed/simple; t=1751053824;
+	h=DKIM-Signature:Message-ID:Date:To:Subject:MIME-Version:From:From;
+	bh=nqeDemHK4PovA9NLIzr4ouWfXBJpIWOBrc5cdxJMlfM=;
+	b=Y1iz2/vwg3Kwwnmzz2wRikAyThvCQm8ydKyQWpv5uhY5NWrXjqB2oXxzoe3myV4gBq0m
+	 5TpXpOFelMC6WweIvi4uavfpIXlMCqxo5pjj/v2PfIvgUVP69cofzjbFGpxB00Lhar0KQ
+	 UmFIUYEd3Xrscn1kVPmzx1H6u0Ojnm2sz2gAajywqA+FmJew20CpBEjtUjWgu44s5jOmm
+	 7BUFrn2akXNLqyWchsxkGsPnOfXKIfjvf+V/ASJEd8bcm4jEMB/Nfewb8ILuE7sgYSUCt
+	 oE2TSZC97NF7Rd+j6RjF9pRaTUMnpk1/BeZ3w/qeFmbYSWxfPoFh6MYd9j9dRws5B4Q==
+ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bTR3y3g8qz13Zh
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1750926156;
-	bh=PWPqAYBwdfuYtZtlyN58aNNJj9LcVhFoEABN32iIlWg=;
-	h=References:In-Reply-To:Date:Subject:To:Cc:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=wWBqe4lfeEDlAager1UBpGLxQ048PW6ZzWCPbI5mTlY5N11SVUbcZ6WnOEhCv9/+v
-	 ZSsclsQzJ3TpU0ArdyfTXQ+aL09U8RABKZA8vEKZId4VZImLWT4sOi6p8dRiWKyrzF
-	 GgTHuT1Ktj7mrY7HC9Z3sCR3jcrLbLYcWTXuq34R0Cb0xrBM5XSBhyl2gk9X57P6Jl
-	 3TiclAO32V1iLmsrF0Owid3eDwo/1g7HlqOvv76TmR/AYCOyXcNWyp4vq/0zeEfT6e
-	 7+nUVewtzh624bJFTiTqBiDru9pLYW/lPWh2IWHc9oA92eB/2S/T4eov9QpKgsbVgf
-	 pwGJGUgGB1uIA==
+	s=default; t=1751053824;
+	bh=nqeDemHK4PovA9NLIzr4ouWfXBJpIWOBrc5cdxJMlfM=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=LiQiQ97TqvBrEvJGX/aFota4GMeY6ZwQUM1adVLHGzqYziC0sl8kbZeXQJYZWH9sP
+	 kuf163nDQBdV7ybYo2t/SNQvYbQ55qJc3VsOR8+LIE0YeIY6jJxQJzL9cFpDJS47bc
+	 tX1bD8Rexv7q/ywx2f1QoDVk3DpGj8CJhIEYCWOMe0+/9o8RyrB6xuN+PJcFi5AX7X
+	 f4WUgiqDsS1/wTSODaYWbvIUbFyZ+d+a4NqVKof3B2rcec2NZtOjJiNGLDYpagP3GW
+	 IN3PPWEqzQP+B3mII3QjTsKtpRPKcwlhNT6jX/KwUI2bqfFO7DMVd7Fj3wqPryL+o8
+	 s5Lp7InYZsfPA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4bSWrp4K7Sz1d1c;
-	Thu, 26 Jun 2025 04:22:34 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bSWrn1MPTz1d1Z
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bSWrn1MPTz1d1Z
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by lists.lttng.org (Postfix) with ESMTPS id 4bSWrn1MPTz1d1Z
- for <lttng-dev@lists.lttng.org>; Thu, 26 Jun 2025 04:22:32 -0400 (EDT)
-Received: by mail-il1-x131.google.com with SMTP id
- e9e14a558f8ab-3da82c6c5d4so6211705ab.1
- for <lttng-dev@lists.lttng.org>; Thu, 26 Jun 2025 01:22:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750926151; x=1751530951;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=um8Qkfp329hxxdg1bqMwd+hI1X+uH2PCrBNbKMWergo=;
- b=mvZ5+Z8LoRh4l6folkvznOm/qavBQ8FBrwQeSjxZdmiccwLxknAkw9F4707DxPk/Rh
- N3mxntPIIVzPieckUNw7HKna7p9xbJC/aBFTFwgVrBJBfTXiTXpp/UKtnhiNTxdBBYVT
- TqSPEormNIRQaDRSu3IvJSIabOCwgvIOqw519PIaxEZUuxdBY/5qTqgXzmfNJAIPiV+/
- rgDxlrx/wlS58mdvNjSB3dgE3sRUGiDtgQKa+MgRttjGjv5KwbJgmckYXzWp+pHmB/q3
- ZUXXAEYUDxwCIOUH76QSlFhjtdh1MOSLS8Y29BjDaYdCCcjyOk4XcAVxS4OzwHQsp0Qw
- nF/w==
-X-Gm-Message-State: AOJu0Yx9YbXT2dHe2V04QEaOkjxDj+1daQ7cARzqLiBxB+ghtgmbito4
- Vsupj32YxE+xjLr5ZhN5LbW8Fq9YvHvGddGl3oAVHtaxEIRB0EQQLHwaRW8p8kGLXWwgkP+xZ3b
- LFhGC1rqpA9TBJR/i+33zHjjejo6j6DA=
-X-Gm-Gg: ASbGncsbrkKnKjOQAAmnxl6xA/nQbUjbTJf3xst3dG05LhHzztuN+iFUuTjtf1R3NEk
- gkTJq8apsowKTRqicMEYMsfEOvArDq6o/L0mdar20ADE+rOotS/6/tZIVs858lvkEd0chsTD+cT
- nigt5uOhbPYNlTsvsI5t5upxWQfiqq7j4KMyfDoob97w==
-X-Google-Smtp-Source: AGHT+IHlLTmaXv7flv8SeJnHyTAnCcZp4DIDCWDjsXw7RBm5HFAqX5NRNwoZ5Dgjk4dMvGQKHBULHZsiyl6XroM2RpM=
-X-Received: by 2002:a05:6e02:1fc9:b0:3dc:8b57:b750 with SMTP id
- e9e14a558f8ab-3df32a0af03mr77732615ab.17.1750926151173; Thu, 26 Jun 2025
- 01:22:31 -0700 (PDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4bTR3y3g8qz13Zh;
+	Fri, 27 Jun 2025 15:50:22 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4bTR3w1YWWz13Wv
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4bTR3w1YWWz13Wv
+Received: from CAN01-YT3-obe.outbound.protection.outlook.com
+ (mail-yt3can01on20710.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:241c::710])
+ by lists.lttng.org (Postfix) with ESMTPS id 4bTR3w1YWWz13Wv
+ for <lttng-dev@lists.lttng.org>; Fri, 27 Jun 2025 15:50:19 -0400 (EDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sMWqT4IqCBE1uK2ya6f/ULJg/+bcOWVkhNioQO/kKeAEmqtlYVPKCvjlu2l9Yr8WNu5kDQh5U4GpZnM76ojT0CTgUs63yV7K2ZJ16YtmK3AIjFtFy2lJvCB2AMFMeDl+lJBAvuWyi5ylKZBdACemdPBA2g3Amswi3IKRnLRZ5V/MspRganOY8g5klxfqwQu67I9oi1iYSgzITV/qNg3ihv/QyPpMTA+LegNi+jjRGRomf9vfQsUY7YpcgBW2gnqzMzx1ma2CKjNYdBrWTYFzhf0aWqL+zs5WNCESqdpqB4575c3KOb6fQdYPJ3++80BM4VxHsNVKqyMCYfE4WxJlTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pIQ3Hcb+sskZIBVt9z6e4lNfMUKh3+WaNjxXEHTIXYk=;
+ b=M6sM7eoH1F25raWcNk4pRNU/8hNFJTsK2OjMXYKHVQqUWjk4Bs6/841UfQ4lIMnTNgioINcUsmupWpOo1wOn2feKQRuzdC1tkZAIyASaXwWVZkP48T2pMbegiXNOzGoN59ORe4qIyZTtH7ovuZ2EnMAwodLlIZOYM0Vwy+ylRF5tIlS7P96Wp8WnRuJESxezH7DdE/i6E7doCaJUMwYLn6TmImccLoIPfb0Ko8G/MRLI9IaVuRbgGxUKQxwt+Kax30kJtJyhYDEvnLKw4Y8vEFnUoOFdhoWe2n7WHRKbGXlsyuvhaySbFmJJlDYibOLPA4PTAh8rXM7EEqGXnbV2hA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YQBPR0101MB5323.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:41::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.24; Fri, 27 Jun
+ 2025 19:50:12 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4%3]) with mapi id 15.20.8880.023; Fri, 27 Jun 2025
+ 19:50:12 +0000
+Message-ID: <965dab1c-7dfc-4502-bc63-933bd0859abb@efficios.com>
+Date: Fri, 27 Jun 2025 15:50:10 -0400
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: lttng-dev@lists.lttng.org,
+ Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
+ linux-trace-users <linux-trace-users@vger.kernel.org>
+Subject: [RELEASE] LTTng 2.14.0 - Orbitales - Linux kernel and user space
+ tracer
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YQZPR01CA0101.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:83::20) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 MIME-Version: 1.0
-References: <CAEobtPOhc8K3c-Qcymm1m-pRpHSZyDSarAKoGKeiKqZfUqXOCQ@mail.gmail.com>
- <34912d84-7750-454c-9f96-fb8d865ba8d8@efficios.com>
- <CAEobtPN-Yq_zpu18FsbS-2s4WhJhpEgjK2yuQ+NeOxcGFuaENg@mail.gmail.com>
- <6914656f-9b7b-43fa-9dd1-9b27506c6d2a@efficios.com>
- <CAEobtPPKOTgJKObVg2hFe2TPR15gTybut=QqrgFhzkPAF3qe5Q@mail.gmail.com>
- <df4912fc-ccc3-442e-96cb-9d8de791b284@efficios.com>
-In-Reply-To: <df4912fc-ccc3-442e-96cb-9d8de791b284@efficios.com>
-Date: Thu, 26 Jun 2025 10:22:18 +0200
-X-Gm-Features: Ac12FXxnqUdeX66zkQVimw464XYNffWVqB-BfxCRUDENGXwggRY9WyyFAzaWGDw
-Message-ID: <CAEobtPNbK2DdbfJf4wZx+X3TH_RWWQ22knJhytd6Z2pBbdG+dw@mail.gmail.com>
-Subject: Re: Malformed Tracefiles
-To: Kienan Stewart <kstewart@efficios.com>
-Cc: lttng-dev@lists.lttng.org
-Content-Type: multipart/alternative; boundary="00000000000044cd4c0638754320"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YQBPR0101MB5323:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62d50a10-5593-4cd8-104f-08ddb5b3d406
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?dW5YUUluS014MGMrelZKTitadHUvWDV5MFBIdjBISyt3SjJpMDRyOG1WekxH?=
+ =?utf-8?B?bk1qajhKamgyTDVWRWg3L0d5KzVEanJvK2JPelFMY2tYWityQW9ueHRUOW5m?=
+ =?utf-8?B?cFYxbGtVRVpvenFsblpTUm0xelVFdGQwRUNIeXp4U1poZno4MTVwY2U1NVVs?=
+ =?utf-8?B?WVhYTzRLZUtVSTJFYzlEa2I1QXB0d2pRV2RXditVL3dFY3poenRLamZPdUlz?=
+ =?utf-8?B?NHJvZHJhM0lzLzNpVTVoWWpKYkc0NGs5cE8xeDFUSDZZSGdaaGxpQVkyMGVK?=
+ =?utf-8?B?bjhWUUY1VlBqUWJlUG5rTjZNL3FhelozRU92elBjcmZsMGd3MHVEcGpVY2JO?=
+ =?utf-8?B?Q2U5TlpwUTN1N3p0SzFaWHkzTDdveFlLd2hlYWNob0QrYmRJd3FqdTFGb2d6?=
+ =?utf-8?B?Zm9YdE1CRWl1U0ZVZE5EMVo1WDg0cHhZbUVRejBQd2laOHViUEt3TVdYQ0hq?=
+ =?utf-8?B?TUY0cnBLNkdabHJyWW50LzNHekdBeGNod1A2RmcvcFBkZEFTKytjWGVIb29h?=
+ =?utf-8?B?WnNuKzBONWJYdkc2Nk11R25WSVZtdVprM3ZvZUlRRS9YUnI4c1RSRi8vdndp?=
+ =?utf-8?B?cEY0dDRjR2x6RmlIQ2pKbVpTalhsL3JLTWhSVGFkU0luaHFUU1dCUHVWNmlp?=
+ =?utf-8?B?WFMyelJiWHVKWllFbVpPbkljUlBEb0hYZ3puYm9oc0l5czloTWU1RElrNDBs?=
+ =?utf-8?B?VmJyekFCR3A1dHFFdll1MENRNXRrYno1bTJWR2s1azUzMWlWZ3NJMWxsa1hp?=
+ =?utf-8?B?TVh5TWZUcWpRemtoUFJIbEgwMnpBOSsrWTlaU2N0TExBWDJqczJ0aG5Ed29y?=
+ =?utf-8?B?NzhyeHBId3Q5WVZRMzVtbnVtM2JlaVBDL1N5WDZ0MHZJZ1lpTnZQazdhdy9X?=
+ =?utf-8?B?b0VPeEs4dnBKY2o2TjE5aVZlM2p2eWlkM1V6TGJaYSsxOWptY05oekF4NnRv?=
+ =?utf-8?B?UWJwVE9oUkJROXZMYklWN1c0OVlCUUZIYWpKRlJ4OVdzaXdtT3BxVFoxWGhr?=
+ =?utf-8?B?VXdpcWVWcWhKNkd0RTd4MmM3cXgyN3dmWnFCYndlU2ZPRW5zK2ZGR3RpQTJx?=
+ =?utf-8?B?c2hkd01LUm4xSTltUkhabUtVcU1OWDArem9xeHBHSEFhSE41dDVOMGRQenJB?=
+ =?utf-8?B?SWF5dGUxSnAwVEZnZ2xJQ2lqVXRWTGhqcFMwdElqeEhMY3lIbkx6bk12WlF2?=
+ =?utf-8?B?N20ySzVBeXRYbDlYVndKM2dHMkl4cG5MaE43cElDVERwand2ZFdId2tGRi9U?=
+ =?utf-8?B?UXZTRlZXYlJZTVRiU3RiQUs4U0ZVai9kNmwrWlk2aEtWc0VKV2ZHWTBZaUlw?=
+ =?utf-8?B?OW1vRWE1eHlKYmliQlp6OE8ydG5jQ3cyQXBPdW9aVjVjVWI3WEozSDBGbDRo?=
+ =?utf-8?B?MUtDMW9KY01KbXdHY1dOeEVUVUl4ZlpGUmNuSnFlOG1vek9LZHJubkU2Qjc3?=
+ =?utf-8?B?ZTVpY1Q4MjN5L0Y4ZjNHc05VVmt1cU53b0R2UGVMV1l1MjBsZ0lXelBOR3k0?=
+ =?utf-8?B?TlNRYk1zM3YzVmZQZXYzRmFsazdQaUNOaEYrUk9NaUYxb2cyS2NCd2pkWi8r?=
+ =?utf-8?B?MFVxVXBLUHZaK1NGTXVpeWI3bEkwMG5Nd25jeEJXQUhWaVpDQk1IQU5VZy9t?=
+ =?utf-8?B?emVURGovNStnVVMvRVFVa3N4b1ZpNU1Ed3dzSWF0YVpEZXZYdjJaNklncTkw?=
+ =?utf-8?B?SEhpa1E3clo2Rkc4V3phdjJzRFhlY1ROTUFsYk1LVTZraXpvT0I0blBRL0oz?=
+ =?utf-8?B?V3BRYm9PZFJjZ3YrWlhVa3dyMUVYTjJ5T00vcVhZVTJ0aUFQL2J2TVh0cjVz?=
+ =?utf-8?Q?L+SScBeh5Gdql19GNX6D3VNL509icLYG7RYIY=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(1800799024)(366016)(376014); DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bk0wanNzUG9sa0E3VXdvVHFhU0Q3TlQ3UEp1Ri9rWnNUSEg4STJEQmJ3WEhW?=
+ =?utf-8?B?Ulphb1FNWncyU1EwSkxzT3lmL1cvREdzZGY0Ymd4R2ZGZytjSDBONDlqOFlp?=
+ =?utf-8?B?MU9VeGVLVTNwaDIreEMxK3AwU2pybnZmQWxMVXgyTWFBeUZlNzdxRkQrd2Y0?=
+ =?utf-8?B?ZEtpRXNsZ1BVZ2lNSTFvU21id2YwckJZZk5kTGpRYTN6MjNJU0g0ZUw5WVha?=
+ =?utf-8?B?OXhIemp5WEIrZHpGRnh3QU92S3Z5MXNLYTNFbHdFeWpoQUdBcWtiWDN6US9w?=
+ =?utf-8?B?d0l5TXp3WFRXVDVrdFA2VFQ0d2VhMERRN1pQV2tMZTliTFVyN3RLUUtUUkNl?=
+ =?utf-8?B?cXA3d2xmWXZGcTVrNERBclBZai9xbzFZcjFWdVc0SUdIM0YxajZTUFpjN3RB?=
+ =?utf-8?B?ZXZ2UmJBOUd2NU8xMFR2YUVtOU5RcmU0d3dwM0xBZmptaDVQVXY0THNkaFcy?=
+ =?utf-8?B?aTJaSWlEZ1VwWHBBWFNKTkk3c3EyNC9mUklVam4wYW16U09wQ0YwemN6UG9m?=
+ =?utf-8?B?SmZGM0VTaXJYREI5L2tpSGQ5Y0RCTUcyNFNhMjRvU0lnVTFEVEY4UEEwd1I3?=
+ =?utf-8?B?dmFJSUZDNVNIK3RRenlHOTNLbVNHcXR3T0Zxa2prU0djVGpyYlE0WHJqR1BI?=
+ =?utf-8?B?WHR6L1ZZeW1IbGRFUUFlbkZ1UEZOc0lGMU95RDE2MmF2OHQvYWp2OFhacXFT?=
+ =?utf-8?B?N0dyQ1kwUHc1Rlh3SDhDcDk4dENFZTNxMUVXZ3N6WGZMbnAzelR0MlgrNGx3?=
+ =?utf-8?B?UHgvSHZPa0RWUS9ZY24wMnM2RWRaQ20xQ3FiRlRPZUZpUlpEdjBocjlhWE5p?=
+ =?utf-8?B?QmlWYjFWRVcyUnZCMFh5TGZEaG9BYThRY1R4TUI5NnBMdzlYcU5GOGRNQXpV?=
+ =?utf-8?B?bC8vaWwwQ1JPcXpDdkNVOGRPSUxraVQ3djRwYVM5Tmh0dDVCNVpPaXhpSFVt?=
+ =?utf-8?B?RVNZUzNSQ3U4eGNVdkx5Rkc2ZWF2MmlUUk02cHlaK2ZqcTY5THdxUDRudXZB?=
+ =?utf-8?B?Z3Y2d1YrWElJRlM2czRLUTQ2eUhZc08zMHBqT1RPMm5kZVcyUlczRS9kQUsx?=
+ =?utf-8?B?MENqUEM3VUZDYmM2ZHUzdk5zQUxWMG1aLzI3a2Z3RmQ4Tjl0V3gwNytpWDlm?=
+ =?utf-8?B?MzBGWjM3U0tzaWVRMkdZbm14WW9YRUhoZHZZKzd6YTNDNnE1RFBQT0NqMnlI?=
+ =?utf-8?B?WklndkhlbU5aeHdqbmxMbVhOanpBRkRXNHgyN0gzVG0vMDhyVnVxNmJDeGJD?=
+ =?utf-8?B?Yy9TcTkzZnpldU5mYkpBY3RCaHd3azBaSk1FV01WL3dvL01UYmFvY2hITDBE?=
+ =?utf-8?B?RnRiNTFtZ2V0N08wS09zZ3NwdWFnWG5yRVVQOE5xT1YvNUY5SFhabE9WQ3F6?=
+ =?utf-8?B?WFdGbk5NOWVORHg1WUltMGFzNGg3bDMwRWdORzRFQzY5dUQ2OXFKc25lSGJF?=
+ =?utf-8?B?RDVpZXNQbmJ3ejBNeEQ1SnhONCtkbU9keW5uSG1oM2dEZXpFa3J4b1g3MHNW?=
+ =?utf-8?B?bmJsemlnUXd4OU9tVHZueWhNWlNpalVvbmpJMTFoQks5S0JQbUV6bHNYNWZt?=
+ =?utf-8?B?NEl4MVNNM2hJYnlQMi93am00UUk0U3UvK0NJVjJkL3ZKeVRoOUVJNWtqYXBO?=
+ =?utf-8?B?ZjhMMmRsd1pJc2x6RFNHV3dKaU5wVHhna2ZmUUVHTHZtbUE5OUkrQndGVXl0?=
+ =?utf-8?B?cTFjbzBOSDhBUzNYSFdjRWNCRzZjdWYyc2lBZmdJUHJMc3B5UzBURE5YWjFn?=
+ =?utf-8?B?YlN4RUVOUFI4MWFtYU5WTVc4OE5hSEtRbFZ2a2hTR3RGZ3FTdEVNN2Z4VS9s?=
+ =?utf-8?B?WldGalErVlkyWHcvM1Q3WVJ2ZUpEdmMvclA5dGVoK0ZCblB2bW1UQUNJWjFK?=
+ =?utf-8?B?SkFLcElGMWlMdmFlMzNsMW5iOGd0UHlBbjZUSmJvMzk5K3RrZVhEckN2YWxQ?=
+ =?utf-8?B?VU55dTB0OHd2WUZzcEFnOExYTGNGNmloNlc2RllyeE1BYVZUWGJ0R1o2aE1v?=
+ =?utf-8?B?UzQ2enlpU2JmUFNNQlFhMmIxdGtpQTUvS3hxSzhrVlc3eGQxSmdrSjVrcjhN?=
+ =?utf-8?B?enovUjBYeXJKVWJVYUFkQkxKUkxENDNPWG5FazJIY0FzZUlwUzFjSjc5Wnh0?=
+ =?utf-8?B?OG9WaWoycjF0Yk50eXo1KzVsV01qVHoxank0SjlBV3RxejFSeTE0TkZFV2xW?=
+ =?utf-8?Q?w7Gr739U6RNM4mPAeLtgYSc=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62d50a10-5593-4cd8-104f-08ddb5b3d406
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2025 19:50:11.9453 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: onUJNRcu19zSNkFelNc9tnhOSVowFrtrX8R7+vWJnpg1U9jdiPa3fvR0drw3MnEpLFPzYkDF3wVbRmBrh3J/WmFalrms5BmwB+sTqn1htmQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR0101MB5323
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -96,777 +178,307 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Georg Muck via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Georg Muck <georgmuck1@gmail.com>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lwn@lwn.net, linux-kernel <linux-kernel@vger.kernel.org>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---00000000000044cd4c0638754320
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi everyone,
 
-Hi Kienan,
+We're excited to announce the release of LTTng 2.14.0, codenamed
+“Orbitales”!
 
-switching to tracing per uid solved the Problem.
+Four years in the making, this release brings a host of new features,
+improvements, and experimental capabilities for you to explore.
 
-Huge thanks for your patients!
+WHAT'S NEW SINCE LTTNG 2.13?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+New features and changes in LTTng 2.14:
 
+General:
+     • User space channels now have a _buffer allocation policy_ which
+       specifies whether LTTng tracers allocate ring buffers per CPU
+       (what you've always known) or per channel.
 
-Best regards,
+       The buffering scheme term now refers to the ownership model
+       (system, user, or process) and the allocation policy together.
 
-Georg
+       The new per-channel allocation policy means each user/process
+       (depending on the buffer ownership model), instead of each CPU of
+       each user/process, gets its own ring buffer.
 
+     • User space tracing now supports the Apache Log4j 2 tracing domain
+       in addition to the existing support for Apache log4j 1.2.
 
-Never burn the bridges before you
-If you've burned the bridges behind
-Never burn the one that you're walking upon
-Or you're sure to hit the water in time. *(Savatage, Streets, 1991)*
+     • LTTng 2.14 brings _experimental_ support of CTF 2 [1] for both the
+       user space and kernel tracers.
 
-Kienan Stewart <kstewart@efficios.com> schrieb am Mi., 25. Juni 2025, 22:52=
-:
+       CTF 2 output isn't enabled by default and is intended solely for
+       preview and feedback purposes: having an experimental support will
+       allow users to test and evaluate CTF 2 until we make it the
+       default output format.
 
-> Hi Georg,
->
-> On 6/25/25 1:27 PM, Georg Muck wrote:
-> > Hi Kienan,
-> >
-> > thanks for your quick response. :)
-> >
-> > I replaced "--daemonize" with "--background".
-> >
-> > I guess I should briefly describe my goal to avoid confusion: I want to
-> > trace a ROS2-session online (tried LTTng-live, but it costs too much
-> > ressources, hence the aggressive rotation of 1s). LTTng gives me the pa=
-th
-> > to a newly created trace-file as soon as it is created. This path is
-> > forwarded to a Thread-Pool that does the rest (analyses each tracefile =
-by
-> > itself)=E2=80=A6 . However, the tracefiles are removed in the end, caus=
-e I'm not
-> > interested in them, only the program should be interested in them (forg=
-ot
-> > to remove it in the example). The problem only occurs when I start to
-> many
-> > ROS2 instances at once, meaning gathering too many tracepoints at once
-> (at
-> > once meaning in a very short amount of time). It works fine for 1-2
-> > instances, but it doesn't work for 16 instances.
-> >
-> >> 1. *Before any traced application is run, babeltrace2 has the followin=
-g
-> > error output:* Ah ok, thought I would be on the right track.
-> >> 2. *After a traced application is run whether is produces enabled even=
-ts
-> > or not, I see the events recorded*: What do you mean by that? There is =
-no
-> > babeltrace2 error if traced instances are running, even tho they are no=
-t
-> > creating events?
->
-> This is what I observed with a fresh start:
->
-> before running any traced application: bt2 error with no traced content
->
-> after running a traced application with no events: bt2 no longer
-> produced an error, but output 0 events (as expected).
->
-> In this case I expect that it is because the consumer started and basic
-> metadata was available so that was written in the snapshot. If I recall
-> correctly, the consumer daemon only starts when the first application
-> connects
->
-> after running a traced application with some events: as usual
-> >> 3. *When your session script stops, the output folder is deleted*: lik=
-e
-> > described, forgot to remove, but it is on purpose
-> >
-> > I tried *tp**:tptest*, but there is no output shown by babeltrace2 (is
-> that
-> > intended?):
-> >
->
-> I had the 100 events produced by gen-ust-events binary that invoked. You
-> ran it but the events weren't recorded? Regardless I think we're on the
-> same page that the session setup program you are using is fine right now.
->
-> > [georg@KARTOFF8xE-zenbook /tmp/structural_traces]$ babeltrace2 archives
-> > [georg@KARTOFF8xE-zenbook /tmp/structural_traces]$
-> >
-> >
-> > However, I figured something out:
-> > When I trace the "ros:rcl_node_init"-Tracepoint and start 12 ROS2
-> > Instances, I receive the following output for the entire
-> archive-directory:
-> > [georg@KARTOFF8xE-zenbook /tmp/structural_traces/archives]$ babeltrace2
-> .
-> >
-> > [19:01:41.474172508] (+?.?????????) KARTOFF8xE-zenbook:listener:(24897)
-> > ros2:rcl_node_init: { cpu_id =3D 1 }, { procname =3D "listener", vpid =
-=3D 24897
-> > }, { node_handle =3D 0x5CCBD0EFA280, rmw_handle =3D 0x5CCBD107A420,
-> node_name =3D
-> > "saturn_listener", namespace =3D "/hallo/saturn" }
-> > [19:01:41.493613263] (+0.019440755) KARTOFF8xE-zenbook:talker:(24898)
-> > ros2:rcl_node_init: { cpu_id =3D 4 }, { procname =3D "talker", vpid =3D=
- 24898
-> },
-> > { node_handle =3D 0x5A8E10DFC6E0, rmw_handle =3D 0x5A8E10F8AA60, node_n=
-ame =3D
-> > "erde_talker", namespace =3D "/hallo/erde" }
-> >
-> > All coming from archive-file number 10:
-> > [georg@KARTOFF8xE-zenbook
-> >
-> /tmp/structural_traces/archives/20250625T190141+0200-20250625T190142+0200=
--10]$
-> > babeltrace2 .
-> >
-> > [19:01:41.474172508] (+?.?????????) KARTOFF8xE-zenbook:listener:(*24897=
-*)
-> > ros2:rcl_node_init: { cpu_id =3D 1 }, { procname =3D "listener", vpid =
-=3D 24897
-> > }, { node_handle =3D 0x5CCBD0EFA280, rmw_handle =3D 0x5CCBD107A420,
-> node_name =3D
-> > "saturn_listener", namespace =3D "/hallo/saturn" }
-> > [19:01:41.493613263] (+0.019440755) KARTOFF8xE-zenbook:talker:(24898)
-> > ros2:rcl_node_init: { cpu_id =3D 4 }, { procname =3D "talker", vpid =3D=
- 24898
-> },
-> > { node_handle =3D 0x5A8E10DFC6E0, rmw_handle =3D 0x5A8E10F8AA60, node_n=
-ame =3D
-> > "erde_talker", namespace =3D "/hallo/erde" }
-> >
-> > However, looking deeper into that file I saw that there are all 12
-> > instances (+some of ros2 itself) I started within the trace-directory
-> > number 10!
-> > [georg@KARTOFF8xE-zenbook
-> >
-> /tmp/structural_traces/archives/20250625T190141+0200-20250625T190142+0200=
--10/ust/pid]$
-> > ls
-> >
-> > listener-24897-20250625-190141  listener-24903-20250625-190141
-> >   ros2-24447-20250625-190131  ros2-24887-20250625-190141
-> >   talker-24900-20250625-190141  talker-24916-20250625-190141
-> > listener-24899-20250625-190141  listener-24914-20250625-190141
-> >   ros2-24451-20250625-190131  talker-24896-20250625-190141
-> >   talker-24902-20250625-190141
-> > listener-24901-20250625-190141  listener-24917-20250625-190141
-> >   ros2-24834-20250625-190134  talker-24898-20250625-190141
-> >   talker-24904-20250625-190141
-> >
-> > BUT:
-> > I looked into the specific directory of a traced instance (underlined i=
-t)
-> > [georg@KARTOFF8xE-zenbook
-> >
-> /tmp/structural_traces/archives/20250625T190141+0200-20250625T190142+0200=
--10/ust/pid]$
-> > ls listener-*24897*-20250625-190141/
-> >
-> > index     structuralChannel_0  structuralChannel_2  structuralChannel_4
-> >   structuralChannel_6  structuralChannel_8  structuralChannel_10
-> > *metadata*  structuralChannel_1  structuralChannel_3  structuralChannel=
-_5
-> >   structuralChannel_7  structuralChannel_9  structuralChannel_11
-> >
-> > and of a non-traced instance:
-> > [georg@KARTOFF8xE-zenbook
-> >
-> /tmp/structural_traces/archives/20250625T190141+0200-20250625T190142+0200=
--10/ust/pid]$
-> > ls listener-24899-20250625-190141
-> >
-> > index                structuralChannel_1  structuralChannel_3
-> >   structuralChannel_5  structuralChannel_7  structuralChannel_9
-> > structuralChannel_11
-> > structuralChannel_0  structuralChannel_2  structuralChannel_4
-> >   structuralChannel_6  structuralChannel_8  structuralChannel_10
-> >
-> > Turns out: There is no metadata file within the second one. Therefore
-> > babeltrace2 is not able to parse the file. Do you have an idea why?
-> >
->
->  From your later e-mail with the updated sessiond log which shows the
-> PERROR for too many open files it sounds like you have a thread to pull o=
-n.
->
-> You can try using the per-uid buffering scheme to reduce the number of
-> FDs required when running 12 concurrent instances of ros.
->
-> > Best regards,
-> > Georg
-> >
-> > Never burn the bridges before you
-> > If you've burned the bridges behind
-> > Never burn the one that you're walking upon
-> > Or you're sure to hit the water in time. *(Savatage, Streets, 1991)*
-> >
-> >
-> > Am Mi., 25. Juni 2025 um 17:50 Uhr schrieb Kienan Stewart <
-> > kstewart@efficios.com>:
-> >
-> >> Hi Georg,
-> >>
-> >> On 6/25/25 9:36 AM, Georg Muck wrote:
-> >>> Hi Kienan,
-> >>>
-> >>> I did exactly that, without success.
-> >>>
-> >>> The log of the lttng-sessiond (lttng.log) did not change after starti=
-ng
-> >> the
-> >>> ROS2 instances. I have also added the output of "lttng list
-> >>> structuralSession"
-> >>> I start my tracing instance as follows:
-> >>>
-> >>> At first there is a bash-script that sets everything up, it does the
-> >>> following:
-> >>>
-> >>> lttng destroy -a # to destroy all existing sessions
-> >>> lttng-sessiond --daemonize --verbose-consumer -vvv &> "/tmp/lttng.log=
-"
-> #
-> >>
-> >> When started with '--daemonize', the file descriptors are closed[1]
-> >> after forking which is why you don't see any further output to
-> >> /tmp/lttng.log. Try with '--background' instead.
-> >>
-> >>> starting a new session Deamon
-> >>> ./exemplary_tracing_session # starting my exemplary tracing session
-> >>>
-> >>> The exemplary tracing session is written by the help of the c Api
-> >>> (appendix).
-> >>>
-> >>
-> >> I modified your script to add 'tp:tptest' (a tracepoint from the
-> >> lttng-tools test suite program gen-ust-events) and did the following:
-> >>
-> >> ```
-> >> $ lttng-sessiond --background --verbose-consumer -vvv &> sessiond.log
-> >> $ ./exemplary_tracing_session &
-> >> $ lttng-tools/./tests/utils/testapp/gen-ust-events/gen-ust-events
-> >> babeltrace2 /tmp/structural_traces | wc -l
-> >> 100
-> >> ```
-> >>
-> >> It seems to be working fine for me. A couple of notes:
-> >>
-> >> 1. Before any traced application is run, babeltrace2 has the following
-> >> error output: No trace was found based on input `/tmp/structural_trace=
-s`
-> >> 2. After a traced application is run whether is produces enabled event=
-s
-> >> or not, I see the events recorded.
-> >> 3. When your session script stops, the output folder is deleted.
-> >>
-> >>> I started the the same procedure on another machine. The same fault
-> >>
-> >> The fault is that the babeltrace2 has an error, right? Are you willing
-> >> to share your trace that has the problem and/or show the output of
-> >> babeltrace2's error?
-> >>
-> >>> occurred. I think I need to configure more within the `lttngDomain`.
-> But
-> >> I
-> >>> don't know how, would you have an idea/hint?
-> >>>
-> >>> Thanks for your help.
-> >>>
-> >>> Best regards,
-> >>> Georg
-> >>>
-> >>> Ps.: I also added the log of my tracing tool (structural.log)
-> >>>
-> >>> Never burn the bridges before you
-> >>> If you've burned the bridges behind
-> >>> Never burn the one that you're walking upon
-> >>> Or you're sure to hit the water in time. *(Savatage, Streets, 1991)*
-> >>>
-> >>>
-> >>> Am Mo., 23. Juni 2025 um 16:26 Uhr schrieb Kienan Stewart <
-> >>> kstewart@efficios.com>:
-> >>>
-> >>>> Hi Georg,
-> >>>>
-> >>>> a good first step is to run lttng-session with `-vvv
-> --verbose-consumer`
-> >>>> and inspect the log file and `LTTNG_UST_DEBUG=3D1` in the environmen=
-t.
-> >>>>
-> >>>> It may also be useful to run your traced applications with
-> >>>> `LTTNG_UST_DEBUG=3D1` set in the environment.
-> >>>>
-> >>>> Do you have steps that reproduce the issue? E.g., all the commands t=
-o
-> >>>> set up the tracing session and so forth.
-> >>>>
-> >>>> thanks,
-> >>>> kienan
-> >>>>
-> >>>> On 6/19/25 10:58 AM, Georg Muck via lttng-dev wrote:
-> >>>>> Hey,
-> >>>>>
-> >>>>> I am using the LTTng tracer (2.13.11, C-API, rotation=3D1s) to trac=
-e my
-> >>>> ROS2
-> >>>>> system (userspace only). Everything works just fine within my Docke=
-r
-> >>>>> Container (Ubuntu 24.04), but if I start the same procedure on the
-> host
-> >>>>> itself (also Ubuntu 24.04), it does not create a TraceFile if to ma=
-ny
-> >>>>> tracepoints occur (speaking of roundabout 1500+ per second)
-> (sometimes
-> >> it
-> >>>>> malformed the tracefile, but I was not able to recreate that. If I
-> >>>> remember
-> >>>>> correctly, Babeltrace2 threw an error that said that there was no
-> >>>>> metadata-file). I played around with some configurations (like
-> >> increasing
-> >>>>> the buffer size from ~16kB to ~512kB or a less aggressive rotation)=
-,
-> >> but
-> >>>>> the problem stayed.
-> >>>>>
-> >>>>> Would be thankful for help. I guess I delivered to less information=
-,
-> >>>> please
-> >>>>> reach out what is interesting at this point, I am not sure about th=
-at
-> >> :).
-> >>>>>
-> >>>>> Best regards,
-> >>>>> Georg
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> Never burn the bridges before you
-> >>>>> If you've burned the bridges behind
-> >>>>> Never burn the one that you're walking upon
-> >>>>> Or you're sure to hit the water in time. *(Savatage, Streets, 1991)=
-*
-> >>>>>
-> >>>>
-> >>>>
-> >>>
-> >>
-> >> thanks,
-> >> kienan
-> >>
-> >> [1]: https://lttng.org/man/8/lttng-sessiond/v2.13/#doc-opt--daemonize
-> >>
-> >
->
->
+Tracing control:
+     • The new `--buffer-allocation` option of the
+       lttng-enable-channel(1) command can set the buffer allocation
+       policy of the channel to create.
 
---00000000000044cd4c0638754320
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+       The default `per-cpu` value is what you've always known while the
+       new `per-channel` value is available for user space channels.
 
-<div dir=3D"auto"><p dir=3D"ltr">Hi Kienan,</p>
-<p dir=3D"ltr">switching to tracing per uid solved the Problem.</p><p dir=
-=3D"ltr">Huge thanks for your patients!</p><p dir=3D"ltr"><br></p><p dir=3D=
-"ltr">Best regards,</p><p dir=3D"ltr">Georg=C2=A0</p><p dir=3D"ltr"><br></p=
-><div data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><span style=3D"co=
-lor:rgb(80,0,80)">Never burn the bridges before you</span><br style=3D"colo=
-r:rgb(80,0,80)"><span style=3D"color:rgb(80,0,80)">If you&#39;ve burned the=
- bridges behind</span><br style=3D"color:rgb(80,0,80)"><span style=3D"color=
-:rgb(80,0,80)">Never burn the one that you&#39;re walking upon</span><br st=
-yle=3D"color:rgb(80,0,80)"><span style=3D"color:rgb(80,0,80)">Or you&#39;re=
- sure to hit the water in time. <i>(Savatage, Streets, 1991)</i></span><br>=
-</div></div></div>
-<br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Kienan=
- Stewart &lt;<a href=3D"mailto:kstewart@efficios.com" target=3D"_blank" rel=
-=3D"noreferrer">kstewart@efficios.com</a>&gt; schrieb am Mi., 25. Juni 2025=
-, 22:52:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .=
-8ex;border-left:1px #ccc solid;padding-left:1ex">Hi Georg,<br>
-<br>
-On 6/25/25 1:27 PM, Georg Muck wrote:<br>
-&gt; Hi Kienan,<br>
-&gt; <br>
-&gt; thanks for your quick response. :)<br>
-&gt; <br>
-&gt; I replaced &quot;--daemonize&quot; with &quot;--background&quot;.<br>
-&gt; <br>
-&gt; I guess I should briefly describe my goal to avoid confusion: I want t=
-o<br>
-&gt; trace a ROS2-session online (tried LTTng-live, but it costs too much<b=
-r>
-&gt; ressources, hence the aggressive rotation of 1s). LTTng gives me the p=
-ath<br>
-&gt; to a newly created trace-file as soon as it is created. This path is<b=
-r>
-&gt; forwarded to a Thread-Pool that does the rest (analyses each tracefile=
- by<br>
-&gt; itself)=E2=80=A6 . However, the tracefiles are removed in the end, cau=
-se I&#39;m not<br>
-&gt; interested in them, only the program should be interested in them (for=
-got<br>
-&gt; to remove it in the example). The problem only occurs when I start to =
-many<br>
-&gt; ROS2 instances at once, meaning gathering too many tracepoints at once=
- (at<br>
-&gt; once meaning in a very short amount of time). It works fine for 1-2<br=
->
-&gt; instances, but it doesn&#39;t work for 16 instances.<br>
-&gt; <br>
-&gt;&gt; 1. *Before any traced application is run, babeltrace2 has the foll=
-owing<br>
-&gt; error output:* Ah ok, thought I would be on the right track.<br>
-&gt;&gt; 2. *After a traced application is run whether is produces enabled =
-events<br>
-&gt; or not, I see the events recorded*: What do you mean by that? There is=
- no<br>
-&gt; babeltrace2 error if traced instances are running, even tho they are n=
-ot<br>
-&gt; creating events?<br>
-<br>
-This is what I observed with a fresh start:<br>
-<br>
-before running any traced application: bt2 error with no traced content<br>
-<br>
-after running a traced application with no events: bt2 no longer <br>
-produced an error, but output 0 events (as expected).<br>
-<br>
-In this case I expect that it is because the consumer started and basic <br=
->
-metadata was available so that was written in the snapshot. If I recall <br=
->
-correctly, the consumer daemon only starts when the first application <br>
-connects<br>
-<br>
-after running a traced application with some events: as usual<br>
-&gt;&gt; 3. *When your session script stops, the output folder is deleted*:=
- like<br>
-&gt; described, forgot to remove, but it is on purpose<br>
-&gt; <br>
-&gt; I tried *tp**:tptest*, but there is no output shown by babeltrace2 (is=
- that<br>
-&gt; intended?):<br>
-&gt; <br>
-<br>
-I had the 100 events produced by gen-ust-events binary that invoked. You <b=
-r>
-ran it but the events weren&#39;t recorded? Regardless I think we&#39;re on=
- the <br>
-same page that the session setup program you are using is fine right now.<b=
-r>
-<br>
-&gt; [georg@KARTOFF8xE-zenbook /tmp/structural_traces]$ babeltrace2 archive=
-s<br>
-&gt; [georg@KARTOFF8xE-zenbook /tmp/structural_traces]$<br>
-&gt; <br>
-&gt; <br>
-&gt; However, I figured something out:<br>
-&gt; When I trace the &quot;ros:rcl_node_init&quot;-Tracepoint and start 12=
- ROS2<br>
-&gt; Instances, I receive the following output for the entire archive-direc=
-tory:<br>
-&gt; [georg@KARTOFF8xE-zenbook /tmp/structural_traces/archives]$ babeltrace=
-2 .<br>
-&gt; <br>
-&gt; [19:01:41.474172508] (+?.?????????) KARTOFF8xE-zenbook:listener:(24897=
-)<br>
-&gt; ros2:rcl_node_init: { cpu_id =3D 1 }, { procname =3D &quot;listener&qu=
-ot;, vpid =3D 24897<br>
-&gt; }, { node_handle =3D 0x5CCBD0EFA280, rmw_handle =3D 0x5CCBD107A420, no=
-de_name =3D<br>
-&gt; &quot;saturn_listener&quot;, namespace =3D &quot;/hallo/saturn&quot; }=
-<br>
-&gt; [19:01:41.493613263] (+0.019440755) KARTOFF8xE-zenbook:talker:(24898)<=
-br>
-&gt; ros2:rcl_node_init: { cpu_id =3D 4 }, { procname =3D &quot;talker&quot=
-;, vpid =3D 24898 },<br>
-&gt; { node_handle =3D 0x5A8E10DFC6E0, rmw_handle =3D 0x5A8E10F8AA60, node_=
-name =3D<br>
-&gt; &quot;erde_talker&quot;, namespace =3D &quot;/hallo/erde&quot; }<br>
-&gt; <br>
-&gt; All coming from archive-file number 10:<br>
-&gt; [georg@KARTOFF8xE-zenbook<br>
-&gt; /tmp/structural_traces/archives/20250625T190141+0200-20250625T190142+0=
-200-10]$<br>
-&gt; babeltrace2 .<br>
-&gt; <br>
-&gt; [19:01:41.474172508] (+?.?????????) KARTOFF8xE-zenbook:listener:(*2489=
-7*)<br>
-&gt; ros2:rcl_node_init: { cpu_id =3D 1 }, { procname =3D &quot;listener&qu=
-ot;, vpid =3D 24897<br>
-&gt; }, { node_handle =3D 0x5CCBD0EFA280, rmw_handle =3D 0x5CCBD107A420, no=
-de_name =3D<br>
-&gt; &quot;saturn_listener&quot;, namespace =3D &quot;/hallo/saturn&quot; }=
-<br>
-&gt; [19:01:41.493613263] (+0.019440755) KARTOFF8xE-zenbook:talker:(24898)<=
-br>
-&gt; ros2:rcl_node_init: { cpu_id =3D 4 }, { procname =3D &quot;talker&quot=
-;, vpid =3D 24898 },<br>
-&gt; { node_handle =3D 0x5A8E10DFC6E0, rmw_handle =3D 0x5A8E10F8AA60, node_=
-name =3D<br>
-&gt; &quot;erde_talker&quot;, namespace =3D &quot;/hallo/erde&quot; }<br>
-&gt; <br>
-&gt; However, looking deeper into that file I saw that there are all 12<br>
-&gt; instances (+some of ros2 itself) I started within the trace-directory<=
-br>
-&gt; number 10!<br>
-&gt; [georg@KARTOFF8xE-zenbook<br>
-&gt; /tmp/structural_traces/archives/20250625T190141+0200-20250625T190142+0=
-200-10/ust/pid]$<br>
-&gt; ls<br>
-&gt; <br>
-&gt; listener-24897-20250625-190141=C2=A0 listener-24903-20250625-190141<br=
->
-&gt;=C2=A0 =C2=A0ros2-24447-20250625-190131=C2=A0 ros2-24887-20250625-19014=
-1<br>
-&gt;=C2=A0 =C2=A0talker-24900-20250625-190141=C2=A0 talker-24916-20250625-1=
-90141<br>
-&gt; listener-24899-20250625-190141=C2=A0 listener-24914-20250625-190141<br=
->
-&gt;=C2=A0 =C2=A0ros2-24451-20250625-190131=C2=A0 talker-24896-20250625-190=
-141<br>
-&gt;=C2=A0 =C2=A0talker-24902-20250625-190141<br>
-&gt; listener-24901-20250625-190141=C2=A0 listener-24917-20250625-190141<br=
->
-&gt;=C2=A0 =C2=A0ros2-24834-20250625-190134=C2=A0 talker-24898-20250625-190=
-141<br>
-&gt;=C2=A0 =C2=A0talker-24904-20250625-190141<br>
-&gt; <br>
-&gt; BUT:<br>
-&gt; I looked into the specific directory of a traced instance (underlined =
-it)<br>
-&gt; [georg@KARTOFF8xE-zenbook<br>
-&gt; /tmp/structural_traces/archives/20250625T190141+0200-20250625T190142+0=
-200-10/ust/pid]$<br>
-&gt; ls listener-*24897*-20250625-190141/<br>
-&gt; <br>
-&gt; index=C2=A0 =C2=A0 =C2=A0structuralChannel_0=C2=A0 structuralChannel_2=
-=C2=A0 structuralChannel_4<br>
-&gt;=C2=A0 =C2=A0structuralChannel_6=C2=A0 structuralChannel_8=C2=A0 struct=
-uralChannel_10<br>
-&gt; *metadata*=C2=A0 structuralChannel_1=C2=A0 structuralChannel_3=C2=A0 s=
-tructuralChannel_5<br>
-&gt;=C2=A0 =C2=A0structuralChannel_7=C2=A0 structuralChannel_9=C2=A0 struct=
-uralChannel_11<br>
-&gt; <br>
-&gt; and of a non-traced instance:<br>
-&gt; [georg@KARTOFF8xE-zenbook=C2=A0 =C2=A0 =C2=A0<br>
-&gt; /tmp/structural_traces/archives/20250625T190141+0200-20250625T190142+0=
-200-10/ust/pid]$<br>
-&gt; ls listener-24899-20250625-190141<br>
-&gt; <br>
-&gt; index=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 structura=
-lChannel_1=C2=A0 structuralChannel_3<br>
-&gt;=C2=A0 =C2=A0structuralChannel_5=C2=A0 structuralChannel_7=C2=A0 struct=
-uralChannel_9<br>
-&gt; structuralChannel_11<br>
-&gt; structuralChannel_0=C2=A0 structuralChannel_2=C2=A0 structuralChannel_=
-4<br>
-&gt;=C2=A0 =C2=A0structuralChannel_6=C2=A0 structuralChannel_8=C2=A0 struct=
-uralChannel_10<br>
-&gt; <br>
-&gt; Turns out: There is no metadata file within the second one. Therefore<=
-br>
-&gt; babeltrace2 is not able to parse the file. Do you have an idea why?<br=
->
-&gt; <br>
-<br>
-=C2=A0From your later e-mail with the updated sessiond log which shows the =
-<br>
-PERROR for too many open files it sounds like you have a thread to pull on.=
-<br>
-<br>
-You can try using the per-uid buffering scheme to reduce the number of <br>
-FDs required when running 12 concurrent instances of ros.<br>
-<br>
-&gt; Best regards,<br>
-&gt; Georg<br>
-&gt; <br>
-&gt; Never burn the bridges before you<br>
-&gt; If you&#39;ve burned the bridges behind<br>
-&gt; Never burn the one that you&#39;re walking upon<br>
-&gt; Or you&#39;re sure to hit the water in time. *(Savatage, Streets, 1991=
-)*<br>
-&gt; <br>
-&gt; <br>
-&gt; Am Mi., 25. Juni 2025 um 17:50 Uhr schrieb Kienan Stewart &lt;<br>
-&gt; <a href=3D"mailto:kstewart@efficios.com" rel=3D"noreferrer noreferrer"=
- target=3D"_blank">kstewart@efficios.com</a>&gt;:<br>
-&gt; <br>
-&gt;&gt; Hi Georg,<br>
-&gt;&gt;<br>
-&gt;&gt; On 6/25/25 9:36 AM, Georg Muck wrote:<br>
-&gt;&gt;&gt; Hi Kienan,<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; I did exactly that, without success.<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; The log of the lttng-sessiond (lttng.log) did not change after=
- starting<br>
-&gt;&gt; the<br>
-&gt;&gt;&gt; ROS2 instances. I have also added the output of &quot;lttng li=
-st<br>
-&gt;&gt;&gt; structuralSession&quot;<br>
-&gt;&gt;&gt; I start my tracing instance as follows:<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; At first there is a bash-script that sets everything up, it do=
-es the<br>
-&gt;&gt;&gt; following:<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; lttng destroy -a # to destroy all existing sessions<br>
-&gt;&gt;&gt; lttng-sessiond --daemonize --verbose-consumer -vvv &amp;&gt; &=
-quot;/tmp/lttng.log&quot; #<br>
-&gt;&gt;<br>
-&gt;&gt; When started with &#39;--daemonize&#39;, the file descriptors are =
-closed[1]<br>
-&gt;&gt; after forking which is why you don&#39;t see any further output to=
-<br>
-&gt;&gt; /tmp/lttng.log. Try with &#39;--background&#39; instead.<br>
-&gt;&gt;<br>
-&gt;&gt;&gt; starting a new session Deamon<br>
-&gt;&gt;&gt; ./exemplary_tracing_session # starting my exemplary tracing se=
-ssion<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; The exemplary tracing session is written by the help of the c =
-Api<br>
-&gt;&gt;&gt; (appendix).<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; I modified your script to add &#39;tp:tptest&#39; (a tracepoint fr=
-om the<br>
-&gt;&gt; lttng-tools test suite program gen-ust-events) and did the followi=
-ng:<br>
-&gt;&gt;<br>
-&gt;&gt; ```<br>
-&gt;&gt; $ lttng-sessiond --background --verbose-consumer -vvv &amp;&gt; se=
-ssiond.log<br>
-&gt;&gt; $ ./exemplary_tracing_session &amp;<br>
-&gt;&gt; $ lttng-tools/./tests/utils/testapp/gen-ust-events/gen-ust-events<=
-br>
-&gt;&gt; babeltrace2 /tmp/structural_traces | wc -l<br>
-&gt;&gt; 100<br>
-&gt;&gt; ```<br>
-&gt;&gt;<br>
-&gt;&gt; It seems to be working fine for me. A couple of notes:<br>
-&gt;&gt;<br>
-&gt;&gt; 1. Before any traced application is run, babeltrace2 has the follo=
-wing<br>
-&gt;&gt; error output: No trace was found based on input `/tmp/structural_t=
-races`<br>
-&gt;&gt; 2. After a traced application is run whether is produces enabled e=
-vents<br>
-&gt;&gt; or not, I see the events recorded.<br>
-&gt;&gt; 3. When your session script stops, the output folder is deleted.<b=
-r>
-&gt;&gt;<br>
-&gt;&gt;&gt; I started the the same procedure on another machine. The same =
-fault<br>
-&gt;&gt;<br>
-&gt;&gt; The fault is that the babeltrace2 has an error, right? Are you wil=
-ling<br>
-&gt;&gt; to share your trace that has the problem and/or show the output of=
-<br>
-&gt;&gt; babeltrace2&#39;s error?<br>
-&gt;&gt;<br>
-&gt;&gt;&gt; occurred. I think I need to configure more within the `lttngDo=
-main`. But<br>
-&gt;&gt; I<br>
-&gt;&gt;&gt; don&#39;t know how, would you have an idea/hint?<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Thanks for your help.<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Best regards,<br>
-&gt;&gt;&gt; Georg<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Ps.: I also added the log of my tracing tool (structural.log)<=
-br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Never burn the bridges before you<br>
-&gt;&gt;&gt; If you&#39;ve burned the bridges behind<br>
-&gt;&gt;&gt; Never burn the one that you&#39;re walking upon<br>
-&gt;&gt;&gt; Or you&#39;re sure to hit the water in time. *(Savatage, Stree=
-ts, 1991)*<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Am Mo., 23. Juni 2025 um 16:26 Uhr schrieb Kienan Stewart &lt;=
-<br>
-&gt;&gt;&gt; <a href=3D"mailto:kstewart@efficios.com" rel=3D"noreferrer nor=
-eferrer" target=3D"_blank">kstewart@efficios.com</a>&gt;:<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; Hi Georg,<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; a good first step is to run lttng-session with `-vvv --ver=
-bose-consumer`<br>
-&gt;&gt;&gt;&gt; and inspect the log file and `LTTNG_UST_DEBUG=3D1` in the =
-environment.<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; It may also be useful to run your traced applications with=
-<br>
-&gt;&gt;&gt;&gt; `LTTNG_UST_DEBUG=3D1` set in the environment.<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; Do you have steps that reproduce the issue? E.g., all the =
-commands to<br>
-&gt;&gt;&gt;&gt; set up the tracing session and so forth.<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; thanks,<br>
-&gt;&gt;&gt;&gt; kienan<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; On 6/19/25 10:58 AM, Georg Muck via lttng-dev wrote:<br>
-&gt;&gt;&gt;&gt;&gt; Hey,<br>
-&gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;&gt; I am using the LTTng tracer (2.13.11, C-API, rotation=
-=3D1s) to trace my<br>
-&gt;&gt;&gt;&gt; ROS2<br>
-&gt;&gt;&gt;&gt;&gt; system (userspace only). Everything works just fine wi=
-thin my Docker<br>
-&gt;&gt;&gt;&gt;&gt; Container (Ubuntu 24.04), but if I start the same proc=
-edure on the host<br>
-&gt;&gt;&gt;&gt;&gt; itself (also Ubuntu 24.04), it does not create a Trace=
-File if to many<br>
-&gt;&gt;&gt;&gt;&gt; tracepoints occur (speaking of roundabout 1500+ per se=
-cond) (sometimes<br>
-&gt;&gt; it<br>
-&gt;&gt;&gt;&gt;&gt; malformed the tracefile, but I was not able to recreat=
-e that. If I<br>
-&gt;&gt;&gt;&gt; remember<br>
-&gt;&gt;&gt;&gt;&gt; correctly, Babeltrace2 threw an error that said that t=
-here was no<br>
-&gt;&gt;&gt;&gt;&gt; metadata-file). I played around with some configuratio=
-ns (like<br>
-&gt;&gt; increasing<br>
-&gt;&gt;&gt;&gt;&gt; the buffer size from ~16kB to ~512kB or a less aggress=
-ive rotation),<br>
-&gt;&gt; but<br>
-&gt;&gt;&gt;&gt;&gt; the problem stayed.<br>
-&gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;&gt; Would be thankful for help. I guess I delivered to les=
-s information,<br>
-&gt;&gt;&gt;&gt; please<br>
-&gt;&gt;&gt;&gt;&gt; reach out what is interesting at this point, I am not =
-sure about that<br>
-&gt;&gt; :).<br>
-&gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;&gt; Best regards,<br>
-&gt;&gt;&gt;&gt;&gt; Georg<br>
-&gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;&gt; Never burn the bridges before you<br>
-&gt;&gt;&gt;&gt;&gt; If you&#39;ve burned the bridges behind<br>
-&gt;&gt;&gt;&gt;&gt; Never burn the one that you&#39;re walking upon<br>
-&gt;&gt;&gt;&gt;&gt; Or you&#39;re sure to hit the water in time. *(Savatag=
-e, Streets, 1991)*<br>
-&gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; thanks,<br>
-&gt;&gt; kienan<br>
-&gt;&gt;<br>
-&gt;&gt; [1]: <a href=3D"https://lttng.org/man/8/lttng-sessiond/v2.13/#doc-=
-opt--daemonize" rel=3D"noreferrer noreferrer noreferrer" target=3D"_blank">=
-https://lttng.org/man/8/lttng-sessiond/v2.13/#doc-opt--daemonize</a><br>
-&gt;&gt;<br>
-&gt; <br>
-<br>
-</blockquote></div>
+     • The new `--buffer-ownership` option of the `enable-channel`
+       command of the `lttng` CLI tool replaces the `--buffers-global`,
+       `--buffers-uid`, and `--buffers-pid` options (now deprecated).
 
---00000000000044cd4c0638754320--
+     • The `enable-channel` command of the `lttng` CLI tool, when
+       creating a user space channel with the usual per-CPU buffer
+       allocation policy, automatically adds a `cpu_id` context field
+       which, as of LTTng 2.14, you cannot remove. This has always been
+       the case and remains true, but `cpu_id` is now an offically
+       supported context field.
+
+       Knowing this, with the new per-channel buffer allocation policy,
+       the `enable-channel` command doesn't add the `cpu_id` context
+       field: add it afterwards with the lttng-add-context(1) command if
+       needed, for example:
+
+           $ lttng add-context -u --channel=my-channel --type=cpu_id
+
+     • Everywhere the Apache log4j 1.2 `--log4j` option or
+       `log4j:logging` option value is available with the `lttng` CLI
+       tool, you may now use resp. `--log4j2` and `log4j2:logging` to
+       target the new Apache Log4j 2 [2] tracing domain.
+
+     • The `liblttng-ctl` C API is updated to support the new features:
+
+       ‣ Set and get the buffer allocation policy of a channel with
+         `lttng_channel_set_allocation_policy()`
+         and `lttng_channel_get_allocation_policy()`.
+
+       ‣ Add the `cpu_id` context field to a channel with the
+         `LTTNG_EVENT_CONTEXT_CPU_ID` enumerator when
+         calling `lttng_add_context()`.
+
+       ‣ Apache Log4j 2 functions and enumerators are available
+         everywhere there are Apache Log4j 2 equivalents:
+
+         ⁃ `LTTNG_DOMAIN_LOG4J2`
+         ⁃ `LTTNG_EVENT_RULE_TYPE_LOG4J2_LOGGING`
+         ⁃ `enum lttng_loglevel_log4j2`
+         ⁃ `lttng_event_rule_log4j2_logging_create()`
+         ⁃ `lttng_event_rule_log4j2_logging_get_filter()`
+         ⁃ `lttng_event_rule_log4j2_logging_get_log_level_rule()`
+         ⁃ `lttng_event_rule_log4j2_logging_get_name_pattern()`
+         ⁃ `lttng_event_rule_log4j2_logging_set_filter()`
+         ⁃ `lttng_event_rule_log4j2_logging_set_log_level_rule()`
+         ⁃ `lttng_event_rule_log4j2_logging_set_name_pattern()`
+
+       ‣ Get the status of the Linux kernel tracer
+         with `lttng_get_kernel_tracer_status()`.
+
+       ‣ Get the shared memory directory path of a recording session
+         with `lttng_get_session_shm_path_override()`.
+
+     • Set the `LTTNG_EXPERIMENTAL_FORCE_CTF_2` environment variable to
+       `1` when starting `lttng-sessiond` to enable the experimental
+       CTF 2 [1] output format.
+
+       With this setting, all the recording sessions which the session
+       daemon manages produce CTF 2 traces. As of LTTng 2.14, this is not
+       a per-session configuration.
+
+       The produced CTF 2 traces are expected to be semantically
+       equivalent to what the tracers would have procuced without
+       `LTTNG_EXPERIMENTAL_FORCE_CTF_2` set to `1` (CTF 1.8).
+
+       ┌──────────────────────────────────────────────────────────────┐
+       │ NOTE: A client of a session daemon started with the          │
+       │ `LTTNG_EXPERIMENTAL_FORCE_CTF_2` environment variable set to │
+       │ `1` cannot create:                                           │
+       │                                                              │
+       │ ‣ A network streaming mode recording session.                │
+       │                                                              │
+       │ ‣ A snapshot mode recording session where you send the trace │
+       │   data over the network.                                     │
+       │                                                              │
+       │ ‣ A live mode recording session.                             │
+       └──────────────────────────────────────────────────────────────┘
+
+     • The `--all` option of the lttng-start(1) and lttng-stop(1)
+       commands is now available to start/stop _all_ the
+       recording sessions.
+
+     • The `--glob` option of the `start`, and `stop`, and
+       lttng-destroy(1) commands is now available to start/stop/destroy
+       recording sessions of which some globbing pattern matches
+       the name.
+
+     • New lttng-relayd(8) options are available to help control
+       its process:
+
+       `--dynamic-port-allocation`::
+           Let the operating system assign the control, data, and live
+           ports if their respective option is missing (`--control-port`,
+           `--data-port`, and `--live-port`) or if their port number part
+           is `0`.
+
+           With this option, `lttng-relayd` writes the `control.port`,
+           `data.port`, and `live.port` files, as needed, to its runtime
+           and configuration directory (`$LTTNG_HOME/.lttng`).
+
+       `--pid-file`:
+           Write the process ID (PID) of the `lttng-relayd` process to
+           some file (like the `--pidfile` option of lttng-sessiond(8)).
+
+       `--sig-parent`:
+           Send the `USR1` signal to the parent process to notify
+           readiness (like the `--sig-parent` option
+           of `lttng-sessiond`).
+
+     • You can now override the path of the directory where
+       `lttng-sessiond` places special files for user space tracing
+       applications with the `LTTNG_UST_CTL_PATH` environment variable.
+
+       See lttng-sessiond(8).
+
+     • You can now override the path of the directory where
+       `lttng-sessiond` places its control files with the `LTTNG_RUNDIR`
+       environment variable.
+
+       See lttng-sessiond(8).
+
+User space tracing specifics:
+     • You can now override the path of the directory where a user
+       application instrumented with liblttng-ust looks for special
+       registration and control files of `lttng-sessiond` with the
+       `LTTNG_UST_APP_PATH` environment variable.
+
+       See lttng-ust(3).
+
+     • You can now override the policy used to populate shared memory
+       pages within the instrumented application with the
+       `LTTNG_UST_MAP_POPULATE_POLICY` environment variable.
+
+       See lttng-ust(3).
+
+     • We improved the memory usage of lttng_ust_tracef()
+       and lttng_ust_tracelog().
+
+Kernel tracing specifics:
+     The minimum supported Linux kernel version is now 4.4 instead
+     of 3.0.
+
+WHAT'S NEW SINCE LTTNG 2.14-rc1?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Session daemon:
+     • Fix an erroneous consumer daemon exit code report and an incorrect
+       “end of list” check.
+
+     • Prevent a crash when shutting down early with the kernel tracer.
+
+     • At run time, now verify the `liblttng-ust-ctl.so` version.
+
+     • Restore build compatibility with libxml2 2.14+.
+
+Kernel consumer:
+     • Silence a spurious warning on 32-bit builds.
+
+Test suite:
+     • Many fixes and cleanups (`HOSTNAME` variable validation, duplicate
+       system call handler, typos, and the rest).
+
+     • Skip or adapt tests on ARMhf/ARM64/riscv64 and 32-bit kernels.
+
+     • Eliminate hangs (ppoll(2) overflow, health tests, and Python
+       logging failures).
+
+     • Timing TAP tests now work in out-of-tree builds.
+
+     • Add Python 3.4 support to `trace_format_helpers.py`.
+
+Documentation:
+     • Fully document most of the liblttng-ctl API with Doxygen.
+
+       Error query and recording session rotation/snapshot APIs are
+       partially documented (usage, not the headers).
+
+       To be documented: process filter and recording session
+       save/load APIs.
+
+LTTng-UST (Userspace Tracer)
+     • Fix discarded packet and discarded event accounting in
+       high throughput scenarios.
+
+     • Hide experimental trace hit counters code and symbols
+       under CONFIG_LTTNG_UST_EXPERIMENTAL_COUNTER define.
+
+LTTng Modules (Linux Kernel Tracer)
+     • Fix discarded packet accounting in high throughput scenarios.
+
+     • Serialize CTF2 enumeration mappings.
+
+     • Fix: NULL pointer dereference by using nonseekable_open for
+       the '/proc/lttng' file.
+
+     • Fix a type confusion in the recently introduced
+       ring_buffer_flush_or_populate_packet.
+
+     • Update to tracepoints, and to sched, ext4, btrfs, mm/writeback
+       instrumentation to support v6.16 rc kernels and re-enable
+       specific tracepoints that changed name in kernels 5.2+, 5.16+,
+       5.18+, 6.5+.
+
+VERSION NAME
+━━━━━━━━━━━━
+This release is named after “Orbitales”, a bold creation from Noctem
+Artisans Brasseurs in Québec City.
+
+Pitch black and dense—one team member compared the color to used motor
+oil—this beer offers an intriguing sensory experience. Aged in wood
+casks, it delivers rich aromas and flavors of blackberry as well as a
+hint of acidity. There’s no head to speak of, but a whisper of blue
+cheese funk lingers just enough to keep you curious.
+
+IMPORTANT LINKS
+━━━━━━━━━━━━━━━
+LTTng tarball:
+     <https://lttng.org/files/lttng-tools/lttng-tools-2.14.0.tar.bz2>
+     <https://lttng.org/files/lttng-ust/lttng-ust-2.14.0.tar.bz2>
+     <https://lttng.org/files/lttng-modules/lttng-modules-2.14.0.tar.bz2>
+
+LTTng website:
+     <https://lttng.org/>
+
+Mailing list for support and development:
+     <https://lists.lttng.org/>
+
+IRC channel:
+     `#lttng` on `irc.oftc.net`
+
+Bug tracker:
+     <https://bugs.lttng.org/projects/lttng/>
+
+GitHub organization:
+     <https://github.com/lttng>
+
+Continuous integration:
+     <https://ci.lttng.org/view/LTTng-tools/>
+     <https://ci.lttng.org/view/LTTng-ust/>
+     <https://ci.lttng.org/view/LTTng-modules/>
+
+Code review:
+     <https://review.lttng.org/q/project:lttng-tools>
+     <https://review.lttng.org/q/project:lttng-ust>
+     <https://review.lttng.org/q/project:lttng-modules>
+
+REFERENCES
+━━━━━━━━━━
+[1]: https://diamon.org/ctf/
+[2]: https://logging.apache.org/log4j/2.x/index.html
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
