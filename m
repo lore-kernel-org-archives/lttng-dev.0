@@ -1,170 +1,110 @@
-Return-Path: <lttng-dev-bounces@lists.lttng.org>
+Return-Path: <bounce+b7b410.602323-lttng-dev=archiver.kernel.org@lists.lttng.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from m228-58.mailgun.net (m228-58.mailgun.net [159.135.228.58])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15377CA1016
-	for <lttng-dev@archiver.kernel.org>; Mon,  8 Sep 2025 20:11:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4cLJ4g2JTzz1vnD
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1757362293;
-	b=BT7f+UL3BppehPzfDfp1Y6l0I12bhlVXgGVU9ap+D5kIphKDJ6+MqvBkFFaUA5Vnknna
-	 t9gTijhqm5rngoXwRu9+lTGjblU5gqGN9OpT+Q3ytvo2bddBND8mbB+6UamcqM43bDX19
-	 sZfOdRfwNs0rr7AY1JMrhjPlht1VDXMFprapdH4EfUAV7TiCOk0d2TDDh8Nfz2KZItO05
-	 2I/LwesyWFAyyu8CvzqN8YGo/0xEJ/vr3LtgVyp6yxU2y321L8bGy5iYXMufT0az0okYP
-	 1vqHLV8gj2l4BCcz8jvpHBr1qguaVRMtXp2W73WMqkRbvYr6SgQjCqJSyn2ohauLJsQ==
-ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1757362293;
-	h=DKIM-Signature:Message-ID:Date:To:Subject:MIME-Version:From:From;
-	bh=e9Vq4nWjJ90wvU5Q6BZNHOlf9CY1XZ+HFMm+E02EVyA=;
-	b=PCAEkCIlaYsmOiIg4ubutwFwTAH2bu98C+4u0C3oH5vaP3QWxy9VroJVyVmCWuwhdTU4
-	 Tbi1CDeYth+WEdNtJmLbO2ouehZiEMKiMNoO1H+b0kprQERtt9LiCVQNQCbVGIGxImgrc
-	 zOWraDTYSpMsByK7BQ5eEcDuIkksBxo0wMM+WwOxMPl3xib1CpZopfhBobijTNMfS3pwE
-	 X0d3UYkzgEGS6Y3GP/wFFqy49oXAqwX7PwNgvOk0TEiz+0rpjFgvo0SNd0XvF8Z3QscUj
-	 1lu9z7wfTYquhe52+RvbqMEae1xchPrcHnoG/RMAr6BWNqDj3nbWX09Ofjgg/uj5m4A==
-ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4cLJ4g2JTzz1vnD
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20960CAC592
+	for <lttng-dev@archiver.kernel.org>; Fri, 19 Sep 2025 20:39:31 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=lists.lttng.org; q=dns/txt; s=mx; t=1758314371; x=1758321571;
+ h=Sender: Sender: Cc: Reply-To: From: From: List-Subscribe: List-Help: List-Post: List-Archive: List-Unsubscribe: List-Id: Content-Type: To: To: Subject: Subject: Message-ID: Date: In-Reply-To: References: MIME-Version;
+ bh=D/au3l3SsTE4kBsWX726dWZJmRK4R4qGJHVBoU0RNFU=;
+ b=l7j0zlL80ECfvnUTEfl/IsuJfQnpxyzqhCTEe/XemLZFMWmIA9qJkOzS48+j+rPZul50cRH3PY/xE3Bq7+oanmbOSXWsD2sjWJG2/0/0Vxayah1BxPZcZBjiOcoRhafb0yI6iB+TU9Gah65lZc63nKOBQnaAnagmYQPVlmPODsQFjTSTXVtU0RFWBGtZtN/PvGm7ZIye9kjnRswpfSaTkEUSN9q49mopBokQG0CGTJjEFwO2+Fb+TQpJvBYiwQuzJXw4L5xhNYmA7fD/N4QFHthm9HwYcfnTWEhqUV5fxmqnkhfS/H1t4yTuh6sxjVtYiF3Tp8a+dYls6kQMEqLQwA==
+X-Mailgun-Sid: WyJlYzgxZCIsImx0dG5nLWRldkBhcmNoaXZlci5rZXJuZWwub3JnIiwiNjAyMzIzIl0=
+Received: from lists.lttng.org (lists.lttng.org [158.69.130.29]) by
+ 6a3b6843705e11b035febf048f86cc2bd0939e10c47de56260e482e3b58c1481 with SMTP id
+ 68cdbf83f11f6307584f7cf6 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Fri, 19 Sep 2025 20:39:31 GMT
+X-Mailgun-Sending-Ip: 159.135.228.58
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4cT49r6rDpz17Fy
+ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1758314370;
+	b=SDyeC1wI64lBr/sgBC+t/Xe17PEtOlbLZRtC5urbQkuQ5VjoXLosFa8YezpTg3DBCsRq
+	 BKXMVm1Bw4SdTnlsQABBWFoCikKL9b+h33sxRSacNt5F6ENqPCQVOzqpzBUBGiyd4vQG/
+	 2Kg7pRGWXYNmcTNaAZIVs0eKvb1fYXNDmWVHEhItFdmAZUxPZ80Cf6tXHAeRcR8Tw8Dbt
+	 /P2FTqQNGCkzLTDfq/4vajdH0aPt1KLhOuM/97thhcPuMqxVmhls9vgcu+5SnoNbCViLZ
+	 +K8Sl5/Xm52un54dsr4JjZWNmsREnuJh5+HS7xlJnmq4AoiCd/lJiBkgQ+Q2aqZ+cKw==
+ARC-Message-Signature: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256;
+	c=relaxed/simple; t=1758314370;
+	h=DKIM-Signature:MIME-Version:Date:Message-ID:Subject:To:From:From;
+	bh=WGCJOwm284nhzDF5oEwTEx/Ii/YjcXuaq++cLg3nNm8=;
+	b=aZHM3RYyO5RNo8uwawo76WtWxyJ9gB2AHo7Bd89M13gX1FI+EAqI9oimSCX4IsGU4E5m
+	 wSdBy05k50+nfOGiYG0Zq6WJ/dybz4EC9uU8vBC21AUh8qaJULveaKp+SWuXnQ12Gvh7I
+	 00ws35sIvkv+VGHrxatGuZZd6rKHacKD2NLind3UbW2VLbTrTXeUio2BewOSX0zFUtk+8
+	 ocKS+/s5UqPDZozzZYVBjEUF6dYk6iveCM0t06fIaIBbg/4ji8kEgV88fzd3cR0WWl+eH
+	 I8A5e8juzEe3nXZM9rzhrXdwSNwfUMXEoCJ/bTnKrnqaoxcUSMTbvoXC+leE2sxB4cQ==
+ARC-Authentication-Results: i=1; lists.lttng.org; arc=none smtp.remote-ip="::1"
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4cT49r6rDpz17Fy
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1757362293;
-	bh=e9Vq4nWjJ90wvU5Q6BZNHOlf9CY1XZ+HFMm+E02EVyA=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Jy50I0O56sRRE+IPy//as8PDPPAb0nFG8HzR6PK9y9Xrcemt6MAyQz6iMtYk8ff1N
-	 R6drrNoDawCHmZjz9rS4TDR/EA1B2nEkwh74O9wWCxIf8tvxgGhktl5loNucqRSUG4
-	 SHNPRf08yzl6zvwkZteX1R98R+coE/wO0M3AidFeCrt4ESbINFbCJyUoJNAwa4anXN
-	 GsEwHc4ZDJAecH5d3pbssJ3c9cHXGJQJ/SdwzDrXpsiHO1DBsJpA5ZuM2LyiZSWyG6
-	 f9quFqoGqfVVtcaW8/3/l8P5QJoOWIvJ0oub28RaY1oyPcr6KWRzC34PecJhgOhZPn
-	 8LXREX+bJWzeg==
+	s=default; t=1758314370;
+	bh=WGCJOwm284nhzDF5oEwTEx/Ii/YjcXuaq++cLg3nNm8=;
+	h=References:In-Reply-To:Date:Subject:To:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=lqUDVAyMS9qDl43uGRD98aFBtM79kg0pADxzJcNNd+3x63d/lB3YlNclW7GbcjptB
+	 1Rb4h/viEFyEmG8snp0PQNCR4x851Ynke5J4tFOumhCIsWlTgG5dEHdLtRFTCIyXjl
+	 9ZgpFAYgKGzZ2/chw4oZ3tLpt3nTLtYSSdOtHvH9O1ET2RH3MtekZvY5xqLIt9HcQ3
+	 1ToUXfV1IjNCUpJS9cxiZObH8foSw5UkQcpZ6rcSBChhEDqluUUNMDi5U9Q/WFdsNJ
+	 vTQ7rUyyYYVMa7/umZJ73CuXYjyZVjD1SxV12DCRSnLsR2j3WqnXTTMkpnYW1E4wmi
+	 POCvh1c15Qq4g==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4cLJ4g2JTzz1vnD;
-	Mon,  8 Sep 2025 16:11:31 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4cLJ4c2rNmz1vn8
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4cLJ4c2rNmz1vn8
-Received: from YT3PR01CU008.outbound.protection.outlook.com
- (mail-canadacentralazlp170100001.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c103::1])
- by lists.lttng.org (Postfix) with ESMTPS id 4cLJ4c2rNmz1vn8
- for <lttng-dev@lists.lttng.org>; Mon,  8 Sep 2025 16:11:27 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hWnN8dcH1UYw3K0P7wMkKKBrR83tkxqsf3S4Kon4Z9k+RO1cUEdwEFWwWHAxxsUAgEnFJebw4f8A3JX+P8sNTlpScl99z37XYmbmApllM0+KrN1vHl8XFHjEcyRsqLBhNjdY0W+FPazvVJjP8c5L6fEZd7HwhrsnI/mWuuo81BsmNSCQLhrIFBd1do8RJ41T/n2utkbP0Bz/yAeXHMla+GMWB6pBfFDjrW3J99QemBMEiyxgpWch1A45ls9mx/uBOSas4w+CaPqx10/bw9p5MRs97GnS+N2vuhIFYl6BluufQqvPSoBeeI0QJprh/pGLfDOvrG42r0UMf18A7vrsoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JQ1RxfqUyr4nxrQ7d1UHaK81U/LnW0wItp9Qh7w9xdU=;
- b=cVwl3gquzIagrGDUlnB1WwnhbrWCOHUEvMzZ2nTlVCk/FhLHSucU849mLr9Bbfw2lRuMBn5sFi0aGIXRk5BP7U7cWnbpjUJSNbM5ZW07vRmyBH4O+IlIowdToNJXWPGN6ZhCO4yMpRJaMW8Tob1W67CnA0lMn7kOI3kt2bvqZW+439tgS53zEygm0QXj/oh18IxG20HNP+HH69INUlwtbIQ6DiMwmVLS8JBF7+yooKPRwGKe/RhqOzydRv08oB0uU+OhyGouyHCSZAsDeCHZGMqlZ7+EJtsNmeT4lrr6kVZi6yApTagJmB3GkT3HDt8K+SilIHi3D2IGByhKgp0ZMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by YT2PR01MB10356.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:de::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Mon, 8 Sep
- 2025 20:07:57 +0000
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::50f1:2e3f:a5dd:5b4%3]) with mapi id 15.20.9094.021; Mon, 8 Sep 2025
- 20:07:57 +0000
-Message-ID: <eecc93ef-8d3c-4b2a-857c-471295ee6ec3@efficios.com>
-Date: Mon, 8 Sep 2025 16:07:55 -0400
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org,
- linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RELEASE] LTTng-modules 2.13.20 and 2.14.1 (Linux kernel tracer)
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0346.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:6b::16) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:be::5)
+	by lists.lttng.org (Postfix) with ESMTP id 4cT49r6rDpz17Fy;
+	Fri, 19 Sep 2025 16:39:28 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4cT49p5SpNz17Fx
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4cT49p5SpNz17Fx
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by lists.lttng.org (Postfix) with ESMTPS id 4cT49p5SpNz17Fx
+ for <lttng-dev@lists.lttng.org>; Fri, 19 Sep 2025 16:39:26 -0400 (EDT)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-62fa0653cd1so3033532a12.0
+ for <lttng-dev@lists.lttng.org>; Fri, 19 Sep 2025 13:39:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1758314364; x=1758919164;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=D/au3l3SsTE4kBsWX726dWZJmRK4R4qGJHVBoU0RNFU=;
+ b=wzIgjrRCsFsArb5MzsZarZKgnqHOkpAMArMVH31oiuzBh23lHvZyKl/Gn9Hngf+qa/
+ fq23BYrrMCUz/IaPSG+UVcsXM1jgX2Afk4C6a6Hv95aKP320zN5hkNEOTH89hHFraXjV
+ Zv4h0UcqZzyz4YeeHMKBxZ+Yrw6rJp1HXedQ+zoKEkzQpTKIvTt1fnXjHRxkOnHMqDvw
+ rQ2UWyYCTS2B5emrdWLyFYRtRrp+FsALe+Vgkmo8BmdMTphq0H7pw72ydROVWoEXG4Rs
+ xVWhapyySlN5I5agjZnCoMtPvO91tTvuPlPVGjh+gRGcoYpqAJVVNUJtEZY5CES2w41G
+ dQ3Q==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWFJO9C14/1uTM8zDThyUE8txu37opoKWOE94mx0BacvsVoLXWDnjEJK6K/KPAPcRVrwMw+qHi2ktQ=@lists.lttng.org
+X-Gm-Message-State: AOJu0Yxk0TUj/HmrcPLwt3bIo7tUJPvR0zIb1G4QgVvNAzLd6n3EMEbj
+ JQ8ztHC3trvDNjgMaRtJx2tvWnNDizTJPaKjP0tli5Tb6wrZdG//B9ofpBa54PU3yQZGuI6xyov
+ jl6hFRtf0kRpheyAO9tBnMrkR8YZbfszHbaC4rfg=
+X-Gm-Gg: ASbGncsT0bD6ENqp7pUAcN4oIisyzsXvpF42pIUzykVfjfMixRuuf0fFjxtKM+ei/EL
+ tFvNOliM7e6CXbDbnzlsFTd0ieFQoYXAGAqe/0ZQ/N2WYQzEg9CB2dd7EC9P79iXbTDu0NYOqjR
+ RZ0vTXPvK0IWFp93QLLzjVzls/17ENac0eWetY5kVPHEBHRbteuue8fVB+XPqAs+j8jL6Lixt2r
+ VJIxJ6K087WOWaD
+X-Google-Smtp-Source: AGHT+IFkOe5xuC5WWjY1WoJq7ZulsWbsXtEVuXD+3FpXLYMMi2AbHsWeJHVsSltL2eDgPZpiV/JhFI6MSabjS6WAyM0=
+X-Received: by 2002:a05:6402:3202:b0:62b:8a92:d2f0 with SMTP id
+ 4fb4d7f45d1cf-62fc0a7ba4cmr4035884a12.33.1758314363589; Fri, 19 Sep 2025
+ 13:39:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT2PR01MB10356:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9428475b-9f92-4b1d-8cae-08ddef13670a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?TDlGQmhjZXJzYlJPbzdwS2cwTGdxWUJnTTRENklnU1hQQVVkaDh0VjNjYXJS?=
- =?utf-8?B?TTBEQXFzZVRtQUI4VkYyaE95L2pMYTN4N3Q5SmY4bHhkRDhJNzVCNG5sdFE3?=
- =?utf-8?B?bm4yOWJITDA4TEtVa2FZeWpPNytwQkMyRlhMQjZLeTFzK2NhdW9XNWN3UjNI?=
- =?utf-8?B?S3pkdjFXeDVzb1VaSkRndDdReFlONXNaZjFJYXRWa3N5K05WQ0ZkVFl4eWRl?=
- =?utf-8?B?RDBPR3FJa3V6TGxES1orUzBSMm90ZTZhenVUT3BtVFNRQUVVOFA3bzZwQWpH?=
- =?utf-8?B?UUxXYjMrNjg2RUV4QnA5SVo0SWZhT1RMY290T3JDc0lBQ3RFMHJjR0lFU0Z4?=
- =?utf-8?B?K3E3MmNYeGp5VnZobDlUZ0xMeXpUUDl5M0dCUkxHc3AzcE5wOUlRd2NYU0Rv?=
- =?utf-8?B?a2Q4Nk50WDJ2TVM1T3IwdHZvbGk1ajhBR0NQUmV1bzlNYml4NzdVb2IwQlZG?=
- =?utf-8?B?ekVLVXcrNG1YU1laNkVZMkYrSWFOY1JMVWc1RHZuRWh5d1RUczA4UTNGUlpo?=
- =?utf-8?B?Q3RZclRNZXFJSTVKQ0NPU3M0VjVVSzg3cEJyeStRZHVCdlk3aFYrZ01wMUFi?=
- =?utf-8?B?MC9lUjV3Y3dkWU1Ha3RBVS9ia1daaExSdzBtd0R6NDNlcUxZbWxrMG14cDYx?=
- =?utf-8?B?bTh6UGJoa09EZkJFbHhPckRKTDd0eVVQYWgwNGJzQnJKK1czdkt5Q1Urbjgz?=
- =?utf-8?B?TlExNXdZZTE1eEJ6MysrM0VvMWdRbExmN2FjMVBFL2hZdExaQVdJNUZ1MW9l?=
- =?utf-8?B?RTJzY0REM0wrbTlOc1BKMXd6RE9RMkJWazBmYkxhaS9zR0VwVFY0TkhHU0lv?=
- =?utf-8?B?UjlCSHNvdmJ0RUN4ZUI5ejMwR3pWMnY4ZzJxWWk4eEN5dkdzN3Z5Ymtrc2g0?=
- =?utf-8?B?QUtuKzdmN1AzeHFKWXQ3WUg4bEhweDZLTjhqTENVNENwN1R4RjRTcFAvVkdx?=
- =?utf-8?B?UXJza1hZVE1QYW5PanUrRHNDcDBzQkJnSzlnaG82OG52WlBUM2VoN2pwSko1?=
- =?utf-8?B?RkxwaG9IK3VNSVRHOUMrc28rQ2dYZHVnWWZuc3pJdXlWMzdYQ2VQK3RQdkkz?=
- =?utf-8?B?YWhIWEZmaFgzOUFEWUYwS0o0alZPSzJRZm8zMXlqNS9maVh4ZGpUdmpJWEZi?=
- =?utf-8?B?NTdLSzJpeW9MNUhWRjRLY3libFNsT0dYNUt0U2pCVWFYTVMrT3FFR1FCY0NP?=
- =?utf-8?B?MEFlYnZwMkJEUFd3d1Vld0VocTRxY3BHdnVEd0doc1VreG5GOHVvcUJjeXRD?=
- =?utf-8?B?bVZsWENhalBjcklxUm9FL2dpSllFYkxWak9pMlFTRG1iNCt3Z3pLNmFxMStJ?=
- =?utf-8?B?ZkoyNTMzb3Q3TENXZ0Jtbmpqa0hVTWI3TEtjcHFLbG5rVW9OM3dqendIUnQz?=
- =?utf-8?B?MDlNVFV6N1B6d3B4eFRQK2htd3pCWDhnazVNMFcvSisva212dXlpYTl2Z0po?=
- =?utf-8?B?UjlhOUIwSUtWRzZFb1V6SXhOaWdOYnFLY1hkVDNYSzlacjlrL1JjKzY5NXBP?=
- =?utf-8?B?TVpQdkwwWU9hb0ZhbHdQeTlrdHJvT0llbENKOE1ENnM4ckRVbUZHcEZMVmYv?=
- =?utf-8?B?NVdTMStTNE1iazNPZzV4YXdsb3V0VTFjcElyZk1LK1hyQXJNaVhBdFozak1z?=
- =?utf-8?B?cnQ3QVRkUlg1RmdXQXAyVStwV3VqdVprWStWWDFJcWVGVysxdDIrRWd6UUJw?=
- =?utf-8?B?RERvaUJWdEJKUmZ3YUx4cndMemZ4SFM4UUtRWWRoYVpYbThtWEVlWkU3U1gy?=
- =?utf-8?B?TXNza05neUcyQlNtanV6Ri96clM5M3ZpQXQwSmJuRTVZYTZ3WHpUbk9BRmMv?=
- =?utf-8?Q?I9JWEEKbr/tnEHE4Aazsq1pGSa7PciLVm5H9M=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(366016); DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NWpKT2JaVUhYejNjVlhEa0paaEtDOFZZd050SnJJMW1veXpCNzJkTFpJa3pE?=
- =?utf-8?B?OGRuYlhYMlh1N3d0Rmh6cS8xay9tc0VrTjFRV1dkbytESWtBeUJERmZYcFNQ?=
- =?utf-8?B?VVNIcGk3WTF5L004WC9DZWQ3akhzeHVveXpiSWRMZVN1SzJObi9veEp5R0w4?=
- =?utf-8?B?VXhjNzBQK0dWRUl4VkJ2L204VUlsQVpQWVNYRHEvdTFZdlFDVmVMQjVpWHAy?=
- =?utf-8?B?K0M2ZGk4NEpXbnZmRFUvNFN1dTUreGs2VDlXbTZyeEtsTmFJdzViek80RlV3?=
- =?utf-8?B?NjZTZjl4TkhmK0hDcEdNeDhrV290MUxpZExVb2F2bmdPMHNtVTFyYTlINjFo?=
- =?utf-8?B?RWpQbndLNVV5eW5IckkyMHlQb1RjemNnb0NqUGpaNHgrMHR6M3RDVm8wak9U?=
- =?utf-8?B?ei8wVytBWXh4THVWUGxHeEhublNqK0VsZVhqR1ZPQS8yYXNLZk5BaXZKMCtw?=
- =?utf-8?B?ZFB5dWdiMVFTUjA5ZkowYlFXVm1Za3ZJenNVbHVaSzZLdGV5eHZERlFGVDdx?=
- =?utf-8?B?SFFSMU5sVG9NRWtiN1VUUDhmczU3djYyeEpTQ1lBQzNoa084dktkS0tRaFRH?=
- =?utf-8?B?YzhQNUdieGtLSGtjWFlFN3BSZ3N4NmxGY21oeXYxcm5Qd3QxL1RwM1hkZDRP?=
- =?utf-8?B?R010N2laR1hBUHc5QlB2ZWJqQ0lmT1RUemQ2V0tnU1AxdlN0Zllja080cW9D?=
- =?utf-8?B?VW1BaU9DbklPS1JyUDRObFhMTStkY1ZUdFF2aHR3QzdCY21ZanZPMkQzaDRF?=
- =?utf-8?B?WWtadmxMYjZOY25ENGs3bXRzTURySTh0d2RycXN0djJFc2diZGFQOXZHQTB4?=
- =?utf-8?B?WEtzMUV3YVJpVkdDUDBjN3FtTWtPcXhyNThGeWNIcXRjRDNnam5hTm5uQlhI?=
- =?utf-8?B?V3VXTnZYdTRjVHVGQW9leGx6c05hQVh3c3hhelJCVm1DM0JtRzV4TXJaQ3Bj?=
- =?utf-8?B?SlVmUSt4emExU3FTMXVVeEtvdWVEaUhORFk2UUZkVGJTUWFHMm81SFVkS2Zn?=
- =?utf-8?B?aFJWU0dVSGFMalJ0eUYwOUdnazZNN0dvU2NMaWZ0NzRaL3ZrZDhTb3c1TDN5?=
- =?utf-8?B?eFdQa2xKMmdqcjdCMTJkVXVmZkRyZEsrM2ZhVVpDNkJWbDlVNTVJUUc3VEJG?=
- =?utf-8?B?bG9sRUl3Q3dzaEVIUWIyS2RSQWhNNmVWdk5MK2Z2YzA5T0FKa0FrZjA5NmFo?=
- =?utf-8?B?WWlQajVkUVVyMTQwUVMzaWJ2MVV3T01BZkQxYit1bVM3eU9HajlocFd1K1da?=
- =?utf-8?B?YTdvOUE0c1lRa1JXbkxLdlhBUlE4d1B6MWZtR2hKeElOb2k4cGsxbG9FOGRn?=
- =?utf-8?B?YzBRUkVaSTE1MVdOQXhPZVVLYlRBMWV5a2R2TW9jMms3bmx0MHovb3JxUG9R?=
- =?utf-8?B?bWhTSDd5UFc3bDhJMytQTHoweCsvSFJlaUtydVZzelRMUitFU0kxemhiZkg3?=
- =?utf-8?B?QTV1ZkVOdG1iVTFBeUNUNlpZWm1CK01nOWp5ZUhBYW5ZZ2Izc1J2ZFJXQ3Rj?=
- =?utf-8?B?ckVyZ0UxZVppYlRXOUV4dnkyZ1BwUTBSdjNLbUE4MUpMRDdlSXE4bGJSVzFl?=
- =?utf-8?B?R3NLN0pDZnZCRXVnZmZUcXNpUjM4dERpSlQyeUVablhqWkIveE83NGZ3VTFQ?=
- =?utf-8?B?Vk00TXloYUdsUlVrRzhqa0hjVzUwMTl2Z21mUWxjTFk0dTBNSEtDd0tGVEhF?=
- =?utf-8?B?Q3VoVzBabVhGNUd3R0o2VG02dWdsUDFSTlNZa0gxY2lZTTN4SmE0dDl6Qmtx?=
- =?utf-8?B?UVlJVjZZL25yUStZa2pQZytHUUZzbzRad3d3dGJWMENFbmtKRkVGNVdQOUNp?=
- =?utf-8?B?ZXFyU2xGVWlGdVcvUU9ic1M1ejNzbVVjdG5iNC80eEgxTjBlODlmbVBJTXo2?=
- =?utf-8?B?UFBsOXE4elNreHdiUDY1bzVkbzVsNVJ6LzlvN09iN0VtYUFSS3BCSStCc2po?=
- =?utf-8?B?c0EyYjRxdkcwRlpRN01Ubnd0UXMwY0FFVS9VcWZVQml1ZnhFSUJVRmZLdWNN?=
- =?utf-8?B?NDltbmNjc2owUVVwMnc5UVNjU0FSOXZ6aDZEUkthRDdmN09SWXVrcC9tODdj?=
- =?utf-8?B?QmNEd1duRjB5YWJIRm9rN21IQ0Q1Q0RCT1RsczJQbHNkeDVnanRabE9WZXBS?=
- =?utf-8?B?MWtWR2M5QnJwYUNGNDRRZEZmOVdqdkQwUDNhdWtmUHlHSVkreGVLVXkwd1Ba?=
- =?utf-8?Q?3UdmY0vKH2on98D0bAKMlcY=3D?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9428475b-9f92-4b1d-8cae-08ddef13670a
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2025 20:07:57.2145 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B/1uAy5yBM2764Kz64NlMeSBZGXJ8n133PW0ET8DOOz7N3ba8ekwu7yUJMowtKBzOQzTwgtn0la7f2HT2X9Wd9TJIM3V/HlTkhvUzWWVhNw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB10356
+References: <CAKGpciq6Cb6+hqsfn+_zPk+MqCg+b0M_Gc3jVxVvnEGcE8rdLw@mail.gmail.com>
+ <CAKGpciqHpGqGJChLa8p4P4Xv7EyUPMxULHxeknOTyie8kHH6hg@mail.gmail.com>
+ <3c49eadb-f310-46b2-984d-58a0c193cde9@efficios.com>
+ <CAKGpcipt=fWJi9Y497C3vq03CXmPY6rXQqs8ZP9nDoTGdRKnAA@mail.gmail.com>
+ <CAKGpcipfyp3Ds4J0OH96Mu4zVhCLJg8g6tqEnfcRscZ1T8EmVA@mail.gmail.com>
+ <2f0dc1b4-3fcb-453c-aa42-4a1f85623300@paulmck-laptop>
+ <CAKGpciq+ixOVGN7TXYaF336ZEL_mOejzic5BvaKbexwwn_aqOQ@mail.gmail.com>
+ <BD1A29BD-2AD2-4092-B1A2-DFEFAE77AAEE@sury.org>
+ <CAKGpcip6w2nVQ+vbtfFH1296xTi5HYX+68J8okecChsihejDQA@mail.gmail.com>
+ <87y0qwwc6j.fsf@laura>
+ <CAKGpcioZbhyTUqLmNSnpuPw=jbi6eZV6ubbFQtvFD6VKn3wKxA@mail.gmail.com>
+ <87h5xg7p3u.fsf@laura>
+ <CAKGpciqOVQRTP9kz7uwFFECGWMzFRFRsRujSDBrxFC24Y1A6NA@mail.gmail.com>
+ <87bjnlrege.fsf@laura>
+In-Reply-To: <87bjnlrege.fsf@laura>
+Date: Fri, 19 Sep 2025 22:39:11 +0200
+X-Gm-Features: AS18NWDfHTnaGOzGYRno-1AAc4ZIeULOsDULNOqkzB_ms5PB9WnIXHY6C-muEJw
+Message-ID: <CAKGpcio7tO-G0JBazV1Xd52==uf9DCtxPfeUtne_QnNivCKacw@mail.gmail.com>
+Subject: Re: URCU feature request?
+To: Olivier Dion <odion@efficios.com>
+Content-Type: multipart/alternative; boundary="0000000000000b9882063f2d7704"
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -176,66 +116,343 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Thobias Knudsen via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Thobias Knudsen <thobknu@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi,
+--0000000000000b9882063f2d7704
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is a stable release announcement for the LTTng kernel tracer,
-an out-of-tree kernel tracer for the Linux kernel.
+>Since 0.15.0, we've introduce an annotation layer (not part of the
+>public API), making TSAN compatible with URCU.  See
+>`include/urcu/annotate.h' and the `CMM_SANITIZE_THREAD' macro.
+>
+>However, IIRC, you also need to compile URCU with the configuration
+>option `--enable-compiler-atomic-builtins' so that atomic operations are
+>implemented with the configured toolchain's builtin atomics.  I don't
+>recall if this was strictly necessary.
+>
+>If you encounter false positives with TSAN, please send me a minimal
+>reproducible example together with:
+>
+> - the toolchain you=E2=80=99re using
+>
+> - the version of URCU
+>
+> - the configuration flags you used
+>
+>I will be happy to have a look.
 
-The LTTng project provides low-overhead, correlated userspace and
-kernel tracing on Linux. Its use of the Common Trace Format and a
-flexible control interface allows it to fulfill various workloads.
+Sorry for the late answer. I had to find the time to fix some bugs to get
+it all running before switching to urcu v0.15.0 and setting the flags and
+macros for thread sanitizer support. Creating a minimum reproducible
+example would take some time as I don't have any good idea of the
+exact place where the thread sanitizer issues arise because they are
+scattered all over tsm.c and test_tsm.c. If you have linux debian family
+then you can clone my repo and run it:
+https://github.com/ThobiasKnudsen/Logos. ./scripts/build.sh --debug --tsan
+&& ./build/bin/test_tsm. I tried running with and without thread sanitizer
+support and got the same issues. In the test_tsm when only one thread is
+running, the thread sanitizer produces warnings still. I did find a place
+where the thread sanitizer said there was a race and the write was within a
+node not yet inserted into the cds_lfht. That seems like a false positive.
+The read for the same case should be inside rcu_read_lock as everything
+within lines 263 to 904 inside test_tsm.c is within a read section.
 
-* New in this release:
+  Read of size 1 at 0x7b1400085ea1 by thread T6:
+    #0 tsm_base_node_is_valid /Logos/src/tsm.c:721 (test_tsm+0xa548)
+    #1 _tsm_tsm_type_is_valid /Logos/src/tsm.c:364 (test_tsm+0xb1bf)
+    #2 tsm_node_is_valid /Logos/src/tsm.c:1553 (test_tsm+0x9984)
+    #3 tsm_node_defer_free /Logos/src/tsm.c:1888 (test_tsm+0xb2fc)
+    #4 stress_thread /Logos/src/tests/test_tsm.c:549 (test_tsm+0x46a6)
 
-The changes in those releases are mainly kernel enablement updates
-to allow compiling against recent kernels and building against the
-full kernel source, which allows building additional instrumentation
-such as ext4 and btrfs.
+  Previous write of size 1 at 0x7b1400085ea1 by thread T9:
+    #0 tsm_base_node_create /Logos/src/tsm.c:683 (test_tsm+0x6f2a)
+    #1 stress_thread /Logos/src/tests/test_tsm.c:843 (test_tsm+0x5ce0)
 
-* Detailed change log
+>I don=E2=80=99t see why that would be a problem for the static-check algor=
+ithm I
+>described above.  If a pointer needs to be protected by a mutex for
+>mutation, that falls outside the scope of RCU, as far as I know.
 
-2025-09-08 LTTng modules 2.13.20
-         * Add missing prototype for wrapper_get_pfnblock_flags_mask()
-         * fix: mm: remove the for_reclaim field from struct writeback_control (v6.17)
-         * fix: btrfs: use refcount_t type for the extent buffer reference counter (v6.17)
-         * fix: percpu: repurpose __percpu tag as a named address space qualifier (v6.15)
-         * tracepoint: Have tracepoints created with DECLARE_TRACE() have _tp suffix (v6.16)
-         * fix: treewide, timers: Rename from_timer() to timer_container_of() (v6.16)
-         * fix: mm/writeback: Convert tracing writeback_page_template to folios (v5.16)
-         * fix: mm/page-writeback: introduce tracepoint for wait_on_page_writeback() (v5.2)
-         * fix: btrfs: use the flags of an extent map to identify the compression type (v6.8)
-         * fix: btrfs: update the writepage tracepoint to take a folio (v6.12)
-         * fix: btrfs: tracepoints: add btrfs prefix to names where it's missing (v6.16)
-         * fix: ext4: Change remaining tracepoints to use folio (v6.5)
-         * fix: ext4: Convert invalidatepage to invalidate_folio (v5.18)
-         * fix: sched/tracepoints: Move and extend the sched_process_exit() tracepoint (v6.16)
-         * Fix: `fast_page_fault` changed in RHEL 8.7
-         * Fix: `kvm_exit` changed in RHEL 8.7
+If I understand correctly the __rcu checks that reads are not done outside
+read sections and unsafe writes are not done at all. If this is correct
+then if you are using custom concurrency for __rcu protected data outside
+the read section or unsafe writes is that allowed? Because if it's not that
+would be a limitation for __rcu.
 
-2025-09-08 LTTng modules 2.14.1
-         * Add missing prototype for wrapper_get_pfnblock_flags_mask()
-         * fix: mm: remove the for_reclaim field from struct writeback_control (v6.17)
-         * fix: btrfs: use refcount_t type for the extent buffer reference counter (v6.17)
-         * Fix: `fast_page_fault` changed in RHEL 8.7
-         * Fix: `kvm_exit` changed in RHEL 8.7
-         * fix: percpu: repurpose __percpu tag as a named address space qualifier (v6.15)
-         * writeback instrumentation: Add missing provider name prefix
+man. 8. sep. 2025 kl. 02:10 skrev Olivier Dion <odion@efficios.com>:
 
-Enjoy!
+> On Sun, 07 Sep 2025, Thobias Knudsen <thobknu@gmail.com> wrote:
+> >> It looks like you want runtime verification for the usage of the API.
+> >> Did you know that URCU can now be compiled against ThreadSanitizer
+> >> (TSAN)?  If a user misuses the API or makes incorrect assumptions abou=
+t
+> >> the guarantees offered by RCU, TSAN will most likely detect those
+> >> issues.  Coupled with the other debug features we already have, this
+> >> makes it very hard to not trigger an error path when the API is used
+> >> incorrectly.
+> >
+> > Really?! I've used TSAN and got a bunch of false positives, I believe,
+> but
+> > maybe they're not false positives? How do you remove the false positive=
+s,
+> > or know that they're not false positives?
+>
+> Since 0.15.0, we've introduce an annotation layer (not part of the
+> public API), making TSAN compatible with URCU.  See
+> `include/urcu/annotate.h' and the `CMM_SANITIZE_THREAD' macro.
+>
+> However, IIRC, you also need to compile URCU with the configuration
+> option `--enable-compiler-atomic-builtins' so that atomic operations are
+> implemented with the configured toolchain's builtin atomics.  I don't
+> recall if this was stricly necessary.
+>
+> If you encounter false positives with TSAN, please send me a minimal
+> reproducible example together with:
+>
+>  - the toolchain you=E2=80=99re using
+>
+>  - the version of URCU
+>
+>  - the configuration flags you used
+>
+> I will be happy to have a look.
+>
+> >> Note that certain kind of errors could actually be flag at compile tim=
+e
+> >> with the proper tooling.  For example, the Linux kernel uses a `__rcu'
+> >> attribute that Sparse can understand to flag improper use of
+> >> RCU=E2=80=91protected pointers.  I=E2=80=99d be very open to exposing =
+something similar
+> >> (an attribute) for static checkers.
+> >
+> > wow thanks for the info! I knew compile time checks would be possible b=
+ut
+> > requiring compiler operability which is a higher hanging fruit for me.
+>
+> I don=E2=80=99t know the details of `__rcu' from the Linux kernel. I thin=
+k it=E2=80=99s
+> just a macro that expands to nothing by default, but Sparse treats it as
+> an attribute.  I=E2=80=99m not sure exactly what checks Sparse performs w=
+ith it,
+> but I suspect it involves traversing the program=E2=80=99s control-flow g=
+raph
+> (CFG), ensuring that pointers marked with the `__rcu' qualifier are:
+>
+>   - obtained via rcu_dereference
+>
+>   - only dereferenced under RCU lock protection
+>
+> > Is '__rcu' compatible with custom concurrency? For example
+> > rcu_dereference a pointer then locking a mutex inside the pointer then
+> > unlock read then continue using the pointer?
+>
+> I don=E2=80=99t see why that would be a problem for the static-check algo=
+rithm I
+> described above.  If a pointer needs to be protected by a mutex for
+> mutation, that falls outside the scope of RCU, as far as I know.
+>
+> > I cant come up with something usefull other than a language rework. Is
+> > it much work making the __urcu attribute?
+>
+> I suppose not.  On top of my head, it would involve adding some pointer
+> qualifier and function attributes to the primitives exposed by URCU.
+> Users would also need to use the pointer qualifier when working with
+> RCU-protected pointers.  The qualifier and the attributes would expand
+> to nothing by default, letting static checkers defining them to internal
+> values.  I suggest you read `Documentation/RCU/rcu_dereference.rst' in
+> the Linux kernel tree if you are interested.
+>
+> In its current state, this would not be very useful because none of the
+> major compilers provide static analysis for RCU.  However, implementing
+> such analysis, as a plugin, wouldn=E2=80=99t be overly difficult for some=
+one
+> familiar with Clang or GCC, I suppose.
+>
+> [...]
+>
+> Thanks,
+> Olivier
+> --
+> Olivier Dion
+> EfficiOS Inc.
+> https://www.efficios.com
+>
 
-Mathieu
+--0000000000000b9882063f2d7704
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
+<div dir=3D"ltr">&gt;Since 0.15.0, we&#39;ve introduce an annotation layer =
+(not part of the<br>&gt;public API), making TSAN compatible with URCU.=C2=
+=A0 See<br>&gt;`include/urcu/annotate.h&#39; and the `CMM_SANITIZE_THREAD&#=
+39; macro.<br>&gt;<br>&gt;However, IIRC, you also need to compile URCU with=
+ the configuration<br>&gt;option `--enable-compiler-atomic-builtins&#39; so=
+ that atomic operations are<br>&gt;implemented with the configured toolchai=
+n&#39;s builtin atomics.=C2=A0 I don&#39;t<br>&gt;recall if this was strict=
+ly necessary.<br>&gt;<br>&gt;If you encounter false positives with TSAN, pl=
+ease send me a minimal<br>&gt;reproducible example together with:<br>&gt;<b=
+r>&gt; - the toolchain you=E2=80=99re using<br>&gt;<br>&gt; - the version o=
+f URCU<br>&gt;<br>&gt; - the configuration flags you used<br>&gt;<br>&gt;I =
+will be happy to have a look.<div><br></div><div>Sorry for the late answer.=
+ I had to find the time to fix some bugs to get it all running before switc=
+hing to urcu v0.15.0 and setting the flags and macros for thread sanitizer=
+=C2=A0support. Creating a minimum reproducible example would take some time=
+ as I don&#39;t have any good idea of the exact=C2=A0place where the thread=
+ sanitizer issues arise=C2=A0because they are scattered all over tsm.c and =
+test_tsm.c. If you have linux debian family then you can clone my repo and =
+run it:=C2=A0<a href=3D"https://github.com/ThobiasKnudsen/Logos">https://gi=
+thub.com/ThobiasKnudsen/Logos</a>. ./scripts/build.sh --debug --tsan &amp;&=
+amp; ./build/bin/test_tsm. I tried running with and without thread sanitize=
+r support and got the same issues. In the test_tsm when only one thread is =
+running, the thread sanitizer produces warnings still. I did find a place w=
+here the thread sanitizer said there=C2=A0was a race and the write was with=
+in a node not yet inserted into the cds_lfht. That seems like a false posit=
+ive. The read for the same case should be inside rcu_read_lock as everythin=
+g within lines 263 to 904 inside test_tsm.c is within a read section.</div>=
+<div><br></div><div>=C2=A0 Read of size 1 at 0x7b1400085ea1 by thread T6:<b=
+r>=C2=A0 =C2=A0 #0 tsm_base_node_is_valid /Logos/src/tsm.c:721 (test_tsm+0x=
+a548)<br>=C2=A0 =C2=A0 #1 _tsm_tsm_type_is_valid /Logos/src/tsm.c:364 (test=
+_tsm+0xb1bf)<br>=C2=A0 =C2=A0 #2 tsm_node_is_valid /Logos/src/tsm.c:1553 (t=
+est_tsm+0x9984)<br>=C2=A0 =C2=A0 #3 tsm_node_defer_free /Logos/src/tsm.c:18=
+88 (test_tsm+0xb2fc)<br>=C2=A0 =C2=A0 #4 stress_thread /Logos/src/tests/tes=
+t_tsm.c:549 (test_tsm+0x46a6)<br><br>=C2=A0 Previous write of size 1 at 0x7=
+b1400085ea1 by thread T9:<br>=C2=A0 =C2=A0 #0 tsm_base_node_create /Logos/s=
+rc/tsm.c:683 (test_tsm+0x6f2a)<br>=C2=A0 =C2=A0 #1 stress_thread /Logos/src=
+/tests/test_tsm.c:843 (test_tsm+0x5ce0)<br></div><div><br></div><div>&gt;I =
+don=E2=80=99t see why that would be a problem for the static-check algorith=
+m I<br>&gt;described above.=C2=A0 If a pointer needs to be protected by a m=
+utex for<br>&gt;mutation, that falls outside the scope of RCU, as far as I =
+know.</div><div><br></div><div>If I understand correctly the __rcu checks t=
+hat reads are not done outside read sections and unsafe writes are not done=
+ at all. If this is correct then if you are using custom concurrency for __=
+rcu protected data outside the read section or unsafe writes is that allowe=
+d? Because if it&#39;s not that would be a limitation for __rcu.=C2=A0</div=
+></div><br><div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr=
+" class=3D"gmail_attr">man. 8. sep. 2025 kl. 02:10 skrev Olivier Dion &lt;<=
+a href=3D"mailto:odion@efficios.com">odion@efficios.com</a>&gt;:<br></div><=
+blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-l=
+eft:1px solid rgb(204,204,204);padding-left:1ex">On Sun, 07 Sep 2025, Thobi=
+as Knudsen &lt;<a href=3D"mailto:thobknu@gmail.com" target=3D"_blank">thobk=
+nu@gmail.com</a>&gt; wrote:<br>
+&gt;&gt; It looks like you want runtime verification for the usage of the A=
+PI.<br>
+&gt;&gt; Did you know that URCU can now be compiled against ThreadSanitizer=
+<br>
+&gt;&gt; (TSAN)?=C2=A0 If a user misuses the API or makes incorrect assumpt=
+ions about<br>
+&gt;&gt; the guarantees offered by RCU, TSAN will most likely detect those<=
+br>
+&gt;&gt; issues.=C2=A0 Coupled with the other debug features we already hav=
+e, this<br>
+&gt;&gt; makes it very hard to not trigger an error path when the API is us=
+ed<br>
+&gt;&gt; incorrectly.<br>
+&gt;<br>
+&gt; Really?! I&#39;ve used TSAN and got a bunch of false positives, I beli=
+eve, but<br>
+&gt; maybe they&#39;re not false positives? How do you remove the false pos=
+itives,<br>
+&gt; or know that they&#39;re not false positives?<br>
+<br>
+Since 0.15.0, we&#39;ve introduce an annotation layer (not part of the<br>
+public API), making TSAN compatible with URCU.=C2=A0 See<br>
+`include/urcu/annotate.h&#39; and the `CMM_SANITIZE_THREAD&#39; macro.<br>
+<br>
+However, IIRC, you also need to compile URCU with the configuration<br>
+option `--enable-compiler-atomic-builtins&#39; so that atomic operations ar=
+e<br>
+implemented with the configured toolchain&#39;s builtin atomics.=C2=A0 I do=
+n&#39;t<br>
+recall if this was stricly necessary.<br>
+<br>
+If you encounter false positives with TSAN, please send me a minimal<br>
+reproducible example together with:<br>
+<br>
+=C2=A0- the toolchain you=E2=80=99re using<br>
+<br>
+=C2=A0- the version of URCU<br>
+<br>
+=C2=A0- the configuration flags you used<br>
+<br>
+I will be happy to have a look.<br>
+<br>
+&gt;&gt; Note that certain kind of errors could actually be flag at compile=
+ time<br>
+&gt;&gt; with the proper tooling.=C2=A0 For example, the Linux kernel uses =
+a `__rcu&#39;<br>
+&gt;&gt; attribute that Sparse can understand to flag improper use of<br>
+&gt;&gt; RCU=E2=80=91protected pointers.=C2=A0 I=E2=80=99d be very open to =
+exposing something similar<br>
+&gt;&gt; (an attribute) for static checkers.<br>
+&gt;<br>
+&gt; wow thanks for the info! I knew compile time checks would be possible =
+but<br>
+&gt; requiring compiler operability which is a higher hanging fruit for me.=
+ <br>
+<br>
+I don=E2=80=99t know the details of `__rcu&#39; from the Linux kernel. I th=
+ink it=E2=80=99s<br>
+just a macro that expands to nothing by default, but Sparse treats it as<br=
+>
+an attribute.=C2=A0 I=E2=80=99m not sure exactly what checks Sparse perform=
+s with it,<br>
+but I suspect it involves traversing the program=E2=80=99s control-flow gra=
+ph<br>
+(CFG), ensuring that pointers marked with the `__rcu&#39; qualifier are:<br=
+>
+<br>
+=C2=A0 - obtained via rcu_dereference<br>
+<br>
+=C2=A0 - only dereferenced under RCU lock protection<br>
+<br>
+&gt; Is &#39;__rcu&#39; compatible with custom concurrency? For example<br>
+&gt; rcu_dereference a pointer then locking a mutex inside the pointer then=
+<br>
+&gt; unlock read then continue using the pointer?<br>
+<br>
+I don=E2=80=99t see why that would be a problem for the static-check algori=
+thm I<br>
+described above.=C2=A0 If a pointer needs to be protected by a mutex for<br=
+>
+mutation, that falls outside the scope of RCU, as far as I know.<br>
+<br>
+&gt; I cant come up with something usefull other than a language rework. Is=
+<br>
+&gt; it much work making the __urcu attribute?<br>
+<br>
+I suppose not.=C2=A0 On top of my head, it would involve adding some pointe=
+r<br>
+qualifier and function attributes to the primitives exposed by URCU.<br>
+Users would also need to use the pointer qualifier when working with<br>
+RCU-protected pointers.=C2=A0 The qualifier and the attributes would expand=
+<br>
+to nothing by default, letting static checkers defining them to internal<br=
+>
+values.=C2=A0 I suggest you read `Documentation/RCU/rcu_dereference.rst&#39=
+; in<br>
+the Linux kernel tree if you are interested.<br>
+<br>
+In its current state, this would not be very useful because none of the<br>
+major compilers provide static analysis for RCU.=C2=A0 However, implementin=
+g<br>
+such analysis, as a plugin, wouldn=E2=80=99t be overly difficult for someon=
+e<br>
+familiar with Clang or GCC, I suppose.<br>
+<br>
+[...]<br>
+<br>
+Thanks,<br>
+Olivier<br>
+-- <br>
+Olivier Dion<br>
+EfficiOS Inc.<br>
+<a href=3D"https://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">h=
+ttps://www.efficios.com</a><br>
+</blockquote></div>
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+--0000000000000b9882063f2d7704--
