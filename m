@@ -1,181 +1,96 @@
 Return-Path: <bounce+b7b410.602323-lttng-dev=archiver.kernel.org@lists.lttng.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from m43-8.mailgun.net (m43-8.mailgun.net [69.72.43.8])
+Received: from m43-10.mailgun.net (m43-10.mailgun.net [69.72.43.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E2DCCCA471
-	for <lttng-dev@archiver.kernel.org>; Mon,  6 Oct 2025 15:51:05 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=lists.lttng.org; q=dns/txt; s=mx; t=1759765864; x=1759773064;
- h=Sender: Sender: Reply-To: From: From: List-Subscribe: List-Help: List-Post: List-Archive: List-Unsubscribe: List-Id: MIME-Version: Content-Transfer-Encoding: Content-Type: Subject: Subject: To: To: Date: Message-ID;
- bh=s7aOsy4eM2Yq7xZ/XAifr4uyuGkXOn1lcHQUzyuMUJg=;
- b=TJaG85Y0QAgX4mG5C7SCBrtRakRSicle72IuK5QtjAEjefEVlONnbYeEc9t+DppyJQK/mJNCcxiq8cKGNZyCTTEAOKrOAjoTWM5OykCuAicYdnhconfXIGyDmSNtc6oSIeIgOUUMLcGe0pPOSl0jETt2J3v+4dCAUSBogFAfXc0c+u5n5yODOGyqY4Qbz0Os5xnrEFt/HsNnX+Y1qhwLXJRXCZirErCZDsNsmz16iSAn3rzg5gBtZ3+2iLXUaB0AiY0IJ4loORi0p3GcS9jULL2bGVQsWW0fl7UcEpWMqOGJ609LcXNhl01rZtEweixZlB9VO5qq0R+s1Y+aKtZ2SA==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F427CCA470
+	for <lttng-dev@archiver.kernel.org>; Mon,  6 Oct 2025 17:23:19 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=lists.lttng.org; q=dns/txt; s=mx; t=1759771398; x=1759778598;
+ h=Sender: Sender: Reply-To: From: From: List-Subscribe: List-Help: List-Post: List-Archive: List-Unsubscribe: List-Id: Content-Type: Cc: To: To: Subject: Subject: Message-ID: Date: In-Reply-To: References: MIME-Version;
+ bh=Z8zO7IF42bUMeQXqbW4fxPlVHBbqOZwWqo6Fhw2fH2I=;
+ b=kA1aq5rsSa467Yze7QOFKt+OAtJYvD8fh7DW1sADfLbyBS5GYe3E83iGuAS39KWc8bkbkjXdp06zVcKs+z/F9y6j8xSOdF5KrOjy+2z7TInNKl0ls13N9Vn8xz3saBtPo/E4Nv1RjHO1gJSwTjSeD/HJQipbYahKVPbrovQ323/inOjG+yNgsrOtpI2jAWi8bNuwYHqV6IMqGp49oV2Q6452Card2K1kvBEizRCaHCspHMmrGRKusV7XsX52Vx/z5AbUHUr6sIGvTopaxVAowjgJ34uxCkOD345E+EtJ3VevKFlZbwG5VNXZMvaMVlWA3d8R37SlcaDvuxPLEfImEA==
 X-Mailgun-Sid: WyJlYzgxZCIsImx0dG5nLWRldkBhcmNoaXZlci5rZXJuZWwub3JnIiwiNjAyMzIzIl0=
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29]) by
- 98da2938d0ee2e962043efee1e81e63305cca8df7680205aad0d2b0a40a7d8cc with SMTP id
- 68e3e5682f8635cc84606f4f (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Mon, 06 Oct 2025 15:51:04 GMT
-X-Mailgun-Sending-Ip: 69.72.43.8
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4cgNzC3kyxz26gC
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1759765864;
-	b=MtS0SU46J9hyzlvwYUALiSyc/xYf1dZ0dkFYzdWfGLZz/4Mlzcwe+x9kTDUiemTKQn8P
-	 5SVT/eWpwXZAlU01wWfbzUPzZlIPPCvdd5l/HF0+sfDp7uO6vjDB1ALLC0Td4HOoyggpo
-	 NNF9v0z3qv8FoqUGc+jfJWXWHIscKD20dDWC/jUxeGcm4Vi67W/aBGMrYE1wNnztxkc63
-	 fO9icDUff5vmwBlbbS4B1TNITg3kU+3Zf5Uw5/m5GdwtxwaRTwL25rBhifKSzIMCVXsJE
-	 mE4SAU6jExyqsJqfXDTuEal17KHb4cnvWuwNJsZSdItp/hXeRocC25Z1aK5H14ynFfA==
-ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1759765864;
-	h=DKIM-Signature:Message-ID:Date:To:Subject:MIME-Version:From:From;
-	bh=H1imEMntMkAfEiNppX5LBZDXiAPjXjGi38W4hQSpE9c=;
-	b=Lf5W85MES2S1Vrv0o5fr2JJTmeflifrIEjW0whF9LGMvyBSdgzFQ1iOgaUl663TMlARW
-	 jTcEroJU8RKrxko7ZRGYOIe2sxMKjpViMw4SFlvTEYorvzhshf37/Qxf+WIV/nqUS34Ol
-	 14pOFQt3buaF/Z8nOU3jX0BWZGWO3vSF+LLgpq1nfjDo/eGNEDuee0I5PmciEf1A+Vnh2
-	 fR2nnUC6DGyxn/goKxeadAs9AoZQ1IUaxWJRYO0K0FXBFwGcvE7vCxXDJN+TSqqdiOGK+
-	 KdIsj1eY0rCRyVjUeJ0gwt3WhRtMYU1fLza1Ed+FXRHqiTaZuRJj7ZT28BWOXwNwiqg==
-ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4cgNzC3kyxz26gC
+ cabc82aa332b72b872e27f9c308aacff10a15e5cb781069d1a356b511e047218 with SMTP id
+ 68e3fb068bd926232c5c6f1b (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Mon, 06 Oct 2025 17:23:18 GMT
+X-Mailgun-Sending-Ip: 69.72.43.10
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4cgR1c5SkWz27SM
+ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1759771397;
+	b=NUrHYk+UgSwY1NqRkXH0N7E4XsxhChPCWEVJ/P4Gh49GOU+zIJCy/pJMExGOBKI8p7rb
+	 yLya7R7dbTKMcEc11Ogs38R6DpSMifvS31C8PSzzaqNq7sI/C9aQqp+Z8WooS/ZDmyBkF
+	 IFDHHBXBnJ3pYeylQSTRtxmWq4/E+odU0Zzjisq5b9OmiL1I2cIYteqfjm4zFSk6I9tY5
+	 NnX6wBQk/k7pJwPL8NpLObUNwkdc5eeGw+byMe8yREmTR61rYwEnvfyvTy3N5hHa1+PEV
+	 JbGcwAi4E8LhbjUBKea61DQIsHaN6zOFoDlND8j0gFQn1W2Xa59b3cg8z4GURbHuAJA==
+ARC-Message-Signature: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256;
+	c=relaxed/simple; t=1759771397;
+	h=DKIM-Signature:MIME-Version:Date:Message-ID:Subject:To:From:From;
+	bh=Z8zO7IF42bUMeQXqbW4fxPlVHBbqOZwWqo6Fhw2fH2I=;
+	b=pmYigcePwmsF1O/YKzUhikyBIyVKjnu8RHrBJhuYb3D6Kotb64QoKlAr5weZgasminqY
+	 kb7XmYwVo0ZsSfR6PZXP0aICfhcbS7e7AE+JmtDI72OQI6UblS3srbSYrXbhJYkMgiB+s
+	 b9k3JHaLNB5Sdn47G97kYXongzwAORCNZ8ia2SMuYReW45kJJxqLUqSnjeQvaCYWKJkn5
+	 CteJ7cUS07/ObRq8QlFyUt/tB6dfhCFrs9ryFQ9llbhh98SZeZdL04R8SqjP/p0ewcCAa
+	 1VtpxQO4fesix3wP02eq49idaxfWrdLwLxmcC4whwg4PNb7pvU4ZC/EYhM3RGBkbMMg==
+ARC-Authentication-Results: i=1; lists.lttng.org; arc=none smtp.remote-ip="::1"
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4cgR1c5SkWz27SM
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1759765864;
-	bh=H1imEMntMkAfEiNppX5LBZDXiAPjXjGi38W4hQSpE9c=;
-	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dnkaQ/xexvDQiEn92G2pTpFIyW2PxiYIik5aqnuvMMvvhReMElZTuqcY5r0ksdEW8
-	 P9C5kWMBH+HXdzQU+sZeQ0lOHIg+Tp61HSEo8VfhJX9B6/mjmzDHzlzlqYF0kN2Akl
-	 Rpqu+IijqtW1gDrRAIuJ4fTLjx5PhzYM7hWUy5GrHDACV1md87nZZBF4gc7xw7pkzK
-	 nnClXUjRAb78X0hFZYgMubXw9DzkrslXVUImWahFnbbmM+qdBOrR463NwCLSbPlPiZ
-	 PmJo2NLdRFsXQXqwWAR0K0VoPwkDEYQwGjVLgJmVZOyIqayp4XN1W+IKamTkWxVpov
-	 aXfR6IXwX84wQ==
+	s=default; t=1759771397;
+	bh=Z8zO7IF42bUMeQXqbW4fxPlVHBbqOZwWqo6Fhw2fH2I=;
+	h=References:In-Reply-To:Date:Subject:To:Cc:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=mRGiSpjVmwAWYtBm6k4d8I2afthJ013rTLguT7j7pZObSQkBGb0tb+H5GYzfeOGJR
+	 b+1mthnXvDJA6NSY87sAL7W69sPCs2NbP1ggqmBqn1bYwIpeGCLa42E4Q/G1bVDy/f
+	 S+djlHyHyROBn9w8yeqdEFHlqInKyIrOtfL1EkEFHIrhM0n+QdhZ7tDp5KZbA5IDJF
+	 ZfKhhWx63gcRdQWacAKNXogbnfyahicgVSL7dkIe8sHhbp0AHKQlwIN3O0Dh7FIXc7
+	 GDKRG8hh+m/26o6f2e/+k6EpHkz6MMxzBYsGXNVUZg8QSinb7QfVqem1UviSGrjxQd
+	 3bEZy+6oTUscw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4cgNzC3kyxz26gC;
-	Mon,  6 Oct 2025 11:51:03 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4cgNzB2D93z26g9
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4cgNzB2D93z26g9
-Received: from YQZPR01CU011.outbound.protection.outlook.com
- (mail-canadaeastazlp170100000.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c104::])
- by lists.lttng.org (Postfix) with ESMTPS id 4cgNzB2D93z26g9
- for <lttng-dev@lists.lttng.org>; Mon,  6 Oct 2025 11:51:01 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Qgo5L5/K0qMWYV19tk8TenT/mACQNq8rPaUVpdAaRVun4sBXEoL2PUp8OVeP9J8GBHnqaKt3DBJlwgZZwqIYtiBSiOm5C6BPtCiYCeImF/seC5wrcorXVsSt1JSwhBRYTa5TEoOnFGPswuz0fpCtfjKtkR5zEJJ6Twibo8x0QxwixswmFSHLrdxILcYlR82wp2OLYW8VW55T6WMuVoL3+nGjG0eK/gW0ywTY4CSpAhHv3WeTLXAgC9eCSx0cK+semQaldmXGcZlh/Vmv6sOwRF3jjYJAS55uclpEmVylzkO2vZsaF3CfGI4VFpFrJ6mIJSfDPR4n3r6Jehu8vyxXXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s7aOsy4eM2Yq7xZ/XAifr4uyuGkXOn1lcHQUzyuMUJg=;
- b=AbQO9DCU1zzbDRz/5zjEG84Bk6qmxeIvnIyvLZiFSWQ9wOlGXoB5cc8KNHc1jHw2m4b7Tnpjyi7UOOD4T45IXEbuOEGe+UDHpmzzacOg9WLzweu01tcXJ5Zm9ocKptLi8MlS48p2WcTWccXhqi/JCIAyIWeP9Zaw3Qag1yzYrUr5EzgkE63IfPu5Uf0C7Y5p6ojL+btadMFYK3cms6uWnNts0btpMn28gv7m9Ndoz7N8k3M5nG3FYdiV3td5ssdb/AvjxzzMwKZtL13u4zgGHdYG4Us2rRAUles0v2kZUuSYvYjMEYpZMUOFDSELvrcB7NfwE5LNXBCyCP/+nMDIOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by TO1PPFECCD46551.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b08::6a3) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.13; Mon, 6 Oct
- 2025 15:50:57 +0000
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::50f1:2e3f:a5dd:5b4%5]) with mapi id 15.20.9182.017; Mon, 6 Oct 2025
- 15:50:57 +0000
-Message-ID: <3ca8430a-d2c1-4fc4-8fa7-bc3fa53ee82e@efficios.com>
-Date: Mon, 6 Oct 2025 11:50:55 -0400
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org,
- linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RELEASE] LTTng-modules 2.13.21 and 2.14.2 (Linux kernel tracer)
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQXPR0101CA0035.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:15::48) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:be::5)
+	by lists.lttng.org (Postfix) with ESMTP id 4cgR1c5SkWz27SM;
+	Mon,  6 Oct 2025 13:23:16 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4cgR1Z1bKmz27h9
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4cgR1Z1bKmz27h9
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
+ [IPv6:2607:f8b0:4864:20::102c])
+ by lists.lttng.org (Postfix) with ESMTPS id 4cgR1Z1bKmz27h9
+ for <lttng-dev@lists.lttng.org>; Mon,  6 Oct 2025 13:23:13 -0400 (EDT)
+Received: by mail-pj1-x102c.google.com with SMTP id
+ 98e67ed59e1d1-32eb45ab7a0so5679166a91.0
+ for <lttng-dev@lists.lttng.org>; Mon, 06 Oct 2025 10:23:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1759771391; x=1760376191;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Z8zO7IF42bUMeQXqbW4fxPlVHBbqOZwWqo6Fhw2fH2I=;
+ b=MjAiYJV98/dOqP1T98fOtC2HfoI3xkPda/Re2itPfvOw3HUSHFxeb5PWwPc0266P/W
+ UtQ9NnGq1sYcU7Jo67sUAndSIm7JMww+67n9oLCYCDy4OUIE0vPjETiFh22OyRyh/Q64
+ 3V3LOmyY+a0Su7i38vNalfV5vsst3/3WPugknND16nYy6Z2BLDpPenO3OoggY6FM8Vlj
+ LYmMcvK49SvvVRvRV2N+2A7ZHw/prvJNbQeiPXVxlfLMzFyZN/x+6e4lp+RfQrMGuBBe
+ 5pn/BlaOdosBOquKr8mhSdQ0sj4oyd7k6Nq9YT2kCg6/X5ei+rlgYgFoNaZB0oe8iRwY
+ +8DA==
+X-Gm-Message-State: AOJu0YxaAimDiyOlZuaq1JOxQmYxg+2sN0s2xrwBfncU4a5g9jLlfDSF
+ +Q7A60ocZUIYfMLHJ+sv/hzM2Ag5Cv1aqde/O8TXFXTGfMLOZkbVLZVJjBW/ozr5QBCRZdd2lBP
+ NrzWjUg70RpPTMmvLvn+4S6ijLVF/pvs=
+X-Gm-Gg: ASbGnctxLTb7QYMoNWnGaVpUMAuRFJkF1my7Ja3qJ1PgCdRT4Mie8KEbGyAYZAx26+j
+ hmX8CmfdkM3G+biQGEYuBODtiHI6E0wAK7It1SaV3QbCafI66s4XySGpDApndLNCMMHFoSyTRi/
+ NfSCcoHvZ7ibq5BHwhTuYupsFhNuQ+kjxatFuFQ67YYSug8Xg37rZaqU0gjRTNxbsqcKcz6hivx
+ zkjRBHsHtT1kGI91wQgbn06ORkejAxkn1fg/w==
+X-Google-Smtp-Source: AGHT+IFhub4dEA2E2vTq4hrlA64jdnW3pI12rm0vBFJSqJBJ+F2Lnauh7JIjQFCOhUalZNoP9Bnjm+JVs0v8yH0rES0=
+X-Received: by 2002:a17:90b:4f4e:b0:32e:e5:a90a with SMTP id
+ 98e67ed59e1d1-339c26e495cmr17950707a91.8.1759771391071; Mon, 06 Oct 2025
+ 10:23:11 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|TO1PPFECCD46551:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b406ee9-b5bd-430d-e452-08de04f02385
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?MS9qdU5tbTR4Z2dkaFFSSDNDREhNMDUzQmxRQjdHNXl0ZExnSDhLOUl0ZjBJ?=
- =?utf-8?B?Y0p4V3l0TGo4TFg3aXBtalVYLzVLK3cvMlNUYXJ5MFlLcGRSWGNVbEpBMERY?=
- =?utf-8?B?NUxSZzBLSnpXbVpBemdON0ZOaHEyeEd5RGR1TzZTRlhOYzdLWEFINU0waFFs?=
- =?utf-8?B?a3N6Tnp3aG5aSUx1bDB4L0x1Ym9sNCs4T1U5enFxem0vMFpVWm9YLzY1R2NJ?=
- =?utf-8?B?eEx5R1U3OTlQM2JNQVdubk1wZGFaTEhpRUNsL0dnSFpPb2JDVk8vbThNd1hM?=
- =?utf-8?B?bUZzeEIzcnZlbVlsYnpHY1gxZzBSeEcrcnI2VlNnQWovcldOTGtrcnBkMG51?=
- =?utf-8?B?WitEVVhhWVBhMHZzRExpWDdvMTByOUNFVDNmOWxGRnZRL3g3L1g1b2h6b2I5?=
- =?utf-8?B?SjlieEpXcVlyQ1JnVm1mV1lKQjB2YnpiNE12eVR2OUxjU3FBV3E3OEdxK2RU?=
- =?utf-8?B?UlV1OEdUWitvMzJZbVdQZEdyWFBxc1lrbVlUSDUxZTVKNWppRjlrNEYxUVlZ?=
- =?utf-8?B?QXo3QWxRRTFDR1lENTJyL05jTTJiTmFENTZUeFZEeW5LaTk0RU9xNjJSemZp?=
- =?utf-8?B?aFVhTGZKZGxLNFAwaTRYU003RHdETEFOeDNoelhBQmNMTDU4NU0zS3Zsa2dC?=
- =?utf-8?B?M2NDZzMyMVUrclNtVCt3V0JpUTJPa1JFMWZXWjg2YWZhYVBSbmRHR242YTdU?=
- =?utf-8?B?bEpUY0hiTXNZU3VMKzhnZytJK2IvWUNnMnRjVjEvTzBoZ0xSVzQxVXRnalVy?=
- =?utf-8?B?QzdqbENHYWlBSlJSTVhPUHUrY2ZvL25vT0JPVzdWSXhhZlBaa3Nod09TejVs?=
- =?utf-8?B?M1NHQUVmQytJRFB1Q0hZeGVra1BVSFJRcWxFUS9mS1pySE9odXM3ZldkVnJi?=
- =?utf-8?B?MGhGS293ZXNwaGxTNSsrZTl3SEE5SFdUQW9ja3Vsc1JxWjBEdXZBaGlkWkd0?=
- =?utf-8?B?NWJCOHN6dCtwVlNpK2ZNTlZ5OWZNN3Z0Sy9MM2RsNmMyb0FRTUtRcGdEK0tn?=
- =?utf-8?B?V1A5MDBNaXRpUHNVWGQvLzhBK2JBQ2VCRWZtam5PZU8wc29KTkRiM3Vaa2dx?=
- =?utf-8?B?SFA2TnRwTVYwcjFsQTdpYWRtUXFBbzExSlpjRWhSWWtIV3ZHQTZFUzVKRDE2?=
- =?utf-8?B?NEtDUjlyK0FtRTMyTUFIMVdkWXJNaHFmcXRncnhmN3VpeXkxeElFdXdBN09P?=
- =?utf-8?B?Zmx1TDRCQzJqZmFFOGJlRGF2T0RROEtoMkYyc0hhaERIZ0t6OHg5T2ZGNERp?=
- =?utf-8?B?dmYvcSt4M211TW51Wk5sYUtBN3hVUFZSV1NVMWs3MXQ5R0tDcHhOazNMOFF0?=
- =?utf-8?B?U05FbVVtSUJaaGIrR1ZwVXhhdmFQQ1ZzT203QXlEVGRvSGhzaUhoamxiYmVE?=
- =?utf-8?B?WUxkMDNTMVgrcFVuTFNlSUY3bHJNSEhCelJDaEZDWEtNWEM0ckdKOEZhNGRY?=
- =?utf-8?B?aTBqSE9PQTVMeVRXbzVGdTZmYWVHYkp4Y0I3eDZDY1JMQVltSGpvSFR3MzJk?=
- =?utf-8?B?VHlyWlpwRVNEOGhueHZJaUpEWW1mdWRXcHQ2SDZOOWpXNUUrRXJ5eCszc216?=
- =?utf-8?B?Q3FmV3JpbGt3UDZNM2JXY2lQOTYvZC9aL3FxTzd1RW5kYXJZVnVzZ1JUczBL?=
- =?utf-8?B?Z2RSWGxxODRRR1JQQzdTbW1GM1JkZ3p2K21tWm1SdU9JUlVtU01vVk5uVjM4?=
- =?utf-8?B?SndQMWhSMTNvZ2FnOUp4MG4rWjJvaGg5ZFR0eW81OWtNbGJpK0xTa3hDbWZ3?=
- =?utf-8?B?ZDY5amtqSjZrWVowL21LMGtMWE92WHA3KytwT0FxeENlc1o5T0xxTFJ1c2l5?=
- =?utf-8?B?Y0lJbzh6eHZMb0xaNmx2dmhMN2xZT0lvZ2pCTC9FZW01M1k2UGJJeTFTWVpo?=
- =?utf-8?B?N3ovS2E3WGNNeHRNWHVLYlRHYTdlQ09McjROQkh1eHp0RGc9PQ==?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(366016); DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dmh4Mk0wYWkraERkR2cvSGo5bTV1amdzVHUxc0xXcVlXQ2Y0dnVzUytnTGpC?=
- =?utf-8?B?SElpV3VYeEVXZHZPaTl5L0hsQWl0QnRydFRMMzdJenAzQlZybExtTzNwU2Rk?=
- =?utf-8?B?aGVqeVlPV3Z2UUpPZm5ZKzJVb09oZDhORzNTT0ZxcHd1ZEsxWjJwL1B3VUtC?=
- =?utf-8?B?QlRrZFQvU2VvcXpheGlwNlJFU3JyZGxvOFhWSFRYeFk5bktOMURSOEtpLzAx?=
- =?utf-8?B?UnRSMmppcFhjOENKU20wOUk5MGtNZ2RTTmpnbGxSQzFPeWZTMXZqMU9lalA5?=
- =?utf-8?B?MEJlWWFrRTBLS3lJMzBYT1VNWmRkMWoxSldVWDRGU1FvaGhwSm5nbFVwTkJN?=
- =?utf-8?B?bFFoeWJNb0NaTG1JM2ZrcytCa2N1NXp5dzRQSUdVSm00OEdiRE16aURITGtG?=
- =?utf-8?B?eFpTMXArU2Jla2dWSzRVOHlkb0VMejI0eFE5WU1qRiszTmRxajlsOEhoZ0Iz?=
- =?utf-8?B?WWw5RlE5S2ZWZDFKenBtWnBabGtuNUs5dTQxMnJTcTVOeVc3SXFKaUw4TGZH?=
- =?utf-8?B?SHVUbGd6K3ZydHRvL1NmcDUxam85L1pKMG1wWCtSMnErcUlObzk5dHNJd2Zw?=
- =?utf-8?B?N1lTZG5GOGRkazFGS3dxS1pDeHVPMklJS2laQW9sUExkbVNPdmcxaWZBb2VJ?=
- =?utf-8?B?SnBOT1VkcnpaOGdQOVdXZXI3bEZ2dVAvMDd5R0ptb3V3V3lEbmlvWmFIdWZq?=
- =?utf-8?B?NGh5TGlRN3ZWdkwxL0J2dzVweWJ1ZExYWlE3UjFRVHcvNUhybGE5aUlZRnl2?=
- =?utf-8?B?VmVFcHpQYVI3QWVGOGVsaTFLY2J5cTdIZ2g3TzJYZWV2L2RpeDVYVVhxOVNa?=
- =?utf-8?B?aEtjMDZ0ejQzVWQ3aDJYSmY5RDJmbnJBSVEyOVNmaGxMYjFiUkdlTnVKNHJu?=
- =?utf-8?B?b0pINE1PalV1azlHcmhwaGJqb1BSWGFDRlRlbzhGTm9yc1V4VnlhSERoNkZp?=
- =?utf-8?B?bGhzeThYOGFhTlJqZFpxN2pOa2RXN2lkVStsc0ZSNkRhS2c1ZkVaZnp0UmJ1?=
- =?utf-8?B?bU9tQmZvcWVyMnd0UUlMOWg1eTQ5M2VHTkMyRkJFWU5mL0k1QXhnTHpQUTRI?=
- =?utf-8?B?elpWWFlvV3R6cDd2Wk5KVVREUXMxTWRmTHJiSWRoQUFaT2szVU80UDJBcC9h?=
- =?utf-8?B?Y0pxNVNwbGNmYTFmcTZMUUhlYVNWdVF0SjhsUTVzYThYNVY1QlptUFo2d0lh?=
- =?utf-8?B?ZHcrWUdiVVF0cllRMkJVQ216Ulg5Y2R4TE82NktJQVBvRmM1VHVSYzhiNzFj?=
- =?utf-8?B?SkZiZDFkZHFFT0pNSExJUHRkTWpublM5N0I4Uml2Qm4ydlo4YlBLU2Y0OGpB?=
- =?utf-8?B?akttMk9DSnAzZFdwQ0V1UEN6YUF3WDVsSUJ1OE9INnZpa3lmbkhGYzc0Y1Q3?=
- =?utf-8?B?TDRaaWlnMDZOYlovcC83TVBGOHBycExKdFBzMG4wZ2hnNEJzVlN4eUN3dGta?=
- =?utf-8?B?MkR2d202eVVMZ3RENU40RXBzM1E4TW1wWENIVW96djNsZFM4VVhhT3BCeUVo?=
- =?utf-8?B?YjdQYWl6cXlTaVhVbnNjelJWMlBGNHNmQU1Vc0JrMzIvb3NWdFp0VTdDdGFa?=
- =?utf-8?B?dmd5dkIyMEtNRUtJYmZiTFZUUUczclJKNklSQ0JoRUNVNENaZnIvc2RJWTFi?=
- =?utf-8?B?ZUhkdlM3RkFhQjBGQ1c5KzJXb2FwaW5vRUNIRDJLVTRkN3RJM3k5Sk54WnVX?=
- =?utf-8?B?ZjVkQ09LK3Z3T2tMT0RkYjRZbCs4bG02U1UzMWZkSzlPR09DNXJ1WDJoeEgw?=
- =?utf-8?B?dGVtSU8vaUhhRWhkZzF4RkZJd0RPMHJ5M3lGcTFPZk13b2pLa29qUWdiL3Ro?=
- =?utf-8?B?blR0WlhOaS9sbTR2YWxrSnFqNThUTUhQWGEwUE1FMXJXNEZoemdiVEFDeWtJ?=
- =?utf-8?B?czV5dGhlcGpieDkrL3ZPOXd2NnBrdGphWVRSRXM3OExlTWI0YUUvUSt4bFpp?=
- =?utf-8?B?TGs5V0tHT1drUm9hZTE2c2ROZGtPOWxsVkFqdFJFZmwrQXBabHRqdW9ydWUw?=
- =?utf-8?B?MEFxaHJFYUR0NHF2cEhMNkwzOTMzTUlMaEdpMHd0U3lHZ1o1VGNIaVdnZTJu?=
- =?utf-8?B?NzRwbTVzMWZzUjQrYTFERUMrNjdja3g0YTBWTVN0WExTOXNWekVhOHpCODRh?=
- =?utf-8?B?ak5EWTNvY0JMT0JGaFp5ZjRVa3M5OStsSGpSTngxdjNKbVFjd2FyN3I1bjJF?=
- =?utf-8?Q?sYHFS93GTynHgHP8otLtE9g=3D?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b406ee9-b5bd-430d-e452-08de04f02385
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2025 15:50:56.9529 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1e84ce18ldN8ts/3495tkSfu4OUPjnn21W5mk2a6K7BDb/JlOz4ekzgkcILkBgUijg6fo/5xPqaw7heirMbFngqxDfpuKemYC7gZjK59Dz8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TO1PPFECCD46551
+References: <870C2018-7321-4478-9609-9A75F99468A7@amazon.com>
+In-Reply-To: <870C2018-7321-4478-9609-9A75F99468A7@amazon.com>
+Date: Mon, 6 Oct 2025 10:22:34 -0700
+X-Gm-Features: AS18NWDsNAVHhFjeDn9UPcSm-_KHAg55WLRtcEHYG9re4y_hOsJyOhYpRCxWb2s
+Message-ID: <CAAS9doZSjHghJAUechOyNxhwA0DnMJX+Rm=YdbqMPfsSn-u7VQ@mail.gmail.com>
+Subject: Re: Call stack context for user space trace points
+To: "Sunku, Sai" <sunkusa@amazon.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: multipart/alternative; boundary="000000000000a69871064080b4d0"
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -187,51 +102,136 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: =?utf-8?q?Christophe_B=C3=A9dard_via_lttng-dev?=
+ <lttng-dev@lists.lttng.org>
+Reply-To: =?UTF-8?Q?Christophe_B=C3=A9dard?= <bedard.christophe@gmail.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
+--000000000000a69871064080b4d0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
 Hi,
 
-Those LTTng-modules stable releases mainly fix an missing preemption off
-issue with system call instrumentation when using LTTng-modules against
-a Linux kernel v6.13 or more recent, with preemptible kernels (PREEMPT
-or PREEMPT_LAZY configurations). Users of LTTng-modules with those
-configurations should upgrade.
+The userspace callstack context is only available for the kernel domain.
 
-This issue is the result of an upstream kernel change (introduction of
-faultable syscall tracepoints), without the introduction of the
-corresponding changes in LTTng-modules.
+There are potential workarounds and solutions; take a look at the
+discussion in this mailing list thread from last year (hit "Next message"):
+https://lists.lttng.org/pipermail/lttng-dev/2024-December/030881.html
 
-One effect of this bug is corruption of per-cpu linked-lists under
-load. It also possible that the ring buffer corrupts itself because
-of unexpected producer migration.
+Regards,
 
-The other change in those releases is the introduction of a wrapper for
-`get_pfnblock_migatetype` to build against v6.17 kernels.
+Christophe
 
-* New in this release:
+On Mon, Oct 6, 2025 at 5:37=E2=80=AFAM Sunku, Sai via lttng-dev <
+lttng-dev@lists.lttng.org> wrote:
 
-2025-10-06 LTTng modules 2.14.2
-         * Fix: Add wrapper for `get_pfnblock_migatetype`
-         * Fix: Protect syscall probes with preemption disable
+> Hello,
+>
+>
+>
+> I have a complex, multithreaded benchmark that emits LTTng trace points a=
+t
+> various stages. I am trying to trace all malloc calls made by this
+> benchmark. I'm specifically trying to get malloc trace points also throug=
+h
+> LTTng so that I can identify when the malloc call was made relative to
+> other trace points from the benchmark. I also want to see the stack trace
+> for each malloc call so that I can identify where in the benchmark the
+> malloc call is coming from.
+>
+>
+>
+> If I preload the lttng libc wrapper with
+> `LD_PRELOAD=3Dliblttng-ust-libc-wrapper.so`, I'm able to see the trace po=
+ints
+> from malloc calls.
+>
+>
+>
+> But when I try to add the callstack-user context with this command `lttng
+> add-context --userspace --channel 1 --type callstack-user`, I get an erro=
+r
+> saying "Error: callstack-user: UST invalid context"
+>
+>
+>
+> I've successfully added user space stack traces for kernel trace points
+> with a similar command `lttng add-context --kernel --type callstack-user`
+>
+>
+>
+> Is the callstack-user context only available for kernel trace points? Is
+> there another way to get the call stack for malloc calls?
+>
+>
+>
+> Thank you,
+>
+> Sai Sunku
+>
+>
+>
 
-2025-10-06 LTTng modules 2.13.21
-         * Fix: Add wrapper for `get_pfnblock_migatetype`
-         * Fix: Protect syscall probes with preemption disable
+--000000000000a69871064080b4d0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+<div dir=3D"ltr">Hi,<div><br></div><div>The userspace callstack=C2=A0contex=
+t is only available for the kernel domain.</div><div><br></div><div>There a=
+re potential workarounds and solutions; take a look at the discussion in th=
+is mailing list thread from last year (hit &quot;Next message&quot;):=C2=A0=
+<a href=3D"https://lists.lttng.org/pipermail/lttng-dev/2024-December/030881=
+.html">https://lists.lttng.org/pipermail/lttng-dev/2024-December/030881.htm=
+l</a></div><div><br></div><div>Regards,</div><div><br></div><div>Christophe=
+</div></div><br><div class=3D"gmail_quote gmail_quote_container"><div dir=
+=3D"ltr" class=3D"gmail_attr">On Mon, Oct 6, 2025 at 5:37=E2=80=AFAM Sunku,=
+ Sai via lttng-dev &lt;<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-d=
+ev@lists.lttng.org</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote=
+" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);=
+padding-left:1ex"><div class=3D"msg6488481305085553015">
 
-Mathieu
-
-Project website: https://lttng.org
-Documentation: https://lttng.org/docs
-Download link: https://lttng.org/download
 
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
 
+
+<div lang=3D"EN-US" style=3D"overflow-wrap: break-word;">
+<div class=3D"m_6488481305085553015WordSection1">
+<p class=3D"MsoNormal">Hello,<u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal">I have a complex, multithreaded benchmark that emits=
+ LTTng trace points at various stages. I am trying to trace all malloc call=
+s made by this benchmark. I&#39;m specifically trying to get malloc trace p=
+oints also through LTTng so that I can
+ identify when the malloc call was made relative to other trace points from=
+ the benchmark. I also want to see the stack trace for each malloc call so =
+that I can identify where in the benchmark the malloc call is coming from.<=
+u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal">If I preload the lttng libc wrapper with `LD_PRELOAD=
+=3Dliblttng-ust-libc-wrapper.so`, I&#39;m able to see the trace points from=
+ malloc calls.<u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal">But when I try to add the callstack-user context wit=
+h this command `lttng add-context --userspace --channel 1 --type callstack-=
+user`, I get an error saying &quot;Error: callstack-user: UST invalid conte=
+xt&quot;<u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal">I&#39;ve successfully added user space stack traces =
+for kernel trace points with a similar command `lttng add-context --kernel =
+--type callstack-user`<u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal">Is the callstack-user context only available for ker=
+nel trace points? Is there another way to get the call stack for malloc cal=
+ls?<u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal">Thank you,<u></u><u></u></p>
+<p class=3D"MsoNormal">Sai Sunku<u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+</div>
+</div>
+
+</div></blockquote></div>
+
+--000000000000a69871064080b4d0--
