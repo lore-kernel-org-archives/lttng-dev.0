@@ -4,183 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from m43-10.mailgun.net (m43-10.mailgun.net [69.72.43.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FF8AD41D64
-	for <lttng-dev@archiver.kernel.org>; Thu, 11 Dec 2025 16:14:36 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=lists.lttng.org; q=dns/txt; s=mx; t=1765469675; x=1765476875;
- h=Sender: Sender: Cc: Reply-To: From: From: List-Subscribe: List-Help: List-Post: List-Archive: List-Unsubscribe: List-Id: MIME-Version: Content-Transfer-Encoding: Content-Type: In-Reply-To: References: To: To: Subject: Subject: Date: Message-ID;
- bh=a1/Hz/01+2w7vMqmQo6O4mTqpAjmTiTO1BrNQEIY6WA=;
- b=o2btn3221sJHQ60tpTR3ClZA8PazXdQ78dxtz7sTOswMALTv/awjLDQpgdlCvbquSRbS8UNQBKSmkoUGm8lUQoMvgCrg8TcLeRwt/6iRQUOqZGjX9AjVNMghKamluXh/p13k1EqYeBJeQhzGsnSyuukIqzLLg0w8D4ycPlF85A5pgjYqclB1Szr+xJoUNfyYLZ4XkdXUTSTiyd9CyH8myo6yMfnmNHPDxZuTxyl2s0GFpHp+0PJsxyv3JaPOKTnDnC5oIv3u8Iz+vxYRE63BS3DIlyc2aVLrXGZEIoQB39vRpcxzbE7iSVXHjMEdG915NJnGREawG0n/90BYsa3XNw==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83BB4D41D66
+	for <lttng-dev@archiver.kernel.org>; Thu, 11 Dec 2025 16:21:51 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=lists.lttng.org; q=dns/txt; s=mx; t=1765470110; x=1765477310;
+ h=Sender: Sender: Cc: Reply-To: From: From: List-Subscribe: List-Help: List-Post: List-Archive: List-Unsubscribe: List-Id: Content-Type: To: To: Subject: Subject: Message-ID: Date: In-Reply-To: References: MIME-Version;
+ bh=Xy7AOMakmNIjKBVdT2CNfGgTwVY5k4CMZ7CWxbTDC/k=;
+ b=glJkuPSh+b5q+vrH9efjVsuDUkI+dUTu2fDkAXDeh568tPcUp67rGyYs0JpzvDlJDMYGGDAlGFgvACiChVu3EUwY+0yHcEr8zSytI27xtb5q2AtVL9deJfn2zJ0bxufCwq27eSaRnsLIOPVqcU3tZIR+F0BZO3Nymowrt0zxEnY+9iv6uoj+BDmbZE0Ss2r3u0t/eO/rDIw7CMVvwcTZai5wWwxQAFjsurFNFHA3ZDD5LBl4cl9ODA2o23ezdLpSKhktZkECxWi/iya2//pl6flZH2CpJnGUFJt3m5LpPBol9GIz4OL4aLnQh5TGDIGf7EThXhf+NJOXsC7kBIkDBg==
 X-Mailgun-Sid: WyJlYzgxZCIsImx0dG5nLWRldkBhcmNoaXZlci5rZXJuZWwub3JnIiwiNjAyMzIzIl0=
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29]) by
- f79737c0cc1f1b4a9d3ac82fb546c8533422bf6515ec96090b4f8a99c4126def with SMTP id
- 693aedeb0b2e34eaf1e7ac1d (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Thu, 11 Dec 2025 16:14:35 GMT
+ 0ef64692cb58f1c19aed6e05c4ec705d89eec772137b7312a133ac21fc6eff89 with SMTP id
+ 693aef9ea2359fc2d0d5b316 (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
+ Thu, 11 Dec 2025 16:21:50 GMT
 X-Mailgun-Sending-Ip: 69.72.43.10
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4dRyMt1q7Qz1xDb
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1765469674;
-	b=cWC9SHwlH5IWivLWk4buFM0UEDHoGyDEp+6G8J5W0qiHfaNxhtbAowvavFMx62dqdgux
-	 8VJ1xijneqvaWpbEOuGznnV5zjp4VGrUlxwmW/VD2wiLrLLeBL1v8Le5aLra/ZBdnOHu7
-	 BIMiyVrnv/Nd2DJ5VbadIZJVf5YVfAYM7ig6B9R3N1zbNy72VJnpTx5v2t4LOPGexjFb4
-	 pkezIp0D/QKRD4Gk9viWmhkw8SVyJLfDo8eLjY/Uq9ZFHoUuCq/4SGdpGKhU8/lH6Q++s
-	 K3Cvd0QzSz46UmbU+RlQ/7QKGmvlzoB4PPO7b9jXShxosRqddG4qovybW0hAVDH6NUQ==
-ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1765469674;
-	h=DKIM-Signature:Message-ID:Date:Subject:To:MIME-Version:From:From;
-	bh=UdHmilUKBek6OGoTMGti2dqWQgYCoXxXEf0YOFLQPoY=;
-	b=OgNYFgbFx/lbUp+0zl1Zdbi/6OYUMMGrzIBSpFV+EZoZmILd/fWJmuLLh2zU62hL8P+1
-	 VAlLrFiTsIb42feKUcPw7INIjVNCzQBO35f3DYK03gW+330NcOBNAqkZ6D5IJfGMAZiw1
-	 L/8YFF11qH80taGPazsTWurEyY/IJrtKH4ZylFfUDJ8Ri3dpUenJ8SSngivdm9FW3CJDr
-	 yMbLZ3gAzVcrOhkX7fdcshCW1jgfKV5HpT+s3wHxqg5945ivsiAfEvPxgSlMWMbWE/QIb
-	 1gZ99NrDg0QVyBhLh+5wSjHYZMZ5b1ciQMtruplrIZrO4CxPP/cVy9X9Usan8p5EPLA==
-ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4dRyMt1q7Qz1xDb
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4dRyXG2k6Bz1x4R
+ARC-Seal: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=none; t=1765470110;
+	b=qcY6S9I6L96SGWLNq32wIknkn3UOs/mTfCyiVQv3JjqlfqtV2MVf8q9qgRuCjyxLem4A
+	 SObAtkMbaXKx5cE0Uy50E4qn22sNNnQC69BBnG5XGkCUAGLJMFMwOBh5MK90/gVwzvo8M
+	 xSxAAo8eK9cAaHlz4Mo4DCuqpVCWuutllQFadOsnJ0tXaHRqwNa/DFYWMDVgjb1Qe/wa5
+	 7Y/czDFcEoaw3nrRRVDyIA3y2e1QCnylwry5Bpc5GTAedds1ekp+hLx4HYOkvI1wjjT8u
+	 hld9mTrMrsx1m2d7EhM/Tny5/kge+LEtqAzyY/zvIDhdtlvZiCByneRaBiUkmlcUd7Q==
+ARC-Message-Signature: i=1; d=lists.lttng.org; s=arc1; a=rsa-sha256;
+	c=relaxed/simple; t=1765470110;
+	h=DKIM-Signature:MIME-Version:Date:Message-ID:Subject:To:From:From;
+	bh=ylJAjhyV+umwtdVX9mmjXbl3PuaVdUlcVkqrTUmenF0=;
+	b=Bc9SYC4zeOCr/1+u54WpKNFGcw3TNUBaMlltJclLgnCIfsktDCbqdWW5jdciLMrgffR9
+	 tiiwJoS3pBsDx+zJFoianBeqHGFI0uQU8P25OGo+OXfldcq2FZn2QtBaEhd1JZnAxu9ya
+	 COJZ55MuDmIOyqHkcVspA6jp5sGeAIrcvaqHrCa4hPeynEatJXtL1eVGRNBUkObCXD4TP
+	 xMOrWoVAALD7d9z3JrQijWx4tzL6MJg+zy49GdieJTx5rX4ykLX1N/VLdImEEBWGSbo+F
+	 XlsIh77R9J01n/tygVsK2BQnMwVJtM4lQCd6KFrugv2Ia4nFnl82SL6KsIXCAyyDoeQ==
+ARC-Authentication-Results: i=1; lists.lttng.org; arc=none smtp.remote-ip="::1"
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4dRyXG2k6Bz1x4R
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lists.lttng.org;
-	s=default; t=1765469674;
-	bh=UdHmilUKBek6OGoTMGti2dqWQgYCoXxXEf0YOFLQPoY=;
-	h=Date:Subject:To:References:In-Reply-To:List-Id:List-Unsubscribe:
+	s=default; t=1765470110;
+	bh=ylJAjhyV+umwtdVX9mmjXbl3PuaVdUlcVkqrTUmenF0=;
+	h=References:In-Reply-To:Date:Subject:To:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=ouDkEkO8Gx0JWGLJ5pr5KAfstG5g/NFBqKUtsTCk+//uEeXhwfyOklzOj/xHdf7X1
-	 T9NAJUDLLK+iN4NJSfiDUBVALCAtWsJES54GynSGSBXB5WhXkewR1uPmjGaoJpFbD9
-	 t1gGvuoZ102LOIuAH+ahTzj+0GtJ66ifPN23g70BIP7gLx8GMEEeyoGx6E1H1D2T7Q
-	 qXgCmbKSllbnpVs6ZbIfASbUR42B6kj4wDf8523iiA2o6kT1CA/rzSrEPyMbrHE9bc
-	 Soobu7dpavCa9oltpnoIlvdUTeDg5YeM2SvCRdj2uxL4WRlng7YIOV+y+cjqJcdUHw
-	 4nRnTAs7RHEdg==
+	b=B/dAt89rxu6nLHVY092vNgmE4v4rlsRNgvgspqXO8c1f3DXxuO4mUD9H4Qc9hFjdr
+	 QHDlM/C/1SBCO7sucmKDEHRMHCV3X8CVoJda9ngOFBayelhyPWbS7jxA1u30RHNFtS
+	 CZMRfpD3fNhSS41fvxaOn6NM1XI0MfBEJKY0VwwLk8mxMdBPrezyO/SxvdQyQaiLcH
+	 RXKgXRBYpWcIKpZ/g1PdfEtfS8CXWgSFb1x8Juw6L+hbD9k5g69yfI5+Ejp28pm7B6
+	 ZDDswORI8jq5GgqPPdYtDJHd/rAoy4HHb6FwPdo8yMic1qe+r7p/3U8+N4zyearu2h
+	 vBAm2j+zCV+cA==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4dRyMt1q7Qz1xDb;
-	Thu, 11 Dec 2025 11:14:34 -0500 (EST)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4dRyMr13n6z1x3P
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4dRyMr13n6z1x3P
-Received: from YT3PR01CU008.outbound.protection.outlook.com
- (mail-canadacentralazlp170100001.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c103::1])
- by lists.lttng.org (Postfix) with ESMTPS id 4dRyMr13n6z1x3P
- for <lttng-dev@lists.lttng.org>; Thu, 11 Dec 2025 11:14:31 -0500 (EST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mNcY+SaELx1xXpqHKpe16jCnFUcKfAJg9uJvk0FSxPMOamiRi1vfhvelN9ndS7GR5lMHHUgAFSoAo2vxFSZnJtn7qZrxy+f6RF+eZmDyBlsa187hNUT2LrZFtGKG7sqw1kq6zrsp5DSOnSJ9a4tF5r5fpNtDfZ1s03sSUB3da7eDXHZanjwN3x9LPt/vx+kJYpOSJdQd0Ep/nc2s1CyxtcefvZlxvomkTh2XdTeGcvxpGTwykB0XQ+0s3r88TaM+r80DojGHnL6aRXFBbi36+jP2TqGB18o53anpRPTNMT/inefjjm0IFFxA/obqKsntxp/qtF4xMe3P8wL9mWax2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a1/Hz/01+2w7vMqmQo6O4mTqpAjmTiTO1BrNQEIY6WA=;
- b=zBc/kaAIGXxFXnqTkEGTnftrR+fJLn/Qc/xQJeuqVDkAFIznl5/1aOe4EE2oCEHMiuEHhq9Udb3CYuPFimtaAl9cR9VUeoqpxTZlGu4RO60ppa0nHGzlBsnSU6kDnxyo0sUQrv+jmtoZaPVCANylP2lG2s+oDSL9tTSZywy9E20bSrj0PaHPmsdJrJMdunEtTfUoZTAod4CgRlqYqV6FW0ob0+WPIOQXK3csD04wIu69SoiBVGuYEJHACNtCjrbcZENJNDKSnYXhKZ31JfRKMhH1jPCI2LH9Q2Qu0UYeXZFgQOWMj7GHhM2My7XLk55ga+8y1m8cXneIWwjR4N74nQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:24::5)
- by YT2PR01MB8918.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:b9::16)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.10; Thu, 11 Dec
- 2025 16:14:27 +0000
-Received: from YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::be09:e1b:b343:7f9]) by YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::be09:e1b:b343:7f9%4]) with mapi id 15.20.9412.005; Thu, 11 Dec 2025
- 16:14:27 +0000
-Message-ID: <ad04c3c2-c0ac-4ed6-96e1-29c661e868f5@efficios.com>
-Date: Thu, 11 Dec 2025 11:14:26 -0500
-User-Agent: Betterbird (Linux)
-Subject: Re: Question about LTTng Context
-To: Amir Najafi Zadeh <anajafizadeh@cs.stonybrook.edu>
+	by lists.lttng.org (Postfix) with ESMTP id 4dRyXG2k6Bz1x4R;
+	Thu, 11 Dec 2025 11:21:50 -0500 (EST)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4dRyXF1sMWz1x4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4dRyXF1sMWz1x4C
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com
+ [IPv6:2001:4860:4864:20::2e])
+ by lists.lttng.org (Postfix) with ESMTPS id 4dRyXF1sMWz1x4C
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Dec 2025 11:21:48 -0500 (EST)
+Received: by mail-oa1-x2e.google.com with SMTP id
+ 586e51a60fabf-3ec3cdcda4eso196722fac.1
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Dec 2025 08:21:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1765470107; x=1766074907;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Xy7AOMakmNIjKBVdT2CNfGgTwVY5k4CMZ7CWxbTDC/k=;
+ b=rn9SsloLOY0l5F8GpsoShU/p2z/SnunC54v9tNIoPKzALlHBOcKivgOgrRQMNSjzk9
+ pf5IydY9S3ZPHj+8vEObmMhPldUGAl/lcTweUwe3oh7xx/W+7hQSQCBoriRUkCL1qz21
+ 8cVz5H2yEQrINj8ohnzjasL7pWYpuo51qGIv2rcRH4ZO6GOcn7vvqaFPKPEmNJ01h1ox
+ +lwS02jE34vQgIjMWc9ttHeosOB+ZOTZdvR/93m2EGLPsyVrkvpk6cPuOERp7AZx6UtG
+ KSPFan0grgPYSz801VxZZOnKnwvZJYn1aXH5i9F9Ry0sxroSv1sTcsTtSCSmjcx6TfU4
+ /6Ow==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCX78wJRCGrMpGKOwEa3dtOxG2m6uAz2QsSBnbuMaus1BbDiHH3J6jTSrEHyY6vzUvJXWn59B1y3/gA=@lists.lttng.org
+X-Gm-Message-State: AOJu0Yxx97eJ2CV+SQsnZJp9SPKUbRrPu/WRAbs66LU6OHDKe5jBQInQ
+ eB87XBuy1meMAdZCh/QSyA3nVYbuy3GyJFfL8xPhPdCe2J3vskVge83K95DLfgQIjZfyMI2Mnmx
+ c2Bb76avnhQgbJV6hlr32gITcSjz45P8hacIiUkXclw==
+X-Gm-Gg: AY/fxX4jozMSgzdlfwc7N+cZH7jJOAEJWL41x4zZ4v6ZvPksTu4FyGI0rDixqfmzL7E
+ hzsQS+ahosiMg7U22EC/gwc6lu8uDJa0LQExO9NyeYwlVBcUCusOwlG7Fr75JwfOvbg7ftHV+as
+ d0EFdQWAsElpKMA1u4yqM3FIyi5rduUxRiG2k05oUVYTrYsTxe3vJd7z2Bf1HEpiie1i1HQgjIR
+ DfpAZ58ognUG95sBechdggPb8lfM2dByxKlyQ/aqcadbtI/cOzmplu5n+Wjjqvu4toD7hEQvWoM
+ JZtAZWzeSoiMjYQrkkYn34WEGQE=
+X-Google-Smtp-Source: AGHT+IGKAkN7wmnOMcub9Nz9gHRL1irbM68wEWZdqpI9xveElohpgZjXtFQWlrwE+KRwaSp2PMVHpjWEGh6at5eM9cw=
+X-Received: by 2002:a05:6820:1891:b0:659:9a49:8f2e with SMTP id
+ 006d021491bc7-65b2ad74c50mr3769468eaf.63.1765470106988; Thu, 11 Dec 2025
+ 08:21:46 -0800 (PST)
+MIME-Version: 1.0
 References: <CAOQX81f1zGCsnr3Ksjv0WoO-J4-OULanefNxzWdrxP8b4+aqJg@mail.gmail.com>
  <87a7e3d3-3ce2-4ded-acdf-bc7f152cdcec@efficios.com>
  <073db198-6792-4caa-81f5-ac65f5d76f1e@efficios.com>
  <CAOQX81e-dtfgLQ+xTt8kr-Qxc+hhiaW4vHF=S=RDVsMR0-TnLA@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAOQX81e-dtfgLQ+xTt8kr-Qxc+hhiaW4vHF=S=RDVsMR0-TnLA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQBPR0101CA0061.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:1::38) To YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:24::5)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YQBPR0101MB5080:EE_|YT2PR01MB8918:EE_
-X-MS-Office365-Filtering-Correlation-Id: 67e91bf0-c750-4b04-bd54-08de38d05b73
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?SDNacGpWUGlVMzN1Y2xQcFFpNHhOWWt2Qk5RUStRbXNMSXVOMjF1cWlnMVMz?=
- =?utf-8?B?K04xb0xXU1Ywcmo5NHhFVWVQcjVHMzVQODBFNkhtRndQVlJvMnIxVlNQUGVr?=
- =?utf-8?B?RTBqaTEwOWhPUGk2aHBiRHlCcFVMU3U5OFRYRlhXMTIrRDhTYnZ4KzhwMjVs?=
- =?utf-8?B?NUZlYWpIZFo4a0gvSSsyeWZCQ1BuUkVGQVlFeWl5ejFtcUoxK1NJdlJTeDhv?=
- =?utf-8?B?Rkc0MVcrWER0RHJNSzNKWEYrbkxzMmFEYTdLdU16VUJnK1BsVkhvakdLam9M?=
- =?utf-8?B?Y3A1WVFlZ25YQVRqT1JuTnRhRmtmaDJHU0hGNlVWdE5OQXlNNHlneEwzaklH?=
- =?utf-8?B?QUFrQ0JlSS9PUW8vREFJUnYvT2MrUnhpR0M5YjlIUkEwRE5YcU9hK3VFalNW?=
- =?utf-8?B?c25NWkdrTUs3RXVPb0hnNm5DOXZxZnlkY2dtM3VnSFFWeUY0UzB1N1Q5OXBF?=
- =?utf-8?B?RGxQY2ZZdDZDdUE0K0RLWDJsdTNBSjFvODV5a3QzMXM3WlJtWlNxU2FrTVhz?=
- =?utf-8?B?Yld0S0lMaHp5Q3lVWFYrNDFPN2IycjZXZ01JM2lzNXJJTGxsM0F6NERhUHI0?=
- =?utf-8?B?NGg0YzN1cWtXeEhPL3JGbmNSUkpQR3c5VkxuNEpZY0h1aDhMMmkzUDYxNGZH?=
- =?utf-8?B?SnlkWlBveU5MT1I1akQ2MGR5WHZoaVh3ZU9EQ21HZktjS3M1SDBpRjh2MTM1?=
- =?utf-8?B?STJ6S0o2bS91OENqUjVhK2hNSC9BeTBGc2o5WCszMExYOFhrQVhEUDZTQzZP?=
- =?utf-8?B?dEcrbHVaamlQaTRObzM1aENaZ1I1UjRpTmFObFNLOFBpUjkxRExDcmNCbFVW?=
- =?utf-8?B?ZnA0UndsQzE4ckJ2OFVrZU1hb1lwcGM1QTFnNjNMRk9NS1pZWlYwMWNJWktY?=
- =?utf-8?B?bEcxL2Fja0xqc3kyT0YrbE50ams5R05NM01IRGI5ZUovUVJMMXQwVnYwVmN3?=
- =?utf-8?B?eDk3Zks0SkVBeGgrN3YyZWdJVnlsNXdGT0REaDg3QytEeTJZWkMzZUVSZHpF?=
- =?utf-8?B?b2lKdjRpZHlFLzhuR0RjdWZvTUpmVVZpczlOanRUN28rSVVQb1hrMWRxL0Iw?=
- =?utf-8?B?VmkyU0VYMlBIQkhwOGh3UWRQZ2tpd2VrendHRVRjYWJEWkVtZTc3MU1DWGps?=
- =?utf-8?B?a0h4cGJQMmUvdTFub1dJMXVzNmNhdCtZMVV0NXRlbHlFZngvSzc4Kyt4aWhF?=
- =?utf-8?B?QTdCOUVKMjR3K1JlTlZlanlmMW5POGJtaE1JRy90YmNqTG0wTno3UnZsQ2o0?=
- =?utf-8?B?b3J2d1VSNVA5S2pCWUdZYVpWalk2bVVVLy9XU0F4TGRKK0wzWmVOcnVRMDlF?=
- =?utf-8?B?Y3ZuQnU0d1lyTlZPaGRSYTZoRkZnakxwMDZCVndQMkFxdjNNemNwTXpwVlU5?=
- =?utf-8?B?S0lnbXdwQkJLa202MEpjdzRtb3VpdTZsUzlVdkVQd2p2QVRZWE8wOUM1SHlU?=
- =?utf-8?B?WEpRTFhMd1dpczVqS3c2QzBjWm9NTjlNOHRPTHRubUpLaXB0NnEvSEJFaE1h?=
- =?utf-8?B?eFFaUFpIQXhMdURjK0tIZGlvdmdPenFmdmNJY1R2d2htSmpPUHZiR3lsQlJT?=
- =?utf-8?B?Y1V2NHk2TlI4S083TGlET3gxeGNxMWJRZUp2YkhsSTZHc2ZDQTNKMEdTVFMy?=
- =?utf-8?B?T2FyTmFBc1FESVZ4RDZKc1ZFalh1ZzJraU5aNms5VHhZNW1XUGozaDVxMlg4?=
- =?utf-8?B?WmxkdENhVnVMK0tCRjBCN081YkJJTW1XZ2ZLbXZtOWYrVmlEMDR3UUQvbHF2?=
- =?utf-8?B?WHdTNU5LWjdqTFBLV1V2OWpCZDlQanh5bDZvSjJZeTN1ZkdDcDZoY214RXJr?=
- =?utf-8?B?RjhhWDR4R09reUs0dklHbTJpUXJpTnZTdDJCMkJsYXpjeHFvNTBiYUcrcE1D?=
- =?utf-8?B?dERmUGR0dXo1dTVvbUtkU0lGblh6VEJ5N0k5d3FicEdjSlVYcnpjampQNVh6?=
- =?utf-8?Q?tcJhpeqHsHEIPoQ0wfSIVmuqBu/faRbR?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(376014)(366016); DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dURlWUlwOGlhYy9iakZVYk85dXhoNUJHMG5heXJnMHJoNzlBN1BQSUdPOWpN?=
- =?utf-8?B?dUdRc0l0VVh4U2ZOclBuK3hTSjFnaFhRelFZZTBQc280b1M3Y3g1MXNweDFY?=
- =?utf-8?B?cE1NUDZKVFMvNGo3c2VwcHpCWlJRTjlvR0d3cHI2ZDd0NjNnTUdLYjNsUW5u?=
- =?utf-8?B?SmxhOTZHRzFZbVhGYms0NndTdUNENkNtNHRxUnRtSWwyY2dmcHBzdmhJY0ZC?=
- =?utf-8?B?d2RzUWlGdHZVbXg0NUFFT09oaHpMWU1ZVXBxRjBmSFkzY3RyK2M5d1lRbitz?=
- =?utf-8?B?d0VIWmJ6ODBpODAvaXN1bHVqWmFzVmlqUm56b1dhMXNOUmlJSkNsU2thcDVJ?=
- =?utf-8?B?VWt6eVNwMnAxaWRXa085UHBwVldWbGxUeTJWRTZVemg1Uk12Y3hzODR2d3FE?=
- =?utf-8?B?UmFRV1BHUUdMY2F0ZVhIZ2QyaFVjN0JYT0JXNkJiMjhkUHZUMWNSem51elVR?=
- =?utf-8?B?VzQ2aElJaUoxN1ZWNDZqRm0rZ0ZjZ0tWSDV4K0RncFJqaW5FK1JYa1VsZnE3?=
- =?utf-8?B?eUN4b1o5UGJBYjJaQ1JnV3k0SjVVT3RPRU9vTjFXUG92bTlLN0pvN2paRzNm?=
- =?utf-8?B?UnRJa2lxRy9tWEs0THd3a0l2SHZtcWFKbmcyZ2szR3lHMGJIS0RXeFpEaXRh?=
- =?utf-8?B?UUQwWFY1K3hjQXZxdnprN003cXBPbVZNUjdsaTBnZmJ6WDFwaW9HRThzdlF1?=
- =?utf-8?B?K00yd2FsYXFCS1htbm5QNnFqYVc2MWVFVjQwWDZVNjR1YU90MjBHWHVQUnBT?=
- =?utf-8?B?YVJjUys4OFhjQmx5dll0a0Mya3VSWFMyZFd1K0lUYXczZ282bG1jOTVDZjVJ?=
- =?utf-8?B?MUJVUnM5aDJMOEF1cmsrcU96aWhjL0M3cmNDdDYyc3cvTWp4QlRIaGd2aVJV?=
- =?utf-8?B?dm4vdk5sVUxxczBsNkl6N2tibzJkTGpvT0ZGYVBjdy9oanZpcmVHQ28zU0Vq?=
- =?utf-8?B?bVhXME5Ca25pNVVkZ2JpNkVQSTduR2JKbGxHRy96Z2JRdGUvRnJreGUzT3VJ?=
- =?utf-8?B?TEZ5dGU3d0E5UFdjeU1lTVN6SlBQaEJlNkRtK1V4c0ZWTEVLZmxhMUVQcVN4?=
- =?utf-8?B?d1V1c3MrZW8wV2p3SmhtbWVYMHJ0Y2FSS2UwWmE2T2NENUJuOVFYNUluQUdt?=
- =?utf-8?B?NThmeWE4THorVkpZK0tpODBSQUtiMEd0UW9kUzEvRk5VT1dmM3I4ZnRNKzZU?=
- =?utf-8?B?VjRaSWZrVVFZbmY1OUt3VktxOWQvclcrS3h4TGFNWGFuMDNTd1hWZElFeXh3?=
- =?utf-8?B?Tk85R2x0TktkYmUrcXVrdEs3a21PQk5vck5hNDViUmw1OXh0MjlhSmJiblNq?=
- =?utf-8?B?TFFSN3laRmJ4SXREREg5VW9kVUFuNTk2Vnp5NEVXdDV0alhreGZnK0FFWjBo?=
- =?utf-8?B?VGNtV09iSms1WGlGNjZKQW95KzRoejVTZlptOGJQeGdLbEVFS0hUMWFHcm5X?=
- =?utf-8?B?bGNISDh3R2lPalhrUEU4NC9lbGFUUVNoQ3hmOU1rT2RLbHcyUGdWbTB0a09s?=
- =?utf-8?B?djNaNGlaL3NRM0x1NjdyaDlOWWxHTWl0dFNzRnYrek5aTnBxWnNmaFlyZ01P?=
- =?utf-8?B?Q0U0N3pwRTBHdHI0ZEFsakN2ajZvQ1AxUnoxL1llZ3E0aXd0QlBqTVNFKzJB?=
- =?utf-8?B?bGF3eVR0U0xzWTVHRE42QjlwRUJEei9SZ0c4UVE4aE1hWmRERmpDSXRJdStN?=
- =?utf-8?B?SDNRRStRV2xLdnBPbkpvL2UyNElDUlBsTCs4djcrZ3pRU0dGNlVCNlUrOFdG?=
- =?utf-8?B?eWRGcURCUUJyUkEvazU3NS9PZ1Y5RXlKUHEyQmluTTZteVVKNzR2blpPUWR4?=
- =?utf-8?B?VjJuV0llL1J6dEN6R2xmOElhUWZuZU9HcVRPb2FNZjY4WFJlbE9XMUtoeXli?=
- =?utf-8?B?dUpvc3dveEQyalFDRHhYRTRKNVdqU0Z4MVRmT3VJdmJEeTFVTnVNL2VGSERh?=
- =?utf-8?B?SkN2b3BDMmowclYyaHVMc0FyMHR1ZVNqekhLL0NDSW9YS09SR3YydjZFVjI1?=
- =?utf-8?B?MFlXclIwb0RuZlZkajVBMVhWZXRZQWNlamp1SXUxUUV2dGxYcUFFWlJhbmE4?=
- =?utf-8?B?am4xR01LRnVQQ2RyZmIrZDBDdm9VNjlTVG9aRFVaM3ljRUwrNmNTY2lGNmMr?=
- =?utf-8?Q?L692b+8bHO8cHzSiq1U8MbqEJ?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67e91bf0-c750-4b04-bd54-08de38d05b73
-X-MS-Exchange-CrossTenant-AuthSource: YQBPR0101MB5080.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2025 16:14:27.4265 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /Q51PmXF1hrUy9Ul3SKgee0cLkiGxbA6OoO/ZBqoZoZoVA00VpfqZuRfHcJPMsQDf/yW8lzVXOyIcrm0mU6jlw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB8918
+ <ad04c3c2-c0ac-4ed6-96e1-29c661e868f5@efficios.com>
+In-Reply-To: <ad04c3c2-c0ac-4ed6-96e1-29c661e868f5@efficios.com>
+Date: Thu, 11 Dec 2025 11:21:35 -0500
+X-Gm-Features: AQt7F2rWgLZUTOyPHG-T4oEar2RgMuS_pcbTaICTAvQxig7VIPzpigOpFpgdePY
+Message-ID: <CAOQX81d3NM5YV6gNCCNoA+VAReRu8oe55=vr-TOzBzcRWCHVKQ@mail.gmail.com>
+Subject: Re: Question about LTTng Context
+To: Michael Jeanson <mjeanson@efficios.com>
+Content-Type: multipart/alternative; boundary="00000000000096c3360645af8af8"
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -192,91 +108,243 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Michael Jeanson via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Michael Jeanson <mjeanson@efficios.com>
+From: Amir Najafi Zadeh via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Amir Najafi Zadeh <anajafizadeh@cs.stonybrook.edu>
 Cc: lttng-dev@lists.lttng.org
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-On 12/11/25 10:51, Amir Najafi Zadeh wrote:
-> Michael, Kienan, Thank you both for your replies. As you mentioned the 
-> cgroup namespace, it isn’t very helpful in some cases. Containers may 
-> share the same cgroup namespace, and the container runtime often avoids 
-> giving each container a private cgroup namespace for performance and 
-> security reasons. Because of this, the cgroup namespace can’t be used as 
-> a reliable or unique label for filtering trace logs.
-> 
-> In my case, with container-d you can inspect a container, find its PID, 
-> and then check /proc/<pid>/ns/cgroup, but you’ll see that different 
-> containers often have the same cgroup namespace ID (e.g., in the 
-> following logs you can see the calico-node and kube-proxy containers 
-> sharing a cgroup ns).
+--00000000000096c3360645af8af8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-If you want to track containers, the pid namespace is the one used by 
-most container runtimes but I don't know specifically for container-d.
+I'll try that too. Thanks for mentioning it.
 
-> 
-> ```
-> Name: calico-node  CID: 
-> b5624afe31b005725f4ba53c7b6fe758f3c09fabf013085231ff8b97588f6ace  PID: 
-> 2243  cgroup_ns_inode: 4026531835
-> Name: kube-proxy  CID: 
-> 52f3c12def7a680f61a925ac92dd5ebd5eba6cad17d671efbfd1d40db7dff624  PID: 
-> 1851  cgroup_ns_inode: 4026531835
->    >> MATCH FOUND: shares ns with container: 
-> b5624afe31b005725f4ba53c7b6fe758f3c09fabf013085231ff8b97588f6ace 
-> (calico-node)
-> ```
-> 
-> Thanks again for your answers. I hope this feature appears in a future 
-> patch.
-> 
-> Best,
-> Amir
-> 
-> On Thu, Dec 11, 2025 at 9:57 AM Michael Jeanson <mjeanson@efficios.com 
-> <mailto:mjeanson@efficios.com>> wrote:
-> 
->     On 12/11/25 09:30, Kienan Stewart via lttng-dev wrote:
->      > Hi Amir,
->      >
->      > On 12/10/25 9:40 PM, Amir Najafi Zadeh via lttng-dev wrote:
->      >> Hello everyone,
->      >>
->      >> I hope you’re doing well. My name is Amir, and I’m a PhD student in
->      >> the Computer Science department at Stony Brook University, New York.
->      >>
->      >> I have a question about the LTTng context that I haven’t been
->     able to
->      >> find an answer for in the docs or man pages. Does LTTng support
->     adding
->      >> the cgroup ID or cgroup path as a context field? I want to
->     filter my
->      >> trace results based on cgroups.
->      >>
->      >
->      > I think you're looking for the `cgroup_ns` context which adds the
->     inum
->      > of the cgroup namespace as a context field.
-> 
->     This will give you the ID of the cgroup namespace but we don't have
->     contexts for cgroups themselves. It's probably something we would like
->     to have but there is no concrete plans on implementing this at the
->     moment.
-> 
->      >
->      >> If this isn’t supported, are there any plans to add it in future
->      >> versions, such as 2.14?
->      >>
->      >> For reference, I’m currently using LTTng 2.13 on Ubuntu 24.04 with
->      >> kernel 6.8.0-87-generic.
->      >>
->      >> Cheers,
->      >> Amir
->      >> --
->      >> *Amirhossein Najafizadeh*
->      >> *PhD Student, Computer Science Department, Stony Brook
->     University, N.Y.
->      >> File systems and Storage Lab (FSL)
-> 
+Cheers,
+Amir
 
+On Thu, 11 Dec 2025, 11:14 Michael Jeanson, <mjeanson@efficios.com> wrote:
+
+> On 12/11/25 10:51, Amir Najafi Zadeh wrote:
+> > Michael, Kienan, Thank you both for your replies. As you mentioned the
+> > cgroup namespace, it isn=E2=80=99t very helpful in some cases. Containe=
+rs may
+> > share the same cgroup namespace, and the container runtime often avoids
+> > giving each container a private cgroup namespace for performance and
+> > security reasons. Because of this, the cgroup namespace can=E2=80=99t b=
+e used as
+> > a reliable or unique label for filtering trace logs.
+> >
+> > In my case, with container-d you can inspect a container, find its PID,
+> > and then check /proc/<pid>/ns/cgroup, but you=E2=80=99ll see that diffe=
+rent
+> > containers often have the same cgroup namespace ID (e.g., in the
+> > following logs you can see the calico-node and kube-proxy containers
+> > sharing a cgroup ns).
+>
+> If you want to track containers, the pid namespace is the one used by
+> most container runtimes but I don't know specifically for container-d.
+>
+> >
+> > ```
+> > Name: calico-node  CID:
+> > b5624afe31b005725f4ba53c7b6fe758f3c09fabf013085231ff8b97588f6ace  PID:
+> > 2243  cgroup_ns_inode: 4026531835
+> > Name: kube-proxy  CID:
+> > 52f3c12def7a680f61a925ac92dd5ebd5eba6cad17d671efbfd1d40db7dff624  PID:
+> > 1851  cgroup_ns_inode: 4026531835
+> >    >> MATCH FOUND: shares ns with container:
+> > b5624afe31b005725f4ba53c7b6fe758f3c09fabf013085231ff8b97588f6ace
+> > (calico-node)
+> > ```
+> >
+> > Thanks again for your answers. I hope this feature appears in a future
+> > patch.
+> >
+> > Best,
+> > Amir
+> >
+> > On Thu, Dec 11, 2025 at 9:57=E2=80=AFAM Michael Jeanson <mjeanson@effic=
+ios.com
+> > <mailto:mjeanson@efficios.com>> wrote:
+> >
+> >     On 12/11/25 09:30, Kienan Stewart via lttng-dev wrote:
+> >      > Hi Amir,
+> >      >
+> >      > On 12/10/25 9:40 PM, Amir Najafi Zadeh via lttng-dev wrote:
+> >      >> Hello everyone,
+> >      >>
+> >      >> I hope you=E2=80=99re doing well. My name is Amir, and I=E2=80=
+=99m a PhD student
+> in
+> >      >> the Computer Science department at Stony Brook University, New
+> York.
+> >      >>
+> >      >> I have a question about the LTTng context that I haven=E2=80=99=
+t been
+> >     able to
+> >      >> find an answer for in the docs or man pages. Does LTTng support
+> >     adding
+> >      >> the cgroup ID or cgroup path as a context field? I want to
+> >     filter my
+> >      >> trace results based on cgroups.
+> >      >>
+> >      >
+> >      > I think you're looking for the `cgroup_ns` context which adds th=
+e
+> >     inum
+> >      > of the cgroup namespace as a context field.
+> >
+> >     This will give you the ID of the cgroup namespace but we don't have
+> >     contexts for cgroups themselves. It's probably something we would
+> like
+> >     to have but there is no concrete plans on implementing this at the
+> >     moment.
+> >
+> >      >
+> >      >> If this isn=E2=80=99t supported, are there any plans to add it =
+in future
+> >      >> versions, such as 2.14?
+> >      >>
+> >      >> For reference, I=E2=80=99m currently using LTTng 2.13 on Ubuntu=
+ 24.04
+> with
+> >      >> kernel 6.8.0-87-generic.
+> >      >>
+> >      >> Cheers,
+> >      >> Amir
+> >      >> --
+> >      >> *Amirhossein Najafizadeh*
+> >      >> *PhD Student, Computer Science Department, Stony Brook
+> >     University, N.Y.
+> >      >> File systems and Storage Lab (FSL)
+> >
+>
+>
+
+--00000000000096c3360645af8af8
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">I&#39;ll try that too. Thanks for mentioning it.<div dir=
+=3D"auto"><br></div><div dir=3D"auto">Cheers,</div><div dir=3D"auto">Amir</=
+div></div><br><div class=3D"gmail_quote gmail_quote_container"><div dir=3D"=
+ltr" class=3D"gmail_attr">On Thu, 11 Dec 2025, 11:14 Michael Jeanson, &lt;<=
+a href=3D"mailto:mjeanson@efficios.com">mjeanson@efficios.com</a>&gt; wrote=
+:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;bor=
+der-left:1px #ccc solid;padding-left:1ex">On 12/11/25 10:51, Amir Najafi Za=
+deh wrote:<br>
+&gt; Michael, Kienan, Thank you both for your replies. As you mentioned the=
+ <br>
+&gt; cgroup namespace, it isn=E2=80=99t very helpful in some cases. Contain=
+ers may <br>
+&gt; share the same cgroup namespace, and the container runtime often avoid=
+s <br>
+&gt; giving each container a private cgroup namespace for performance and <=
+br>
+&gt; security reasons. Because of this, the cgroup namespace can=E2=80=99t =
+be used as <br>
+&gt; a reliable or unique label for filtering trace logs.<br>
+&gt; <br>
+&gt; In my case, with container-d you can inspect a container, find its PID=
+, <br>
+&gt; and then check /proc/&lt;pid&gt;/ns/cgroup, but you=E2=80=99ll see tha=
+t different <br>
+&gt; containers often have the same cgroup namespace ID (e.g., in the <br>
+&gt; following logs you can see the calico-node and kube-proxy containers <=
+br>
+&gt; sharing a cgroup ns).<br>
+<br>
+If you want to track containers, the pid namespace is the one used by <br>
+most container runtimes but I don&#39;t know specifically for container-d.<=
+br>
+<br>
+&gt; <br>
+&gt; ```<br>
+&gt; Name: calico-node =C2=A0CID: <br>
+&gt; b5624afe31b005725f4ba53c7b6fe758f3c09fabf013085231ff8b97588f6ace =C2=
+=A0PID: <br>
+&gt; 2243 =C2=A0cgroup_ns_inode: 4026531835<br>
+&gt; Name: kube-proxy =C2=A0CID: <br>
+&gt; 52f3c12def7a680f61a925ac92dd5ebd5eba6cad17d671efbfd1d40db7dff624 =C2=
+=A0PID: <br>
+&gt; 1851 =C2=A0cgroup_ns_inode: 4026531835<br>
+&gt;=C2=A0 =C2=A0 &gt;&gt; MATCH FOUND: shares ns with container: <br>
+&gt; b5624afe31b005725f4ba53c7b6fe758f3c09fabf013085231ff8b97588f6ace <br>
+&gt; (calico-node)<br>
+&gt; ```<br>
+&gt; <br>
+&gt; Thanks again for your answers. I hope this feature appears in a future=
+ <br>
+&gt; patch.<br>
+&gt; <br>
+&gt; Best,<br>
+&gt; Amir<br>
+&gt; <br>
+&gt; On Thu, Dec 11, 2025 at 9:57=E2=80=AFAM Michael Jeanson &lt;<a href=3D=
+"mailto:mjeanson@efficios.com" target=3D"_blank" rel=3D"noreferrer">mjeanso=
+n@efficios.com</a> <br>
+&gt; &lt;mailto:<a href=3D"mailto:mjeanson@efficios.com" target=3D"_blank" =
+rel=3D"noreferrer">mjeanson@efficios.com</a>&gt;&gt; wrote:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0On 12/11/25 09:30, Kienan Stewart via lttng-dev wro=
+te:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; Hi Amir,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; On 12/10/25 9:40 PM, Amir Najafi Zadeh via lt=
+tng-dev wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; Hello everyone,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; I hope you=E2=80=99re doing well. My name=
+ is Amir, and I=E2=80=99m a PhD student in<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; the Computer Science department at Stony =
+Brook University, New York.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; I have a question about the LTTng context=
+ that I haven=E2=80=99t been<br>
+&gt;=C2=A0 =C2=A0 =C2=A0able to<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; find an answer for in the docs or man pag=
+es. Does LTTng support<br>
+&gt;=C2=A0 =C2=A0 =C2=A0adding<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; the cgroup ID or cgroup path as a context=
+ field? I want to<br>
+&gt;=C2=A0 =C2=A0 =C2=A0filter my<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; trace results based on cgroups.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; I think you&#39;re looking for the `cgroup_ns=
+` context which adds the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0inum<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; of the cgroup namespace as a context field.<b=
+r>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0This will give you the ID of the cgroup namespace b=
+ut we don&#39;t have<br>
+&gt;=C2=A0 =C2=A0 =C2=A0contexts for cgroups themselves. It&#39;s probably =
+something we would like<br>
+&gt;=C2=A0 =C2=A0 =C2=A0to have but there is no concrete plans on implement=
+ing this at the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0moment.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; If this isn=E2=80=99t supported, are ther=
+e any plans to add it in future<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; versions, such as 2.14?<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; For reference, I=E2=80=99m currently usin=
+g LTTng 2.13 on Ubuntu 24.04 with<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; kernel 6.8.0-87-generic.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; Cheers,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; Amir<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; --<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; *Amirhossein Najafizadeh*<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; *PhD Student, Computer Science Department=
+, Stony Brook<br>
+&gt;=C2=A0 =C2=A0 =C2=A0University, N.Y.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;&gt; File systems and Storage Lab (FSL)<br>
+&gt; <br>
+<br>
+</blockquote></div>
+
+--00000000000096c3360645af8af8--
