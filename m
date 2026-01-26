@@ -4,176 +4,162 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 948E1D13C1E
-	for <lttng-dev@archiver.kernel.org>; Mon, 26 Jan 2026 14:37:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4f0B262Ydrz1JZX
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1769438224;
-	b=BZU6gvAMMiKgT4Y3ok+Upv7iH0r5mjK7yH4kEVcd/L6YFLvSJeoW+4NO9R6W+8WdJ7Om
-	 XnOzNdx++BD5IlTAShkOR00KwYX6lOs4wkVmqN3GFEVpPjLMvOMcmW8TFCeokk0MquKws
-	 9SUGwvlq8OkVG+5ObmMJzurhNZlyuAIlJ8ioUMNvqYL4JHtf1C4uHRgLC9gb9+CSm0heq
-	 /N248nOHIkcFATNH7Sj8MWhkoIUIRSSBUdap+03g5iC/H6rYCeElk6yNQsahTYbsl1Cz/
-	 lGxiSNH4il46m3hl0HewpWyWAdKOAi1XCevZVRSeymqAcs1uc5hH/rSUFlY3Z6n7v3w==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B251D19502
+	for <lttng-dev@archiver.kernel.org>; Mon, 26 Jan 2026 16:42:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4f0Dpk0PpDz1KNT
+ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1769445743;
+	b=i96KPhOJUPmkULY0zxow+0gWw+TeN0kYkI4g1soPDP66CnEkeeXbDiNHDeXDOGG+ekxN
+	 owFT1L2124yxfZ21Kw5Pd0W++Lj8c/JPPQ3BTXmWSX0Yn/l6UskkkNl6YfU9BoPn6NmQ8
+	 EQIvgUFxgUpxzuXdyFS5iohdf3ygnhTsh+KZI4wZCRg9stDZBU5PMqqHT6trYtqEKCLJm
+	 ftgkD9cEYnzpKQ0R0zzXFFGoSK9uhfe3HomhIW2W9L0lNvM1BPH0KxfXFz8rAKbfJCPeF
+	 wBuXRkhq25pTQ9jwQ8R4/2O2mLLnt+0tlOaaN7koAaM4NdJjDy4Ca0c8lA320DHX4Jg==
 ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1769438224;
-	h=DKIM-Signature:Message-ID:Date:To:Subject:MIME-Version:From:From;
-	bh=iP/eg7Xz6Cs24zvAj1QvpRrGxrQ97iFkMId48A00qhA=;
-	b=bj3mUTB+6bj7VfgiISGq2Lslg+5AlDueyQ1FcgFaFaW19buIEY1uhzpdwNs0t+hpYbz0
-	 /71cONVknvL23LAm13KpQt6Qy1iFnelkaK7kHybNBxmLVROj15fDnBfHyxGRucC17tENy
-	 qyOzAzG133XEoArKSTXn9sHw1ErtM+GtC+f9TAQS2oN9wXQ9B2FRxc/1gMraJ/WEBYx2e
-	 OM/x39Zb7AbIscn/GtSv7XG1lArMwc0z/oEV6LqUka8mOqHNnsxHsdcTpR/jW8TLo0dsD
-	 mbzXT/paYz3FP5BleUIW8NOZ2CsMiQ5YpTFfGRT0JhV/C44SUJtT1NuaKus19kLIQmQ==
+	c=relaxed/simple; t=1769445743;
+	h=DKIM-Signature:To:Subject:Date:Message-ID:MIME-Version:From:From;
+	bh=pPw2SYFZhqTOfkUFNwwPcOBBJSwpQfIz2IRYnPHtACs=;
+	b=VMYG1tA0qyhKGa5EOb1+b9SrNYIBjacX3oKvSvSyOQefuHXubbOnUjUcQwA6Q1tJ8L0e
+	 Ee2p8mfYHP3k3hlxzatMwmdN4qaDgdsipF38Paoqs/mOFsG5ECyf4L5mlAqNFkjoGtwzm
+	 oX70Ouye+PDKFBiuXUTtMNaM1mHCsJG881ZxAxl7w9YViFF8CKDEo7tFPAwM9fELLBQlc
+	 fTr5UlsCrR2v+MQl7uHyA6vTBEMWI31/2uTKGsMkZf6JC8qoasiqZ+lDUaiAtrqkhmnds
+	 L/OU8ovRxFCszo/igmxwJ8mrxLv5d3XhOiFjcb9ckGVRV/9C6/YDKwjd3CsIYWJy3ig==
 ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4f0B262Ydrz1JZX
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4f0Dpk0PpDz1KNT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lists.lttng.org;
-	s=default; t=1769438224;
-	bh=HsG55ufMESVV/aiNrdZ2jfaKewg2gMWDPdftdVTh3fE=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1769445743;
+	bh=pPw2SYFZhqTOfkUFNwwPcOBBJSwpQfIz2IRYnPHtACs=;
+	h=To:CC:Subject:Date:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=odoIBJYJ2WOkET4m2WkkG66hA6HPts5PVXPEcD/r/1tZIKN4gpu5Kg3soCybDO3eG
-	 Zpx2nNFXNg0d+9+6gWQoe5IfPNQPWSxPWg+WnnYwReqoHcSg9yAOVXZzuPvtwpCStC
-	 FSvNxn50eDObNRkH78Nuy9RGKpkTNNCHxEosBF02SIJzVxhfQwg2w+YRLnYX6yQRPp
-	 S9YXGd0CLnWJ5eSjNs2rFRR7LCKGhpVHM27F18y0lCp+lnZplembnkXfhraHEGUPd+
-	 MG/mrqeWyPxgatvSRWKDAiDcXN/Rz+FFSuwb5fbqQ5oh8q0594K41yvVU/EWAevLyY
-	 nVqW3nuegztcw==
+	b=CGULwHyl3Srn7ce2S6hJMsNDvtFwPu8ErG73iNKAqpxHhOFJ3oURxzZeAkkiFI9LS
+	 tAFESYv1reT1eMGl4o0KoAm9BFRtKnaArgSEhTvFwoiQR/M9LomLLnE3OtMgBj672u
+	 EhJx95tr3jnnIT+fEsRZDym2zhLJItdBgsWm7ioqQb/hmnnjNdPaRKej2gQlCZQlQH
+	 E7NEC6nGMsbOG+E3wxsoEVDnblfMSqZ5jWX4ldiNiaTmVN72sba99EKdTkqsPaRtnR
+	 +oRKAmotcziod8IYO+PdmXeiJ8N29bXzgzAbolfj4B4uI8m7W0GqVf+QanCufyN+C1
+	 Z78zVBa+2hx9w==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4f0B262Ydrz1JZX;
-	Mon, 26 Jan 2026 09:37:02 -0500 (EST)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4f0B241SzXz1Jd8
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4f0B241SzXz1Jd8
-Received: from YT3PR01CU008.outbound.protection.outlook.com
- (mail-canadacentralazon11020102.outbound.protection.outlook.com
- [52.101.189.102])
- by lists.lttng.org (Postfix) with ESMTPS id 4f0B241SzXz1Jd8
- for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2026 09:36:59 -0500 (EST)
+	by lists.lttng.org (Postfix) with ESMTP id 4f0Dpk0PpDz1KNT;
+	Mon, 26 Jan 2026 11:42:21 -0500 (EST)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4f0Dpg6WYgz1Kym
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4f0Dpg6WYgz1Kym
+Received: from SJ2PR03CU001.outbound.protection.outlook.com
+ (mail-westusazon11012058.outbound.protection.outlook.com [52.101.43.58])
+ by lists.lttng.org (Postfix) with ESMTPS id 4f0Dpg6WYgz1Kym
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2026 11:42:19 -0500 (EST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WGU2CRXLqbBnTpNw2RUcGMPsnL7soil538gR5Rwg2Un1wkwSid5GTL2r75Tj6f9oDkw9Wh2zoUc+1pt3FrDbH76CywC5IW+oEV85d+MlEEJBwtV8k3ny0IAYuIxl0QJrbhtlZe29DliRxkY2T75kH24UwMSbSaax2897VBfmYk3ebkbT3IkK6ZUvY2cbJ8F8XpNlNcFkx1CQ+BHqgdwqTpze9oTyPubvUqNeKRThJcySZPWCNYoUcEdkIzKP9LmHCtslSQ5+6B46gHDlsSWgDA/pG5rCOzgs14hsCtPQk3brAfK3+EK7FdO5k79b7y0XrYjuNA3V7prNPSWC81AIvA==
+ b=i/ALkPCjqctAJowe4zs/0LYui0c0KHDs81ScGENkKMxBHbsVvYaOLtrxz3ty2POxWeFlU3pV2MKoSD2uT13L6AzSrl8zrqDNvUMI8yztnHGwVfvJGUC1v2mwECXLkR3Si0wdM2m+1Qww9eHsf36i/LkyXae2G1O3+1W6NLIJmbqsbetcPYc69Zaf8bGa4qamP0+97g/m9h+p7Oonl+yE1fFyILkZnnv6IYn0oV+zXr85PagrhJclOdRmg8rmQHYV3EfHLOjOa5peR7D6wA4NZpuslgd68CKryQEFG5qFBGtPRZ/6GW1Fz5kRPfygXdHUJernEZBsgq6Qjq46DBm3lw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HsG55ufMESVV/aiNrdZ2jfaKewg2gMWDPdftdVTh3fE=;
- b=gN5XfCw53pYksvQTTiUVnMFFTKhZ0enU/j61HWa+gPstP1RXb6GQUG2/IOVTEJ1BJ0CstcYle+p6bDe6Os/1C+PdANjm60tUa5niqwSO7Nd/gOrzlt1pdOi037p6ipHiFswqVWd40o5r17fttwZkqFY56+3FUrW2VV+tYrpaolWGN4jI2smnlFxJObyDKLY50snwS6xHTLByvsTageV1ivOrBX61G9w47Y9f4IS/x+CP97xTBOBbz1524wDUQk4vQiHzcf4/v4yelDLr3Z0CQYw8SFpm/2nsMa2GbCA1KsGWp4FzvF4Fm5is0lD2I/3zXSaKglQ0WFQiKBH3LyS3tg==
+ bh=pPw2SYFZhqTOfkUFNwwPcOBBJSwpQfIz2IRYnPHtACs=;
+ b=G9yvW9szl3N6n2d0ptYypHLAitZT7IBZjdk1T5VqyRCYtFMQHI64dLQWaCxiwDzIzCiJokRs50oEdfB3GBVzC2YDKBwGROnT/FBxt/T+7vrpO5Dbj9meEQj5bzjDrkJS3/3V2f9OItGmHtG9oDUbBcjVGFCoNbIck6Ckhrrx3FqEfd4c4tpFOvS/Izd3ufSytPeRzwFba0h2Rwoj230kWFyEj1XN+dsZ7G4Ef3JMmJYIA0xEepi/iCCsvDZgoPCZZhvnO49aC6CqKPmBNV8wrellZrYqZ9PBVfFLYkgcRdcAZnc8oxOQpuNIEsl2A1WoYT3lA9hZN8lGNAMoIpWDMg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by YT2PR01MB10748.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:f0::11) with
- Microsoft SMTP Server (version=TLS1_2,
+ smtp.mailfrom=ericsson.com; dmarc=pass action=none header.from=ericsson.com;
+ dkim=pass header.d=ericsson.com; arc=none
+Received: from DS4PPFB691D9211.namprd15.prod.outlook.com
+ (2603:10b6:f:fc00::9b3) by DS4PR15MB6777.namprd15.prod.outlook.com
+ (2603:10b6:8:320::18) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.16; Mon, 26 Jan
- 2026 14:36:56 +0000
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6004:a862:d45d:90c1%5]) with mapi id 15.20.9542.015; Mon, 26 Jan 2026
- 14:36:56 +0000
-Message-ID: <d08df9ca-65d5-4873-9205-8b58311c3859@efficios.com>
-Date: Mon, 26 Jan 2026 09:36:55 -0500
-User-Agent: Mozilla Thunderbird
+ 2026 16:42:19 +0000
+Received: from DS4PPFB691D9211.namprd15.prod.outlook.com
+ ([fe80::5c59:d68d:e8ec:d09c]) by DS4PPFB691D9211.namprd15.prod.outlook.com
+ ([fe80::5c59:d68d:e8ec:d09c%6]) with mapi id 15.20.9542.010; Mon, 26 Jan 2026
+ 16:42:16 +0000
+To: tracecompass developer discussions <tracecompass-dev@eclipse.org>
+CC: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Subject: Invitation: Trace Compass Monthly Project Meetings
+Thread-Topic: Invitation: Trace Compass Monthly Project Meetings
+Thread-Index: AQHcjuKGix7vxiSHoEqfMjqpSuz5sQ==
+Date: Mon, 26 Jan 2026 16:42:16 +0000
+Message-ID: <DS4PPFB691D9211B0432FC71D96571491B79E93A@DS4PPFB691D9211.namprd15.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>,
- Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: [RELEASE] Userspace RCU 0.14.2 and 0.15.6
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQZPR01CA0033.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:86::19) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:be::5)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS4PPFB691D9211:EE_|DS4PR15MB6777:EE_
+x-ms-office365-filtering-correlation-id: 518d6b9d-843d-4d0d-2870-08de5cf9dd8d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|366016|376014|1800799024|13003099007|38070700021|8096899003; 
+x-microsoft-antispam-message-info: =?iso-8859-1?Q?ISJSfv0W6wuGTJLXIGOXs96puDvBFLiL9Ueity9e1fga06uVfxo6NkJcV8?=
+ =?iso-8859-1?Q?+CWeP+6LJbsG+PcB58miSZTl2QsAbSKPdKuq9RsJpfcMIiAuBxk63UW0Pz?=
+ =?iso-8859-1?Q?rR3x3Bfhry1wDXEPKuwmVnAVqQBE2EQ/Zq9AN191XyQWqB1QpukmABAm7A?=
+ =?iso-8859-1?Q?pqxA2TuX7VuZBTk6L80w04N96A7cDe6j+hW5oU6FQfA3JfxhisFfsPKpRo?=
+ =?iso-8859-1?Q?leC+dn4Gnu27hFTb9tqVLv3ik4VYz6PWGRMPK71H13tQau9FAO71/LVepF?=
+ =?iso-8859-1?Q?qkefaAOahTe6ZthfkDeVNtLyR7mJK1Q02BJvxRbaGvQEz+EN92nxKu7hXH?=
+ =?iso-8859-1?Q?QtuGTz1j2fFwyQHHn+FHka7ZXnT1Uxl7Q2cDu8XABy73I60sLM8D+fNVNn?=
+ =?iso-8859-1?Q?Rkhyhx94jMF/f03uzy1OUzV1HTHXDdP3gJU/bmF2o46v1p1FG7i4ZX5a8J?=
+ =?iso-8859-1?Q?AT560Rn8hvYvuAKY81Yn60Me9i1rqXhB3MWik41UdawO/uiq62vMI4k3AN?=
+ =?iso-8859-1?Q?jkPW8U20Y39lGIJ6B0T2pBTEWBokJa8rTmYwIhuWGMMdtDibhBGOPVdrPy?=
+ =?iso-8859-1?Q?3FMP3+icYZn7rIHBFkKbkvX35u73XTTSJw2ksexIPwaRH5rSBSxZ/LsBV+?=
+ =?iso-8859-1?Q?PuNlMLCHBlIgGQv8b+xMSSR04LcqcAEJddt4t3K1q0vK64vZ2qzqs7I4oF?=
+ =?iso-8859-1?Q?w0MX9eqw5HQbBQprufTA2G61fOs3bR3Ki9UQ462swM6PEtgKBjZGmUKAuk?=
+ =?iso-8859-1?Q?d3T58E8F2pLHAUT5cKw3U2/KS2rNqJOUyZKgvcBNjV4gV5FbxTkV3SL4pv?=
+ =?iso-8859-1?Q?XoGyJjrV3gbkrgn8k70VsWr4a37fZbTAag3y0Q2/vmV+6G+9gj6gQTkXGh?=
+ =?iso-8859-1?Q?540PjfSo6fvf3wpBMgtOBwISWArfVK8zgZmb0Rpk/OmR18SfoOv5EtU+AV?=
+ =?iso-8859-1?Q?N+FgrsJsh7Y+YaOs6wxLq3DRFa1dnN8yIaCu+bWHPQswHxNvlf6wsCw8XG?=
+ =?iso-8859-1?Q?rHbxMYt5atcyjYWu2dorgFTG9fGkvwbhQ62Qc7HiGqQLGuTRhvC5mKP2gJ?=
+ =?iso-8859-1?Q?qH2duA9PLmMxQXc1XskxWW/3oOkuKS2QPfDS71JrSpb7OjibUx0OKNsI10?=
+ =?iso-8859-1?Q?KSN4kLUUe+jRWZuz/RB/ByJKvtO2wdxWb3tOwH8zB+bHBUQh15L9S/ifd4?=
+ =?iso-8859-1?Q?HJtAX2TdFosQeZf1J8gBD2esS33pbQbPAKRvKl2tXMrgpSl9lUC3qHcV/d?=
+ =?iso-8859-1?Q?ODx8PQ+eZga5TkiWxpE7bbdv4LXp4kpOjvZ23ZCy/aSWG9uA1Q6Ba8C6k/?=
+ =?iso-8859-1?Q?jbCoGZyEjGMsWotLi2aVCsPe//4U1Ugdtp6ozs7MMbFK7ZEAw1hKpZa3RF?=
+ =?iso-8859-1?Q?vnGOtyRR3THqukP++Pu83om1Y5esJoJ/lKmY4YHmZ8lCiTkitofKeDzErx?=
+ =?iso-8859-1?Q?PWjBpIa6c7ev4r8LuZcb57mRamy5hsZyMdT0zXIF53mOtG5WOseRaQ/1DL?=
+ =?iso-8859-1?Q?CnzRimA0Ka6QCwCF4ARi1O/muIgfa3iXosJwfCRwzJ3FHd7P8FvRdWPTi2?=
+ =?iso-8859-1?Q?ovMg3Lp6fEep4E0I2JT1zU5P0+eYYL8WOlH3Ykep/NR7w0rf1WDHiF7UHN?=
+ =?iso-8859-1?Q?6U36fH28lc8nFx/p070yxcaRmjRBbCgM3jW3pMWA+CLIBhkimqddzJOVxc?=
+ =?iso-8859-1?Q?A+cL6otx8l1PyDLtjO0=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DS4PPFB691D9211.namprd15.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(376014)(1800799024)(13003099007)(38070700021)(8096899003);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?aNBXHHkvl8wOcmqqPJuN4kIXIxOZAxOuPfqp5o3F4dmahFAj+FIulIHtNt?=
+ =?iso-8859-1?Q?eXr7aewjK+yNq7vh4trtFkJb4rnxrlRLCwX+o/bIoUP4XIp9WsKAmL3ZJM?=
+ =?iso-8859-1?Q?UBfaaKCb0zTGuoqiHDWXsUctk1eX5Vabx6LEHp71jQEGG0DlhC5pmVLer0?=
+ =?iso-8859-1?Q?8+KCXvedkfb/sl+wc7/Mhn92ejeWU9A0WcXddeVXBETnerw7nxezEEnJAn?=
+ =?iso-8859-1?Q?Q01TAfLCoQZuTqHtJhylkKZ+Hy6CXHaGj/TGcxiWj30qyIx2FMBMXyrmgt?=
+ =?iso-8859-1?Q?c+dmC9/LD0ElKzTiWwUDhZ0mjsSWM2shqnPMBcNhq/im1qqcssqyu/gNeN?=
+ =?iso-8859-1?Q?YY0a2oBXb3chcN2r9F5f8B6aKX7NWiSahu51VdwFocO55S3GBmcf5xTtWi?=
+ =?iso-8859-1?Q?wJiD49vIQHdKBgKqyXuPhWqgxskdAKOVHxe8yt8jr5NPssXgOBLw8GL8Re?=
+ =?iso-8859-1?Q?3oHK6SfyX7DqskK9Nb52Yz1fTmA3DGeXC0XHcDYg/CrwkiTn0n3jSxGECU?=
+ =?iso-8859-1?Q?b0VmCK7eOKejbaI3sFKw36Ft0Kwh+jwi9gLNCuk4dm3HG0S/yJjFBaAMwV?=
+ =?iso-8859-1?Q?bUn0UvWIAftpS+lUCLq/nD3B7cIaqSE0GaqHX3I2eE0Y0aN6TPe3cbGGQm?=
+ =?iso-8859-1?Q?B8DSGR0kqvtZ8dpoP1ipui7TBxVnbxRN8l6QRhXKCQX//jB9+AYeJE6G/8?=
+ =?iso-8859-1?Q?FeeHPGQbTTaP5WGd9uusLqIPOzm7Ym8zR40BDO9dj2lTpjuXSsuiWmwUD7?=
+ =?iso-8859-1?Q?eP5830jMoMqPOEVQ5Tgpzs5rUW6ku73W9M5BX/0mUYGNqgGzqNXrvHqcEd?=
+ =?iso-8859-1?Q?BWtnSdClqlAtwThW+i1kLdTLJ+A9j17HDUy3154cvSHBtBqmTu78YpX0MT?=
+ =?iso-8859-1?Q?KD5M0ZcH/N5E4A6IHoGY/4204+tGLywCMiwgf6rnEBEGTcdiJnxkt6QSxi?=
+ =?iso-8859-1?Q?hEurWoNWO8UYV9yTfAvS/YFnKBJO+ZAxIReauUX2Caoq716AhhIyNuh/9I?=
+ =?iso-8859-1?Q?8iCXK2Wzplp/S/Kkl14I2XVUmClYc9kGVyQp18zA3/Sr0z5hZINkbigYrB?=
+ =?iso-8859-1?Q?nfcXdwHgYqj/mtCSOwPtR5iWC4NFH9SIjvmomP9gRTfL6sugKWSLUwi2sh?=
+ =?iso-8859-1?Q?FNBZvzunwLJbzQv8uHPP9ylAfwJrz+Yps0t6jlAM8HZa/cII2Ia6BTvm/a?=
+ =?iso-8859-1?Q?GER6B+ZJIe6A/JpdYET6mt21+UTVgBmpne5B1hlZKIPiWj4IjMGIhdGWiu?=
+ =?iso-8859-1?Q?p/IqdjjLQK2cg4ZH5eTjA7GIJgdyAvFE4tIUoFIoRPlujN5bLfCinekKGa?=
+ =?iso-8859-1?Q?R6FywxEghQgQUSJXMSiQm2Upt8IGhRGIDyA7GB+NMplm9EU1ZMqg+/YUO5?=
+ =?iso-8859-1?Q?UfOKOb/Q5uyDKDl20e6mAGQgt6ExAnzgnBVDG6KxUTPwtdwhCxtJwWkSgD?=
+ =?iso-8859-1?Q?w/Uo0DTBNyehfyyr2NbQneE2FWhk8MGDH0Q9baK7cwUrvRDN5LMGvSd/Ep?=
+ =?iso-8859-1?Q?ufnibWRwueVZGTsxeHlY6t6zX8PRHg7nND7XTKUMNdigB8RU+pF1T9Pgd4?=
+ =?iso-8859-1?Q?EMvhStDTILFu6RhYHT4udTXv7hJ+ih8GR4aAiUnJ292uLt9Egp8nfSpVmr?=
+ =?iso-8859-1?Q?NIOj7Z8apVVSZ15cMxOYEmgmti3wuqXtWnQdfZ2Vj7bBefYHp3iPM19YZR?=
+ =?iso-8859-1?Q?pVksmR2p+knr5BfjuEWbtJS/ZpRrP0OQRggXaVULxUKJn/J8aj3kryyBN7?=
+ =?iso-8859-1?Q?wfiXhKNJzWRo3OpWO7K4IqqcyUovfnMDAE1nkAG8jKWl77ExQ7Tj8HO+GH?=
+ =?iso-8859-1?Q?gj+Ae92+AA=3D=3D?=
+Content-Type: multipart/alternative;
+ boundary="_000_DS4PPFB691D9211B0432FC71D96571491B79E93ADS4PPFB691D9211_"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT2PR01MB10748:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4589c504-d386-4b3a-bff1-08de5ce85af3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0; ARA:13230040|376014|1800799024|10070799003|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?Zk1vZGJ1Ny92d1JNTTN5U3ZHUzZFQWlyeWFqL3V3MWF5emZQSUE2WlRMcEtZ?=
- =?utf-8?B?ekwxVFo4N2N0VFJjclFHVGtpYjRjN3R4RU9IS2dYOFBLRjV4Ym42dDhNNDd2?=
- =?utf-8?B?WjU0alRYdEF4c0RlelBxUVh1L3l0T1A2RlhwYmpjWTJVaVJ3TU5ybWwrYWN0?=
- =?utf-8?B?WVNWN0NKQzh5RklWb29KME9vQXRGY2VtZlBVd0N1bWRqVFJTUlBVWFhyYlNx?=
- =?utf-8?B?aVovOFlqWVhBQ3IyeUxPeGp1R01JYnc1ek9CRURrT0tYSmNYM1NaRE45b1lX?=
- =?utf-8?B?TG83S2ZhV3VJanpNYTJXbGpWczdBWUZpYWx0T05lR2RRQW1HdU1VYk5SVUpK?=
- =?utf-8?B?RnAwdTY5b2VUdzhsUjZSR1VYZGZTdG9sV2VIRzdaWlE0NmVUVjVoblNyaWlz?=
- =?utf-8?B?T1ZGa0JSczdTWW1TS3owUG5jT3Fyb3NiYTVlRlFqL2x2WFdZRWhPa25qcGJT?=
- =?utf-8?B?aHZwaFRTMDJDVHc5WUJRUzdEYUlVazIvSng0a1djVWFMOFVmYXdqSnFzaTFS?=
- =?utf-8?B?Wi9DMEVxS2Vaa1VPamZ5eVhKUUEyRk5vdjUvb1Y4VzUvRUJEVkxta0QzRU9V?=
- =?utf-8?B?dDBTMWplV093VlZIa3ZCbGxLY2FJY0JaWHZ6L1N6UXBqWFk5TjNydHltT2lC?=
- =?utf-8?B?dGd2dHZrakhPSlFxNFB0TkJoNXpkN1pFYkd0T2xFU1dhRXgyd2RnSVJ3ZVUx?=
- =?utf-8?B?RXZwTnNjVURER2hoT1hINU5KQnh5cmtjbmVlam9KNXBEVlA4OFp6R1V0eEJV?=
- =?utf-8?B?bDYyMlRRNUNGVStNekZIQWtUbjA4L0VhZVFLUEU2ejhyWklzSjNKK0xUNXRT?=
- =?utf-8?B?ellJQ2FRbDI2QjNmUHpEblRKb1ViQld3cGFOa2xoSHNtNjhSYzRUU3hrZVRa?=
- =?utf-8?B?dmt1b2hreFU2aTYyZzRpaU5iQzlTS0VmUEFEbS8yM1ZzbjNtWmxnRkg0VGtO?=
- =?utf-8?B?Ulh2dkhKQ0xhMkJWZ0R4VURBT05GUVJVMWhkV3I0bDZwVnBPWWVTb0ZXVGhU?=
- =?utf-8?B?WVZCZzI4Y2R0MThyUVIyS0dWM2lLencveXp1RWV0UFM3WnZqdDBmNlRDUVE3?=
- =?utf-8?B?K3NKYmN5eDRMZVJDZjJKQXI0SW9ycHZRVXVUMUdZZFNDU2QvNGRYMk5USXhr?=
- =?utf-8?B?MFczdjBvQ1VnSDlGb3JhTnF5UE9xaW44QXYxMXkxUmkyb0d3dVorTGswVFlm?=
- =?utf-8?B?SXlyRUNocVFwRnJnTGpUbXptalRBOHJsbldpT3pnSFMraGdzTXdMamMzRW1n?=
- =?utf-8?B?Vkg3S2MvSGRLWUJmMDF5QkZaSlJEZ2FOTlVPSlh4RjkvU3R0RFJnWDFCbDE3?=
- =?utf-8?B?RlJTcTRYTGFtK1lNWXI0c0h6Sm9FVEE0cm5sQURoTENiaVVoUWg3d1VDZmpH?=
- =?utf-8?B?dm5nSU1qcUpNUlVXdit5T01XdWtJWmtlMnNLZW90MTcvNnh4YkphZGhld3ZI?=
- =?utf-8?B?OGNUcEVsODBvNWQ3U2QrN3h3Zjh5WStqNDExSXVmd09HQnQ0cFQ5RzNRRjVL?=
- =?utf-8?B?MW1lczNqVWEzYW9zQTlmaHV6VWI1UWhlcE1DbVAvUnB5UHdYSC9Ma1p3SkRX?=
- =?utf-8?B?SmQrbVlqV0NhY1krMFcyekQ5ZkRJTFRqRkV5VnZLc3pLSnRvaDFxZU5rWGNH?=
- =?utf-8?B?YW5FWWxLSDZ5djBIc0psazhLUVJmd3lsUlY1TXJRbkN6NnRmczlySGpvS1B2?=
- =?utf-8?B?RWxqZnpqdzN2dWgxNDB1NXhXTVNnRUovU0hMZWIrY3VSWFVFYmo2cVdTVXNC?=
- =?utf-8?B?WjZpdjVKYnRJQllVR0o2ZWplcWF1ZGs0K01pTVhwaXVVaHE1R2NjTkxrVTM3?=
- =?utf-8?B?c0Q5YmZ0aXlhWDd5TG8wVjhONHpLczEwYXVuL2hPRFlBYUFpdE9CTW5ib3FP?=
- =?utf-8?B?eXdEVzhkWUZPcGNvazd3d1ZsMVg3UkdENGR3SmVITTk3TEdNbGZoS0MvT2gy?=
- =?utf-8?B?TDV3TTgwY0FSZFNXTUpOWGVJQ0dNcCtXMHlydi9HaDdyL1JGTDNFa1ZJTmF5?=
- =?utf-8?Q?1d9CHM9bQufiEZN3eoFD0Ti0xUhsTk=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(10070799003)(366016); DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2FiaThOYUFKcUF6cDRwbVNaWVhoZUVSaVBUYkUzcUwzcFNJa25ta1ZzQjVp?=
- =?utf-8?B?QlVmdFdpTER6S0dkZHM2SXF6MXFzZXYzNERIZzRJaXVFUlMra1RhWHdnWGNY?=
- =?utf-8?B?TmFNenM2eTZCNk1kNFlOVjZzeWdTbGtJaUxSWUl6TlY1VXd0L08yMFNCTkNJ?=
- =?utf-8?B?aGczUnNBdzdYYlQyeWoyNmVMdU9DcHZmdkJXOGdoVDUxanF3U056eWx6amtW?=
- =?utf-8?B?ci9Rams5SnpsYnVhWE5HZnZDUk0rVVFiQUpZYis1bi9iNUxleHpyaVRMeUwx?=
- =?utf-8?B?TG5NenlOY1J5U2QzcTh2N2puNFdaZWYyakh5YW5TSW04QTEvU0FZRzJ0V25Z?=
- =?utf-8?B?WGFOc0U3MzNoMlJLTHpROGVXNExxZTRUSENnYWdDRmNhR051QWZWV0hzYWEy?=
- =?utf-8?B?dlMrYWhZUmJUUU9RN3EzNUY1WWc2LzJZNG5kNzNkNDdWVmN1WnBOSWplWkI1?=
- =?utf-8?B?c0FyaGhJd2NsV3o1d2l0dmtxNWJwUysrV0RmTWtpTWpFRlU2ZWVyamZtOFFl?=
- =?utf-8?B?SjY5dWVQZkJ0OTVaRHYrSXRzbE5YR3hTeGZ6TkVEaVBMWVV1cXdGVzFFaHkr?=
- =?utf-8?B?Y3lZL2VIMVBKTmx5UU1TR0RyenVwR0gyeUlsRTVpKzNPNnp4M2JKUTJ1Vjdr?=
- =?utf-8?B?S3oydHlkM2V1Q2RrRElKc1JBUzMvSkdKcWVzSjRJSEpDWkljSW9iK1E1c1FM?=
- =?utf-8?B?eVF2MTVxUEtzZkxvNWtMUm5OMU9KMWczZFAycVhVdFRuU2lJUzN2WmxYRXBj?=
- =?utf-8?B?cGE0a2psaVhxbHlXSmZKWjZxTTNISzFobXYwcjV6a21WNFhBdEIyUkRZMTBs?=
- =?utf-8?B?dldwZUtWeldQYVlkNFdML2duQ2FvRjJqMjRnRXJVNHZZSzJoOWRsTmVwMldT?=
- =?utf-8?B?dVVyQk02UEZRUy8zcmJ4bHUrZjhpQUlDWTVtSDdaY052eWRSeExETmhQZDNO?=
- =?utf-8?B?YjdxbDkxbWNqZHJMd1VmRHFzWVR4UEVJbGZYWGVMYndhVlphSUtHUFZUelJJ?=
- =?utf-8?B?STd3dHliVFlMSUFzTVFBMlJPUWcvWWR5bWFzSmJTZTdyQ0dFMTVsem9pTDc1?=
- =?utf-8?B?UlF4RnY5dnY5dkJ5S1p6U1VwNmxuN2NIUHVrL3hKVnhVYkE5VWphRGRTU0dI?=
- =?utf-8?B?MkVjT1pvK3hTcE4yVG5BMGZSZDluWUhFVjNBZ2pNZkFSc1ZKU0M4ZUJIQUhl?=
- =?utf-8?B?blBpcG5rSkJuVUdYNFdxQTRJK3hLMUlQbGpTbFAya2hSTzVlNEpLcVRzWVBK?=
- =?utf-8?B?WERwVDAxYmorWWFsWXBTQ1JxVkd5WGlDZHNldVMxc3NlVHNNWng5RFIrMzFQ?=
- =?utf-8?B?RUdXd1NnT1RuU3NvRHA0U2Urd05JRkphdDlLZWt1R05EcDJTZ0VWU2kyYjR4?=
- =?utf-8?B?RDVUUUdKbmlDMTdiMnp3M2pETVRXWFpwVS8ycGN0clJ6LzEza0VheXFTcm91?=
- =?utf-8?B?TUpmbjVzemhJMWNMKzlMdytSdVU1L1gzRlNYYUl1YUhRMFhEdGxGaktYMWll?=
- =?utf-8?B?aGw5cTVQbWRjbElKUXRKd0dBMTlqSHdVVHpCMkJxbk11L0pubVpHNk9hOXZT?=
- =?utf-8?B?clM0ZW0zMXNUTVowbjhpRk5GK2p5N3pBaVUvV01NbWJ5MVdsVW9IVk02bUZT?=
- =?utf-8?B?SG85MlM0ZFBtZml4bER4d3p1ZG1SMUdaTlU0bEVKcHo1N2QvRkh4QUtnTEhx?=
- =?utf-8?B?RmVDR2d6YlVaeUxRcUNkbnE0UkNxRmxQRWhiQTJFQjdydXphbW5MVk85aTFt?=
- =?utf-8?B?Mm9pOFlza0NPc2hudkkzclBYaXRpbjRKLyt3dnM1emt5VGtyQzY4M1Izamh6?=
- =?utf-8?B?c1RlcFRtWU5SSUpXSkhFYk40aVlFUStCQlVmL3Bzb2pweTFuREc2N0daMDRL?=
- =?utf-8?B?djRTbjNqdG44WGRJYjVoSnJLTTFVVVk1V3d2MldMb3hvRUEydmo3cm03WjFi?=
- =?utf-8?B?dXRqUjZUcXRwNFhERXJnREZzV1BCWWlvSWczQk9lQ1J5OXYwVG0xTUN4aUF2?=
- =?utf-8?B?SlNuYlczcFZTYlVhYmtHWmVUeFluY2JvcEJjSnVnTC9vdnM2bitIeVI4THJ6?=
- =?utf-8?B?SzlPQWFHR3ZNbldoQ1FZVjB4RUZ4RkVlKzRmdHJ2YjZrb3llTytVdXRLSVUr?=
- =?utf-8?B?Y0Z3Tk5YVk9lR1dMR1d2Z3l5RjcrQjhiRlg1c1NXdTZVL0g0OWZ0M0l5aDJl?=
- =?utf-8?B?YStBek02T0w3MGZYVkJodEFHdVNvUkhDc01ib0hhSjRneVNBdG5mZEZiVjUz?=
- =?utf-8?B?OEt0eXRHZHA4a09DQVpsc0Eyb3YwaVZoTmVVTkpTZVZYZ3hqb1RoTmE2K3NB?=
- =?utf-8?B?YmJqcVdjSTFFOFhOQUpRbG1DMWo2NXQ1WjdCRklsREl0ZWgxRlFSMVBOWVo0?=
- =?utf-8?Q?UdCyoNOX990fAExJKj35QTwX2gBkSHcLgSCg9tK24QIPz?=
-X-MS-Exchange-AntiSpam-MessageData-1: jC47PMuSFUR24VjbcXIQYVxFFdfIqmNWEZ4=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4589c504-d386-4b3a-bff1-08de5ce85af3
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-OriginatorOrg: ericsson.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2026 14:36:56.2714 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CJmgtx3OHyBNATHdS2JR6h8OCmntEyYA06KN7kuy6WTVLIq2ndOc3i8alJN89cvdNdqXNFUElRPv+pdSXsdKk214iSugya8aeqaGVBdAKiA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB10748
+X-MS-Exchange-CrossTenant-AuthSource: DS4PPFB691D9211.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 518d6b9d-843d-4d0d-2870-08de5cf9dd8d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2026 16:42:16.6268 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 92e84ceb-fbfd-47ab-be52-080c6b87953f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7Eu0sVxEgbGYoH23TcrVF43mbCjk5IuGEk9d0IWJu2ntNgZLMVy42jfzNCQVv2DioBhBUHWQRc6+sjqzwSmdEexmgCc8ZTdTDiT6a0dZ3hU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PR15MB6777
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -185,50 +171,137 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Matthew Khouzam via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi,
+--_000_DS4PPFB691D9211B0432FC71D96571491B79E93ADS4PPFB691D9211_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-This is a release announcement for liburcu 0.14.2 and 0.15.6,
-respectively for the stable 0.14 and 0.15 branches.
+Hello everyone,
+The Trace Compass project holds monthly online meetings to discuss the curr=
+ent state of the project, ongoing development work, and upcoming plans.
+These meetings are primarily intended for committers and contributors, but =
+anyone interested in Trace Compass development is welcome to attend.
+Schedule:
+The meetings take place every second Wednesday of the month at 10:00 AM Eas=
+tern Time.
+Location:
+The meetings are held online using Google Meet.
+https://meet.google.com/rsq-gzem-tkv
+Calendar:
+All meetings are published in a shared Google Calendar.
+View the calendar:
+https://calendar.google.com/calendar/u/0?cid=3DdHJhY2Vjb21wYXNzQGdtYWlsLmNv=
+bQ
+Subscribe via iCal:
+https://calendar.google.com/calendar/ical/dHJhY2Vjb21wYXNzQGdtYWlsLmNvbQ/pu=
+blic/basic.ics
+Subscribing to the calendar is the best way to stay informed about upcoming=
+ meetings and any schedule changes.
+Agendas and minutes:
+Agendas and minutes are maintained on the Trace Compass GitHub Wiki (https:=
+//github.com/eclipse-tracecompass/org.eclipse.tracecompass/wiki/Project_Mee=
+tings) . Participants are encouraged to propose agenda items ahead of time =
+by editing the relevant meeting page.
+We look forward to seeing you at an upcoming meeting.
+Best regards,
+The Trace Compass Project
 
-The most relevant fix is for the 0.15 branch, where urcu-qsbr
-and urcu-mb flavors were missing a barrier between store to
-update the per-thread reader counter and the following relaxed
-load of the futex waiting state.
 
-* New in this release:
+--_000_DS4PPFB691D9211B0432FC71D96571491B79E93ADS4PPFB691D9211_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Changelog:
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+Hello everyone,</div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+The Trace Compass project holds monthly online meetings to discuss the curr=
+ent state of the project, ongoing development work, and upcoming plans.</di=
+v>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+These meetings are primarily intended for committers and contributors, but =
+anyone interested in Trace Compass development is welcome to attend.</div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+Schedule:<br>
+The meetings take place every second Wednesday of the month at 10:00 AM Eas=
+tern Time.</div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+Location:<br>
+The meetings are held online using Google Meet.<br>
+<a class=3D"OWAAutoLink" id=3D"OWAe86685ac-2ffd-a267-5580-1df07c75bfd4" hre=
+f=3D"https://meet.google.com/rsq-gzem-tkv">https://meet.google.com/rsq-gzem=
+-tkv</a></div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+Calendar:<br>
+All meetings are published in a shared Google Calendar.</div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+View the calendar:<br>
+<a class=3D"OWAAutoLink" id=3D"OWA86c67b98-944b-2fd3-e0ed-49cf3e58b1d2" hre=
+f=3D"https://calendar.google.com/calendar/u/0?cid=3DdHJhY2Vjb21wYXNzQGdtYWl=
+sLmNvbQ">https://calendar.google.com/calendar/u/0?cid=3DdHJhY2Vjb21wYXNzQGd=
+tYWlsLmNvbQ</a></div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+Subscribe via iCal:<br>
+<a class=3D"OWAAutoLink" id=3D"OWA2c3614b0-82a3-727c-0032-d9dfcd66c3e2" hre=
+f=3D"https://calendar.google.com/calendar/ical/dHJhY2Vjb21wYXNzQGdtYWlsLmNv=
+bQ/public/basic.ics">https://calendar.google.com/calendar/ical/dHJhY2Vjb21w=
+YXNzQGdtYWlsLmNvbQ/public/basic.ics</a></div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+Subscribing to the calendar is the best way to stay informed about upcoming=
+ meetings and any schedule changes.</div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);" class=3D"elementToProof">
+Agendas and minutes:<br>
+Agendas and minutes are maintained on the Trace Compass GitHub Wiki (<a hre=
+f=3D"https://github.com/eclipse-tracecompass/org.eclipse.tracecompass/wiki/=
+Project_Meetings">https://github.com/eclipse-tracecompass/org.eclipse.trace=
+compass/wiki/Project_Meetings</a>)
+ . Participants are encouraged to propose agenda items ahead of time by edi=
+ting the relevant meeting page.</div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+We look forward to seeing you at an upcoming meeting.</div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Aptos, Apto=
+s_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-s=
+ize: 12pt; color: rgb(0, 0, 0);">
+Best regards,<br>
+The Trace Compass Project</div>
+<div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, =
+Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+</body>
+</html>
 
-2026-01-26 Userspace RCU 0.15.6
-         * urcu-mb: Add missing TSAN annotation to _urcu_mb_read_lock_update
-         * lfstack: Coding style cleanup
-         * urcu-qsbr: Use CMM_SEQ_CST_FENCE for _urcu_qsbr_thread_online
-         * urcu-mb: Use CMM_SEQ_CST_FENCE for _urcu_mb_read_lock_update
-         * urcu-qsbr: Use CMM_SEQ_CST_FENCE for quiescent state update and offline
-         * urcu-mb: Use CMM_SEQ_CST_FENCE for _urcu_mb_read_unlock_update_and_wakeup
-         * Fix: Only include linux/time_types.h when __NR_futex_time64 is defined
-         * Use __NR_futex_time64 in futex syscall wrapper
-
-2026-01-26 Userspace RCU 0.14.2
-         * Fix: Only include linux/time_types.h when __NR_futex_time64 is defined
-         * Use __NR_futex_time64 in futex syscall wrapper
-         * Cleanup: Remove useless declarations from urcu-qsbr
-         * src/urcu-bp.c: assert => urcu_posix_assert
-
-Project website: https://liburcu.org
-Git repository: https://git.liburcu.org/userspace-rcu.git
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+--_000_DS4PPFB691D9211B0432FC71D96571491B79E93ADS4PPFB691D9211_--
