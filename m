@@ -4,147 +4,142 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A26D210F9969
-	for <lttng-dev@archiver.kernel.org>; Wed,  8 Apr 2026 18:28:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4frWmP1Dj9z1G88
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1775672935;
-	b=nA1iHegTEorCCjk4CTaVi7JFIvrXf2DKOE80my7ybHQTW4HuoDaDfoY9pb9yD2gphzEz
-	 sKJmK3srp2aDZxffN7OpnHsaIuXhDzDPksqRcVLJEevRbUiLhRK/L7R5UY2Zr3OBsnrw8
-	 iymdWrAglDTKtAFMebZWsxHlo5Y1C3xyTbZAIeZnLk6FLDI5vPrbmTbA5zuMbqDM0nUMz
-	 uyhn3hJvyp3TZiL85IGoN87yJSklWKSxsA3yWIadc4jZ4BNnjk4YqahPdFIuOE31TTlIS
-	 6nDq0ztgCOcMdAWOTsgZFnC5lvdj4rWZ7DnkqrZ+uPEPtpMtvqrt5SdNoFC/Zfk6DpQ==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1DF9FED3F2
+	for <lttng-dev@archiver.kernel.org>; Fri, 24 Apr 2026 19:52:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4g2NsR1vwfz1s7G
+ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1777060349;
+	b=mChKiSpSpSmviVbbsR+m28Xw5vomiObB/57EY4h+y/716Mvtt/EoGeEfBnoXtiA4ZPyM
+	 wbOb7pGRlPlIH0cvqUK0AKX1VUQbaej4AFHFjU8wP2jny6tLvAksN6qMfQnacuyvwlw8D
+	 zqWczTCLS/M/M+X0b8e93mZVdWQqJeEnE8KCE8qRN7zxNTkTKTa2Fy9uh7W8fyADyP/MF
+	 1hvU0HhM8+4xcHYQYZ12ToliYrs7fCFtrd2y8KXcqVXJ6ZV3/kZ57AiisYM3vm/Mcjxvf
+	 dPMMH2vQo29CsX6wH3TIAMsM5HBwjR7fgq4PZoP0M1N7Vm/l96jFqTziIVH/lh1dHlw==
 ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1775672935;
-	h=DKIM-Signature:Message-ID:Date:Subject:To:MIME-Version:From:From;
-	bh=zOdMyNslianbh/v1EIlj97LHocMvRqIHVku3zlfaPDg=;
-	b=fhgJNAreq2sropRBCdSHrHB7PcVMEmmIP7YbOFjWgVKhGBaVKAYBHKYaBHhKGQwU9xMp
-	 eKkdsTYgnm72tvWAPFqyOGXLPvpFhK6LTYN+d6PB7pIo3fWx97XooASJ8tqkQYDSZDxap
-	 ZDwuzjN5VLZVbVNHQ652+Ovdhu9zrXvoP6hpTFM0maYVf3l9Abve5Ea9aT9UdbpKxL5jN
-	 C+JtoXHNmrKd+cTDbore4TACBC+wW2LW76YUJSf5K1jBNZ5JFckJIFcBjYRJjfCz/0A3d
-	 h/TFHggDZA4rhOo6753l5s+ikK/LA7KcV+o5zfL6vlV5y1BJBlbMXXbh0hTEwwBjADg==
+	c=relaxed/simple; t=1777060349;
+	h=DKIM-Signature:Message-ID:Date:To:Subject:MIME-Version:From:From;
+	bh=6By0bKkyHsv5AeuP1tvxt3R4j+aWxAEmbhcC6aTG0Z4=;
+	b=Ce58g4TNeO6/KHmoVHo4fOL2+1UvI+VveQlfcxqL6vZlD/dhb6WS3TLVIo/KxO9Hrebu
+	 QvQi42IlyvxdLRrdVGESwxTOor3T960boIGRM70JqY4WebzhaBXivKUOKYw5EIte1p8I2
+	 SNy8MIdoZd1J25I0SMmNeImA3Z9USQCmmKAoaLi5neSS12GnKJYE31Rw0eedrob7KC0TX
+	 l7knuDk7PkgE7gQHHI12j1iTcHbvy9Cp9eixxasW2Zsk8oT8RW89kJJiay80a0ZP5wVEj
+	 xHbYXyLp+kB5mJEPM/zuWrXsm5TwF7eLCzPBhnzOAIFTlFOyoc3VLH4OpxyKpiEL4dg==
 ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4frWmP1Dj9z1G88
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4g2NsR1vwfz1s7G
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lists.lttng.org;
-	s=default; t=1775672935;
-	bh=aGQyXMezIxIkI5hmvqqFKWglZTsqLcZ8YbYXHhjWor8=;
-	h=Date:Subject:To:References:In-Reply-To:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=XHk8U/ZFqvu0qzoxDqXyqnD5cGSS2HR6XYO89BTeI/+eHUl+ukGA269q4e40QIbSl
-	 xRsfj8DQ3RGO4Q0bClC1SnwMUJ7yybj+X4A5acbCjv1NpqDyXyDsTiaDk0e9gAkwYH
-	 5FO/8MNHHXhsMZMlIfvDpyOu8g1Y8qZbm+DJiPXDo5nEqxz9obJ3q3k8As1Jy6IWNn
-	 MGCLDs6LZweXLgnDKiRsFD1RBcDVJ3bIkr8Y50jJRp/dIQqymMKRPO/vcxs7rE+ZRk
-	 mG4jGiHzbb9TqvMPmKsvamjjG62BanVhijfpakBMMw+po3VqqtYJf78qIexQQbAS8o
-	 PDtXckN/4q0+w==
+	s=default; t=1777060349;
+	bh=sAP7eT8/PoHkFPUGIn+ygwYcu3+wx+SXcH33/MTmQtE=;
+	h=Date:To:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=sBMxKKTn5Y25mAqy4PlFBNx4hIb7YF4+TUlGDW1hsmivxkvN/RX+rLXn8F3hQRVfm
+	 1SygyYF/AV4RDsuhJlsXDFmGZDAcY+V1bZeZai+ETNk0K1mO1z43r7ct2wDhXKC4w7
+	 e9v334OiWEEQGw8JksofkrzsaC5N/E58D1pxohWNr7txUsjmYyFM4hquEgAbS3QSh/
+	 /D/4ROeSO3CMXNBS5T0dTkhhT7/YV447f3QZqV3dURS14jhM/Z49k/jcsZOcYVw4DZ
+	 06+WWNcPxtnIs/MYX0fghMTdzCEvZw1f/7gTX7w0QGzF+vYBB7Uu8pFCyYEtrBph5v
+	 zKhU/X3BgHL7w==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4frWmP1Dj9z1G88;
-	Wed,  8 Apr 2026 14:28:52 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4frWmL5MQDz1FbK
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4frWmL5MQDz1FbK
+	by lists.lttng.org (Postfix) with ESMTP id 4g2NsR1vwfz1s7G;
+	Fri, 24 Apr 2026 15:52:27 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4g2NsP2RTVz1sS3
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4g2NsP2RTVz1sS3
 Received: from YT5PR01CU002.outbound.protection.outlook.com
- (mail-canadacentralazlp170110005.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c103::5])
- by lists.lttng.org (Postfix) with ESMTPS id 4frWmL5MQDz1FbK
- for <lttng-dev@lists.lttng.org>; Wed,  8 Apr 2026 14:28:50 -0400 (EDT)
+ (mail-canadacentralazon11021105.outbound.protection.outlook.com
+ [40.107.192.105])
+ by lists.lttng.org (Postfix) with ESMTPS id 4g2NsP2RTVz1sS3
+ for <lttng-dev@lists.lttng.org>; Fri, 24 Apr 2026 15:52:24 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MIAbLYG2Lk5g4h4CkMoQ8SFeF/QbZU3Hb9k9G311pnNg2lhbtiGzSCFZaG6J0mTgSXv4z7YcXthKkTLfYnivNilIfJyLyBiU2S3f98wxxDU/BGQbVZepHm0M7l0TjFF4Wtc3cW61IK9Zi0gpEE5SmYAhrd4hkcvq0pNe8VjjDFeNu6OsjTNIBDEcC8kOKUoez9m6JzC4Zs0mYibopvJm8skV7+ehvMqAPF1pDCjdO8CHCIFLPQ1293kVJGcy6psJfnbWWBnI+HBgHkfrsWQSSwB7SOZ2Zk1O0DxUWOfPOdXJK8nqB0sHy8gfN4HVVCMu7Z8mQskLP7vtpvb9evzz2Q==
+ b=HkOuaQWwQKKn6FTtGMb/jtkvZrdgPbO5vwVDfNdN3pCaMRwonaiWLa5gU9311amOx3fJTboNbq8JlaroSmFN5ZaIpxwwKJdZKpPazzyGnNMkF1ZaMGS98q6uDjPO4qHCC1HFaNbJP0YcLZtG/5nfUR7Ap94qcoIyqv+w0tSaHrNGL360kgxx1S5HncDd8J8w0lA7fzm+S9Ztgu+mrjW87TP3PULyp1jL603s+sunq3R7q5HCOkO5etGKvN91CTJFmFvLUOc/eESl94y2BwkNtHimTw1bf4kZo5FOVfEjVh9xHVtjz/cK07DNM7yoMZGwUeDQbmXXTJe+nfkaIWD6tQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aGQyXMezIxIkI5hmvqqFKWglZTsqLcZ8YbYXHhjWor8=;
- b=xgv7yHwCknCWaWkoeaz/0NKGIvWQSgfh8xla8BiDQLhnwr6CdsDnkRrE3AcB3siUiU1/c0yLAHOPN+2VfM898V7lOExTVhGYY71XuBhy2PwUilRjhDH83BZvbGkdGRtcXqUHsIKpwJIulq+6F5r924vFbu/EG/YAfA5BB2r2D1dHArjC2N/uJHBYyhlCTd+0LB/clH0KDOt3UUThJjK70veB8WRSZO3Xd9c2N9ONIBEKVWWWKOLdHkai+YA/I6WD6fbIqdwjLEFEc5aRNaSooA5Q4O+CFEsimgTlI9xDx+LWJ459R02Ifr+fgXgfc28rbGlw5CSstwgUVjYfUe8pBw==
+ bh=sAP7eT8/PoHkFPUGIn+ygwYcu3+wx+SXcH33/MTmQtE=;
+ b=L0aj3snNNmvEND5H374cpb4fEbApZm9YWMJDIqn+HxH67yUBq7XFU/cZUQmqY3PDZgukW3cR1G3h9MlsU9WUnxYLuYFrygTnYTZnf9nHd4saq1S4vJaA0/TSGZPKPKPBTk1TzQl+BSkC9Wif8xyLEbrnne2FdcxWbT4F+8D/e1XrfF33zBKsslqAYqwuQOJiJpJU04ntcbVV3Q4WjnxbzsIddkRwFS/AEbEVbxobUpbcG2dneXJwJJ2Y6Xnh1BTr034jRgzCgvk+/oso+xegCcJKjg0c9FUvLyd4SVs5fHF0eRDHzUfGd7MQyGMu3P8AVzzsOslr2JgG6WovDg9TZQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
  dkim=pass header.d=efficios.com; arc=none
-Received: from YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c00:42::24)
- by YTZPR01MB12072.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:175::13)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.19; Wed, 8 Apr
- 2026 18:28:47 +0000
-Received: from YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::4c7b:7dec:7e59:918e]) by YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::4c7b:7dec:7e59:918e%4]) with mapi id 15.20.9769.020; Wed, 8 Apr 2026
- 18:28:46 +0000
-Message-ID: <b2f2c847-95da-4dac-b294-0b5e21d912c0@efficios.com>
-Date: Wed, 8 Apr 2026 14:28:44 -0400
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT2PR01MB6350.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:4d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.22; Fri, 24 Apr
+ 2026 19:52:19 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1%3]) with mapi id 15.20.9846.021; Fri, 24 Apr 2026
+ 19:52:18 +0000
+Message-ID: <7192935f-d79d-4bdd-9716-6a2a01dae7ec@efficios.com>
+Date: Fri, 24 Apr 2026 15:52:17 -0400
 User-Agent: Mozilla Thunderbird
-Subject: Re: Question about LTTng Kernel Probe Tracking
-To: Amir Najafi Zadeh <anajafizadeh@cs.stonybrook.edu>,
- lttng-dev@lists.lttng.org
-References: <CAOQX81c_1OGMybWoc3axCVZGk58q9aefxpNS2XTny2K8cy_65w@mail.gmail.com>
- <4a6fd540-da30-419e-b311-1fdf17306cef@efficios.com>
- <CAOQX81e-YGCktrjYwdwDAe_5uRmP5=GaYPBbWm1EiMDnuG0aaA@mail.gmail.com>
 Content-Language: en-US
-In-Reply-To: <CAOQX81e-YGCktrjYwdwDAe_5uRmP5=GaYPBbWm1EiMDnuG0aaA@mail.gmail.com>
+To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org,
+ linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RELEASE] LTTng-modules 2.15.1 and 2.14.5 (Linux kernel tracer)
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT1PR01CA0096.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2d::35) To YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:42::24)
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4PR01CA0320.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10a::13) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YQXPR01MB2357:EE_|YTZPR01MB12072:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4926ba14-6cb7-4a3d-0a2b-08de959cab76
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT2PR01MB6350:EE_
+X-MS-Office365-Filtering-Correlation-Id: 65a8a949-71aa-483b-9651-08dea23afdfe
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|366016|376014|10070799003|1800799024|56012099003|22082099003|18002099003|13003099007;
-X-Microsoft-Antispam-Message-Info: SyOreJPibsgxsE51qtGi6lkuPKeRmvbioDdM+dOGiqKKcB0FWhKNyDHJyW8aBKf+SBDrdUa/K6w0axaYy4DWd+yByKF9SCWsYd+o9TkYmY0qW6VtUYgvvLUa6/lAJjhu8Tv0ziqGggveBG6tAMe8fNW90irwQZhsfStc6hcHCjNWgDlJ4s2/QSLSYVxGF7vkVDJFSCBl6zysieKpXpgAdHpO0oXJsMti/nzi9uU6ALHif44Q515uUV7qcZQDd1EnBqdMsNPpjKO+si+9wCPh3jia/Qqt43hAqx0uukqcMMuVRK+/psAWSZ79Rqng/Bp94UhBzECu8g8qvZ8EjGJsKtq1dyNyHswHFZFn2wiVtbJ1OqUmsPzn8l0G/Ldb9q/hG/ajQMdfjoGMppLpHFn1p04De2I75O44ZyXerVoZO39N+vz4Nqvdp++Yw5JCoXRHf7LjCAhob+N0jKmcNeB36+OhXPsDsqI3fuJTqCloH312v7T+Hm/ALUga9HaOlztvATTrfBJ38bMd+yBRue3ItcIirt7PzGTFMPI+JjdAoq6Dukytv2b8GMnYKLpR8ufEaW+K61Tat93cwFwXwMl+ma9TdI0cA/p8E828c0zLFDmotjdvNPBQ9eEuFuMaBu4rog1Bws+m92On27wlMYoZHlYCA/AvJ4UjYOX8O/LFToI=
+ ARA:13230040|1800799024|366016|376014|56012099003|18002099003; 
+X-Microsoft-Antispam-Message-Info: d52vYDj+deAEvwv4k+ojogcRLy6jGTR9Gzyw1FacIMyA9tUQZidFf3xqjQtZ+2vbJSECLfVveHqsqXM9rYqJ2k5BeilUEXoGXFtvUvhr2VS3wTUfWjyYhUDTfOGHkkd14zBm0iDiAwfouF9y8OdmpbnE8M9DXpQQZwaO8zgrMfatNXvQXlEKoEEEQf/yc629+aQN/C+bvarAa50QPTb2j00LVH6Yz0VTHn2FOzWI8SJUg3ltLnOMpZAt2kAJahRk3BCloImipjHb+9HhmoZP3cMQ3A9cXVEf8Mr/OPWnJI2BkiWY3fwsip4wmfE4cca8d02EpaItdv3CT5IkIxdJbQoP12vxV3Brhr3y2zKgO6pEGvddmgtvMc7FeHO/OZtNqKLWVXTXzimZs/X8bzN6kIFgM1uztnSMkbiAlyv5yoCfK9gmZ4Jhi5Qp54Dwg1ajS3H8infXaB2+pHXSUXnBEcoLX6vl7BhkdxkPCfFl+UP8tSAYstEvbDHdDsoclP56zmJHt9ze7wTiSsL7dj+B0WOhN3KAELE2+XMdST7YDBzTNZ+eUABy+k0h7NJOawhrDVAtlQHOqNw08yXm5VOKgWBddHpKsLZkGJao3y8rno4gwwygS7SjN9lfRJOuW+f5CIhIKNtzGzJGMivycOiBQd1rcgW6oqKoyFPNfQEi9PE=
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(376014)(10070799003)(1800799024)(56012099003)(22082099003)(18002099003)(13003099007);
- DIR:OUT; SFP:1102; 
+ IPV:NLI; SFV:NSPM; H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(1800799024)(366016)(376014)(56012099003)(18002099003); DIR:OUT;
+ SFP:1102; 
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K2xWY2h2V3lyTUl3a28vQy9RbUsybDR5blBhc2hNMG1FQ2hpd01kc2U4azho?=
- =?utf-8?B?SXppZGpVMnJzMk10citZTWZjSXN0YjZpVzFnSnlick95LzJjQW44cTVXZ3Y3?=
- =?utf-8?B?N0xCY0g2enVYMm9zU3hrN0lDNjAxZUVCakY1bkR6UmJaRnRaOXNkUjBlVHlS?=
- =?utf-8?B?REFGQkVnK2o2SkJBVlpvVC9pdTlxbGRROEJ3SFhMNWNGdjlsL3lZb2Z6K2Fq?=
- =?utf-8?B?TUxiTWRPajlVZzhXcmZ6US83SlFHMGd0VXZ2TEhqcitGMkJONks0bzMycGFI?=
- =?utf-8?B?Sk01NEMva1VPcklvcWpqWjYvcXFoVUwrOVNNVWdFVnU2MFpNVWVCemk0b0lk?=
- =?utf-8?B?V2N3R0VOMTlWcjQraURQU0tHOFRodUpnVHhSQWtIbUtzNmNGQ2xHN01ubGxv?=
- =?utf-8?B?cGthMWtjNDVxenpWSUwzZXJDa3EwWDhGaGlyTzJPQUFZQk5DWm51aUlyNE1w?=
- =?utf-8?B?NU9XZEVJWjJpUGh5c0pjcHF6MWRsdHlhaS9ESEtuZFgyUEZzbDlLenpDcDVa?=
- =?utf-8?B?ZXNpdTVsMXdRbUsvR1djZWZVYW1SbXdLa2ZSZHF4WkN4bEo4ZGRsekN6cnFC?=
- =?utf-8?B?dzFhS3BvVHduL3lMb25EaFVlZ2V2YmVacy9tN3ZDSUZ1a29FOTR5K1A5RU1M?=
- =?utf-8?B?Q2ZiWlBxTnRsSVdQYmZadWZsdGh3NG5ZZHJRWHdaSDlZa3huN0JiNzFyeEJJ?=
- =?utf-8?B?TVFxVFVTZnowYURtbnNTblZmam9oM01BVVVPLzZOUGlkaTd1QllzTmZFWHB4?=
- =?utf-8?B?dG9sVHhydnlwblE0SG9tQ29qOEtIYThFbXJMUVhXNG91RzZWNEFUTHBEdDFR?=
- =?utf-8?B?MnF2NUR4VVJwejNZNTRCUEcrT3VBT1pUWG54RlErRUlQeVgyQ2p1bWxpR0po?=
- =?utf-8?B?WjlNOHh4d0oyVnlLQmlGZzQ1RjZjMjJIeTJnRXBRQ3MxWThZSEhwdyt2TGU1?=
- =?utf-8?B?MUZhbzBEenhXZUI0WVIzSEZHUWVkMCs1elF2K2U1bDhEeHdXS2N4ZjRoV3dK?=
- =?utf-8?B?U0lyanNwT0pSUXk3U1RXcEFHeWtxMGFGRzY0RXZMN1crSnlpR1dCSXFGbUVt?=
- =?utf-8?B?M3Ercmt3L2xUTFZYVWUrMGhIOFhSTjAwUTEvTFZqZ24wZnVBZ3RZaG8zYWxu?=
- =?utf-8?B?akJxdGlwZVB3dFQ2Q2JvTlRQWFhLb0plWm42Zzl0QThaOVRGQzlMeFI2U0xP?=
- =?utf-8?B?QjRmNWJiY1NxQkE1ZWxJbzd2cE4wcE9lcHljejJsVGZ3OUNGVDI5dThlQ2NE?=
- =?utf-8?B?aTlRMXpCZEszWHk1WVJ5dFF4U1RpYjVWR3ZQQWNtQmQrcUo1OGd6UlNwdi95?=
- =?utf-8?B?V3lkM29jNUh3TCsxOGV2UlgwZ1hIWUZuN2xHZkRMK3B2U3ZGbkRFRjQ0M2RJ?=
- =?utf-8?B?ZTFMQ3BJMXEyWm1Nb0M3TStiaGxucFgzZjRKSzNiVDBUMXB5dlk5QUJnWStQ?=
- =?utf-8?B?cXJEN0dxaDI5WmEyeW9TK3JrNUlRQUxNUExGNjZqVDZjbXdRQ3ArZTRoWUxZ?=
- =?utf-8?B?L002OXhzQU4rYVV1ZEs1SnVrblNybzhNczJBSGlXclE2S0ZSYXJuSmdhZXZs?=
- =?utf-8?B?RVY0dHpVWjdEb2JuM0ZTaitwZzkrSGhKd3pXdldIUlVQQldOTHdxNXpBRjlD?=
- =?utf-8?B?Nm5sbVk5bXBoQkhwQ0hmOUFNWXR2bzZEenBxYmF2cDNJa0NmVEhoUjMyVHVj?=
- =?utf-8?B?Tm9weHBLd1RsRyt4cDNlMEhhZDdJdnZZTjVUdW04a0c5T0hwejJoeFhSSFVl?=
- =?utf-8?B?dHZLM3hqUGVRcmVmQ0hSZGF2YW1lQ1c1QmlYTnRUMnNXanNnMEVIRFdaMjZs?=
- =?utf-8?B?NmdEMW9UMytTWW1JbTN5N2htQWZzMkdXc2x2V0h6ZTVidUNERjdhaG5SbzVL?=
- =?utf-8?B?UGVZWjNtR0pSQzNWcmJwM244WHM2ZXJxUmt3VzFMV0s5NEQ4WHdXYk9BNGIv?=
- =?utf-8?B?TXkvQUNUbW9yem54Ryt0R1YxYjJmZTA2RUtkQjViaG1EbEJsM0NLeTRIUzVS?=
- =?utf-8?B?d2hwaWhRU09GbHRPajdZTytveGw2Qmp4VER0WWd1RmRzc2lVMXpsQlRYU3Iw?=
- =?utf-8?B?MENvdFExcTJ3MmwzWGpyb3Q3V3BwNWRWT05TZURtbERTZFdYTkZhWFdmaFJZ?=
- =?utf-8?B?ampHUWU2MzZ6RnhHWnpjTXBWYnljem55WTlETGREdjlEWVdPTEhFN3RZUkZm?=
- =?utf-8?B?RTRZa1picTliNUVPVjFnaWc0L2svMFpYUDgzM2YycUJZbmZtb1ZMOFFaUER6?=
- =?utf-8?B?b0pOUFFKVENzc3p2cGl0L0hYdGZlR01RelNZemU2Y1dKRGpkbkxyZ05UVkZp?=
- =?utf-8?B?T2N0Qlc1QUFuRkNWbU1GZnp4U3NDdmZuQTd3Q1hGUk9VTHVKRmJIY2s4Yjh4?=
- =?utf-8?Q?086bSQ4xdJzRThc4=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NXZqYXZtWUMxcFZjdmVtbzFpaTlXQXhoUUh4NmJmTWQ2ZGV1MjR1WXNmd3Ez?=
+ =?utf-8?B?Y2h5dmVTd2pzVXEwMHRxUyt0ekFhNXlIalFOVGhFWG1CdzF6UGVCQjFMUWdC?=
+ =?utf-8?B?UmpqbVpMNkxOTkptVUR2TS9KS3VSYlVSSUFFNGgrdEpxRWJzREdNeFpnbDJv?=
+ =?utf-8?B?b2dpaDB4UTY2V1ErcnBrWlpVVi9tYm1VZjMrUWpabWJMZkt3a242TXlyQXJD?=
+ =?utf-8?B?aWZHS2NQdHZ2ZVNoVXkvckJ5V285eHR0SGVuQlFaKzV2aFdSc0dyanBDYWY0?=
+ =?utf-8?B?ckI0SE9aYVVxNzVTYUwvV1hDS0R6ZEFKZmFXMkVuNFpuQ1NMRWxkWVJ4Ynlr?=
+ =?utf-8?B?NUZHNitsbWJIaG9tRXNIczJHakpvK0pQajVESXV1Wm5mN2xXNDlOVWxtK1JM?=
+ =?utf-8?B?SUFSVSt0K2JCN3I1M1NQekJMbkN1QTlVeDBLYjFaT1hUUlFtRHVvdXk3Wkw4?=
+ =?utf-8?B?anJ2VStSSW44RWVYWklia1V0Tng4Y1FyYmVFNUxvWXp5UmpFdkU0M2xqWFZt?=
+ =?utf-8?B?V2hYVDVSS0NNUDVIVDNHSHl0K0NSR3R4NDJZK2FwWXZSckJ1SDU2SDdjUGlj?=
+ =?utf-8?B?V0owNUJsTVk1dmFPZkxvU0FGTzE0ODBGZlFWM1VvRC9IWVV2V3o5U3FaTUhZ?=
+ =?utf-8?B?bUdLUFR0S1JEYmE3aTQvWnR6czl2dDhxK0orRlhRVGlURm9POG00Qi9Fbkcz?=
+ =?utf-8?B?UFg0emJTSFUyRHdnWVhWaFIrSGZlMFoyZmRCbXBCb0R4ZXZzT0grbGNIN2dp?=
+ =?utf-8?B?NllnaWVtMUxlZW9KODdNaFlLcWN3OHVheUc1SVRzL2dndVR3SlBtYkMyOUJk?=
+ =?utf-8?B?YWdwQlZPQTBrZjROZ1Z0QW1QWWhuNmp2b2xTdVdUU2hycDFoV0UvOHY5Vi9X?=
+ =?utf-8?B?RFNhSFFkYWNBcUVjdWRyaUxOZTBCaHZDK0xNcHlwaUdWRlVWRm9PY3NRcW5O?=
+ =?utf-8?B?eTlDTW13bmErQ2lkdkxKNzlkcDdoaTdHaVJDY1o4RDUrelpGTENjVDJPQkpv?=
+ =?utf-8?B?QjZvZzNMZjNPSmEzV0ZEM0w2b0FSTFdWVkE2MHliV0FycmdkR3RPaEdDVXJo?=
+ =?utf-8?B?cEhQcmgyUTdTNEN2RlJSZUpJd2dXbGZsWkVBbThHcU5lbE4yWDJxS1BkRi9y?=
+ =?utf-8?B?K3RHRGZnMFJscEI5OFZ1eHNrd2lEeTd2Y2pPZFVVZUJFZFNCZ2VTeXBFdFZt?=
+ =?utf-8?B?MDc4MWJHRTZweUp3dE9JakZJSXVZRTFlNFY0aTRUV3NvTk9mYVQxbThqN0kw?=
+ =?utf-8?B?Ry9vWEZWTzhEd3BnblJ1dWtHR2FycXVlcFkvMmFZcFR1eVVHV3liRnh6K3Vv?=
+ =?utf-8?B?QlI2eVl1SDR1Q3BXY2JRRUx4QUhCRy8rSWhKZUt2dzk1d21oN0FnTDZPZzVh?=
+ =?utf-8?B?MHovZVJkeUdydk1rWGl2eWI5RXZBMXZsWDJOSXZNbkNOVGc3L3JlQzZXTmky?=
+ =?utf-8?B?bFVvMURnclcrZVpuY2FHaEZpSHRtek83dGp6TjlPakxLbk44cGN4Nk9iUjBZ?=
+ =?utf-8?B?dm1QbFMvbzMzVVFBNzQvWVk2WmxjRU5FUk8yeVRXcld2alNUWnN6bCszMlFx?=
+ =?utf-8?B?YzZ6QkFZQ2E2T2dLdU43Q25xWG9qYmMyS1Y4dnBERDZlMmlnTWYxbk9GdE9V?=
+ =?utf-8?B?bTlyV1c4R0wvWW5rMDNYQlFMOWlVbFFmNm1JRVQxSHRpbk1aa0xjS1BsSFBO?=
+ =?utf-8?B?REY1aFJrTFV4NDc4OTNVL2xabzdLMGQ0d1dVT1JTOXpzSDlrbHJOUkdtVnAw?=
+ =?utf-8?B?eUZyU2J2SXVmRDAvek5tMGlnYXgwbzBjaUNQTjk5RjNuMVd3eS9BQWlXRVU2?=
+ =?utf-8?B?RlkxWUF3VlVPdFJBOTVBM25JUWxvNnVLYUZvNVM1Q1BFbmRmQW5WQitMSmd1?=
+ =?utf-8?B?c3R2RFk3cE9UeGJnd2w0V1ZhTk91akY2dlJvRFd0MTBoTG1mNklDdjNsSFQ5?=
+ =?utf-8?B?dCtURCtjSFN4YUNkQjVmeFFqWENhamZybUdRRUNMU3pvS3RqQ3Yzc1FuUFNP?=
+ =?utf-8?B?U1VqMGxLUTJzK1FoeXpvekd2U0xDbDlOTlo1akRwbk5EakN2MXVMWldqbDNj?=
+ =?utf-8?B?U1FyaGVFTmkvemk2TUZMbk42V3Q5cEVuZXRVOEVOSEpoQ3JNVVBlbnZBSzdq?=
+ =?utf-8?B?andVbUpEakZ5a0FkL2tBNTIxNHNKS1c5YmFZNGpsOENQSXlYRHEzb3F0VThv?=
+ =?utf-8?B?RGhTNWdyb1BCaldHNDNCYjA5NEIxek5JUkJxUnNuRGJZM3Nvd1AxcjdSZXYy?=
+ =?utf-8?B?bEFVOFRDQ2NIWGRHak1HR0paNzdxKzNYZEV6bDRVUm1DNnBFUEZIRzRDdFRV?=
+ =?utf-8?B?ZWk4M0hlSnZVaDJJUU1mTW1WTnNUekcwQkhXS29ZSGZmSk1ySU03bktncWcy?=
+ =?utf-8?Q?5ocPXY5I0llxEKc8=3D?=
 X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4926ba14-6cb7-4a3d-0a2b-08de959cab76
-X-MS-Exchange-CrossTenant-AuthSource: YQXPR01MB2357.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65a8a949-71aa-483b-9651-08dea23afdfe
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2026 18:28:46.5338 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2026 19:52:18.8462 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X1XFtQBKG1rNmursoudIhIKf3NT3nCISibtxoq/Nysy9LdCK0YGZ3E2aZQHa91jDpA2Ja+YwZO/CrEHOulPlfQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YTZPR01MB12072
+X-MS-Exchange-CrossTenant-UserPrincipalName: PNZrloyVRieQj5aLe3lpWRf1DI97jnIWUFEhai5MnSvQcAQZUhQJr1SWV7BksWa0HshufLUpU+YY4hIbhCGtmt+2ePX1VkzetHzbetnD+WQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB6350
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -156,164 +151,44 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Kienan Stewart via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Kienan Stewart <kstewart@efficios.com>
+From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hi Amir,
+Hi,
 
-On 2026-04-07 11:14, Amir Najafi Zadeh wrote:
-> Added LTTng dev to BCC to avoid spamming.
-> 
-> Hi Kienan. Thanks for your response. I tried specifying the session 
-> name, but nothing changed.
-> 
-> Here is the output I get after adding the tracker:
-> 
-> |Added 1002 to the group ID tracker inclusion set|
-> 
-> I don’t think the session name is the issue, because I also specified 
-> the session name when starting tracking. This is the session state after 
-> creating it:
-> 
-> |$ sudo lttng list lttng-gid-test Recording session lttng-gid-test: 
-> [active] Trace output: /tmp/lttng/lttng-gid-test === Domain: Linux 
-> kernel === Tracked process attributes Process IDs: none Virtual process 
-> IDs: none User IDs: none Virtual user IDs: none Group IDs: 1002 Virtual 
-> group IDs: none|
-> 
-> And these are the logs I get:
-> 
-> |[11:01:51.222277079] (+0.000004846) dhcp15 ext4_get_inode_loc: { cpu_id 
-> = 3 }, { pid = 403653, tid = 403660, procname = "lttng-consumerd", gid = 
-> 0, uid = 0, vpid = 403653, vuid = 0, vgid = 0 }, { ip = 
-> 0xFFFFFFFFAC804940 } ...|
-> 
-> There are many logs like this from systemd, kworker, and processes 
-> belonging to other groups. Note that the GID 1002 that I want to trace 
-> currently has no active subjects.
-> 
-> Do you suggest switching to the recent version of LTTng (current version 
-> 2.13.11)?
-> 
+This is a stable release announcement for the LTTng kernel tracer,
+an out-of-tree kernel tracer for the Linux kernel.
 
-I just tested with stable-2.13 and stable-2.14. I was able to reproduce 
-the issue you saw in stable-2.13, but not stable-2.14
+Those releases include minor kernel version enablement changes for Linux
+kernel v7.0 and v6.18.14+. More interestingly is a fix for powerpc64 ABI
+V1, useful for those with custom distributions which rely on this
+specific version of the big endian powerpc64 ABI.
 
-I recommend updating to 2.14 or later.
+* New in these releases:
 
-thanks,
-kienan
+2026-04-24 LTTng modules 2.15.1
+         * Fix: kallsyms on powerpc64 with ABI V1
+         * fix: ASoC: soc-dapm: move struct snd_soc_dapm_context (v7.0)
+         * fix: adjust range in btrfs probe for v6.18.14
 
-> Best,
-> Amir
-> 
-> 
-> On Tue, Apr 7, 2026 at 10:57 AM Kienan Stewart <kstewart@efficios.com 
-> <mailto:kstewart@efficios.com>> wrote:
-> 
->     Hi Amir,
-> 
->     On 2026-04-04 21:02, Amir Najafi Zadeh via lttng-dev wrote:
->      > Hello all,
->      >
->      > I hope you are doing well.
->      >
->      > I have a quick question about LTTng tracking when using kernel
->     probes. I
->      > mainly use LTTng to trace file system functions in the Linux
->     kernel, and
->      > for that I use the LTTng kernel probe feature, which works very
->     well.
->      > However, when I tried filtering logs for a specific group ID, I
->     noticed
->      > that filters are not supported for kernel probes.
->      >
->      > Then I attempted to use the tracking feature to trace only a
->     specific
->      > GID, but this also did not work. From what I see in my logs, it
->     appears
->      > that for kernel probes all events are captured and recorded,
->     regardless
->      > of the tracking options.
->      >
->      > I wanted to know if this is a known limitation, and whether there
->     is any
->      > in-progress work or reason why this is not currently supported.
->      >
-> 
->     I just tried on the master branch (since I had easy access to it), and
->     wasn't able to reproduce a situation where I added the gid tracking and
->     had results for a different gid in lttng view.
-> 
->      > For reference, here is my code. I am using LTTng 2.13.11 with kernel
->      > 6.8.0-101-generic:
->      >
->      > ``` #!/bin/sh
->      > SESSION_NAME="lttng-gid-test"
->      > OUTPUT_DIR="/tmp/lttng/${SESSION_NAME}"
->      > GROUP_ID=1002
->      >
->      > # create the lttng session
->      > lttng create "$SESSION_NAME" -o "$OUTPUT_DIR"
->      >
->      > # create the lttng ring buffer channel
->      > lttng enable-channel --session="$SESSION_NAME" --kernel channel0 \
->      > --subbuf-size=16M \
->      > --num-subbuf=2
->      >
->      > # add pid, tid, proc, and gid for tracing collection
->      > lttng add-context --session="$SESSION_NAME" --channel=channel0 --
->     kernel
->      > --type pid
->      > lttng add-context --session="$SESSION_NAME" --channel=channel0 --
->     kernel
->      > --type gid
->      >
->      > # enable the target probe
->      > lttng enable-event --session="$SESSION_NAME" --channel=channel0
->     --kernel
->      > --probe=ext4_get_inode_loc ext4_get_inode_loc
->      >
->      > # disable all tracks # NOTE: untracking doesn't make a difference
->      > # lttng untrack --session="$SESSION_NAME" --kernel --all --gid
->      > # lttng untrack --session="$SESSION_NAME" --kernel --all --pid
->      > # lttng untrack --session="$SESSION_NAME" --kernel --all --vpid
->      > # lttng untrack --session="$SESSION_NAME" --kernel --all --uid
->      > # lttng untrack --session="$SESSION_NAME" --kernel --all --vuid
->      > # lttng untrack --session="$SESSION_NAME" --kernel --all --vgid
->      > # only enable gid 1002 track
->      > lttng track --kernel --gid=1002
->      >
-> 
->     Could you check the output of your script after "lttng track --kernel
->     --gid=1002"?
-> 
->     The rest of your commands specify a session name, but this one does
->     not.
->     I wonder if  it's selecting a different default session that the one
->     you're expecting?
-> 
->      > # start lttng lttng start $SESSION_NAME
->      >
->      > ```
->      >
->      > Thank you for your time and guidance.
->      >
->      > Best regards,
->      > Amir
->      >
->      > --
->      > *Amirhossein Najafizadeh*
->      > *PhD Student, Computer Science Department, Stony Brook
->     University, N.Y.
->      > File systems and Storage Lab (FSL)
->      >
->      > *
->      > najafizadeh21@gmail.com <mailto:najafizadeh21@gmail.com>
->     <mailto:najafizadeh21@gmail.com <mailto:najafizadeh21@gmail.com>>
->      > https://amirhnajafiz.github.io/ <https://amirhnajafiz.github.io/>
->     <https://amirhnajafiz.github.io/ <https://amirhnajafiz.github.io/>>
-> 
+
+2026-04-24 LTTng modules 2.14.5
+         * Fix: kallsyms on powerpc64 with ABI V1
+         * fix: ASoC: soc-dapm: move struct snd_soc_dapm_context (v7.0)
+         * fix: adjust range in btrfs probe for v6.18.14
+
+Project website: https://lttng.org
+Documentation: https://lttng.org/docs
+Download link: https://lttng.org/download
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
