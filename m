@@ -4,145 +4,144 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0950C5516D
-	for <lttng-dev@archiver.kernel.org>; Thu, 30 Jul 2026 19:59:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4hB0QM4wP5z2J7b
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1785441549;
-	b=LgqG/Sz/2PHWN93/DgTOqOwC0/zWRCWn4I/zW06UCnkyD4w0+22AJ06FeVd0iy8CQZk3
-	 nyAztkOKBbD+oVCIn0tRnRA63iUbChy5GS40OkmyjcsUX9yHJ8ulP3gCPb0Q9oa1Cq4lJ
-	 5wmNIGRS09Vkn7bdJlnt3GuIBWnAVp6IbyuQhu7tfLB1Sk30X5vco6hLjEx+c/ARQurA8
-	 isejuTBgnwBPuH+5kD5G9fY+KbSjg6Ltimq0sp5sL1Q/LhqJ7RrG0dSUzCuF+66Ertbkm
-	 xksZVC7+WSTXZ4Yl61JIE2csCtPc0b/iqo8zRpKXjuGD9VuAjh18FVoL5moF3pT+wug==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0A57C55838
+	for <lttng-dev@archiver.kernel.org>; Tue,  4 Aug 2026 15:28:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4hDy994lSzz2CJy
+ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1785857279;
+	b=Vr3asAqDd20Jkn5fqtbaz8kv18mbYbQi7KnNbDEIccE2XHeFTbdtmaIrcRENPt9Y7RHg
+	 05ZMcjD/PxJ8o/zDGczylKiIBasI5aaLrdFmBrXbwGEwuwEX+C2Fs4ec0iMdvNTMcqGDd
+	 8/IHipxlvgjManuum+dEhlxH88Lc5pd+8iTVZqJ/xzWiP1B9mL2VrIsXFOO6prvACQsJy
+	 AxxVZU+YkcrraHrf44O6o8y+1BGMe7JLc2N+e+O5ht+3J6JVlzShQbSzCclcPBgfgZn9G
+	 rCR8qMV29bZV/ZN3/h/xv9lFmzHHP2bjNpnMsPtVj2FccZJo1uqbPOHWIU99N0q1+rQ==
 ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1785441549;
-	h=DKIM-Signature:Message-ID:Date:To:Subject:MIME-Version:From:From;
-	bh=GijLH5FfhzXXNJdlsZ5nY/f1hR18XvNCd6HIZx9S/Qg=;
-	b=fQuOPuu+jdT0ju6nVfAzG+W+CWgNXbVNjntVpFVHecQGvxbSrLnvw00Dt5E57iZvDqNS
-	 cc8sdNkWuyC1QAmnEW+cNaCEKOiyWgsRH8CySutLVbXsMHveQyIi6ADnANszJ1y3RsURt
-	 EKWYDTpxE+oLXKPGt1CXEmGh/UmZhHNxU/7sKKxdBL3KfIwsmI628CIGtHJ9AE81JNFSl
-	 t9hHA5TZxM4yvL8XWI06CsPzWJWtsasmddJ9RooTg7VPwvU/bT+11m9BAHTnEmPrR/Or8
-	 634R2jf5RdXJRdnWpzudiCg07yCNi/wHPvmrbnFLM2e7RQRah/H5GQRMj4qWpBvXwEA==
+	c=relaxed/simple; t=1785857279;
+	h=DKIM-Signature:To:Subject:Date:Message-ID:MIME-Version:From:From;
+	bh=Jpe5lPWP2Rk9vGsDbiFLQdPEhJOgD6Ub6JppPzxm6t8=;
+	b=Utq+q0SBjTjcOsDS19BujeV9CBrEzTyPYOZW0TCoJjaNPmw9v+tunPBeTVFJ2sa8Trkg
+	 CrVxNYwY3qvxkWDKI2OqdYUQK+3a0gGT27JNgEtCj8Eqw+RIq0AbtrDOnACaYx4b1ckOW
+	 mKgj/laQafiif+PCQUAA2tCbRF9axINlRi7VE807C2N13iURHgxCc8hIJuEzoguLgLIIy
+	 xtCP92f2Z5FsZ6hqIAoU+OvhdcYpEMdZJE8JZfqyZ8/Re+dspouf2rAXBh1ElS/rwIVho
+	 Fcz8u+8aHgQD1JeX2TkcD9nEiSCsWVmnVRxpA5C5ITU4ckMprkr6BhHJkJQwM+z9ODQ==
 ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4hB0QM4wP5z2J7b
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4hDy994lSzz2CJy
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lists.lttng.org;
-	s=default; t=1785441549;
-	bh=8cJQt06901ZFueT5j4B4mU1n2Dg4cqxVf6xx7sMkg1I=;
-	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=LfBflB5D31Sgsn6s6sE/lJ/4FE2aCIwonxesSGLmw6eoOcP5c5RKC7UxDNtvdtFSR
-	 ytd8U+CmjDqSBFsrNS5UD7JeyKTdBAKuBjNU675hlVx7Uol08StKQnKx4V8ZRWU15r
-	 pVTh8TPNQgqUMHX2qHojLmk/wraNnn5J03ZJE2tsApiP2M+mZLK734IGj3GtPy4dWy
-	 /Dza0E/ScnWKCQad+dtzrYGB2yGzrJg0f2k6g4J42exIdv/rOusKtWAyNDcWvKYKzg
-	 UJ0dgv5NbF7nH3Vjb7nJtCqXU9GleFuOgANxYTCTDtEfBccA7r3+kQ7tR2ZhowYnkl
-	 VhkokqaMbM6mg==
+	s=default; t=1785857279;
+	bh=Nq1REuhQ7LONdhCwAxQm904Ez5jzhPeObBh5Ui6z0WM=;
+	h=To:Subject:Date:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=HA5uPsE1vlSMIQgssvPr5GUt6/y8cbAKST58hDPmYDNpFmswlHbG8NQ3yUuzcDPPy
+	 5W6Z3UVEzPJUwzhm3tv2VRwu0ZRuImKbgS1S8Nrut95XbjNKZbvAVIJOnDivVFBquv
+	 aQQiOhBotgJzxcEcN9M/09OgAVA6jOokbXBZ6CP0QdcuH7baHd0CbWqbjTM1aWHY6i
+	 E/fBn/yyUIWTgBVGYZit7D1UTK8+8A7YnHH4X9pXXMPWoVVdoceCq+DM/vgKTm3e4Y
+	 JTNLMQhLniSoZhByJF0GjJXoEmK+e5dkFwmRwJQoU8eQrNR0JMFWbI/KhFWUTpxyTX
+	 6Eij3ooFPl25Q==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4hB0QM4wP5z2J7b;
-	Thu, 30 Jul 2026 15:59:07 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4hB0QK2WDzz2JMJ
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4hB0QK2WDzz2JMJ
-Received: from YT6PR01CU002.outbound.protection.outlook.com
- (mail-canadacentralazon11022120.outbound.protection.outlook.com
- [40.107.193.120])
- by lists.lttng.org (Postfix) with ESMTPS id 4hB0QK2WDzz2JMJ
- for <lttng-dev@lists.lttng.org>; Thu, 30 Jul 2026 15:59:05 -0400 (EDT)
+	by lists.lttng.org (Postfix) with ESMTP id 4hDy994lSzz2CJy;
+	Tue,  4 Aug 2026 11:27:57 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4hDy9601MTzyvq
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4hDy9601MTzyvq
+Received: from DUZPR83CU001.outbound.protection.outlook.com
+ (mail-northeuropeazlp170120005.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:c200::5])
+ by lists.lttng.org (Postfix) with ESMTPS id 4hDy9601MTzyvq
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Aug 2026 11:27:52 -0400 (EDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=m54RDoobrnsg91Ned5rweab9C7MG9ESJB8EJgDaQqvSF+z5kCU2eWNylzjv0f1vmhTk3rAS/uc0qLi6YzrsNLBhnW1DglI7IM2A1lxUaEJgdWOadOWqWeQoq3uB166xnv1HsbznY8CgY5u71/hUtUNJZuNd7UQTcCLcdhWVg4EehzoU4UwYT0HW+5+WjexSMFVDVmDVyC1qsMWZfz24RkQ9AJJqR61SR8POntO1LOio7+pG338aHwt+QnFB2JHTVG3alFGrIVtsNxaBO1TZjVF4ixF1gWeme6mO+F/QHod0yq53dcZMJ9x+XCMl6ThoSah9dJaVNMxwjM6wnO2kxTQ==
+ b=QQQ1fg4fOKOY96OJtu4leCOPaw7u17pBF3iwjKD2hM6ciazcmiyoxgiVxEi24iYU0OQg2nM9cXcyNZymZJCsSPhn/NADcLRh/7ivJ1W/6MTEH8ba3K90sz06rDpGgoGRSFHWZiMaMXcykR0CcByLyb8/UR8eqjCzbYg+tG4rPcr8iDtNKbnD5AqGNwzO5UkO1s7WzTAIVqyh2/P+7ieZFz1o/7fpP+duMRI61A6q6nrLJS6DD2jJ+pSFnxR1eAtmKysJKOEjd5f7Mmaixp1DMkHFon+7Vq2H5oPD3+NMgKUOD5vhvJqzvLyxJy01HYfoI0PL/y1uk0QcjoXFw436NA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8cJQt06901ZFueT5j4B4mU1n2Dg4cqxVf6xx7sMkg1I=;
- b=yE/Ydl5rEv0LMOk3RdetfwnuYRYi58zHRL9i2KqF+OrnqQ32kw6DUNuOj5FiN1OaIuTnFCBz5B3329xoDmWelNCWKagnCbZ0WgoiDTK3MEkLEYZbuvf4TwI3atNh/72n9dH2UskU/nn0dnNbk42qu3yEelRd53ZWPe8keypEie7ANSJxLj141haSkb2jKhkZYK1/eFj67utC5LzUejH3IVGcek5xV3MbxiQH6GqeuvXh7fUgRT988evZgR2kA9GYnKEeBHBLGxZiZPvQqUkJht7RSp+aCXxiY4IaKpA+a3yWrx8jtkmbxhRwJK1NG1wlJX06YYZAtgVusyzddUw1tg==
+ bh=Nq1REuhQ7LONdhCwAxQm904Ez5jzhPeObBh5Ui6z0WM=;
+ b=ayFizyqT/we4PLTPMb/8H+yYUxUC8dd41JI81TMb1s9sLBJJTVQM/KB6tipvSp1z75qlIolpXAhsCDJ2TXz5ytDsZdZJYQzn4ogNhjHxvMa6bZjx4IsVknexy3XFNYfSh1G/1YzydcTfCcstNRFcp76Yd2ZFoW3PEJnZ0VrjKtOhAdFAZUCfONu9+8srAizOhvvraNBvCa+7+IfT3xAkmQ671gIfYVyjIFWfCAQjgLlMQBh1EaNLLN057XblH2aUQ4GT8g7mxUc+BjYKi+CWjaCHBZN8Www1pxued89bGdvKb/XWI/+PpZd1ndRasJqisScNAnooFF62GWowBu4fTA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by YT3PR01MB6179.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:68::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.15; Thu, 30 Jul
- 2026 19:59:01 +0000
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::6004:a862:d45d:90c1%4]) with mapi id 15.21.0270.012; Thu, 30 Jul 2026
- 19:59:00 +0000
-Message-ID: <0b50e8af-5f4d-4918-9431-1958568046aa@efficios.com>
-Date: Thu, 30 Jul 2026 15:58:58 -0400
-User-Agent: Mozilla Thunderbird
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+Received: from AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:17e::10)
+ by GVXPR10MB8415.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:1da::11)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.18; Tue, 4 Aug
+ 2026 15:27:44 +0000
+Received: from AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::c54c:ccd8:ebbf:477c]) by AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::c54c:ccd8:ebbf:477c%5]) with mapi id 15.21.0270.017; Tue, 4 Aug 2026
+ 15:27:44 +0000
+To: "MOESSBAUER, Felix via lttng-dev" <lttng-dev@lists.lttng.org>
+Subject: babeltrace 2.1.2: sink.ctf.fs does not deduplicate identical clocks
+Thread-Topic: babeltrace 2.1.2: sink.ctf.fs does not deduplicate identical
+ clocks
+Thread-Index: AQHdJCXLboIl0NHpUkG2WMG99naCwg==
+Date: Tue, 4 Aug 2026 15:27:43 +0000
+Message-ID: <d0e142586819e25725452b2849308829c38216fb.camel@siemens.com>
+Accept-Language: de-DE, en-US
 Content-Language: en-US
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Cc: Diamon discuss <diamon-discuss@lists.linuxfoundation.org>,
- linux-kernel <linux-kernel@vger.kernel.org>,
- linux-trace-users <linux-trace-users@vger.kernel.org>
-Subject: [RELEASE] LTTng 2.16.0-rc2 - Question de Perspective - Linux kernel
- and userspace tracer
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQZPR01CA0192.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:8b::13) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:be::5)
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.56.2-10 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM7PR10MB3956:EE_|GVXPR10MB8415:EE_
+x-ms-office365-filtering-correlation-id: 89fcfbc3-2a56-4933-df77-08def23cee1e
+x-ms-exchange-atpmessageproperties: SA
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|376014|23010399003|6049299003|366016|1800799024|38070700021|4053099003|6133799003|10067099003|5023799004|11063799006|56012099006|18002099003|55112099003;
+x-microsoft-antispam-message-info: O7CNk+cS7ivMAKvEL25EHOqyOrg0CKXuBODrentehQLvwrI9Qh8yn6XuENaY29ws12QjeahFldeZjb11v0pL1AHdk18xm/lb0l60UED+aBVOn33QvAYH0qfI0Xd2i0oC2ulbclqZVkJcqiYvgV82cC57NwjyxMVBqhg551KBCGx9KyCIRkj4bcd2G9atpjQTYY4ZU3CEHMNoa1cJtPdZucTYUSS011jVi9kyFT6ZApleL+w72/m7iVk0Tg2kAWwGKDoQ+SRWcKvcufGBip5D9HFLjRgcOoMH3h8ilsRIeatEmdIUQxgtqUPKMkzee1PzGByg/o/9kFj8C6790+YFS0TM4n3hiOkQfiCQR98NC8YmDOROc0NoxOsKJiXs/Wfr3tiuAwi0lmjwCUqZGuoVbHNbBy5KWb/O3f+t/3PsNzpM3sOMM6+tVBKXy5QsTxh/DlNhnORxBFwgicOf3O8rTkN4P4r8sc3xOTWIYzYeiA+HhItqbBNuhm9DnP6/zyrBtyZJxjlLLPi2TzEmKDlR4fMV1Sci3zFE53N7TjJ5IPQtT6vBVu6yBTXILvhq1g6XrNSrSMXXU37xPC1Tyvhg2YlkCLIa5CSzbNLe3eHMwW7l5GgLvF6Z8d28SdwclTEiDiR2BdLKr2AaEvYbG9dQgWIgEgqccizWPzmTk1RbswK6zHz+VjZFEybNoeiyM5l12RHsOiz//EdQAlhC3euQX+iMJ3mK6n/ykpFVl0CZ6/U=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(23010399003)(6049299003)(366016)(1800799024)(38070700021)(4053099003)(6133799003)(10067099003)(5023799004)(11063799006)(56012099006)(18002099003)(55112099003);
+ DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dDFzN1lKVUJkNEFMcjNqR1FhTXJvTFRnZXo3OTVZamh4R0N5T3N1Qjh2NjNJ?=
+ =?utf-8?B?YS9OZk56Tm5pUEpZZjdEeWMzZmpwRzhPYTMrcnd6YXQvc1NQUDVtcWNwTkhp?=
+ =?utf-8?B?M2FmeUE2VUJKYlFYRVQ2djV5cnI1MjJWTURhdmJ4TFZmcmpRVEt3U3owbUFk?=
+ =?utf-8?B?S3NONmE2MUF0NU9FWmcxNWRwM1Z1MFhWbS9tKzQzYzhnOENmYXlEdjlGRFFG?=
+ =?utf-8?B?Q0duMWFQRDZ3a3VFczFwQVJwTFI0elVsaWdPSllETGFQb1pJSHl2Qm1RQTFk?=
+ =?utf-8?B?bjNBVElkakttSUR5MjlpYlE5SE9pVi9QTEdKOEt5TXlwb1FlOHk2eUxoano1?=
+ =?utf-8?B?eS95aFFIMVlXSDNIUnRaeUhaMzBlRXlLT1A2L1ZqeGhudkhkZXd3WEp0OTV5?=
+ =?utf-8?B?bkhwRVVsMDFVNytZQkFBVzdKNElyU3Nld1NtdXp4UDZQK3NHSnkyc2FnNFJR?=
+ =?utf-8?B?M1h3ZEZObFlpaEFJdnZkcmNzZEdocnZqOEpDUkdPUjNRSkFaWUZKWlNYR2V2?=
+ =?utf-8?B?c21SLzArbVBtbmtjMVRBMXBLYkNKSXo2dHV5SlU5dms5NEtWbmtnL3pGVWIv?=
+ =?utf-8?B?VWpuZkNENFpJZkFyUDNrcS81YjEybWFRaVhueEJoa3p0dmNGVjVFM2Y1L1JO?=
+ =?utf-8?B?dkc2SkJ5RnEyN0x5OExRTGl6VkxRYWRUWlg4MllIZEY2KzJxUWR0alEwQ2JV?=
+ =?utf-8?B?d0dBWlZQY01JVlVTaVJYMGhQMUVXQnIxNzc1eXl3MlZDWkYyOGxiUEd6SUlF?=
+ =?utf-8?B?WTA0elRhRnRvODdlM3dSTFMrM2tRY1JOT01ZcHI5K3dmaHpoYk9ONVM4aUwx?=
+ =?utf-8?B?TzNyMmtacXpFYTNKZzNEZm5BOG5UNWlXU2lDT2RVbFlwa1Q0dVB1MktwdEpU?=
+ =?utf-8?B?cXpKN1BPRWhXSVFRUHJFREFrWkhRYUsxV2F1ajRUUThJV2ZGeldkdVo4R2s1?=
+ =?utf-8?B?OUJjQUNHbVpxbVY5K1BockpicW11bnNuR21xY2RFbzBlTDVhNXhrVnE2VWVy?=
+ =?utf-8?B?TVptUDBMNXQ3cE1CVjNaVHBPdUpsRTJwbFZEaTNocHB0bDRSdk5rQzRhRmtn?=
+ =?utf-8?B?aE1iNlIxVHZGNFRjaWFQSkFBRldEaUUycEFuMCsxNlZjd2FiSU9lR3QxcTEw?=
+ =?utf-8?B?Y3pMcjRPNFF5RTBqbVpXZUdLeFFTRSsyMkxVSDIvUTVKU1F1NmJPNHNnbzhP?=
+ =?utf-8?B?NkgxZkhOM3NUMTJYUXdIS1dMaUQzNTJCSm1UKzY2UUVDY1dSNkFkSjZKQmI2?=
+ =?utf-8?B?VG9pS2ZKMjZ1NnRvVEN3NkZMcTMremprS2dzTk9sc0ZmNFBLZ1VJQmF6Zlln?=
+ =?utf-8?B?cWllVkYwbzBwQ1JIMXFMMDF6NVI4R2F5dkxyYld6bnUzKzc1NUF1ZkM5YmV3?=
+ =?utf-8?B?NFhvUEtxcXFkVDY0Q01uUzl2cVpwenlWbis1bWNFYmFId3E4S3I5ZXJxbXl5?=
+ =?utf-8?B?cUhTMVJjU2U4YmJsSGxiclZiY2pQVVIrNjcwRFFKNkUwOHpaK2p2bFowdjha?=
+ =?utf-8?B?N1lEUnJBNVVRbytzN3NmTThjM0NTdEdFVzNtZnlVOE96LzNQS1h6TXF4ejFy?=
+ =?utf-8?B?OFJwZlFPQ2VYOE1tUEtjY1BEN2NURk85d01YNEdmSzZNS3luWmtiSXJrS1dM?=
+ =?utf-8?B?N2hYd0dVZ2E3dExBUmx0QVE1TEdqeUVaV3VoNThPQjdOSDBOWFBaTHhxbHd5?=
+ =?utf-8?B?cGpnVDd6YUxDVzB1UjVKdW85b2xmaHRMMlNyc2t1cmhVNjd6MkszRHlKVlZt?=
+ =?utf-8?B?T1NDOFg0cm9jdlpkcjNBSzUzWHhlQ3V6VWVBY3JOTGNOQy9jSE5mWExTbWZj?=
+ =?utf-8?B?Z2dsNHBnM0FyS3h5UjRsSXZhWGlhUDRtUnBpa2FrbVhiMU5xODVFbHFQSGtr?=
+ =?utf-8?B?ekh3Z3hZaXEzdXJjSmROY2x1UldQTHNpMG12eFlmYVgrWWtpL0d2dkFuZ3Rn?=
+ =?utf-8?B?MU56UlovckZaMlNrbGZ3QmVvMjR1azlLbDhkb3dmZjEyZnJ0UWpzL0JPaExq?=
+ =?utf-8?B?dXd1R3lpSS9HTTVjN0ZqMVFwVjVYVWJJOHpSSGhPYklCWmtqYTRoeWVnMG5y?=
+ =?utf-8?B?ZXlIbDBMeFV6WU1FR1V5WXFQOVR0aTZ6emRLbmR6dDhoKzloOGEzNmtteTNT?=
+ =?utf-8?B?TGtTbE4wSEFPVzBRZHdrcnBRWlI2ejJLbHhDR29ORUNNM3Q1MEU2ZTNHK2x1?=
+ =?utf-8?B?M1JtY3JYUnNGUzR2RnYzcnVnV3krMlhacXJ5MVE5c3UxZWc3YVIxVjdkQUpD?=
+ =?utf-8?B?bWEwTjJMYVlnaEFOTm1IQmtQTjBqWEE3Z1A5bVBXcFJVUVJVYTVPRVZtOThR?=
+ =?utf-8?B?NWZYSjNKSlIwbGY0Uk5UbHpPamFNY0o0QnhqTnFtckZNQWlPMDV5dz09?=
+Content-Type: multipart/mixed;
+ boundary="_002_d0e142586819e25725452b2849308829c38216fbcamelsiemenscom_"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB6179:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0a4663f-3fde-4a0b-59bb-08deee74ff2f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|23010399003|366016|1800799024|6133799003|56012099006|10067099003|3023799007|18002099003;
-X-Microsoft-Antispam-Message-Info: yO7LtYCLUpu2QSl/xR/zImQGVPv8+R1cuE4vMeqJy7X2GIHVkzkhmEtrFMv5OgFVSfFW1wRvcBT0H/KyStfteoR2NDO2uKE5RYBikOrR4wcVYu7FVhurlSQ4RhMrRm50QnNCh3SQopq/fve2nr5SAnEgRqImDHbLv5c87sJMfZOOpJjAbRkyD0j7ZQftT2vlKz5Vfzv5LP10NX/FfLnjdaJK0Wd4L37h1ArsObyfZQw2sE2YNWJ7Z4DOZnqy6N5qDHgV3aA0GC5751q12wn3Qjb2frlwpzRRVVZzelhYnpdK+jcFeYl0M8ZaLv9iDLjhQdduw5ExG91AK6TXRo/jCPOkmZ06mm1BlHTErb27uwX8qK7KyqRNZfEh8W5N3HGi6xCPMT0PnW8oyRFBzYWOEpcoZHZIvRGtMmnV2BzPIpsIGT6TUjjcLkxX65l6eD3XW1yeddAz0LJsi5S6Kl/kP1ecCcT+hxguEWoZGLGCPFvV7fEYGBAsMAbTaoF3Sood/YXezhjVfG2VyAvR3ZTF25c43N+xp3Z6KXTS6GuwDn3VthFqAppTKcw+35lMZuj1aSSD5xoeE0oNtpEqbWeRASjEKBC5pLv8Ynni1yOGVhA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(23010399003)(366016)(1800799024)(6133799003)(56012099006)(10067099003)(3023799007)(18002099003);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzFvQWVUeDMrOFZJWGt0N24vTTI1UGw5c2dYak1pWkFreENuM1ZiNkgvWHJ0?=
- =?utf-8?B?SnlHTDNYQnBwSFNZSmZ0NEUwQnFKUjgwamhrZTFuMk5BdytlbVNPdjFnSndR?=
- =?utf-8?B?Z2wzVTJ4ZDZBZ1BibGU4YTZCOExxOHNaMWtUQ0dWZ24wME1ZeUFucjVEb3NH?=
- =?utf-8?B?MTVhUDRVNUN0dTNTRWNqRy9qa2NTMVJCYmNpbDdhdWNlSFAyL0R6OFdCQmpW?=
- =?utf-8?B?R1hwY0lCZWEwYm9DL2xwek5XQmZjb2tjVjRlQlZJWGJxd05icE82bzdvdW83?=
- =?utf-8?B?YnNvWXZHdXdkbytpcDNmYjdmN0ZrN1c4dTBvM1RQNmRRQ3NyS0x2SXFjYkI3?=
- =?utf-8?B?aTduc3BVVXNRM01udHBhZHU0QStwRFkrN2dNSkR1S3ZNY0RGSEhiN1E3bVU3?=
- =?utf-8?B?TmVtLzNIWDhWOTM2amtFNk5ZVFBSUnpncWJXZkF6TkhQbFpHMG9jYm10amty?=
- =?utf-8?B?MGdiTmdxR0N2bkJPQ0JvOGc4U2ZjWHhETWdlZWc1U2Nia0NjbjJwRytiK001?=
- =?utf-8?B?eDloditjYWg1WHlOVE9GcmhjTHNhUlAxak40WmFlMWVRUU54TW1RR2ZaU0tm?=
- =?utf-8?B?Y0doUTlCVS9idjhndTlCdjlrZFdKL0c0cDliNDQ2TFlHb01DNTM3VjNjT0xa?=
- =?utf-8?B?NUR0Z1M2dXFjV0VnSXc5OU9EYlRQOStncllqbTlpeFFxdXltRmF2MlVVMnpu?=
- =?utf-8?B?L09wK0hvbzh4QW1uN1ZUU2NHcjJ4NmthQkpmaURUbGQ1VTU5azFWSTgzUnZV?=
- =?utf-8?B?cklsZDhYcUF2R3ZjRlh1Vy9DaGlyOHVCeUdXclV5NGRyQjRseHJOZlQvRXpU?=
- =?utf-8?B?ckpxbnQwZUlpVkYvRzNheWg5WTFtaHJYS3hZMWVKNk5HVnVQQ2lCdDNpNVBE?=
- =?utf-8?B?R3hpSXJuS1haMzZqeEtYck8wMnR0dXNJMEI4NitWM29pUXRqeU5ZcUkzVnJ4?=
- =?utf-8?B?TXhoSjdWNytOZ1hHUTFhRGYzeHhBa3liNkdzd2loU2VSY2RzdG5iR0M2UVly?=
- =?utf-8?B?MERtZDRPRUFJQnorSHlVSHpvNU9hSWxtUVpUVWpLUnErVFJSd3FxQk9qMHVk?=
- =?utf-8?B?dFVCeW92YkZlN3lrbTZZQkEvK0ZBYmVIV2c1MytoYnd4MXlCVndZdmZzTDVx?=
- =?utf-8?B?bkNPN3lKNzZnS1o5N3NFUFFnMGt0dGVkbzFLc1dJdGhPWG9hZXcrUXN6YzlU?=
- =?utf-8?B?OHNQL3JjOTBtR0pYbG80ZXhCWlhyaVMwK2I1Y2wrWUdmZWhPQ1NXdStyajUx?=
- =?utf-8?B?dy9KbVBGamh6TFNsRndmQi9lZ0p5ZUJFamZUZHVzQ3JRMVdvQmMrQ2Q0eFFL?=
- =?utf-8?B?RVM2QkFqbllqMjMyRTZCV01tOEFYRkVLNlJWUXVNZDVyZTRIUU9SZzJrVWww?=
- =?utf-8?B?MlphaUt4YkZ1T1hqY2ljcVM4eG5MK2JNY1ZSdWU1R0FCZFpZb3VnMmxzM2ly?=
- =?utf-8?B?RjhZeU5uVnZLU3VzN3hIVTFaUWg1TVBrUUs1aWdnWGJNRzNaUnlUUFVsWHYv?=
- =?utf-8?B?bngvSXZNSWxKOEVHQlMwQVl2bjhVc0thWStYZWp1d3RBUnpqby94Umcxc29x?=
- =?utf-8?B?amNIY015amQzWndnWk1GcEF5RFQ1OVVNWVFHVHF6NmJaQ0JxVnZrNzc0aVdt?=
- =?utf-8?B?dm54T0IzRE1FLzJsOUFJbHYvQ2dSckFxMVpUMEJUMVo3bzhiTXk4VVFjQVR2?=
- =?utf-8?B?VTEzdm1ETUNiUjhMMVhVT2liM1prbkpYQVFoMUUvSjVHeDh0OEt6ZWx0d0lu?=
- =?utf-8?B?bHhEcnhhcktBS1FVb01MeUhMRS9aTDhVc29Ba2VNUHZPK0doNzhaUUp0TEEw?=
- =?utf-8?B?bDhHek5ZeDZUM2N2dzcyWGN6cisyQ0ZlNExLQ3pZeE54YXcxUjlkZnlhQnhD?=
- =?utf-8?B?bXhjSG9zcDdkNWlPckVYSm1KNExDK1ZFaTNmVVBiWEdSOUMzMzdzWUttb1Vy?=
- =?utf-8?B?L25oR1F3c2graEVHRWVpMGxFTnFEVWNZT29Dc3hOS3YxNkd4aU9ORnAreVRn?=
- =?utf-8?B?c0xxVlh2T3hxbjNTTlpmNU5HVzd0T0duNHZoZUVpUWxzQ1RPMmhObmJSeU9Y?=
- =?utf-8?B?VE93dE1aNUZGZ25wMHJlbnZOZXlobUVzcmxISko4SHJwWXAyNTRCRGV4ZVRU?=
- =?utf-8?B?YXNMczdCeXFLSmM5VE5DdllMbi9zcy9ZVnEyKzFwL3E2RWVMYS9TRXFLWDlF?=
- =?utf-8?B?L0dyazZNcmpKMUp0b3NLVVNyeW0yb0lGcU9OSEZrKzdvRW52V0hsVGZqMUpa?=
- =?utf-8?B?b2J0UE9LRTNjSHdMZXg4Z2FWV2J4SU9HdUFMUWlKYURSL05iZnpMbkh1WUNL?=
- =?utf-8?B?N1QxVFNCVFF3K0xqQ3FVenZmcDdVRUFQajJqUEt3bmlnRi9uZjd0TXZuTlFq?=
- =?utf-8?Q?c4qvE+E3G+x1sTYMLABgz3bwXiji5V+hbibQl?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0a4663f-3fde-4a0b-59bb-08deee74ff2f
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-OriginatorOrg: siemens.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2026 19:59:00.0268 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ey3x0ojsK/3MihEcLtQVaTobKyTGH3W3Mv3h/Lz/Iu/OSaVRr+wYchYp1epr3ZnAIeyD7ufJSChMGOoBn3Q+ufDXW83cW3A0Qt6Y5OpGDy0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB6179
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR10MB3956.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89fcfbc3-2a56-4933-df77-08def23cee1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Aug 2026 15:27:43.9571 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: d7Be1ZMZgoEqr6D49xzRAYuGjodXb2TDHLBH/Nihwq50wWF5YCBZv+Yz3GIAxTmqs+aAvb0LeduQ6OglfOvEZ5JLTufbRmWby2Wh3sdnLEs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR10MB8415
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -154,395 +153,137 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Mathieu Desnoyers via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: "MOESSBAUER, Felix via lttng-dev" <lttng-dev@lists.lttng.org>
+Reply-To: "MOESSBAUER, Felix" <felix.moessbauer@siemens.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
-Hello, fellow tracers.
-
-The LTTng team is proud to unveil the second release candidate of
-LTTng 2.16, codenamed “Question de Perspective”!
-
-What changed since RC1:
-───────────────────────────────────────────────────────
-This release candidate contains no new features; the changes are
-bug fixes and hardening work, most of them covered by new regression
-tests.
-
-A good part of the work since RC1 went into stabilizing the new map
-channels. Most notably, agent domain (JUL, Log4j, and Python) event
-rules can now be used to increment the values of a map.
-
-Other notable map-related changes:
-
-   - The triggers targeting the keys of a map channel are now evaluated
-     in their registration order, making key exhaustion deterministic
-     when a channel fills up
-
-   - Sessions containing only map channels no longer spawn an unneeded
-     consumer daemon.
-
-The session daemon now derives the kernel tracer's capabilities from
-its ABI version. Attempting to create a map against an lttng-modules
-release older than 2.16 now fails with a clear "not supported" error
-rather than an obscure one. This work also fixes a regression
-introduced during this release cycle that broke the use of older
-lttng-modules releases: trigger error accounting failed against 2.14
-and 2.15, and the kernel domain failed to initialize entirely against
-2.13.
-
-We also introduced retry behavior for global buffers to better handle
-scenarios where concurrent producers writing to the same ring buffer
-would cause effective ring buffer waste due to padding and unexpected
-event loss rate. This became important since the introduction of the
-robust per-user buffers in 2.15. This fix was backported to LTTng-UST
-2.15.
-
-Highlight
-───────────────────────────────────────────────────────
-This release introduces _maps_, a brand new way to aggregate live event
-counters directly within a recording session, along with BLOB fields,
-trigger persistence across session save/load, and other
-thrilling refinements.
-
-Aggregate live event counters with the new maps feature
-───────────────────────────────────────────────────────
-Maps are the main feature of LTTng 2.16: they add a new live aggregation
-path alongside event recording.
-
-Maps let you count event activity live, such as how often each system
-call fires or which events your application emits the most, without
-recording a single event record. You get a high-level view of the
-observed system at a fraction of the resource use of recording
-every event:
-
-     ┏━━━━━━━━┯━━━━━━━━┓
-     ┃  Key   │ Value  ┃
-     ┣━━━━━━━━┿━━━━━━━━┫
-     ┃ read   │ 48,201 ┃
-     ┃ write  │ 31,944 ┃
-     ┃ openat │  8,127 ┃
-     ┃ close  │  7,930 ┃
-     ┃ mmap   │  2,615 ┃
-     ┗━━━━━━━━┷━━━━━━━━┛
-
-A _map channel_ configures a set of per-CPU _counters_: named integer
-values, keyed by strings, which accumulate over time.
-
-Unlike an event record channel (new terminology for what used to be
-simply called a “channel”), a map channel doesn't record individual
-events to ring buffers; instead, it maintains running totals that you
-can read at any moment.
-
-Map channels and event record channels are independent and may coexist
-within the same recording session: you don't need a dedicated recording
-session to start counting events.
-
-A live tally like this is a great way to guide your event recording
-setup: once you know the busiest events, you can pick which ones to
-actually record, size the buffers of your event record channels
-accordingly, and pinpoint the real sources of tracing overhead instead
-of recording blindly and sorting it out later.
-
-Add a map channel to a recording session with the new
-lttng-add-map-channel(1) command:
-
-     $ lttng add-map-channel --type=user my-counters
-
-Then, populate its counters with the new `incr-map-value` action of the
-lttng-add-trigger(1) command.
-
-The example below increments a separate counter for every user space
-tracepoint event, using the event name as the key:
-
-     $ lttng add-trigger --condition=event-rule-matches \
-                         --type=user --name='*' \
-                         --action=incr-map-value \
-                         --session=my-session \
-                         --channel=my-counters --type=user \
-                         --key='{event_name}:count'
-
-The `--key` option is actually a _template_ above: LTTng substitutes the
-`{event_name}` and `{provider_name}` placeholders for each matching
-event, so that a single trigger can feed many counters.
-
-Read the current counter values with the new lttng-show-maps(1) command:
-
-     $ lttng show-maps
-
-     Recording session `my-session`:
-     User space map channel `my-counters`:
-     ┏━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━┯━━━━━━━━━━━┓
-     ┃         Key         │   Value   │ Overflow? ┃
-     ┣━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━┿━━━━━━━━━━━┫
-     ┃ myapp:request:count │    12,043 │           ┃
-     ┃ myapp:error:count   │        87 │           ┃
-     ┃ mydb:query:count    │ 5,920,377 │           ┃
-     ┗━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━┷━━━━━━━━━━━┛
-
-Sort, filter, and slice the output in many ways, for example to show the
-five highest-valued counters of some process:
-
-     $ lttng show-maps --channel=counters --per=owner --pid=2860 \
-                       --sort-by=value --sort-order=desc --limit=5
-
-     Recording session `my-session`:
-     User space map channel `counters`, process ID 2860 (`myapp`)
-     (64-bit int. values):
-     ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━━━┯━━━━━━━━━━━┓
-     ┃            Key            │   Value   │ Overflow? ┃
-     ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━━━┿━━━━━━━━━━━┫
-     ┃ myapp:request:count       │ 2,481,005 │           ┃
-     ┃ myapp:cache_hit:count     │ 1,938,712 │           ┃
-     ┃ myapp:db_query:count      │   842,330 │           ┃
-     ┃ myapp:cache_miss:count    │   220,118 │           ┃
-     ┃ myapp:error:count         │     1,204 │           ┃
-     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━━━┷━━━━━━━━━━━┛
-
-Or to break a single counter down for CPUs 3 and 9 of Unix user `paul`:
-
-     $ lttng show-maps --channel=count --per=cpu \
-                       --uid=paul --cpu-id=3 --cpu-id=9 \
-                       --key=myapp:db_query:count
-
-     Recording session `my-session`:
-     User space map channel `count`, user ID 1002 (`paul`)
-     (64-bit int. values), CPU 3:
-     ┏━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━┯━━━━━━━━━━━┓
-     ┃          Key         │  Value  │ Overflow? ┃
-     ┣━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━┿━━━━━━━━━━━┫
-     ┃ myapp:db_query:count │ 612,489 │           ┃
-     ┗━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━┷━━━━━━━━━━━┛
-
-     Recording session `my-session`:
-     User space map channel `count`, user ID 1002 (`paul`)
-     (64-bit int. values), CPU 9:
-     ┏━━━━━━━━━━━━━━━━━━━━━━┯━━━━━━━━━┯━━━━━━━━━━━┓
-     ┃          Key         │  Value  │ Overflow? ┃
-     ┣━━━━━━━━━━━━━━━━━━━━━━┿━━━━━━━━━┿━━━━━━━━━━━┫
-     ┃ myapp:db_query:count │ 229,581 │           ┃
-     ┗━━━━━━━━━━━━━━━━━━━━━━┷━━━━━━━━━┷━━━━━━━━━━━┛
-
-Power users can go further. When you'd rather query the counters
-yourself instead of relying on the fixed, human-readable presentation of
-lttng-show-maps(1), export every counter of every map channel as a
-self-contained SQLite script with the new lttng-export-maps(1) command.
-Where `show-maps` filters and aggregates for you, `export-maps` does
-neither: it hands you the raw data so that you can slice, filter, and
-aggregate it afterwards with the full power of SQL.
-
-Pipe the script into `sqlite3` and query the convenient `vmap` view. For
-example, with a shared resolver library feeding `resolver:cache_*`
-counters across every process which resolves names, rank the processes
-by their DNS cache hit rate, combining two different counters into a
-ratio that `show-maps` can't express:
-
-     $ { lttng export-maps; cat << EOF
-         SELECT owner_name AS command,
-                ROUND(100.0 *
-                      SUM(CASE WHEN key = 'resolver:cache_hit'
-                               THEN value
-                          END) /
-                      SUM(value), 1) AS hit_rate_pct
-         FROM vmap
-         WHERE channel_name = 'my-counters'
-           AND group_type = 'user-per-process'
-           AND key LIKE 'resolver:cache_%'
-         GROUP BY owner_id
-         ORDER BY hit_rate_pct;
-       EOF
-       } | sqlite3 -box :memory:
-
-     ╭──────────────┬──────────────╮
-     │   command    │ hit_rate_pct │
-     ╞══════════════╪══════════════╡
-     │ nginx        │         54.8 │
-     │ chromium     │         71.2 │
-     │ postfix      │         83.0 │
-     │ redis-server │         94.6 │
-     │ sshd         │         99.1 │
-     ╰──────────────┴──────────────╯
-
-See the lttng-export-maps(1) manual page to discover the full
-SQL schema.
-
-Other map highlights:
-
-• A map channel may hold 32-bit or 64-bit signed integer counters, cap
-   its number of keys, and follow a per-user or per-process buffer
-   ownership model for user space tracing thanks to the `--value-type`,
-   `--max-key-count`, and `--buffer-ownership` options
-   of lttng-add-map-channel(1).
-
-• With a per-process buffer ownership model, choose what happens to the
-   counters of an instrumented process when it terminates while the map
-   channel still exists with the `--dead-process-policy` option of
-   lttng-add-map-channel(1): either discard them or, by default, fold
-   them into the _shared counters_ of the map channel so that you don't
-   lose any contributions.
-
-• The lttng-list(1) and lttng-status(1) commands now list map channels
-   and their configuration; filter them with the new `--map-channel`
-   option if needed.
-
-• The lttng-clear(1) command resets all the counters of a recording
-   session to 0, without removing any allocated keys.
-
-📖 To learn more, read:
-
-    • The new “MAP CHANNEL AND COUNTERS” section of lttng-concepts(7).
-
-    • The new “Map channel and counter” concept section of the
-      online documentation [1].
-
-    • The new “Count events with a map channel” online tutorial [2].
-
-Save and load your triggers
-───────────────────────────
-The lttng-save(1) and lttng-load(1) commands now serialize and
-restore _triggers_.
-
-Saving a recording session configuration also writes every trigger which
-exists at saving time, and loading it recreates those triggers.
-
-This matters for maps: because the new `incr-map-value` action targets a
-map channel, saving and loading triggers is the only way to preserve the
-configuration which populates the counters of a recording session.
-Without it, the saved configuration would have no record of which
-triggers feed which map channels.
-
-Skip this behaviour with the new `--no-triggers` option of
-both commands:
-
-     $ lttng save my-session
-     $ lttng load my-session --no-triggers
-
-lttng-load(1) doesn't restore the original owner of a loaded trigger:
-the Unix user running the command becomes the owner of every loaded
-trigger, regardless of which Unix user owned it at saving time.
-
-📖 To learn more, read:
-
-    • The lttng-save(1) and lttng-load(1) manual pages.
-
-    • The “Save and load recording session configurations” section of the
-      online documentation [3].
-
-Record raw binary data with BLOB fields
-───────────────────────────────────────
-The new BLOB field instrumentation support of LTTng-UST records an
-arbitrary sequence of bytes tagged with an IANA media type [4], for
-example `image/jpeg`. Previously, LTTng-UST could only capture binary
-data as an array of integers, with no way to tag its type.
-
-The new lttng_ust_field_fixed_length_blob() and
-lttng_ust_field_variable_length_blob() field macros do this:
-
-     lttng_ust_field_variable_length_blob(payload, buf, size_t, len,
-                                          "image/jpeg")
-
-LTTng records the bytes as is, without interpreting them: think raw
-network data, memory regions, binary protocol data, or whole files.
-
-CTF 2 [5] supports the BLOB field class as is, including the IANA media
-type. For CTF 1.8 [6], which has no equivalent field class, LTTng
-records the bytes as a best-effort array field of 8-bit unsigned
-integers; this loses the media type as CTF 1.8 has no way to encode it.
-
-📖 To learn more, read the lttng-ust(3) manual page.
-
-Start the consumer daemons up front
-───────────────────────────────────
-Pass the new `--spawn-consumers` option to the lttng-sessiond(8) command
-to start the consumer daemons immediately instead of having the session
-daemon spawn them on first need.
-
-This removes the one-time delay of spawning them on first need from your
-first recording session, which is handy when the earliest events matter
-or when you're measuring startup latency.
-
-Control the new features from the liblttng-ctl C API
-────────────────────────────────────────────────────
-The liblttng-ctl C API gains functions for all of the above:
-
-• Add and enumerate map channels with lttng_session_add_map_channel()
-   and lttng_session_list_map_channels().
-
-• Configure and inspect map channels and their keys with the
-   lttng_map_channel_*(), lttng_map_group_*(), and lttng_map_key_*()
-   function families.
-
-• Build the new “increment map value” trigger action with the
-   lttng_action_increment_map_value_*() function family, along with
-   string key template utilities.
-
-• Capture and filter on BLOB event fields from triggers with the new
-   `LTTNG_EVENT_FIELD_VALUE_TYPE_BLOB` event field value type.
-
-   Get the IANA media type, length, and data of a captured BLOB field
-   with lttng_event_field_value_blob_get_media_type(),
-   lttng_event_field_value_blob_get_length(),
-   and lttng_event_field_value_blob_get_data().
-
-• lttng_register_consumer() is deprecated and now
-   returns `LTTNG_ERR_NOT_SUPPORTED`.
-
-📖 To learn more, read the liblttng-ctl C API documentation [7].
-
-VERSION NAME
-━━━━━━━━━━━━
-This release is named after “Question de Perspective”, a stout brewed by
-Ayawan in Val-Morin that the team adopted for its name. It is a
-thoroughly standard stout: dark and roasty, faithful to the expectations
-of the style, and remarkable mostly for how unremarkably it conforms to
-them. An `std::stout`, if you will. Whether that counts for or against
-it is, fittingly, a question of perspective.
-
-IMPORTANT LINKS
-━━━━━━━━━━━━━━━
-LTTng tarball:
-     • <https://lttng.org/files/lttng-tools/lttng-tools-2.16.0-rc2.tar.bz2>
-     • <https://lttng.org/files/lttng-ust/lttng-ust-2.16.0-rc2.tar.bz2>
-     • <https://lttng.org/files/lttng-modules/lttng-modules-2.16.0-rc2.tar.bz2>
-
-LTTng website:
-     <https://lttng.org/>
-
-Mailing list for support and development:
-     <https://lists.lttng.org/>
-
-IRC channel:
-     `#lttng` on `irc.oftc.net`
-
-Bug tracker:
-     <https://bugs.lttng.org/projects/lttng/>
-
-GitHub organization:
-     <https://github.com/lttng>
-
-Continuous integration:
-     • <https://ci.lttng.org/view/LTTng-tools/>
-     • <https://ci.lttng.org/view/LTTng-ust/>
-     • <https://ci.lttng.org/view/LTTng-modules/>
-
-Code review:
-     • <https://review.lttng.org/q/project:lttng-tools>
-     • <https://review.lttng.org/q/project:lttng-ust>
-     • <https://review.lttng.org/q/project:lttng-modules>
-
-REFERENCES
-━━━━━━━━━━
-[1]: https://lttng.org/docs/v2.16/#doc-map-channel
-[2]: https://lttng.org/docs/v2.16/#doc-count-events-map-channel
-[3]: https://lttng.org/docs/v2.16/#doc-saving-loading-tracing-session
-[4]: https://www.iana.org/assignments/media-types/
-[5]: https://diamon.org/ctf/
-[6]: https://diamon.org/ctf/v1.8.3/
-[7]: https://lttng.org/docs/v2.16/liblttng-ctl/
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+--_002_d0e142586819e25725452b2849308829c38216fbcamelsiemenscom_
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9D4D30746C587E4CB107BFB42B1ED173@EURPRD10.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+
+SGksCgp3aGlsZSBwb3J0aW5nIHRoZSBidDItZnRyYWNlLXRvLWN0ZiBbMV0gcGx1Z2luIHRvIGJh
+YmVsdHJhY2UgMi4xLCBJCm5vdGljZWQgdGhhdCB0aGUgc2luay5jdGYuZnMgY3JlYXRlcyBpbnZh
+bGlkIGNsb2NrIGRlZmluaXRpb25zIGlmCm11bHRpcGxlIHN0cmVhbS1jbGFzc2VzIHNoYXJlIHRo
+ZSBzYW1lIGNsb2NrLWNsYXNzLiBJbiB0aGlzIGNhc2UsIHRoZQpjbG9jayBkZWZpbml0aW9uIGlz
+IGFkZGVkIG11bHRpcGxlIHRpbWVzIHRvIHRoZSBDVEYgMiBtZXRhZGF0YSwKcmVzdWx0aW5nIGlu
+IHRoZSBmb2xsb3dpbmcgYXNzZXJ0aW9uIG9uIHJlYWQtYmFjazoKCkVSUk9SOiAgICBbQmFiZWx0
+cmFjZSBDTEldIChiYWJlbHRyYWNlMi5jOjI3MDUpCiAgQ29tbWFuZC1saW5lIGVycm9yOiByZXRj
+b2RlPTEKQ0FVU0VEIEJZIFtTb3VyY2UgYXV0by1kaXNjb3ZlcnldIChhdXRvZGlzYy9hdXRvZGlz
+Yy5jOjQ5MykKICBiYWJlbHRyYWNlLnN1cHBvcnQtaW5mbyBxdWVyeSBmYWlsZWQuCkNBVVNFRCBC
+WSBbbGliYmFiZWx0cmFjZTJdIChsaWIvZ3JhcGgvcXVlcnktZXhlY3V0b3IuYzoyMzMpCiAgQ29t
+cG9uZW50IGNsYXNzJ3MgInF1ZXJ5IiBtZXRob2QgZmFpbGVkOiBxdWVyeS1leGVjLQphZGRyPTB4
+NTVjYmEwMGMxMmUwLCBjYy1hZGRyPTB4NTVjYmEwMGI0MTAwLCBjYy10eXBlPVNPVVJDRSwgY2Mt
+Cm5hbWU9ImZzIiwgY2MtcGFydGlhbC1kZXNjcj0iUmVhZCBDVEYgdHJhY2VzIGZyb20KICB0aGUg
+ZmlsZSBzeSIsIGNjLWlzLWZyb3plbj0wLCBjYy1zby1oYW5kbGUtYWRkcj0weDU1Y2JhMDBiMTkz
+MCwgY2MtCnNvLWhhbmRsZS1wYXRoPSI8Li4uPi9idWlsZC9iYWJlbHRyYWNlLXBsdWdpbi1jdGYu
+c28iLAogIG9iamVjdD0iYmFiZWx0cmFjZS5zdXBwb3J0LWluZm8iLCBwYXJhbXMtYWRkcj0weDU1
+Y2JhMDBjZDQ3MCwgcGFyYW1zLQp0eXBlPU1BUCwgcGFyYW1zLWVsZW1lbnQtY291bnQ9MiwgbG9n
+LWxldmVsPVdBUk5JTkcKQ0FVU0VEIEJZIFsnc291cmNlLmN0Zi5mcyddIChwbHVnaW5zL2N0Zi9j
+b21tb24vc3JjL21ldGFkYXRhL2pzb24vY3RmLQoyLW1ldGFkYXRhLXN0cmVhbS1wYXJzZXIuY3Bw
+OjEzMCkKICBbMToxIEAgODUxMiBieXRlc10gSW52YWxpZCBmcmFnbWVudCAjMTIuCkNBVVNFRCBC
+WSBbJ3NvdXJjZS5jdGYuZnMnXSAocGx1Z2lucy9jdGYvY29tbW9uL3NyYy9tZXRhZGF0YS9qc29u
+L2N0Zi0KMi1tZXRhZGF0YS1zdHJlYW0tcGFyc2VyLmNwcDozNjcpCiAgWzE6MSBAIDE3MDI0IGJ5
+dGVzXSBEdXBsaWNhdGUgY2xvY2sgY2xhc3MgZnJhZ21lbnQgd2l0aCBJRCBgbG9jYWxgLgoKV2hl
+biBydW5uaW5nIHdpdGggTUlQPTAsIHRoZSBDVEYgMS44IGRhdGEgZG9lcyBub3QgaGF2ZSB0aGlz
+IGlzc3VlIChvcgp0aGUgcmVhZGVyIGlnbm9yZXMgdGhlIGR1cGxpY2F0ZWQgZGVmaW5pdGlvbnMp
+LgoKWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9zaWVtZW5zL2J0Mi1mdHJhY2UtdG8tY3RmCgpBdHRh
+Y2hlZCB5b3Ugd2lsbCBmaW5kIGFuIEFJIGdlbmVyYXRlZCByZXByb2R1Y2VyIHVzaW5nIGp1c3Qg
+dGhlCmJhYmVsdHJhY2UyIFB5dGhvbiBiaW5kaW5ncy4KCkJlc3QgcmVnYXJkcywKRmVsaXggTW9l
+c3NiYXVlcgoKLS0gClNpZW1lbnMgQUcKTGludXggRXhwZXJ0IENlbnRlcgpGcmllZHJpY2gtTHVk
+d2lnLUJhdWVyLVN0ci4gMwo4NTc0OCBHYXJjaGluZywgR2VybWFueQoK
+
+--_002_d0e142586819e25725452b2849308829c38216fbcamelsiemenscom_
+Content-Type: text/x-python3; name="repro.py"
+Content-Description: repro.py
+Content-Disposition: attachment; filename="repro.py"; size=4650;
+	creation-date="Tue, 04 Aug 2026 15:27:43 GMT";
+	modification-date="Tue, 04 Aug 2026 15:27:43 GMT"
+Content-ID: <524C377792EA6E429C097226C26F5B01@EURPRD10.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+
+IyEvdXNyL2Jpbi9lbnYgcHl0aG9uMwojCiMgTWluaW1hbCwgc2VsZi1jb250YWluZWQgcmVwcm9k
+dWNlciBmb3IgYSBiYWJlbHRyYWNlMiBDVEYtMiBzaW5rIGJ1Zy4KIwojIEEgc2luZ2xlIHRyYWNl
+IHRoYXQgY29udGFpbnMgdHdvIGRhdGEgc3RyZWFtIGNsYXNzZXMgc2hhcmluZyBPTkUgY2xvY2sg
+Y2xhc3MKIyBpcyB3cml0dGVuIHRvIENURiAyIGJ5IHNpbmsuY3RmLmZzLiBUaGUgc2luayBlbWl0
+cyBvbmUgYGNsb2NrLWNsYXNzYCBtZXRhZGF0YQojIGZyYWdtZW50IFBFUiBzdHJlYW0gY2xhc3Mg
+KGJvdGggd2l0aCB0aGUgc2FtZSBpZCwgaGVyZSAidGhlX2Nsb2NrIikgaW5zdGVhZAojIG9mIGVt
+aXR0aW5nIHRoZSBzaGFyZWQgY2xvY2sgY2xhc3Mgb25seSBvbmNlLiBSZWFkaW5nIHRoZSByZXN1
+bHRpbmcgdHJhY2UKIyBiYWNrIHRoZW4gZmFpbHMgd2l0aDoKIwojICAgRHVwbGljYXRlIGNsb2Nr
+IGNsYXNzIGZyYWdtZW50IHdpdGggSUQgYHRoZV9jbG9ja2AuCiMKIyBUaGlzIGRlcGVuZHMgb25s
+eSBvbiBiYWJlbHRyYWNlMiBhbmQgaXRzIGJ1bmRsZWQgYGN0ZmAvYHV0aWxzYCBwbHVnaW5zOyBu
+bwojIGV4dGVybmFsIHRyYWNlIGZpbGVzIG9yIHRoaXJkLXBhcnR5IHBsdWdpbnMgYXJlIG5lZWRl
+ZC4KIwojIFVzYWdlOgojICAgcHl0aG9uMyByZXByby5weSA8b3V0cHV0LWRpcj4KIwojIFRoZSBz
+Y3JpcHQgd3JpdGVzIHRoZSB0cmFjZSBpbiBhIGNoaWxkIHByb2Nlc3MgKHNvIHNpbmsuY3RmLmZz
+IGZsdXNoZXMgdGhlCiMgbWV0YWRhdGEgZmlsZSBvbiBjb21wb25lbnQgdGVhcmRvd24pLCB0aGVu
+IHJlYWRzIGl0IGJhY2sgaW4gdGhlIHBhcmVudC4KaW1wb3J0IG9zCmltcG9ydCBzdWJwcm9jZXNz
+CmltcG9ydCBzeXMKCmltcG9ydCBidDIKCgpjbGFzcyBUaGVJdGVyKGJ0Mi5fVXNlck1lc3NhZ2VJ
+dGVyYXRvcik6CiAgICBkZWYgX19pbml0X18oc2VsZiwgY29uZmlnLCBwb3J0KToKICAgICAgICBz
+dHJlYW0gPSBwb3J0LnVzZXJfZGF0YQogICAgICAgIHNlbGYuX21zZ3MgPSBbCiAgICAgICAgICAg
+IHNlbGYuX2NyZWF0ZV9zdHJlYW1fYmVnaW5uaW5nX21lc3NhZ2Uoc3RyZWFtKSwKICAgICAgICAg
+ICAgc2VsZi5fY3JlYXRlX3N0cmVhbV9lbmRfbWVzc2FnZShzdHJlYW0pLAogICAgICAgIF0KICAg
+ICAgICBzZWxmLl9pID0gMAoKICAgIGRlZiBfX25leHRfXyhzZWxmKToKICAgICAgICBpZiBzZWxm
+Ll9pID49IGxlbihzZWxmLl9tc2dzKToKICAgICAgICAgICAgcmFpc2UgU3RvcEl0ZXJhdGlvbgog
+ICAgICAgIG1zZyA9IHNlbGYuX21zZ3Nbc2VsZi5faV0KICAgICAgICBzZWxmLl9pICs9IDEKICAg
+ICAgICByZXR1cm4gbXNnCgoKQGJ0Mi5wbHVnaW5fY29tcG9uZW50X2NsYXNzCmNsYXNzIFRoZVNv
+dXJjZShidDIuX1VzZXJTb3VyY2VDb21wb25lbnQsIG1lc3NhZ2VfaXRlcmF0b3JfY2xhc3M9VGhl
+SXRlcik6CiAgICAiIiJPbmUgdHJhY2UsIHR3byBzdHJlYW0gY2xhc3NlcywgT05FIHNoYXJlZCBj
+bG9jayBjbGFzcy4iIiIKCiAgICBkZWYgX19pbml0X18oc2VsZiwgY29uZmlnLCBwYXJhbXMsIG9i
+aik6CiAgICAgICAgdGMgPSBzZWxmLl9jcmVhdGVfdHJhY2VfY2xhc3MoYXNzaWduc19hdXRvbWF0
+aWNfc3RyZWFtX2NsYXNzX2lkPUZhbHNlKQogICAgICAgIGNjID0gc2VsZi5fY3JlYXRlX2Nsb2Nr
+X2NsYXNzKGZyZXF1ZW5jeT0xMDAwMDAwMDAwLCBuYW1lPSJ0aGVfY2xvY2siKQogICAgICAgIHNj
+MCA9IHRjLmNyZWF0ZV9zdHJlYW1fY2xhc3MoCiAgICAgICAgICAgIGlkPTAsCiAgICAgICAgICAg
+IGRlZmF1bHRfY2xvY2tfY2xhc3M9Y2MsCiAgICAgICAgICAgIHN1cHBvcnRzX3BhY2tldHM9VHJ1
+ZSwKICAgICAgICAgICAgYXNzaWduc19hdXRvbWF0aWNfc3RyZWFtX2lkPUZhbHNlLAogICAgICAg
+ICkKICAgICAgICBzYzEgPSB0Yy5jcmVhdGVfc3RyZWFtX2NsYXNzKAogICAgICAgICAgICBpZD0x
+LAogICAgICAgICAgICBkZWZhdWx0X2Nsb2NrX2NsYXNzPWNjLAogICAgICAgICAgICBzdXBwb3J0
+c19wYWNrZXRzPVRydWUsCiAgICAgICAgICAgIGFzc2lnbnNfYXV0b21hdGljX3N0cmVhbV9pZD1G
+YWxzZSwKICAgICAgICApCiAgICAgICAgdHJhY2UgPSB0YygpCiAgICAgICAgc2VsZi5fYWRkX291
+dHB1dF9wb3J0KCJvdXQwIiwgdHJhY2UuY3JlYXRlX3N0cmVhbShzYzAsIGlkPTApKQogICAgICAg
+IHNlbGYuX2FkZF9vdXRwdXRfcG9ydCgib3V0MSIsIHRyYWNlLmNyZWF0ZV9zdHJlYW0oc2MxLCBp
+ZD0xKSkKCgpkZWYgd3JpdGVfdHJhY2Uob3V0X2Rpcik6CiAgICBjdGYgPSBidDIuZmluZF9wbHVn
+aW4oImN0ZiIpCiAgICB1dGlscyA9IGJ0Mi5maW5kX3BsdWdpbigidXRpbHMiKQogICAgc2lua19j
+bHMgPSBjdGYuc2lua19jb21wb25lbnRfY2xhc3Nlc1siZnMiXQoKICAgICMgQ1RGIDIgcmVxdWly
+ZXMgTUlQIDEuIFRoZSBjdGYuZnMgc2luayBoYXMgYSBzaW5nbGUgaW5wdXQgcG9ydCwgc28gbXV4
+CiAgICAjIHRoZSB0d28gc291cmNlIHBvcnRzIGludG8gaXQuCiAgICBncmFwaCA9IGJ0Mi5HcmFw
+aChtaXBfdmVyc2lvbj0xKQogICAgc3JjID0gZ3JhcGguYWRkX2NvbXBvbmVudChUaGVTb3VyY2Us
+ICJzcmMiKQogICAgbXV4ZXIgPSBncmFwaC5hZGRfY29tcG9uZW50KHV0aWxzLmZpbHRlcl9jb21w
+b25lbnRfY2xhc3Nlc1sibXV4ZXIiXSwgIm11eCIpCiAgICBzaW5rID0gZ3JhcGguYWRkX2NvbXBv
+bmVudCgKICAgICAgICBzaW5rX2NscywgInNpbmsiLCBwYXJhbXM9eyJwYXRoIjogb3V0X2Rpciwg
+ImN0Zi12ZXJzaW9uIjogIjIifQogICAgKQogICAgb3V0X3BvcnRzID0gbGlzdChzcmMub3V0cHV0
+X3BvcnRzLnZhbHVlcygpKQogICAgZ3JhcGguY29ubmVjdF9wb3J0cyhvdXRfcG9ydHNbMF0sIGxp
+c3QobXV4ZXIuaW5wdXRfcG9ydHMudmFsdWVzKCkpWzBdKQogICAgZ3JhcGguY29ubmVjdF9wb3J0
+cyhvdXRfcG9ydHNbMV0sIGxpc3QobXV4ZXIuaW5wdXRfcG9ydHMudmFsdWVzKCkpWzFdKQogICAg
+Z3JhcGguY29ubmVjdF9wb3J0cygKICAgICAgICBsaXN0KG11eGVyLm91dHB1dF9wb3J0cy52YWx1
+ZXMoKSlbMF0sCiAgICAgICAgbGlzdChzaW5rLmlucHV0X3BvcnRzLnZhbHVlcygpKVswXSwKICAg
+ICkKICAgIGdyYXBoLnJ1bigpCgoKZGVmIHJlYWRfdHJhY2UodHJhY2VfZGlyKToKICAgIGZvciBf
+IGluIGJ0Mi5UcmFjZUNvbGxlY3Rpb25NZXNzYWdlSXRlcmF0b3IodHJhY2VfZGlyKToKICAgICAg
+ICBwYXNzCgoKZGVmIG1haW4oKToKICAgIGlmIGxlbihzeXMuYXJndikgPCAyOgogICAgICAgIHBy
+aW50KCJ1c2FnZTogcmVwcm8ucHkgPG91dHB1dC1kaXI+IiwgZmlsZT1zeXMuc3RkZXJyKQogICAg
+ICAgIHJldHVybiAyCgogICAgIyBJbnRlcm5hbCBlbnRyeSBwb2ludHMsIGludm9rZWQgYXMgY2hp
+bGQgcHJvY2Vzc2VzLgogICAgaWYgc3lzLmFyZ3ZbMV0gPT0gIi0td3JpdGUiOgogICAgICAgIHdy
+aXRlX3RyYWNlKHN5cy5hcmd2WzJdKQogICAgICAgIHJldHVybiAwCiAgICBpZiBzeXMuYXJndlsx
+XSA9PSAiLS1yZWFkIjoKICAgICAgICByZWFkX3RyYWNlKHN5cy5hcmd2WzJdKQogICAgICAgIHJl
+dHVybiAwCgogICAgb3V0X2RpciA9IHN5cy5hcmd2WzFdCiAgICB0cmFjZV9kaXIgPSBvcy5wYXRo
+LmpvaW4ob3V0X2RpciwgInRyYWNlIikKCiAgICAjIFdyaXRlIGluIGEgY2hpbGQgcHJvY2VzcyBz
+byB0aGUgc2luayBmbHVzaGVzIHRoZSBtZXRhZGF0YSBvbiB0ZWFyZG93bi4KICAgIHN1YnByb2Nl
+c3MucnVuKFtzeXMuZXhlY3V0YWJsZSwgX19maWxlX18sICItLXdyaXRlIiwgb3V0X2Rpcl0sIGNo
+ZWNrPVRydWUpCiAgICBwcmludCgid3JvdGUgQ1RGLTIgdHJhY2UgdG8iLCB0cmFjZV9kaXIpCgog
+ICAgd2l0aCBvcGVuKG9zLnBhdGguam9pbih0cmFjZV9kaXIsICJtZXRhZGF0YSIpLCAicmIiKSBh
+cyBmOgogICAgICAgIG5fY2xvY2sgPSBmLnJlYWQoKS5jb3VudChiJyJ0eXBlIjoiY2xvY2stY2xh
+c3MiJykKICAgIHByaW50KCJjbG9jay1jbGFzcyBmcmFnbWVudHMgd3JpdHRlbiB0byBtZXRhZGF0
+YToiLCBuX2Nsb2NrKQoKICAgICMgUmVhZCBiYWNrIHdpdGggdGhlIENMSSBmb3IgYSBjbGVhciwg
+dW53cmFwcGVkIGVycm9yIG1lc3NhZ2UuCiAgICBwcm9jID0gc3VicHJvY2Vzcy5ydW4oCiAgICAg
+ICAgWyJiYWJlbHRyYWNlMiIsIHRyYWNlX2Rpcl0sCiAgICAgICAgc3Rkb3V0PXN1YnByb2Nlc3Mu
+REVWTlVMTCwKICAgICAgICBzdGRlcnI9c3VicHJvY2Vzcy5QSVBFLAogICAgICAgIHRleHQ9VHJ1
+ZSwKICAgICkKICAgIGlmIHByb2MucmV0dXJuY29kZSAhPSAwOgogICAgICAgIHByaW50KCJcblJF
+QUQtQkFDSyBGQUlMRUQgKGJ1ZyByZXByb2R1Y2VkKToiLCBmaWxlPXN5cy5zdGRlcnIpCiAgICAg
+ICAgZm9yIGxpbmUgaW4gcHJvYy5zdGRlcnIuc3BsaXRsaW5lcygpOgogICAgICAgICAgICBpZiAi
+RHVwbGljYXRlIGNsb2NrIGNsYXNzIiBpbiBsaW5lIG9yICJJbnZhbGlkIGZyYWdtZW50IiBpbiBs
+aW5lOgogICAgICAgICAgICAgICAgcHJpbnQoIiAgIiArIGxpbmUuc3BsaXQoIl0gIiwgMSlbLTFd
+LCBmaWxlPXN5cy5zdGRlcnIpCiAgICAgICAgcmV0dXJuIDEKCiAgICBwcmludCgicmVhZC1iYWNr
+IE9LIChidWcgTk9UIHJlcHJvZHVjZWQpIikKICAgIHJldHVybiAwCgoKaWYgX19uYW1lX18gPT0g
+Il9fbWFpbl9fIjoKICAgIHN5cy5leGl0KG1haW4oKSkK
+
+--_002_d0e142586819e25725452b2849308829c38216fbcamelsiemenscom_--
