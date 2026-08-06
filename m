@@ -4,137 +4,107 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from lists.lttng.org (lists.lttng.org [158.69.130.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0863BC55ABA
-	for <lttng-dev@archiver.kernel.org>; Wed,  5 Aug 2026 14:10:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4hFXNz16wpz1C96
-ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1785939013;
-	b=g1Y7jEhJgQmkbPjbzNparp+5REv4SVTrlKuH/wd3eua1wWgUvFa4E5aymt1w8230+TCo
-	 78t7sg5zi1U/5aqZygyu2NlUv1rc6g9R/63EQu++gCzx4Zo3QNpckFeaKvKpb3+kqEViv
-	 6PrLG4Y8B0j+Dc6OH7+MXowBp6z+4BgQorolV5ChaQxjcQVG2MqEKDgTwkFmb4pJ+HUPw
-	 JMZEvVX52/p7bVpV8aVjMDuL4mUYxMj+5sTPrlqwQozMeSPj4Y4w+7u67Hcq8zpDqoNQD
-	 NpmlnviSnHRLIaKqqRsVDtWplZc1lZuaPaLXgVYom4E6ITNUCDEG/wMo4c+q2tPP6JA==
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 476E6C5AC67
+	for <lttng-dev@archiver.kernel.org>; Thu,  6 Aug 2026 18:46:32 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4hGGTK2qB2z1l51
+ARC-Seal: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256; cv=fail; t=1786041991;
+	b=XUkmdotC/Ce62JFZ3NvTapiKEx+dihZUfVKmlRX++BLVD9VM1c/+3L2XTSTMWVPhRtfC
+	 Rp9De0PZ9FrIOItUzjevoKtpJJDoqlR4WLIR23MsGcawJfnE20HgHBvCmumRRga87RyWR
+	 VEgPP/NodmXLBQG88A4zMuaAVM26VYsng6r0pJWNCehNDN2q6m3yN3AFla4Z+khffLWbc
+	 NLwHI/B/UgPtUyEzAfQhM12gZQvndGVmselSt4WUhHzIq5PqWZfhojkZjiqAFrmASvmmp
+	 wAgNW3yTfkxGJpB0SmFi5EbgRRkc0UyIDh8cC6ezacPpEmTcyEFjG6ceqv9mrA+3YlA==
 ARC-Message-Signature: i=2; d=lists.lttng.org; s=arc1; a=rsa-sha256;
-	c=relaxed/simple; t=1785939013;
-	h=DKIM-Signature:To:Subject:Date:Message-ID:MIME-Version:From:From;
-	bh=uL/r1/85SgOujAGapVdvixx4+NZNTtmhkuH0r6r2ITo=;
-	b=I4gXimR/PHA4pChpBpZA4HGkM2yFMvFMA5JuWiKjjEtwggw7a+1xIJLZgnsKG7zNfxdZ
-	 tQfkicAHcqJFVZhbs71ZZmfjLZiNpgH4avkqmnN3rvowEjhsm6b3Rp+DTVfiBBxzuRpuZ
-	 MY8tN14MEjKbWvU9VTDbiMBZ+mEhK99ZVmRJF93l5xv3UgyjG+/hF/eMWmMCOJ9MgSfXb
-	 0+fVkZRE/Pmj1fdYkcTuuH3ayV9t+cuhPFbKYnUE9jQSrTSjQOapAwSFxMKTvvLA0k4dQ
-	 34NBrhpmOEfuZAf/ccyur3V7r+JxbvQEL/k+wjU6y1juumMV5bkAH8O7TXC5ttEFZ5g==
+	c=relaxed/simple; t=1786041991;
+	h=DKIM-Signature:MIME-Version:Date:Message-ID:Subject:To:From:From;
+	bh=Ly13BbjUrYUDD2EYUpJi4CgFd5YoK09DF9M8MruC2h4=;
+	b=hz6t/vXX8t+R4VJ0dsj2sFQCZu4a3X7pEnGBmy87FucUtNuX0vhtfn5Zw6x/VAdpq1y+
+	 ml6z2gc7o4SNEJ9nZ+ap1ux3GD0VAi+1/RZMnNnwRg/5wNEqqd3iqQ1ITOIvwvhy/dCRs
+	 4jJu5ClF6FwTRWCQhgeJkxiJ07OFpBfpHSx/OLsANrtKOsV2X/3tdOR+xTEVb2pCLowfd
+	 NFuTjywr82cH/i7J1NMjkQPzGMeTzl/8LYKjLB83m+qLYBMfAlYIOgwDzR7+yXamHLfpw
+	 uipRIdcjq8gLp4bd2msIGvX0esNXAjN655FjaeLUCOSRb32tbikcbX5sRMiRdKimDUQ==
 ARC-Authentication-Results: i=2; lists.lttng.org; arc=fail smtp.remote-ip="::1"
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4hFXNz16wpz1C96
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4hGGTK2qB2z1l51
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lists.lttng.org;
-	s=default; t=1785939013;
-	bh=uL/r1/85SgOujAGapVdvixx4+NZNTtmhkuH0r6r2ITo=;
-	h=To:Subject:Date:References:In-Reply-To:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=qDvrVeVNNNukhdvHi3BmY3cZxDGzulXxG0fNcWYBeXMJkgS6fDmGNRO/TBrATNb90
-	 TU4Lustpes8LJ2GQWS+X6fOFAaqXCrc9lfZ7rgel+hmirbN0Q5schN/q5TQROAsPLR
-	 MM2NsR/BVUwimxBZ1W/TGcUskg+m8gRgDiJNv8i2eKvIwgrktSvy8UezHe4EQDlu4F
-	 hGhluHCY+GYnFv3gewAMYcz1fcCtI+pmPz9Wkry9bl7hEFea9+S3x+No1u5zwjlBk4
-	 LsMTvdUUo87EfcMxwiDYFveLKF6a56JYohoWMAM5KYqnyR5hXue14xaVzBDNcs1L2/
-	 0Bo6unz/JDykg==
+	s=default; t=1786041991;
+	bh=IKk1Z0Dm4u7t6vAWCFG70hyPsShZpm0a0ULx7imG7wI=;
+	h=References:In-Reply-To:Date:Subject:To:Cc:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=MzEdmm8coNRN7TkxTdSPJz5QMFGt7osCeSl0jXQJCfm6+EpwVRzo4Ro9gtAsr8q9C
+	 Iopwq+FGtadCVsVGfli4jiHBqd/gFvtKMzFLdj/DFHkf2hqYtE1WrpLeWpjEQt/qxd
+	 UkI8cQ9zlSNzxRHm/GBi47mRS6JQS5yyzDrOAP18D52FM4S4sH7zGDpNb2Lu09red8
+	 cMPvvT3FaqhUKLcFwseIbXhxzsesGeHhNPJVaqNIpHdVFzoLoBm2wWaZHV2lSx2rNc
+	 /DycKp6XBd0XJ2am2egu6sAzBhsEp4G+MRDHlshmyK1H38ianZGZm4nYDaPevd9V0o
+	 g25LeFIP2cCOw==
 Received: from lists-lttng01.efficios.com (localhost [IPv6:::1])
-	by lists.lttng.org (Postfix) with ESMTP id 4hFXNz16wpz1C96;
-	Wed,  5 Aug 2026 10:10:11 -0400 (EDT)
-ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4hFXNx3y1zz1CCD
-DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4hFXNx3y1zz1CCD
-Received: from YQZPR01CU011.outbound.protection.outlook.com
- (mail-canadaeastazon11020084.outbound.protection.outlook.com [52.101.191.84])
- by lists.lttng.org (Postfix) with ESMTPS id 4hFXNx3y1zz1CCD
- for <lttng-dev@lists.lttng.org>; Wed,  5 Aug 2026 10:10:09 -0400 (EDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZCWbM9O+4FCKvMUmwL6f8xevqD14YFOtifRW/RtDyoWLpPrE9MLz/K7WMUxNhnkmJ0rdGFGvvwZcO8Yoc86Lj8cTQ/6thaKzwjGJQ04fnSre1VNmEHC40z054d6gDrPeP9YtwfGjJMmccYihhzImW2Tf3Fvqclqimlf6+ELBCtZzT6oTBEWKkieqrqw0unvgnJcnVOSRzsAuvbcJdgroSVGBGtn9HuxaejUQNDXQYgYemc0jW9GkJXWFV0L9P4djJPrRgVOJIc6WTHbBMKsz/QOnlW0gGtRpOMyV2nGpjLT9AdOoyO0C3IAOJM5FjcSeBpRhqWigrKmDZ6IEiVNHhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uL/r1/85SgOujAGapVdvixx4+NZNTtmhkuH0r6r2ITo=;
- b=VvPtscT2AU5FVhQwMbzeSf6NxIAM2+I3TibzIZh6j0STKSXc5RfSSf90R+qCsXRDsCXjA24Nb4HouMDfVoPDOk2QWkIjA/42FYcB+/IxWiloUIP712eFeHaEE1DrXX8w8yv0xSxqg9eGwtbeWgGSw0s36+c80FIj3LayDCpy+s0K2qP+dWy8042+XnPBrpYb1kJ78Z6cNvHgFlT+r0SKvp9vlEFm+WKITH6mbxsLPNHzbGCZPeKdjmaYUVppZ7NmBaQwnnBO8YX0I/qe+FP8mL9ulstcmTJte5ErHAzEHF7Ab60opYRe5J0fxm9jfuJ8vsWH9XJdW1HHmEbifly2rQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=polymtl.ca; dmarc=pass action=none header.from=polymtl.ca;
- dkim=pass header.d=polymtl.ca; arc=none
-Received: from YQBPR0101MB9838.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:7a::17) by YT2PR01MB6332.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:4d::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Wed, 5 Aug
- 2026 14:10:05 +0000
-Received: from YQBPR0101MB9838.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::17c2:2167:4422:a673]) by YQBPR0101MB9838.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::17c2:2167:4422:a673%6]) with mapi id 15.21.0292.018; Wed, 5 Aug 2026
- 14:10:05 +0000
-To: "MOESSBAUER, Felix via lttng-dev" <lttng-dev@lists.lttng.org>
-Subject: Re: babeltrace master: trace-compass is unable to open trace with
- index
-Thread-Topic: babeltrace master: trace-compass is unable to open trace with
- index
-Thread-Index: AQHdJMN9J+nDISDJA0e9fh1jxkhO27aPfpob
-Date: Wed, 5 Aug 2026 14:10:05 +0000
-Message-ID: <YQBPR0101MB9838D35D912444AEB1C71531E9D32@YQBPR0101MB9838.CANPRD01.PROD.OUTLOOK.COM>
-References: <5eed80a93b79f22f7c30a383f2a7b4d6f7068a97.camel@siemens.com>
-In-Reply-To: <5eed80a93b79f22f7c30a383f2a7b4d6f7068a97.camel@siemens.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: YQBPR0101MB9838:EE_|YT2PR01MB6332:EE_
-x-ms-office365-filtering-correlation-id: 582f2062-eb19-4bed-75bc-08def2fb3fdf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|366016|1800799024|786006|376014|23010399003|18002099003|22082099003|11063799006|56012099006|8096899003|38070700021|13003099007|6133799003|10067099003;
-x-microsoft-antispam-message-info: DTGb8ukkMNlBPI/u4KXzuAN3iJWB9UuUKQnpyG96UnOsRw68r/zRMnbJ/3frMxQX6R+1zKY87dToo9eCvkGGm/m6ioPp940oNf59efEmU0BJspZQvYlYHgJYFeQmVfjPO4ThAQA9nLIdsV9n5jQXGK5Cuj+sUzS8Ro1TiD9bOaUiTjRtw+3JlzzGtvvYAff+irMMliTznQNKSKHxI9TZBrmMwrxtZa1HlB2kXcJj8ErzC2EF94L33Vvd1gSczf1YzUb6SavhsyIjeJ0j7+eqVPZXmhegO1LRlG6JcefU6Jjw1wq+f+ukKvlnyUyqzM5ZtwLw41hkPbPqWRaqYdkyS7QAnTjtab/s2JeEN8G0loQl4G0+vXId73YKnTLl7sySOY/WwZmKoMnsKmWN7H2ddEEdZwzh+MJ02vo9b7vafPayhjAVFQnxBtR3H9vWdi7Cu4ux+iU0trGTSc9/89EI0yk6rVNhNjkMHMKqPXrExFby7Bp+jLmEIqrcmtSUZOacpOoqpxnxZsstumPBps9IafEHK8NCyTdpdYmumx4EMUKrbflRChNJr93cZFYDWnHWh3o7XecZexVH46NKB2+JnhgyeTP7WEDFlFQH4XQ91AfPsSSCe6EsFoZmbbkOdADat7KD1xq3hGuDEzD2uYggN/Q/LrKZD/cuWxhps4Hcfmyfx4pX31C+RGJcUsks3pyUUz75SR2uh/5HyBxtmLOc8eUjEzCJmv5+KIfh0C4Ac1k=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:YQBPR0101MB9838.CANPRD01.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(1800799024)(786006)(376014)(23010399003)(18002099003)(22082099003)(11063799006)(56012099006)(8096899003)(38070700021)(13003099007)(6133799003)(10067099003);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DZztKw0gakJGiuF+o/M6hI20om/6bPJGKRV1/bxfDUhXuzF8E87oOrwKWgU1?=
- =?us-ascii?Q?zKMGuGKHcd+pgkhBq8q27MMwBgZfAPG9379J/KFSj+c/sxAkj6Ipyle+P2hr?=
- =?us-ascii?Q?4jUsyOSAxilyVEa3JapeUKwK7o4VgRpDAUsQM+lMvcs1Ic+RNoXvJfTFzGTq?=
- =?us-ascii?Q?VW+YLbB+ZkCbjd92gkg3o7FaL5DhHPoPlnnjlmArzcIzTagKGWmdPysbkwBd?=
- =?us-ascii?Q?U+XXt43H4dsmbCpCTs90sNLHwhYNPZyWzQBbAO6khgShHkir+YdPUKSqr9EE?=
- =?us-ascii?Q?SD40t4ymgzeuogAarLSALQ2oskPw8pj3jjum9UY/zNuQE+pll3Tb1JhFm9GN?=
- =?us-ascii?Q?gJCj0kjoIvQ5ttvRvEOV8fVE5qcnKlBqmPdnJjGgzoR7Hf5JAVDqoXEsnHv4?=
- =?us-ascii?Q?mLYb7pY9Oijpy9pHtKNdjg1ynMDh3j/v7yTqHLU2aCUhGaseOAGdflisM7hb?=
- =?us-ascii?Q?AJBRKpDDnSTKftozWU6lYokIdLEIlhf9/lgpju5E58Pm2Cj1dCcjKwq9Rqw3?=
- =?us-ascii?Q?E5A7Oi/+URX5UjZh9Ah7RJhbZj0ClKE2Hh4ohgIg3pPfrH/Eiio6FFxfU3h9?=
- =?us-ascii?Q?fqZx7550J8tD5mjpQmfwtk2wUniVik/5PPX5jHRyfVm2dTcubIXCc3Jz2/aU?=
- =?us-ascii?Q?wEkRLsO81MiMo9YnruvUdP3ra7fJ9TQIESx4hdo16b/1ozG7+LrgQ29pOe9G?=
- =?us-ascii?Q?b8FDxDUGWUszaL1hxvfy2XspA9dzmxRX3joUWDB6AWgzkpb+1nedgNkrAvI0?=
- =?us-ascii?Q?c4Pu+QOlH0CAxLRpGBbvH62CaNfBHj7mBFSvG+uocOyNp4sJMLL7nXVsm1hF?=
- =?us-ascii?Q?FUmuTtvGDmrisa0ayiKJ50khNGDOv8OvI9ismcd1AtA1lQs6Y8QI8N3wG7aq?=
- =?us-ascii?Q?BYgPvCjQ5l0l5lkow+DN1yEi9CBNQNCWv9eW+cEXgQArib6ebYlgjj/hsp5P?=
- =?us-ascii?Q?yxi9kpl2dqbL3mWSZIKOzDOTS5YMAA8IongBLLkCoptFVF+09SVXPYKps5uj?=
- =?us-ascii?Q?LRPC/xSu6cffLHFXUDDHWM4FVB0nwGZD7pwQ9GKUUVMgNeRYeGZYa/5L7W2l?=
- =?us-ascii?Q?HKl5cyypYisfeEK0gvvLKLAEtYf0QsiDcvSD7GUIaFBkZdSqmRd1DcUbsTHH?=
- =?us-ascii?Q?Lwq7a85DH/bFWv2jDySufK743M38sKXDAxAxFM6DgpwTZshKYM7sfw+i7UOR?=
- =?us-ascii?Q?71zE1bYkJgK+fVe8lQvgW8lFoCe56S58pj728VVhweMBVd3jALwFfafDfcRp?=
- =?us-ascii?Q?lmmeSIiBUMLvGleUHQhPs/t0i7i4Np+DPmQg2cqTkejMR0p4R14HguKdkE5l?=
- =?us-ascii?Q?zITd1vkSczWQvh1bnE9K5YUI5HqQQQLD/xlXgKUbJZWj/+mFqitzVRdtPCgc?=
- =?us-ascii?Q?NW2Dk0oklg6HkYsumrsWPy1YkxgVoFzuNuTiheJcvEiDXTS0D06Jhu6TQWPn?=
- =?us-ascii?Q?HRJrqb26vVbBViD9dVBSLuU8AXlzo5ievA8aRb+pKvON3Ck377RsjN1CR/eJ?=
- =?us-ascii?Q?ErFvz03s876DZavPnkYpmXH2h8uaDr6Qipwl9tHGU1KQlMKaGP4LCdt86yBk?=
- =?us-ascii?Q?4auot3GruUXW1tHuwHmzQS+xKKETBUdEg0DEz5QMwoKoGDEUkZo5HpWJSyw9?=
- =?us-ascii?Q?ofQSLat6z3nR0wzvLz3jxVNRjUttyZKZ8LBTZxUqW4AwKCi/vYuUNbTkleCT?=
- =?us-ascii?Q?hzYwXYx0p2A8FdVCxfS6mdg3hZ/HmayUtAw5hA5ZpLHjgq3xzeEj8xce0Iox?=
- =?us-ascii?Q?RHib7W+oiw=3D=3D?=
-Content-Type: multipart/alternative;
- boundary="_000_YQBPR0101MB9838D35D912444AEB1C71531E9D32YQBPR0101MB9838_"
+	by lists.lttng.org (Postfix) with ESMTP id 4hGGTK2qB2z1l51;
+	Thu,  6 Aug 2026 14:46:29 -0400 (EDT)
+ARC-Filter: OpenARC Filter v1.2.1 lists.lttng.org 4hGGTG5qyxz1l7h
+DKIM-Filter: OpenDKIM Filter v2.11.0 lists.lttng.org 4hGGTG5qyxz1l7h
+Received: from mail-yx1-xb12e.google.com (mail-yx1-xb12e.google.com
+ [IPv6:2607:f8b0:4864:20::b12e])
+ by lists.lttng.org (Postfix) with ESMTPS id 4hGGTG5qyxz1l7h
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Aug 2026 14:46:26 -0400 (EDT)
+Received: by mail-yx1-xb12e.google.com with SMTP id
+ 956f58d0204a3-669944f5ef1so2929405d50.1
+ for <lttng-dev@lists.lttng.org>; Thu, 06 Aug 2026 11:46:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786041981; cv=none;
+ d=google.com; s=arc-20260327;
+ b=aL9fgnpbwhmyon4h5BRLe+et5pyti8b27FeYzjKGgOVmgjwn9khPuzGmzj3njjApmT
+ 76SmDIRq5jBt3Sirz1+b1VaFp6+lN00xZLRzObx/M2mEWgIO+4epeGS3VKaHb4edKx2a
+ LzQo54GmvAttkbZfgaoyBkc9JyrAwD4Ciyl69aflhxGnB/4jnqJdTC3NSCsP2hx/uoLK
+ Kv3TYmW/SZPBj0j86C74z/rEk5NrXat7vXiQf0TH3s78gAW9bi5NGS7keNI3nlmc3eHF
+ 0Yqy+UEJb/8vFvF71BR/MbuN461mzOlTtL7h0crI4JvyZK2S5ac6R42wbJnBtHuThiOs
+ CgtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:dkim-signature;
+ bh=IKk1Z0Dm4u7t6vAWCFG70hyPsShZpm0a0ULx7imG7wI=;
+ fh=1Vik1agtZhBIlGZ2swS0tVK1RrASytr6HSq6q93Y7mg=;
+ b=rtcIdX8xelFLWfPEgvqzJYWpTCdc1L79LlqEYSAnFYGF3u/4dyovOzPUsmPUPoqSdg
+ EKo61d0MIWUaQt5bC6t3AsnprzFcAFXA/VBBaVBKec9PJTcF0q7la/7AbYk7zXRQc2p7
+ SMaStVXRSGZN6Pe3gLQB2Die42QMZjJYNVeWrVP//XFNQ7JKpBGmQMHZL2djAj6S1dyp
+ oJshPdtxNeLMsxPXglOLfQNTICRHw/Kjerll/Vpt5xxmpmrn/Pt5yGof0ScwylgkoRKX
+ toGnRAQvKqsQPaz11wwcdqh+ScLZqGSiUpftCbm8qwHQp72XGYnN6yW6ftIFThWf8ttv
+ jxqQ==; darn=lists.lttng.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20251104; t=1786041981; x=1786646781;
+ h=content-transfer-encoding:content-type:cc:to:subject:message-id
+ :date:from:in-reply-to:references:mime-version:x-gm-gg
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=IKk1Z0Dm4u7t6vAWCFG70hyPsShZpm0a0ULx7imG7wI=;
+ b=PbDUdiJdFGyPRncPnWqLJ/JGfyjySvnFqChLDWD7SCTeLSTKDeeEdkKiEaRPdc3+WE
+ JzT07CkVnbbJ0MbvLHfoPoBDxaXKapfTNgKggFURIKLnN20IzkILu2p0cX9fwubuOGOc
+ C4uyJSkn50514PD4sDOsntUIBp0PdtNQh2/Tlpsqww/KiF+Le2Sx6aY+b08cmPUwjpOZ
+ Tt/o+WDxYHyg6litK3mBfplCZ4wD+AGD69d47kmJ2oBR+MeDSkj8/EKQMaOLqLRjK0+5
+ s4nwkjaYRaDT4IkeuSoep4ZFuyVszplWvlET+T5dy3jyvs9uOBGVL/CpxIOyrqMh8jGl
+ zf4A==
+X-Gm-Message-State: AOJu0YyG6+es1N923P9xqFvkRn/tJ7/bwb28nAoA4tjBPMlNCzmWzjgy
+ J+hVEia7Tc/TRlxZroL9xfK0lJbtxVb549q7FTcgC3Fv3Vw695c5WWlq3GtoFCgfPMc/vkEJe8o
+ 9i7VjP4JupKH8SUO0riXxVthVLulCg0DTdOMo
+X-Gm-Gg: AR+sD11MrS+tn8RtjqzvtSOLYxKfopXGbc1hEXTs9CpVqEFShAqkwF3vdzCv4vkOUZU
+ elK4Nz+IigdyfrdIVrtC5ObfVzSD8/6bkrfcp6dSCL/6XKWhrNHDKIUobYd6gMDxgr+zO4JNwC6
+ 8+ppRVeWyXjqc1n/gaNSDIWzkEBb9EvFVryRJb2Zzq8mVTGDGUk4RXIFb2g93w17C1ga5NTPqEj
+ fedbHTAvuKmhiP7wscvl45O6ak637kqNfW7563pSvkcszkdnQJxWAsVsgvDx541de29xvEN8oPy
+ ygmZXatIswuKeEc7Dt+H6EphRSUXy06UtF+JU4QorZ8j7A==
+X-Received: by 2002:a05:690e:4810:b0:669:4c6d:a19c with SMTP id
+ 956f58d0204a3-6699aa49381mr8880165d50.24.1786041980612; Thu, 06 Aug 2026
+ 11:46:20 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: polymtl.ca
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: YQBPR0101MB9838.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 582f2062-eb19-4bed-75bc-08def2fb3fdf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2026 14:10:05.5110 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 253209e9-7731-40eb-96e1-6444a6823237
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CklvXIbepKURFWu5cY/Qaab99RNJZR/0wbLUN/Eynx2sBk22BtuHOBU5z5LFxkpD9TyMeA0fmguUmtDORuKRDyLEBLiZyKXWSuVje4FPUYo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB6332
+References: <d0e142586819e25725452b2849308829c38216fb.camel@siemens.com>
+In-Reply-To: <d0e142586819e25725452b2849308829c38216fb.camel@siemens.com>
+Date: Thu, 6 Aug 2026 14:45:53 -0400
+X-Gm-Features: AUfX_mxFn2B4aJcKkKrpPdz7OwzWtjnhradiS2sUHQZJcMCBWWtzakh5X1Cqlj0
+Message-ID: <CAB4xu_3zXGL4a20TRK2m2OwfC7NPqVW6tJvM397er0w6dBwSLw@mail.gmail.com>
+Subject: Re: babeltrace 2.1.2: sink.ctf.fs does not deduplicate identical
+ clocks
+To: "MOESSBAUER, Felix" <felix.moessbauer@siemens.com>
+Cc: "MOESSBAUER, Felix via lttng-dev" <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-BeenThere: lttng-dev@lists.lttng.org
 X-Mailman-Version: 2.1.39
 Precedence: list
@@ -146,199 +116,65 @@ List-Post: <mailto:lttng-dev@lists.lttng.org>
 List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>, 
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-From: Arnaud Fiorini via lttng-dev <lttng-dev@lists.lttng.org>
-Reply-To: Arnaud Fiorini <arnaud-2.fiorini@polymtl.ca>
+From: Philippe Proulx via lttng-dev <lttng-dev@lists.lttng.org>
+Reply-To: Philippe Proulx <eeppeliteloop@gmail.com>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 
---_000_YQBPR0101MB9838D35D912444AEB1C71531E9D32YQBPR0101MB9838_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Felix,
-
-There was indeed a bug in how CTF trace index is parsed in Trace Compass. I=
- created a fix in https://github.com/eclipse-tracecompass/org.eclipse.trace=
-compass/pull/427
-
-If you find another issue in Trace Compass, you can file a bug here instead=
-: https://github.com/eclipse-tracecompass/org.eclipse.tracecompass/issues
-
-Thank you,
-Arnaud Fiorini
-
-________________________________
-From: MOESSBAUER, Felix via lttng-dev <lttng-dev@lists.lttng.org>
-Sent: Wednesday, August 5, 2026 6:16 AM
-To: MOESSBAUER, Felix via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: babeltrace master: trace-compass is unable to open trace with inde=
-x
-
-Hi,
-
-the babeltrace version from the master branch (65fb4669f) is able to
-create LTTng index files. However, these index files seem to be
-incompatible with trace-compass.
-
-On loading such a trace, trace-compass (incubator version, 0.18.0-
-20260711-0558, or release 12.0.0) issues the following error message:
-
-> Error initializing trace.
-> org.eclipse.tracecompass.tmf.core.exceptions.TmfTraceException:
-> Failed to allocate mapped byte buffer at 36 of size 416 on a
-> file of size 176
-
-I double checked the traces with babeltrace and
-https://github.com/eepp/jacquesctf , which are both able to properly
-read the traces.
-
-For reproducing, run the
-tests/plugins/sink.ctf.fs/test_create_lttng_index.py test and open any
-of the generated CTF files in trace-compass. I explicitly tested and
-reproduced it with "with-packets-ctf-2" and "no-packets-ctf-2".
-
-The traces itself are valid, which can be proved by removing the index
-file and successfully re-opening them in trace-compass.
-
-PS: I'm pretty sure this is a trace-compass bug, but as I'm not a
-member of the tracecompass-dev ML, I report it here. Feel free to
-forward.
-
-Best regards,
-Felix Moessbauer
-
---
-Siemens AG
-Linux Expert Center
-Friedrich-Ludwig-Bauer-Str. 3
-85748 Garching, Germany
-
-
---_000_YQBPR0101MB9838D35D912444AEB1C71531E9D32YQBPR0101MB9838_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+On Tue, Aug 4, 2026 at 11:28=E2=80=AFAM MOESSBAUER, Felix via lttng-dev
+<lttng-dev@lists.lttng.org> wrote:
 >
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: black;">
-Hi Felix,</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: black;">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: black;">
-There was indeed a bug in how CTF trace index is parsed in Trace Compass. I=
- created a fix in
-<a href=3D"https://github.com/eclipse-tracecompass/org.eclipse.tracecompass=
-/pull/427" target=3D"_blank" id=3D"OWA79684497-5c55-1c0c-ba7e-216f2b92987b"=
- class=3D"OWAAutoLink" title=3D"https://github.com/eclipse-tracecompass/org=
-.eclipse.tracecompass/pull/427" rel=3D"noopener noreferrer" data-auth=3D"No=
-tApplicable" data-linkindex=3D"0">
-https://github.com/eclipse-tracecompass/org.eclipse.tracecompass/pull/427</=
-a></div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: black;">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: black;">
-If you find another issue in Trace Compass, you can file a bug here instead=
-: <a href=3D"https://github.com/eclipse-tracecompass/org.eclipse.tracecompa=
-ss/issues" target=3D"_blank" id=3D"OWAdb24d199-d214-5b0c-a2f4-84b88c057774"=
- class=3D"OWAAutoLink" title=3D"https://github.com/eclipse-tracecompass/org=
-.eclipse.tracecompass/issues" rel=3D"noopener noreferrer" data-auth=3D"NotA=
-pplicable" data-linkindex=3D"1">
-https://github.com/eclipse-tracecompass/org.eclipse.tracecompass/issues</a>=
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: black;">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: black;">
-Thank you,</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: black;">
-Arnaud Fiorini</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<div id=3D"appendonsend"></div>
-<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
-yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> MOESSBAUER, Felix via=
- lttng-dev &lt;lttng-dev@lists.lttng.org&gt;<br>
-<b>Sent:</b> Wednesday, August 5, 2026 6:16 AM<br>
-<b>To:</b> MOESSBAUER, Felix via lttng-dev &lt;lttng-dev@lists.lttng.org&gt=
-;<br>
-<b>Subject:</b> babeltrace master: trace-compass is unable to open trace wi=
-th index</font>
-<div>&nbsp;</div>
-</div>
-<div class=3D"BodyFragment"><font size=3D"2"><span style=3D"font-size:11pt;=
-">
-<div class=3D"PlainText">Hi,<br>
-<br>
-the babeltrace version from the master branch (65fb4669f) is able to<br>
-create LTTng index files. However, these index files seem to be<br>
-incompatible with trace-compass.<br>
-<br>
-On loading such a trace, trace-compass (incubator version, 0.18.0-<br>
-20260711-0558, or release 12.0.0) issues the following error message:<br>
-<br>
-&gt; Error initializing trace.<br>
-&gt; org.eclipse.tracecompass.tmf.core.exceptions.TmfTraceException:<br>
-&gt; Failed to allocate mapped byte buffer at 36 of size 416 on a<br>
-&gt; file of size 176<br>
-<br>
-I double checked the traces with babeltrace and<br>
-<a href=3D"https://github.com/eepp/jacquesctf">https://github.com/eepp/jacq=
-uesctf</a> , which are both able to properly<br>
-read the traces.<br>
-<br>
-For reproducing, run the<br>
-tests/plugins/sink.ctf.fs/test_create_lttng_index.py test and open any<br>
-of the generated CTF files in trace-compass. I explicitly tested and<br>
-reproduced it with &quot;with-packets-ctf-2&quot; and &quot;no-packets-ctf-=
-2&quot;.<br>
-<br>
-The traces itself are valid, which can be proved by removing the index<br>
-file and successfully re-opening them in trace-compass.<br>
-<br>
-PS: I'm pretty sure this is a trace-compass bug, but as I'm not a<br>
-member of the tracecompass-dev ML, I report it here. Feel free to<br>
-forward.<br>
-<br>
-Best regards,<br>
-Felix Moessbauer<br>
-<br>
--- <br>
-Siemens AG<br>
-Linux Expert Center<br>
-Friedrich-Ludwig-Bauer-Str. 3<br>
-85748 Garching, Germany<br>
-<br>
-</div>
-</span></font></div>
-</body>
-</html>
+> Hi,
+>
+> while porting the bt2-ftrace-to-ctf [1] plugin to babeltrace 2.1, I
+> noticed that the sink.ctf.fs creates invalid clock definitions if
+> multiple stream-classes share the same clock-class. In this case, the
+> clock definition is added multiple times to the CTF 2 metadata,
+> resulting in the following assertion on read-back:
+>
+> ERROR:    [Babeltrace CLI] (babeltrace2.c:2705)
+>   Command-line error: retcode=3D1
+> CAUSED BY [Source auto-discovery] (autodisc/autodisc.c:493)
+>   babeltrace.support-info query failed.
+> CAUSED BY [libbabeltrace2] (lib/graph/query-executor.c:233)
+>   Component class's "query" method failed: query-exec-
+> addr=3D0x55cba00c12e0, cc-addr=3D0x55cba00b4100, cc-type=3DSOURCE, cc-
+> name=3D"fs", cc-partial-descr=3D"Read CTF traces from
+>   the file sy", cc-is-frozen=3D0, cc-so-handle-addr=3D0x55cba00b1930, cc-
+> so-handle-path=3D"<...>/build/babeltrace-plugin-ctf.so",
+>   object=3D"babeltrace.support-info", params-addr=3D0x55cba00cd470, param=
+s-
+> type=3DMAP, params-element-count=3D2, log-level=3DWARNING
+> CAUSED BY ['source.ctf.fs'] (plugins/ctf/common/src/metadata/json/ctf-
+> 2-metadata-stream-parser.cpp:130)
+>   [1:1 @ 8512 bytes] Invalid fragment #12.
+> CAUSED BY ['source.ctf.fs'] (plugins/ctf/common/src/metadata/json/ctf-
+> 2-metadata-stream-parser.cpp:367)
+>   [1:1 @ 17024 bytes] Duplicate clock class fragment with ID `local`.
 
---_000_YQBPR0101MB9838D35D912444AEB1C71531E9D32YQBPR0101MB9838_--
+See <https://review.lttng.org/c/babeltrace/+/18460>.
+
+Let's continue the discussion on Gerrit if need be.
+
+Thank you for the report and reproducer.
+
+Philippe
+
+>
+> When running with MIP=3D0, the CTF 1.8 data does not have this issue (or
+> the reader ignores the duplicated definitions).
+>
+> [1] https://github.com/siemens/bt2-ftrace-to-ctf
+>
+> Attached you will find an AI generated reproducer using just the
+> babeltrace2 Python bindings.
+>
+> Best regards,
+> Felix Moessbauer
+>
+> --
+> Siemens AG
+> Linux Expert Center
+> Friedrich-Ludwig-Bauer-Str. 3
+> 85748 Garching, Germany
+>
